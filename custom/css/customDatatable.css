@@ -1,0 +1,143 @@
+.dtsp-searchPanes .dataTables_scrollBody {
+    max-height: 100px !important;
+}
+
+.theme-light .dropdown-item.active,
+.theme-light .dropdown-item:active {
+    padding: 10px;
+    border: 1px solid #ffffff80;
+}
+
+.dtsp-panes.dtsp-container {
+    display: none;
+    animation: fade_in_show 0.5s
+}
+
+.dtsp-nameButton,
+.dtsp-countButton {
+    display: none !important;
+}
+
+.dtsp-topRow {
+    padding: 0px;
+}
+
+.dtsp-topRow .dtsp-subRow1 {
+    margin: 0px;
+}
+
+.dtsp-topRow .dtsp-subRow1 button.tsp-searchIcon {
+    border-radius: inherit;
+}
+
+.dtsp-topRow .dtsp-subRow2 button.clearButton {
+    border-radius: 0.35rem !important;
+}
+
+/* custom select boxes */
+table.dataTable tbody td.select-checkbox,
+table.dataTable tbody th.select-checkbox {
+    position: relative;
+}
+
+table.dataTable tbody td.select-checkbox:before,
+table.dataTable tbody th.select-checkbox:before {
+    content: " ";
+    margin-top: -6px;
+    margin-left: -6px;
+    border: 1px solid black;
+    border-radius: 3px;
+}
+
+.theme-dark tbody td.select-checkbox:before,
+.theme-dark tbody th.select-checkbox:before {
+    color: #eee;
+    border: 1px solid #eee!important;
+}
+
+table.dataTable tbody td.select-checkbox:before,
+table.dataTable tbody td.select-checkbox:after,
+table.dataTable tbody th.select-checkbox:before,
+table.dataTable tbody th.select-checkbox:after {
+    display: block;
+    position: absolute;
+    top: 1.2em;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    box-sizing: border-box;
+}
+
+table.dataTable tr.selected td.select-checkbox:after,
+table.dataTable tr.selected th.select-checkbox:after {
+    content: "✓";
+    font-size: 20px;
+    margin-top: -27px;
+    margin-left: -6px;
+    text-align: center;
+    text-shadow: 1px 1px #b0bed9, -1px -1px #b0bed9, 1px -1px #b0bed9, -1px 1px #b0bed9;
+}
+
+.theme-dark table.dataTable tr.selected td.select-checkbox:after,
+.theme-dark table.dataTable tr.selected th.select-checkbox:after {
+    content: "✓";
+    font-size: 20px;
+    margin-top: -27px;
+    margin-left: -6px;
+    text-align: center;
+    text-shadow: 1px 1px #363e4e, -1px -1px #44526c, 1px -1px #5d6778, -1px 1px #2e3136!important;
+}
+
+
+@keyframes fade_in_show {
+    0% {
+        opacity: 0;
+        transform: scale(0)
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1)
+    }
+}
+
+/* copy clipboard messahe */
+div.dt-button-info {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    margin-top: -100px;
+    margin-left: -200px;
+    background-color: white;
+    border: 2px solid #111;
+    box-shadow: 3px 4px 10px 1px rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    text-align: center;
+    z-index: 21
+}
+
+div.dt-button-info h2 {
+    padding: .5em;
+    margin: 0;
+    font-weight: normal;
+    border-bottom: 1px solid #ddd;
+    background-color: #f3f3f3
+}
+
+div.dt-button-info>div {
+    padding: 1em
+}
+
+
+.theme-dark div.dt-button-info , .theme-dark div.dt-button-info:last-child {
+    background-color: #535353!important;
+    border: 2px solid #757575!important;  
+    /* color: #f5f5f5!important;  */
+    color: #eee!important; 
+}
+.theme-dark div.dt-button-info h2{
+    border-bottom: 1px solid #535353!important;
+    background-color: #757575!important;  
+    color: #eee!important;
+}

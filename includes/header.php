@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&amp;family=Roboto+Mono&amp;display=swap" rel="stylesheet">
+    <link href="<?php echo $GLOBALS['siteurl']; ?>/assets/build/styles/ltr-core.css" rel="stylesheet">
+    <link href="<?php echo $GLOBALS['siteurl']; ?>/assets/build/styles/ltr-vendor.css" rel="stylesheet">
+    
+    <!-- <link href="https://dashboard1.panely-html.blueupcode.com/assets/images/favicon.ico" rel="shortcut icon"
+        type="image/x-icon"> -->
+
+    <title>Dashboard</title>
+</head>
+
+<body class="theme-light preload-active aside-active aside-mobile-minimized aside-desktop-maximized" id="fullscreen">
+    <div class="preload">
+        <div class="preload-dialog">
+            <div class="spinner-border text-primary preload-spinner"></div>
+        </div>
+    </div>
+    <div class="holder">
+        <div class="aside">
+            <div class="aside-header">
+                <h3 class="aside-title">Logo</h3>
+                <div class="aside-addon"><button class="btn btn-label-primary btn-icon btn-lg" data-toggle="aside"><i class="fa fa-times aside-icon-minimize"></i> <i class="fa fa-thumbtack aside-icon-maximize"></i></button></div>
+            </div>
+            <div class="aside-body" data-simplebar="data-simplebar">
+                <div class="menu">
+                    <div class="menu-item"><a href="<?php echo $GLOBALS['siteurl']; ?>/index.php" data-menu-path="/ltr/index.php" class="menu-item-link">
+                            <div class="menu-item-icon"><i class="fa fa-desktop"></i></div><span class="menu-item-text">Dashboard</span>
+                            <div class="menu-item-addon"><span class="badge badge-success">New</span></div>
+                        </a>
+                    </div>
+                    <div class="menu-section">
+                        <div class="menu-section-icon"><i class="fa fa-ellipsis-h"></i></div>
+                        <h2 class="menu-section-text">Inventory</h2>
+                    </div>
+                    <div class="menu-item"><button class="menu-item-link menu-item-toggle">
+                            <div class="menu-item-icon">
+                                <i class="fa fa-plus"></i>
+                            </div>
+                            <span class="menu-item-text">New Cars</span>
+                            <div class="menu-item-addon"><i class="menu-item-caret caret"></i></div>
+                        </button>
+                        <div class="menu-submenu">
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/manMatrix.php?r=man" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">Matrix</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a href="#" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">Swaps</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a href="#" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">incentive</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item"><button class="menu-item-link menu-item-toggle">
+                            <div class="menu-item-icon">
+                                <i class="fa fa-clipboard"></i>
+                            </div>
+                            <span class="menu-item-text">Inventory Management</span>
+                            <div class="menu-item-addon"><i class="menu-item-caret caret"></i></div>
+                        </button>
+                        <div class="menu-submenu">
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/inventory/addInventory.php" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">Add / Import</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/inventory/manageInv.php?r=man" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">Manage</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="menu-section">
+                        <div class="menu-section-icon"><i class="fa fa-ellipsis-h"></i></div>
+                        <h2 class="menu-section-text">Sales</h2>
+                    </div>
+                    <div class="menu-item"><button class="menu-item-link menu-item-toggle">
+                            <div class="menu-item-icon">
+                                <i class="fa fa-shopping-cart"></i>
+                            </div>
+                            <span class="menu-item-text">Sales</span>
+                            <div class="menu-item-addon"><i class="menu-item-caret caret"></i></div>
+                        </button>
+                        <div class="menu-submenu">
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/addSale.php" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">Add Sale</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">Sold Logs</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldTodo.php" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">To Do's</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="menu-section">
+                        <div class="menu-section-icon"><i class="fa fa-ellipsis-h"></i></div>
+                        <h2 class="menu-section-text">Users</h2>
+                    </div>
+
+                    <div class="menu-item"><button class="menu-item-link menu-item-toggle">
+                            <div class="menu-item-icon">
+                                <i class="fa fa-users"></i>
+                            </div>
+                            <span class="menu-item-text">Users Management</span>
+                            <div class="menu-item-addon"><i class="menu-item-caret caret"></i></div>
+                        </button>
+                        <div class="menu-submenu">
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/users/addUser.php" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">Add User</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/users/userList.php" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">User List</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/users/roleList.php?r=man" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">Role List</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="menu-section">
+                        <div class="menu-section-icon"><i class="fa fa-ellipsis-h"></i></div>
+                        <h2 class="menu-section-text">Settings</h2>
+                    </div>
+                    <div class="menu-item"><button class="menu-item-link menu-item-toggle">
+                            <div class="menu-item-icon">
+                                <i class="fa fa-solid fa-wrench"></i>
+                            </div>
+                            <span class="menu-item-text">General Settings</span>
+                            <div class="menu-item-addon"><i class="menu-item-caret caret"></i></div>
+                        </button>
+                        <div class="menu-submenu">
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/incentiveRules.php" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">Incentive Rules</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/salesPesonsRules.php" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">Sales Person's Todo Rules</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/locations.php?r=man" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">Locations</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="wrapper">
+            <div class="header">
+                <div class="header-holder header-holder-desktop sticky-header" id="sticky-header-desktop">
+                    <div class="header-container container-fluid">
+                        <div class="header-wrap">
+                            <ul class="nav nav-pills">
+                                <li class="nav-item dropdown"><a href="#" class="nav-link active" data-toggle="dropdown">Apps</a>
+                                    <div class="dropdown-menu dropdown-menu-left dropdown-menu-animated"><a href="#" class="dropdown-item">
+                                            <div class="dropdown-icon"><i class="fa fa-boxes"></i></div><span class="dropdown-content">Inventory Manager</span>
+                                            <div class="dropdown-addon"><span class="badge badge-warning badge-pill">20</span></div>
+                                        </a>
+                                        <div class="dropdown-submenu"><a href="#" class="dropdown-item">
+                                                <div class="dropdown-icon"><i class="fa fa-project-diagram"></i></div>
+                                                <span class="dropdown-content">Project manager</span>
+                                                <div class="dropdown-addon"><i class="caret"></i></div>
+                                            </a>
+                                            <div class="dropdown-submenu-menu dropdown-submenu-left"><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Create project</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Delete project</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Ongoing project</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Completed project</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Urgent project</span></a></div>
+                                        </div>
+                                        <div class="dropdown-submenu"><a href="#" class="dropdown-item">
+                                                <div class="dropdown-icon"><i class="fa fa-tasks"></i></div><span class="dropdown-content">Task manager</span>
+                                                <div class="dropdown-addon"><i class="caret"></i></div>
+                                            </a>
+                                            <div class="dropdown-submenu-menu dropdown-submenu-left"><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Show task</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Assign task</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Assign member</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Completed task</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Urgent task</span></a></div>
+                                        </div><a href="#" class="dropdown-item">
+                                            <div class="dropdown-icon"><i class="fa fa-dollar-sign"></i></div><span class="dropdown-content">Invoice</span>
+                                        </a>
+                                        <div class="dropdown-divider"></div><a href="#" class="dropdown-item">
+                                            <div class="dropdown-icon"><i class="fa fa-user-cog"></i></div><span class="dropdown-content">My Account</span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="nav-item dropdown"><a href="#" class="nav-link" data-toggle="dropdown">Features</a>
+                                    <div class="dropdown-menu dropdown-menu-left dropdown-menu-wide dropdown-menu-animated overflow-hidden">
+                                        <div class="dropdown-row">
+                                            <div class="dropdown-col d-flex flex-column align-items-start justify-content-center bg-primary text-white">
+                                                <h2 class="font-weight-bolder">Welcome back!</h2>
+                                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium,
+                                                    commodi hic qui aspernatur doloremque quos tempora placeat culpa
+                                                    illum, voluptatibus delectus provident cumque aliquid enim, laborum
+                                                    aliquam. Quod, perferendis unde.</p><a href="pages/login/login-1.php" class="btn btn-light btn-wider">Login</a>
+                                            </div>
+                                            <div class="dropdown-col">
+                                                <h4 class="dropdown-header dropdown-header-lg">Features</h4>
+                                                <div class="grid-nav grid-nav-action">
+                                                    <div class="grid-nav-row"><a href="#" class="grid-nav-item">
+                                                            <div class="grid-nav-icon"><i class="far fa-window-restore"></i></div><span class="grid-nav-content">Dashboard</span>
+                                                        </a><a href="#" class="grid-nav-item">
+                                                            <div class="grid-nav-icon"><i class="far fa-clipboard"></i>
+                                                            </div><span class="grid-nav-content">TODO List</span>
+                                                        </a><a href="#" class="grid-nav-item">
+                                                            <div class="grid-nav-icon"><i class="far fa-question-circle"></i></div><span class="grid-nav-content">Help Center</span>
+                                                        </a></div>
+                                                    <div class="grid-nav-row"><a href="#" class="grid-nav-item">
+                                                            <div class="grid-nav-icon"><i class="far fa-images"></i>
+                                                            </div><span class="grid-nav-content">Galery</span>
+                                                        </a><a href="#" class="grid-nav-item">
+                                                            <div class="grid-nav-icon"><i class="far fa-chart-bar"></i>
+                                                            </div><span class="grid-nav-content">Scrumboard</span>
+                                                        </a><a href="#" class="grid-nav-item">
+                                                            <div class="grid-nav-icon"><i class="far fa-bookmark"></i>
+                                                            </div><span class="grid-nav-content">Docs</span>
+                                                        </a></div>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-col border-left">
+                                                <h4 class="dropdown-header dropdown-header-lg">Tools</h4><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Components</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Form Wizard</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Documentation</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Knowledge Base</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Inventory Manager</span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="header-wrap header-wrap-block">
+                            <div class="input-group-icon input-group-lg widget15-compact">
+                                <div class="input-group-prepend"><i class="fa fa-search text-primary"></i></div><input type="text" class="form-control" placeholder="Type to search...">
+                            </div>
+                        </div>
+                        <div class="header-wrap">
+                            <div class="dropdown"><button class="btn btn-label-primary btn-icon" data-toggle="dropdown"><i class="far fa-bell"></i>
+                                    <div class="btn-marker"><i class="marker marker-dot text-success"></i></div>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-wide dropdown-menu-animated overflow-hidden py-0">
+                                    <div class="portlet border-0 portlet-scroll">
+                                        <div class="portlet-header bg-primary rounded-0">
+                                            <div class="portlet-icon text-white"><i class="far fa-bell"></i></div>
+                                            <h3 class="portlet-title text-white">Notification</h3>
+                                            <div class="portlet-addon"><span class="badge badge-warning badge-square badge-lg">9+</span></div>
+                                        </div>
+                                        <div class="portlet-body p-0 rounded-0" data-toggle="simplebar">
+                                            <div class="rich-list rich-list-action"><a href="#" class="rich-list-item">
+                                                    <div class="rich-list-prepend">
+                                                        <div class="avatar avatar-label-info">
+                                                            <div class="avatar-display"><i class="fa fa-file-invoice"></i></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="rich-list-content">
+                                                        <h4 class="rich-list-title">New report has been received</h4>
+                                                        <span class="rich-list-subtitle">2 min ago</span>
+                                                    </div>
+                                                    <div class="rich-list-append"><i class="caret mx-2"></i></div>
+                                                </a><a href="#" class="rich-list-item">
+                                                    <div class="rich-list-prepend">
+                                                        <div class="avatar avatar-label-success">
+                                                            <div class="avatar-display"><i class="fa fa-shopping-basket"></i></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="rich-list-content">
+                                                        <h4 class="rich-list-title">Last order was completed</h4><span class="rich-list-subtitle">1 hrs ago</span>
+                                                    </div>
+                                                    <div class="rich-list-append"><i class="caret mx-2"></i></div>
+                                                </a><a href="#" class="rich-list-item">
+                                                    <div class="rich-list-prepend">
+                                                        <div class="avatar avatar-label-danger">
+                                                            <div class="avatar-display"><i class="fa fa-users"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="rich-list-content">
+                                                        <h4 class="rich-list-title">Company meeting canceled</h4><span class="rich-list-subtitle">5 hrs ago</span>
+                                                    </div>
+                                                    <div class="rich-list-append"><i class="caret mx-2"></i></div>
+                                                </a><a href="#" class="rich-list-item">
+                                                    <div class="rich-list-prepend">
+                                                        <div class="avatar avatar-label-warning">
+                                                            <div class="avatar-display"><i class="fa fa-paper-plane"></i></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="rich-list-content">
+                                                        <h4 class="rich-list-title">New feedback received</h4><span class="rich-list-subtitle">6 hrs ago</span>
+                                                    </div>
+                                                    <div class="rich-list-append"><i class="caret mx-2"></i></div>
+                                                </a><a href="#" class="rich-list-item">
+                                                    <div class="rich-list-prepend">
+                                                        <div class="avatar avatar-label-primary">
+                                                            <div class="avatar-display"><i class="fa fa-download"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="rich-list-content">
+                                                        <h4 class="rich-list-title">New update was available</h4><span class="rich-list-subtitle">1 day ago</span>
+                                                    </div>
+                                                    <div class="rich-list-append"><i class="caret mx-2"></i></div>
+                                                </a><a href="#" class="rich-list-item">
+                                                    <div class="rich-list-prepend">
+                                                        <div class="avatar avatar-label-success">
+                                                            <div class="avatar-display"><i class="fa fa-asterisk"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="rich-list-content">
+                                                        <h4 class="rich-list-title">Your password was changed</h4><span class="rich-list-subtitle">2 day ago</span>
+                                                    </div>
+                                                    <div class="rich-list-append"><i class="caret mx-2"></i></div>
+                                                </a><a href="#" class="rich-list-item">
+                                                    <div class="rich-list-prepend">
+                                                        <div class="avatar avatar-label-info">
+                                                            <div class="avatar-display"><i class="fa fa-user-plus"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="rich-list-content">
+                                                        <h4 class="rich-list-title">New account has been registered</h4>
+                                                        <span class="rich-list-subtitle">5 day ago</span>
+                                                    </div>
+                                                    <div class="rich-list-append"><i class="caret mx-2"></i></div>
+                                                </a></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dropdown ml-2"><button class="btn btn-label-primary btn-icon" data-toggle="dropdown"><i class="far fa-comments"></i>
+                                    <div class="btn-marker"><i class="marker marker-dot text-success"></i></div>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-wide dropdown-menu-animated overflow-hidden py-0">
+                                    <div class="portlet portlet-scroll border-0">
+                                        <div class="portlet-header portlet-header-bordered rounded-0">
+                                            <div class="rich-list-item w-100 p-0">
+                                                <div class="rich-list-prepend">
+                                                    <div class="avatar avatar-circle">
+                                                        <!-- <div class="avatar-display"><img src="https://dashboard1.panely-html.blueupcode.com/assets/images/avatar/avatar-3.webp" alt="Avatar image"></div> -->
+                                                    </div>
+                                                </div>
+                                                <div class="rich-list-content">
+                                                    <h3 class="rich-list-title">Garrett Winters</h3><span class="rich-list-subtitle">UX Designer</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body" data-toggle="simplebar">
+                                            <div class="chat">
+                                                <div class="chat-item chat-item-left">
+                                                    <div class="chat-content">
+                                                        <p class="chat-bubble chat-bubble-primary">Lorem ipsum dolor sit
+                                                            amet, consectetur adipisicing elit. Unde, eius.</p>
+                                                        <p class="chat-bubble chat-bubble-primary">Lorem ipsum dolor sit
+                                                            amet, consectetur adipisicing elit. Unde, eius.</p><span class="chat-time">3 min ago</span>
+                                                    </div>
+                                                </div>
+                                                <div class="chat-item chat-item-right">
+                                                    <div class="chat-content">
+                                                        <p class="chat-bubble">Lorem ipsum dolor sit amet, consectetur
+                                                            adipisicing elit. Unde, eius.</p><span class="chat-time">2
+                                                            min ago</span>
+                                                    </div>
+                                                </div>
+                                                <div class="chat-item chat-item-left">
+                                                    <div class="chat-content">
+                                                        <p class="chat-bubble chat-bubble-primary">Lorem ipsum dolor sit
+                                                            amet, consectetur adipisicing elit. Unde, eius.</p><span class="chat-time">1 min ago</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-footer portlet-footer-bordered rounded-0">
+                                            <div class="input-group"><input type="text" class="form-control" placeholder="Type...">
+                                                <div class="input-group-append"><button class="btn btn-primary btn-icon"><i class="fa fa-paper-plane"></i></button></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><button class="btn btn-label-primary btn-icon ml-2" data-toggle="sidemenu" data-target="#sidemenu-todo"><i class="far fa-calendar-alt"></i></button> <button class="btn btn-label-primary btn-icon ml-2" data-toggle="sidemenu" data-target="#sidemenu-settings"><i class="far fa-list-alt"></i></button>
+                            <div class="dropdown ml-2"><button class="btn btn-flat-primary widget13" data-toggle="dropdown">
+                                    <div class="widget13-text">Hi <strong>User</strong></div>
+                                    <div class="avatar avatar-info widget13-avatar">
+                                        <div class="avatar-display"><i class="fa fa-user-alt"></i></div>
+                                    </div>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-wide dropdown-menu-right dropdown-menu-animated overflow-hidden py-0">
+                                    <div class="portlet border-0">
+                                        <div class="portlet-header bg-primary rounded-0">
+                                            <div class="rich-list-item w-100 p-0">
+                                                <div class="rich-list-prepend">
+                                                    <div class="avatar avatar-circle">
+                                                        <!-- <div class="avatar-display"><img src="https://dashboard1.panely-html.blueupcode.com/assets/images/avatar/avatar-4.webp" alt="Avatar image"></div> -->
+                                                    </div>
+                                                </div>
+                                                <div class="rich-list-content">
+                                                    <h3 class="rich-list-title text-white">Brielle Williamson</h3><span class="rich-list-subtitle text-white">Software Engineer</span>
+                                                </div>
+                                                <div class="rich-list-append"><span class="badge badge-warning badge-square badge-lg">9+</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body p-0">
+                                            <div class="grid-nav grid-nav-flush grid-nav-action grid-nav-no-rounded">
+                                                <div class="grid-nav-row"><a href="#" class="grid-nav-item">
+                                                        <div class="grid-nav-icon"><i class="far fa-address-card"></i>
+                                                        </div><span class="grid-nav-content">Profile</span>
+                                                    </a><a href="#" class="grid-nav-item">
+                                                        <div class="grid-nav-icon"><i class="far fa-comments"></i></div>
+                                                        <span class="grid-nav-content">Messages</span>
+                                                    </a><a href="#" class="grid-nav-item">
+                                                        <div class="grid-nav-icon"><i class="far fa-clone"></i></div>
+                                                        <span class="grid-nav-content">Activities</span>
+                                                    </a></div>
+                                                <div class="grid-nav-row"><a href="#" class="grid-nav-item">
+                                                        <div class="grid-nav-icon"><i class="far fa-calendar-check"></i>
+                                                        </div><span class="grid-nav-content">Tasks</span>
+                                                    </a><a href="#" class="grid-nav-item">
+                                                        <div class="grid-nav-icon"><i class="far fa-sticky-note"></i>
+                                                        </div><span class="grid-nav-content">Notes</span>
+                                                    </a><a href="#" class="grid-nav-item">
+                                                        <div class="grid-nav-icon"><i class="far fa-bell"></i></div>
+                                                        <span class="grid-nav-content">Notification</span>
+                                                    </a></div>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-footer portlet-footer-bordered rounded-0"><a href="<?php echo $GLOBALS['siteurl']; ?>/logout.php" class="btn btn-label-danger">Sign out</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-holder header-holder-desktop">
+                    <div class="header-container container-fluid">
+                        <h4 class="header-title">Dashboard</h4><i class="header-divider"></i>
+                        <div class="header-wrap header-wrap-block justify-content-start">
+                            <div class="breadcrumb"><a href="index.php" class="breadcrumb-item">
+                                    <div class="breadcrumb-icon"><i data-feather="home"></i></div><span class="breadcrumb-text">Dashboard</span>
+                                </a></div>
+                        </div>
+                        <div class="header-wrap">
+                            <!-- <div class="btn-group btn-group-toggle" data-toggle="buttons"><label class="btn btn-flat-primary active"><input type="radio" name="timeOption" id="timeOption1" checked="checked"> Today</label> <label class="btn btn-flat-primary"><input type="radio" name="timeOption" id="timeOption2">
+                                    Week</label> <label class="btn btn-flat-primary"><input type="radio" name="timeOption" id="timeOption3"> Month</label></div> -->
+                            <button class="btn btn-label-info btn-icon ml-2" id="fullscreen-trigger" data-toggle="tooltip" title="Toggle fullscreen" data-placement="left"><i class="fa fa-expand fullscreen-icon-expand"></i> <i class="fa fa-compress fullscreen-icon-compress"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header-holder header-holder-mobile sticky-header" id="sticky-header-mobile">
+                    <div class="header-container container-fluid">
+                        <div class="header-wrap"><button class="btn btn-flat-primary btn-icon" data-toggle="aside"><i class="fa fa-bars"></i></button></div>
+                        <div class="header-wrap header-wrap-block justify-content-start px-3">
+                            <h4 class="header-brand">Logo</h4>
+                        </div>
+                        <div class="header-wrap"><button class="btn btn-flat-primary btn-icon" data-toggle="sidemenu" data-target="#sidemenu-todo"><i class="far fa-calendar-alt"></i></button>
+                            <div class="dropdown ml-2"><button class="btn btn-flat-primary widget13" data-toggle="dropdown">
+                                    <div class="widget13-text">Hi <strong>User</strong></div>
+                                    <div class="avatar avatar-info widget13-avatar">
+                                        <div class="avatar-display"><i class="fa fa-user-alt"></i></div>
+                                    </div>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-wide dropdown-menu-right dropdown-menu-animated overflow-hidden py-0">
+                                    <div class="portlet border-0">
+                                        <div class="portlet-header bg-primary rounded-0">
+                                            <div class="rich-list-item w-100 p-0">
+                                                <div class="rich-list-prepend">
+                                                    <div class="avatar avatar-circle">
+                                                        <!-- <div class="avatar-display"><img src="https://dashboard1.panely-html.blueupcode.com/assets/images/avatar/avatar-4.webp" alt="Avatar image"></div> -->
+                                                    </div>
+                                                </div>
+                                                <div class="rich-list-content">
+                                                    <h3 class="rich-list-title text-white">Brielle Williamson</h3><span class="rich-list-subtitle text-white">Software Engineer</span>
+                                                </div>
+                                                <div class="rich-list-append"><span class="badge badge-warning badge-square badge-lg">9+</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body p-0">
+                                            <div class="grid-nav grid-nav-flush grid-nav-action grid-nav-no-rounded">
+                                                <div class="grid-nav-row"><a href="#" class="grid-nav-item">
+                                                        <div class="grid-nav-icon"><i class="far fa-address-card"></i>
+                                                        </div><span class="grid-nav-content">Profile</span>
+                                                    </a><a href="#" class="grid-nav-item">
+                                                        <div class="grid-nav-icon"><i class="far fa-comments"></i></div>
+                                                        <span class="grid-nav-content">Messages</span>
+                                                    </a><a href="#" class="grid-nav-item">
+                                                        <div class="grid-nav-icon"><i class="far fa-clone"></i></div>
+                                                        <span class="grid-nav-content">Activities</span>
+                                                    </a></div>
+                                                <div class="grid-nav-row"><a href="#" class="grid-nav-item">
+                                                        <div class="grid-nav-icon"><i class="far fa-calendar-check"></i>
+                                                        </div><span class="grid-nav-content">Tasks</span>
+                                                    </a><a href="#" class="grid-nav-item">
+                                                        <div class="grid-nav-icon"><i class="far fa-sticky-note"></i>
+                                                        </div><span class="grid-nav-content">Notes</span>
+                                                    </a><a href="#" class="grid-nav-item">
+                                                        <div class="grid-nav-icon"><i class="far fa-bell"></i></div>
+                                                        <span class="grid-nav-content">Notification</span>
+                                                    </a></div>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-footer portlet-footer-bordered rounded-0"><a href="<?php echo $GLOBALS['siteurl']; ?>/logout.php" class="btn btn-label-danger">Sign out</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-holder header-holder-mobile">
+                    <div class="header-container container-fluid">
+                        <div class="header-wrap header-wrap-block justify-content-start w-100">
+                            <div class="breadcrumb"><a href="index.php" class="breadcrumb-item">
+                                    <div class="breadcrumb-icon"><i data-feather="home"></i></div><span class="breadcrumb-text">Dashboard</span>
+                                </a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
