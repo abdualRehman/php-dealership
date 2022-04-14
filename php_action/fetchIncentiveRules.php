@@ -2,7 +2,7 @@
 
 require_once 'db/core.php';
 
-$sql = "SELECT `id`, `from_date`, `to_date`, `model`, `year`, `modelno`, `college`, `military`, `loyalty`, `conquest`, `misc1`, `misc2`, `misc3` , `type` FROM `incentive_rules` WHERE status = 1";
+$sql = "SELECT `id`, `from_date`, `to_date`, `model`, `year`, `modelno`, `college`, `military`, `loyalty`, `conquest`, `misc1`, `misc2`, `misc3` , `type` , `ex_modelno` FROM `incentive_rules` WHERE status = 1";
 $result = $connect->query($sql);
 
 $output = array('data' => array());
@@ -14,6 +14,9 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_array()) {
         $id = $row[0];
 
+
+        $ex_modelno = $row[14];
+        $ex_modelno = str_replace('_', ' ', $ex_modelno);
 
         // $fdate = new DateTime($row[1]);
         
@@ -63,6 +66,7 @@ if ($result->num_rows > 0) {
             $row[4],
             $row[5],
             $row[13],  // type
+            $ex_modelno,
             $abs_diff,
             $college,
             $military,

@@ -122,7 +122,7 @@ if ($_GET['r'] == 'man') {
         <div class="modal-dialog modal-xl">
             <div class="modal-content modal-dialog-scrollable">
                 <div class="modal-header modal-header-bordered">
-                    <h5 class="modal-title">Sale Details</h5><button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                    <h5 class="modal-title">Edit Details</h5><button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
                 </div>
                 <form id="editLocationForm" autocomplete="off" method="post" action="../php_action/editLocation.php">
                     <input type="hidden" name="locId" id="locId">

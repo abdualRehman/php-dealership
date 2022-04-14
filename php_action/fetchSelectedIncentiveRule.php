@@ -4,7 +4,7 @@ require_once 'db/core.php';
 
 $id = $_POST['id'];
 
-$sql = "SELECT `id`, `from_date`, `to_date`, `model`, `year`, `modelno`, `type`, `college`, `military`, `loyalty`, `conquest`, `misc1`, `misc2`, `misc3`, `status` FROM `incentive_rules` WHERE id = '$id'";
+$sql = "SELECT `id`, `from_date`, `to_date`, `model`, `year`, `modelno` , `ex_modelno`, `type`, `college`, `military`, `loyalty`, `conquest`, `misc1`, `misc2`, `misc3`, `status` FROM `incentive_rules` WHERE id = '$id'";
 $result = $connect->query($sql);
 
 if($result->num_rows > 0) { 

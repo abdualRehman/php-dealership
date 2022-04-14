@@ -42,7 +42,7 @@ $(function () {
                 viewTotal: !0,
                 columns: [2,3,4,5,6]
             },
-            
+            "pageLength": 25,
             buttons: [
                 {
                     extend: "colvis",

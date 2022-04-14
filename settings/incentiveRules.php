@@ -15,8 +15,41 @@ include_once '../includes/header.php';
         margin: auto;
         align-items: center;
     }
-    #datatable-1 tbody tr td{
+
+    #datatable-1 tbody tr td {
         padding: 10px 6px;
+    }
+    .DTFC_RightBodyLiner {
+        width: 100% !important;
+        overflow-x: hidden;
+        overflow-y: auto !important;
+    }
+
+    #datatable-1 tbody tr td {
+        padding: 10px;
+    }
+
+    @media (min-width: 576px) {
+        .modal-dialog {
+            max-width: 600px;
+            margin: 1.75rem auto;
+        }
+
+        .modal-dialog table.detialsTable {
+            width: max-content;
+        }
+    }
+
+    @media (min-width: 1025px) {
+
+        .modal-lg,
+        .modal-xl {
+            max-width: 1000PX;
+        }
+
+        .modal-dialog table.detialsTable {
+            width: inherit;
+        }
     }
 </style>
 
@@ -43,6 +76,7 @@ include_once '../includes/header.php';
                                     <th>Year</th>
                                     <th>Model no.</th>
                                     <th>Model Type</th>
+                                    <th>Ex Model No</th>
                                     <th>Expire In.</th>
                                     <th>College</th>
                                     <th>Military</th>
@@ -93,10 +127,10 @@ include_once '../includes/header.php';
                         <!-- <div class="form-row">
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="model">Modal</label>
+                                    <label for="model">Model</label>
                                     
                                     <select class="form-control selectpicker w-auto" id="editModel" name="editModel" data-live-search="true" data-size="4">
-                                        <option value="0" selected disabled>Select Modal</option>
+                                        <option value="0" selected disabled>Select Model</option>
                                         <option value="ACCORD">ACCORD</option>
                                         <option value="ACCORD HYBRID">ACCORD HYBRID</option>
                                         <option value="CIVIC">CIVIC</option>
@@ -122,7 +156,7 @@ include_once '../includes/header.php';
                                 <div class="form-group">
                                     <label for="modelno">Model No.</label>
                                    
-                                    <input type="text" class="form-control typeahead" id="editModelno" name="editModelno" placeholder="Modal No.">
+                                    <input type="text" class="form-control typeahead" id="editModelno" name="editModelno" placeholder="Model No.">
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -139,17 +173,23 @@ include_once '../includes/header.php';
                         <table class="table" id="productTable1">
                             <thead>
                                 <tr>
-                                    <th style="width:25%;text-align:center">Modal</th>
+                                    <!-- <th style="width:25%;text-align:center">Model</th>
+                                    <th style="width:20%;text-align:center">Year</th>
+                                    <th style="width:20%;text-align:center">Model No.</th>
+                                    <th style="width:20%;text-align:center">Model Type</th> -->
+                                    <th style="width:20%;text-align:center">Model</th>
                                     <th style="width:20%;text-align:center">Year</th>
                                     <th style="width:20%;text-align:center">Model No.</th>
                                     <th style="width:20%;text-align:center">Model Type</th>
+                                    <th style="width:20%;text-align:center">Exclude Model No</th>
+
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr id="row1" class="0">
                                     <td class="form-group">
                                         <select class="form-control selectpicker w-auto" id="editModel" name="editModel" data-live-search="true" data-size="4">
-                                            <option value="0" selected disabled>Select Modal</option>
+                                            <option value="0" selected disabled>Select Model</option>
                                             <option value="ACCORD">ACCORD</option>
                                             <option value="ACCORD HYBRID">ACCORD HYBRID</option>
                                             <option value="CIVIC">CIVIC</option>
@@ -167,12 +207,18 @@ include_once '../includes/header.php';
                                         <input type="text" class="form-control typeahead typeahead1" id="editYear" name="editYear" placeholder="Year">
                                     </td>
                                     <td class="form-group">
-                                        <input type="text" class="form-control typeahead typeahead1" id="editModelno" name="editModelno" placeholder="Modal No.">
+                                        <input type="text" class="form-control typeahead typeahead1" id="editModelno" name="editModelno" placeholder="Model No.">
                                     </td>
                                     <td class="form-group">
                                         <select class="form-control selectpicker w-auto" id="editModelType" name="editModelType">
-                                            <option value="NEW" selected>NEW</option>
+                                            <option value="BOTH" selected>BOTH</option>
+                                            <option value="NEW">NEW</option>
                                             <option value="USED">USED</option>
+                                        </select>
+                                    </td>
+                                    <td class="form-group">
+                                        <select class="form-control select21" id="editExModelno" name="editExModelno[]" multiple="multiple" title="Exclude Model No.">
+                                            <optgroup label="Press Enter to add">
                                         </select>
                                     </td>
                                 </tr>
@@ -297,18 +343,19 @@ include_once '../includes/header.php';
                     <table class="table" id="productTable">
                         <thead>
                             <tr>
-                                <th style="width:25%;text-align:center">Modal</th>
-                                <th style="width:20%;text-align:center">Year</th>
+                                <th style="width:20%;text-align:center">Model</th>
+                                <th style="width:15%;text-align:center">Year</th>
                                 <th style="width:20%;text-align:center">Model No.</th>
-                                <th style="width:20%;text-align:center">Model Type</th>
-                                <th style="width:15%;text-align:center"></th>
+                                <th style="width:15%;text-align:center">Model Type</th>
+                                <th style="width:20%;text-align:center">Exclude Model No</th>
+                                <th style="width:10%;text-align:center"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr id="row1" class="0">
                                 <td class="form-group">
                                     <select class="form-control selectpicker w-auto" id="model1" name="model[]" data-live-search="true" data-size="4">
-                                        <option value="0" selected disabled>Select Modal</option>
+                                        <option value="0" selected disabled>Select Model</option>
                                         <option value="ACCORD">ACCORD</option>
                                         <option value="ACCORD HYBRID">ACCORD HYBRID</option>
                                         <option value="CIVIC">CIVIC</option>
@@ -326,12 +373,18 @@ include_once '../includes/header.php';
                                     <input type="text" class="form-control typeahead typeahead1" id="year1" name="year[]" placeholder="Year">
                                 </td>
                                 <td class="form-group">
-                                    <input type="text" class="form-control typeahead typeahead1" id="modelno1" name="modelno[]" placeholder="Modal No.">
+                                    <input type="text" class="form-control typeahead typeahead1" id="modelno1" name="modelno[]" placeholder="Model No.">
                                 </td>
                                 <td class="form-group">
                                     <select class="form-control selectpicker w-auto" id="modelType1" name="modelType[]">
-                                        <option value="NEW" selected>NEW</option>
+                                        <option value="BOTH" selected>BOTH</option>
+                                        <option value="NEW">NEW</option>
                                         <option value="USED">USED</option>
+                                    </select>
+                                </td>
+                                <td class="form-group">
+                                    <select class="form-control select21" id="exModelno1" name="exModelno1[]" multiple="multiple" title="Exclude Model No.">
+                                        <optgroup label="Press Enter to add">
                                     </select>
                                 </td>
                                 <td class="form-group text-center">
@@ -348,9 +401,9 @@ include_once '../includes/header.php';
                         <div class="col-md-3">
 
                             <div class="form-group">
-                                <label for="model">Modal</label>
+                                <label for="model">Model</label>
                                 <select class="form-control selectpicker w-auto" id="model" name="model" data-live-search="true" data-size="4">
-                                    <option value="0" selected disabled>Select Modal</option>
+                                    <option value="0" selected disabled>Select Model</option>
                                     <option value="ACCORD">ACCORD</option>
                                     <option value="ACCORD HYBRID">ACCORD HYBRID</option>
                                     <option value="CIVIC">CIVIC</option>
@@ -374,7 +427,7 @@ include_once '../includes/header.php';
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="modelno">Model No.</label>
-                                <input type="text" class="form-control typeahead" id="modelno" name="modelno" placeholder="Modal No.">
+                                <input type="text" class="form-control typeahead" id="modelno" name="modelno" placeholder="Model No.">
                             </div>
                         </div>
                         <div class="col-md-3">

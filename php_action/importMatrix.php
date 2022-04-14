@@ -343,7 +343,7 @@ if ($_POST) {
 
 
     // echo "successfully added";
-    // $connect->close();
+    $connect->close();
 
-    // echo json_encode($valid);
+    echo json_encode($valid);
 }

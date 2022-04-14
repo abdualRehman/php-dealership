@@ -21,10 +21,10 @@ if ($result->num_rows > 0) {
         $invStatus = $row[15]; 
         
         $certified = ($row[13] == 'on') ? 'Yes' : 'No';
-        // $balance = ($invStatus == 1) ? $row[14] : "";
-        // $lot = ($invStatus == 1) ? $row[12] : "";
-        $balance = $row[14];
-        $lot = $row[12];
+        $balance = ($invStatus == 1) ? $row[14] : "";
+        $lot = ($invStatus == 1) ? $row[12] : "";
+        // $balance = $row[14];
+        // $lot = $row[12];
 
         
         $id = $row[11];

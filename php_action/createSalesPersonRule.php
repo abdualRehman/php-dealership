@@ -44,14 +44,18 @@ if ($_POST) {
         $inspection = mysqli_real_escape_string($connect, $_POST['inspection']);
     }
     $salespersonStatus = "N/A";
-    if (isset($_POST['salespersonStatus'])) {
-        $salespersonStatus = mysqli_real_escape_string($connect, $_POST['salespersonStatus']);
+    if (isset($_POST['salePStatus'])) {
+        $salespersonStatus = mysqli_real_escape_string($connect, $_POST['salePStatus']);
     }
     $paid = "N/A";
     if (isset($_POST['paid'])) {
         $paid = mysqli_real_escape_string($connect, $_POST['paid']);
     }
 
+    // echo $vinCheck . '<br />';
+    // echo $insurance . '<br />';
+    // echo $tradeTitle . '<br />';
+    // echo $registration . '<br />';
     // echo $inspection . '<br />';
     // echo $salespersonStatus . '<br />';
     // echo $paid . '<br />';
@@ -59,29 +63,35 @@ if ($_POST) {
 
 
     for ($x = 0; $x < count($_POST['model']); $x++) {
-
+        $i = $x + 1;
         $model = mysqli_real_escape_string($connect, $_POST['model'][$x]);
+        $state = mysqli_real_escape_string($connect, $_POST['state'][$x]);
         $year = mysqli_real_escape_string($connect, $_POST['year'][$x]);
         $modelno = mysqli_real_escape_string($connect, $_POST['modelno'][$x]);
         $modelType = mysqli_real_escape_string($connect, $_POST['modelType'][$x]);
+
+        $exModelno = (isset($_POST['exModelno' . $i] )) ? implode("_", $_POST['exModelno' . $i] ) : "";
+        $exModelno = ($exModelno ===  "") ? "" :   "_" . $exModelno . "_";
        
 
-        $checkSql = "SELECT * FROM `salesperson_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND type='$modelType' AND status = 1";
+        $checkSql = "SELECT * FROM `salesperson_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND type='$modelType' AND `state`='$state' AND status = 1";
         $result = $connect->query($checkSql);
         if ($result->num_rows > 0) {
             
-            $valid['errorMessages'][] = $model .' - '. $year . ' - ' . $modelno. ' - ' . $modelType  ." is Already Exist";
+            $valid['errorMessages'][] = $model .' - '. $year . ' - ' . $modelno. ' - ' . $state . ' - ' . $modelType . " is Already Exist";
         
         } else {
 
-            $sql = "INSERT INTO `salesperson_rules`(`from_date`, `to_date`, `model`, `year`, `modelno` , `type`, `vin_check`, `insurance`, `trade_title`, `registration`, `inspection`, `salesperson_status`, `paid`, `status`) 
+            $sql = "INSERT INTO `salesperson_rules`(`from_date`, `to_date`, `model`, `year`, `modelno` , `ex_modelno` , `type`, `state` , `vin_check`, `insurance`, `trade_title`, `registration`, `inspection`, `salesperson_status`, `paid`, `status`) 
             VALUES (
                 '$fromDate',
                 '$toDate',
                 '$model',
                 '$year',
                 '$modelno',
+                '$exModelno',
                 '$modelType',
+                '$state',
                 '$vinCheck',
                 '$insurance',
                 '$tradeTitle',

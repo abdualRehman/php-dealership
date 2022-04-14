@@ -2,9 +2,14 @@
     max-height: 100px !important;
 }
 
-.theme-light .dropdown-item.active,
-.theme-light .dropdown-item:active {
-    padding: 10px;
+
+.dt-button-collection.two-column .dropdown-item
+{
+    /* padding: 5px; */
+    display: inline-block!important;
+}
+.dt-button-collection.two-column .dropdown-item.active,
+.dt-button-collection.two-column .dropdown-item:active{
     border: 1px solid #ffffff80;
 }
 

@@ -86,6 +86,7 @@ $(function () {
             <'row'<'col-12'tr>>\n      
             <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
 
+        "pageLength": 25,
         searchPanes: {
             cascadePanes: !0,
             viewTotal: !0,

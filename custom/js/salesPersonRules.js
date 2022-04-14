@@ -43,23 +43,35 @@ $(function () {
 
 
     manageRuleTable = $("#datatable-1").DataTable({
-        responsive: !0,
+        // responsive: !0,
+        scrollX: !0,
+        scrollCollapse: !0,
+        fixedColumns: {
+            leftColumns: 0,
+            rightColumns: 1
+        },
         'ajax': '../php_action/fetchSalesPersonRules.php',
         dom: "Pfrtip",
         searchPanes: {
             cascadePanes: !0,
             viewTotal: !0,
-            columns: [0, 1, 2, 3 , 4],
+            columns: [0, 1, 2, 3, 4],
         },
+        "pageLength": 25,
         columnDefs: [
             {
                 searchPanes: {
                     show: true
                 },
-                targets: [0, 1, 2, 3 , 4],
+                targets: [0, 1, 2, 3, 4],
             },
             {
-                targets: 4,
+                "targets": [0, 1, 2, 5, 6],
+                "visible": false,
+                "searchable": false
+            },
+            {
+                targets: 5,
                 createdCell: function (td, cellData, rowData, row, col) {
                     if (cellData == 'Expire') {
                         $(td).html('<span class="badge badge-danger badge-pill">Expire</span>');
@@ -114,6 +126,23 @@ $(function () {
                     }
                 },
             },
+            "state[]": {
+                // valueNotEquals: "0",
+                required: function (params) {
+                    var id = params.id;
+                    if (params.value == 0) {
+                        params.classList.add('is-invalid');
+                        params.classList.remove('is-valid');
+                        $('#' + id).selectpicker('refresh');
+                        return true;
+                    } else {
+                        params.classList.remove('is-invalid');
+                        params.classList.add('is-valid');
+                        $('#' + id).selectpicker('refresh');
+                        return false;
+                    }
+                },
+            },
         },
         messages: {
             fromDate: {
@@ -125,43 +154,46 @@ $(function () {
         },
         submitHandler: function (form, e) {
             // return false
-            e.preventDefault();
-            var form = $('#addNewRule');
-            $.ajax({
-                type: "POST",
-                url: form.attr('action'),
-                data: form.serialize(),
-                dataType: 'json',
-                success: function (response) {
-                    console.log(response);
+            // e.preventDefault();
+            var c = confirm('Do you really want to save this?');
+            if (c) {
+                var form = $('#addNewRule');
+                $.ajax({
+                    type: "POST",
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response);
 
-                    if ( (response.errorMessages) && response.errorMessages.length > 0) {
-                        response.errorMessages.forEach(message => {
-                            toastr.error( message , 'Error while Adding');
-                        });
-                    }
-                    if (response.success == true) {
-                        e1.fire({
-                            position: "center",
-                            icon: "success",
-                            title:  response.messages.length > 0 ? response.messages[0] : "Successfully Added",
-                            showConfirmButton: !1,
-                            timer: 1500
-                        })
-                        manageRuleTable.ajax.reload(null, false);
-                    } else {
-                        e1.fire({
-                            position: "center",
-                            icon: "error",
-                            title: response.messages.length > 0 ? response.messages[0] : "Error while Adding",
-                            showConfirmButton: !1,
-                            timer: 2500
-                        })
+                        if ((response.errorMessages) && response.errorMessages.length > 0) {
+                            response.errorMessages.forEach(message => {
+                                toastr.error(message, 'Error while Adding');
+                            });
+                        }
+                        if (response.success == true) {
+                            e1.fire({
+                                position: "center",
+                                icon: "success",
+                                title: response.messages.length > 0 ? response.messages[0] : "Successfully Added",
+                                showConfirmButton: !1,
+                                timer: 1500
+                            })
+                            manageRuleTable.ajax.reload(null, false);
+                        } else {
+                            e1.fire({
+                                position: "center",
+                                icon: "error",
+                                title: response.messages.length > 0 ? response.messages[0] : "Error while Adding",
+                                showConfirmButton: !1,
+                                timer: 2500
+                            })
 
-                        // form[0].reset();
+                            // form[0].reset();
+                        }
                     }
-                }
-            });
+                });
+            }
             return false;
 
         }
@@ -208,38 +240,41 @@ $(function () {
         submitHandler: function (form, e) {
             // return true
             e.preventDefault();
-            var form = $('#editRuleForm');
-            $.ajax({
-                type: "POST",
-                url: form.attr('action'),
-                data: form.serialize(),
-                dataType: 'json',
-                success: function (response) {
-                    console.log(response);
+            var c = confirm('Do you really want to save this?');
+            if (c) {
+                var form = $('#editRuleForm');
+                $.ajax({
+                    type: "POST",
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response);
 
-                    if (response.success == true) {
-                        e1.fire({
-                            position: "top-end",
-                            icon: "success",
-                            title: response.messages,
-                            showConfirmButton: !1,
-                            timer: 1500
-                        })
-                        // form[0].reset();
-                        manageRuleTable.ajax.reload(null, false);
+                        if (response.success == true) {
+                            e1.fire({
+                                position: "top-end",
+                                icon: "success",
+                                title: response.messages,
+                                showConfirmButton: !1,
+                                timer: 1500
+                            })
+                            // form[0].reset();
+                            manageRuleTable.ajax.reload(null, false);
 
-                    } else {
-                        e1.fire({
-                            position: "top-end",
-                            icon: "error",
-                            title: response.messages,
-                            showConfirmButton: !1,
-                            timer: 2500
-                        })
+                        } else {
+                            e1.fire({
+                                position: "top-end",
+                                icon: "error",
+                                title: response.messages,
+                                showConfirmButton: !1,
+                                timer: 2500
+                            })
 
+                        }
                     }
-                }
-            });
+                });
+            }
             return false;
 
         }
@@ -268,6 +303,12 @@ function loadTypeHead(id) {
             }), a(t)
         })
     });
+    $(".select2" + id).select2({
+        dropdownAutoWidth: !0,
+        placeholder: "Exclude Modal No.",
+        tags: !0,
+        allowClear: true
+    })
 }
 
 
@@ -302,18 +343,42 @@ function editRule(ruleId = null) {
                 $('#editYear').val(response.year);
                 $('#editModelno').val(response.modelno);
                 $('#editModelType').val(response.type);
+                $('#editState').val(response.state);
+                
+                var arr = (response.ex_modelno.trim()).split('_');
+                arr.shift(); //remove first space
+                arr.pop(); //remove last space
+                $("#editExModelno").html('');
+                arr.forEach(element => {
+                    if ((element == '') || $('#editExModelno').find("option[value='" + element + "']").length) {
+                        // $('#editExModelno').val(element).trigger('change');
+                    }
+                    else {
+                        var newOption = new Option(element, element, true, true);
+                        $('#editExModelno').append(newOption).trigger('change');
+                    }
+                });
 
-                $('#editVinCheck').attr("checked", (response.vin_check == 'on' ?  true : false) );
-                $('#editInsurance').attr("checked", (response.insurance == 'on' ?  true : false) );
-                $('#editTradeTitle').attr("checked", (response.trade_title == 'on' ?  true : false) );
-                $('#editRegistration').attr("checked", (response.registration == 'on' ?  true : false) );
-                $('#editInspection').attr("checked", (response.inspection == 'on' ?  true : false) );
-                $('#editSalespersonStatus').attr("checked", (response.salesperson_status == 'on' ?  true : false) );
-                $('#editPaid').attr("checked", (response.paid == 'on' ?  true : false) );
-
+                $('#editVinCheck').val(response.vin_check);
+                $('#editInsurance').val(response.insurance);
+                $('#editTradeTitle').val(response.trade_title);
+                $('#editRegistration').val(response.registration);
+                $('#editInspection').val(response.inspection);
+                $('#editSalespersonStatus').val(response.salesperson_status);
+                $('#editPaid').val(response.paid);
 
 
                 $('.selectpicker').selectpicker('refresh');
+
+                chnageStyle({ id: 'editVinCheck', value: response.vin_check });
+                chnageStyle({ id: 'editInsurance', value: response.insurance });
+                chnageStyle({ id: 'editTradeTitle', value: response.trade_title });
+                chnageStyle({ id: 'editRegistration', value: response.registration });
+                chnageStyle({ id: 'editInspection', value: response.inspection });
+                chnageStyle({ id: 'editSalespersonStatus', value: response.salesperson_status });
+                chnageStyle({ id: 'editPaid', value: response.paid });
+
+
 
             }, // /success
             error: function (err) {
@@ -356,15 +421,15 @@ function removeRule(ruleId = null) {
 }
 
 
-$('#selectAll').change(function () {
-    // $('#selectAll').prop("checked", this.checked)
-    $('#checkBoxRow .check').prop("checked", this.checked);
-});
+// $('#selectAll').change(function () {
+//     // $('#selectAll').prop("checked", this.checked)
+//     $('#checkBoxRow .check').prop("checked", this.checked);
+// });
 
-$('#editSelectAll').change(function () {
-    // $('#selectAll').prop("checked", this.checked)
-    $('#checkBoxRow .check').prop("checked", this.checked);
-});
+// $('#editSelectAll').change(function () {
+//     // $('#selectAll').prop("checked", this.checked)
+//     $('#checkBoxRow .check').prop("checked", this.checked);
+// });
 function toggleFilterClass() {
     $('.dtsp-panes').toggle();
 }
@@ -417,8 +482,71 @@ function addRow() {
     </td>
     <td class="form-group">
         <select class="form-control selectpicker w-auto" id="modelType${count}" name="modelType[]">
-            <option value="NEW" selected>NEW</option>
+            <option value="ALL" selected>All</option>
+            <option value="NEW">NEW</option>
             <option value="USED">USED</option>
+        </select>
+    </td>
+    <td class="form-group">
+        <select class="form-control selectpicker w-auto" name="state[]" id="state${count}" data-live-search="true" data-size="4">
+            <option value="0" selected disabled>State</option>
+            <option value="MA">MA</option>
+            <option value="RI">RI</option>
+            <option value="CT">CT</option>
+            <option value="NH">NH</option>
+            <option value="AL">AL</option>
+            <option value="AK">AK</option>
+            <option value="AZ">AZ</option>
+            <option value="AR">AR</option>
+            <option value="CA">CA</option>
+            <option value="CO">CO</option>
+            <option value="DC">DC</option>
+            <option value="DE">DE</option>
+            <option value="FL">FL</option>
+            <option value="GA">GA</option>
+            <option value="HI">HI</option>
+            <option value="ID">ID</option>
+            <option value="IL">IL</option>
+            <option value="IN">IN</option>
+            <option value="IA">IA</option>
+            <option value="KS">KS</option>
+            <option value="KY">KY</option>
+            <option value="LA">LA</option>
+            <option value="ME">ME</option>
+            <option value="MD">MD</option>
+            <option value="MI">MI</option>
+            <option value="MN">MN</option>
+            <option value="MS">MS</option>
+            <option value="MO">MO</option>
+            <option value="MT">MT</option>
+            <option value="NE">NE</option>
+            <option value="NV">NV</option>
+            <option value="NJ">NJ</option>
+            <option value="NM">NM</option>
+            <option value="NY">NY</option>
+            <option value="NC">NC</option>
+            <option value="ND">ND</option>
+            <option value="OH">OH</option>
+            <option value="OK">OK</option>
+            <option value="OR">OR</option>
+            <option value="PA">PA</option>
+            <option value="SC">SC</option>
+            <option value="SD">SD</option>
+            <option value="TN">TN</option>
+            <option value="TX">TX</option>
+            <option value="UT">UT</option>
+            <option value="VT">VT</option>
+            <option value="VA">VA</option>
+            <option value="WA">WA</option>
+            <option value="WV">WV</option>
+            <option value="WI">WI</option>
+            <option value="WY">WY</option>
+            <option value="N/A">N/A</option>
+        </select>
+    </td>
+    <td class="form-group">
+        <select class="form-control select2${count}" id="exModelno${count}" name="exModelno${count}[]" multiple="multiple" title="Exclude Model No.">
+            <optgroup label="Press Enter to add">
         </select>
     </td>
     <td class="form-group text-center">
@@ -443,4 +571,78 @@ function removeProductRow(row = null) {
     } else {
         alert('error! Refresh the page again');
     }
+}
+
+function chnageStyle(field) {
+
+    var ele = $(`button[data-id="${field.id}"]`);
+
+    switch (field.id) {
+        case 'vinCheck':
+        case 'editVinCheck':
+            if (field.value == 'checkTitle' || field.value == 'need') {
+                $('#' + field.id).selectpicker('refresh');
+                $('#' + field.id).selectpicker('setStyle', 'btn-outline-danger');
+            } else {
+                ele.removeClass('btn-outline-danger');
+                $('#' + field.id).selectpicker('setStyle', ' btn-outline-success');
+            }
+            break;
+
+        case 'insurance':
+        case 'tradeTitle':
+        case 'inspection':
+        case 'editInsurance':
+        case 'editTradeTitle':
+        case 'editInspection':
+            if (field.value == 'need') {
+                $('#' + field.id).selectpicker('refresh');
+                $('#' + field.id).selectpicker('setStyle', 'btn-outline-danger');
+            } else {
+                ele.removeClass('btn-outline-danger');
+                $('#' + field.id).selectpicker('setStyle', ' btn-outline-success');;
+            }
+            break;
+        case 'registration':
+        case 'editRegistration':
+            if (field.value == 'pending') {
+                $('#' + field.id).selectpicker('refresh');
+                $('#' + field.id).selectpicker('setStyle', 'btn-outline-danger');
+            } else {
+                ele.removeClass('btn-outline-danger');
+                $('#' + field.id).selectpicker('setStyle', ' btn-outline-success');
+            }
+            break;
+        case 'salePStatus':
+        case 'editSalespersonStatus':
+            if (field.value == 'dealWritten') {
+                $('#' + field.id).selectpicker('refresh');
+                $('#' + field.id).selectpicker('setStyle', 'btn-outline-danger');
+            } else {
+                ele.removeClass('btn-outline-danger');
+                $('#' + field.id).selectpicker('setStyle', ' btn-outline-success');
+            }
+            break;
+        case 'paid':
+        case 'editPaid':
+            if (field.value == 'no') {
+                $('#' + field.id).selectpicker('refresh');
+                $('#' + field.id).selectpicker('setStyle', 'btn-outline-danger');
+            } else {
+                ele.removeClass('btn-outline-danger');
+                $('#' + field.id).selectpicker('setStyle', ' btn-outline-success');
+            }
+            break;
+        default:
+
+            break;
+
+    }
+    if (field.value == 'N/A') {
+        ele.removeClass('btn-outline-danger');
+        ele.removeClass('btn-outline-success');
+        $('#' + field.id).selectpicker('refresh');
+    }
+
+
 }

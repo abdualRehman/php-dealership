@@ -2,7 +2,7 @@
 
 require_once 'db/core.php';
 
-$sql = "SELECT `id`, `from_date`, `to_date`, `model`, `year`, `modelno`, `vin_check`, `insurance`, `trade_title`, `registration`, `inspection`, `salesperson_status`, `paid` , `type` FROM `salesperson_rules` WHERE status = 1";
+$sql = "SELECT `id`, `from_date`, `to_date`, `model`, `year`, `modelno`, `vin_check`, `insurance`, `trade_title`, `registration`, `inspection`, `salesperson_status`, `paid` , `type` , `ex_modelno` , `state` FROM `salesperson_rules` WHERE status = 1";
 $result = $connect->query($sql);
 
 $output = array('data' => array());
@@ -15,8 +15,11 @@ if ($result->num_rows > 0) {
         $id = $row[0];
 
 
+        $ex_modelno = $row[14];
+        $ex_modelno = str_replace('_', ' ', $ex_modelno);
         // $fdate = new DateTime($row[1]);
-        
+        $state = $row[15];
+
         // date_default_timezone_set('Australia/Melbourne');
         $date = date('Y-m-d');
         $date1 = new DateTime($date);
@@ -25,9 +28,9 @@ if ($result->num_rows > 0) {
 
         $abs_diff = $date1->diff($tdate)->format("%r%a");
 
-        if($abs_diff <= 0){
+        if ($abs_diff <= 0) {
             $abs_diff = "Expire";
-        }else{
+        } else {
             $abs_diff = $abs_diff . " Days";
         }
 
@@ -43,22 +46,23 @@ if ($result->num_rows > 0) {
         ';
 
 
-        $vin_check = ($row[6] == 'on') ? "YES" : "N/A";
-        $insurance = ($row[7] == 'on') ? "YES" : "N/A";
-        $trade_title = ($row[8] == 'on') ? "YES" : "N/A";
-        $registration = ($row[9] == 'on') ? "YES" : "N/A";
-        $inspection = ($row[10] == 'on') ? "YES" : "N/A";
-        $salesperson_status = ($row[11] == 'on') ? "YES" : "N/A";
-        $paid = ($row[12] == 'on') ? "YES" : "N/A";
-    
-
+        $vin_check = ($row[6] === 'N/A') ? "Disabled" : $row[6];
+        $insurance = ($row[7] === 'N/A') ? "Disabled" : $row[7];
+        $trade_title = ($row[8] === 'N/A') ? "Disabled" : $row[8];
+        $registration = ($row[9] === 'N/A') ? "Disabled" : $row[9];
+        $inspection = ($row[10] === 'N/A') ? "Disabled" : $row[10];
+        $salesperson_status = ($row[11] === 'N/A') ? "Disabled" : $row[11];
+        $paid = ($row[12] === 'N/A') ? "Disabled" : $row[12];
+       
 
 
         $output['data'][] = array(
             $row[3],
             $row[4],
             $row[5],
+            $state,
             $row[13],  // type
+            $ex_modelno,
             $abs_diff,
             $vin_check,
             $insurance,

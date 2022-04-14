@@ -23,7 +23,12 @@ if ($_POST) {
     $year = mysqli_real_escape_string($connect, $_POST['editYear']);
     $modelno = mysqli_real_escape_string($connect, $_POST['editModelno']);
     $editModelType = mysqli_real_escape_string($connect, $_POST['editModelType']);
+    $editState = mysqli_real_escape_string($connect, $_POST['editState']);
 
+    $editExModelno = (isset($_POST['editExModelno'])) ? implode("_", $_POST['editExModelno']): "";
+    $editExModelno = ($editExModelno ===  "") ? "" :   "_".$editExModelno."_" ;
+
+    // echo $editExModelno;
 
     $vinCheck = "N/A";
     if (isset($_POST['editVinCheck'])) {
@@ -55,7 +60,7 @@ if ($_POST) {
     }
 
 
-    $checkSql = "SELECT * FROM `salesperson_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND type = '$editModelType' AND status = 1 AND id != '$ruleId'";
+    $checkSql = "SELECT * FROM `salesperson_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND type = '$editModelType' AND `state` = '$editState' AND status = 1 AND id != '$ruleId'";
     $result = $connect->query($checkSql);
 
     if ($result->num_rows > 0) {
@@ -71,7 +76,9 @@ if ($_POST) {
         `model`='$model',
         `year`='$year',
         `modelno`='$modelno',
+        `ex_modelno`='$editExModelno',
         `type`='$editModelType',
+        `state`='$editState',
         `vin_check`='$vinCheck',
         `insurance`='$insurance',
         `trade_title`='$tradeTitle',

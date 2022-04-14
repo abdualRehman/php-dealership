@@ -58,6 +58,7 @@ $(function () {
                 columns: [0, 2, 4, 5, 9],
                 stateSave: true,
             },
+            "pageLength": 25,
             buttons: [
                 {
                     text: 'Today',
@@ -342,7 +343,7 @@ $(function () {
                     if (!checkValue) {
                         // if Inventory item was deleted then search from deleted inv data
                         fetchSelectedInvForSearch(response.stock_id);
-                    }else{
+                    } else {
                         changeRules()
                     }
 
@@ -479,8 +480,6 @@ $(function () {
 
 
 
-
-
         });
     }
 
@@ -501,9 +500,9 @@ function fetchSelectedInvForSearch(id = null) {
             var selectBox = document.getElementById('stockId');
             selectBox.innerHTML += `<option value="${item[0]}" selected title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`;
             $('.selectpicker').selectpicker('refresh');
-            changeStockDetails({value: item[0]})
+            changeStockDetails({ value: item[0] })
         }
-        
+
     }); // /ajax function to remove the brand
 }
 
@@ -702,7 +701,7 @@ function loadSaleManager() {
             selectBoxs.forEach(element => {
                 for (var i = 0; i < array.length; i++) {
                     var item = array[i];
-                    element.innerHTML = `<option value="${item[0]}" title="${item[1]}">${item[1]} || ${item[2]} </option>`;
+                    element.innerHTML += `<option value="${item[0]}" title="${item[1]}">${item[1]} || ${item[2]} </option>`;
                 }
             });
             $('.selectpicker').selectpicker('refresh');
@@ -754,53 +753,177 @@ function changeStockDetails(ele) {
     }
 
     autosize.update($("#selectedDetails"));
-    changeSalesPersonTodo()
     changeRules()
 
 }
 
+function changeRules() {
+    // console.log("function call");
+    var eleV = $('#stockId').val();
+    if (eleV) {
+        let obj = stockArray.find(data => data[0] === eleV);
+        console.log(obj);
+
+        var saleDate = $('#saleDate').val();
+        saleDate = moment(saleDate).format('MM-DD-YYYY');
+
+        // setting Incentives Rulus
+        var startDate = moment(obj[17]).format('MM-DD-YYYY');
+        var endDate = moment(obj[18]).format('MM-DD-YYYY');
+
+        var bool1 = moment(saleDate).isBetween
+            (startDate, endDate, null, '[]'); // true
+
+        console.log(saleDate);
+        console.log("incentive start date", startDate);
+        console.log("incentive End date", endDate);
+        console.log("incentive Boolean", bool1);
+
+        if (bool1) {
+
+            $('#college').prop("disabled", obj[19] != 'N/A' ? false : true);
+            $('#military').prop("disabled", obj[20] != 'N/A' ? false : true);
+            $('#loyalty').prop("disabled", obj[21] != 'N/A' ? false : true);
+            $('#conquest').prop("disabled", obj[22] != 'N/A' ? false : true);
+            $('#misc1').prop("disabled", obj[23] != 'N/A' ? false : true);
+            $('#misc2').prop("disabled", obj[24] != 'N/A' ? false : true);
+            $('#misc3').prop("disabled", obj[25] != 'N/A' ? false : true);
+
+
+        } else {
+
+            $('#college').prop("disabled", true);
+            $('#military').prop("disabled", true);
+            $('#loyalty').prop("disabled", true);
+            $('#conquest').prop("disabled", true);
+            $('#misc1').prop("disabled", true);
+            $('#misc2').prop("disabled", true);
+            $('#misc3').prop("disabled", true);
+        }
+
+        $('.selectpicker').selectpicker('refresh');
+
+        changeSalesPersonTodo();
+    }
+
+}
+
 function changeSalesPersonTodo() {
-    var stockType = $('#selectedStockType').val(); // setting stock type
-    var state = $('#state').val();
-    var obj = { id: 'vincheck', value: "" };
+    var eleV = $('#stockId').val();
+    if (eleV) {
+        let obj = stockArray.find(data => data[0] === eleV);
+        // console.log(obj);
 
+        // sales Person's Todo Rules
+        // console.log(obj['spTodoArray']);
+        var todoArray = obj['spTodoArray'];
+        let state = $('#state').val();
+        console.log(todoArray.length);
+        var saleDate = $('#saleDate').val();
+        if (state && todoArray.length > 0) {
 
-    if (stockType != '' && state != null) {
+            var spTodoRulesObj = todoArray.find(data => data[4] === state);
 
-        if (state !== "RI") {
-            // console.log("Doest need Not RI: ", state);
-            $('select[name=vincheck]').val('notNeed');
-            $('#vincheck').selectpicker('refresh');
-            obj.value = "notNeed";
-            chnageStyle(obj);
-            $('select[name=inspection]').val('need');
-            $('#inspection').selectpicker('refresh');
-            $('select[name=inspection]').selectpicker('setStyle', 'btn-outline-danger');
+            if (spTodoRulesObj) {
+
+                saleDate = moment(saleDate).format('MM-DD-YYYY');
+                var startDate1 = moment(spTodoRulesObj[12]).format('MM-DD-YYYY');
+                var endDate1 = moment(spTodoRulesObj[13]).format('MM-DD-YYYY');
+
+                var bool = moment(saleDate).isBetween
+                    (startDate1, endDate1, null, '[]'); // true
+
+                console.log("Is Valid? \n", bool);
+
+                if (bool) {
+                    console.log("Data found \n", spTodoRulesObj);
+                    changeSalesPersonTodoStyle("vincheck", spTodoRulesObj[5]);
+                    changeSalesPersonTodoStyle("insurance", spTodoRulesObj[6]);
+                    changeSalesPersonTodoStyle("tradeTitle", spTodoRulesObj[7]);
+                    changeSalesPersonTodoStyle("registration", spTodoRulesObj[8]);
+                    changeSalesPersonTodoStyle("inspection", spTodoRulesObj[9]);
+                    changeSalesPersonTodoStyle("salePStatus", spTodoRulesObj[10]);
+                    changeSalesPersonTodoStyle("paid", spTodoRulesObj[11]);
+
+                } else {
+                    changeSalesPersonTodoStyle("vincheck", "N/A");
+                    changeSalesPersonTodoStyle("insurance", "N/A");
+                    changeSalesPersonTodoStyle("tradeTitle", "N/A");
+                    changeSalesPersonTodoStyle("registration", "N/A");
+                    changeSalesPersonTodoStyle("inspection", "N/A");
+                    changeSalesPersonTodoStyle("salePStatus", "N/A");
+                    changeSalesPersonTodoStyle("paid", "N/A");
+                }
+            }
+
+        } else {
+            changeSalesPersonTodoStyle("vincheck", "N/A");
+            changeSalesPersonTodoStyle("insurance", "N/A");
+            changeSalesPersonTodoStyle("tradeTitle", "N/A");
+            changeSalesPersonTodoStyle("registration", "N/A");
+            changeSalesPersonTodoStyle("inspection", "N/A");
+            changeSalesPersonTodoStyle("salePStatus", "N/A");
+            changeSalesPersonTodoStyle("paid", "N/A");
+
         }
-        if ((state === "RI") && stockType === "USED") {
-            // console.log("CheckTitle:  ", state, stockType);
-            $('select[name=vincheck]').val('checkTitle');
-            $('#vincheck').selectpicker('refresh');
-            obj.value = "checkTitle";
-            chnageStyle(obj);
-            $('select[name=inspection]').val('need');
-            $('#inspection').selectpicker('refresh');
-            $('select[name=inspection]').selectpicker('setStyle', 'btn-outline-danger');
-        }
-        if ((state === "RI") && stockType === "NEW") {
-            // console.log("Doesn't Need:  ", state, stockType);
-            $('select[name=vincheck]').val('notNeed');
-            obj.value = "notNeed";
-            $('#vincheck').selectpicker('refresh');
-            chnageStyle(obj);
-            $('select[name=inspection]').val('notNeed');
-            $('#inspection').selectpicker('refresh');
-            $('select[name=inspection]').selectpicker('setStyle', 'btn-outline-success');
-        }
 
+        $(".selectpicker").selectpicker("refresh");
 
     }
+
+    // var stockType = $('#selectedStockType').val(); // setting stock type
+    // var state = $('#state').val();
+    // var obj = { id: 'vincheck', value: "" };
+
+
+    // if (stockType != '' && state != null) {
+
+    //     if (state !== "RI") {
+    //         // console.log("Doest need Not RI: ", state);
+    //         $('select[name=vincheck]').val('notNeed');
+    //         $('#vincheck').selectpicker('refresh');
+    //         obj.value = "notNeed";
+    //         chnageStyle(obj);
+    //         $('select[name=inspection]').val('need');
+    //         $('#inspection').selectpicker('refresh');
+    //         $('select[name=inspection]').selectpicker('setStyle', 'btn-outline-danger');
+    //     }
+    //     if ((state === "RI") && stockType === "USED") {
+    //         // console.log("CheckTitle:  ", state, stockType);
+    //         $('select[name=vincheck]').val('checkTitle');
+    //         $('#vincheck').selectpicker('refresh');
+    //         obj.value = "checkTitle";
+    //         chnageStyle(obj);
+    //         $('select[name=inspection]').val('need');
+    //         $('#inspection').selectpicker('refresh');
+    //         $('select[name=inspection]').selectpicker('setStyle', 'btn-outline-danger');
+    //     }
+    //     if ((state === "RI") && stockType === "NEW") {
+    //         // console.log("Doesn't Need:  ", state, stockType);
+    //         $('select[name=vincheck]').val('notNeed');
+    //         obj.value = "notNeed";
+    //         $('#vincheck').selectpicker('refresh');
+    //         chnageStyle(obj);
+    //         $('select[name=inspection]').val('notNeed');
+    //         $('#inspection').selectpicker('refresh');
+    //         $('select[name=inspection]').selectpicker('setStyle', 'btn-outline-success');
+    //     }
+
+
+    // }
 }
+
+function changeSalesPersonTodoStyle(elementID, value) {
+    if (value !== "N/A") {
+        $('#' + elementID).val(value);
+        $('#' + elementID).prop("disabled", false);
+    } else {
+        $(`#${elementID} option:eq(0)`).prop("selected", true);
+        $('#' + elementID).prop("disabled", true);
+    }
+
+}
+
 
 function toggleInfo(className) {
     $('.' + className).toggleClass('hidden')
@@ -865,95 +988,5 @@ function chnageStyle(field) {
             break;
     }
 
-
-}
-function changeRules() {
-    // console.log("function call");
-    var eleV = $('#stockId').val();
-    if (eleV) {
-        let obj = stockArray.find(data => data[0] === eleV);
-        console.log(obj);
-
-        var saleDate = $('#saleDate').val();
-        saleDate = moment(saleDate).format('MM-DD-YYYY');
-
-        // setting Incentives Rulus
-        var startDate = moment(obj[17]).format('MM-DD-YYYY');
-        var endDate = moment(obj[18]).format('MM-DD-YYYY');
-
-        var bool1 = moment(saleDate).isBetween
-            (startDate, endDate); // true
-
-        console.log(saleDate);
-        console.log("incentive start date", startDate);
-        console.log("incentive End date", endDate);
-        console.log("incentive Boolean", bool1);
-
-        if (bool1) {
-
-            $('#college').prop("disabled", obj[19] != 'N/A' ? false : true);
-            $('#military').prop("disabled", obj[20] != 'N/A' ? false : true);
-            $('#loyalty').prop("disabled", obj[21] != 'N/A' ? false : true);
-            $('#conquest').prop("disabled", obj[22] != 'N/A' ? false : true);
-            $('#misc1').prop("disabled", obj[23] != 'N/A' ? false : true);
-            $('#misc2').prop("disabled", obj[24] != 'N/A' ? false : true);
-            $('#misc3').prop("disabled", obj[25] != 'N/A' ? false : true);
-
-
-        } else {
-
-            $('#college').prop("disabled", true);
-            $('#military').prop("disabled", true);
-            $('#loyalty').prop("disabled", true);
-            $('#conquest').prop("disabled", true);
-            $('#misc1').prop("disabled", true);
-            $('#misc2').prop("disabled", true);
-            $('#misc3').prop("disabled", true);
-        }
-
-        // sales Person's Todo Rules
-        var startDate1 = moment(obj[26]).format('MM-DD-YYYY');
-        var endDate1 = moment(obj[27]).format('MM-DD-YYYY');
-
-        var bool = moment(saleDate).isBetween
-            (startDate1, endDate1); // true
-
-        console.log(saleDate);
-        console.log("SalesPerson start date", startDate);
-        console.log("SalesPerson End date", endDate);
-        console.log("SalesPerson Boolean", bool);
-
-        if (bool) {
-
-            $('#vincheck').prop("disabled", obj[28] != 'N/A' ? false : true);
-            $('#insurance').prop("disabled", obj[29] != 'N/A' ? false : true);
-            $('#tradeTitle').prop("disabled", obj[30] != 'N/A' ? false : true);
-            $('#registration').prop("disabled", obj[31] != 'N/A' ? false : true);
-            $('#inspection').prop("disabled", obj[32] != 'N/A' ? false : true);
-            $('#salePStatus').prop("disabled", obj[33] != 'N/A' ? false : true);
-            $('#paid').prop("disabled", obj[34] != 'N/A' ? false : true);
-
-        } else {
-
-            $('#vincheck').prop("disabled", true);
-            $('#insurance').prop("disabled", true);
-            $('#tradeTitle').prop("disabled", true);
-            $('#registration').prop("disabled", true);
-            $('#inspection').prop("disabled", true);
-            $('#salePStatus').prop("disabled", true);
-            $('#paid').prop("disabled", true);
-        }
-
-
-
-
-
-
-
-
-        $('.selectpicker').selectpicker('refresh');
-
-
-    }
 
 }

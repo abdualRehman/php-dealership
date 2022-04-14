@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&amp;family=Roboto+Mono&amp;display=swap" rel="stylesheet">
     <link href="<?php echo $GLOBALS['siteurl']; ?>/assets/build/styles/ltr-core.css" rel="stylesheet">
     <link href="<?php echo $GLOBALS['siteurl']; ?>/assets/build/styles/ltr-vendor.css" rel="stylesheet">
-    
+
     <!-- <link href="https://dashboard1.panely-html.blueupcode.com/assets/images/favicon.ico" rel="shortcut icon"
         type="image/x-icon"> -->
 
@@ -60,7 +60,7 @@
                                 </a>
                             </div>
                             <div class="menu-item">
-                                <a href="#" class="menu-item-link">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/incentives.php" class="menu-item-link">
                                     <i class="menu-item-bullet"></i>
                                     <span class="menu-item-text">incentive</span>
                                 </a>
@@ -121,6 +121,12 @@
                                     <span class="menu-item-text">To Do's</span>
                                 </a>
                             </div>
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/registrationProblem.php" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">Registration Problem</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
 
@@ -162,7 +168,8 @@
                         <div class="menu-section-icon"><i class="fa fa-ellipsis-h"></i></div>
                         <h2 class="menu-section-text">Settings</h2>
                     </div>
-                    <div class="menu-item"><button class="menu-item-link menu-item-toggle">
+                    <div class="menu-item">
+                        <button class="menu-item-link menu-item-toggle">
                             <div class="menu-item-icon">
                                 <i class="fa fa-solid fa-wrench"></i>
                             </div>
@@ -188,9 +195,57 @@
                                     <span class="menu-item-text">Locations</span>
                                 </a>
                             </div>
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/manufaturePrice.php?r=man" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">Import Manufacture Price</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
-
+                    <div class="menu-item">
+                        <button class="menu-item-link menu-item-toggle">
+                            <div class="menu-item-icon">
+                                <i class="fa fa-solid fa-wrench"></i>
+                            </div>
+                            <span class="menu-item-text">Matrix Rules</span>
+                            <div class="menu-item-addon"><i class="menu-item-caret caret"></i></div>
+                        </button>
+                        <div class="menu-submenu">
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/matrixRules.php" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">Matrix Rule</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/bdcRules.php" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">BDC Price Rule</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/rateRules.php" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">Rate Rule</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/leaseRules.php" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">Lease Rule</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/cashIncentiveRules.php" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">Dealer Cash Incentive Rule</span>
+                                </a>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <br><br>
 
                 </div>
             </div>

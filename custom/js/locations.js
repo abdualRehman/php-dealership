@@ -43,6 +43,7 @@ $(function () {
                 columns: [0, 1, 2]
             },
 
+            "pageLength": 25,
             columnDefs: [
                 {
                     searchPanes: {

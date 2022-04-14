@@ -118,6 +118,7 @@ $(function () {
 
     } else if (divRequest == 'man') {
         manageRoleTable = $("#datatable-1").DataTable({
+            "pageLength": 25,
             responsive: !0,
             'ajax': '../php_action/fetchRoles.php',
             // data: [],

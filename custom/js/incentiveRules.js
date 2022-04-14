@@ -43,7 +43,13 @@ $(function () {
 
 
     manageRuleTable = $("#datatable-1").DataTable({
-        responsive: !0,
+        // responsive: !0,
+        scrollX: !0,
+        scrollCollapse: !0,
+        fixedColumns: {
+            leftColumns: 0,
+            rightColumns: 1
+        },
         'ajax': '../php_action/fetchIncentiveRules.php',
         dom: "Pfrtip",
         searchPanes: {
@@ -51,6 +57,7 @@ $(function () {
             viewTotal: !0,
             columns: [0, 1, 2, 3, 4],
         },
+        "pageLength": 25,
         columnDefs: [
             {
                 searchPanes: {
@@ -59,7 +66,7 @@ $(function () {
                 targets: [0, 1, 2, 3, 4],
             },
             {
-                targets: 4,
+                targets: 5,
                 createdCell: function (td, cellData, rowData, row, col) {
                     if (cellData == 'Expire') {
                         $(td).html('<span class="badge badge-danger badge-pill">Expire</span>');
@@ -124,48 +131,51 @@ $(function () {
             },
         },
         submitHandler: function (form, e) {
-            // return false
+            // return true;
             e.preventDefault();
-            var form = $('#addNewRule');
-            $.ajax({
-                type: "POST",
-                url: form.attr('action'),
-                data: form.serialize(),
-                dataType: 'json',
-                success: function (response) {
-                    console.log(response);
+            var c = confirm('Do you really want to save this?');
+            if (c) {
+                var form = $('#addNewRule');
+                $.ajax({
+                    type: "POST",
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response);
 
-                    if ((response.errorMessages) && response.errorMessages.length > 0) {
-                        response.errorMessages.forEach(message => {
-                            toastr.error(message, 'Error while Adding');
-                        });
+                        if ((response.errorMessages) && response.errorMessages.length > 0) {
+                            response.errorMessages.forEach(message => {
+                                toastr.error(message, 'Error while Adding');
+                            });
+                        }
+                        if (response.success == true) {
+                            e1.fire({
+                                position: "center",
+                                icon: "success",
+                                title: response.messages.length > 0 ? response.messages[0] : "Successfully Added",
+                                showConfirmButton: !1,
+                                timer: 1500
+                            })
+                            manageRuleTable.ajax.reload(null, false);
+                        } else {
+                            e1.fire({
+                                // position: "center",
+                                icon: "error",
+                                title: response.messages.length > 0 ? response.messages[0] : "Error while Adding",
+                                showConfirmButton: !1,
+                                timer: 2500
+                            })
+
+                            // form[0].reset();
+                        }
+
+
+
+
                     }
-                    if (response.success == true) {
-                        e1.fire({
-                            position: "center",
-                            icon: "success",
-                            title: response.messages.length > 0 ? response.messages[0] : "Successfully Added",
-                            showConfirmButton: !1,
-                            timer: 1500
-                        })
-                        manageRuleTable.ajax.reload(null, false);
-                    } else {
-                        e1.fire({
-                            // position: "center",
-                            icon: "error",
-                            title: response.messages.length > 0 ? response.messages[0] : "Error while Adding",
-                            showConfirmButton: !1,
-                            timer: 2500
-                        })
-
-                        // form[0].reset();
-                    }
-
-
-
-
-                }
-            });
+                });
+            }
             return false;
 
         }
@@ -212,40 +222,43 @@ $(function () {
         submitHandler: function (form, e) {
             // return true
             e.preventDefault();
-            var form = $('#editRuleForm');
-            $.ajax({
-                type: "POST",
-                url: form.attr('action'),
-                data: form.serialize(),
-                dataType: 'json',
-                success: function (response) {
-                    console.log(response);
+            var c = confirm('Do you really want to save this?');
+            if (c) {
+                var form = $('#editRuleForm');
+                $.ajax({
+                    type: "POST",
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response);
 
-                    if (response.success == true) {
-                        e1.fire({
-                            position: "top-end",
-                            icon: "success",
-                            title: response.messages,
-                            showConfirmButton: !1,
-                            timer: 1500
-                        })
-                        // form[0].reset();
-                        manageRuleTable.ajax.reload(null, false);
+                        if (response.success == true) {
+                            e1.fire({
+                                position: "top-end",
+                                icon: "success",
+                                title: response.messages,
+                                showConfirmButton: !1,
+                                timer: 1500
+                            })
+                            // form[0].reset();
+                            manageRuleTable.ajax.reload(null, false);
 
-                    } else {
-                        e1.fire({
-                            position: "top-end",
-                            icon: "error",
-                            title: response.messages,
-                            showConfirmButton: !1,
-                            timer: 2500
-                        })
+                        } else {
+                            e1.fire({
+                                position: "top-end",
+                                icon: "error",
+                                title: response.messages,
+                                showConfirmButton: !1,
+                                timer: 2500
+                            })
+
+                        }
+
 
                     }
-
-
-                }
-            });
+                });
+            }
             return false;
 
         }
@@ -274,6 +287,12 @@ function loadTypeHead(id) {
             }), a(t)
         })
     });
+    $(".select2" + id).select2({
+        dropdownAutoWidth: !0,
+        placeholder: "Exclude Modal No.",
+        tags: !0,
+        allowClear: true
+    })
 }
 
 
@@ -308,6 +327,20 @@ function editRule(ruleId = null) {
                 $('#editYear').val(response.year);
                 $('#editModelno').val(response.modelno);
                 $('#editModelType').val(response.type);
+
+                var arr = (response.ex_modelno.trim()).split('_');
+                arr.shift(); //remove first space
+                arr.pop(); //remove last space
+                $("#editExModelno").html('');
+                arr.forEach(element => {
+                    if ((element == '') || $('#editExModelno').find("option[value='" + element + "']").length) {
+                        // $('#editExModelno').val(element).trigger('change');
+                    }
+                    else {
+                        var newOption = new Option(element, element, true, true);
+                        $('#editExModelno').append(newOption).trigger('change');
+                    }
+                });
 
 
                 $('#editCollege').attr("checked", (response.college == 'on' ? true : false));
@@ -423,8 +456,14 @@ function addRow() {
     </td>
     <td class="form-group">
         <select class="form-control selectpicker w-auto" id="modelType${count}" name="modelType[]">
-            <option value="NEW" selected>NEW</option>
+            <option value="BOTH" selected>BOTH</option>
+            <option value="NEW">NEW</option>
             <option value="USED">USED</option>
+        </select>
+    </td>
+    <td class="form-group">
+        <select class="form-control select2${count}" id="exModelno${count}" name="exModelno${count}[]" multiple="multiple" title="Exclude Model No.">
+            <optgroup label="Press Enter to add">
         </select>
     </td>
     <td class="form-group text-center">

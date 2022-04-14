@@ -2,7 +2,7 @@
 
 require_once './db/core.php';
 
-$valid = array('success' => false, 'messages' => array() , 'errorMessages' => array() , 'id' => '');
+$valid = array('success' => false, 'messages' => array(), 'errorMessages' => array(), 'id' => '');
 function reformatDate($date, $from_format = 'm-d-Y', $to_format = 'Y-m-d')
 {
     $date_aux = date_create_from_format($from_format, $date);
@@ -59,28 +59,33 @@ if ($_POST) {
 
 
     for ($x = 0; $x < count($_POST['model']); $x++) {
+        $i = $x + 1;
 
         $model = mysqli_real_escape_string($connect, $_POST['model'][$x]);
         $year = mysqli_real_escape_string($connect, $_POST['year'][$x]);
         $modelno = mysqli_real_escape_string($connect, $_POST['modelno'][$x]);
         $modelType = mysqli_real_escape_string($connect, $_POST['modelType'][$x]);
-       
+
+        $exModelno = (isset($_POST['exModelno' . $i] )) ? implode("_", $_POST['exModelno' . $i] ) : "";
+        $exModelno = ($exModelno ===  "") ? "" :   "_" . $exModelno . "_";
+
+        // echo $exModelno ."<br />";
 
         $checkSql = "SELECT * FROM `incentive_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND type='$modelType' AND status = 1";
         $result = $connect->query($checkSql);
         if ($result->num_rows > 0) {
-            
-            $valid['errorMessages'][] = $model .' - '. $year . ' - ' . $modelno. ' - ' . $modelType  ." is Already Exist";
-        
+
+            $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . ' - ' . $modelType  . " is Already Exist";
         } else {
 
-            $sql = "INSERT INTO `incentive_rules`(`from_date`, `to_date`, `model`, `year`, `modelno` , `type`, `college`, `military`, `loyalty`, `conquest`, `misc1`, `misc2`, `misc3`, `status`) 
+            $sql = "INSERT INTO `incentive_rules`(`from_date`, `to_date`, `model`, `year`, `modelno` , `ex_modelno` , `type`, `college`, `military`, `loyalty`, `conquest`, `misc1`, `misc2`, `misc3`, `status`) 
             VALUES (
                 '$fromDate',
                 '$toDate',
                 '$model',
                 '$year',
                 '$modelno',
+                '$exModelno',
                 '$modelType',
                 '$college',
                 '$military',

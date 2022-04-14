@@ -16,8 +16,41 @@ include_once '../includes/header.php';
         align-items: center;
     }
 
-    #datatable-1 tbody tr td {
+    /* #datatable-1 tbody tr td {
         padding: 10px 6px;
+    } */
+
+    /* .DTFC_RightBodyLiner {
+        width: 100% !important;
+        overflow-x: hidden;
+        overflow-y: auto !important;
+    } */
+
+    /* #datatable-1 tbody tr td {
+        padding: 10px;
+    } */
+
+    @media (min-width: 576px) {
+        .modal-dialog {
+            max-width: 600px;
+            margin: 1.75rem auto;
+        }
+
+        .modal-dialog table.detialsTable {
+            width: max-content;
+        }
+    }
+
+    @media (min-width: 1025px) {
+
+        .modal-lg,
+        .modal-xl {
+            max-width: 1000PX;
+        }
+
+        .modal-dialog table.detialsTable {
+            width: inherit;
+        }
     }
 </style>
 
@@ -43,7 +76,9 @@ include_once '../includes/header.php';
                                     <th>Model</th>
                                     <th>Year</th>
                                     <th>Model no.</th>
+                                    <th>State</th>
                                     <th>Model Type</th>
+                                    <th>Ex Model No</th>
                                     <th>Expire In.</th>
                                     <th>Vin Check</th>
                                     <th>Insurance</th>
@@ -94,17 +129,19 @@ include_once '../includes/header.php';
                         <table class="table" id="productTable1">
                             <thead>
                                 <tr>
-                                    <th style="width:25%;text-align:center">Modal</th>
-                                    <th style="width:20%;text-align:center">Year</th>
-                                    <th style="width:20%;text-align:center">Model No.</th>
-                                    <th style="width:20%;text-align:center">Model Type</th>
+                                    <th style="width:20%;text-align:center">Model</th>
+                                    <th style="width:15%;text-align:center">Year</th>
+                                    <th style="width:15%;text-align:center">Model No.</th>
+                                    <th style="width:15%;text-align:center">Model Type</th>
+                                    <th style="width:15%;text-align:center">State</th>
+                                    <th style="width:20%;text-align:center">Exclude Model No</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr id="row1" class="0">
                                     <td class="form-group">
                                         <select class="form-control selectpicker w-auto" id="editModel" name="editModel" data-live-search="true" data-size="4">
-                                            <option value="0" selected disabled>Select Modal</option>
+                                            <option value="0" selected disabled>Select Model</option>
                                             <option value="ACCORD">ACCORD</option>
                                             <option value="ACCORD HYBRID">ACCORD HYBRID</option>
                                             <option value="CIVIC">CIVIC</option>
@@ -122,12 +159,75 @@ include_once '../includes/header.php';
                                         <input type="text" class="form-control typeahead typeahead1" id="editYear" name="editYear" placeholder="Year">
                                     </td>
                                     <td class="form-group">
-                                        <input type="text" class="form-control typeahead typeahead1" id="editModelno" name="editModelno" placeholder="Modal No.">
+                                        <input type="text" class="form-control typeahead typeahead1" id="editModelno" name="editModelno" placeholder="Model No.">
                                     </td>
                                     <td class="form-group">
                                         <select class="form-control selectpicker w-auto" id="editModelType" name="editModelType">
-                                            <option value="NEW" selected>NEW</option>
+                                            <option value="ALL" selected>ALL</option>
+                                            <option value="NEW">NEW</option>
                                             <option value="USED">USED</option>
+                                        </select>
+                                    </td>
+                                    <td class="form-group">
+                                        <select class="form-control selectpicker w-auto" name="editState" id="editState" data-live-search="true" data-size="4">
+                                            <option value="0" selected disabled>State</option>
+                                            <option value="MA">MA</option>
+                                            <option value="RI">RI</option>
+                                            <option value="CT">CT</option>
+                                            <option value="NH">NH</option>
+                                            <option value="AL">AL</option>
+                                            <option value="AK">AK</option>
+                                            <option value="AZ">AZ</option>
+                                            <option value="AR">AR</option>
+                                            <option value="CA">CA</option>
+                                            <option value="CO">CO</option>
+                                            <option value="DC">DC</option>
+                                            <option value="DE">DE</option>
+                                            <option value="FL">FL</option>
+                                            <option value="GA">GA</option>
+                                            <option value="HI">HI</option>
+                                            <option value="ID">ID</option>
+                                            <option value="IL">IL</option>
+                                            <option value="IN">IN</option>
+                                            <option value="IA">IA</option>
+                                            <option value="KS">KS</option>
+                                            <option value="KY">KY</option>
+                                            <option value="LA">LA</option>
+                                            <option value="ME">ME</option>
+                                            <option value="MD">MD</option>
+                                            <option value="MI">MI</option>
+                                            <option value="MN">MN</option>
+                                            <option value="MS">MS</option>
+                                            <option value="MO">MO</option>
+                                            <option value="MT">MT</option>
+                                            <option value="NE">NE</option>
+                                            <option value="NV">NV</option>
+                                            <option value="NJ">NJ</option>
+                                            <option value="NM">NM</option>
+                                            <option value="NY">NY</option>
+                                            <option value="NC">NC</option>
+                                            <option value="ND">ND</option>
+                                            <option value="OH">OH</option>
+                                            <option value="OK">OK</option>
+                                            <option value="OR">OR</option>
+                                            <option value="PA">PA</option>
+                                            <option value="SC">SC</option>
+                                            <option value="SD">SD</option>
+                                            <option value="TN">TN</option>
+                                            <option value="TX">TX</option>
+                                            <option value="UT">UT</option>
+                                            <option value="VT">VT</option>
+                                            <option value="VA">VA</option>
+                                            <option value="WA">WA</option>
+                                            <option value="WV">WV</option>
+                                            <option value="WI">WI</option>
+                                            <option value="WY">WY</option>
+                                            <option value="N/A">N/A</option>
+                                        </select>
+                                    </td>
+                                    <td class="form-group">
+                                        <select class="form-control select21" id="editExModelno" name="editExModelno[]" multiple="multiple" title="Exclude Model No.">
+                                            <optgroup label="Press Enter to add">
                                         </select>
                                     </td>
                                 </tr>
@@ -140,7 +240,6 @@ include_once '../includes/header.php';
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Select All</th>
                                             <th>Vin Check</th>
                                             <th>Insurance</th>
                                             <th>Trade Title</th>
@@ -151,62 +250,70 @@ include_once '../includes/header.php';
                                         </tr>
                                     </thead>
                                     <tbody class="table-warning">
-                                        <tr id="checkBoxRow">
+                                        <tr>
                                             <th class="text-center">
-                                                <div class="custom-control-lg custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="editSelectAll">
-                                                    <label class="custom-control-label" for="editSelectAll">
-                                                    </label>
-                                                </div>
+                                                <select onchange="chnageStyle(this)" name="editVinCheck" id="editVinCheck" class="selectpicker">
+                                                    <option value="N/A" selected>Disabled</option>
+                                                    <option value="checkTitle">Check Title</option>
+                                                    <option value="need">Need</option>
+                                                    <option value="notNeed">Doesn't Need</option>
+                                                    <option value="n/a">N/A</option>
+                                                    <option value="onHold">On Hold</option>
+                                                    <option value="done">Done</option>
+                                                </select>
                                             </th>
                                             <th class="text-center">
-                                                <div class="custom-control-lg custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input check" name="editVinCheck" id="editVinCheck">
-                                                    <label class="custom-control-label" for="editVinCheck">
-                                                    </label>
-                                                </div>
+                                                <select class="selectpicker" onchange="chnageStyle(this)" id="editInsurance" name="editInsurance">
+                                                    <option value="N/A" selected>Disabled</option>
+                                                    <option value="need">Need</option>
+                                                    <option value="inHouse">In House</option>
+                                                    <option value="n/a">N/A</option>
+                                                </select>
                                             </th>
                                             <th class="text-center">
-                                                <div class="custom-control-lg custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input check" name="editInsurance" id="editInsurance">
-                                                    <label class="custom-control-label" for="editInsurance">
-                                                    </label>
-                                                </div>
+                                                <select class="selectpicker" onchange="chnageStyle(this)" id="editTradeTitle" name="editTradeTitle">
+                                                    <option value="N/A" selected>Disabled</option>
+                                                    <option value="need">Need</option>
+                                                    <option value="payoff">Payoff</option>
+                                                    <option value="noTrade">No Trade</option>
+                                                    <option value="inHouse">In House</option>
+                                                </select>
                                             </th>
                                             <th class="text-center">
-                                                <div class="custom-control-lg custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input check" name="editTradeTitle" id="editTradeTitle">
-                                                    <label class="custom-control-label" for="editTradeTitle">
-                                                    </label>
-                                                </div>
+                                                <select class="selectpicker" onchange="chnageStyle(this)" id="editRegistration" name="editRegistration">
+                                                    <option value="N/A" selected>Disabled</option>
+                                                    <option value="pending">Pending</option>
+                                                    <option value="done">Done</option>
+                                                    <option value="customerHas">Customer Has</option>
+                                                    <option value="mailed">Mailed</option>
+                                                    <option value="n/a">N/A</option>
+                                                </select>
                                             </th>
                                             <th class="text-center">
-                                                <div class="custom-control-lg custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input check" name="editRegistration" id="editRegistration">
-                                                    <label class="custom-control-label" for="editRegistration">
-                                                    </label>
-                                                </div>
+                                                <select class="selectpicker" onchange="chnageStyle(this)" id="editInspection" name="editInspection">
+                                                    <option value="N/A" selected>Disabled</option>
+                                                    <option value="need">Need</option>
+                                                    <option value="notNeed">Doesn't Need</option>
+                                                    <option value="done">Done</option>
+                                                    <option value="n/a">N/A</option>
+                                                </select>
                                             </th>
                                             <th class="text-center">
-                                                <div class="custom-control-lg custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input check" name="editInspection" id="editInspection">
-                                                    <label class="custom-control-label" for="editInspection">
-                                                    </label>
-                                                </div>
+                                                <select class="selectpicker" onchange="chnageStyle(this)" id="editSalespersonStatus" name="editSalespersonStatus">
+                                                    <option value="N/A" selected>Disabled</option>
+                                                    <option value="dealWritten">Deal Written</option>
+                                                    <option value="gmdSubmit">GMD Submit</option>
+                                                    <option value="contracted">Contracted</option>
+                                                    <option value="cancelled">Cancelled</option>
+                                                    <option value="delivered">Delivered</option>
+                                                </select>
                                             </th>
                                             <th class="text-center">
-                                                <div class="custom-control-lg custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input check" name="editSalespersonStatus" id="editSalespersonStatus">
-                                                    <label class="custom-control-label" for="editSalespersonStatus">
-                                                    </label>
-                                                </div>
-                                            </th>
-                                            <th class="text-center">
-                                                <div class="custom-control-lg custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input check" name="editPaid" id="editPaid">
-                                                    <label class="custom-control-label" for="editPaid">
-                                                    </label>
-                                                </div>
+                                                <select class="selectpicker" onchange="chnageStyle(this)" id="editPaid" name="editPaid">
+                                                    <option value="N/A" selected>Disabled</option>
+                                                    <option value="no">No</option>
+                                                    <option value="yes">Yes</option>
+                                                </select>
                                             </th>
                                         </tr>
                                     </tbody>
@@ -252,18 +359,20 @@ include_once '../includes/header.php';
                     <table class="table" id="productTable">
                         <thead>
                             <tr>
-                                <th style="width:25%;text-align:center">Modal</th>
-                                <th style="width:20%;text-align:center">Year</th>
-                                <th style="width:20%;text-align:center">Model No.</th>
-                                <th style="width:20%;text-align:center">Model Type</th>
-                                <th style="width:15%;text-align:center"></th>
+                                <th style="width:20%;text-align:center">Model</th>
+                                <th style="width:15%;text-align:center">Year</th>
+                                <th style="width:15%;text-align:center">Model No.</th>
+                                <th style="width:10%;text-align:center">Model Type</th>
+                                <th style="width:10%;text-align:center">State</th>
+                                <th style="width:20%;text-align:center">Exclude Model No</th>
+                                <th style="width:10%;text-align:center"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr id="row1" class="0">
                                 <td class="form-group">
                                     <select class="form-control selectpicker w-auto" id="model1" name="model[]" data-live-search="true" data-size="4">
-                                        <option value="0" selected disabled>Select Modal</option>
+                                        <option value="0" selected disabled>Select Model</option>
                                         <option value="ACCORD">ACCORD</option>
                                         <option value="ACCORD HYBRID">ACCORD HYBRID</option>
                                         <option value="CIVIC">CIVIC</option>
@@ -281,12 +390,75 @@ include_once '../includes/header.php';
                                     <input type="text" class="form-control typeahead typeahead1" id="year1" name="year[]" placeholder="Year">
                                 </td>
                                 <td class="form-group">
-                                    <input type="text" class="form-control typeahead typeahead1" id="modelno1" name="modelno[]" placeholder="Modal No.">
+                                    <input type="text" class="form-control typeahead typeahead1" id="modelno1" name="modelno[]" placeholder="Model No.">
                                 </td>
                                 <td class="form-group">
                                     <select class="form-control selectpicker w-auto" id="modelType1" name="modelType[]">
-                                        <option value="NEW" selected>NEW</option>
+                                        <option value="ALL" selected>All</option>
+                                        <option value="NEW">NEW</option>
                                         <option value="USED">USED</option>
+                                    </select>
+                                </td>
+                                <td class="form-group">
+                                    <select class="form-control selectpicker w-auto" name="state[]" id="state1" data-live-search="true" data-size="4">
+                                        <option value="0" selected disabled>State</option>
+                                        <option value="MA">MA</option>
+                                        <option value="RI">RI</option>
+                                        <option value="CT">CT</option>
+                                        <option value="NH">NH</option>
+                                        <option value="AL">AL</option>
+                                        <option value="AK">AK</option>
+                                        <option value="AZ">AZ</option>
+                                        <option value="AR">AR</option>
+                                        <option value="CA">CA</option>
+                                        <option value="CO">CO</option>
+                                        <option value="DC">DC</option>
+                                        <option value="DE">DE</option>
+                                        <option value="FL">FL</option>
+                                        <option value="GA">GA</option>
+                                        <option value="HI">HI</option>
+                                        <option value="ID">ID</option>
+                                        <option value="IL">IL</option>
+                                        <option value="IN">IN</option>
+                                        <option value="IA">IA</option>
+                                        <option value="KS">KS</option>
+                                        <option value="KY">KY</option>
+                                        <option value="LA">LA</option>
+                                        <option value="ME">ME</option>
+                                        <option value="MD">MD</option>
+                                        <option value="MI">MI</option>
+                                        <option value="MN">MN</option>
+                                        <option value="MS">MS</option>
+                                        <option value="MO">MO</option>
+                                        <option value="MT">MT</option>
+                                        <option value="NE">NE</option>
+                                        <option value="NV">NV</option>
+                                        <option value="NJ">NJ</option>
+                                        <option value="NM">NM</option>
+                                        <option value="NY">NY</option>
+                                        <option value="NC">NC</option>
+                                        <option value="ND">ND</option>
+                                        <option value="OH">OH</option>
+                                        <option value="OK">OK</option>
+                                        <option value="OR">OR</option>
+                                        <option value="PA">PA</option>
+                                        <option value="SC">SC</option>
+                                        <option value="SD">SD</option>
+                                        <option value="TN">TN</option>
+                                        <option value="TX">TX</option>
+                                        <option value="UT">UT</option>
+                                        <option value="VT">VT</option>
+                                        <option value="VA">VA</option>
+                                        <option value="WA">WA</option>
+                                        <option value="WV">WV</option>
+                                        <option value="WI">WI</option>
+                                        <option value="WY">WY</option>
+                                        <option value="N/A">N/A</option>
+                                    </select>
+                                </td>
+                                <td class="form-group">
+                                    <select class="form-control select21" id="exModelno1" name="exModelno1[]" multiple="multiple" title="Exclude Model No.">
+                                        <optgroup label="Press Enter to add">
                                     </select>
                                 </td>
                                 <td class="form-group text-center">
@@ -302,7 +474,7 @@ include_once '../includes/header.php';
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Select All</th>
+                                        <!-- <th>All</th> -->
                                         <th>Vin Check</th>
                                         <th>Insurance</th>
                                         <th>Trade Title</th>
@@ -314,7 +486,7 @@ include_once '../includes/header.php';
                                 </thead>
                                 <tbody class="table-warning">
                                     <tr id="checkBoxRow">
-                                        <th class="text-center">
+                                        <!-- <th class="text-center">
                                             <div class="custom-control-lg custom-checkbox">
                                                 <input type="checkbox" class="custom-control-input" id="selectAll">
                                                 <label class="custom-control-label" for="selectAll">
@@ -369,6 +541,72 @@ include_once '../includes/header.php';
                                                 <label class="custom-control-label" for="paid">
                                                 </label>
                                             </div>
+                                        </th> -->
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center">
+                                            <select onchange="chnageStyle(this)" name="vinCheck" id="vinCheck" class="selectpicker">
+                                                <option value="N/A" selected>Disabled</option>
+                                                <option value="checkTitle">Check Title</option>
+                                                <option value="need">Need</option>
+                                                <option value="notNeed">Doesn't Need</option>
+                                                <option value="n/a">N/A</option>
+                                                <option value="onHold">On Hold</option>
+                                                <option value="done">Done</option>
+                                            </select>
+                                        </th>
+                                        <th class="text-center">
+                                            <select class="selectpicker" onchange="chnageStyle(this)" id="insurance" name="insurance">
+                                                <option value="N/A" selected>Disabled</option>
+                                                <option value="need">Need</option>
+                                                <option value="inHouse">In House</option>
+                                                <option value="n/a">N/A</option>
+                                            </select>
+                                        </th>
+                                        <th class="text-center">
+                                            <select class="selectpicker" onchange="chnageStyle(this)" id="tradeTitle" name="tradeTitle">
+                                                <option value="N/A" selected>Disabled</option>
+                                                <option value="need">Need</option>
+                                                <option value="payoff">Payoff</option>
+                                                <option value="noTrade">No Trade</option>
+                                                <option value="inHouse">In House</option>
+                                            </select>
+                                        </th>
+                                        <th class="text-center">
+                                            <select class="selectpicker" onchange="chnageStyle(this)" id="registration" name="registration">
+                                                <option value="N/A" selected>Disabled</option>
+                                                <option value="pending">Pending</option>
+                                                <option value="done">Done</option>
+                                                <option value="customerHas">Customer Has</option>
+                                                <option value="mailed">Mailed</option>
+                                                <option value="n/a">N/A</option>
+                                            </select>
+                                        </th>
+                                        <th class="text-center">
+                                            <select class="selectpicker" onchange="chnageStyle(this)" id="inspection" name="inspection">
+                                                <option value="N/A" selected>Disabled</option>
+                                                <option value="need">Need</option>
+                                                <option value="notNeed">Doesn't Need</option>
+                                                <option value="done">Done</option>
+                                                <option value="n/a">N/A</option>
+                                            </select>
+                                        </th>
+                                        <th class="text-center">
+                                            <select class="selectpicker" onchange="chnageStyle(this)" id="salePStatus" name="salePStatus">
+                                                <option value="N/A" selected>Disabled</option>
+                                                <option value="dealWritten">Deal Written</option>
+                                                <option value="gmdSubmit">GMD Submit</option>
+                                                <option value="contracted">Contracted</option>
+                                                <option value="cancelled">Cancelled</option>
+                                                <option value="delivered">Delivered</option>
+                                            </select>
+                                        </th>
+                                        <th class="text-center">
+                                            <select class="selectpicker" onchange="chnageStyle(this)" id="paid" name="paid">
+                                                <option value="N/A" selected>Disabled</option>
+                                                <option value="no">No</option>
+                                                <option value="yes">Yes</option>
+                                            </select>
                                         </th>
                                     </tr>
                                 </tbody>

@@ -23,7 +23,12 @@ if ($_POST) {
     $year = mysqli_real_escape_string($connect, $_POST['editYear']);
     $modelno = mysqli_real_escape_string($connect, $_POST['editModelno']);
     $editModelType = mysqli_real_escape_string($connect, $_POST['editModelType']);
+    
+    $editExModelno = (isset($_POST['editExModelno'])) ? implode("_",$_POST['editExModelno']): "";
+    // echo implode(" ",(array)$_POST['editExModelno']);
+    $editExModelno = ($editExModelno ===  "") ? "" :   "_".$editExModelno."_" ;
 
+    // echo $editExModelno;
 
     $college = "N/A";
     if (isset($_POST['editCollege'])) {
@@ -71,6 +76,7 @@ if ($_POST) {
         `model`='$model',
         `year`='$year',
         `modelno`='$modelno',
+        `ex_modelno`='$editExModelno',
         `type`='$editModelType',
         `college`='$college',
         `military`='$military',

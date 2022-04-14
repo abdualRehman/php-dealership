@@ -134,7 +134,7 @@ if ($_GET['r'] == 'man') {
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control" name="saleDate" onchange="changeRules()" placeholder="Select date" id="saleDate" disabled>
+                                            <input type="text" class="form-control" name="saleDate" placeholder="Select date" id="saleDate" disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -274,7 +274,7 @@ if ($_GET['r'] == 'man') {
                                                             <span class="input-group-text"><i class="fa fa-calendar"></i>
                                                             </span>
                                                         </div>
-                                                        <input type="text" class="form-control" name="saleDate" placeholder="Select date" id="saleDate">
+                                                        <input type="text" class="form-control" name="saleDate" onchange="changeRules()" placeholder="Select date" id="saleDate">
                                                     </div>
                                                 </div>
                                             </div>

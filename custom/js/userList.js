@@ -5,6 +5,7 @@ $(function () {
 
     manageUserTable = $("#datatable-1").DataTable({
         responsive: !0,
+        "pageLength": 25,
         'ajax': '../php_action/fetchUsers.php',
         // data: [],
     })
