@@ -30,40 +30,52 @@ if ($_POST) {
     }
 
     // $checkSql = "SELECT id, stockno FROM inventory WHERE stockno LIKE ('$stockno'_%')";
+    $checkSql = "SELECT * FROM `inventory` WHERE `stockno` = '$stockno'";
+    $result = $connect->query($checkSql);
+    if ($result->num_rows > 0) {
+        // update Inv data if this stock number already exist with deleted id with sale 
+        $updatekSql = "UPDATE `inventory` SET `year`='$year', `make`='$make',
+        `model`='$model',`modelno`='$modelno',`color`='$color',`lot`='$lot',`vin`='$vin',`mileage`='$mileage',`age`='$age',
+        `balance`='$balance',`retail`='$retail',`certified`='$certified',`stocktype`='$stockType',`wholesale`='$wholesale' , `status`=1 WHERE stockno = '$stockno'";
 
-    $sql = "INSERT INTO `inventory`(`stockno`, `year`, `make`, `model`, `modelno`, `color`, `lot`, `vin`, `mileage`, `age`, `balance`, `retail`, `certified`, `stocktype`, `wholesale`,  `status`) 
-    VALUES (
-        '$stockno',
-        '$year',
-        '$make',
-        '$model',
-        '$modelno',
-        '$color',
-        '$lot',
-        '$vin',
-        '$mileage',
-        '$age',
-        '$balance',
-        '$retail',
-        '$certified',
-        '$stockType',
-        '$wholesale',
-        1 )";
-
-    // update Inv data if this stock number already exist with deleted id with sale 
-    $updatekSql = "UPDATE `inventory` SET `year`='$year', `make`='$make',
-    `model`='$model',`modelno`='$modelno',`color`='$color',`lot`='$lot',`vin`='$vin',`mileage`='$mileage',`age`='$age',
-    `balance`='$balance',`retail`='$retail',`certified`='$certified',`stocktype`='$stockType',`wholesale`='$wholesale' WHERE stockno LIKE ('" . $stockno . "_%') AND status = 2 ";
-    $connect->query($updatekSql);
-
-    if ($connect->query($sql) === true) {
-        $valid['success'] = true;
-        $valid['messages'] = "Successfully Added";
+        if ($connect->query($updatekSql) === true) {
+            $valid['success'] = true;
+            $valid['messages'] = "Successfully Added";
+        } else {
+            $valid['success'] = false;
+            $valid['messages'] = $connect->error;
+            $valid['messages'] = mysqli_error($connect);
+        }
     } else {
-        $valid['success'] = false;
-        $valid['messages'] = $connect->error;
-        $valid['messages'] = mysqli_error($connect);
+        $sql = "INSERT INTO `inventory`(`stockno`, `year`, `make`, `model`, `modelno`, `color`, `lot`, `vin`, `mileage`, `age`, `balance`, `retail`, `certified`, `stocktype`, `wholesale`,  `status`) 
+        VALUES (
+            '$stockno',
+            '$year',
+            '$make',
+            '$model',
+            '$modelno',
+            '$color',
+            '$lot',
+            '$vin',
+            '$mileage',
+            '$age',
+            '$balance',
+            '$retail',
+            '$certified',
+            '$stockType',
+            '$wholesale',
+            1 )";
+
+        if ($connect->query($sql) === true) {
+            $valid['success'] = true;
+            $valid['messages'] = "Successfully Added";
+        } else {
+            $valid['success'] = false;
+            $valid['messages'] = $connect->error;
+            $valid['messages'] = mysqli_error($connect);
+        }
     }
+
 
 
 

@@ -67,8 +67,8 @@ include_once '../includes/header.php';
                                     <th>Year</th>
                                     <th>Model no.</th>
                                     <th>Exclude Model No</th>
-                                    <th>Finance Exprire</th>
-                                    <th>Lease Exprire</th>
+                                    <th>Finance Expires</th>
+                                    <th>Lease Expires</th>
                                     <th>24-36</th>
                                     <th>37-48</th>
                                     <th>49-60</th>

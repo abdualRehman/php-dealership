@@ -461,7 +461,7 @@ function changeSalesPersonTodo() {
         // console.log(obj['spTodoArray']);
         var todoArray = obj['spTodoArray'];
         let state = $('#state').val();
-        console.log(todoArray.length);
+        console.log(todoArray);
         var saleDate = $('#saleDate').val();
         if (state && todoArray.length > 0) {
 
@@ -469,34 +469,23 @@ function changeSalesPersonTodo() {
 
             if (spTodoRulesObj) {
 
-                saleDate = moment(saleDate).format('MM-DD-YYYY');
-                var startDate1 = moment(spTodoRulesObj[12]).format('MM-DD-YYYY');
-                var endDate1 = moment(spTodoRulesObj[13]).format('MM-DD-YYYY');
+                console.log("Data found \n", spTodoRulesObj);
+                changeSalesPersonTodoStyle("vincheck", spTodoRulesObj[5]);
+                changeSalesPersonTodoStyle("insurance", spTodoRulesObj[6]);
+                changeSalesPersonTodoStyle("tradeTitle", spTodoRulesObj[7]);
+                changeSalesPersonTodoStyle("registration", spTodoRulesObj[8]);
+                changeSalesPersonTodoStyle("inspection", spTodoRulesObj[9]);
+                changeSalesPersonTodoStyle("salePStatus", spTodoRulesObj[10]);
+                changeSalesPersonTodoStyle("paid", spTodoRulesObj[11]);
 
-                var bool = moment(saleDate).isBetween
-                    (startDate1, endDate1, null, '[]'); // true
-
-                console.log("Is Valid? \n", bool);
-
-                if (bool) {
-                    console.log("Data found \n", spTodoRulesObj);
-                    changeSalesPersonTodoStyle("vincheck", spTodoRulesObj[5]);
-                    changeSalesPersonTodoStyle("insurance", spTodoRulesObj[6]);
-                    changeSalesPersonTodoStyle("tradeTitle", spTodoRulesObj[7]);
-                    changeSalesPersonTodoStyle("registration", spTodoRulesObj[8]);
-                    changeSalesPersonTodoStyle("inspection", spTodoRulesObj[9]);
-                    changeSalesPersonTodoStyle("salePStatus", spTodoRulesObj[10]);
-                    changeSalesPersonTodoStyle("paid", spTodoRulesObj[11]);
-
-                } else {
-                    changeSalesPersonTodoStyle("vincheck", "N/A");
-                    changeSalesPersonTodoStyle("insurance", "N/A");
-                    changeSalesPersonTodoStyle("tradeTitle", "N/A");
-                    changeSalesPersonTodoStyle("registration", "N/A");
-                    changeSalesPersonTodoStyle("inspection", "N/A");
-                    changeSalesPersonTodoStyle("salePStatus", "N/A");
-                    changeSalesPersonTodoStyle("paid", "N/A");
-                }
+            } else {
+                changeSalesPersonTodoStyle("vincheck", "N/A");
+                changeSalesPersonTodoStyle("insurance", "N/A");
+                changeSalesPersonTodoStyle("tradeTitle", "N/A");
+                changeSalesPersonTodoStyle("registration", "N/A");
+                changeSalesPersonTodoStyle("inspection", "N/A");
+                changeSalesPersonTodoStyle("salePStatus", "N/A");
+                changeSalesPersonTodoStyle("paid", "N/A");
             }
 
         } else {

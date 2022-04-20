@@ -3,23 +3,9 @@
 require_once './db/core.php';
 
 $valid = array('success' => false, 'messages' => array() , 'errorMessages' => array() , 'id' => '');
-function reformatDate($date, $from_format = 'm-d-Y', $to_format = 'Y-m-d')
-{
-    $date_aux = date_create_from_format($from_format, $date);
-    return date_format($date_aux, $to_format);
-}
 
 if ($_POST) {
 
-    $fromDate = mysqli_real_escape_string($connect, $_POST['fromDate']);
-    $fromDate = reformatDate($fromDate);
-
-    $toDate = mysqli_real_escape_string($connect, $_POST['toDate']);
-    $toDate = reformatDate($toDate);
-
-
-    // echo $fromDate . '<br />';
-    // echo $toDate . '<br />';
 
 
 
@@ -82,10 +68,8 @@ if ($_POST) {
         
         } else {
 
-            $sql = "INSERT INTO `salesperson_rules`(`from_date`, `to_date`, `model`, `year`, `modelno` , `ex_modelno` , `type`, `state` , `vin_check`, `insurance`, `trade_title`, `registration`, `inspection`, `salesperson_status`, `paid`, `status`) 
+            $sql = "INSERT INTO `salesperson_rules`(`model`, `year`, `modelno` , `ex_modelno` , `type`, `state` , `vin_check`, `insurance`, `trade_title`, `registration`, `inspection`, `salesperson_status`, `paid`, `status`) 
             VALUES (
-                '$fromDate',
-                '$toDate',
                 '$model',
                 '$year',
                 '$modelno',

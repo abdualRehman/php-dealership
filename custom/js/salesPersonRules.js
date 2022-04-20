@@ -66,21 +66,10 @@ $(function () {
                 targets: [0, 1, 2, 3, 4],
             },
             {
-                "targets": [0, 1, 2, 5, 6],
+                "targets": [0, 1, 2, 5],
                 "visible": false,
                 "searchable": false
             },
-            {
-                targets: 5,
-                createdCell: function (td, cellData, rowData, row, col) {
-                    if (cellData == 'Expire') {
-                        $(td).html('<span class="badge badge-danger badge-pill">Expire</span>');
-                    } else {
-                        $(td).html('<span class="badge badge-info badge-pill">' + cellData + '</span>');
-                    }
-
-                }
-            }
         ],
 
         language: {
@@ -97,12 +86,12 @@ $(function () {
     $("#addNewRule").validate({
         ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
         rules: {
-            fromDate: {
-                required: !0,
-            },
-            toDate: {
-                required: !0,
-            },
+            // fromDate: {
+            //     required: !0,
+            // },
+            // toDate: {
+            //     required: !0,
+            // },
             "year[]": {
                 required: !0,
             },
@@ -142,14 +131,6 @@ $(function () {
                         return false;
                     }
                 },
-            },
-        },
-        messages: {
-            fromDate: {
-                required: "",
-            },
-            toDate: {
-                required: "",
             },
         },
         submitHandler: function (form, e) {
@@ -203,12 +184,12 @@ $(function () {
     $("#editRuleForm").validate({
         ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
         rules: {
-            editfromDate: {
-                required: !0,
-            },
-            edittoDate: {
-                required: !0,
-            },
+            // editfromDate: {
+            //     required: !0,
+            // },
+            // edittoDate: {
+            //     required: !0,
+            // },
             editYear: {
                 required: !0,
             },
@@ -229,14 +210,14 @@ $(function () {
                 },
             },
         },
-        messages: {
-            editfromDate: {
-                required: "",
-            },
-            edittoDate: {
-                required: "",
-            },
-        },
+        // messages: {
+        //     editfromDate: {
+        //         required: "",
+        //     },
+        //     edittoDate: {
+        //         required: "",
+        //     },
+        // },
         submitHandler: function (form, e) {
             // return true
             e.preventDefault();
@@ -330,14 +311,8 @@ function editRule(ruleId = null) {
 
                 $('#editRuleForm')[0].reset();
 
-                // var date  = new Date(response.from_date)
-                var from_date = moment(response.from_date).format('MM-DD-YYYY');
-                var to_date = moment(response.to_date).format('MM-DD-YYYY');
 
-                $('#ruleId').val(response.id);
-
-                $('#editfromDate').datepicker('update', from_date);
-                $('#edittoDate').datepicker('update', to_date);
+                $('#ruleId').val(response.id);                
 
                 $('#editModel').val(response.model);
                 $('#editYear').val(response.year);
@@ -458,6 +433,7 @@ function addRow() {
     tr += `<td class="form-group">
     <select class="form-control selectpicker w-auto" id="model${count}" name="model[]" data-live-search="true" data-size="4">
         <option value="0" selected disabled>Select Modal</option>
+        <option value="All">All</option>
         <option value="ACCORD">ACCORD</option>
         <option value="ACCORD HYBRID">ACCORD HYBRID</option>
         <option value="CIVIC">CIVIC</option>

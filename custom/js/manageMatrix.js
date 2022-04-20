@@ -34,7 +34,7 @@ $(function () {
             searchPanes: {
                 cascadePanes: !0,
                 viewTotal: !0,
-                columns: [0, 1, 2]
+                columns: [0, 1, 3]
             },
             "pageLength": 25,
 
@@ -43,13 +43,13 @@ $(function () {
                     searchPanes: {
                         show: true
                     },
-                    targets: [0, 1, 2]
+                    targets: [0, 1,3]
                 },
                 // for hide columns as defaul
-                // { 
-                //     visible: false, 
-                //     targets: [0, 1] 
-                // },
+                { 
+                    targets: [3],
+                    visible: false, 
+                },
 
             ],
             // select: {

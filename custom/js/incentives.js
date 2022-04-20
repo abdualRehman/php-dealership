@@ -13,16 +13,45 @@ var e1 = Swal.mixin({
 
 $(function () {
 
-    loadSaleManager();
+    // $(".slick-2").slick({
+    //     variableWidth: false,
+    //     slidesToShow: 2,
+    //     slidesToScroll: 1,
+    //     infinite: false,
+    // });
 
-    var t = "rtl" === $("html").attr("dir");
-    $(".slick-2").slick({
-        // rtl: t, 
-        variableWidth: false,
-        slidesToShow: 2,
-        slidesToScroll: 1,
-        infinite: false,
+    $('.slick-2').each(function () {
+        var slider = $(this);
+        slider.slick({
+
+            infinite: false,
+            autoplay: false,
+            slidesToShow: 2,
+            slidesToScroll: 1,
+            responsive: [{
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                }
+            }
+            ]
+        });
+        var sLightbox = $(this);
+        sLightbox.slickLightbox({
+            src: 'src',
+            imageMaxHeight: 9,
+            itemSelector: '.carousel-item img'
+        });
     })
+
 
 
 
@@ -54,9 +83,11 @@ $(function () {
                 if (settings.nTable !== tableNode) {
                     return true;
                 }
-
-                if (data[11] === "" || data[12] === "" || data[13] === "" || data[14] === "" || data[15] === "" || data[16] === "" || data[17] === "" || data[18] === "") {
-                    return true;
+               
+                if (data[4] != 'No' || data[5] != 'No' || data[6] != 'No' || data[7] != 'No' || data[8] != 'No' || data[9] != 'No' || data[10] != 'No') {
+                    if (data[11] === "" || data[12] === "" || data[13] === "" || data[14] === "" || data[15] === "" || data[16] === "" || data[17] === "" || data[18] === "") {
+                        return true;
+                    }
                 }
 
                 return false;
@@ -121,16 +152,19 @@ $(function () {
                             if (settings.nTable !== tableNode) {
                                 return true;
                             }
-                            if (data[11] !== "" && data[12] !== "" && data[13] !== "" && data[14] !== "" && data[15] !== "" && data[16] !== "" && data[17] !== "" && data[18] !== "") {
-                                return true;
+                            
+                            if (data[4] !== 'No' || data[5] !== 'No' || data[6] !== 'No' || data[7] !== 'No' || data[8] !== 'No' || data[9] !== 'No' || data[10] !== 'No') {
+                                if (data[11] !== "" && data[12] !== "" && data[13] !== "" && data[14] !== "" && data[15] !== "" && data[16] !== "" && data[17] !== "" && data[18] !== "") {
+                                    return true;
+                                }
                             }
                             return false
                         }
                     )
 
                     manageSoldLogsTable.draw();  // working
-                   
-                
+
+
 
                 },
 
@@ -171,6 +205,7 @@ $(function () {
 
     loadUncomplete();
 
+    loadSaleManager();
 
 
     // ---------------------- Edit Sale---------------------------
@@ -254,6 +289,19 @@ function removeImage(ele) {
 
 }
 
+
+function checkValue(ele) {
+    var value = ele.value;
+    if(!isNaN(value)){
+        // console.log(ele.name);
+        $('#'+ele.name+'Date').attr('disabled' , false);
+    }else{
+        $('#'+ele.name+'Date').val("");
+        $('#'+ele.name+'Date').attr('disabled' , true);
+    }
+}
+
+
 function loadSaleManager() {
     var sales_manager_id = 1;
     $.ajax({
@@ -289,6 +337,7 @@ function changePillCSS(row, data, compareIndex, valueIndex) {
 function toggleFilterClass() {
     $('.dtsp-panes').toggle();
 }
+
 function editDetails(id = null) {
 
     if (id) {
@@ -344,6 +393,7 @@ function editDetails(id = null) {
                 $('#stockNo').val(response.stockno);
                 $('#vehicle').val(`${response.stocktype} ${response.year} ${response.make} ${response.model}`);
                 $('#state').val(response.state);
+                $('#vin').val(response.vin);
                 $('#saleDate').datetimepicker('update', response.date);
 
 
@@ -364,6 +414,13 @@ function editDetails(id = null) {
                 $('#misc2Date').val(response.misc2_date ? moment(response.misc2_date).format('MMM-DD-YYYY') : "");
                 $('#misc3Date').val(response.misc3_date ? moment(response.misc3_date).format('MMM-DD-YYYY') : "");
 
+                checkValue({name: "college" , value: response.college});
+                checkValue({name: "military" , value: response.military});
+                checkValue({name: "loyalty" , value: response.loyalty});
+                checkValue({name: "conquest" , value: response.conquest});
+                checkValue({name: "misc1" , value: response.misc1});
+                checkValue({name: "misc2" , value: response.misc2});
+                checkValue({name: "misc3" , value: response.misc3});
 
                 $('.selectpicker').selectpicker('refresh');
 

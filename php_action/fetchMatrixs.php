@@ -60,8 +60,8 @@ if ($result->num_rows > 0) {
 
                     $row[1], // year
                     $row[2], // model
-                    $row[3], // model
                     $trim, // $row[7], // trim
+                    $row[3], // model no
                     $net, // $row[8], // net
                     $hb, // $row[9], // hb
                     $invoice, // $row[10], // invoice

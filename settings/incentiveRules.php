@@ -211,7 +211,7 @@ include_once '../includes/header.php';
                                     </td>
                                     <td class="form-group">
                                         <select class="form-control selectpicker w-auto" id="editModelType" name="editModelType">
-                                            <option value="BOTH" selected>BOTH</option>
+                                            <option value="ALL" selected>ALL</option>
                                             <option value="NEW">NEW</option>
                                             <option value="USED">USED</option>
                                         </select>
@@ -377,7 +377,7 @@ include_once '../includes/header.php';
                                 </td>
                                 <td class="form-group">
                                     <select class="form-control selectpicker w-auto" id="modelType1" name="modelType[]">
-                                        <option value="BOTH" selected>BOTH</option>
+                                        <option value="ALL" selected>ALL</option>
                                         <option value="NEW">NEW</option>
                                         <option value="USED">USED</option>
                                     </select>

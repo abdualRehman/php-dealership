@@ -53,8 +53,8 @@ if ($result->num_rows > 0) {
         // $ruleSql = "SELECT * FROM `incentive_rules` WHERE model = '$model' AND 
         // ( year = '$year' OR year = 'ALL' ) AND ( modelno = '$modelno' OR modelno = 'ALL' ) AND type = '$stockType' AND status = 1 LIMIT 1";
         $ruleSql = "SELECT * FROM `incentive_rules` WHERE model = '$model' AND 
-        ( year = '$year' OR year = 'ALL' ) AND ( modelno = '$modelno' OR modelno = 'ALL' ) AND 
-        (type = '$stockType' OR type = 'BOTH' ) AND status = 1 AND
+        ( year = '$year' OR year = 'All' ) AND ( modelno = '$modelno' OR modelno = 'All' ) AND 
+        (type = '$stockType' OR type = 'ALL' ) AND status = 1 AND
         `ex_modelno` NOT LIKE '%_" . $modelno . "_%' ORDER BY FIELD(year, '$year') DESC, FIELD(modelno, '$modelno') DESC, FIELD(type, '$stockType') DESC LIMIT 1";
         $result1 = $connect->query($ruleSql);
         if ($result1->num_rows > 0) {
@@ -81,17 +81,17 @@ if ($result->num_rows > 0) {
         // $ruleSql = "SELECT * FROM `salesperson_rules` WHERE model = '$model' AND 
         // ( year = '$year' OR year = 'ALL' ) AND ( modelno = '$modelno' OR modelno = 'ALL' ) AND 
         // (type = '$stockType' OR type = 'ALL' )  AND status = 1 AND
-        // `ex_modelno` NOT LIKE '%_" . $modelno . "_%' ORDER BY FIELD(year, '$year') DESC, FIELD(modelno, '$modelno') DESC, FIELD(type, '$stockType') DESC LIMIT 1";
+        // `ex_modelno` NOT LIKE '%_" . $modelno . "_%' ORDER BY FIELD(year, '$year') DESC, FIELD(modelno, '$modelno') DESC, FIELD(type, '$stockType') DESC";
 
-        $ruleSql = "SELECT * FROM `salesperson_rules` WHERE model = '$model' AND 
-        ( year = '$year' OR year = 'ALL' ) AND ( modelno = '$modelno' OR modelno = 'ALL' ) AND 
+        $ruleSql = "SELECT * FROM `salesperson_rules` WHERE ( model = '$model' OR model = 'All' ) AND 
+        ( year = '$year' OR year = 'All' ) AND ( modelno = '$modelno' OR modelno = 'All' ) AND 
         (type = '$stockType' OR type = 'ALL' )  AND status = 1 AND
-        `ex_modelno` NOT LIKE '%_" . $modelno . "_%' ORDER BY FIELD(year, '$year') DESC, FIELD(modelno, '$modelno') DESC, FIELD(type, '$stockType') DESC";
+        `ex_modelno` NOT LIKE '%_" . $modelno . "_%' ORDER BY FIELD(model, '$model') DESC, FIELD(year, '$year') DESC, FIELD(modelno, '$modelno') DESC, FIELD(type, '$stockType') DESC";
+
         $result2 = $connect->query($ruleSql);
         if ($result2->num_rows > 0) {
             while ($row2 = $result2->fetch_array()) {
 
-                // array_push( $salespersonTodoArray ,  );
                 $salespersonTodoArray[] = array(
                     $row2['model'],
                     $row2['year'],
@@ -106,18 +106,7 @@ if ($result->num_rows > 0) {
                     $row2['inspection'],
                     $row2['salesperson_status'],
                     $row2['paid'],
-                    $row2['from_date'],
-                    $row2['to_date']
                 );
-                // $vin_check =  $row2['vin_check'];
-                // $insurance =  $row2['insurance'];
-                // $trade_title =  $row2['trade_title'];
-                // $registration =  $row2['registration'];
-                // $inspection =  $row2['inspection'];
-                // $salesperson_status =  $row2['salesperson_status'];
-                // $paid =  $row2['paid'];
-                // $sp_from_date =  $row2['from_date'];
-                // $sp_to_date =  $row2['to_date'];
             }
         }
 
@@ -140,10 +129,9 @@ if ($result->num_rows > 0) {
         }
 
 
-
+        // if ($row[4] === "RIDGELINE") {
 
         // echo json_encode($salespersonTodoArray) . " <br />";
-
         $output['data'][] = array(
             $row[0],  // id //0
             $row[1],  //stockno //1
@@ -171,6 +159,7 @@ if ($result->num_rows > 0) {
             $misc1, // 23
             $misc2, // 24
             $misc3, // 25
+            $row[16], // 26 inventory status
 
             // $sp_from_date, // 26
             // $sp_to_date, // 27
@@ -183,6 +172,8 @@ if ($result->num_rows > 0) {
             // $paid, // 34
             'spTodoArray' => $salespersonTodoArray,
         );
+
+        // }
     } // /while 
 
 } // if num_rows

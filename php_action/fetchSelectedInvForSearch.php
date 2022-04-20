@@ -5,7 +5,11 @@ require_once 'db/core.php';
 
 $id = $_POST['id'];
 
-$sql = "SELECT inventory.id, inventory.stockno, inventory.year, inventory.make, inventory.model, inventory.modelno, inventory.color, inventory.lot, inventory.vin, inventory.mileage, inventory.age, inventory.balance, inventory.retail, inventory.certified, inventory.stocktype, inventory.wholesale, inventory.status , sales.sale_status FROM inventory LEFT JOIN sales ON inventory.id = sales.stock_id WHERE inventory.id = '$id'  ORDER BY inventory.id ASC";
+// $sql = "SELECT inventory.id, inventory.stockno, inventory.year, inventory.make, inventory.model, inventory.modelno, inventory.color, inventory.lot, inventory.vin, inventory.mileage, inventory.age, inventory.balance, inventory.retail, inventory.certified, inventory.stocktype, inventory.wholesale, inventory.status , sales.sale_status FROM inventory LEFT JOIN sales ON inventory.id = sales.stock_id WHERE inventory.id = '$id'  ORDER BY inventory.id ASC";
+$sql = "SELECT inventory.id, inventory.stockno, inventory.year, inventory.make, inventory.model, inventory.modelno, inventory.color, 
+inventory.lot, inventory.vin, inventory.mileage, inventory.age, inventory.balance, inventory.retail, inventory.certified, inventory.stocktype, 
+inventory.wholesale, inventory.status , sales.sale_status FROM inventory LEFT JOIN sales ON inventory.id = sales.stock_id 
+WHERE inventory.id = '$id' ORDER BY inventory.id ASC";
 
 $result = $connect->query($sql);
 
@@ -17,6 +21,7 @@ if ($result->num_rows > 0) {
 
     while ($row = $result->fetch_array()) {
 
+        $salespersonTodoArray = array();
 
         $year = $row[2];  // model
         $model = $row[4];  // model
@@ -47,7 +52,13 @@ if ($result->num_rows > 0) {
         $paid = 'N/A';
         
 
-        $ruleSql = "SELECT * FROM `incentive_rules` WHERE model = '$model' AND ( year = '$year' OR year = 'ALL' ) AND ( modelno = '$modelno' OR modelno = 'ALL' ) AND type = '$stockType' AND status = 1 LIMIT 1";
+        // $ruleSql = "SELECT * FROM `incentive_rules` WHERE model = '$model' AND ( year = '$year' OR year = 'ALL' ) AND ( modelno = '$modelno' OR modelno = 'ALL' ) AND type = '$stockType' AND status = 1 LIMIT 1";
+        $ruleSql = "SELECT * FROM `incentive_rules` WHERE model = '$model' AND 
+        ( year = '$year' OR year = 'All' ) AND ( modelno = '$modelno' OR modelno = 'All' ) AND 
+        (type = '$stockType' OR type = 'ALL' ) AND status = 1 AND
+        `ex_modelno` NOT LIKE '%_" . $modelno . "_%' ORDER BY FIELD(year, '$year') DESC, FIELD(modelno, '$modelno') DESC, FIELD(type, '$stockType') DESC LIMIT 1";
+        $result1 = $connect->query($ruleSql);
+
         $result1 = $connect->query($ruleSql);
         if ($result1->num_rows > 0) {
             while ($row1 = $result1->fetch_array()) {
@@ -63,22 +74,33 @@ if ($result->num_rows > 0) {
             }
         }
 
-        $ruleSql = "SELECT * FROM `salesperson_rules` WHERE model = '$model' AND ( year = '$year' OR year = 'ALL' ) AND ( modelno = '$modelno' OR modelno = 'ALL' ) AND type = '$stockType' AND status = 1 LIMIT 1";
+        // $ruleSql = "SELECT * FROM `salesperson_rules` WHERE model = '$model' AND ( year = '$year' OR year = 'ALL' ) AND ( modelno = '$modelno' OR modelno = 'ALL' ) AND type = '$stockType' AND status = 1 LIMIT 1";
+        $ruleSql = "SELECT * FROM `salesperson_rules` WHERE ( model = '$model' OR model = 'All' ) AND 
+        ( year = '$year' OR year = 'All' ) AND ( modelno = '$modelno' OR modelno = 'All' ) AND 
+        (type = '$stockType' OR type = 'ALL' )  AND status = 1 AND
+        `ex_modelno` NOT LIKE '%_" . $modelno . "_%' ORDER BY FIELD(model, '$model') DESC, FIELD(year, '$year') DESC, FIELD(modelno, '$modelno') DESC, FIELD(type, '$stockType') DESC";
+
         $result2 = $connect->query($ruleSql);
-        if ($result2->num_rows > 0) {
+         if ($result2->num_rows > 0) {
             while ($row2 = $result2->fetch_array()) {
-                $vin_check =  $row2['vin_check'];
-                $insurance =  $row2['insurance'];
-                $trade_title =  $row2['trade_title'];
-                $registration =  $row2['registration'];
-                $inspection =  $row2['inspection'];
-                $salesperson_status =  $row2['salesperson_status'];
-                $paid =  $row2['paid'];
-                $sp_from_date =  $row2['from_date'];
-                $sp_to_date =  $row2['to_date'];
+
+                $salespersonTodoArray[] = array(
+                    $row2['model'],
+                    $row2['year'],
+                    $row2['modelno'],
+                    $row2['type'],
+                    $row2['state'],
+
+                    $row2['vin_check'],
+                    $row2['insurance'],
+                    $row2['trade_title'],
+                    $row2['registration'],
+                    $row2['inspection'],
+                    $row2['salesperson_status'],
+                    $row2['paid'],
+                );
             }
         }
-
 
 
 
@@ -125,16 +147,18 @@ if ($result->num_rows > 0) {
             $misc1, // 23
             $misc2, // 24
             $misc3, // 25
+            $row[16], // 26 inventory status
             
-            $sp_from_date, // 26
-            $sp_to_date, // 27
-            $vin_check, // 28
-            $insurance, // 29
-            $trade_title, // 30
-            $registration, // 31
-            $inspection, // 32
-            $salesperson_status, // 33
-            $paid, // 34
+            // $sp_from_date, // 26
+            // $sp_to_date, // 27
+            // $vin_check, // 28
+            // $insurance, // 29
+            // $trade_title, // 30
+            // $registration, // 31
+            // $inspection, // 32
+            // $salesperson_status, // 33
+            // $paid, // 34
+            'spTodoArray' => $salespersonTodoArray,
 
         );
     } // /while 

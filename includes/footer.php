@@ -264,6 +264,7 @@
 <script type="text/javascript" src="<?php echo $GLOBALS['siteurl'];?>/assets/build/scripts/mandatory.js"></script>
 <script type="text/javascript" src="<?php echo $GLOBALS['siteurl'];?>/assets/build/scripts/core.js"></script>
 <script type="text/javascript" src="<?php echo $GLOBALS['siteurl'];?>/assets/build/scripts/vendor1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-lightbox/0.2.12/slick-lightbox.min.js"></script>
 
 </body>
 

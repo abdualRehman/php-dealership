@@ -79,7 +79,6 @@ include_once '../includes/header.php';
                                     <th>State</th>
                                     <th>Model Type</th>
                                     <th>Ex Model No</th>
-                                    <th>Expire In.</th>
                                     <th>Vin Check</th>
                                     <th>Insurance</th>
                                     <th>Trade Title</th>
@@ -114,7 +113,7 @@ include_once '../includes/header.php';
                     </div>
                     <div class="showResult d-none">
                         <input type="hidden" name="ruleId" id="ruleId">
-                        <div class="form-group row">
+                        <!-- <div class="form-group row">
                             <label for="dateRange" class="col-sm-2 offset-sm-1 col-form-label text-right">Select Date:</label>
                             <div class="col-sm-8">
                                 <div class="input-group input-daterange">
@@ -124,7 +123,7 @@ include_once '../includes/header.php';
                                     <input type="text" class="form-control" name="edittoDate" id="edittoDate" placeholder="To">
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <table class="table" id="productTable1">
                             <thead>
@@ -142,6 +141,7 @@ include_once '../includes/header.php';
                                     <td class="form-group">
                                         <select class="form-control selectpicker w-auto" id="editModel" name="editModel" data-live-search="true" data-size="4">
                                             <option value="0" selected disabled>Select Model</option>
+                                            <option value="All">All</option>
                                             <option value="ACCORD">ACCORD</option>
                                             <option value="ACCORD HYBRID">ACCORD HYBRID</option>
                                             <option value="CIVIC">CIVIC</option>
@@ -342,7 +342,7 @@ include_once '../includes/header.php';
             <form id="addNewRule" autocomplete="off" method="post" action="../php_action/createSalesPersonRule.php">
                 <!-- <form id="addNewRule" autocomplete="off" method="post" action="#"> -->
                 <div class="modal-body">
-                    <br>
+                    <!-- <br>
                     <div class="form-group row">
                         <label for="dateRange" class="col-sm-2 offset-sm-1 col-form-label text-right">Select Date:</label>
                         <div class="col-sm-8">
@@ -354,7 +354,7 @@ include_once '../includes/header.php';
                             </div>
                         </div>
                     </div>
-                    <br><br>
+                    <br><br> -->
 
                     <table class="table" id="productTable">
                         <thead>
@@ -373,6 +373,7 @@ include_once '../includes/header.php';
                                 <td class="form-group">
                                     <select class="form-control selectpicker w-auto" id="model1" name="model[]" data-live-search="true" data-size="4">
                                         <option value="0" selected disabled>Select Model</option>
+                                        <option value="All">All</option>
                                         <option value="ACCORD">ACCORD</option>
                                         <option value="ACCORD HYBRID">ACCORD HYBRID</option>
                                         <option value="CIVIC">CIVIC</option>
@@ -485,64 +486,6 @@ include_once '../includes/header.php';
                                     </tr>
                                 </thead>
                                 <tbody class="table-warning">
-                                    <tr id="checkBoxRow">
-                                        <!-- <th class="text-center">
-                                            <div class="custom-control-lg custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="selectAll">
-                                                <label class="custom-control-label" for="selectAll">
-                                                </label>
-                                            </div>
-                                        </th>
-                                        <th class="text-center">
-                                            <div class="custom-control-lg custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input check" name="vinCheck" id="vinCheck">
-                                                <label class="custom-control-label" for="vinCheck">
-                                                </label>
-                                            </div>
-                                        </th>
-                                        <th class="text-center">
-                                            <div class="custom-control-lg custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input check" name="insurance" id="insurance">
-                                                <label class="custom-control-label" for="insurance">
-                                                </label>
-                                            </div>
-                                        </th>
-                                        <th class="text-center">
-                                            <div class="custom-control-lg custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input check" name="tradeTitle" id="tradeTitle">
-                                                <label class="custom-control-label" for="tradeTitle">
-                                                </label>
-                                            </div>
-                                        </th>
-                                        <th class="text-center">
-                                            <div class="custom-control-lg custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input check" name="registration" id="registration">
-                                                <label class="custom-control-label" for="registration">
-                                                </label>
-                                            </div>
-                                        </th>
-                                        <th class="text-center">
-                                            <div class="custom-control-lg custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input check" name="inspection" id="inspection">
-                                                <label class="custom-control-label" for="inspection">
-                                                </label>
-                                            </div>
-                                        </th>
-                                        <th class="text-center">
-                                            <div class="custom-control-lg custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input check" name="salespersonStatus" id="salespersonStatus">
-                                                <label class="custom-control-label" for="salespersonStatus">
-                                                </label>
-                                            </div>
-                                        </th>
-                                        <th class="text-center">
-                                            <div class="custom-control-lg custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input check" name="paid" id="paid">
-                                                <label class="custom-control-label" for="paid">
-                                                </label>
-                                            </div>
-                                        </th> -->
-                                    </tr>
                                     <tr>
                                         <th class="text-center">
                                             <select onchange="chnageStyle(this)" name="vinCheck" id="vinCheck" class="selectpicker">

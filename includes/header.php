@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&amp;family=Roboto+Mono&amp;display=swap" rel="stylesheet">
     <link href="<?php echo $GLOBALS['siteurl']; ?>/assets/build/styles/ltr-core.css" rel="stylesheet">
     <link href="<?php echo $GLOBALS['siteurl']; ?>/assets/build/styles/ltr-vendor.css" rel="stylesheet">
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-lightbox/0.2.12/slick-lightbox.css" rel="stylesheet" />
     <!-- <link href="https://dashboard1.panely-html.blueupcode.com/assets/images/favicon.ico" rel="shortcut icon"
         type="image/x-icon"> -->
 
@@ -54,7 +54,7 @@
                                 </a>
                             </div>
                             <div class="menu-item">
-                                <a href="#" class="menu-item-link">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/swaps.php" class="menu-item-link">
                                     <i class="menu-item-bullet"></i>
                                     <span class="menu-item-text">Swaps</span>
                                 </a>
@@ -192,7 +192,7 @@
                             <div class="menu-item">
                                 <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/locations.php?r=man" class="menu-item-link">
                                     <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">Locations</span>
+                                    <span class="menu-item-text">Swap Locations</span>
                                 </a>
                             </div>
                             <div class="menu-item">

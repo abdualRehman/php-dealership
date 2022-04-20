@@ -118,7 +118,7 @@ if ($_GET['r'] == 'man') {
                                                             <input type="radio" name="mod" data-texts="Accord,Accord Hybrid,ACCORD 4DR"> Accord
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="mod" data-texts="Civic,CIVIC HATCH ,CIVIC SEDAN,Civic SI,CIVIC 5DR"> Civic
+                                                            <input type="radio" name="mod" data-texts="Civic,CIVIC HATCH,CIVIC SEDAN,Civic SI,CIVIC 5DR"> Civic
                                                         </label>
                                                         <label class="btn btn-outline-primary">
                                                             <input type="radio" name="mod" data-texts="CR-V,CR-V Hybrid,CRV,CLARITY PLUG-IN HYBRID"> CR-V
@@ -139,7 +139,7 @@ if ($_GET['r'] == 'man') {
                                                             <input type="radio" name="mod" data-texts="Pilot,PILOT"> Pilot
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="mod" data-texts="Ridgeline,Ridgeline Packages,RIDGELINE,"> Ridgeline
+                                                            <input type="radio" name="mod" data-texts="Ridgeline,Ridgeline Packages,RIDGELINE"> Ridgeline
                                                         </label>
                                                     </div>
                                                 </div>
@@ -193,8 +193,8 @@ if ($_GET['r'] == 'man') {
                                     <tr>
                                         <th style="width: 10%;">Year</th>
                                         <th style="width: 10%;">Model</th>
-                                        <th style="width: 10%;">Model No</th>
                                         <th style="width: 15%;">Trim</th>
+                                        <th style="width: 10%;">Model No</th>
                                         <th style="width: 10%;">Net</th>
                                         <th style="width: 10%;">HB</th>
                                         <th style="width: 10%;">Invoice</th>

@@ -9,15 +9,16 @@ $invId = $_POST['invId'];
 
 if ($invId) {
 
-	$checkSql = "SELECT * FROM `sales` WHERE stock_id = '$invId' AND status = 1";
-	$result = $connect->query($checkSql);
+	$sql = "UPDATE inventory SET status = 2 WHERE id = '$invId'";
 
-	// check if stock id exist in sale table then update the inventory with status otherwise drop this record
-	if ($result->num_rows > 0) {
-		$sql = "UPDATE inventory SET stockno = CONCAT(stockno , '_', '$invId') , status = 2 WHERE id = '$invId'";
-	}else{
-		$sql = "DELETE FROM `inventory` WHERE `inventory`.`id` = '$invId' ";
-	}
+	// $checkSql = "SELECT * FROM `sales` WHERE stock_id = '$invId' AND status = 1";
+	// $result = $connect->query($checkSql);
+	// // check if stock id exist in sale table then update the inventory with status otherwise drop this record
+	// if ($result->num_rows > 0) {
+	// 	$sql = "UPDATE inventory SET stockno = CONCAT(stockno , '_', '$invId') , status = 2 WHERE id = '$invId'";
+	// }else{
+	// 	$sql = "DELETE FROM `inventory` WHERE `inventory`.`id` = '$invId' ";
+	// }
 
 	if ($connect->query($sql) === TRUE) {
 		$valid['success'] = true;

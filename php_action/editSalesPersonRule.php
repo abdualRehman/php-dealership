@@ -3,21 +3,11 @@
 require_once './db/core.php';
 
 $valid['success'] = array('success' => false, 'messages' => array(), 'id' => '');
-function reformatDate($date, $from_format = 'm-d-Y', $to_format = 'Y-m-d')
-{
-    $date_aux = date_create_from_format($from_format, $date);
-    return date_format($date_aux, $to_format);
-}
+
 
 if ($_POST) {
 
     $ruleId = $_POST['ruleId'];
-
-    $fromDate = mysqli_real_escape_string($connect, $_POST['editfromDate']);
-    $fromDate = reformatDate($fromDate);
-
-    $toDate = mysqli_real_escape_string($connect, $_POST['edittoDate']);
-    $toDate = reformatDate($toDate);
 
     $model = mysqli_real_escape_string($connect, $_POST['editModel']);
     $year = mysqli_real_escape_string($connect, $_POST['editYear']);
@@ -71,8 +61,6 @@ if ($_POST) {
     } else {
 
         $sql = "UPDATE `salesperson_rules` SET 
-        `from_date`='$fromDate',
-        `to_date`='$toDate',
         `model`='$model',
         `year`='$year',
         `modelno`='$modelno',

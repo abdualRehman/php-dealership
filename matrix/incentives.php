@@ -58,15 +58,28 @@ include_once '../includes/header.php';
         opacity: 0;
     }
 
-    /* .DTFC_RightBodyLiner {
+    .DTFC_RightBodyLiner {
         width: 100% !important;
         overflow-x: hidden;
         overflow-y: auto !important;
-    } */
+    }
+    .DTFC_RightWrapper{
+        right: 0px!important;
+    }
 
     #datatable-1 tbody tr td {
         text-align: center;
         padding: 10px;
+    }
+
+    .slick-lightbox-slick-item-inner>img {
+        height: 400px !important;
+    }
+
+    @media (max-width: 1025px) {
+        .slick-lightbox-slick-item-inner>img {
+            height: 400px !important;
+        }
     }
 
     @media (min-width: 1025px) {
@@ -74,6 +87,12 @@ include_once '../includes/header.php';
         .modal-lg,
         .modal-xl {
             max-width: 1000px !important;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .slick-lightbox-slick-item-inner>img {
+            height: 200px !important;
         }
     }
 
@@ -97,6 +116,10 @@ include_once '../includes/header.php';
         color: white;
         max-height: 300px;
         overflow-y: hidden;
+    }
+
+    .carousel-item img {
+        width: 95%;
     }
 
     .carousel-item .card {
@@ -125,8 +148,6 @@ include_once '../includes/header.php';
         object-fit: cover;
         /* min-width: fit-content!important; */
     }
-
-   
 </style>
 
 
@@ -143,7 +164,7 @@ include_once '../includes/header.php';
                         </button>
                     </div>
 
-                    <div class="portlet-body" >
+                    <div class="portlet-body">
 
                         <table id="datatable-1" class="table table-bordered table-striped table-hover">
                             <thead>
@@ -212,7 +233,7 @@ include_once '../includes/header.php';
 
                                 </div>
                                 <div class="row">
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
                                         <label for="stockNo" class="col-form-label">Stock #</label>
                                         <input type="text" class="form-control" id="stockNo" readonly name="stockNo" placeholder="Stock No">
                                     </div>
@@ -220,7 +241,11 @@ include_once '../includes/header.php';
                                         <label for="vehicle" class="col-form-label">Vehicle</label>
                                         <input type="text" class="form-control" id="vehicle" readonly name="vehicle" placeholder="Vehicle">
                                     </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
+                                        <label for="vin" class="col-form-label">Vin</label>
+                                        <input type="text" class="form-control" style="padding: 5px!important;" id="vin" readonly name="vin" placeholder="Vin">
+                                    </div>
+                                    <div class="form-group col-md-2">
                                         <label for="state" class="col-form-label">State</label>
                                         <input type="text" class="form-control" id="state" readonly name="state" placeholder="State">
                                     </div>
@@ -245,7 +270,7 @@ include_once '../includes/header.php';
                                     <label for="vincheck" class="col-md-2 col-form-label text-center">College</label>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <select class="selectpicker" data-live-search="true" id="college" name="college" data-size="5">
+                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" id="college" name="college" data-size="5">
                                                 <optgroup>
                                                     <option>No</option>
                                                     <option>Yes</option>
@@ -270,7 +295,7 @@ include_once '../includes/header.php';
                                     <label for="vincheck" class="col-md-2 col-form-label text-center">Military</label>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <select class="selectpicker" data-live-search="true" id="military" name="military" data-size="5">
+                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" id="military" name="military" data-size="5">
                                                 <optgroup>
                                                     <option>No</option>
                                                     <option>Yes</option>
@@ -295,7 +320,7 @@ include_once '../includes/header.php';
                                     <label for="vincheck" class="col-md-2 col-form-label text-center">Loyalty</label>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <select class="selectpicker" data-live-search="true" id="loyalty" name="loyalty" data-size="5">
+                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" id="loyalty" name="loyalty" data-size="5">
                                                 <optgroup>
                                                     <option>No</option>
                                                     <option>Yes</option>
@@ -320,7 +345,7 @@ include_once '../includes/header.php';
                                     <label for="vincheck" class="col-md-2 col-form-label text-center">Conquest</label>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <select class="selectpicker" data-live-search="true" id="conquest" name="conquest" data-size="5">
+                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" id="conquest" name="conquest" data-size="5">
                                                 <optgroup>
                                                     <option>No</option>
                                                     <option>Yes</option>
@@ -347,7 +372,7 @@ include_once '../includes/header.php';
                                     <label for="vincheck" class="col-md-2 col-form-label text-center">Misc 1</label>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <select class="selectpicker" data-live-search="true" id="misc1" name="misc1" data-size="5">
+                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" id="misc1" name="misc1" data-size="5">
                                                 <optgroup>
                                                     <option>No</option>
                                                     <option>Yes</option>
@@ -371,7 +396,7 @@ include_once '../includes/header.php';
                                     <label for="vincheck" class="col-md-2 col-form-label text-center">Misc 2</label>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <select class="selectpicker" data-live-search="true" id="misc2" name="misc2" data-size="5">
+                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" id="misc2" name="misc2" data-size="5">
                                                 <optgroup>
                                                     <option>No</option>
                                                     <option>Yes</option>
@@ -395,7 +420,7 @@ include_once '../includes/header.php';
                                     <label for="vincheck" class="col-md-2 col-form-label text-center">Misc 3</label>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <select class="selectpicker" data-live-search="true" id="misc3" name="misc3" data-size="5">
+                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" id="misc3" name="misc3" data-size="5">
                                                 <optgroup>
                                                     <option>No</option>
                                                     <option>Yes</option>

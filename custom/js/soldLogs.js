@@ -498,7 +498,7 @@ function fetchSelectedInvForSearch(id = null) {
             stockArray.push(response.data);
             var item = response.data;
             var selectBox = document.getElementById('stockId');
-            selectBox.innerHTML += `<option value="${item[0]}" selected title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`;
+            selectBox.innerHTML += `<option value="${item[0]}" selected title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} || Stock Deleted</option>`;
             $('.selectpicker').selectpicker('refresh');
             changeStockDetails({ value: item[0] })
         }
@@ -733,7 +733,7 @@ function changeStockDetails(ele) {
 
     $('#selectedStockType').val(obj[14]); // setting up stockType for sales person Todo
 
-    var detailsDiv = `${obj[14]} ${obj[2]} ${obj[3]} ${obj[4]} \n Vin: ${obj[8]} \n Mileage: ${obj[9]} \n Age: ${obj[10]} \n Lot: ${obj[7]} \n Balance: ${obj[11]}`;
+    var detailsDiv = `${obj[14]} ${obj[2]} ${obj[3]} ${obj[4]} \n Vin: ${obj[8]} \n Mileage: ${obj[26] == 1 ? obj[9] : "" } \n Age: ${obj[26] == 1 ? obj[10] : ""} \n Lot: ${obj[26] == 1 ? obj[7] : "" } \n Balance: ${obj[26] == 1 ? obj[11] : ""} ${obj[26] == 2 ? "\n  Stock is Deleted" : "" } `;
     $('#selectedDetails').html(detailsDiv);
     $('#selectedDetails').addClass('text-center');
 
@@ -818,42 +818,31 @@ function changeSalesPersonTodo() {
         // console.log(obj['spTodoArray']);
         var todoArray = obj['spTodoArray'];
         let state = $('#state').val();
-        console.log(todoArray.length);
+        console.log(todoArray);
         var saleDate = $('#saleDate').val();
-        if (state && todoArray.length > 0) {
+        if (state && todoArray && todoArray.length > 0) {
 
             var spTodoRulesObj = todoArray.find(data => data[4] === state);
 
             if (spTodoRulesObj) {
 
-                saleDate = moment(saleDate).format('MM-DD-YYYY');
-                var startDate1 = moment(spTodoRulesObj[12]).format('MM-DD-YYYY');
-                var endDate1 = moment(spTodoRulesObj[13]).format('MM-DD-YYYY');
+                console.log("Data found \n", spTodoRulesObj);
+                changeSalesPersonTodoStyle("vincheck", spTodoRulesObj[5]);
+                changeSalesPersonTodoStyle("insurance", spTodoRulesObj[6]);
+                changeSalesPersonTodoStyle("tradeTitle", spTodoRulesObj[7]);
+                changeSalesPersonTodoStyle("registration", spTodoRulesObj[8]);
+                changeSalesPersonTodoStyle("inspection", spTodoRulesObj[9]);
+                changeSalesPersonTodoStyle("salePStatus", spTodoRulesObj[10]);
+                changeSalesPersonTodoStyle("paid", spTodoRulesObj[11]);
 
-                var bool = moment(saleDate).isBetween
-                    (startDate1, endDate1, null, '[]'); // true
-
-                console.log("Is Valid? \n", bool);
-
-                if (bool) {
-                    console.log("Data found \n", spTodoRulesObj);
-                    changeSalesPersonTodoStyle("vincheck", spTodoRulesObj[5]);
-                    changeSalesPersonTodoStyle("insurance", spTodoRulesObj[6]);
-                    changeSalesPersonTodoStyle("tradeTitle", spTodoRulesObj[7]);
-                    changeSalesPersonTodoStyle("registration", spTodoRulesObj[8]);
-                    changeSalesPersonTodoStyle("inspection", spTodoRulesObj[9]);
-                    changeSalesPersonTodoStyle("salePStatus", spTodoRulesObj[10]);
-                    changeSalesPersonTodoStyle("paid", spTodoRulesObj[11]);
-
-                } else {
-                    changeSalesPersonTodoStyle("vincheck", "N/A");
-                    changeSalesPersonTodoStyle("insurance", "N/A");
-                    changeSalesPersonTodoStyle("tradeTitle", "N/A");
-                    changeSalesPersonTodoStyle("registration", "N/A");
-                    changeSalesPersonTodoStyle("inspection", "N/A");
-                    changeSalesPersonTodoStyle("salePStatus", "N/A");
-                    changeSalesPersonTodoStyle("paid", "N/A");
-                }
+            } else {
+                changeSalesPersonTodoStyle("vincheck", "N/A");
+                changeSalesPersonTodoStyle("insurance", "N/A");
+                changeSalesPersonTodoStyle("tradeTitle", "N/A");
+                changeSalesPersonTodoStyle("registration", "N/A");
+                changeSalesPersonTodoStyle("inspection", "N/A");
+                changeSalesPersonTodoStyle("salePStatus", "N/A");
+                changeSalesPersonTodoStyle("paid", "N/A");
             }
 
         } else {
