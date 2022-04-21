@@ -70,6 +70,20 @@ $(function () {
     });
 
 
+    function comparision(name, date) {
+        // if(name != 'Yes' && name != 'No'){
+        if (name.startsWith("Yes/Approved by")) {
+            // console.log(name);
+            if (date == "") {
+                return false;
+            } else {
+                return true;
+            }
+        } else if (name == 'Yes' || name == 'No') {
+            return true;
+        }
+    }
+
     function loadUncomplete() {
         manageSoldLogsTable.button(0).active(true);
         manageSoldLogsTable.button(1).active(false);
@@ -83,9 +97,17 @@ $(function () {
                 if (settings.nTable !== tableNode) {
                     return true;
                 }
-               
+
                 if (data[4] != 'No' || data[5] != 'No' || data[6] != 'No' || data[7] != 'No' || data[8] != 'No' || data[9] != 'No' || data[10] != 'No') {
-                    if (data[11] === "" || data[12] === "" || data[13] === "" || data[14] === "" || data[15] === "" || data[16] === "" || data[17] === "" || data[18] === "") {
+                    if (
+                        comparision(data[4], data[11]) !== true ||
+                        comparision(data[5], data[12]) !== true ||
+                        comparision(data[6], data[13]) !== true ||
+                        comparision(data[7], data[14]) !== true ||
+                        comparision(data[8], data[15]) !== true ||
+                        comparision(data[9], data[16]) !== true ||
+                        comparision(data[10], data[17]) !== true
+                    ) {
                         return true;
                     }
                 }
@@ -152,9 +174,19 @@ $(function () {
                             if (settings.nTable !== tableNode) {
                                 return true;
                             }
-                            
-                            if (data[4] !== 'No' || data[5] !== 'No' || data[6] !== 'No' || data[7] !== 'No' || data[8] !== 'No' || data[9] !== 'No' || data[10] !== 'No') {
-                                if (data[11] !== "" && data[12] !== "" && data[13] !== "" && data[14] !== "" && data[15] !== "" && data[16] !== "" && data[17] !== "" && data[18] !== "") {
+
+
+                            if (data[4] != 'No' || data[5] != 'No' || data[6] != 'No' || data[7] != 'No' || data[8] != 'No' || data[9] != 'No' || data[10] != 'No') {
+                                if (
+                                    comparision(data[4], data[11]) === true &&
+                                    comparision(data[5], data[12]) === true &&
+                                    comparision(data[6], data[13]) === true &&
+                                    comparision(data[7], data[14]) === true &&
+                                    comparision(data[8], data[15]) === true &&
+                                    comparision(data[9], data[16]) === true &&
+                                    comparision(data[10], data[17]) === true
+                                ) {
+
                                     return true;
                                 }
                             }
@@ -190,7 +222,7 @@ $(function () {
                 targets: [0, 1, 2, 3],
 
             },
-            { 'visible': false, 'targets': [11, 12, 13, 14, 15, 16, 17, 18] }, //hide columns 
+            // { 'visible': false, 'targets': [11, 12, 13, 14, 15, 16, 17, 18] }, //hide columns 
         ],
 
         language: {
@@ -292,12 +324,12 @@ function removeImage(ele) {
 
 function checkValue(ele) {
     var value = ele.value;
-    if(!isNaN(value)){
+    if (!isNaN(value)) {
         // console.log(ele.name);
-        $('#'+ele.name+'Date').attr('disabled' , false);
-    }else{
-        $('#'+ele.name+'Date').val("");
-        $('#'+ele.name+'Date').attr('disabled' , true);
+        $('#' + ele.name + 'Date').attr('disabled', false);
+    } else {
+        $('#' + ele.name + 'Date').val("");
+        $('#' + ele.name + 'Date').attr('disabled', true);
     }
 }
 
@@ -414,13 +446,13 @@ function editDetails(id = null) {
                 $('#misc2Date').val(response.misc2_date ? moment(response.misc2_date).format('MMM-DD-YYYY') : "");
                 $('#misc3Date').val(response.misc3_date ? moment(response.misc3_date).format('MMM-DD-YYYY') : "");
 
-                checkValue({name: "college" , value: response.college});
-                checkValue({name: "military" , value: response.military});
-                checkValue({name: "loyalty" , value: response.loyalty});
-                checkValue({name: "conquest" , value: response.conquest});
-                checkValue({name: "misc1" , value: response.misc1});
-                checkValue({name: "misc2" , value: response.misc2});
-                checkValue({name: "misc3" , value: response.misc3});
+                checkValue({ name: "college", value: response.college });
+                checkValue({ name: "military", value: response.military });
+                checkValue({ name: "loyalty", value: response.loyalty });
+                checkValue({ name: "conquest", value: response.conquest });
+                checkValue({ name: "misc1", value: response.misc1 });
+                checkValue({ name: "misc2", value: response.misc2 });
+                checkValue({ name: "misc3", value: response.misc3 });
 
                 $('.selectpicker').selectpicker('refresh');
 

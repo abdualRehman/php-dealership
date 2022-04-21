@@ -77,12 +77,12 @@ $(function () {
     $("#addNewSwap").validate({
         ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
         rules: {
-            "inpercentage":{
-                required:false,
+            "inpercentage": {
+                required: false,
                 number: !0,
             },
-            "outpercentage":{
-                required:false,
+            "outpercentage": {
+                required: false,
                 number: !0,
             },
             "fromDealer": {
@@ -186,12 +186,12 @@ $(function () {
     $("#editSwapForm").validate({
         ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
         rules: {
-            "einpercentage":{
-                required:false,
+            "einpercentage": {
+                required: false,
                 number: !0,
             },
-            "eoutpercentage":{
-                required:false,
+            "eoutpercentage": {
+                required: false,
                 number: !0,
             },
             "efromDealer": {
@@ -321,12 +321,15 @@ $('.vehicleOut').on('change', function () {
 
 
 $('.evehicleDetails').on('change', function () {
+    var selectBox = document.getElementById('estatus');
+    var value = selectBox.value;
     if ($('.evehicleDetails:checked').length == $('.evehicleDetails').length) {
-        var selectBox = document.getElementById('estatus');
+        $("#estatus option[value='completed']").remove();
         selectBox.innerHTML += `<option value="completed">Completed</option>`;
     } else {
         $("#estatus option[value='completed']").remove();
     }
+    $('select[name=estatus]').val(value);
     $('.selectpicker').selectpicker('refresh');
 });
 $('.evehicleIn').on('change', function () {
@@ -346,7 +349,7 @@ $('.evehicleOut').on('change', function () {
 });
 
 
-function calculateHTB(currentElement, target , percentage) {
+function calculateHTB(currentElement, target, percentage) {
     var msrp = $('#' + currentElement).val();
     var prcntge = $('#' + percentage).val();
     var calcHbt = (msrp * prcntge) / 100;
@@ -469,23 +472,25 @@ function editDetails(id = null) {
 
                 $("#einvReceived").prop("checked", (response.inv_received == 'on') ? true : false);
                 $("#etransferredIn").prop("checked", (response.transferred_in == 'on') ? true : false);
-                $('.evehicleIn').change();
+                if (response.inv_received == 'on' && response.transferred_in == 'on') {
+                    $('.evehicleIn').change();
+                }
 
 
                 $('#evinIn').val(response.vin_in);
                 $('#einvIn').val(response.inv_in);
                 $('#ehbIn').val(response.hb_in);
-                
+
                 $('#emsrpIn').val(response.msrp_in);
-                
+
                 $('#ehdagIn').val(response.hdag_in);
                 $('#eaddsIn').val(response.adds_in);
                 $('#eaddsInNotes').val(response.adds_in_notes);
-                
+
                 $('#ehbtIn').val(response.hbt_in);
-                
-                
-                $('#einpercentage').val(( response.hbt_in && response.msrp_in )  ?  (( response.hbt_in * 100 ) / response.msrp_in) : "1.5" );
+
+
+                $('#einpercentage').val((response.hbt_in && response.msrp_in) ? ((response.hbt_in * 100) / response.msrp_in) : "1.5");
 
 
                 $('#enetcostIn').val(response.net_cost_in);
@@ -497,7 +502,10 @@ function editDetails(id = null) {
 
                 $("#einvSent").prop("checked", (response.inv_sent == 'on') ? true : false);
                 $("#etransferredOut").prop("checked", (response.transferred_out == 'on') ? true : false);
-                $('.evehicleOut').change();
+
+                if (response.inv_sent == 'on' && response.transferred_out == 'on') {
+                    $('.evehicleOut').change();
+                }
 
 
 
@@ -510,7 +518,7 @@ function editDetails(id = null) {
                 $('#eaddsOutNotes').val(response.adds_out_notes);
                 $('#ehbtOut').val(response.hbt_out);
 
-                $('#eoutpercentage').val(( response.hbt_out && response.msrp_out )  ?  (( response.hbt_out * 100 ) / response.msrp_out) : "1.5" );
+                $('#eoutpercentage').val((response.hbt_out && response.msrp_out) ? ((response.hbt_out * 100) / response.msrp_out) : "1.5");
 
                 $('#enetcostOut').val(response.net_cost_out);
 

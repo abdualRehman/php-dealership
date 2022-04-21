@@ -88,7 +88,10 @@ $(function () {
                         )
                         manageSoldLogsTable.draw();  // working
                         // manageSoldLogsTable.searchPanes.rebuildPane();
-
+                        manageSoldLogsTable.button(0).active(true);
+                        manageSoldLogsTable.button(1).active(false);
+                        manageSoldLogsTable.button(2).active(false);
+                        manageSoldLogsTable.button(3).active(false);
                     },
 
                 },
@@ -123,6 +126,10 @@ $(function () {
                         manageSoldLogsTable.draw();  // working
                         // manageSoldLogsTable.searchPanes.rebuildPane();
 
+                        manageSoldLogsTable.button(0).active(false);
+                        manageSoldLogsTable.button(1).active(true);
+                        manageSoldLogsTable.button(2).active(false);
+                        manageSoldLogsTable.button(3).active(false);
 
 
                     },
@@ -166,14 +173,17 @@ $(function () {
 
                         manageSoldLogsTable.draw();  // working
                         // manageSoldLogsTable.searchPanes.rebuildPane();
-
+                        manageSoldLogsTable.button(0).active(false);
+                        manageSoldLogsTable.button(1).active(false);
+                        manageSoldLogsTable.button(2).active(true);
+                        manageSoldLogsTable.button(3).active(false);
 
 
                     },
 
                 },
                 {
-                    text: "Clear",
+                    text: "Show All",
                     action: function (e, dt, node, config) {
                         // $.fn.dataTable.ext.search = [];
 
@@ -209,6 +219,11 @@ $(function () {
 
                         manageSoldLogsTable.ajax.reload(null, false);
                         // manageSoldLogsTable.searchPanes.rebuildPane();
+
+                        manageSoldLogsTable.button(0).active(false);
+                        manageSoldLogsTable.button(1).active(false);
+                        manageSoldLogsTable.button(2).active(false);
+                        manageSoldLogsTable.button(3).active(true);
 
 
                     }
@@ -246,6 +261,11 @@ $(function () {
             },
             "order": [[0, "asc"]]
         });
+
+        manageSoldLogsTable.button(0).active(false);
+        manageSoldLogsTable.button(1).active(false);
+        manageSoldLogsTable.button(2).active(false);
+        manageSoldLogsTable.button(3).active(true);
 
 
     } else if (divRequest == 'edit') {
@@ -733,7 +753,7 @@ function changeStockDetails(ele) {
 
     $('#selectedStockType').val(obj[14]); // setting up stockType for sales person Todo
 
-    var detailsDiv = `${obj[14]} ${obj[2]} ${obj[3]} ${obj[4]} \n Vin: ${obj[8]} \n Mileage: ${obj[26] == 1 ? obj[9] : "" } \n Age: ${obj[26] == 1 ? obj[10] : ""} \n Lot: ${obj[26] == 1 ? obj[7] : "" } \n Balance: ${obj[26] == 1 ? obj[11] : ""} ${obj[26] == 2 ? "\n  Stock is Deleted" : "" } `;
+    var detailsDiv = `${obj[14]} ${obj[2]} ${obj[3]} ${obj[4]} \n Vin: ${obj[8]} \n Mileage: ${obj[26] == 1 ? obj[9] : ""} \n Age: ${obj[26] == 1 ? obj[10] : ""} \n Lot: ${obj[26] == 1 ? obj[7] : ""} \n Balance: ${obj[26] == 1 ? obj[11] : ""} ${obj[26] == 2 ? "\n  Stock is Deleted" : ""} `;
     $('#selectedDetails').html(detailsDiv);
     $('#selectedDetails').addClass('text-center');
 

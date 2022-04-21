@@ -37,6 +37,7 @@ if ($_GET['r'] == 'man') {
         margin-bottom: 2px;
         /* color: #424248; */
         font-weight: 700;
+        font-size: 15px;
     }
 
     #datatable-1 tbody tr{
@@ -46,6 +47,7 @@ if ($_GET['r'] == 'man') {
     #other,
     #lease {
         font-weight: 700;
+        font-size: 15px;
     }
 
 
@@ -324,6 +326,7 @@ if ($_GET['r'] == 'man') {
                                 </div>
                             </div>
                         </div>
+                        <hr />
                         <h3 class="h3 text-center text-primary m-3"><strong>RESIDUALS</strong></h3>
                         <div class="container">
 

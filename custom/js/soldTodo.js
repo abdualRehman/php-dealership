@@ -19,7 +19,7 @@ $(function () {
         pickTime: false,
     });
 
-    function loadUncomplete() {
+    function loadOpened() {
         $.fn.dataTable.ext.search.pop();
         manageSoldLogsTable.search('').draw();
         // var tableNode = this.table(0).node();
@@ -38,9 +38,7 @@ $(function () {
                 var salesperson_status = data[10];
                 var paid = data[11];
                 if (
-                    (vin_check === 'checkTitle' || vin_check === 'need') || insurance === 'need' ||
-                    trade_title === 'need' || registration === 'pending' || inspection === 'need' ||
-                    salesperson_status === 'dealWritten' || paid === 'no'
+                    salesperson_status !== 'cancelled' && salesperson_status !== 'delivered'
                 ) {
 
                     return true;
@@ -95,9 +93,9 @@ $(function () {
         },
         buttons: [
             {
-                text: 'Un Complete',
+                text: 'Opened',
                 action: function (e, dt, node, config) {
-                    loadUncomplete();
+                    loadOpened();
                 },
 
             },
@@ -124,9 +122,7 @@ $(function () {
                             var salesperson_status = data[10];
                             var paid = data[11];
                             if (
-                                (vin_check !== 'checkTitle' && vin_check !== 'need') && insurance !== 'need' &&
-                                trade_title !== 'need' && registration !== 'pending' && inspection !== 'need' &&
-                                salesperson_status !== 'dealWritten' && paid !== 'no'
+                                salesperson_status === 'cancelled' || salesperson_status === 'delivered'
                             ) {
                                 return true;
                             }
@@ -202,7 +198,7 @@ $(function () {
     });
 
 
-    loadUncomplete();
+    loadOpened();
 
 
 
@@ -270,81 +266,81 @@ function changePillCSS(data, title) {
     switch (title) {
         case 'vinCheck':
             if (data == 'checkTitle') {
-                return '<span class="badge badge-danger badge-pill">Check Title</span>';
+                return '<span class="badge badge-lg badge-danger badge-pill">Check Title</span>';
             } else if (data == 'need') {
-                return '<span class="badge badge-danger badge-pill">Need</span>';
+                return '<span class="badge badge-lg badge-danger badge-pill">Need</span>';
             } else if (data == 'notNeed') {
-                return '<span class="badge badge-success badge-pill">Not Need</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">Not Need</span>';
             } else if (data == 'n/a') {
-                return '<span class="badge badge-success badge-pill">N/A</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">N/A</span>';
             } else if (data == 'onHold') {
-                return '<span class="badge badge-success badge-pill">On Hold</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">On Hold</span>';
             } else if (data == 'done') {
-                return '<span class="badge badge-success badge-pill">Done</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">Done</span>';
             }
             break;
         case 'insurance':
             if (data == 'need') {
-                return '<span class="badge badge-danger badge-pill">Need</span>';
+                return '<span class="badge badge-lg badge-danger badge-pill">Need</span>';
             } else if (data == 'inHouse') {
-                return '<span class="badge badge-success badge-pill">In House</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">In House</span>';
             } else if (data == 'n/a') {
-                return '<span class="badge badge-success badge-pill">N/A</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">N/A</span>';
             }
             break;
         case 'tradeTitle':
             if (data == 'need') {
-                return '<span class="badge badge-danger badge-pill">Need</span>';
+                return '<span class="badge badge-lg badge-danger badge-pill">Need</span>';
             } else if (data == 'payoff') {
-                return '<span class="badge badge-success badge-pill">Payoff</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">Payoff</span>';
             } else if (data == 'noTrade') {
-                return '<span class="badge badge-success badge-pill">No Trade</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">No Trade</span>';
             } else if (data == 'inHouse') {
-                return '<span class="badge badge-success badge-pill">In House</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">In House</span>';
             }
             break;
         case 'registration':
             if (data == 'pending') {
-                return '<span class="badge badge-danger badge-pill">Pending</span>';
+                return '<span class="badge badge-lg badge-danger badge-pill">Pending</span>';
             } else if (data == 'done') {
-                return '<span class="badge badge-success badge-pill">Done</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">Done</span>';
             } else if (data == 'customerHas') {
-                return '<span class="badge badge-success badge-pill">Customer Has</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">Customer Has</span>';
             } else if (data == 'mailed') {
-                return '<span class="badge badge-success badge-pill">Mailed</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">Mailed</span>';
             } else if (data == 'n/a') {
-                return '<span class="badge badge-success badge-pill">N/A</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">N/A</span>';
             }
             break;
         case 'inspection':
             if (data == 'need') {
-                return '<span class="badge badge-danger badge-pill">Need</span>';
+                return '<span class="badge badge-lg badge-danger badge-pill">Need</span>';
             } else if (data == 'notNeed') {
-                return '<span class="badge badge-success badge-pill">Not Need</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">Not Need</span>';
             } else if (data == 'done') {
-                return '<span class="badge badge-success badge-pill">Done</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">Done</span>';
             } else if (data == 'n/a') {
-                return '<span class="badge badge-success badge-pill">N/A</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">N/A</span>';
             }
             break;
         case 'salePStatus':
             if (data == 'dealWritten') {
-                return '<span class="badge badge-danger badge-pill">Deal Written</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">Deal Written</span>';
             } else if (data == 'gmdSubmit') {
-                return '<span class="badge badge-success badge-pill">GMD Submit</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">GMD Submit</span>';
             } else if (data == 'contracted') {
-                return '<span class="badge badge-success badge-pill">Contracted</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">Contracted</span>';
             } else if (data == 'cancelled') {
-                return '<span class="badge badge-success badge-pill">Cancelled</span>';
+                return '<span class="badge badge-lg badge-danger badge-pill">Cancelled</span>';
             } else if (data == 'delivered') {
-                return '<span class="badge badge-success badge-pill">Delivered</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">Delivered</span>';
             }
             break;
         case 'paid':
             if (data == 'no') {
-                return '<span class="badge badge-danger badge-pill">No</span>';
+                return '<span class="badge badge-lg badge-danger badge-pill">No</span>';
             } else if (data == 'yes') {
-                return '<span class="badge badge-success badge-pill">Yes</span>';
+                return '<span class="badge badge-lg badge-success badge-pill">Yes</span>';
             }
             break;
 
