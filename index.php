@@ -31,17 +31,33 @@ if ($_POST) {
 
         if ($result->num_rows == 1) {
             $password = md5($password);
+            // echo $password;
             // exists
-            $mainSql = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
+            $mainSql = "SELECT users.* , role.role_name FROM users LEFT JOIN role ON users.role = role.role_id WHERE users.email = '$email' AND users.password = '$password'";
             $mainResult = $connect->query($mainSql);
 
             if ($mainResult->num_rows == 1) {
                 $value = $mainResult->fetch_assoc();
                 $user_id = $value['id'];
+                $role_id = $value['role'];
 
                 // set session
                 $_SESSION['userId'] = $user_id;
-                $_SESSION['userRole'] = $value['role'];
+                $_SESSION['userName'] = $value['username'];
+                $_SESSION['userRoleName'] = $value['role_name'];
+                $_SESSION['userRole'] = $role_id;
+
+                $checkSql = "SELECT modules , functions , permission FROM `role_mod` WHERE role_id = '$role_id'";
+                $result = $connect->query($checkSql);
+                // $output = array('data' => array());
+                $output = array();
+                if ($result && $result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        // $output['data'][] = array($row);
+                        array_push($output , $row);
+                    }
+                }
+                $_SESSION['permissionsArray'] = $output;
 
                 header('location: dashboard.php');
             } else {
@@ -124,7 +140,7 @@ if ($_POST) {
 
 
     <!-- <script type="text/javascript" src="./assets/app/pages/login.js"></script> -->
-    <div class="float-btn float-btn-right"><button class="btn btn-flat-primary btn-icon mb-2" id="theme-toggle" data-toggle="tooltip" data-placement="right" title="Change theme"><i class="fa fa-moon"></i></button> 
+    <div class="float-btn float-btn-right"><button class="btn btn-flat-primary btn-icon mb-2" id="theme-toggle" data-toggle="tooltip" data-placement="right" title="Change theme"><i class="fa fa-moon"></i></button>
     </div>
     <script type="text/javascript" src="assets/build/scripts/mandatory.js"></script>
     <script type="text/javascript" src="assets/build/scripts/core.js"></script>

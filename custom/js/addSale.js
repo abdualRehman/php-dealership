@@ -313,7 +313,8 @@ function loadStock() {
 }
 
 function loadSaleConsultant() {
-    var sales_consultant_id = 38;
+    // var sales_consultant_id = 38;
+    var sales_consultant_id = 66;
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",
@@ -332,7 +333,8 @@ function loadSaleConsultant() {
 }
 
 function loadSaleManager() {
-    var sales_manager_id = 1;
+    // var sales_manager_id = 1;
+    var sales_manager_id = 67;
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",

@@ -2,6 +2,10 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
+if (hasAccess("cashincrule", "Add") === 'false' && hasAccess("cashincrule", "Edit") === 'false' && hasAccess("cashincrule", "Remove") === 'false') {
+    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+}
+
 
 ?>
 
@@ -27,13 +31,18 @@ include_once '../includes/header.php';
             <div class="col-12">
                 <div class="portlet">
                     <div class="portlet-header portlet-header-bordered">
-                        <h3 class="portlet-title">Deal Cash Incentive Rule List</h3>
+                        <h3 class="portlet-title">Dealer Cash Incentive Rule List</h3>
                         <button class="btn btn-primary mr-2 p-2" onclick="toggleFilterClass()">
                             <i class="fa fa-align-center ml-1 mr-2"></i> Filter
                         </button>
-                        <button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
+                        <?php
+                        if (hasAccess("cashincrule", "Add") !== 'false') {
+                            echo '<button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
                             <i class="fa fa-plus ml-1 mr-2"></i> Set New Rule
-                        </button>
+                        </button>';
+                        }
+                        ?>
+
                     </div>
                     <div class="portlet-body">
                         <div class="remove-messages"></div>
@@ -64,7 +73,7 @@ include_once '../includes/header.php';
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header modal-header-bordered">
-                <h5 class="modal-title">Edit BDC Rule</h5><button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                <h5 class="modal-title">Edit Rule</h5><button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
             </div>
             <form class="form-horizontal" id="editRuleForm" action="../php_action/editCashIncentiveRule.php" method="post">
                 <div class="modal-body">
@@ -90,6 +99,7 @@ include_once '../includes/header.php';
                                     <td class="form-group">
                                         <select class="form-control selectpicker w-auto" id="editModel" name="editModel" data-live-search="true" data-size="4">
                                             <option value="0" selected disabled>Select Model</option>
+                                            <option value="All">All</option>
                                             <?php
                                             $sql = "SELECT model FROM `manufature_price` WHERE status = 1 GROUP BY model";
                                             $result = $connect->query($sql);
@@ -186,6 +196,7 @@ include_once '../includes/header.php';
                                 <td class="form-group">
                                     <select class="form-control selectpicker w-auto" id="model1" name="model[]" data-live-search="true" data-size="4">
                                         <option value="0" selected disabled>Select Model</option>
+                                        <option value="All">All</option>
                                         <?php
                                         $sql = "SELECT model FROM `manufature_price` WHERE status = 1 GROUP BY model";
                                         $result = $connect->query($sql);

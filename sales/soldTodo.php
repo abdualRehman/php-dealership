@@ -2,6 +2,10 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
+if (hasAccess("todo", "Edit") === 'false') {
+    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+}
+
 ?>
 
 <head>

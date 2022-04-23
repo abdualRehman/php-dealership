@@ -11,55 +11,7 @@ var e1 = Swal.mixin({
 $(function () {
     var divRequest = $(".div-request").text();
 
-    if (divRequest == 'add' || divRequest == 'edit') {
-        new Sortable(document.querySelector("#users-left"), {
-            group: "shared",
-            ghostClass: 'blue-background-class',
-            animation: 150,
-            // Element dragging ended
-            onAdd: function (/**Event*/evt) {
-                var itemEl = evt.item;  // dragged HTMLElement
-                var input = $(itemEl).find('input[type="hidden"]')
-                input.val(false)
-            },
-
-        })
-        new Sortable(document.querySelector("#users-right"), {
-            group: "shared",
-            ghostClass: 'blue-background-class',
-            animation: 150,
-            // Element dragging ended
-            onAdd: function (/**Event*/evt) {
-                var itemEl = evt.item;  // dragged HTMLElement
-                var input = $(itemEl).find('input[type="hidden"]')
-                input.val(true)
-            },
-
-        })
-        new Sortable(document.querySelector("#inv-left"), {
-            group: "shared1",
-            ghostClass: 'blue-background-class',
-            animation: 150,
-            onAdd: function (evt) {
-                var itemEl = evt.item;  // dragged HTMLElement
-                var input = $(itemEl).find('input[type="hidden"]')
-                input.val(false)
-            },
-        })
-        new Sortable(document.querySelector("#inv-right"), {
-            group: "shared1",
-            ghostClass: 'blue-background-class',
-            animation: 150,
-            onAdd: function (evt) {
-                var itemEl = evt.item;  // dragged HTMLElement
-                var input = $(itemEl).find('input[type="hidden"]')
-                input.val(true)
-            },
-        })
-    }
-
     if (divRequest == 'add') {
-
         $("#createRoleForm").validate({
             rules: {
                 roleName: {
@@ -73,40 +25,45 @@ $(function () {
                 }
             },
             submitHandler: function (form, e) {
+                // return true;
                 e.preventDefault();
-                var form = $('#createRoleForm');
-                $.ajax({
-                    type: "POST",
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response);
+                var c = confirm("do you really want to save?");
+                if (c) {
+                    var form = $('#createRoleForm');
+                    $.ajax({
+                        type: "POST",
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        dataType: 'json',
+                        success: function (response) {
+                            console.log(response);
 
-                        if (response.success == true) {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "success",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 1500
-                            })
-                            form[0].reset();
+                            if (response.success == true) {
+                                e1.fire({
+                                    position: "top-end",
+                                    icon: "success",
+                                    title: response.messages,
+                                    showConfirmButton: !1,
+                                    timer: 1500
+                                })
+                                form[0].reset();
 
-                        } else {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "error",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 2500
-                            })
+                            } else {
+                                e1.fire({
+                                    position: "top-end",
+                                    icon: "error",
+                                    title: response.messages,
+                                    showConfirmButton: !1,
+                                    timer: 2500
+                                })
+
+                            }
+
 
                         }
+                    });
+                }
 
-
-                    }
-                });
                 return false;
 
             }
@@ -157,7 +114,7 @@ $(function () {
                                 showConfirmButton: !1,
                                 timer: 1500
                             })
-                            form[0].reset();
+                            // form[0].reset();
 
                         } else {
                             e1.fire({
@@ -177,7 +134,16 @@ $(function () {
         })
     }
 
-})
+});
+
+
+$('#checkALL').change(function () {
+    // $('#checkALL').prop("checked", this.checked)
+    $('.custom-control-input').prop("checked", this.checked);
+});
+
+
+
 function removeRole(roleId) {
     e1.fire({
         title: "Are you sure?",
@@ -197,7 +163,7 @@ function removeRole(roleId) {
                 data: { roleId: roleId },
                 dataType: 'json',
                 success: function (response) {
-                    if (response.success == true) {                        
+                    if (response.success == true) {
                         Swal.fire("Deleted!", "Your file has been deleted.", "success")
                         manageRoleTable.ajax.reload(null, false);
                     } // /response messages

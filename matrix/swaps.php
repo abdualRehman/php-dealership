@@ -1,7 +1,12 @@
 <?php
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
+
+if (hasAccess("swap", "Add") === 'false' && hasAccess("swap", "Edit") === 'false' && hasAccess("swap", "Remove") === 'false') {
+    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+}
 ?>
+
 
 <head>
     <link rel="stylesheet" href="../custom/css/customDatatable.css">
@@ -42,9 +47,15 @@ include_once '../includes/header.php';
                         <button class="btn btn-primary mr-2 p-2" onclick="toggleFilterClass()">
                             <i class="fa fa-align-center ml-1 mr-2"></i> Filter
                         </button>
-                        <button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
-                            <i class="fa fa-plus ml-1 mr-2"></i> Add Swap
-                        </button>
+                        <?php
+                        if (hasAccess("swap", "Add") !== 'false') {
+                        ?>
+                            <button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
+                                <i class="fa fa-plus ml-1 mr-2"></i> Add Swap
+                            </button>
+                        <?php
+                        }
+                        ?>
                     </div>
                     <div class="portlet-body">
                         <div class="remove-messages"></div>

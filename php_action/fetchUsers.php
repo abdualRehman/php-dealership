@@ -13,7 +13,7 @@ if ($result->num_rows > 0) {
 
     while ($row = $result->fetch_array()) {
         $userid = $row[0];
-        if(is_null($row[3])){
+        if (is_null($row[3])) {
             $row[3] = "Admin";
         }
 
@@ -21,10 +21,10 @@ if ($result->num_rows > 0) {
         if ($row[1] != 'Admin') {
             $button = '<div class="dropdown show">
                 <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Action</button>
-                    <div class="dropdown-menu dropdown-menu-left" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 29px, 0px);">
-                        <a class="dropdown-item" data-toggle="modal" data-target="#modal8" onclick="editUser('.$userid.')" >Edit</a> 
-                        <a class="dropdown-item" data-toggle="modal" data-target="#modal7" onclick="removeUser('.$userid.')" >Remove</a> 
-                    </div>
+                    <div class="dropdown-menu dropdown-menu-left" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 29px, 0px);">' .
+                (hasAccess("user", "Edit") !== 'false' ?  '<a class="dropdown-item" data-toggle="modal" data-target="#modal8" onclick="editUser(' . $userid . ')" >Edit</a>' : "") .
+                (hasAccess("user", "Remove") !== 'false' ? '<a class="dropdown-item" data-toggle="modal" data-target="#modal7" onclick="removeUser(' . $userid . ')" >Remove</a>' : "") .
+                '</div>
                 </div>';
         }
 

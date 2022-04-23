@@ -1,6 +1,11 @@
 <?php
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
+
+if (hasAccess("sale", "Add") === 'false') {
+    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+}
+
 ?>
 <style>
     .customerDetailBody,
@@ -314,7 +319,7 @@ include_once '../includes/header.php';
                                 <div class="form-row p-3">
                                     <label for="college" class="col-md-1 col-form-label">College</label>
                                     <div class="col-md-2">
-                                        <select class="selectpicker" data-live-search="true" id="college" name="college" data-size="5" >
+                                        <select class="selectpicker" data-live-search="true" id="college" name="college" data-size="5">
                                             <optgroup>
                                                 <option>No</option>
                                                 <option>Yes</option>

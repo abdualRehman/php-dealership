@@ -47,24 +47,38 @@
                             <div class="menu-item-addon"><i class="menu-item-caret caret"></i></div>
                         </button>
                         <div class="menu-submenu">
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/manMatrix.php?r=man" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">Matrix</span>
-                                </a>
-                            </div>
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/swaps.php" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">Swaps</span>
-                                </a>
-                            </div>
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/incentives.php" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">incentive</span>
-                                </a>
-                            </div>
+                            <?php
+                            if (hasAccess("matrix", "View") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/manMatrix.php?r=man" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">Matrix</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+                            if (hasAccess("swap", "Add") !== 'false' || hasAccess("swap", "Edit") !== 'false' || hasAccess("swap", "Remove") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/swaps.php" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">Swaps</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+                            if (hasAccess("incentives", "Edit") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/incentives.php" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">incentive</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+                            ?>
                         </div>
                     </div>
                     <div class="menu-item"><button class="menu-item-link menu-item-toggle">
@@ -75,18 +89,30 @@
                             <div class="menu-item-addon"><i class="menu-item-caret caret"></i></div>
                         </button>
                         <div class="menu-submenu">
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/inventory/addInventory.php" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">Add / Import</span>
-                                </a>
-                            </div>
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/inventory/manageInv.php?r=man" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">Manage</span>
-                                </a>
-                            </div>
+                            <?php
+                            if (hasAccess("inventory", "Add") !== 'false') {
+                            ?>
+
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/inventory/addInventory.php" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">Add / Import</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+                            if (hasAccess("inventory", "Edit") !== 'false' || hasAccess("inventory", "Remove") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/inventory/manageInv.php?r=man" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">Manage</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+
+                            ?>
                         </div>
                     </div>
 
@@ -103,30 +129,48 @@
                             <div class="menu-item-addon"><i class="menu-item-caret caret"></i></div>
                         </button>
                         <div class="menu-submenu">
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/addSale.php" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">Add Sale</span>
-                                </a>
-                            </div>
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">Sold Logs</span>
-                                </a>
-                            </div>
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldTodo.php" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">To Do's</span>
-                                </a>
-                            </div>
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/registrationProblem.php" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">Registration Problem</span>
-                                </a>
-                            </div>
+                            <?php
+                            if (hasAccess("sale", "Add") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/addSale.php" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">Add Sale</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+                            if (hasAccess("sale", "Edit") !== 'false' || hasAccess("sale", "Remove") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">Sold Logs</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+                            if (hasAccess("todo", "Edit") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldTodo.php" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">To Do's</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+                            if (hasAccess("regp", "Add") !== 'false'  || hasAccess("regp", "Edit") !== 'false' || hasAccess("regp", "Remove") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/registrationProblem.php" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">Registration Problem</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+                            ?>
                         </div>
                     </div>
 
@@ -143,24 +187,38 @@
                             <div class="menu-item-addon"><i class="menu-item-caret caret"></i></div>
                         </button>
                         <div class="menu-submenu">
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/users/addUser.php" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">Add User</span>
-                                </a>
-                            </div>
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/users/userList.php" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">User List</span>
-                                </a>
-                            </div>
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/users/roleList.php?r=man" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">Role List</span>
-                                </a>
-                            </div>
+                            <?php
+                            if (hasAccess("user", "Add") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/users/addUser.php" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">Add User</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+                            if (hasAccess("user", "Edit") !== 'false' || hasAccess("user", "Remove") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/users/userList.php" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">User List</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+                            if (hasAccess("role", "Add") !== 'false' || hasAccess("role", "Edit") !== 'false' || hasAccess("role", "Remove") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/users/roleList.php?r=man" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">Role List</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+                            ?>
                         </div>
                     </div>
 
@@ -177,30 +235,50 @@
                             <div class="menu-item-addon"><i class="menu-item-caret caret"></i></div>
                         </button>
                         <div class="menu-submenu">
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/incentiveRules.php" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">Incentive Rules</span>
-                                </a>
-                            </div>
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/salesPesonsRules.php" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">Sales Person's Todo Rules</span>
-                                </a>
-                            </div>
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/locations.php?r=man" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">Swap Locations</span>
-                                </a>
-                            </div>
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/manufaturePrice.php?r=man" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">Import Manufacture Price</span>
-                                </a>
-                            </div>
+
+                            <?php
+
+                            if (hasAccess("incr", "Add") !== 'false' || hasAccess("incr", "Edit") !== 'false' || hasAccess("incr", "Remove") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/incentiveRules.php" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">Incentive Rules</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+                            if (hasAccess("sptr", "Add") !== 'false' || hasAccess("sptr", "Edit") !== 'false' || hasAccess("sptr", "Remove") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/salesPesonsRules.php" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">Sales Person's Todo Rules</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+                            if (hasAccess("swploc", "Add") !== 'false' || hasAccess("swploc", "Edit") !== 'false' || hasAccess("swploc", "Remove") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/locations.php?r=man" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">Swap Locations</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+                            if (hasAccess("manprice", "Add") !== 'false' || hasAccess("manprice", "Edit") !== 'false' || hasAccess("manprice", "Remove") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/manufaturePrice.php?r=man" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">Import Manufacture Price</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+                            ?>
                         </div>
                     </div>
                     <div class="menu-item">
@@ -212,37 +290,60 @@
                             <div class="menu-item-addon"><i class="menu-item-caret caret"></i></div>
                         </button>
                         <div class="menu-submenu">
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/matrixRules.php" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">Matrix Rule</span>
-                                </a>
-                            </div>
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/bdcRules.php" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">BDC Price Rule</span>
-                                </a>
-                            </div>
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/rateRules.php" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">Rate Rule</span>
-                                </a>
-                            </div>
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/leaseRules.php" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">Lease Rule</span>
-                                </a>
-                            </div>
-                            <div class="menu-item">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/cashIncentiveRules.php" class="menu-item-link">
-                                    <i class="menu-item-bullet"></i>
-                                    <span class="menu-item-text">Dealer Cash Incentive Rule</span>
-                                </a>
-                            </div>
-                            
+                            <?php
+                            if (hasAccess("matrixrule", "Add") !== 'false' || hasAccess("matrixrule", "Edit") !== 'false' || hasAccess("matrixrule", "Remove") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/matrixRules.php" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">Matrix Rule</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+                            if (hasAccess("bdcrule", "Add") !== 'false' || hasAccess("bdcrule", "Edit") !== 'false' || hasAccess("bdcrule", "Remove") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/bdcRules.php" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">BDC Price Rule</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+                            if (hasAccess("raterule", "Add") !== 'false' || hasAccess("raterule", "Edit") !== 'false' || hasAccess("raterule", "Remove") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/rateRules.php" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">Rate Rule</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+                            if (hasAccess("leaserule", "Add") !== 'false' || hasAccess("leaserule", "Edit") !== 'false' || hasAccess("leaserule", "Remove") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/leaseRules.php" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">Lease Rule</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+                            if (hasAccess("cashincrule", "Add") !== 'false' || hasAccess("cashincrule", "Edit") !== 'false' || hasAccess("cashincrule", "Remove") !== 'false') {
+                            ?>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/cashIncentiveRules.php" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">Dealer Cash Incentive Rule</span>
+                                    </a>
+                                </div>
+                            <?php
+                            }
+
+                            ?>
+
                         </div>
                     </div>
                     <br><br>
@@ -471,7 +572,7 @@
                                 </div>
                             </div><button class="btn btn-label-primary btn-icon ml-2" data-toggle="sidemenu" data-target="#sidemenu-todo"><i class="far fa-calendar-alt"></i></button> <button class="btn btn-label-primary btn-icon ml-2" data-toggle="sidemenu" data-target="#sidemenu-settings"><i class="far fa-list-alt"></i></button>
                             <div class="dropdown ml-2"><button class="btn btn-flat-primary widget13" data-toggle="dropdown">
-                                    <div class="widget13-text">Hi <strong>User</strong></div>
+                                    <div class="widget13-text">Hi <strong> <?php echo $_SESSION['userName']; ?> </strong></div>
                                     <div class="avatar avatar-info widget13-avatar">
                                         <div class="avatar-display"><i class="fa fa-user-alt"></i></div>
                                     </div>
@@ -483,16 +584,21 @@
                                                 <div class="rich-list-prepend">
                                                     <div class="avatar avatar-circle">
                                                         <!-- <div class="avatar-display"><img src="https://dashboard1.panely-html.blueupcode.com/assets/images/avatar/avatar-4.webp" alt="Avatar image"></div> -->
+                                                        <div class="avatar-display">
+                                                            <i class="fa fa-user-alt"></i>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="rich-list-content">
-                                                    <h3 class="rich-list-title text-white">Brielle Williamson</h3><span class="rich-list-subtitle text-white">Software Engineer</span>
+                                                    <h3 class="rich-list-title text-white"> <?php echo $_SESSION['userName']; ?> </h3><span class="rich-list-subtitle text-white"> <?php echo $_SESSION['userRoleName']; ?> </span>
                                                 </div>
-                                                <div class="rich-list-append"><span class="badge badge-warning badge-square badge-lg">9+</span>
+                                                <!-- <div class="rich-list-append"><span class="badge badge-warning badge-square badge-lg">9+</span></div> -->
+                                                <div class="rich-list-append">
+                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/logout.php" class="btn btn-danger">Sign out</a>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="portlet-body p-0">
+                                        <!-- <div class="portlet-body p-0">
                                             <div class="grid-nav grid-nav-flush grid-nav-action grid-nav-no-rounded">
                                                 <div class="grid-nav-row"><a href="#" class="grid-nav-item">
                                                         <div class="grid-nav-icon"><i class="far fa-address-card"></i>
@@ -515,8 +621,10 @@
                                                         <span class="grid-nav-content">Notification</span>
                                                     </a></div>
                                             </div>
-                                        </div>
-                                        <div class="portlet-footer portlet-footer-bordered rounded-0"><a href="<?php echo $GLOBALS['siteurl']; ?>/logout.php" class="btn btn-label-danger">Sign out</a></div>
+                                        </div> -->
+                                        <!-- <div class="portlet-footer portlet-footer-bordered rounded-0">
+                                            <a href="<?php echo $GLOBALS['siteurl']; ?>/logout.php" class="btn btn-label-danger">Sign out</a>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>

@@ -17,40 +17,40 @@ $output = array('data' => array());
 if ($result->num_rows > 0) {
 
     while ($row = $result->fetch_array()) {
-        
-        $invStatus = $row[15]; 
-        
+
+        $invStatus = $row[15];
+
         $certified = ($row[13] == 'on') ? 'Yes' : 'No';
         $balance = ($invStatus == 1) ? $row[14] : "";
         $lot = ($invStatus == 1) ? $row[12] : "";
         // $balance = $row[14];
         // $lot = $row[12];
 
-        
+
         $id = $row[11];
 
         $date = $row[0];
         $date = date("M-d-Y", strtotime($date));  // formating date
-        $vehicle = $row[7] . ' ' . $row[8]. ' ' . $row[9]; // vehicle details
+        $vehicle = $row[7] . ' ' . $row[8] . ' ' . $row[9]; // vehicle details
 
-        $gross = round(($row[10]) , 2);
+        $gross = round(($row[10]), 2);
 
 
         $button = '
         <div class="show d-inline-flex" >
             <button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#showDetails" onclick="showDetails(' . $id . ')" >
                 <i class="fa fa-eye"></i>
-            </button>
-            <a href="'.$GLOBALS['siteurl'].'/sales/soldLogs.php?r=edit&i='.$id.'" class="btn btn-label-primary btn-icon mr-1" >
+            </button>' .
+            (hasAccess("sale", "Edit") !== 'false' ? '<a href="' . $GLOBALS['siteurl'] . '/sales/soldLogs.php?r=edit&i=' . $id . '" class="btn btn-label-primary btn-icon mr-1" >
                 <i class="fa fa-edit"></i>
-            </a>
-            <button class="btn btn-label-primary btn-icon" onclick="removeSale('.$id.')" >
+            </a>' : "") .
+            (hasAccess("sale", "Remove") !== 'false' ? '<button class="btn btn-label-primary btn-icon" onclick="removeSale(' . $id . ')" >
                 <i class="fa fa-trash"></i>
-            </button>    
-        </div>';
-            
+            </button>' : "")
+            . '</div>';
+
         $output['data'][] = array(
-          
+
             $date,
             $row[1],
             $row[2],
@@ -64,7 +64,7 @@ if ($result->num_rows > 0) {
             $row[6],
             $balance,
             $button,
-           
+
         );
     } // /while 
 

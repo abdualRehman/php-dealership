@@ -222,7 +222,7 @@ $(function () {
                 targets: [0, 1, 2, 3],
 
             },
-            // { 'visible': false, 'targets': [11, 12, 13, 14, 15, 16, 17, 18] }, //hide columns 
+            { 'visible': false, 'targets': [11, 12, 13, 14, 15, 16, 17, 18] }, //hide columns 
         ],
 
         language: {
@@ -335,7 +335,8 @@ function checkValue(ele) {
 
 
 function loadSaleManager() {
-    var sales_manager_id = 1;
+    // var sales_manager_id = 1;
+    var sales_manager_id = 67;
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",

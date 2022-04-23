@@ -2,6 +2,10 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
+if (hasAccess("matrix", "View") === 'false') {
+    echo "<script>location.href='".$GLOBALS['siteurl']."/error.php';</script>";
+}
+
 if ($_GET['r'] == 'man') {
     echo "<div class='div-request d-none'>man</div>";
 } else if ($_GET['r'] == 'add') {

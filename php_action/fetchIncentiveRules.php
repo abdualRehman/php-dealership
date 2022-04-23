@@ -19,7 +19,7 @@ if ($result->num_rows > 0) {
         $ex_modelno = str_replace('_', ' ', $ex_modelno);
 
         // $fdate = new DateTime($row[1]);
-        
+
         // date_default_timezone_set('Australia/Melbourne');
         $date = date('Y-m-d');
         $date1 = new DateTime($date);
@@ -28,21 +28,21 @@ if ($result->num_rows > 0) {
 
         $abs_diff = $date1->diff($tdate)->format("%r%a");
 
-        if($abs_diff <= 0){
+        if ($abs_diff <= 0) {
             $abs_diff = "Expire";
-        }else{
+        } else {
             $abs_diff = $abs_diff . " Days";
         }
 
         $button = '
-            <div class="show d-flex" >
-                <button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editRule(' . $id . ')" >
+            <div class="show d-flex" >' .
+            (hasAccess("incr", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editRule(' . $id . ')" >
                     <i class="fa fa-edit"></i>
-                </button>
-                <button class="btn btn-label-primary btn-icon mr-1" onclick="removeRule(' . $id . ')" >
+                </button>' : "") .
+            (hasAccess("incr", "Remove") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeRule(' . $id . ')" >
                     <i class="fa fa-trash"></i>
-                </button>  
-            </div>
+                </button>' : "") .
+            '</div>
         ';
 
 

@@ -18,8 +18,12 @@ if ($result->num_rows > 0) {
         $model_code = trim($row[3]); // model code
 
 
+        // $matrixRuleSql = "SELECT `model`, `year`, `modelno`, `ex_modelno`, `destination`, `hb`, `status` FROM `matrix_rule` 
+        // WHERE ( model = '$model' OR model = 'All' ) AND ( year = '$year' OR year = 'All' ) AND ( modelno = '$model_code' OR modelno = 'All' ) AND ex_modelno != '$model_code' AND status = 1 LIMIT 1";
+
         $matrixRuleSql = "SELECT `model`, `year`, `modelno`, `ex_modelno`, `destination`, `hb`, `status` FROM `matrix_rule` 
-        WHERE model = '$model' AND ( year = '$year' OR year = 'All' ) AND ( modelno = '$model_code' OR modelno = 'All' ) AND ex_modelno != '$model_code' AND status = 1 LIMIT 1";
+        WHERE ( model = '$model' OR model = 'All' ) AND ( year = '$year' OR year = 'All' ) AND ( modelno = '$model_code' OR modelno = 'All' ) AND ex_modelno != '$model_code' AND status = 1
+            ORDER BY FIELD(model, '$model') DESC, FIELD(year, '$year') DESC, FIELD(modelno, '$model_code') DESC LIMIT 1";
         $rsult = $connect->query($matrixRuleSql);
         if (($rsult) && $rsult->num_rows > 0) {
             while ($row1 = $rsult->fetch_array()) {

@@ -3,8 +3,14 @@ include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
 if ($_GET['r'] == 'man') {
+    if (hasAccess("sale", "Edit") === 'false' && hasAccess("sale", "Remove") === 'false') {
+        echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+    }
     echo "<div class='div-request d-none'>man</div>";
 } else if ($_GET['r'] == 'edit') {
+    if (hasAccess("sale", "Edit") === 'false') {
+        echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+    }
     echo "<div class='div-request d-none'>edit</div>";
 } // /else manage order
 
@@ -64,8 +70,6 @@ if ($_GET['r'] == 'man') {
         height: 0px;
         opacity: 0;
     }
-
-
 </style>
 
 
@@ -90,7 +94,7 @@ if ($_GET['r'] == 'man') {
                             <table id="datatable-1" class="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th >Sold Date</th>
+                                        <th>Sold Date</th>
                                         <th>Stock #</th>
                                         <th>First Name</th>
                                         <th>Last Name</th>

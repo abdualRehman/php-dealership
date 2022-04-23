@@ -9,7 +9,9 @@ $roleId = $_POST['roleId'];
 
 if($roleId) { 
 
- $sql = "UPDATE role SET role_status = 2 WHERE role_id = {$roleId}";
+ $sql = "DELETE FROM role WHERE role_id = {$roleId}";
+ $sql1 = "DELETE FROM `role_mod` WHERE role_id = {$roleId}";
+ $connect->query($sql1) === TRUE;
 
  if($connect->query($sql) === TRUE) {
  	$valid['success'] = true;

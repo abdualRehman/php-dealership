@@ -9,9 +9,9 @@ function updateManufacturePriceByRule($model, $year, $modelno)   // unlinked wit
     global $connect;
     global $validate;
 
-    $checkSql = "SELECT `id`, `destination`, `hb` , ex_modelno FROM `matrix_rule` WHERE model = '$model' 
+    $checkSql = "SELECT `id`, `destination`, `hb` , ex_modelno FROM `matrix_rule` WHERE ( model = '$model' OR model = 'All' ) 
     AND ( year = '$year' OR year = 'All' ) AND ( modelno = '$modelno' OR modelno = 'All' ) AND status = 1 AND
-    ex_modelno NOT LIKE '% " . $modelno . " %' ORDER BY FIELD(year, '$year') DESC, FIELD(modelno, '$modelno') DESC LIMIT 1";
+    ex_modelno NOT LIKE '% " . $modelno . " %' ORDER BY FIELD(model, '$model') DESC, FIELD(year, '$year') DESC, FIELD(modelno, '$modelno') DESC LIMIT 1";
 
     // echo $checkSql .'<br />';
     $result = $connect->query($checkSql);
@@ -31,11 +31,12 @@ function updateManufacturePriceByRule($model, $year, $modelno)   // unlinked wit
             // echo $model . ' ex_modelno ' . json_encode($filter) . ' - ' . '<br />';
 
             // Generating Query
-            $year1 = ($year === 'All') ? " year IS NOT NULL" : "'{$year}'";
+            $model1 = ($model === 'All') ? " model IS NOT NULL" : "'$model'";
+            $year1 = ($year === 'All') ? " year IS NOT NULL" : "'$year'";
             $modelno1 = ($modelno === 'All') ? " model_code IS NOT NULL AND (" . implode(' AND ', $filter) . " ) " : "'$modelno'";
 
 
-            $sql = "SELECT id , dlr_inv , msrp FROM `manufature_price` WHERE model = '$model' AND year = " . $year1 . " 
+            $sql = "SELECT id , dlr_inv , msrp FROM `manufature_price` WHERE model = ". $model1 ." AND year = " . $year1 . " 
             AND model_code = " . $modelno1 . " AND status = 1";
             // CV1F1NEW
             // echo $sql . '<br />';
@@ -127,11 +128,12 @@ function updateAllMaxtix()
             }
 
             // Generating Query
+            $model1 = ($model === 'All') ? " model IS NOT NULL" : "'$model'";
             $year1 = ($year === 'All') ? " year IS NOT NULL" : "'$year'";
             $modelno1 = ($modelno === 'All') ? " model_code IS NOT NULL AND (" . implode(' AND ', $filter) . " ) " : "'$modelno'";
 
 
-            $sql = "SELECT id , dlr_inv , msrp FROM `manufature_price` WHERE model = '$model' AND year = " . $year1 . " 
+            $sql = "SELECT id , dlr_inv , msrp FROM `manufature_price` WHERE model = ". $model1 ." AND year = " . $year1 . " 
             AND model_code = " . $modelno1 . " AND status = 1";
 
             $mnpResult =  $connect->query($sql);
@@ -196,9 +198,9 @@ function updateManufactureBDCByRule($model, $year, $modelno)  // unlinked with c
     // AND ( year = '$year' OR year = 'All' ) AND ( modelno = '$modelno' OR modelno = 'All' ) AND status = 1 AND
     // ex_modelno NOT LIKE '% " . $modelno . " %' ORDER BY IF(year = 'All', 1, 0) ASC, IF(modelno = 'All', 1, 0) ASC LIMIT 1";
 
-    $checkSql = "SELECT `id`, `calcfrom`, `calculation` , `num_to_calc` , ex_modelno FROM `bdc_rules` WHERE model = '$model' 
+    $checkSql = "SELECT `id`, `calcfrom`, `calculation` , `num_to_calc` , ex_modelno FROM `bdc_rules` WHERE ( model = '$model' OR model = 'All' ) 
     AND ( year = '$year' OR year = 'All' ) AND ( modelno = '$modelno' OR modelno = 'All' ) AND status = 1 AND
-    ex_modelno NOT LIKE '% " . $modelno . " %' ORDER BY FIELD(year, '$year') DESC, FIELD(modelno, '$modelno') DESC LIMIT 1";
+    ex_modelno NOT LIKE '% " . $modelno . " %' ORDER BY FIELD(model, '$model') DESC, FIELD(year, '$year') DESC, FIELD(modelno, '$modelno') DESC LIMIT 1";
 
     // echo $checkSql . '<br />';
     $result = $connect->query($checkSql);
@@ -223,11 +225,12 @@ function updateManufactureBDCByRule($model, $year, $modelno)  // unlinked with c
             }
 
 
-            $year1 = ($year === 'All') ? " year IS NOT NULL" : "'{$year}'";
+            $model1 = ($model === 'All') ? " model IS NOT NULL" : "'$model'";
+            $year1 = ($year === 'All') ? " year IS NOT NULL" : "'$year'";
             $modelno1 = ($modelno === 'All') ? " model_code IS NOT NULL AND (" . implode(' AND ', $filter) . " ) " : "'$modelno'";
 
 
-            $sql = "SELECT id , `" . $calcfrom . "` FROM `manufature_price` WHERE model = '$model' AND year = " . $year1 . " 
+            $sql = "SELECT id , `" . $calcfrom . "` FROM `manufature_price` WHERE model = " . $model1 . " AND year = " . $year1 . " 
             AND model_code = " . $modelno1 . " AND status = 1 AND `" . $calcfrom . "` != '' ";
 
             // echo $sql ."<br />";
@@ -315,11 +318,12 @@ function updateAllBdc()
             }
 
             // Generating Query
+            $model1 = ($model === 'All') ? " model IS NOT NULL" : "'$model'";
             $year1 = ($year === 'All') ? " year IS NOT NULL" : "'$year'";
             $modelno1 = ($modelno === 'All') ? " model_code IS NOT NULL AND (" . implode(' AND ', $filter) . " ) " : "'$modelno'";
 
 
-            $sql = "SELECT id , `" . $calcfrom . "` FROM `manufature_price` WHERE model = '$model' AND year = " . $year1 . " 
+            $sql = "SELECT id , `" . $calcfrom . "` FROM `manufature_price` WHERE model = " . $model1 . " AND year = " . $year1 . " 
             AND model_code = " . $modelno1 . " AND status = 1 AND `" . $calcfrom . "` != '' ";
 
             // echo $sql;
@@ -390,12 +394,13 @@ function updateALLRates()
             }
 
             // Generating Query
+            $model1 = ($model === 'All') ? " model IS NOT NULL" : "'$model'";
             $year1 = ($year === 'All') ? " year IS NOT NULL" : "'$year'";
             $modelno1 = ($modelno === 'All') ? " model_code IS NOT NULL AND (" . implode(' AND ', $filter) . " ) " : "'$modelno'";
 
 
 
-            $sql = "SELECT id FROM `manufature_price` WHERE model = '$model' AND year = " . $year1 . " 
+            $sql = "SELECT id FROM `manufature_price` WHERE model = " . $model1 . " AND year = " . $year1 . " 
             AND model_code = " . $modelno1 . " AND status = 1";
 
             // echo $sql;
@@ -452,12 +457,13 @@ function updateAllLeaseRules()
             }
 
             // Generating Query
+            $model1 = ($model === 'All') ? " model IS NOT NULL" : "'$model'";
             $year1 = ($year === 'All') ? " year IS NOT NULL" : "'$year'";
             $modelno1 = ($modelno === 'All') ? " model_code IS NOT NULL AND (" . implode(' AND ', $filter) . " ) " : "'$modelno'";
 
 
 
-            $sql = "SELECT id FROM `manufature_price` WHERE model = '$model' AND year = " . $year1 . " 
+            $sql = "SELECT id FROM `manufature_price` WHERE model = " . $model1 . " AND year = " . $year1 . " 
             AND model_code = " . $modelno1 . " AND status = 1";
 
             // echo $sql;
@@ -515,11 +521,12 @@ function updateAllCashInventives()
             }
 
             // Generating Query
+            $model1 = ($model === 'All') ? " model IS NOT NULL" : "'$model'";
             $year1 = ($year === 'All') ? " year IS NOT NULL" : "'$year'";
             $modelno1 = ($modelno === 'All') ? " model_code IS NOT NULL AND (" . implode(' AND ', $filter) . " ) " : "'$modelno'";
 
 
-            $sql = "SELECT id  FROM `manufature_price` WHERE model = '$model' AND year = " . $year1 . " 
+            $sql = "SELECT id  FROM `manufature_price` WHERE model = " . $model1 . " AND year = " . $year1 . " 
             AND model_code = " . $modelno1 . " AND status = 1 ";
 
             // echo $sql;

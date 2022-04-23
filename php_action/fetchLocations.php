@@ -19,16 +19,16 @@ if ($result->num_rows > 0) {
         <div class="show" >
             <button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#showDetails" onclick="showDetails(' . $id . ')" >
                 <i class="fa fa-eye"></i>
-            </button>
-            <button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#editDetails" onclick="editDetails(' . $id . ')" >
+            </button>' .
+            (hasAccess("swploc", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#editDetails" onclick="editDetails(' . $id . ')" >
                 <i class="fa fa-edit"></i>
-            </button>
-            <button class="btn btn-label-primary btn-icon mr-1" onclick="removeLocation(' . $id . ')"  >
+            </button>' : "") .
+            (hasAccess("swploc", "Remove") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeLocation(' . $id . ')"  >
                 <i class="fa fa-trash"></i>
-            </button>    
-        </div>
+            </button>' : "") .
+            '</div>
     ';
-   
+
 
         $output['data'][] = array(
             $row[2],

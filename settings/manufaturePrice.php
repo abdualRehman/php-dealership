@@ -4,8 +4,14 @@ include_once '../includes/header.php';
 
 
 if ($_GET['r'] == 'man') {
+    if ( hasAccess("manprice", "Add") === 'false' && hasAccess("manprice", "Edit") === 'false' && hasAccess("manprice", "Remove") === 'false') {
+        echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+    }
     echo "<div class='div-request d-none'>man</div>";
 } else if ($_GET['r'] == 'add') {
+    if (hasAccess("manprice", "Add") === 'false') {
+        echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+    }
     echo "<div class='div-request d-none'>add</div>";
 } // /else manage order
 
@@ -54,9 +60,16 @@ if ($_GET['r'] == 'man') {
                             <button class="btn btn-info mr-2 p-2" onclick="toggleFilterClass()">
                                 <i class="fa fa-align-center ml-1 mr-2"></i> Filter
                             </button>
-                            <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/manufaturePrice.php?r=add" class="btn btn-primary mr-2 p-2">
-                                <i class="fa fa-plus ml-1 mr-2"></i> Import New File
-                            </a>
+                            <?php
+                            if (hasAccess("manprice", "Add") !== 'false') {
+                            ?>
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/manufaturePrice.php?r=add" class="btn btn-primary mr-2 p-2">
+                                    <i class="fa fa-plus ml-1 mr-2"></i> Import New File
+                                </a>
+                            <?php
+                            }
+                            ?>
+
                         </div>
                         <div class="portlet-body">
 

@@ -47,13 +47,45 @@ $(function () {
     manageDataTable = $("#datatable-1").DataTable({
         responsive: !0,
         'ajax': '../php_action/fetchRegistrationPrblm.php',
-        dom: "Pfrtip",
+        dom: "PfBrtip",
         searchPanes: {
             cascadePanes: !0,
             viewTotal: !0,
             columns: [0, 1, 2, 3],
         },
         "pageLength": 25,
+        buttons: [
+            {
+                extend: 'copyHtml5',
+                title: function(){
+                    var printTitle = 'Registration Problems';
+                    return printTitle
+                },
+                exportOptions: {
+                    columns: [0,1,2,3,4,5,6,7,8]
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                title: function(){
+                    var printTitle = 'Registration Problems';
+                    return printTitle
+                },
+                exportOptions: {
+                    columns: [0,1,2,3,4,5,6,7,8]
+                }
+            },
+            {
+                extend: 'print',
+                title: function(){
+                    var printTitle = 'Registration Problems';
+                    return printTitle
+                },
+                exportOptions: {
+                    columns: [0,1,2,3,4,5,6,7,8]
+                }
+            },
+        ],
         columnDefs: [
             {
                 searchPanes: {
@@ -62,7 +94,10 @@ $(function () {
                 targets: [0, 1, 2, 3],
             },
         ],
-
+        select: {
+            'style': 'multi', // 'single', 'multi', 'os', 'multi+shift'
+            selector: 'tr',
+        },
         language: {
             searchPanes: {
                 count: "{total} found",
@@ -72,7 +107,7 @@ $(function () {
         "order": [[0, "asc"]]
     })
 
-    loadStock();
+    loadTypeHeadCustomerName();
     loadSaleConsultant();
     loadFinanceManager();
 
@@ -109,8 +144,11 @@ $(function () {
             "financeManager": {
                 required: requireSelectBox,
             },
-            "stockId": {
-                required: requireSelectBox,
+            // "stockId": {
+            //     required: !0,
+            // },
+            "vehicle": {
+                required: !0,
             },
 
         },
@@ -183,8 +221,11 @@ $(function () {
             "efinanceManager": {
                 required: requireSelectBox,
             },
-            "estockId": {
-                required: requireSelectBox,
+            // "estockId": {
+            //     required: !0,
+            // },
+            "evehicle": {
+                required: !0,
             },
         },
 
@@ -238,36 +279,64 @@ $(function () {
 
 })
 
+function loadTypeHeadCustomerName() {
 
-function loadStock() {
     $.ajax({
-        url: '../php_action/fetchInvForSearch.php',
+        url: '../php_action/fetchCustomerDetails.php',
         type: "POST",
         dataType: 'json',
-        beforeSend: function () {
-            // selectBox.setAttribute("disabled", true);
-        },
         success: function (response) {
-            stockArray = response.data;
-            // console.log(stockArray);
+            var o, e = response.data;
+            $(".typeahead1").typeahead({
+                hint: true,
+                highlight: true,
+                minLength: 2
+            }, {
+                name: "customerName",
+                source: (o = e, function (e, a) {
+                    var t = [],
+                        n = new RegExp(e, "i");
+                    o.forEach(function (e) {
+                        n.test(e) && t.push(e)
+                    }), a(t)
+                })
+            });
             // console.log(selectBox);
-
-            var selectBoxs = document.getElementsByClassName('stockIdList');
-            selectBoxs.forEach(element => {
-                for (var i = 0; i < stockArray.length; i++) {
-                    var item = stockArray[i];
-                    element.innerHTML += `<option value="${item[0]}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`;
-                }
-            })
-            // selectBox.removeAttribute("disabled");
-            $('.selectpicker').selectpicker('refresh');
         }
     });
+
 }
+
+// function loadStock() {
+// $.ajax({
+//     url: '../php_action/fetchInvForSearch.php',
+//     type: "POST",
+//     dataType: 'json',
+//     beforeSend: function () {
+//         // selectBox.setAttribute("disabled", true);
+//     },
+//     success: function (response) {
+//         stockArray = response.data;
+//         // console.log(stockArray);
+//         // console.log(selectBox);
+
+//         var selectBoxs = document.getElementsByClassName('stockIdList');
+//         selectBoxs.forEach(element => {
+//             for (var i = 0; i < stockArray.length; i++) {
+//                 var item = stockArray[i];
+//                 element.innerHTML += `<option value="${item[0]}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`;
+//             }
+//         })
+//         // selectBox.removeAttribute("disabled");
+//         $('.selectpicker').selectpicker('refresh');
+//     }
+// });
+// }
 
 
 function loadSaleConsultant() {
-    var sales_consultant_id = 38;
+    // var sales_consultant_id = 38;
+    var sales_consultant_id = 66;
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",
@@ -288,12 +357,13 @@ function loadSaleConsultant() {
 }
 
 function loadFinanceManager() {
-    var sales_manager_id = 42; //finance manager role id in database
+    // var finance_manager_id = 42; //finance manager role id in database
+    var finance_manager_id = 64; //finance manager role id in database
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",
         dataType: 'json',
-        data: { id: sales_manager_id },
+        data: { id: finance_manager_id },
         success: function (response) {
             var array = response.data;
             var selectBoxs = document.getElementsByClassName('financeManagerList');
@@ -309,13 +379,6 @@ function loadFinanceManager() {
 }
 
 
-function changeStockDetails(ele , targetEle) {
-
-    $('#detailsSection').removeClass('d-none');
-    let obj = stockArray.find(data => data[0] === ele.value);
-
-    $('#'+targetEle).val(obj[2] + ' ' + obj[3] + ' ' + obj[4]);
-}
 
 function editProblem(probId = null) {
     if (probId) {
@@ -342,7 +405,7 @@ function editProblem(probId = null) {
                 $('#econtractDate').val(contract_date);
                 var problem_date = moment(response.problem_date).format('MM-DD-YYYY HH:mm');
                 $('#eproblemDate').val(problem_date);
-                
+
                 $('#ecustomerName').val(response.customer_name);
                 $('#esalesConsultant').val(response.sales_consultant);
                 $('#efinanceManager').val(response.finance_manager);

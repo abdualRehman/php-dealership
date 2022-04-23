@@ -3,8 +3,17 @@ include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
 if ($_GET['r'] == 'man') {
+
+    if (hasAccess("inventory", "Edit") === 'false' && hasAccess("inventory", "Remove") === 'false') {
+        echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+    }
+    
     echo "<div class='div-request d-none'>man</div>";
 } else if ($_GET['r'] == 'edit') {
+
+    if (hasAccess("inventory", "Edit") === 'false') {
+        echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+    }
     echo "<div class='div-request d-none'>edit</div>";
 } // /else manage order
 

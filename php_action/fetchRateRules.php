@@ -40,14 +40,14 @@ if ($result->num_rows > 0) {
             <div class="show d-flex" >
                 <!-- <button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#showDetails" onclick="showDetails(' . $id . ')" >
                     <i class="fa fa-eye"></i>
-                </button> -->
-                <button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editRule(' . $id . ')" >
+                </button> -->' .
+            (hasAccess("raterule", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editRule(' . $id . ')" >
                     <i class="fa fa-edit"></i>
-                </button>
-                <button class="btn btn-label-primary btn-icon mr-1" onclick="removeRule(' . $id . ')" >
+                </button>' : "") .
+            (hasAccess("raterule", "Remove") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeRule(' . $id . ')" >
                     <i class="fa fa-trash"></i>
-                </button>  
-            </div>
+                </button>' : "") .
+            '</div>
         ';
 
 

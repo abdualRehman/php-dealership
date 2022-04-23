@@ -1,6 +1,11 @@
 <?php
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
+
+if (hasAccess("user", "Add") === 'false') {
+    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+}
+
 ?>
 
 <div class="content">
@@ -15,7 +20,7 @@ include_once '../includes/header.php';
                         <form id="addUserForm" autocomplete="off" method="post" action="../php_action/createUser.php">
                             <div class="row justify-content-center">
                                 <div class="form-group form-group col-sm-10" id="add-messages">
-                                  
+
                                 </div>
                             </div>
                             <div class="row"><label for="username" class="col-sm-3 offset-sm-1 col-form-label text-right">User Name</label>
@@ -33,17 +38,17 @@ include_once '../includes/header.php';
                             <div class="row">
                                 <label for="role" class="col-sm-3 offset-sm-1 col-form-label text-right">Role</label>
                                 <div class="form-group col-sm-6">
-                                   
+
                                     <select id="role" name="role" class="form-control required">
                                         <option value="0">Select</option>
                                         <?php
-                                            $sql = "SELECT `role_id`, `role_name` FROM `role` WHERE role_status = 1";
-                                            $result = $connect->query($sql);
-                                            while($itemData = $result->fetch_assoc()){
-                                                echo '<option value="'.$itemData['role_id'].'">'.$itemData['role_name'].'</option>';
-                                            }
+                                        $sql = "SELECT `role_id`, `role_name` FROM `role` WHERE role_status = 1";
+                                        $result = $connect->query($sql);
+                                        while ($itemData = $result->fetch_assoc()) {
+                                            echo '<option value="' . $itemData['role_id'] . '">' . $itemData['role_name'] . '</option>';
+                                        }
                                         ?>
-                                        
+
                                     </select>
                                 </div>
                             </div>

@@ -23,7 +23,7 @@ if ($result->num_rows > 0) {
 
         // $abs_diff = $date1->diff($tdate)->format("%r%a");
 
-        
+
         $diff = strtotime($row[1]) - strtotime($date);
         $abs_diff = abs(round($diff / 86400));
         if ($abs_diff == 0) {
@@ -32,25 +32,25 @@ if ($result->num_rows > 0) {
             $abs_diff = $abs_diff;
         }
 
-        
+
 
         $contract_date = DateTime::createFromFormat('Y-m-d H:i', $row[1]);
         $contract_date = $contract_date->format('M-d-Y');
 
         $problem_date = DateTime::createFromFormat('Y-m-d H:i', $row[2]);
         $problem_date = $problem_date->format('M-d-Y');
-        
+
         // echo $problem_date . '<br />';
 
         $button = '
-            <div class="show d-flex" >
-                <button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editProblem(' . $id . ')" >
+            <div class="show d-flex" >' .
+            (hasAccess("regp", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editProblem(' . $id . ')" >
                     <i class="fa fa-edit"></i>
-                </button>
-                <button class="btn btn-label-primary btn-icon mr-1" onclick="removeProblem(' . $id . ')" >
+                </button>' : "") .
+            (hasAccess("regp", "Remove") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeProblem(' . $id . ')" >
                     <i class="fa fa-trash"></i>
-                </button>  
-            </div>
+                </button>' : "") .
+            '</div>
         ';
 
 

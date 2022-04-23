@@ -52,14 +52,14 @@ if ($result->num_rows > 0) {
         <div class="show d-inline-flex" >
             <button class="btn btn-label-primary btn-icon mr-1" onclick="printDetails(' . $id . ')" >
                 <i class="fa fa-print"></i>
-            </button>
-            <button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#editDetails" onclick="editDetails(' . $id . ')" >
+            </button>'
+            . ((hasAccess("swap", "Edit") !== 'false') ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#editDetails" onclick="editDetails(' . $id . ')" >
                 <i class="fa fa-edit"></i>
-            </button>
-            <button class="btn btn-label-primary btn-icon" onclick="removeDetails(' . $id . ')" >
+            </button>' : '') .
+            ((hasAccess("swap", "Remove") !== 'false') ? '<button class="btn btn-label-primary btn-icon" onclick="removeDetails(' . $id . ')" >
                 <i class="fa fa-trash"></i>
-            </button>    
-        </div>';
+            </button>'  : '') .
+            '</div>';
 
         $output['data'][] = array(
 

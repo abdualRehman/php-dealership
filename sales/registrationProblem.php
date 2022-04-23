@@ -1,6 +1,11 @@
 <?php
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
+
+if (hasAccess("regp", "Add") === 'false' && hasAccess("regp", "Edit") === 'false' && hasAccess("regp", "Remove") === 'false') {
+    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+}
+
 ?>
 
 <head>
@@ -21,6 +26,16 @@ include_once '../includes/header.php';
     .dropdown-header.optgroup-1 {
         padding: 0px !important;
     }
+
+    .tt-is-under-cursor {
+        background-color: #c9c8c8 !important;
+        color: #FFFFFF !important;
+    }
+
+    .tt-cursor {
+        background-color: #c9c8c8 !important;
+        color: #FFFFFF !important;
+    }
 </style>
 
 <div class="content">
@@ -33,9 +48,15 @@ include_once '../includes/header.php';
                         <button class="btn btn-primary mr-2 p-2" onclick="toggleFilterClass()">
                             <i class="fa fa-align-center ml-1 mr-2"></i> Filter
                         </button>
-                        <button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
-                            <i class="fa fa-plus ml-1 mr-2"></i> Create New
-                        </button>
+                        <?php
+                        if (hasAccess("regp", "Add") !== 'false') {
+                        ?>
+                            <button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
+                                <i class="fa fa-plus ml-1 mr-2"></i> Create New
+                            </button>
+                        <?php
+                        }
+                        ?>
                     </div>
                     <div class="portlet-body">
                         <div class="remove-messages"></div>
@@ -104,7 +125,7 @@ include_once '../includes/header.php';
                             <div class="col-md-4">
                                 <label for="ecustomerName" class="col-form-label text-md-center">Customer Name:</label>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="ecustomerName" name="ecustomerName" placeholder="Customer Name*">
+                                    <input type="text" class="form-control typeahead typeahead1" id="ecustomerName" name="ecustomerName" placeholder="Customer Name*">
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -132,17 +153,18 @@ include_once '../includes/header.php';
                             <div class="col-md-6">
                                 <label class="col-form-label" for="estockId">Stock No.</label>
                                 <div class="form-group">
-                                    <select class="selectpicker" onchange="changeStockDetails(this , 'evehicle')" name="estockId" id="estockId" data-live-search="true" data-size="4">
+                                    <!-- <select class="selectpicker" onchange="changeStockDetails(this , 'evehicle')" name="estockId" id="estockId" data-live-search="true" data-size="4">
                                         <optgroup class="stockIdList">
                                             <option value="0" selected disabled>Stock No:</option>
                                         </optgroup>
-                                    </select>
+                                    </select> -->
+                                    <input type="text" class="form-control" id="estockId" name="estockId" placeholder="Stock No.">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="col-form-label" for="evehicle">Vehicle</label>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="evehicle" name="evehicle" readonly placeholder="Vehicle">
+                                    <input type="text" class="form-control" id="evehicle" name="evehicle" placeholder="Vehicle">
                                 </div>
                             </div>
                         </div>
@@ -208,7 +230,7 @@ include_once '../includes/header.php';
                         <div class="col-md-4">
                             <label for="customerName" class="col-form-label text-md-center">Customer Name:</label>
                             <div class="form-group">
-                                <input type="text" class="form-control" id="customerName" name="customerName" placeholder="Customer Name*">
+                                <input type="text" class="form-control typeahead typeahead1" id="customerName" name="customerName" placeholder="Customer Name">
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -236,17 +258,18 @@ include_once '../includes/header.php';
                         <div class="col-md-6">
                             <label class="col-form-label" for="stockId">Stock No.</label>
                             <div class="form-group">
-                                <select class="selectpicker" onchange="changeStockDetails(this , 'vehicle')" name="stockId" id="stockId" data-live-search="true" data-size="4">
+                                <!-- <select class="selectpicker" onchange="changeStockDetails(this , 'vehicle')" name="stockId" id="stockId" data-live-search="true" data-size="4">
                                     <optgroup class="stockIdList">
                                         <option value="0" selected disabled>Stock No:</option>
                                     </optgroup>
-                                </select>
+                                </select> -->
+                                <input type="text" class="form-control" id="stockId" name="stockId" placeholder="Stock No.">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <label class="col-form-label" for="vehicle">Vehicle</label>
                             <div class="form-group">
-                                <input type="text" class="form-control" id="vehicle" name="vehicle" readonly placeholder="Vehicle">
+                                <input type="text" class="form-control" id="vehicle" name="vehicle" placeholder="Vehicle">
                             </div>
                         </div>
                     </div>

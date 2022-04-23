@@ -16,17 +16,17 @@ if ($result->num_rows > 0) {
 
 
         $button = '
-        <div class="show d-flex" >
-          
-            <button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#editDetails" onclick="editDetails(' . $id . ')" >
+        <div class="show d-flex" >' .
+
+            (hasAccess("manprice", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#editDetails" onclick="editDetails(' . $id . ')" >
                 <i class="fa fa-edit"></i>
-            </button>
-            <button class="btn btn-label-primary btn-icon mr-1" onclick="removeManufacturePrice(' . $id . ')"  >
+            </button>' : "") .
+            (hasAccess("manprice", "Remove") !== 'false' ?  '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeManufacturePrice(' . $id . ')"  >
                 <i class="fa fa-trash"></i>
-            </button>    
-        </div>
+            </button>' : "") .
+            '</div>
     ';
-   
+
 
         $output['data'][] = array(
             $row[0],

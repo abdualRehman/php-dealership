@@ -4,8 +4,14 @@ include_once '../includes/header.php';
 
 
 if ($_GET['r'] == 'man') {
+    if ( hasAccess("swploc", "Add") === 'false' && hasAccess("swploc", "Edit") === 'false' && hasAccess("swploc", "Remove") === 'false') {
+        echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+    }
     echo "<div class='div-request d-none'>man</div>";
 } else if ($_GET['r'] == 'add') {
+    if (hasAccess("swploc", "Add") === 'false') {
+        echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+    }
     echo "<div class='div-request d-none'>add</div>";
 } // /else manage order
 
@@ -32,9 +38,16 @@ if ($_GET['r'] == 'man') {
                             <button class="btn btn-info mr-2 p-2" onclick="toggleFilterClass()">
                                 <i class="fa fa-align-center ml-1 mr-2"></i> Filter
                             </button>
-                            <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/locations.php?r=add" class="btn btn-primary mr-2 p-2">
-                                <i class="fa fa-plus ml-1 mr-2"></i> Import New File
-                            </a>
+                            <?php
+                            if (hasAccess("swploc", "Add") !== 'false') {
+                            ?>
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/locations.php?r=add" class="btn btn-primary mr-2 p-2">
+                                    <i class="fa fa-plus ml-1 mr-2"></i> Import New File
+                                </a>
+                            <?php
+                            }
+                            ?>
+
                         </div>
                         <div class="portlet-body">
 

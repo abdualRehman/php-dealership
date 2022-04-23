@@ -2,6 +2,10 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
+if (hasAccess("incentives", "Edit") === 'false') {
+    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+}
+
 ?>
 
 <head>
@@ -63,8 +67,9 @@ include_once '../includes/header.php';
         overflow-x: hidden;
         overflow-y: auto !important;
     }
-    .DTFC_RightWrapper{
-        right: 0px!important;
+
+    .DTFC_RightWrapper {
+        right: 0px !important;
     }
 
     #datatable-1 tbody tr td {

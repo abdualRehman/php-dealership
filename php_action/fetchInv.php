@@ -24,20 +24,20 @@ if ($result->num_rows > 0) {
                 <button class="btn btn-label-primary btn-icon" data-toggle="dropdown">
                     <i class="fa fa-ellipsis-v"></i>
                 </button>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a href="'.$GLOBALS['siteurl'].'/inventory/manageInv.php?r=edit&i='.$id.'" class="dropdown-item">
+                <div class="dropdown-menu dropdown-menu-right">' .
+            ((hasAccess("inventory", "Edit") !== 'false') ? '<a href="' . $GLOBALS['siteurl'] . '/inventory/manageInv.php?r=edit&i=' . $id . '" class="dropdown-item">
                         <div class="dropdown-icon">
                             <i class="fa fa-edit"></i>
                         </div>
                         <span class="dropdown-content">Edit</span>
-                    </a>
-                    <button class="dropdown-item" onclick="removeInv('.$id.')" >
+                    </a>' : "") .
+            ((hasAccess("inventory", "Remove") !== 'false') ? '<button class="dropdown-item" onclick="removeInv(' . $id . ')" >
                         <div class="dropdown-icon">
                             <i class="fa fa-trash"></i>
                         </div>
                         <span class="dropdown-content">Delete</span>
-                    </button> 
-                </div>
+                    </button>' : "")
+            . '</div>
             </div>
     </div>
     ';

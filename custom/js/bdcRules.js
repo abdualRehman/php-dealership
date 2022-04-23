@@ -444,7 +444,8 @@ function addRow() {
 
             tr += `<td class="form-group">
                     <select class="form-control selectpicker w-auto" id="model${count}" name="model[]" data-live-search="true" data-size="4">
-                        <option value="0" selected disabled>Select Modal</option>`
+                        <option value="0" selected disabled>Select Modal</option>
+                        <option value="All">All</option>`
             $.each(response, function (index, value) {
                 tr += '<option value="' + value[0] + '"> ' + value[0] + ' </option>';
             });

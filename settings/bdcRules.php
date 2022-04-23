@@ -3,6 +3,10 @@ include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
 
+if (hasAccess("bdcrule", "Add") === 'false' && hasAccess("bdcrule", "Edit") === 'false' && hasAccess("bdcrule", "Remove") === 'false') {
+    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+}
+
 ?>
 
 <head>
@@ -31,9 +35,14 @@ include_once '../includes/header.php';
                         <button class="btn btn-primary mr-2 p-2" onclick="toggleFilterClass()">
                             <i class="fa fa-align-center ml-1 mr-2"></i> Filter
                         </button>
-                        <button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
+                        <?php
+                        if (hasAccess("bdcrule", "Add") !== 'false') {
+                            echo '<button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
                             <i class="fa fa-plus ml-1 mr-2"></i> Set New Rule
-                        </button>
+                        </button>';
+                        }
+                        ?>
+                       
                     </div>
                     <div class="portlet-body">
                         <div class="remove-messages"></div>
@@ -90,6 +99,7 @@ include_once '../includes/header.php';
                                     <td class="form-group">
                                         <select class="form-control selectpicker w-auto" id="editModel" name="editModel" data-live-search="true" data-size="4">
                                             <option value="0" selected disabled>Select Model</option>
+                                            <option value="All">All</option>
                                             <?php
                                             $sql = "SELECT model FROM `manufature_price` WHERE status = 1 GROUP BY model";
                                             $result = $connect->query($sql);
@@ -197,6 +207,7 @@ include_once '../includes/header.php';
                                 <td class="form-group">
                                     <select class="form-control selectpicker w-auto" id="model1" name="model[]" data-live-search="true" data-size="4">
                                         <option value="0" selected disabled>Select Model</option>
+                                        <option value="All">All</option>
                                         <?php
                                         $sql = "SELECT model FROM `manufature_price` WHERE status = 1 GROUP BY model";
                                         $result = $connect->query($sql);
