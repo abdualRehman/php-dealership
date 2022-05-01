@@ -266,6 +266,11 @@
 <script type="text/javascript" src="<?php echo $GLOBALS['siteurl'];?>/assets/build/scripts/vendor1.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-lightbox/0.2.12/slick-lightbox.min.js"></script>
 
+<!-- <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script> -->
+
+<!-- <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script> -->
+<script src="https://cdn.datatables.net/rowgroup/1.0.2/js/dataTables.rowGroup.min.js"></script>
+
 </body>
 
 </html>

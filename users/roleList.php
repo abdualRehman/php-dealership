@@ -8,7 +8,7 @@ if ($_GET['r'] == 'add') {
     }
     echo "<div class='div-request d-none'>add</div>";
 } else if ($_GET['r'] == 'man') {
-    if ( hasAccess("role", "Add") === 'false' && hasAccess("role", "Edit") === 'false' && hasAccess("role", "Remove") === 'false') {
+    if (hasAccess("role", "Add") === 'false' && hasAccess("role", "Edit") === 'false' && hasAccess("role", "Remove") === 'false') {
         echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
     }
     echo "<div class='div-request d-none'>man</div>";
@@ -433,6 +433,47 @@ if ($_GET['r'] == 'add') {
                                                     </div>
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Lot Wazards</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="lotWizardsAdd" name="lotWizardsAdd">
+                                                            <label class="custom-control-label h5" for="lotWizardsAdd">Add</label>
+                                                        </div>
+                                                        <!-- <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="cashincruleEdit" name="cashincruleEdit">
+                                                            <label class="custom-control-label h5" for="cashincruleEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="cashincruleRemove" name="cashincruleRemove">
+                                                            <label class="custom-control-label h5" for="cashincruleRemove">REMOVE</label>
+                                                        </div> -->
+                                                    </div>
+                                                </td>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Used Cars</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="usedCarsAdd" name="usedCarsAdd">
+                                                            <label class="custom-control-label h5" for="usedCarsAdd">Add</label>
+                                                        </div>
+                                                        <!-- <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="cashincruleEdit" name="cashincruleEdit">
+                                                            <label class="custom-control-label h5" for="cashincruleEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="cashincruleRemove" name="cashincruleRemove">
+                                                            <label class="custom-control-label h5" for="cashincruleRemove">REMOVE</label>
+                                                        </div> -->
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -614,6 +655,10 @@ if ($_GET['r'] == 'add') {
                                                     $Name = "LEASE RULE";
                                                 } else if ($module === 'cashincrule') {
                                                     $Name = "DEALER CASH INCENTIVE RULES";
+                                                } else if ($module === 'lotWizards') {
+                                                    $Name = "Lot Wizards";
+                                                } else if ($module === 'usedCars') {
+                                                    $Name = "Used Cars";
                                                 }
                                             ?>
                                                 <tr>
@@ -700,6 +745,10 @@ if ($_GET['r'] == 'add') {
                                                                     echo serPermissions($itemPData, 'Add', 'cashincruleAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'cashincruleEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'cashincruleRemove');
+                                                                } else if ($module === 'lotWizards') {
+                                                                    echo serPermissions($itemPData, 'Add', 'lotWizardsAdd');
+                                                                } else if ($module === 'usedCars') {
+                                                                    echo serPermissions($itemPData, 'Add', 'usedCarsAdd');
                                                                 }
                                                             }
 

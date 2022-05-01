@@ -13,6 +13,8 @@
     <!-- <link href="https://dashboard1.panely-html.blueupcode.com/assets/images/favicon.ico" rel="shortcut icon"
         type="image/x-icon"> -->
 
+    <link href="https://cdn.datatables.net/rowgroup/1.0.2/css/rowGroup.dataTables.min.css" rel="stylesheet" type="text/css" />
+
     <title>Dashboard</title>
 </head>
 
@@ -140,7 +142,7 @@
                                 </div>
                             <?php
                             }
-                            if (hasAccess("sale", "Edit") !== 'false' || hasAccess("sale", "Remove") !== 'false') {
+                            if (hasAccess("sale", "Edit") !== 'false' || hasAccess("sale", "Remove") !== 'false' || $salesConsultantID == $_SESSION['userRole']) {
                             ?>
                                 <div class="menu-item">
                                     <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man" class="menu-item-link">
@@ -279,6 +281,12 @@
                             <?php
                             }
                             ?>
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/bodyshops.php" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">Bodyshop Contacts</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                     <div class="menu-item">
@@ -357,7 +365,27 @@
                     <div class="header-container container-fluid">
                         <div class="header-wrap">
                             <ul class="nav nav-pills">
-                                <li class="nav-item dropdown"><a href="#" class="nav-link active" data-toggle="dropdown">Apps</a>
+                                <li class="nav-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/dashboard.php" id="dashboard" class="nav-link active">Dashboard</a>
+                                </li>
+                                <?php
+                                if (hasAccess("lotWizards", "Add") !== 'false') {
+                                ?>
+                                    <li class="nav-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/wizard/lotwizards.php" id="lotWizars" class="nav-link">Lot Wizards</a>
+                                    </li>
+                                <?php
+                                }
+
+                                if (hasAccess("usedCars", "Add") !== 'false') {
+                                ?>
+                                    <li class="nav-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/wizard/usedCars.php" id="usedCars" class="nav-link">Used Cars</a>
+                                    </li>
+                                <?php
+                                }
+                                ?>
+                                <!-- <li class="nav-item dropdown"><a href="#" class="nav-link active" data-toggle="dropdown">Apps</a>
                                     <div class="dropdown-menu dropdown-menu-left dropdown-menu-animated"><a href="#" class="dropdown-item">
                                             <div class="dropdown-icon"><i class="fa fa-boxes"></i></div><span class="dropdown-content">Inventory Manager</span>
                                             <div class="dropdown-addon"><span class="badge badge-warning badge-pill">20</span></div>
@@ -381,8 +409,8 @@
                                             <div class="dropdown-icon"><i class="fa fa-user-cog"></i></div><span class="dropdown-content">My Account</span>
                                         </a>
                                     </div>
-                                </li>
-                                <li class="nav-item dropdown"><a href="#" class="nav-link" data-toggle="dropdown">Features</a>
+                                </li> -->
+                                <!-- <li class="nav-item dropdown"><a href="#" class="nav-link" data-toggle="dropdown">Features</a>
                                     <div class="dropdown-menu dropdown-menu-left dropdown-menu-wide dropdown-menu-animated overflow-hidden">
                                         <div class="dropdown-row">
                                             <div class="dropdown-col d-flex flex-column align-items-start justify-content-center bg-primary text-white">
@@ -420,16 +448,17 @@
                                             </div>
                                         </div>
                                     </div>
-                                </li>
+                                </li> -->
                             </ul>
                         </div>
                         <div class="header-wrap header-wrap-block">
-                            <div class="input-group-icon input-group-lg widget15-compact">
+                            <!-- <div class="input-group-icon input-group-lg widget15-compact">
                                 <div class="input-group-prepend"><i class="fa fa-search text-primary"></i></div><input type="text" class="form-control" placeholder="Type to search...">
-                            </div>
+                            </div> -->
                         </div>
                         <div class="header-wrap">
-                            <div class="dropdown"><button class="btn btn-label-primary btn-icon" data-toggle="dropdown"><i class="far fa-bell"></i>
+                            <!-- <div class="dropdown">
+                                <button class="btn btn-label-primary btn-icon" data-toggle="dropdown"><i class="far fa-bell"></i>
                                     <div class="btn-marker"><i class="marker marker-dot text-success"></i></div>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-wide dropdown-menu-animated overflow-hidden py-0">
@@ -521,7 +550,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="dropdown ml-2"><button class="btn btn-label-primary btn-icon" data-toggle="dropdown"><i class="far fa-comments"></i>
+                            <div class="dropdown ml-2">
+                                <button class="btn btn-label-primary btn-icon" data-toggle="dropdown"><i class="far fa-comments"></i>
                                     <div class="btn-marker"><i class="marker marker-dot text-success"></i></div>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-wide dropdown-menu-animated overflow-hidden py-0">
@@ -530,7 +560,6 @@
                                             <div class="rich-list-item w-100 p-0">
                                                 <div class="rich-list-prepend">
                                                     <div class="avatar avatar-circle">
-                                                        <!-- <div class="avatar-display"><img src="https://dashboard1.panely-html.blueupcode.com/assets/images/avatar/avatar-3.webp" alt="Avatar image"></div> -->
                                                     </div>
                                                 </div>
                                                 <div class="rich-list-content">
@@ -570,7 +599,37 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div><button class="btn btn-label-primary btn-icon ml-2" data-toggle="sidemenu" data-target="#sidemenu-todo"><i class="far fa-calendar-alt"></i></button> <button class="btn btn-label-primary btn-icon ml-2" data-toggle="sidemenu" data-target="#sidemenu-settings"><i class="far fa-list-alt"></i></button>
+                            </div> -->
+                            <!-- <button class="btn btn-label-primary btn-icon ml-2" data-toggle="sidemenu" data-target="#sidemenu-todo">
+                                <i class="far fa-calendar-alt"></i>
+                            </button>
+                            <button class="btn btn-label-primary btn-icon ml-2" data-toggle="sidemenu" data-target="#sidemenu-settings">
+                                <i class="far fa-list-alt"></i>
+                            </button> -->
+                            <?php
+                            if (hasAccess("matrix", "View") !== 'false') {
+                            ?>
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/manMatrix.php?r=man" class="btn btn-label-primary ml-2">
+                                    Matrix
+                                </a>
+                            <?php
+                            }
+                            if (hasAccess("sale", "Add") !== 'false') {
+                            ?>
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/addSale.php" class="btn btn-label-primary ml-2">
+                                    Add Sale
+                                </a>
+                            <?php
+                            }
+                            if (hasAccess("sale", "Edit") !== 'false' || hasAccess("sale", "Remove") !== 'false' || $salesConsultantID == $_SESSION['userRole']) {
+                            ?>
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man" class="btn btn-label-primary ml-2">
+                                    Sold Logs
+                                </a>
+                            <?php
+                            }
+
+                            ?>
                             <div class="dropdown ml-2"><button class="btn btn-flat-primary widget13" data-toggle="dropdown">
                                     <div class="widget13-text">Hi <strong> <?php echo $_SESSION['userName']; ?> </strong></div>
                                     <div class="avatar avatar-info widget13-avatar">

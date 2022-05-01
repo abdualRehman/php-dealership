@@ -79,8 +79,12 @@ $(function () {
             } else {
                 return true;
             }
-        } else if (name == 'Yes' || name == 'No') {
+        }
+        else if (name == 'No') {
             return true;
+        }
+        else if (name == 'Yes') {
+            return false;
         }
     }
 

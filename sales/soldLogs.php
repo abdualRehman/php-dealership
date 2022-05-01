@@ -3,8 +3,11 @@ include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
 if ($_GET['r'] == 'man') {
-    if (hasAccess("sale", "Edit") === 'false' && hasAccess("sale", "Remove") === 'false') {
-        echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+    if ($salesConsultantID != $_SESSION['userRole']) {
+        if (hasAccess("sale", "Edit") === 'false' && hasAccess("sale", "Remove") === 'false') {
+            // echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+            echo "Dont Allow";
+        }
     }
     echo "<div class='div-request d-none'>man</div>";
 } else if ($_GET['r'] == 'edit') {

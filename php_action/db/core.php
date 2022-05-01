@@ -7,6 +7,8 @@ require_once 'db_connect.php';
 $siteurl = "http://localhost/carshop";
 // $siteurl ="https://www.laughingalbattani5c25df.binfarooqtextile.com";
 
+$salesConsultantID = 66; // sets in the database role 
+
 function hasAccess($module, $function)
 {
 	$permissionsArray = $_SESSION['permissionsArray'];
