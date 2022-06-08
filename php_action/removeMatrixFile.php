@@ -1,0 +1,28 @@
+<?php
+
+require_once 'db/core.php';
+
+$valid['success'] = array('success' => false, 'messages' => array(), 'settingError' => array());
+
+$fileType = $_POST['fileType'];
+$fileName = $_POST['fileName'];
+
+if ($fileType) {
+	
+	$sql = "UPDATE settings SET `file_name` = '' WHERE file_type = '$fileType'";
+	$targetPath = "../assets/uploadMatrixRateFiles/" . $fileName;
+	unlink($targetPath);
+
+	if ($connect->query($sql) === TRUE) {
+		$valid['success'] = true;
+		$valid['messages'] = "Successfully Removed";
+	} else {
+		$valid['success'] = false;
+		$valid['messages'] = $connect->error;
+		$valid['messages'] = mysqli_error($connect);
+	}
+
+	$connect->close();
+
+	echo json_encode($valid);
+} // /if $_POST

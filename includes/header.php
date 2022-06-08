@@ -9,6 +9,50 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&amp;family=Roboto+Mono&amp;display=swap" rel="stylesheet">
     <link href="<?php echo $GLOBALS['siteurl']; ?>/assets/build/styles/ltr-core.css" rel="stylesheet">
     <link href="<?php echo $GLOBALS['siteurl']; ?>/assets/build/styles/ltr-vendor.css" rel="stylesheet">
+
+    <style>
+        .aside.aside-hover {
+            height: 100%;
+        }
+
+        body.aside-active.aside-desktop-minimized .sticky-wrapper.is-sticky .header-container.container-fluid {
+            padding-left: 1rem !important;
+        }
+
+        .aside.aside-hover:hover {
+            height: 100% !important;
+        }
+
+        .aside.aside-hover .aside-body,
+        .aside.aside-hover .aside-addon {
+            display: none !important;
+        }
+
+        .aside.aside-hover:hover .aside-body,
+        .aside.aside-hover:hover .aside-addon {
+            display: block !important;
+        }
+
+        .menu-section .menu-section-icon {
+            display: none !important;
+        }
+
+        body.aside-active.aside-desktop-minimized .wrapper {
+            padding-left: 0px !important;
+        }
+
+        @media (min-width: 1025px) {
+            body.aside-desktop-minimized .aside {
+                width: 0.1rem;
+                transition: all .2s ease-in-out;
+            }
+            body.aside-active.aside-desktop-minimized .sticky-header {
+                left: 0rem;
+            }
+        }
+    </style>
+
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-lightbox/0.2.12/slick-lightbox.css" rel="stylesheet" />
     <!-- <link href="https://dashboard1.panely-html.blueupcode.com/assets/images/favicon.ico" rel="shortcut icon"
         type="image/x-icon"> -->
@@ -28,7 +72,12 @@
         <div class="aside">
             <div class="aside-header">
                 <h3 class="aside-title">Logo</h3>
-                <div class="aside-addon"><button class="btn btn-label-primary btn-icon btn-lg" data-toggle="aside"><i class="fa fa-times aside-icon-minimize"></i> <i class="fa fa-thumbtack aside-icon-maximize"></i></button></div>
+                <div class="aside-addon"><button class="btn btn-label-primary btn-icon btn-lg" data-toggle="aside">
+                        <i class="fa fa-times aside-icon-minimize"></i>
+                        <!-- <i class="fa fa-thumbtack aside-icon-maximize"></i> -->
+                        <i class="fa fa-bars aside-icon-maximize"></i>
+                    </button>
+                </div>
             </div>
             <div class="aside-body" data-simplebar="data-simplebar">
                 <div class="menu">
@@ -233,7 +282,7 @@
                             <div class="menu-item-icon">
                                 <i class="fa fa-solid fa-wrench"></i>
                             </div>
-                            <span class="menu-item-text">General Settings</span>
+                            <span class="menu-item-text">Settings</span>
                             <div class="menu-item-addon"><i class="menu-item-caret caret"></i></div>
                         </button>
                         <div class="menu-submenu">
@@ -287,17 +336,14 @@
                                     <span class="menu-item-text">Bodyshop Contacts</span>
                                 </a>
                             </div>
-                        </div>
-                    </div>
-                    <div class="menu-item">
-                        <button class="menu-item-link menu-item-toggle">
-                            <div class="menu-item-icon">
-                                <i class="fa fa-solid fa-wrench"></i>
+                            <div class="menu-item">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/matrixFiles.php" class="menu-item-link">
+                                    <i class="menu-item-bullet"></i>
+                                    <span class="menu-item-text">Matrix Files</span>
+                                </a>
                             </div>
-                            <span class="menu-item-text">Matrix Rules</span>
-                            <div class="menu-item-addon"><i class="menu-item-caret caret"></i></div>
-                        </button>
-                        <div class="menu-submenu">
+
+
                             <?php
                             if (hasAccess("matrixrule", "Add") !== 'false' || hasAccess("matrixrule", "Edit") !== 'false' || hasAccess("matrixrule", "Remove") !== 'false') {
                             ?>
@@ -352,8 +398,20 @@
 
                             ?>
 
+
                         </div>
                     </div>
+                    <!-- <div class="menu-item">
+                        <button class="menu-item-link menu-item-toggle">
+                            <div class="menu-item-icon">
+                                <i class="fa fa-solid fa-wrench"></i>
+                            </div>
+                            <span class="menu-item-text">Matrix Rules</span>
+                            <div class="menu-item-addon"><i class="menu-item-caret caret"></i></div>
+                        </button>
+                        <div class="menu-submenu">
+                        </div>
+                    </div> -->
                     <br><br>
 
                 </div>
@@ -633,7 +691,16 @@
                             <div class="dropdown ml-2"><button class="btn btn-flat-primary widget13" data-toggle="dropdown">
                                     <div class="widget13-text">Hi <strong> <?php echo $_SESSION['userName']; ?> </strong></div>
                                     <div class="avatar avatar-info widget13-avatar">
-                                        <div class="avatar-display"><i class="fa fa-user-alt"></i></div>
+                                        <div class="avatar-display" style="width: inherit;height: inherit;">
+                                            <!-- <i class="fa fa-user-alt"></i> -->
+                                            <?php
+                                            if ($_SESSION['userProfile'] != "") {
+                                                echo '<img src="' . $GLOBALS['siteurl'] . '/assets/profiles/' . $_SESSION['userProfile'] . '" alt="Avatar image">';
+                                            } else {
+                                                echo '<img src="' . $GLOBALS['siteurl'] . '/assets/profiles/default.jpg" alt="Avatar image" >';
+                                            }
+                                            ?>
+                                        </div>
                                     </div>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-wide dropdown-menu-right dropdown-menu-animated overflow-hidden py-0">
@@ -642,10 +709,18 @@
                                             <div class="rich-list-item w-100 p-0">
                                                 <div class="rich-list-prepend">
                                                     <div class="avatar avatar-circle">
-                                                        <!-- <div class="avatar-display"><img src="https://dashboard1.panely-html.blueupcode.com/assets/images/avatar/avatar-4.webp" alt="Avatar image"></div> -->
-                                                        <div class="avatar-display">
-                                                            <i class="fa fa-user-alt"></i>
+                                                        <div class="avatar-display" style="width: inherit;height: inherit;">
+                                                            <?php
+                                                            if ($_SESSION['userProfile'] != "") {
+                                                                echo '<img src="' . $GLOBALS['siteurl'] . '/assets/profiles/' . $_SESSION['userProfile'] . '" alt="Avatar image">';
+                                                            } else {
+                                                                echo '<img src="' . $GLOBALS['siteurl'] . '/assets/profiles/default.jpg" alt="Avatar image" >';
+                                                            }
+                                                            ?>
                                                         </div>
+                                                        <!-- <div class="avatar-display">
+                                                            <i class="fa fa-user-alt"></i>
+                                                        </div> -->
                                                     </div>
                                                 </div>
                                                 <div class="rich-list-content">
@@ -657,19 +732,24 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div class="portlet-body p-0">
+                                        <div class="portlet-body p-0">
                                             <div class="grid-nav grid-nav-flush grid-nav-action grid-nav-no-rounded">
-                                                <div class="grid-nav-row"><a href="#" class="grid-nav-item">
-                                                        <div class="grid-nav-icon"><i class="far fa-address-card"></i>
-                                                        </div><span class="grid-nav-content">Profile</span>
-                                                    </a><a href="#" class="grid-nav-item">
+                                                <div class="grid-nav-row">
+                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/users/profile.php" class="grid-nav-item">
+                                                        <div class="grid-nav-icon">
+                                                            <i class="far fa-address-card"></i>
+                                                        </div>
+                                                        <span class="grid-nav-content">Profile Setting</span>
+                                                    </a>
+                                                    <!-- <a href="#" class="grid-nav-item">
                                                         <div class="grid-nav-icon"><i class="far fa-comments"></i></div>
                                                         <span class="grid-nav-content">Messages</span>
                                                     </a><a href="#" class="grid-nav-item">
                                                         <div class="grid-nav-icon"><i class="far fa-clone"></i></div>
                                                         <span class="grid-nav-content">Activities</span>
-                                                    </a></div>
-                                                <div class="grid-nav-row"><a href="#" class="grid-nav-item">
+                                                    </a> -->
+                                                </div>
+                                                <!-- <div class="grid-nav-row"><a href="#" class="grid-nav-item">
                                                         <div class="grid-nav-icon"><i class="far fa-calendar-check"></i>
                                                         </div><span class="grid-nav-content">Tasks</span>
                                                     </a><a href="#" class="grid-nav-item">
@@ -678,9 +758,9 @@
                                                     </a><a href="#" class="grid-nav-item">
                                                         <div class="grid-nav-icon"><i class="far fa-bell"></i></div>
                                                         <span class="grid-nav-content">Notification</span>
-                                                    </a></div>
+                                                    </a></div> -->
                                             </div>
-                                        </div> -->
+                                        </div>
                                         <!-- <div class="portlet-footer portlet-footer-bordered rounded-0">
                                             <a href="<?php echo $GLOBALS['siteurl']; ?>/logout.php" class="btn btn-label-danger">Sign out</a>
                                         </div> -->

@@ -44,6 +44,8 @@ if ($_POST) {
                 // set session
                 $_SESSION['userId'] = $user_id;
                 $_SESSION['userName'] = $value['username'];
+                $_SESSION['userEmail'] = $value['email'];
+                $_SESSION['userProfile'] = $value['profile'];
                 $_SESSION['userRoleName'] = $value['role_name'];
                 $_SESSION['userRole'] = $role_id;
 
@@ -54,7 +56,7 @@ if ($_POST) {
                 if ($result && $result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         // $output['data'][] = array($row);
-                        array_push($output , $row);
+                        array_push($output, $row);
                     }
                 }
                 $_SESSION['permissionsArray'] = $output;
@@ -81,6 +83,11 @@ if ($_POST) {
     <link href="assets/build/styles/ltr-core.css" rel="stylesheet">
     <link href="assets/build/styles/ltr-vendor.css" rel="stylesheet">
     <title>Login</title>
+    <script>
+        var siteURL = 'http://localhost/carshop';
+        // var siteURL = 'https://www.laughingalbattani5c25df.binfarooqtextile.com';
+        localStorage.setItem('siteURL', siteURL);
+    </script>
 </head>
 
 <body class="theme-light preload-active" id="fullscreen">

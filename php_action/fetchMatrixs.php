@@ -52,12 +52,12 @@ if ($result->num_rows > 0) {
                 // calculation 
 
 
-                $button = '
-                <div class="show" >
-                    <button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#showDetails" onclick="showDetails(' . $id . ')" >
-                        <i class="fa fa-eye"></i>
-                    </button>   
-                </div> ';
+                // $button = '
+                // <div class="show" >
+                //     <button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#showDetails" onclick="showDetails(' . $id . ')" >
+                //         <i class="fa fa-eye"></i>
+                //     </button>   
+                // </div> ';
 
 
                 $output['data'][] = array(
@@ -71,7 +71,8 @@ if ($result->num_rows > 0) {
                     $invoice, // $row[10], // invoice
                     $msrp, // $row[4], // mrsp
                     $bdc, // $row[11], // bdc
-                    $button
+                    // $button
+                    $id
                 );
             }
         }

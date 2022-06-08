@@ -27,20 +27,22 @@ $(function () {
             'ajax': '../php_action/fetchInv.php',
 
             // working.... with both
-            dom: `\n     
-             <'row'<'col-12'P>>\n      
-             <'row'<'col-sm-12 col-md-6'l>>\n  
-            \n     
-            <'row'<'col-sm-6 text-center text-sm-left p-3'B>
-                <'col-sm-6 text-center text-sm-right mt-2 mt-sm-0'f>>\n
-            <'row'<'col-12'tr>>\n      
-            <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n    `,
-            
-            
+            // dom: `\n     
+            //  <'row'<'col-12'P>>\n      
+            //  <'row'<'col-sm-12 col-md-6'l>>\n  
+            // \n     
+            // <'row'<'col-sm-6 text-center text-sm-left p-3'B>
+            //     <'col-sm-6 text-center text-sm-right mt-2 mt-sm-0'f>>\n
+            // <'row'<'col-12'tr>>\n      
+            // <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n    `,
+            // dom: `Pfrtip`,
+            dom: `Plfrtip`,
+
+
             searchPanes: {
                 cascadePanes: !0,
                 viewTotal: !0,
-                columns: [2,3,4,5,6]
+                columns: [2, 4, 5]
             },
             "pageLength": 25,
             buttons: [
@@ -48,6 +50,7 @@ $(function () {
                     extend: "colvis",
                     text: "Visibility control",
                     collectionLayout: "two-column",
+                    columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
                 },
                 {
                     extend: 'copyHtml5',
@@ -84,7 +87,7 @@ $(function () {
                         //     var stockno1 = self.find("td:eq(1)").text();
                         //     console.log(stockno1);
                         // });
-                        var selData = manageInvTable.rows(".selected", {"filter": "applied"} ).data();
+                        var selData = manageInvTable.rows(".selected", { "filter": "applied" }).data();
 
                         var i = 0, stockNoArray = [];
 
@@ -141,7 +144,7 @@ $(function () {
                 }
 
             ],
-            
+
 
             columnDefs: [
                 {
@@ -156,13 +159,13 @@ $(function () {
                     searchPanes: {
                         show: true
                     },
-                    targets: [3, 4, 5]
+                    targets: [2, 4, 5]
                 },
                 // for hide columns as defaul
-                // { 
-                //     visible: false, 
-                //     targets: 2 
-                // }
+                {
+                    visible: false,
+                    targets: [6, 7, 8, 9, 10, 11, 12, 13, 15]
+                }
             ],
             select: {
                 'style': 'multi', // 'single', 'multi', 'os', 'multi+shift'

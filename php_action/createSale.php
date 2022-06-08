@@ -4,23 +4,36 @@ require_once './db/core.php';
 
 $valid['success'] = array('success' => false, 'messages' => array(), 'id' => '');
 // print_r($valid);
-function reformatDate($date, $from_format = 'm-d-Y H:i', $to_format = 'Y-m-d H:i') {
+function reformatDate($date, $from_format = 'm-d-Y H:i', $to_format = 'Y-m-d H:i')
+{
     $date_aux = date_create_from_format($from_format, $date);
-    return date_format($date_aux,$to_format);
+    return date_format($date_aux, $to_format);
+}
+function reformatDateOnly($date, $from_format = 'm-d-Y', $to_format = 'Y-m-d')
+{
+    $date_aux = date_create_from_format($from_format, $date);
+    return date_format($date_aux, $to_format);
 }
 if ($_POST) {
-    
+
+    $userId = $_SESSION['userId'];
     $saleDate = mysqli_real_escape_string($connect, $_POST['saleDate']);
     // $saleDate = date('Y-m-d H:i:s',strtotime($saleDate));
     $saleDate = reformatDate($saleDate);
+
+    $reconcileDate = mysqli_real_escape_string($connect, $_POST['reconcileDate']);
+    $reconcileDate = reformatDateOnly($reconcileDate);
+    // $reconcileDate = date('Y-m-d', strtotime($reconcileDate));
 
 
     $status = mysqli_real_escape_string($connect, $_POST['status']);  // sale status
     $stockId = mysqli_real_escape_string($connect, $_POST['stockId']);
     $salesConsultant = mysqli_real_escape_string($connect, $_POST['salesPerson']);
+    $financeManager = mysqli_real_escape_string($connect, $_POST['financeManager']);
+    $dealType = (isset($_POST['dealType'])) ? mysqli_real_escape_string($connect, $_POST['dealType']) : "";  // sale dealType
     $dealNote = mysqli_real_escape_string($connect, $_POST['dealNote']);
     $iscertified = mysqli_real_escape_string($connect, $_POST['iscertified']);
-    
+
     $gross = mysqli_real_escape_string($connect, $_POST['profit']);
 
 
@@ -47,6 +60,15 @@ if ($_POST) {
     $mobile = mysqli_real_escape_string($connect, $_POST['mobile']);
     $altContact = mysqli_real_escape_string($connect, $_POST['altContact']);
     $email = mysqli_real_escape_string($connect, $_POST['email']);
+
+    $cbAddress1 = mysqli_real_escape_string($connect, $_POST['cbAddress1']);
+    $cbAddress2 = mysqli_real_escape_string($connect, $_POST['cbAddress2']);
+    $cbCity = mysqli_real_escape_string($connect, $_POST['cbCity']);
+    $cbCountry = mysqli_real_escape_string($connect, $_POST['cbCountry']);
+    $cbZipCode = mysqli_real_escape_string($connect, $_POST['cbZipCode']);
+    $cbMobile = mysqli_real_escape_string($connect, $_POST['cbMobile']);
+    $cbAltContact = mysqli_real_escape_string($connect, $_POST['cbAltContact']);
+    $cbEmail = mysqli_real_escape_string($connect, $_POST['cbEmail']);
 
     // echo $fname . "<br />";
     // echo $mname . '<br />';
@@ -117,7 +139,8 @@ if ($_POST) {
         `zipcode`, 
         `mobile`, 
         `altcontact`, 
-        `email`, 
+        `email`,
+        `cb_address1`, `cb_address2`, `cb_city`, `cb_country`, `cb_zipcode`, `cb_mobile`, `cb_altcontact`, `cb_email` , `reconcileDate`, `finance_manager` , `deal_type`, `submitted_by`,
         `sale_status`, 
         `status`) VALUES (
             '$saleDate',
@@ -138,14 +161,15 @@ if ($_POST) {
             '$mobile',
             '$altContact',
             '$email',
+            '$cbAddress1' , '$cbAddress2' , '$cbCity' , '$cbCountry' , '$cbZipCode' , '$cbMobile' , '$cbAltContact' , '$cbEmail' , '$reconcileDate', '$financeManager' , '$dealType' , '$userId' , 
             '$status', 1 )";
-    
-    $sale_id ="";
+
+    $sale_id = "";
     if ($connect->query($sql) === true) {
         $sale_id = $connect->insert_id;
     }
 
-    if($sale_id){
+    if ($sale_id) {
         $insentiveSql = "INSERT INTO `sale_incentives`( 
             `sale_id`, 
             `college`, 
@@ -164,7 +188,7 @@ if ($_POST) {
                 '$misc1',
                 '$misc2',
                 '$misc3', 1 )";
-        
+
         $saleTodoSql = "INSERT INTO `sale_todo`( 
             `sale_id`, 
             `vin_check`, 
@@ -184,12 +208,12 @@ if ($_POST) {
                 '$inspection',
                 '$salePStatus',
                 '$paid', 1 )";
-        
 
-        if($connect->query($insentiveSql) === true && $connect->query($saleTodoSql) === true ){
+
+        if ($connect->query($insentiveSql) === true && $connect->query($saleTodoSql) === true) {
             $valid['success'] = true;
             $valid['messages'] = "Successfully Added";
-        }else{
+        } else {
             $valid['success'] = false;
             $valid['messages'] = $connect->error;
             $valid['messages'] = mysqli_error($connect);
@@ -197,7 +221,7 @@ if ($_POST) {
     }
 
 
-    
+
 
 
 
@@ -206,5 +230,4 @@ if ($_POST) {
 
     $connect->close();
     echo json_encode($valid);
-
 } // /if $_POST

@@ -73,6 +73,39 @@ if ($_GET['r'] == 'man') {
         height: 0px;
         opacity: 0;
     }
+
+    body.theme-dark #datatable-1 tbody td.dublicate_left {
+        border: 5px solid red;
+        border-right: 0.1px solid #757575;
+    }
+
+    body.theme-dark #datatable-1 tbody td.dublicate_right {
+        border: 5px solid red;
+        border-left: 0.1px solid #757575;
+    }
+
+    body.theme-light #datatable-1 tbody td.dublicate_left {
+        border: 5px solid red;
+        border-right: 0.1px solid #f5f5f5;
+    }
+
+    body.theme-light #datatable-1 tbody td.dublicate_right {
+        border: 5px solid red;
+        border-left: 0.1px solid #f5f5f5;
+    }
+
+
+    #datatable-1 tbody tr td {
+        padding: .55rem;
+    }
+
+    @media (min-width: 1025px) {
+
+        .modal-lg,
+        .modal-xl {
+            max-width: 1000px !important;
+        }
+    }
 </style>
 
 
@@ -88,28 +121,82 @@ if ($_GET['r'] == 'man') {
                 <div class="col-12">
                     <div class="portlet">
                         <div class="portlet-header portlet-header-bordered">
-                            <h3 class="portlet-title">Sold Logs</h3>
-                            <button class="btn btn-primary mr-2 p-2" onclick="toggleFilterClass()">
-                                <i class="fa fa-align-center ml-1 mr-2"></i> Filter
-                            </button>
+                            <div class="row w-100 p-0 m-0">
+                                <div class="col-md-2 d-flex align-items-center p-0 mb-2">
+                                    <h3 class="portlet-title">Sold Logs</h3>
+                                </div>
+
+                                <div class="col-md-4 d-flex justify-content-center align-items-center p-0 mb-2">
+                                    <div class="row d-flex justify-content-center flex-row p-0 m-0">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    <label class="btn btn-flat-primary">
+                                                        <input type="radio" name="radio-date" id="todayBtn" value="today">
+                                                        Today
+                                                        <span class="badge badge-lg p-1" id="todayCount"></span>
+                                                    </label>
+                                                    <label class="btn btn-flat-primary">
+                                                        <input type="radio" name="radio-date" value="yesterday">
+                                                        Yesterday
+                                                        <span class="badge badge-lg p-1" id="yesterdayCount"></span>
+                                                    </label>
+                                                    <label class="btn btn-flat-primary">
+                                                        <input type="radio" name="radio-date" value="currentMonth">
+                                                        Current Month
+                                                        <span class="badge badge-lg p-1" id="currentMonthCount"></span>
+                                                    </label>
+                                                    <label class="btn btn-flat-primary">
+                                                        <input type="radio" name="radio-date" value="all" id="modAll">
+                                                        Show All
+                                                        <span class="badge badge-lg p-1" id="AllCount"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6 p-1 d-flex justify-content-end align-items-center">
+                                    <div class="justify-content-right align-items-center">
+                                        <div class="row d-flex justify-content-center flex-row p-0 mb-2 w-100">
+                                            <div class="row w-100">
+                                                <div class="col-md-12">
+                                                    <input type="text" class="form-control" placeholder="Select Date" name="datefilter" value="" />
+                                                </div>
+                                            </div>
+    
+                                        </div>
+                                    </div>
+                                    <div class="d-inline-flex">
+                                        <button class="btn btn-primary mr-2 p-2" onclick="toggleFilterClass()">
+                                            <i class="fa fa-align-center ml-1 mr-2"></i> Filter
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="portlet-body">
-                            <table id="datatable-1" class="table table-bordered table-striped table-hover">
+                            <table id="datatable-1" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         <th>Sold Date</th>
-                                        <th>Stock #</th>
                                         <th>First Name</th>
                                         <th>Last Name</th>
                                         <th>Sales Consultant</th>
+                                        <th>Stock #</th>
                                         <th>Vehicle</th>
+                                        <th>Age</th>
                                         <th>Certified</th>
                                         <th>Lot</th>
                                         <th>Gross</th>
                                         <th>Status</th>
-                                        <th style="max-width: 5%;">Notes</th>
+                                        <th>Notes</th>
                                         <th>Balance</th>
                                         <th>Action</th>
+                                        <th>Stock Type</th>
+                                        <th>count</th>
+                                        <th>ID</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -125,122 +212,213 @@ if ($_GET['r'] == 'man') {
                 <div class="modal-header modal-header-bordered">
                     <h5 class="modal-title">Sale Details</h5><button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
                 </div>
-                <div class="modal-body">
-                    <div class="text-center">
-                        <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div>
-                    </div>
-                    <div class="showResult d-none">
+                <form id="updateNotesForm" autocomplete="off" method="post" action="../php_action/updateSaleNotes.php" enctype="multipart/form-data">
+                    <input type="hidden" name="sale_id" id="sale_id" />
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div>
+                        </div>
+                        <div class="showResult d-none">
 
-                        <div class="form-row">
-                            <div class="col-md-6 mb-3">
-                                <div class="row">
-                                    <label for="inputEmail4" class="col-sm-2 col-form-label text-md-center">Date:</label>
-                                    <div class="col-sm-10">
-                                        <div class="form-group input-group">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"><i class="fa fa-calendar"></i>
-                                                </span>
-                                            </div>
-                                            <input type="text" class="form-control" name="saleDate" placeholder="Select date" id="saleDate" disabled>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <div class="row">
-                                    <label for="inputPassword4" class="col-sm-1 offset-sm-1 col-form-label text-md-right">Status</label>
-                                    <div class="col-sm-6 m-auto">
-                                        <div class="form-group col-sm-6 text-center">
-                                            <div class="btn-group btn-group-toggle" id="statusDiv" data-toggle="buttons">
+                            <div class="form-row">
+                                <div class="col-md-3 mb-3">
+                                    <div class="row">
+                                        <label for="inputEmail4" class="col-sm-2 col-form-label text-md-center">Date:</label>
+                                        <div class="col-sm-10">
+                                            <div class="form-group input-group">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="fa fa-calendar"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control" name="saleDate" placeholder="Select date" id="saleDate" disabled>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-3 mb-3">
+                                    <div class="row">
+                                        <label for="inputPassword4" class="col-sm-1 offset-sm-1 col-form-label text-md-right">Status</label>
+                                        <div class="col-sm-6 m-auto">
+                                            <div class="form-group text-center">
+                                                <div class="btn-group btn-group-toggle" id="statusDiv" data-toggle="buttons">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <div class="row">
+                                        <label for="inputEmail4" class="col-sm-4 col-form-label">Reconcile</label>
+                                        <div class="col-sm-8">
+                                            <div class="form-group input-group">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="fa fa-calendar"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control" name="reconcileDate" placeholder="Select date" id="reconcileDate" disabled="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <div class="row">
+                                        <label for="inputPassword4" class="col-sm-5 col-form-label">Submitted By</label>
+                                        <div class="col-sm-7 m-auto">
+                                            <div class="form-group text-center">
+                                                <input type="text" class="form-control" name="submittedBy" id="submittedBy" disabled="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-row">
+                            <div class="form-row">
 
-                            <div class="col-md-6 mb-3">
-                                <div class="row">
-                                    <div class="col-md-6 form-group">
-                                        <label class="col-form-label" for="stockId">Stock #</label>
-                                        <input type="text" class="form-control" id="stockId" disabled>
+                                <div class="col-md-6 mb-3">
+                                    <div class="row">
+                                        <div class="col-md-6 form-group">
+                                            <label class="col-form-label" for="stockId">Stock #</label>
+                                            <input type="text" class="form-control" id="stockId" disabled>
+                                        </div>
+                                        <div class="col-md-6 form-group">
+                                            <label class="col-form-label" for="salesPerson">Sales Consultant:</label>
+                                            <input type="text" class="form-control" id="salesPerson" disabled>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6 form-group">
-                                        <label class="col-form-label" for="salesPerson">Sales Consultant:</label>
-                                        <input type="text" class="form-control" id="salesPerson" disabled>
+                                    <div class="row">
+                                        <div class="col-md-6 form-group">
+                                            <label class="col-form-label" for="financeManager">Finance Manager:</label>
+                                            <input type="text" class="form-control" id="financeManager" disabled>
+                                        </div>
+                                        <div class="col-md-6 form-group">
+                                            <label class="col-form-label" for="dealType">Deal Type:</label>
+                                            <input type="text" class="form-control" id="dealType" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="dealNote">Deal Notes</label>
+                                        <textarea class="form-control autosize" name="dealNote" id="dealNote" readonly placeholder="Deal Notes..."></textarea>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-form-label" for="dealNote">Deal Notes</label>
-                                    <textarea class="form-control autosize" name="dealNote" id="dealNote" readonly placeholder="Deal Notes..."></textarea>
-                                </div>
-                            </div>
 
-                            <div class="col-md-6 mb-3">
-                                <div class="form-group">
-                                    <label class="col-form-label text-md-right" for="iscertified">Certified</label>
-                                    <input type="text" class="form-control" id="iscertified" disabled>
-                                </div>
-                                <div class="form-group">
-                                    <div class="saleDetailsDiv" id="saleDetailsDiv">
-                                        <textarea class="form-control autosize" name="selectedDetails" style="border:none ;overflow-y: scroll!important;" id="selectedDetails" readonly placeholder="Type Something..."></textarea>
+
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-group">
+                                        <label class="col-form-label text-md-right" for="iscertified">Certified</label>
+                                        <input type="text" class="form-control" id="iscertified" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="saleDetailsDiv" id="saleDetailsDiv">
+                                            <textarea class="form-control autosize" name="selectedDetails" style="border:none ;overflow-y: scroll!important;" id="selectedDetails" readonly placeholder="Type Something..."></textarea>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-12">
-                                <div class="form-group input-group d-flex flex-md-row flex-sm-column">
-                                    <input type="text" name="fname" id="fname" class="form-control w-auto" disabled placeholder="First name">
-                                    <input type="text" name="mname" id="mname" class="form-control w-auto" disabled placeholder="Middle name">
-                                    <input type="text" name="lname" id="lname" class="form-control w-auto" disabled placeholder="Last name">
-                                    <input type="text" name="state" id="state" class="form-control w-auto" disabled placeholder="State">
+                            <div class="form-row">
+
+                                <div class="form-group col-md-12">
+                                    <label class="col-form-label" for="consultantNote">Consultant Notes</label>
+                                    <textarea class="form-control autosize" name="consultantNote" id="consultantNote" placeholder="Consultant Notes..."></textarea>
+                                </div>
+                                <div class="col-md-12 mb-2">
+                                    <div class="custom-control custom-control-lg custom-checkbox">
+                                        <input type="checkbox" name="thankyouCard" class="custom-control-input" id="thankyouCard">
+                                        <label class="custom-control-label" for="thankyouCard">Thank you card</label> 
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-3 mb-3">
-                                <label for="address1">Address 1</label>
-                                <input type="text" class="form-control" id="address1" disabled>
+                            <div class="form-row">
+                                <div class="col-md-12">
+                                    <div class="form-group input-group d-flex flex-md-row flex-sm-column">
+                                        <input type="text" name="fname" id="fname" class="form-control w-auto" disabled placeholder="First name">
+                                        <input type="text" name="mname" id="mname" class="form-control w-auto" disabled placeholder="Middle name">
+                                        <input type="text" name="lname" id="lname" class="form-control w-auto" disabled placeholder="Last name">
+                                        <input type="text" name="state" id="state" class="form-control w-auto" disabled placeholder="State">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="address2">Address 2</label>
-                                <input type="text" class="form-control" id="address2" disabled>
+                            <div class="form-row">
+                                <div class="col-md-3 mb-3">
+                                    <label for="address1">Address 1</label>
+                                    <input type="text" class="form-control" id="address1" disabled>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="address2">Address 2</label>
+                                    <input type="text" class="form-control" id="address2" disabled>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="city">City</label>
+                                    <input type="text" class="form-control" id="city" disabled>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="country">Country</label>
+                                    <input type="text" class="form-control" id="country" disabled>
+                                </div>
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="city">City</label>
-                                <input type="text" class="form-control" id="city" disabled>
+                            <div class="form-row">
+                                <div class="col-md-3 mb-3">
+                                    <label for="zipCode">Zip Code</label>
+                                    <input type="text" class="form-control" id="zipCode" disabled>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="mobile">Mobile</label>
+                                    <input type="text" class="form-control" id="mobile" disabled>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="altContact">Contact #</label>
+                                    <input type="text" class="form-control" id="altContact" disabled>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="email">Email</label>
+                                    <input type="text" class="form-control" id="email" disabled>
+                                </div>
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="country">Country</label>
-                                <input type="text" class="form-control" id="country" disabled>
+                            <div class="form-row">
+                                <h4 class="h4">Co-Buyer Details</h4>
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-3 mb-3">
-                                <label for="zipCode">Zip Code</label>
-                                <input type="text" class="form-control" id="zipCode" disabled>
+                            <div class="form-row">
+                                <div class="col-md-3 mb-3">
+                                    <label for="cbAddress1">Address 1</label>
+                                    <input type="text" class="form-control" id="cbAddress1" disabled>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="cbAddress2">Address 2</label>
+                                    <input type="text" class="form-control" id="cbAddress2" disabled>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="cbCity">City</label>
+                                    <input type="text" class="form-control" id="cbCity" disabled>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="cbCountry">Country</label>
+                                    <input type="text" class="form-control" id="cbCountry" disabled>
+                                </div>
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="mobile">Mobile</label>
-                                <input type="text" class="form-control" id="mobile" disabled>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="altContact">Contact #</label>
-                                <input type="text" class="form-control" id="altContact" disabled>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="email">Email</label>
-                                <input type="text" class="form-control" id="email" disabled>
+                            <div class="form-row">
+                                <div class="col-md-3 mb-3">
+                                    <label for="cbZipCode">Zip Code</label>
+                                    <input type="text" class="form-control" id="cbZipCode" disabled>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="cbMobile">Mobile</label>
+                                    <input type="text" class="form-control" id="cbMobile" disabled>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="cbAltContact">Contact #</label>
+                                    <input type="text" class="form-control" id="cbAltContact" disabled>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="cbEmail">Email</label>
+                                    <input type="text" class="form-control" id="cbEmail" disabled>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer modal-footer-bordered">
-                    <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=edit&i=" class="btn btn-primary mr-2" id="editBtn">Edit</a>
-                    <button class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
-                </div>
+                    <div class="modal-footer modal-footer-bordered">
+                        <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=edit&i=" class="btn btn-primary mr-2 d-none" id="editBtn">Edit</a>
+                        <button type="submit" class="btn btn-success mr-2">Update Sale</button>
+                        <button class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -272,7 +450,7 @@ if ($_GET['r'] == 'man') {
                                 <div class="showResult">
                                     <input type="hidden" name="saleId" id="saleId" value="<?php echo $_GET["i"]; ?>">
                                     <div class="form-row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
                                             <div class="row">
                                                 <label for="inputEmail4" class="col-sm-2 col-form-label text-md-center">Date:</label>
                                                 <div class="col-sm-10">
@@ -287,10 +465,10 @@ if ($_GET['r'] == 'man') {
                                             </div>
                                         </div>
 
-                                        <div class="form-group col-md-6">
+                                        <div class="col-md-5">
                                             <div class="row">
                                                 <label for="inputPassword4" class="col-sm-1 offset-sm-1 col-form-label text-md-right">Status</label>
-                                                <div class="col-sm-6">
+                                                <div class="col-sm-8">
                                                     <div class="form-group col-sm-6 text-center">
                                                         <div class="btn-group btn-group-toggle" data-toggle="buttons">
 
@@ -312,13 +490,33 @@ if ($_GET['r'] == 'man') {
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-md-4">
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <div class="custom-control custom-control-lg custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" onchange="changeReconcile()" id="reconcileCheckbox">
+                                                        <!-- <label class="custom-control-label" for="reconcileCheckbox"></label> -->
+                                                        <label for="reconcileCheckbox" class="custom-control-label text-md-right">Reconcile</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <div class="form-group input-group">
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text"><i class="fa fa-calendar"></i>
+                                                            </span>
+                                                        </div>
+                                                        <input type="text" class="form-control" name="reconcileDate" placeholder="Select date" id="reconcileDate" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <hr>
                                     <div class="form-row">
                                         <div class="col-md-6">
                                             <div class="row">
-                                                <label class="col-md-2 col-form-label" for="stockId">Stock No.</label>
-                                                <div class="col-md-10">
+                                                <label class="col-md-3 col-form-label" for="stockId">Stock No.</label>
+                                                <div class="col-md-9">
                                                     <div class="form-group">
                                                         <input type="hidden" name="selectedStockType" id="selectedStockType" />
                                                         <select class="selectpicker required" onchange="changeStockDetails(this)" name="stockId" id="stockId" data-live-search="true" data-size="4">
@@ -329,8 +527,8 @@ if ($_GET['r'] == 'man') {
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-2 col-form-label" for="salesConsultant">Sales Consultant:</label>
-                                                <div class="col-md-10">
+                                                <label class="col-md-3 col-form-label" for="salesConsultant">Sales Consultant:</label>
+                                                <div class="col-md-9">
                                                     <div class="form-group">
                                                         <select class="selectpicker" name="salesPerson" id="salesPerson" data-live-search="true" data-size="4">
                                                             <option value="0" selected disabled>Sales Consultant</option>
@@ -338,9 +536,46 @@ if ($_GET['r'] == 'man') {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="row align-items-baseline">
+                                                <label class="col-md-3 col-form-label" for="financeManager">Finance Manager:</label>
+                                                <div class="col-md-9">
+                                                    <div class="form-group">
+                                                        <select class="selectpicker" name="financeManager" id="financeManager" data-live-search="true" data-size="4">
+                                                            <option value="0" selected disabled>Finance Manager</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="row">
-                                                <label class="col-md-2 col-form-label" for="dealNote">Deal Notes</label>
-                                                <div class="col-md-10 form-group">
+                                                <label class="col-md-3 col-form-label" for="dealType">Deal Type:</label>
+                                                <div class="col-md-9">
+                                                    <div class="form-group d-flex justify-content-around">
+
+                                                        <div class="custom-control custom-control-lg custom-radio">
+                                                            <input type="radio" id="cash" name="dealType" value="cash" class="custom-control-input">
+                                                            <label class="custom-control-label" for="cash">Cash</label>
+                                                        </div>
+
+                                                        <div class="custom-control custom-control-lg custom-radio">
+                                                            <input type="radio" id="lease" name="dealType" value="lease" class="custom-control-input">
+                                                            <label class="custom-control-label" for="lease">Lease</label>
+                                                        </div>
+
+                                                        <div class="custom-control custom-control-lg custom-radio">
+                                                            <input type="radio" id="finance" name="dealType" value="finance" class="custom-control-input">
+                                                            <label class="custom-control-label" for="finance">Finance</label>
+                                                        </div>
+
+                                                        <div class="custom-control custom-control-lg custom-radio">
+                                                            <input type="radio" id="other" name="dealType" value="other" class="custom-control-input">
+                                                            <label class="custom-control-label" for="other">Other</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-3 col-form-label" for="dealNote">Deal Notes</label>
+                                                <div class="col-md-9 form-group">
                                                     <textarea class="form-control autosize" name="dealNote" id="dealNote" placeholder="Deal Notes..."></textarea>
                                                 </div>
                                             </div>
@@ -504,6 +739,61 @@ if ($_GET['r'] == 'man') {
 
 
                                     </div>
+
+                                    <h5 class="my-4 pl-2 d-flex justify-content-between align-items-center border rounded">
+                                        Co-Buyer
+                                        &nbsp;
+                                        <a href="javascript:;" class="col-md-2 text-center w-100 btn btn-info ml-2 align-item-streach" onclick="toggleInfo('coBuyer')">
+                                            Add Co-Buyer <i class="fa fa-angle-down"></i>
+                                        </a>
+                                    </h5>
+                                    <div class="mt-3 coBuyer border rounded hidden" id="pbody" style="background-color: rgba(0,188,212,.1);">
+                                        <div class="form-row p-3">
+                                            <label for="cbAddress1" class="col-md-1 col-form-label">Address 1*</label>
+                                            <div class="form-group col-md-5">
+                                                <div class="input-group-icon">
+                                                    <input type="text" class="form-control" name="cbAddress1" id="cbAddress1" placeholder="Your address here">
+                                                    <div class="input-group-append"><i class="fa fa-map-marker-alt"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <label for="cbAddress2" class="col-md-1 col-form-label">Address 2</label>
+                                            <div class="form-group col-md-5">
+                                                <div class="input-group-icon">
+                                                    <input type="text" class="form-control" name="cbAddress2" id="cbAddress2" placeholder="Your address here">
+                                                    <div class="input-group-append"><i class="fa fa-map-marker-alt"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row pb-0 p-3">
+
+                                            <div class="col-md-4 form-group">
+                                                <input type="text" class="form-control" id="cbCity" name="cbCity" placeholder="City*">
+                                            </div>
+
+                                            <div class="col-md-4 form-group">
+                                                <input type="text" class="form-control" id="cbCountry" name="cbCountry" placeholder="Country*">
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <input type="text" class="form-control" id="cbZipCode" name="cbZipCode" placeholder="Zip Code*">
+                                            </div>
+                                        </div>
+                                        <div class="form-row p-3 pt-0">
+
+                                            <div class="col-md-4 form-group">
+                                                <input type="text" class="form-control" id="cbMobile" name="cbMobile" placeholder="Mobile*">
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <input type="text" class="form-control" id="cbAltContact" name="cbAltContact" placeholder="Alternate Contact">
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <input type="text" class="form-control" id="cbEmail" name="cbEmail" placeholder="Email*">
+                                            </div>
+
+                                        </div>
+                                    </div>
+
                                     <h5 class="my-4 pl-2 d-flex justify-content-between align-items-center border rounded">Incentives <a href="javascript:;" class="col-md-2 text-center w-100 btn btn-info ml-2 align-item-streach" onclick="toggleInfo('loadIncentives')">
                                             Load Incentives <i class="fa fa-angle-down"></i>
                                         </a>

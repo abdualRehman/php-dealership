@@ -66,7 +66,7 @@ if (hasAccess("sale", "Add") === 'false') {
                         <form id="addSaleForm" autocomplete="off" method="post" action="../php_action/createSale.php">
 
                             <div class="form-row">
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <div class="row">
                                         <label for="inputEmail4" class="col-sm-2 col-form-label text-md-center">Date:</label>
                                         <div class="col-sm-10">
@@ -81,13 +81,12 @@ if (hasAccess("sale", "Add") === 'false') {
                                     </div>
                                 </div>
 
-                                <div class="form-group col-md-6">
+                                <div class="col-md-5">
                                     <div class="row">
                                         <label for="inputPassword4" class="col-sm-1 offset-sm-1 col-form-label text-md-right">Status</label>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-8">
                                             <div class="form-group col-sm-6 text-center">
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-
                                                     <label class="btn btn-flat-primary active d-flex align-items-center">
                                                         <input type="radio" name="status" value="pending" id="pending" checked="checked">
                                                         <i class="fa fa-clock pr-1"></i> Pending
@@ -106,13 +105,33 @@ if (hasAccess("sale", "Add") === 'false') {
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <div class="custom-control custom-control-lg custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" onchange="changeReconcile()" id="reconcileCheckbox">
+                                                <!-- <label class="custom-control-label" for="reconcileCheckbox"></label> -->
+                                                <label for="reconcileCheckbox" class="custom-control-label text-md-right">Reconcile</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <div class="form-group input-group">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="fa fa-calendar"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control" name="reconcileDate" placeholder="Select date" id="reconcileDate" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <hr>
+                            <hr class="mt-0 mb-5">
                             <div class="form-row">
                                 <div class="col-md-6">
                                     <div class="row">
-                                        <label class="col-md-2 col-form-label" for="stockId">Stock No.</label>
-                                        <div class="col-md-10">
+                                        <label class="col-md-3 col-form-label" for="stockId">Stock No.</label>
+                                        <div class="col-md-9">
                                             <div class="form-group">
                                                 <input type="hidden" name="selectedStockType" id="selectedStockType" />
                                                 <select class="selectpicker required" onchange="changeStockDetails(this)" name="stockId" id="stockId" data-live-search="true" data-size="4">
@@ -124,9 +143,9 @@ if (hasAccess("sale", "Add") === 'false') {
 
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <label class="col-md-2 col-form-label" for="salesConsultant">Sales Consultant:</label>
-                                        <div class="col-md-10">
+                                    <div class="row align-items-baseline">
+                                        <label class="col-md-3 col-form-label" for="salesConsultant">Sales Consultant:</label>
+                                        <div class="col-md-9">
                                             <div class="form-group">
                                                 <select class="selectpicker" name="salesPerson" id="salesPerson" data-live-search="true" data-size="4">
                                                     <option value="0" selected disabled>Sales Consultant</option>
@@ -134,9 +153,52 @@ if (hasAccess("sale", "Add") === 'false') {
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row align-items-baseline">
+                                        <label class="col-md-3 col-form-label" for="financeManager">Finance Manager:</label>
+                                        <div class="col-md-9">
+                                            <div class="form-group">
+                                                <select class="selectpicker" name="financeManager" id="financeManager" data-live-search="true" data-size="4">
+                                                    <option value="0" selected disabled>Finance Manager</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row">
-                                        <label class="col-md-2 col-form-label" for="dealNote">Deal Notes</label>
-                                        <div class="col-md-10 form-group">
+                                        <label class="col-md-3 col-form-label" for="dealType">Deal Type:</label>
+                                        <div class="col-md-9">
+                                            <div class="form-group d-flex justify-content-around">
+
+                                                <div class="custom-control custom-control-lg custom-radio">
+                                                    <input type="radio" id="cash" name="dealType" value="cash" class="custom-control-input">
+                                                    <label class="custom-control-label" for="cash">Cash</label>
+                                                </div>
+                                                <!-- &nbsp;
+                                                &nbsp;
+                                                &nbsp; -->
+                                                <div class="custom-control custom-control-lg custom-radio">
+                                                    <input type="radio" id="lease" name="dealType" value="lease" class="custom-control-input">
+                                                    <label class="custom-control-label" for="lease">Lease</label>
+                                                </div>
+                                                <!-- &nbsp;
+                                                &nbsp;
+                                                &nbsp; -->
+                                                <div class="custom-control custom-control-lg custom-radio">
+                                                    <input type="radio" id="finance" name="dealType" value="finance" class="custom-control-input">
+                                                    <label class="custom-control-label" for="finance">Finance</label>
+                                                </div>
+                                                <!-- &nbsp;
+                                                &nbsp;
+                                                &nbsp; -->
+                                                <div class="custom-control custom-control-lg custom-radio">
+                                                    <input type="radio" id="other" name="dealType" value="other" class="custom-control-input">
+                                                    <label class="custom-control-label" for="other">Other</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-md-3 col-form-label" for="dealNote">Deal Notes</label>
+                                        <div class="col-md-9 form-group">
                                             <textarea class="form-control autosize" name="dealNote" id="dealNote" placeholder="Deal Notes..."></textarea>
                                         </div>
                                     </div>
@@ -190,7 +252,7 @@ if (hasAccess("sale", "Add") === 'false') {
                             </div>
 
 
-                            <h5 class="my-4">Customer account</h5>
+                            <h5 class="my-4">Customer Account</h5>
                             <div class="form-row">
 
                                 <div class="col-md-10">
@@ -310,6 +372,64 @@ if (hasAccess("sale", "Add") === 'false') {
 
 
                             </div>
+
+                            <h5 class="my-4 pl-2 d-flex justify-content-between align-items-center border rounded">
+                                Co-Buyer
+                                &nbsp;
+                                <a href="javascript:;" class="col-md-2 text-center w-100 btn btn-info ml-2 align-item-streach" onclick="toggleInfo('coBuyer')">
+                                    Add Co-Buyer <i class="fa fa-angle-down"></i>
+                                </a>
+                            </h5>
+
+                            <div class="mt-3 coBuyer border rounded hidden" id="pbody" style="background-color: rgba(0,188,212,.1);">
+                                <div class="form-row p-3">
+                                    <label for="cbAddress1" class="col-md-1 col-form-label">Address 1*</label>
+                                    <div class="form-group col-md-5">
+                                        <div class="input-group-icon">
+                                            <input type="text" class="form-control" name="cbAddress1" id="cbAddress1" placeholder="Your address here">
+                                            <div class="input-group-append"><i class="fa fa-map-marker-alt"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label for="cbAddress2" class="col-md-1 col-form-label">Address 2</label>
+                                    <div class="form-group col-md-5">
+                                        <div class="input-group-icon">
+                                            <input type="text" class="form-control" name="cbAddress2" id="cbAddress2" placeholder="Your address here">
+                                            <div class="input-group-append"><i class="fa fa-map-marker-alt"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row pb-0 p-3">
+
+                                    <div class="col-md-4 form-group">
+                                        <input type="text" class="form-control" id="cbCity" name="cbCity" placeholder="City*">
+                                    </div>
+
+                                    <div class="col-md-4 form-group">
+                                        <input type="text" class="form-control" id="cbCountry" name="cbCountry" placeholder="Country*">
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="text" class="form-control" id="cbZipCode" name="cbZipCode" placeholder="Zip Code*">
+                                    </div>
+                                </div>
+                                <div class="form-row p-3 pt-0">
+
+                                    <div class="col-md-4 form-group">
+                                        <input type="text" class="form-control" id="cbMobile" name="cbMobile" placeholder="Mobile*">
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="text" class="form-control" id="cbAltContact" name="cbAltContact" placeholder="Alternate Contact">
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="text" class="form-control" id="cbEmail" name="cbEmail" placeholder="Email*">
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
                             <h5 class="my-4 pl-2 d-flex justify-content-between align-items-center border rounded">Incentives <a href="javascript:;" class="col-md-2 text-center w-100 btn btn-info ml-2 align-item-streach" onclick="toggleInfo('loadIncentives')">
                                     Load Incentives <i class="fa fa-angle-down"></i>
                                 </a>
@@ -494,7 +614,7 @@ if (hasAccess("sale", "Add") === 'false') {
 
                             </div>
 
-                            <button type="submit" class="btn btn-success">Create Sale</button>
+                            <button type="submit" class="btn btn-success float-right">Create Sale</button>
                         </form>
                     </div>
 

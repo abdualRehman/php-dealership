@@ -116,6 +116,7 @@ if (hasAccess("inventory", "Add") === 'false' ) {
                                                     </option>
                                                     <option value="NEW">NEW</option>
                                                     <option value="USED">USED</option>
+                                                    <option value="OTHER">OTHER</option>
                                                 </select>
                                             </div>
                                         </div>

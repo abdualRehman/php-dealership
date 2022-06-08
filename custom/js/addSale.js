@@ -6,6 +6,7 @@ $(function () {
     loadStock();
     loadSaleConsultant();
     loadSaleManager();
+    loadFinanceManager();
 
     autosize($(".autosize"));
     var today = new Date();
@@ -23,7 +24,15 @@ $(function () {
         pickTime: false,
 
     });
-    $('#saleDate').datetimepicker('update', new Date())
+    $("#reconcileDate").datepicker({
+        todayHighlight: !0,
+        autoclose: true,
+        todayBtn: "linked",
+        startDate: today,
+        language: 'pt-BR',
+        format: 'mm-dd-yyyy',
+    });
+    $('#saleDate').datetimepicker('update', new Date());
 
 
     var e1 = Swal.mixin({
@@ -237,45 +246,48 @@ $(function () {
         submitHandler: function (form, event) {
             // return true;
             event.preventDefault();
-            var c = confirm('Do you really want to save this?');
-            if (c == true) {
+            // $('[disabled]').removeAttr('disabled');
+            var form = $('#addSaleForm');
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
 
-                $('[disabled]').removeAttr('disabled');
+                    if (response.success == true) {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500,
+                        })
 
-                var form = $('#addSaleForm');
-                $.ajax({
-                    type: "POST",
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response);
+                        // form[0].reset();
+                        setTimeout(() => {
+                            var siteURL = localStorage.getItem('siteURL');
+                            console.log(siteURL);
+                            if (siteURL != null) {
+                                window.location.href = siteURL + '/sales/soldLogs.php?r=man&filter=today';
+                            }
+                        }, 1000);
 
-                        if (response.success == true) {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "success",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 2500,
-                            })
-
-                            form[0].reset();
-
-                        } else {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "error",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 2500
-                            })
-                        }
-
-
+                    } else {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500
+                        })
                     }
-                });
-            }
+
+
+                }
+            });
+
 
             return false;
 
@@ -332,6 +344,26 @@ function loadSaleConsultant() {
     });
 }
 
+function loadFinanceManager() {
+    var finance_manager_id = 64; //finance manager role id in database
+    $.ajax({
+        url: '../php_action/fetchUsersWithRoleForSearch.php',
+        type: "POST",
+        dataType: 'json',
+        data: { id: finance_manager_id },
+        success: function (response) {
+            var array = response.data;
+            var selectBoxs = document.getElementById('financeManager');
+            for (var i = 0; i < array.length; i++) {
+                var item = array[i];
+                selectBoxs.innerHTML += `<option value="${item[0]}" title="${item[1]}">${item[1]} || ${item[2]} </option>`;
+            }
+            $('.selectpicker').selectpicker('refresh');
+        }
+    });
+}
+
+
 function loadSaleManager() {
     // var sales_manager_id = 1;
     var sales_manager_id = 67;
@@ -355,6 +387,12 @@ function loadSaleManager() {
     });
 }
 
+function changeReconcile() {
+    if (!$('#reconcileDate').attr('disabled')) {
+        $('#reconcileDate').val('')
+    }
+    $('#reconcileDate').attr('disabled', function (_, attr) { return !attr });
+}
 
 function changeStockDetails(ele) {
 
@@ -390,7 +428,7 @@ function changeStockDetails(ele) {
     if ((obj[16] != null) && obj[16] != 'cancelled') {
         $('#selectedDetails').addClass('text-center text-danger is-invalid');  // invalid selectarea section
         $('#saleDetailsDiv').addClass('is-invalid');  // invalid stock details div
-        $('#grossDiv').addClass('v-none');  // hide gross div
+        // $('#grossDiv').addClass('v-none');  // hide gross div
         $('#stockId').parent().addClass('text-danger is-invalid'); // invalid stock input div
     } else {
         $('#selectedDetails').removeClass('text-danger is-invalid');  // valid selectarea section

@@ -261,9 +261,9 @@
 <div class="float-btn float-btn-right">
     <button class="btn btn-flat-primary btn-icon mb-2" id="theme-toggle" data-toggle="tooltip" data-placement="right" title="Change theme"><i class="fa fa-moon"></i></button>
 </div>
-<script type="text/javascript" src="<?php echo $GLOBALS['siteurl'];?>/assets/build/scripts/mandatory.js"></script>
-<script type="text/javascript" src="<?php echo $GLOBALS['siteurl'];?>/assets/build/scripts/core.js"></script>
-<script type="text/javascript" src="<?php echo $GLOBALS['siteurl'];?>/assets/build/scripts/vendor1.js"></script>
+<script type="text/javascript" src="<?php echo $GLOBALS['siteurl']; ?>/assets/build/scripts/mandatory.js"></script>
+<script type="text/javascript" src="<?php echo $GLOBALS['siteurl']; ?>/assets/build/scripts/core.js"></script>
+<script type="text/javascript" src="<?php echo $GLOBALS['siteurl']; ?>/assets/build/scripts/vendor1.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-lightbox/0.2.12/slick-lightbox.min.js"></script>
 
 <!-- <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script> -->

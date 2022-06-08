@@ -3,7 +3,7 @@ include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
 if (hasAccess("matrix", "View") === 'false') {
-    echo "<script>location.href='".$GLOBALS['siteurl']."/error.php';</script>";
+    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
 
 if ($_GET['r'] == 'man') {
@@ -41,12 +41,25 @@ if ($_GET['r'] == 'man') {
         margin-bottom: 2px;
         /* color: #424248; */
         font-weight: 700;
-        font-size: 15px;
+        font-size: 16px;
     }
 
-    #datatable-1 tbody tr{
+    .details .well {
+        display: flex;
+    }
+
+    .details .well p {
+        width: 50%;
+    }
+
+    .details .well p:last-child {
+        text-align: left;
+    }
+
+    #datatable-1 tbody tr {
         font-size: 14px;
     }
+
     #dealer,
     #other,
     #lease {
@@ -67,16 +80,25 @@ if ($_GET['r'] == 'man') {
     #bdc::first-letter,
     #dealer::first-letter,
     #other::first-letter,
-    #lease::first-letter
-    {
+    #lease::first-letter {
         font-size: medium;
+    }
+
+    body.theme-light #bdc,
+    body.theme-light .manBDC {
+        color: green !important;
+        font-weight: 700;
     }
 
     /* buttons groups */
     #modal label,
     #year label {
-        margin: auto 1px;
+        /* margin: auto 1px; */
         border: 1px solid #bdbdbd;
+    }
+
+    #year label {
+        margin-top: 2px;
     }
 
     #modal label {
@@ -84,16 +106,51 @@ if ($_GET['r'] == 'man') {
     }
 
     #modal {
+        /* margin: 0px 5px;
+        margin-right: 14px; */
         text-align: center;
     }
 
     #year {
-        margin-top: 5px;
+        margin-right: 20px;
+        margin-top: 3px;
         text-align: center;
     }
 
+    .form-row.leaseAndFinanceDiv>.col-lg-6.col-md-12 {
+        margin-bottom: 5px;
+    }
+
+    .form-row.leaseAndFinanceDiv>.col-lg-6.col-md-12>.inner {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        border: 1px solid #bdbdbd;
+        border-radius: 15px;
+        height: 100%;
+        padding: 10px 0px;
+    }
+
+    #datatable-1 th {
+        /* font-weight: 700; */
+        font-size: initial;
+    }
+
+
+    @media (min-width: 1025px) {
+
+        .modal-lg,
+        .modal-xl {
+            max-width: 1000px
+        }
+    }
+
+    .pdfBtnsRow button {
+        font-size: revert;
+    }
+
     /* table css */
-   
 </style>
 
 <?php
@@ -107,12 +164,32 @@ if ($_GET['r'] == 'man') {
                 <div class="col-12">
                     <div class="portlet">
                         <div class="portlet-header portlet-header-bordered">
-                            <div class="row w-100 p-0">
+                            <div class="row w-100 p-0 m-0">
                                 <div class="col-md-2 d-flex align-items-center">
                                     <h3 class="portlet-title">Manage Matrix</h3>
                                 </div>
                                 <div class="col-md-7">
-                                    <div class="row d-flex justify-content-center">
+                                    <div class="row d-flex justify-content-center flex-row p-0 m-0">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div id="year">
+                                                    <div class="btn-group-toggle" data-toggle="buttons">
+                                                        <label class="btn btn-outline-primary">
+                                                            <input type="radio" name="year" value=""> ALL
+                                                        </label>
+                                                        <label class="btn btn-outline-primary">
+                                                            <input type="radio" name="year" value="2022"> 2022
+                                                        </label>
+                                                        <label class="btn btn-outline-primary">
+                                                            <input type="radio" name="year" value="2023"> 2023
+                                                        </label>
+                                                        <label class="btn btn-outline-primary">
+                                                            <input type="radio" name="year" value="2024"> 2024
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div id="modal">
@@ -151,26 +228,7 @@ if ($_GET['r'] == 'man') {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div id="year">
-                                                    <div class="btn-group-toggle" data-toggle="buttons">
-                                                        <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="year" value=""> ALL
-                                                        </label>
-                                                        <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="year" value="2021"> 2021
-                                                        </label>
-                                                        <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="year" value="2022"> 2022
-                                                        </label>
-                                                        <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="year" value="2023"> 2023
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+
                                     </div>
                                 </div>
                                 <div class="col-md-3 p-1 d-flex justify-content-center align-items-center">
@@ -188,25 +246,23 @@ if ($_GET['r'] == 'man') {
                                     </div>
                                 </div>
                             </div>
-
-
-
                         </div>
+
                         <div class="portlet-body">
 
                             <table id="datatable-1" class="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th style="width: 10%;">Year</th>
-                                        <th style="width: 10%;">Model</th>
-                                        <th style="width: 15%;">Trim</th>
+                                        <th class="ymt" style="width: 10%;">Year</th>
+                                        <th class="ymt" style="width: 10%;">Model</th>
+                                        <th class="ymt" style="width: 20%;">Trim</th>
                                         <th style="width: 10%;">Model No</th>
                                         <th style="width: 10%;">Net</th>
                                         <th style="width: 10%;">HB</th>
                                         <th style="width: 10%;">Invoice</th>
                                         <th style="width: 10%;">MSRP</th>
                                         <th style="width: 10%;">BDC</th>
-                                        <th style="width: 5%;">Action</th>
+                                        <!-- <th style="width: 5%;">Action</th> -->
                                     </tr>
                                 </thead>
                             </table>
@@ -263,7 +319,6 @@ if ($_GET['r'] == 'man') {
                         </div>
                         <div class="form-row">
                             <div class="col-md-4 text-center">
-                                <!-- <label for="dealer">Dealer</label> -->
                                 <h5 class="h5 text-primary">Dealer</h5>
                                 <p id="dealer"></p>
                             </div>
@@ -276,64 +331,154 @@ if ($_GET['r'] == 'man') {
                                 <p id="lease"></p>
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="col-md-3">
-                                <h5 class="h5 text-primary">FINANCE RATES 660+</h5>
-                                <div class="well">
-                                    <p>24-36 Months <strong id="f_24_36"></strong> </p>
-                                </div>
-                                <div class="well">
-                                    <p>37-48 Months <strong id="f_37_48"></strong> </p>
-                                </div>
-                                <div class="well">
-                                    <p>49-60 Months <strong id="f_49_60"></strong> </p>
-                                </div>
-                                <div class="well">
-                                    <p>61-72 Months <strong id="f_61_72"></strong> </p>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <h5 class="h5 text-primary">FINANCE RATES 610-659</h5>
-                                <div class="well">
-                                    <p>24-36 Months <strong id="f_610_24_36"></strong> </p>
-                                </div>
-                                <div class="well">
-                                    <p>37-60 Months <strong id="f_610_37_60"></strong> </p>
-                                </div>
+                        <div class="form-row leaseAndFinanceDiv">
+                            <div class="col-lg-6 col-md-12">
+                                <div class="inner">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5 class="h5 text-primary">FINANCE RATES 660+</h5>
+                                            <div class="well">
+                                                <p>24-36 Months <strong id="f_24_36"></strong> </p>
+                                            </div>
+                                            <div class="well">
+                                                <p>37-48 Months <strong id="f_37_48"></strong> </p>
+                                            </div>
+                                            <div class="well">
+                                                <p>49-60 Months <strong id="f_49_60"></strong> </p>
+                                            </div>
+                                            <div class="well">
+                                                <p>61-72 Months <strong id="f_61_72"></strong> </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5 class="h5 text-primary">FINANCE RATES 610-659</h5>
+                                            <div class="well">
+                                                <p>24-36 Months <strong id="f_610_24_36"></strong> </p>
+                                            </div>
+                                            <div class="well">
+                                                <p>37-60 Months <strong id="f_610_37_60"></strong> </p>
+                                            </div>
 
-                                <div class="well">
-                                    <p>61-72 Months <strong id="f_610_61_72"></strong> </p>
-                                </div>
-                                <div class="well">
-                                    <p>Expire In <strong id="f_expire"></strong> </p>
+                                            <div class="well">
+                                                <p>61-72 Months <strong id="f_610_61_72"></strong> </p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 text-center">
+                                            <div class="well">
+                                                <p>Expires <strong id="f_expire"></strong> </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <h5 class="h5 text-primary">LEASE RATES 660+</h5>
-                                <div class="well">
-                                    <p>One Pay <strong id="l_onePay"></strong> </p>
-                                </div>
-                                <div class="well">
-                                    <p>24-36 Months <strong id="l_24_36"></strong> </p>
+                            <div class="col-lg-6 col-md-12">
+                                <div class="inner">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5 class="h5 text-primary">LEASE RATES 660+</h5>
+                                            <div class="well">
+                                                <p>24-36 Months <strong id="l_24_36"></strong> </p>
+                                            </div>
+                                            <div class="well">
+                                                <p>One Pay <strong id="l_onePay"></strong> </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5 class="h5 text-primary">LEASE RATES 610-659</h5>
+                                            <div class="well">
+                                                <p>24-36 Months <strong id="l_610_24_36"></strong> </p>
+                                            </div>
+                                            <div class="well">
+                                                <p>One Pay <strong id="l_610_onePay"></strong> </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 text-center">
+                                            <div class="well">
+                                                <p>Expires <strong id="l_expire"></strong> </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <h5 class="h5 text-primary">LEASE RATES 610-659</h5>
-                                <div class="well">
-                                    <p>One Pay <strong id="l_610_onePay"></strong> </p>
-                                </div>
-                                <div class="well">
-                                    <p>24-36 Months <strong id="l_610_24_36"></strong> </p>
-                                </div>
-                                <div class="well">
-                                    <p>Expire In <strong id="l_expire"></strong> </p>
-                                </div>
+                        </div>
+
+                        <?php
+                        $sql = "SELECT `file_type` , `file_name` FROM `settings`";
+                        $result = $connect->query($sql);
+                        $resultData = array();
+                        // $resultData = $result->fetch_array();
+                        while ($row = $result->fetch_assoc()) {
+                            $resultData[] = $row;
+                        }
+
+                        ?>
+
+                        <div class="form-row pdfBtnsRow">
+                            <div class="col-lg-3">
+                                <?php
+                                $key = array_search("retailRates", array_column($resultData, 'file_type'));
+                                if ($resultData[$key]['file_name'] != "") {
+                                    echo '<a href="http://docs.google.com/gview?url=' . $GLOBALS['siteurl'] . '/assets/uploadMatrixRateFiles/' . $resultData[$key]['file_name'] . '&embedded=true" target="_blank" class="col-12 btn btn-outline-primary m-1">
+                                    Standard Retail Rates
+                                </a>';
+                                } else {
+                                    echo '<button class="col-12 btn btn-outline-primary m-1" onclick="showError()" >
+                                    Standard Retail Rates
+                                </button>';
+                                }
+                                ?>
+                            </div>
+                            <div class="col-lg-3">
+                                <?php
+                                $key = array_search("programs", array_column($resultData, 'file_type'));
+                                if ($resultData[$key]['file_name'] != "") {
+                                    echo '<a href="http://docs.google.com/gview?url=' . $GLOBALS['siteurl'] . '/assets/uploadMatrixRateFiles/' . $resultData[$key]['file_name'] . '&embedded=true" target="_blank" class="col-12 btn btn-outline-primary m-1">
+                                    Programs
+                                </a>';
+                                } else {
+                                    echo '<button class="col-12 btn btn-outline-primary m-1" onclick="showError()" >
+                                    Programs
+                                </button>';
+                                }
+                                ?>
+                            </div>
+                            <div class="col-lg-3">
+                                <?php
+                                $key = array_search("incentivesSummary", array_column($resultData, 'file_type'));
+                                if ($resultData[$key]['file_name'] != "") {
+                                    echo '<a href="http://docs.google.com/gview?url=' . $GLOBALS['siteurl'] . '/assets/uploadMatrixRateFiles/' . $resultData[$key]['file_name'] . '&embedded=true" target="_blank" class="col-12 btn btn-outline-primary m-1">
+                                        Programs Incentives Summary
+                                    </a>';
+                                } else {
+                                    echo '<button class="col-12 btn btn-outline-primary m-1" onclick="showError()" >
+                                        Programs Incentives Summary
+                                    </button>';
+                                }
+                                ?>
+                            </div>
+                            <div class="col-lg-3">
+                                <?php
+                                $key = array_search("leaseRate", array_column($resultData, 'file_type'));
+                                if ($resultData[$key]['file_name'] != "") {
+                                    echo '<a href="http://docs.google.com/gview?url=' . $GLOBALS['siteurl'] . '/assets/uploadMatrixRateFiles/' . $resultData[$key]['file_name'] . '&embedded=true" target="_blank" class="col-12 btn btn-outline-primary m-1">
+                                        Standard Lease Rates
+                                    </a>';
+                                } else {
+                                    echo '<button class="col-12 btn btn-outline-primary m-1" onclick="showError()" >
+                                        Standard Lease Rates
+                                    </button>';
+                                }
+                                ?>
                             </div>
                         </div>
                         <hr />
                         <h3 class="h3 text-center text-primary m-3"><strong>RESIDUALS</strong></h3>
                         <div class="container">
-
 
                             <div class="form-row">
                                 <div class="col-md-4">

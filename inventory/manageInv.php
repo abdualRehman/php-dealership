@@ -7,7 +7,7 @@ if ($_GET['r'] == 'man') {
     if (hasAccess("inventory", "Edit") === 'false' && hasAccess("inventory", "Remove") === 'false') {
         echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
     }
-    
+
     echo "<div class='div-request d-none'>man</div>";
 } else if ($_GET['r'] == 'edit') {
 
@@ -56,7 +56,16 @@ if ($_GET['r'] == 'man') {
                                         <th>Make</th>
                                         <th>Model</th>
                                         <th>Model No.</th>
+                                        <th>Color</th>
+                                        <th>Lot</th>
+                                        <th>Vin</th>
+                                        <th>Mileage</th>
+                                        <th>Age</th>
+                                        <th>Balance</th>
+                                        <th>Retail</th>
+                                        <th>Certified</th>
                                         <th>Stock Type</th>
+                                        <th>Wholesale</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>

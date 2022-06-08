@@ -1,6 +1,7 @@
 "use strict";
-var manageSoldLogsTable;
+var manageSoldLogsTable, rowGroupSrc = 10; // status
 var stockArray = [];
+var collapsedGroups = {};
 
 var e1 = Swal.mixin({
     customClass: {
@@ -18,228 +19,287 @@ $(function () {
         minView: 2,
         pickTime: false,
     });
+
+    $("#reconcileDate").datepicker({
+        todayHighlight: !0,
+        autoclose: true,
+        todayBtn: "linked",
+        language: 'pt-BR',
+        format: 'mm-dd-yyyy',
+    });
+
+
     autosize($(".autosize"));
 
     var divRequest = $(".div-request").text();
 
     if (divRequest == "man") {
+
+        $('input[name="datefilter"]').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Clear'
+            }
+        });
+
         manageSoldLogsTable = $("#datatable-1").DataTable({
 
             // scrollY:"50vh",
 
-            // responsive: !0,
+            responsive: !0,
             // responsive: {
             //     details: {
             //         type: 'column',
             //         target: 1
             //     }
             // },
+
             // scrollY: 500,
-            scrollX: !0,
-            scrollCollapse: !0,
-            fixedColumns: !0,
+            // scrollX: !0,
+            // scrollCollapse: !0,
+            // fixedColumns: !0,
 
             'ajax': '../php_action/fetchSoldLogs.php',
 
             // working.... with both
-            // dom: "Pfrtip",
             dom: `\n     
-             <'row'<'col-12'P>>\n      
-             <'row'<'col-sm-12 col-md-6'l>>\n  
-            \n     
-            <'row'<'col-sm-6 text-center text-sm-left p-3'B>
-                <'col-sm-6 text-center text-sm-right mt-2 mt-sm-0'f>>\n
-            <'row'<'col-12'tr>>\n      
-            <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
+            <'row'<'col-12'P>>\n      
+            <'row'<'col-sm-12 text-sm-left col-md-3 mb-2'B> <'col-sm-12 col-md-6 text-center text-sm-left '<'#statusFilterDiv'>  > <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
+           <'row'<'col-12'tr>>\n      
+           <'row align-items-baseline'
+           <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
+           <'col-md-5'p>>\n`,
 
             searchPanes: {
                 cascadePanes: !0,
                 viewTotal: !0,
-                columns: [0, 2, 4, 5, 9],
-                stateSave: true,
+                columns: [3, 4, 5, 14]
             },
             "pageLength": 25,
+            autoWidth: false,
             buttons: [
                 {
-                    text: 'Today',
-                    action: function (e, dt, node, config) {
-                        // $.fn.dataTable.ext.search = [];
-                        // var date2 = new Date("03-15-2022");
-                        var date2 = new Date();
-                        var today = moment(date2).format("MMM-DD-YYYY");
-                        // manageSoldLogsTable.columns(0).search(today).draw();
-
-                        $.fn.dataTable.ext.search.pop();
-                        manageSoldLogsTable.search('').draw();
-                        var tableNode = this.table(0).node();
-                        $.fn.dataTable.ext.search.push(
-                            function (settings, data, dataIndex) {
-                                if (settings.nTable !== tableNode) {
-                                    return true;
-                                }
-                                var date = data[0];
-                                if (
-                                    (today === date)
-                                ) {
-                                    return true;
-                                }
-                                return false
-                            }
-                        )
-                        manageSoldLogsTable.draw();  // working
-                        // manageSoldLogsTable.searchPanes.rebuildPane();
-                        manageSoldLogsTable.button(0).active(true);
-                        manageSoldLogsTable.button(1).active(false);
-                        manageSoldLogsTable.button(2).active(false);
-                        manageSoldLogsTable.button(3).active(false);
-                    },
-
-                },
-                {
-                    text: 'Yesterday',
-                    action: function (e, dt, node, config) {
-                        // $.fn.dataTable.ext.search = [];
-                        // var date2 = moment(new Date('03-13-2022'), "MMM-DD-YYYY").subtract(1, 'days');
-                        var date2 = moment(new Date(), "MMM-DD-YYYY").subtract(1, 'days');
-                        var yesterday = moment(date2).format("MMM-DD-YYYY")
-                        // console.log(yesterday);
-                        // manageSoldLogsTable.columns(0).search(yesterday).draw();
-
-
-                        $.fn.dataTable.ext.search.pop();
-                        manageSoldLogsTable.search('').draw();
-                        var tableNode = this.table(0).node();
-                        $.fn.dataTable.ext.search.push(
-                            function (settings, data, dataIndex) {
-                                if (settings.nTable !== tableNode) {
-                                    return true;
-                                }
-                                var date = data[0];
-                                if (
-                                    (yesterday === date)
-                                ) {
-                                    return true;
-                                }
-                                return false
-                            }
-                        )
-                        manageSoldLogsTable.draw();  // working
-                        // manageSoldLogsTable.searchPanes.rebuildPane();
-
-                        manageSoldLogsTable.button(0).active(false);
-                        manageSoldLogsTable.button(1).active(true);
-                        manageSoldLogsTable.button(2).active(false);
-                        manageSoldLogsTable.button(3).active(false);
-
-
-                    },
-
-                },
-                {
-                    text: 'Current Month',
-                    action: function (e, dt, node, config) {
-                        // manageSoldLogsTable.search('').draw();
-                        // $.fn.dataTable.ext.search = [];
-                        // manageSoldLogsTable.columns(0).search('').draw();
-
-                        // $.fn.dataTable.ext.search = [];
-                        $.fn.dataTable.ext.search.pop();
-                        manageSoldLogsTable.search('').draw();
-                        var tableNode = this.table(0).node();
-
-                        const startOfMonth = moment().startOf('month').format('MMM-DD-YYYY');
-                        const endOfMonth = moment().endOf('month').format('MMM-DD-YYYY');
-                        var date;
-                        $.fn.dataTable.ext.search.push(
-                            function (settings, data, dataIndex) {
-                                if (settings.nTable !== tableNode) {
-                                    return true;
-                                }
-                                var min = startOfMonth;
-                                var max = endOfMonth;
-                                date = data[0];
-                                if (
-                                    (min === null && max === null) ||
-                                    (min === null && date <= max) ||
-                                    (min <= date && max === null) ||
-                                    (min <= date && date <= max)
-                                ) {
-                                    return true;
-                                }
-
-                                return false;
-                            }
-                        );
-
-                        manageSoldLogsTable.draw();  // working
-                        // manageSoldLogsTable.searchPanes.rebuildPane();
-                        manageSoldLogsTable.button(0).active(false);
-                        manageSoldLogsTable.button(1).active(false);
-                        manageSoldLogsTable.button(2).active(true);
-                        manageSoldLogsTable.button(3).active(false);
-
-
-                    },
-
-                },
-                {
-                    text: "Show All",
-                    action: function (e, dt, node, config) {
-                        // $.fn.dataTable.ext.search = [];
-
-                        // manageSoldLogsTable.clear().draw();
-                        $.fn.dataTable.ext.search.pop();
-                        manageSoldLogsTable.search('').draw();
-                        // manageSoldLogsTable.draw();  // working
-                        // manageSoldLogsTable.fnReloadAjax();
-                        // manageSoldLogsTable.searchPanes.rebuildPane();
-                        // manageSoldLogsTable.ajax.reload();
-
-
-                        // $('#datatable-1').DataTable().searchPanes.clearSelections();
-
-                        // manageSoldLogsTable.search('').draw();
-
-
-                        var tableNode = this.table(0).node();
-                        $.fn.dataTable.ext.search.push(
-                            function (settings, data, dataIndex) {
-
-                                // Check that the search is running on the intended table
-                                if (settings.nTable !== tableNode) {
-                                    return true;
-                                }
-                                if (data[0]) {
-                                    return true;
-                                }
-                                return false;
-                            }
-                        );
-                        manageSoldLogsTable.draw();  // working
-
-                        manageSoldLogsTable.ajax.reload(null, false);
-                        // manageSoldLogsTable.searchPanes.rebuildPane();
-
-                        manageSoldLogsTable.button(0).active(false);
-                        manageSoldLogsTable.button(1).active(false);
-                        manageSoldLogsTable.button(2).active(false);
-                        manageSoldLogsTable.button(3).active(true);
-
-
+                    extend: 'copyHtml5',
+                    title: 'Sold Logs',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
                     }
-                }
+                },
+                {
+                    extend: 'excelHtml5',
+                    title: 'Sold Logs',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                    }
+                },
+                {
+                    extend: 'print',
+                    title: 'Sold Logs',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                    }
+                },
             ],
+            // buttons: [
+            //     {
+
+            //         text: 'Today',
+            //         attr: {
+            //             title: 'Today',
+            //             id: 'todayBtn'
+            //         },
+            //         action: function (e, dt, node, config) {
+            //             // $.fn.dataTable.ext.search = [];
+            //             // var date2 = new Date("03-15-2022");
+            //             var date2 = new Date();
+            //             var today = moment(date2).format("MMM-DD-YYYY");
+            //             // manageSoldLogsTable.columns(0).search(today).draw();
+
+            //             $.fn.dataTable.ext.search.pop();
+            //             manageSoldLogsTable.search('').draw();
+            //             var tableNode = this.table(0).node();
+            //             $.fn.dataTable.ext.search.push(
+            //                 function (settings, data, dataIndex) {
+            //                     if (settings.nTable !== tableNode) {
+            //                         return true;
+            //                     }
+            //                     var date = data[0];
+            //                     if (
+            //                         (today === date)
+            //                     ) {
+            //                         return true;
+            //                     }
+            //                     return false
+            //                 }
+            //             )
+            //             manageSoldLogsTable.draw();  // working
+
+            //             // manageSoldLogsTable.searchPanes.rebuildPane();
+
+            //             manageSoldLogsTable.button(0).active(true);
+            //             manageSoldLogsTable.button(1).active(false);
+            //             manageSoldLogsTable.button(2).active(false);
+            //             manageSoldLogsTable.button(3).active(false);
+            //         },
+
+            //     },
+            //     {
+            //         text: 'Yesterday',
+            //         action: function (e, dt, node, config) {
+            //             // $.fn.dataTable.ext.search = [];
+            //             // var date2 = moment(new Date('03-13-2022'), "MMM-DD-YYYY").subtract(1, 'days');
+            //             var date2 = moment(new Date(), "MMM-DD-YYYY").subtract(1, 'days');
+            //             var yesterday = moment(date2).format("MMM-DD-YYYY")
+            //             // console.log(yesterday);
+            //             // manageSoldLogsTable.columns(0).search(yesterday).draw();
+
+
+            //             $.fn.dataTable.ext.search.pop();
+            //             manageSoldLogsTable.search('').draw();
+            //             var tableNode = this.table(0).node();
+            //             $.fn.dataTable.ext.search.push(
+            //                 function (settings, data, dataIndex) {
+            //                     if (settings.nTable !== tableNode) {
+            //                         return true;
+            //                     }
+            //                     var date = data[0];
+            //                     if (
+            //                         (yesterday === date)
+            //                     ) {
+            //                         return true;
+            //                     }
+            //                     return false
+            //                 }
+            //             )
+            //             manageSoldLogsTable.draw();  // working
+            //             // manageSoldLogsTable.searchPanes.rebuildPane();
+
+            //             manageSoldLogsTable.button(0).active(false);
+            //             manageSoldLogsTable.button(1).active(true);
+            //             manageSoldLogsTable.button(2).active(false);
+            //             manageSoldLogsTable.button(3).active(false);
+
+
+            //         },
+
+            //     },
+            //     {
+            //         text: 'Current Month',
+            //         action: function (e, dt, node, config) {
+            //             // manageSoldLogsTable.search('').draw();
+            //             // $.fn.dataTable.ext.search = [];
+            //             // manageSoldLogsTable.columns(0).search('').draw();
+
+            //             // $.fn.dataTable.ext.search = [];
+            //             $.fn.dataTable.ext.search.pop();
+            //             manageSoldLogsTable.search('').draw();
+            //             var tableNode = this.table(0).node();
+
+            //             const startOfMonth = moment().startOf('month').format('MMM-DD-YYYY');
+            //             const endOfMonth = moment().endOf('month').format('MMM-DD-YYYY');
+            //             var date;
+            //             $.fn.dataTable.ext.search.push(
+            //                 function (settings, data, dataIndex) {
+            //                     if (settings.nTable !== tableNode) {
+            //                         return true;
+            //                     }
+            //                     var min = startOfMonth;
+            //                     var max = endOfMonth;
+            //                     date = data[0];
+            //                     if (
+            //                         (min === null && max === null) ||
+            //                         (min === null && date <= max) ||
+            //                         (min <= date && max === null) ||
+            //                         (min <= date && date <= max)
+            //                     ) {
+            //                         return true;
+            //                     }
+
+            //                     return false;
+            //                 }
+            //             );
+
+            //             manageSoldLogsTable.draw();  // working
+            //             // manageSoldLogsTable.searchPanes.rebuildPane();
+            //             manageSoldLogsTable.button(0).active(false);
+            //             manageSoldLogsTable.button(1).active(false);
+            //             manageSoldLogsTable.button(2).active(true);
+            //             manageSoldLogsTable.button(3).active(false);
+
+
+            //         },
+
+            //     },
+            //     {
+            //         text: "Show All",
+            //         action: function (e, dt, node, config) {
+            //             // $.fn.dataTable.ext.search = [];
+
+            //             // manageSoldLogsTable.clear().draw();
+            //             $.fn.dataTable.ext.search.pop();
+            //             manageSoldLogsTable.search('').draw();
+            //             // manageSoldLogsTable.draw();  // working
+            //             // manageSoldLogsTable.fnReloadAjax();
+            //             // manageSoldLogsTable.searchPanes.rebuildPane();
+            //             // manageSoldLogsTable.ajax.reload();
+
+
+            //             // $('#datatable-1').DataTable().searchPanes.clearSelections();
+
+            //             // manageSoldLogsTable.search('').draw();
+
+
+            //             var tableNode = this.table(0).node();
+            //             $.fn.dataTable.ext.search.push(
+            //                 function (settings, data, dataIndex) {
+
+            //                     // Check that the search is running on the intended table
+            //                     if (settings.nTable !== tableNode) {
+            //                         return true;
+            //                     }
+            //                     if (data[0]) {
+            //                         return true;
+            //                     }
+            //                     return false;
+            //                 }
+            //             );
+            //             manageSoldLogsTable.draw();  // working
+
+            //             manageSoldLogsTable.ajax.reload(null, false);
+            //             // manageSoldLogsTable.searchPanes.rebuildPane();
+
+            //             manageSoldLogsTable.button(0).active(false);
+            //             manageSoldLogsTable.button(1).active(false);
+            //             manageSoldLogsTable.button(2).active(false);
+            //             manageSoldLogsTable.button(3).active(true);
+
+
+            //         }
+            //     }
+            // ],
             columnDefs: [
-                { "width": "200px", "targets": 0 },
+                { width: 200, targets: 11 },
+                {
+                    targets: [14, 15 , 16],
+                    visible: false,
+                },
                 {
                     searchPanes: {
                         show: true
                     },
-                    targets: [0, 2, 4, 5, 9],
+                    targets: [3, 4, 5],
 
                 },
                 {
-                    targets: 9,
+                    searchPanes: {
+                        show:true,
+                        preSelect: ['NEW' , 'USED']
+                        // preSelect: ['OTHER']
+                    },
+                    targets: [14]
+                },
+                {
+                    targets: 10,
                     createdCell: function (td, cellData, rowData, row, col) {
                         if (cellData == 'pending') {
                             $(td).html('<span class="badge badge-info badge-pill">Pending</span>');
@@ -250,22 +310,308 @@ $(function () {
                         }
 
                     }
+                },
+                {
+                    targets: [4, 5],
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        if (rowData[15] > 0) {
+                            if (col == 4) {
+                                $(td).addClass('dublicate_left');
+                            }
+                            if (col == 5) {
+                                $(td).addClass('dublicate_right');
+                            }
+                        }
+                    }
                 }
             ],
 
             language: {
+                "infoFiltered": "",
                 searchPanes: {
                     count: "{total} found",
                     countFiltered: "{shown} / {total}"
                 }
             },
-            "order": [[0, "asc"]]
+
+            rowGroup: {
+                dataSrc: 10,
+                startRender: function (rows, group) {
+                    var collapsed = !!collapsedGroups[group];
+
+                    var filteredData = $('#datatable-1').DataTable()
+                        .rows({ search: 'applied' })
+                        .data()
+                        .filter(function (data, index) {
+                            return data[10] == group ? true : false;
+                        });
+                    // setting total numbers
+                    $('#' + group + 'Count').html(filteredData.length);
+
+                    return $('<tr/>')
+                        .append('<td colspan="14">' + group + ' (' + filteredData.length + ')</td>')
+                        .attr('data-name', group)
+                        .toggleClass('collapsed', collapsed);
+                }
+            },
+            "drawCallback": function (settings, start, end, max, total, pre) {
+                var json = this.fnSettings().json;
+                if (json) {
+                    var obj = json.data;
+                    var todayCount = 0, yesterdayCount = 0, AllCount = obj.length, currentMonthCount = 0, pendingCount = 0, deliveredCount = 0, cancelledCount = 0;
+
+                    for (const [key, value] of Object.entries(obj)) {
+                        // console.log(value[0]);
+                        var rowDate = value[0];
+
+                        var date = new Date();
+                        var today = moment(date).format("MMM-DD-YYYY");
+                        if (today === rowDate) {
+                            todayCount += 1;
+                        }
+                        var date2 = moment(new Date(), "MMM-DD-YYYY").subtract(1, 'days');
+                        var yesterday = moment(date2).format("MMM-DD-YYYY")
+
+                        if (yesterday === rowDate) {
+                            yesterdayCount += 1;
+                        }
+
+                        const startOfMonth = moment().startOf('month').format('MMM-DD-YYYY');
+                        const endOfMonth = moment().endOf('month').format('MMM-DD-YYYY');
+
+
+                        var min = startOfMonth;
+                        var max = endOfMonth;
+                        if (
+                            (min === null && max === null) ||
+                            (min === null && rowDate <= max) ||
+                            (min <= rowDate && max === null) ||
+                            (min <= rowDate && rowDate <= max)
+                        ) {
+                            currentMonthCount += 1;
+                        }
+
+                    }
+
+
+                    $('#datatable-1').DataTable()
+                        .rows({ search: 'applied' })
+                        .data()
+                        .filter(function (data, index) {
+                            if (data[10] == 'pending') {
+                                pendingCount += 1;
+                            } else if (data[10] == 'delivered') {
+                                deliveredCount += 1;
+                            } else if (data[10] == 'cancelled') {
+                                cancelledCount += 1;
+                            }
+                            return true;
+                        });
+
+                    $(`#todayCount`).html(todayCount);
+                    $(`#yesterdayCount`).html(yesterdayCount);
+                    $(`#currentMonthCount`).html(currentMonthCount);
+                    $(`#AllCount`).html(AllCount);
+                    $('#pendingCount').html(pendingCount);
+                    $('#deliveredCount').html(deliveredCount);
+                    $('#cancelledCount').html(cancelledCount);
+
+
+                }
+            },
+            createdRow: function (row, data, dataIndex) {
+                $(row).attr({
+                    "data-toggle": "modal",
+                    "data-target": "#showDetails",
+                    "onclick": "showDetails(" + data[16] + ")"
+                });
+            },
+            "order": [[10, "desc"], [3, "asc"], [0, "asc"]]
         });
 
-        manageSoldLogsTable.button(0).active(false);
-        manageSoldLogsTable.button(1).active(false);
-        manageSoldLogsTable.button(2).active(false);
-        manageSoldLogsTable.button(3).active(true);
+
+        writeStatusHTML();
+
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const filter = urlParams.get('filter');
+
+        if (filter == 'today') {
+            $('#todayBtn').click();
+            $('#searchStatusAll').click();
+        } else {
+            $('#modAll').click();
+            $('#searchStatusAll').click();
+        }
+
+
+        // --------------------- checkboxes query --------------------------------------
+
+
+        $.fn.dataTable.ext.search.push(
+            function (settings, searchData, index, rowData, counter) {
+                var tableNode = manageSoldLogsTable.table().node();
+
+
+                var dateType = $('input:radio[name="radio-date"]:checked').map(function () {
+                    if (this.value !== "") {
+                        return this.value;
+                    }
+                }).get();
+
+                if (dateType.length === 0) {
+                    return true;
+                }
+
+                if (dateType == 'all') {
+                    return true;
+                } else if (dateType == 'today') {
+                    var date2 = new Date();
+                    var today = moment(date2).format("MMM-DD-YYYY");
+                    if (today === searchData[0]) {
+                        return true;
+                    }
+
+                } else if (dateType == 'yesterday') {
+                    var date2 = moment(new Date(), "MMM-DD-YYYY").subtract(1, 'days');
+                    var yesterday = moment(date2).format("MMM-DD-YYYY")
+                    if (yesterday === searchData[0]) {
+                        return true;
+                    }
+                } else if (dateType == 'currentMonth') {
+                    const startOfMonth = moment().startOf('month').format('MMM-DD-YYYY');
+                    const endOfMonth = moment().endOf('month').format('MMM-DD-YYYY');
+
+                    var date = searchData[0];
+                    var min = startOfMonth;
+                    var max = endOfMonth;
+                    if (
+                        (min === null && max === null) ||
+                        (min === null && date <= max) ||
+                        (min <= date && max === null) ||
+                        (min <= date && date <= max)
+                    ) {
+                        return true;
+                    }
+                }
+
+
+
+                if (settings.nTable !== tableNode) {
+                    return true;
+                }
+
+                return false;
+            }
+        );
+
+
+
+        $.fn.dataTable.ext.search.push(
+            function (settings, searchData, index, rowData, counter) {
+                var tableNode = manageSoldLogsTable.table().node();
+
+                var searchStatus = $('input:radio[name="searchStatus"]:checked').map(function () {
+                    if (this.value !== "") {
+                        return this.value;
+                    }
+                }).get();
+
+                if (searchStatus.length === 0) {
+                    return true;
+                }
+
+                if (searchStatus.indexOf(searchData[10]) !== -1) {
+                    return true;
+                }
+                if (settings.nTable !== tableNode) {
+                    return true;
+                }
+                return false;
+            }
+        );
+
+
+        $('input:radio').on('change', function () {
+            $('#datatable-1').block({
+                message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+                timeout: 1e3
+            });
+            manageSoldLogsTable.draw();  // working
+            manageSoldLogsTable.searchPanes.rebuildPane();
+        });
+
+
+
+
+        $('input[name="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('MMM-DD-YYYY') + ' / ' + picker.endDate.format('MMM-DD-YYYY'));
+            applyDateRageFilter(picker.startDate.format('MMM-DD-YYYY'), picker.endDate.format('MMM-DD-YYYY'));
+            $('#datatable-1').block({
+                message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+                timeout: 1e3
+            });
+            manageSoldLogsTable.draw();  // working
+            manageSoldLogsTable.searchPanes.rebuildPane();
+        });
+
+        $('input[name="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            applyDateRageFilter();
+            $('#datatable-1').block({
+                message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+                timeout: 1e3
+            });
+            manageSoldLogsTable.draw();  // working
+            manageSoldLogsTable.searchPanes.rebuildPane();
+        });
+
+
+
+        $("#updateNotesForm").validate({
+
+            submitHandler: function (form, event) {
+                // return true;
+                event.preventDefault();
+                // $('[disabled]').removeAttr('disabled');
+                var form = $('#updateNotesForm');
+                $.ajax({
+                    type: "POST",
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response);
+
+                        if (response.success == true) {
+                            e1.fire({
+                                position: "top-end",
+                                icon: "success",
+                                title: response.messages,
+                                showConfirmButton: !1,
+                                timer: 2500,
+                            })
+
+
+                        } else {
+                            e1.fire({
+                                position: "top-end",
+                                icon: "error",
+                                title: response.messages,
+                                showConfirmButton: !1,
+                                timer: 2500
+                            })
+                        }
+
+
+                    }
+                });
+
+                return false;
+
+            }
+        });
+
 
 
     } else if (divRequest == 'edit') {
@@ -274,6 +620,7 @@ $(function () {
             loadStock();
             loadSaleConsultant();
             loadSaleManager();
+            loadFinanceManager();
 
             var saleId = $('#saleId').val();
             console.log(saleId);
@@ -287,7 +634,7 @@ $(function () {
                 data: { id: saleId },
                 dataType: 'json',
                 success: function (response) {
-                    // console.log(response);
+                    console.log(response);
 
                     // modal loading
                     $('.spinner-grow').addClass('d-none');
@@ -295,7 +642,12 @@ $(function () {
                     $('.showResult').removeClass('d-none');
 
                     // modal footer
-                    $('#saleDate').datetimepicker('update', response.date)
+                    $('#saleDate').datetimepicker('update', response.date);
+
+                    if (response.reconcileDate != "") {
+                        $('#reconcileDate').datepicker('update', moment(response.reconcileDate).format('MM-DD-YYYY'));
+                    }
+
                     $('#' + response.sale_status).attr("checked", "checked");
                     $('#' + response.sale_status).parent().addClass('active')
 
@@ -314,6 +666,13 @@ $(function () {
                         $('#grossDiv').addClass('v-none');
                     }
                     $('#salesPerson').val(response.sales_consultant);
+
+                    $('#financeManager').val(response.finance_manager);
+                    if (response.deal_type) {
+                        $('#' + response.deal_type).attr("checked", "checked");
+                        $('#' + response.deal_type).parent().addClass('active');
+                    }
+
                     $('#dealNote').val(response.deal_notes);
                     $('#fname').val(response.fname);
                     $('#mname').val(response.mname);
@@ -327,6 +686,16 @@ $(function () {
                     $('#mobile').val(response.mobile);
                     $('#altContact').val(response.altcontact);
                     $('#email').val(response.email);
+
+                    $('#cbAddress1').val(response.cb_address1);
+                    $('#cbAddress2').val(response.cb_address2);
+                    $('#cbCity').val(response.cb_city);
+                    $('#cbCountry').val(response.cb_country);
+                    $('#cbZipCode').val(response.cb_zipcode);
+                    $('#cbMobile').val(response.cb_mobile);
+                    $('#cbAltContact').val(response.cb_altcontact);
+                    $('#cbEmail').val(response.cb_email);
+
                     $('#profit').val(response.gross);
 
                     var detailsDiv = `${response.stocktype} ${response.year} ${response.make} ${response.model} \n Vin: ${response.vin} \n Mileage: ${response.mileage} \n Age: ${response.age} \n Lot: ${response.lot} \n Balance: ${response.balance}`;
@@ -456,42 +825,41 @@ $(function () {
                     // return true;
                     event.preventDefault();
 
-                    var c = confirm('Do you really want to save this?');
-                    if (c == true) {
-                        $('[disabled]').removeAttr('disabled');
-                        var form = $('#editSaleForm');
-                        $.ajax({
-                            type: "POST",
-                            url: form.attr('action'),
-                            data: form.serialize(),
-                            dataType: 'json',
-                            success: function (response) {
-                                console.log(response);
 
-                                if (response.success == true) {
-                                    e1.fire({
-                                        position: "top-end",
-                                        icon: "success",
-                                        title: response.messages,
-                                        showConfirmButton: !1,
-                                        timer: 2500,
-                                    })
+                    $('[disabled]').removeAttr('disabled');
+                    var form = $('#editSaleForm');
+                    $.ajax({
+                        type: "POST",
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        dataType: 'json',
+                        success: function (response) {
+                            console.log(response);
 
-
-                                } else {
-                                    e1.fire({
-                                        position: "top-end",
-                                        icon: "error",
-                                        title: response.messages,
-                                        showConfirmButton: !1,
-                                        timer: 2500
-                                    })
-                                }
+                            if (response.success == true) {
+                                e1.fire({
+                                    position: "top-end",
+                                    icon: "success",
+                                    title: response.messages,
+                                    showConfirmButton: !1,
+                                    timer: 2500,
+                                })
 
 
+                            } else {
+                                e1.fire({
+                                    position: "top-end",
+                                    icon: "error",
+                                    title: response.messages,
+                                    showConfirmButton: !1,
+                                    timer: 2500
+                                })
                             }
-                        });
-                    }
+
+
+                        }
+                    });
+
 
                     return false;
 
@@ -506,6 +874,53 @@ $(function () {
 
 });
 
+
+function applyDateRageFilter(startOfMonth = "", endOfMonth = "") {
+
+    // console.log(startOfMonth, endOfMonth);
+    $.fn.dataTable.ext.search.pop();
+    manageSoldLogsTable.search('').draw();
+    $.fn.dataTable.ext.search.push(
+        function (settings, searchData, index, rowData, counter) {
+            var tableNode = manageSoldLogsTable.table().node();
+
+            // var dateObject = $('input.dateRangePicker').map(function () {
+            //     if (this.value !== "") {
+            //         return this.value;
+            //     }
+            // }).get();
+            // console.log(dateObject);
+
+            if (startOfMonth == "" || endOfMonth == "") {
+                return true;
+            }
+
+
+            // const startOfMonth = moment(dateObject[0]).format('MMM-DD-YYYY');
+            // const endOfMonth = moment(dateObject[1]).format('MMM-DD-YYYY');
+
+            // console.log(startOfMonth);
+            // console.log(endOfMonth);
+
+            var date = searchData[0];
+            var min = startOfMonth;
+            var max = endOfMonth;
+            if (
+                (min === null && max === null) ||
+                (min === null && date <= max) ||
+                (min <= date && max === null) ||
+                (min <= date && date <= max)
+            ) {
+                return true;
+            }
+
+            if (settings.nTable !== tableNode) {
+                return true;
+            }
+            return false;
+        }
+    );
+}
 
 function fetchSelectedInvForSearch(id = null) {
     // console.log(id);
@@ -527,6 +942,30 @@ function fetchSelectedInvForSearch(id = null) {
 }
 
 
+
+function writeStatusHTML() {
+    document.getElementById('statusFilterDiv').innerHTML = `<div class="row">
+        <div class="col-md-12">
+            <div id="year">
+                <div class="btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-outline-primary">
+                        <input type="radio" name="searchStatus" id="searchStatusAll" value=""> ALL
+                    </label>
+                    <label class="btn btn-outline-info">
+                        <input type="radio" name="searchStatus" value="pending"> Pending <span class="badge badge-lg p-1" id="pendingCount" ></span>
+                    </label>
+                    <label class="btn btn-outline-success">
+                        <input type="radio" name="searchStatus" value="delivered"> Delivered <span class="badge badge-lg p-1" id="deliveredCount" ></span>
+                    </label>
+                    <label class="btn btn-outline-danger">
+                        <input type="radio" name="searchStatus" value="cancelled"> Cancelled <span class="badge badge-lg p-0" id="cancelledCount" ></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
 function toggleFilterClass() {
     $('.dtsp-panes').toggle();
 }
@@ -544,6 +983,8 @@ function showDetails(id = null) {
             dataType: 'json',
             success: function (response) {
 
+                console.log(response);
+
                 $('.spinner-grow').addClass('d-none');
                 // modal result
                 $('.showResult').removeClass('d-none');
@@ -551,6 +992,11 @@ function showDetails(id = null) {
                 $('.modal-footer').removeClass('d-none');
 
                 $('#saleDate').datetimepicker('update', response.date)
+
+                if (response.reconcileDate != "") {
+                    $('#reconcileDate').datepicker('update', moment(response.reconcileDate).format('MM-DD-YYYY'));
+                }
+                $('#submittedBy').val(response.submittedBy);
 
                 if (response.sale_status == 'pending') {
                     $('#statusDiv').html(`
@@ -590,10 +1036,20 @@ function showDetails(id = null) {
                 }
 
 
+                $('#sale_id').val(response.sale_id);
                 $('#stockId').val(response.stockno);
                 $('#salesPerson').val(response.salesConsultant);
+
+                $('#financeManager').val(response.financeManager);
+                $('#dealType').val(response.deal_type);
+
                 $('#dealNote').val(response.deal_notes);
                 $('#iscertified').val((response.certified == "on" ? "YES" : "NO"));
+
+                $('#consultantNote').val(response.consultant_notes);
+                $('#thankyouCard').prop('checked', response.thankyou_cards == 'on' ? true : false);
+
+
                 $('#fname').val(response.fname);
                 $('#mname').val(response.mname);
                 $('#lname').val(response.lname);
@@ -606,6 +1062,15 @@ function showDetails(id = null) {
                 $('#mobile').val(response.mobile);
                 $('#altContact').val(response.altcontact);
                 $('#email').val(response.email);
+
+                $('#cbAddress1').val(response.cb_address1);
+                $('#cbAddress2').val(response.cb_address2);
+                $('#cbCity').val(response.cb_city);
+                $('#cbCountry').val(response.cb_country);
+                $('#cbZipCode').val(response.cb_zipcode);
+                $('#cbMobile').val(response.cb_mobile);
+                $('#cbAltContact').val(response.cb_altcontact);
+                $('#cbEmail').val(response.cb_email);
 
                 setTimeout(() => {
                     autosize.update($(".autosize"));
@@ -628,7 +1093,12 @@ function showDetails(id = null) {
     }
 
 }
-
+function changeReconcile() {
+    if (!$('#reconcileDate').attr('disabled')) {
+        $('#reconcileDate').val('')
+    }
+    $('#reconcileDate').attr('disabled', function (_, attr) { return !attr });
+}
 function removeSale(saleId = null) {
     if (saleId) {
         e1.fire({
@@ -1000,4 +1470,23 @@ function chnageStyle(field) {
     }
 
 
+}
+
+function loadFinanceManager() {
+    var finance_manager_id = 64; //finance manager role id in database
+    $.ajax({
+        url: '../php_action/fetchUsersWithRoleForSearch.php',
+        type: "POST",
+        dataType: 'json',
+        data: { id: finance_manager_id },
+        success: function (response) {
+            var array = response.data;
+            var selectBoxs = document.getElementById('financeManager');
+            for (var i = 0; i < array.length; i++) {
+                var item = array[i];
+                selectBoxs.innerHTML += `<option value="${item[0]}" title="${item[1]}">${item[1]} || ${item[2]} </option>`;
+            }
+            $('.selectpicker').selectpicker('refresh');
+        }
+    });
 }

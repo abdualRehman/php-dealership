@@ -18,7 +18,6 @@ $(function () {
 
             responsive: !0,
 
-
             'ajax': '../php_action/fetchMatrixs.php',
 
             // working.... with both
@@ -43,19 +42,36 @@ $(function () {
                     searchPanes: {
                         show: true
                     },
-                    targets: [0, 1,3]
+                    targets: [0, 1, 3]
                 },
                 // for hide columns as defaul
-                { 
+                {
                     targets: [3],
-                    visible: false, 
+                    visible: false,
                 },
+                {
+                    targets: 8,
+                    className: 'manBDC',
+                },
+                {
+                    targets: [0, 1, 2],
+                    className:'font-weight-bolder'
+                }
+                // {
+                //     targets: [0],
+                //     render: function (data, type, row, meta) {
+                //         return `<a href='#' data-toggle="modal" data-target="#showDetails" onclick="showDetails(${row[9]})" >${data}</a>`;
+                //     },
+                // }
 
             ],
-            // select: {
-            //     'style': 'multi', // 'single', 'multi', 'os', 'multi+shift'
-            //     selector: 'td:first-child',
-            // },
+            createdRow: function (row, data, dataIndex) {
+                $(row).attr({
+                    "data-toggle": "modal",
+                    "data-target": "#showDetails",
+                    "onclick": "showDetails(" + data[9] + ")"
+                });
+            },
             language: {
                 searchPanes: {
                     count: "{total} found",
@@ -65,41 +81,6 @@ $(function () {
             "order": [[1, "asc"]]
         })
 
-
-        $('#MyTableCheckAllButton').click(function () {
-            if (manageInvTable.rows({
-                selected: true
-            }).count() > 0) {
-                manageInvTable.rows().deselect();
-                return;
-            }
-
-            manageInvTable.rows().select();
-        });
-
-        manageInvTable.on('select deselect', function (e, dt, type, indexes) {
-            if (type === 'row') {
-                // We may use dt instead of manageInvTable to have the freshest data.
-                if (dt.rows().count() === dt.rows({
-                    selected: true
-                }).count()) {
-                    // Deselect all items button.
-                    $('#MyTableCheckAllButton i').attr('class', 'far fa-check-square');
-                    return;
-                }
-
-                if (dt.rows({
-                    selected: true
-                }).count() === 0) {
-                    // Select all items button.
-                    $('#MyTableCheckAllButton i').attr('class', 'far fa-square');
-                    return;
-                }
-
-                // Deselect some items button.
-                $('#MyTableCheckAllButton i').attr('class', 'far fa-minus-square');
-            }
-        });
 
 
         // --------------------- checkboxes query --------------------------------------
@@ -164,123 +145,16 @@ $(function () {
 
 
         $('input:radio').on('change', function () {
-
-
             $('#datatable-1').block({
                 message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
                 timeout: 1e3
-            })
-
+            });
             manageInvTable.draw();
             manageInvTable.searchPanes.rebuildPane();
         });
-
-
-
     }
-    // else if (divRequest == "add") {
-    //     $(function () {
-    //         $("#importMatrixForm").validate({
-    //             rules: {
-    //                 excelFile: {
-    //                     required: true,
-    //                 }
-    //             },
-    //             messages: {
-    //                 excelFile: {
-    //                     required: "File must be required",
-    //                 }
-    //             },
-    //             submitHandler: function (form, event) {
-    //                 // return true;
-    //                 event.preventDefault();
-
-    //                 var allowedFiles = [".xlsx", ".xls", ".csv"];
-    //                 var fileUpload = $("#excelFile");
-    //                 var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(" + allowedFiles.join('|') + ")$");
-    //                 if (!regex.test(fileUpload.val().toLowerCase())) {
-    //                     e1.fire("Files having extensions: " + allowedFiles.join(', ') + " only.");
-    //                     return false;
-    //                 }
-
-
-    //                 var form = $('#importMatrixForm');
-    //                 var fd = new FormData(document.getElementById("importMatrixForm"));
-    //                 fd.append("CustomField", "This is some extra data");
-
-
-    //                 $.ajax({
-    //                     async: false,
-    //                     url: form.attr('action'),
-    //                     type: 'POST',
-    //                     data: fd,
-    //                     contentType: false,
-    //                     processData: false,
-    //                     success: function (response) {
-    //                         console.log(response);
-
-
-    //                         // var ne = window.open('', 'title');
-    //                         // ne.document.write(response);
-
-    //                         // response = JSON.parse(response);
-
-
-    //                         // console.log(response);
-    //                         // console.log(response.success);
-    //                         if (response.success == true) {
-
-    //                             e1.fire({
-    //                                 position: "top-end",
-    //                                 icon: "success",
-    //                                 title: response.messages,
-    //                                 showConfirmButton: !1,
-    //                                 timer: 2500,
-    //                             })
-    //                             form[0].reset();
-
-    //                             if (response.erorStock.length > 0) {
-    //                                 var i = 0;
-    //                                 $('#errorDiv').removeClass('d-none');
-    //                                 // console.log(response.erorStock);
-    //                                 while (response.erorStock[i]) {
-    //                                     console.log(response.erorStock[i]);
-    //                                     document.getElementById('errorList').innerHTML += `
-    //                                         <span class="list-group-item list-group-item-danger">
-    //                                         ${response.erorStock[i]}
-    //                                     </span> `;
-    //                                     i++;
-    //                                 }
-
-    //                             }
-
-    //                         } else {
-
-    //                             e1.fire({
-    //                                 position: "top-end",
-    //                                 icon: "error",
-    //                                 title: response.erorStock,
-    //                                 showConfirmButton: !1,
-    //                                 timer: 2500
-    //                             })
-    //                         }
-
-
-    //                     },
-    //                     error: function (e) {
-    //                         console.log(e);
-    //                     }
-    //                 });
-    //                 return false;
-    //                 // return true;
-
-    //             }
-    //         })
-    //     })
-    // }
 
 });
-
 function showDetails(id = null) {
     if (id) {
         $('.spinner-grow').removeClass('d-none');
@@ -326,41 +200,41 @@ function showDetails(id = null) {
 
                 if (days >= 0) {
                     f_status = true;
-                }else{
-                     f_status = false;                    
+                } else {
+                    f_status = false;
                 }
-                
+
                 var lend = moment(response['lease_expire']); // another date
                 var lduration = moment.duration(lend.diff(now));
                 var ldays = lduration.asDays();
                 ldays = Math.ceil(ldays);
-                
+
                 if (ldays >= 0) {
                     l_status = true;
-                }else{
-                    l_status = false;                    
+                } else {
+                    l_status = false;
                 }
 
 
 
-                $('#f_24_36').html(( f_status && response['f_24-36']) ? response['f_24-36'] : "");
+                $('#f_24_36').html((f_status && response['f_24-36']) ? response['f_24-36'] : "");
                 $('#f_37_48').html((f_status && response['f_37-48']) ? response['f_37-48'] : "");
                 $('#f_49_60').html((f_status && response['f_49-60']) ? response['f_49-60'] : "");
                 $('#f_61_72').html((f_status && response['f_61-72']) ? response['f_61-72'] : "");
 
 
-                $('#f_610_24_36').html(( f_status && response['f_659_610_24-36']) ? response['f_659_610_24-36'] : "");
-                $('#f_610_37_60').html(( f_status && response['f_659_610_37-60']) ? response['f_659_610_37-60'] : "");
-                $('#f_610_61_72').html(( f_status && response['f_659_610_61-72']) ? response['f_659_610_61-72'] : "");
-                $('#f_expire').html(( response['f_expire']) ? moment(response['f_expire']).format('MM-DD-YYYY') : "");
+                $('#f_610_24_36').html((f_status && response['f_659_610_24-36']) ? response['f_659_610_24-36'] : "");
+                $('#f_610_37_60').html((f_status && response['f_659_610_37-60']) ? response['f_659_610_37-60'] : "");
+                $('#f_610_61_72').html((f_status && response['f_659_610_61-72']) ? response['f_659_610_61-72'] : "");
+                $('#f_expire').html((response['f_expire']) ? moment(response['f_expire']).format('MM-DD-YYYY') : "");
 
-                $('#l_onePay').html(( l_status && response['lease_one_pay_660']) ? response['lease_one_pay_660'] : "");
-                $('#l_24_36').html(( l_status && response['lease_660']) ? response['lease_660'] : "");
+                $('#l_onePay').html((l_status && response['lease_one_pay_660']) ? response['lease_one_pay_660'] : "");
+                $('#l_24_36').html((l_status && response['lease_660']) ? response['lease_660'] : "");
 
 
-                $('#l_610_onePay').html(( l_status && response['lease_one_pay_659_610']) ? response['lease_one_pay_659_610'] : "");
-                $('#l_610_24_36').html(( l_status && response['lease_659_610']) ? response['lease_659_610'] : "");
-                $('#l_expire').html(( response['lease_expire']) ? moment(response['lease_expire']).format('MM-DD-YYYY') : "");
+                $('#l_610_onePay').html((l_status && response['lease_one_pay_659_610']) ? response['lease_one_pay_659_610'] : "");
+                $('#l_610_24_36').html((l_status && response['lease_659_610']) ? response['lease_659_610'] : "");
+                $('#l_expire').html((response['lease_expire']) ? moment(response['lease_expire']).format('MM-DD-YYYY') : "");
 
 
                 var miles = 24;
@@ -408,3 +282,13 @@ function toggleFilterClass() {
 function clearErrorsList() {
     $('#errorList').html('');
 }
+
+function showError() {
+    Swal.fire("Not Found!", "This File is not uploaded yet.", "error");
+}
+
+function loadPDF(URL) {
+    var nURL = 'http://docs.google.com/gview?url=' + URL + '&embedded=true';
+    window.open(nURL, 'pdf'); // _blank
+}
+

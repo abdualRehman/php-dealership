@@ -30,31 +30,20 @@ $(function () {
                 required: !0,
             },
             modelno: {
-                required: !0,
-            },
-            color: {
-                required: !0,
-            },
-            lot: {
-                required: !0,
-            },
-            vin: {
-                required: !0,
+                required: function (element) {
+                    return ($('#stockType').val() == 'NEW') ? true : false;
+                },
             },
             mileage: {
-                required: !0,
                 number: !0,
             },
             age: {
-                required: !0,
                 number: !0,
             },
             balance: {
-                required: !0,
                 number: !0,
             },
             retail: {
-                required: !0,
                 number: !0,
             },
             stockType: {
@@ -70,19 +59,15 @@ $(function () {
                 number: "Please enter a valid number",
             },
             mileage: {
-                required: "This field is required.",
                 number: "Please enter a valid number",
             },
             age: {
-                required: "This field is required.",
                 number: "Please enter a valid number",
             },
             balance: {
-                required: "This field is required.",
                 number: "Please enter a valid number",
             },
             retail: {
-                required: "This field is required.",
                 number: "Please enter a valid number",
             }
 
@@ -90,7 +75,7 @@ $(function () {
         },
         submitHandler: function (form, event) {
             event.preventDefault();
-            
+
             var form = $('#addInvForm');
             $.ajax({
                 type: "POST",
@@ -151,7 +136,7 @@ $(function () {
                 return false;
             }
 
-            
+
             var form = $('#importInvForm');
             var fd = new FormData(document.getElementById("importInvForm"));
             fd.append("CustomField", "This is some extra data");
@@ -178,11 +163,11 @@ $(function () {
                         })
                         form[0].reset();
 
-                        if(response.erorStock.length > 0){
+                        if (response.erorStock.length > 0) {
                             var i = 0;
                             $('#errorDiv').removeClass('d-none');
                             // console.log(response.erorStock);
-                            while (response.erorStock[i] ) {
+                            while (response.erorStock[i]) {
                                 console.log(response.erorStock[i]);
                                 document.getElementById('errorList').innerHTML += `
                                     <span class="list-group-item list-group-item-danger">
@@ -190,7 +175,7 @@ $(function () {
                                 </span> `;
                                 i++;
                             }
-                          
+
                         }
 
                     } else {
@@ -203,7 +188,7 @@ $(function () {
                         })
                     }
 
-                    
+
                 }
             });
             return false;
@@ -211,6 +196,6 @@ $(function () {
         }
     })
 });
-function clearErrorsList(){
+function clearErrorsList() {
     $('#errorList').html('');
 }
