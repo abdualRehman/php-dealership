@@ -30,6 +30,8 @@ toastr.options = {
 $(function () {
 
 
+    $('#travelTime').timepicker({ 'timeFormat': 'H:i', 'showDuration': true });
+    $('#roundTrip').timepicker({ 'timeFormat': 'H:i', 'showDuration': true });
     autosize($(".autosize"));
 
     manageDataTable = $("#datatable-1").DataTable({
@@ -49,6 +51,10 @@ $(function () {
                 },
                 targets: [0, 1, 2, 3],
             },
+            {
+                targets: [9],
+                visible: false,
+            },
         ],
 
         language: {
@@ -57,7 +63,74 @@ $(function () {
                 countFiltered: "{shown} / {total}"
             }
         },
-    })
+        createdRow: function (row, data, dataIndex) {
+            if ($('#isEditAllowed').val() == "true") {
+                // $(row).attr({
+                //     "data-toggle": "modal",
+                //     "data-target": "#editDetails",
+                //     "onclick": "editDetails(" + data[9] + ")"
+                // });
+                $(row).children().not(':last-child').attr({
+                    "data-toggle": "modal",
+                    "data-target": "#editDetails",
+                    "onclick": "editDetails(" + data[9] + ")"
+                });
+            }
+        },
+    });
+
+    // --------------------- checkboxes query --------------------------------------
+
+    $('#modAll').click();
+    $.fn.dataTable.ext.search.push(
+        function (settings, searchData, index, rowData, counter) {
+            var tableNode = manageDataTable.table().node();
+
+
+            var dateType = $('input:radio[name="radio-status"]:checked').map(function () {
+                if (this.value !== "") {
+                    return this.value;
+                }
+            }).get();
+
+            if (dateType.length === 0) {
+                return true;
+            }
+
+            if (dateType == 'all') {
+                return true;
+            } else if (dateType == 'pending') {
+                if (searchData[7] == 'Pending') {
+                    return true;
+                }
+            } else if (dateType == 'paperWork') {
+                if (searchData[7] == 'Paperwork Done') {
+                    return true;
+                }
+            } else if (dateType == 'completed') {
+                if (searchData[7] == 'Completed') {
+                    return true;
+                }
+            }
+
+            if (settings.nTable !== tableNode) {
+                return true;
+            }
+
+            return false;
+        }
+    );
+
+    $('input:radio').on('change', function () {
+        $('#datatable-1').block({
+            message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+            timeout: 1e3
+        });
+        manageDataTable.draw();  // working
+        manageDataTable.searchPanes.rebuildPane();
+    });
+
+
 
     function requireSelectBox(params) {
         var id = params.id;
@@ -88,19 +161,18 @@ $(function () {
             "fromDealer": {
                 required: requireSelectBox,
             },
-            "vehicleIn": {
-                required: !0
-            },
-            "stockIn": {
-                required: !0,
-            },
-            "vehicleOut": {
-                required: !0
-            },
-            "stockOut": {
+            // "vehicleIn": {
+            //     required: !0
+            // },
+            // "stockIn": {
+            //     required: !0,
+            // },
+            // "vehicleOut": {
+            //     required: !0
+            // },
+            "salesPerson": {
                 required: requireSelectBox,
             },
-
             "invIn": {
                 number: !0,
             },
@@ -139,43 +211,44 @@ $(function () {
         submitHandler: function (form, e) {
             // return true;
             e.preventDefault();
-            var c = confirm('Do you really want to save this?');
-            if (c) {
-                var form = $('#addNewSwap');
-                $.ajax({
-                    type: "POST",
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response);
 
+            var form = $('#addNewSwap');
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
 
-                        if (response.success == true) {
-                            e1.fire({
-                                position: "center",
-                                icon: "success",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 1500
-                            })
-                            manageDataTable.ajax.reload(null, false);
-                        } else {
-                            e1.fire({
-                                // position: "center",
-                                icon: "error",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 2500
-                            })
+                    if (response.success == true) {
 
-                            // form[0].reset();
-                        }
+                        e1.fire({
+                            position: "center",
+                            icon: "success",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 1500
+                        });
 
+                        $("#createBtnPrint").attr("onclick", `printDetails(${response.id})`);
+                        manageDataTable.ajax.reload(null, false);
+                    } else {
+                        e1.fire({
+                            // position: "center",
+                            icon: "error",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500
+                        })
 
+                        // form[0].reset();
                     }
-                });
-            }
+
+
+                }
+            });
+
             return false;
 
         }
@@ -197,16 +270,16 @@ $(function () {
             "efromDealer": {
                 required: requireSelectBox,
             },
-            "evehicleIn": {
-                required: !0
-            },
-            "estockIn": {
-                required: !0,
-            },
-            "evehicleOut": {
-                required: !0
-            },
-            "estockOut": {
+            // "evehicleIn": {
+            //     required: !0
+            // },
+            // "estockIn": {
+            //     required: !0,
+            // },
+            // "evehicleOut": {
+            //     required: !0
+            // },
+            "esalesPerson": {
                 required: requireSelectBox,
             },
             "einvIn": {
@@ -244,86 +317,167 @@ $(function () {
         submitHandler: function (form, e) {
             // return true
             e.preventDefault();
-            var c = confirm('Do you really want to save this?');
-            if (c) {
-                var form = $('#editSwapForm');
-                $.ajax({
-                    type: "POST",
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response);
 
-                        if (response.success == true) {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "success",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 1500
-                            })
-                            // form[0].reset();
-                            manageDataTable.ajax.reload(null, false);
+            var form = $('#editSwapForm');
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
 
-                        } else {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "error",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 2500
-                            })
+                    if (response.success == true) {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 1500
+                        })
+                        // form[0].reset();
+                        manageDataTable.ajax.reload(null, false);
 
-                        }
-
+                    } else {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500
+                        })
 
                     }
-                });
-            }
+
+
+                }
+            });
+
             return false;
 
         }
 
     })
 
+    $("#addNewSwapLocation").validate({
+        ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
+        rules: {
+            dealerno: {
+                required: !0,
+            },
+            dealership: {
+                required: !0,
+            },
+            address: {
+                required: !0,
+            },
+            city: {
+                required: !0,
+            },
+            state: {
+                required: function (params) {
+                    if (params.value == 0) {
+                        params.classList.add('is-invalid');
+                        $('#state').selectpicker('refresh');
+                        params.classList.add('is-invalid');
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            },
+            zip: {
+                required: !0,
+            },
+            phone: {
+                required: !0,
+            },
+            fax: {
+                required: !0,
+            },
+
+        },
+
+        submitHandler: function (form, event) {
+            event.preventDefault();
+
+            var form = $('#addNewSwapLocation');
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
+
+                    if (response.success == true) {
+
+                        e1.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500,
+                        })
+
+                        form[0].reset();
+                        loadLocations();
+
+                    } else {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500
+                        })
+                    }
+
+
+                }
+            });
+
+            return false;
+
+        }
+    });
+
     loadStock();
     loadLocations();
+    loadSaleConsultant();
 
-})
+});
 
 
-$('.vehicleDetails').on('change', function () {
-    if ($('.vehicleDetails:checked').length == $('.vehicleDetails').length) {
-        var selectBox = document.getElementById('status');
+
+// $('.vehicleDetails').on('change', function () {
+//     if ($('.vehicleDetails:checked').length == $('.vehicleDetails').length) {
+//         var selectBox = document.getElementById('status');
+//         selectBox.innerHTML += `<option value="completed">Completed</option>`;
+//     } else {
+//         $("#status option[value='completed']").remove();
+//     }
+//     $('.selectpicker').selectpicker('refresh');
+// });
+
+function updateStatus() {
+    var selectBox = document.getElementById('status');
+    var value = selectBox.value;
+    if (($('.vehicleIn:checked').length == $('.vehicleIn').length) || ($('.vehicleOut:checked').length == $('.vehicleOut').length)) {
+        $("#status option[value='completed']").remove();
         selectBox.innerHTML += `<option value="completed">Completed</option>`;
     } else {
         $("#status option[value='completed']").remove();
     }
+
+    $('select[name=status]').val(value);
     $('.selectpicker').selectpicker('refresh');
-});
-
-$('.vehicleIn').on('change', function () {
-    if ($('.vehicleIn:checked').length == $('.vehicleIn').length) {
-        $('#inDetails').removeClass('d-none');
-    } else {
-        $('#inDetails').addClass('d-none');
-    }
-});
-
-$('.vehicleOut').on('change', function () {
-    if ($('.vehicleOut:checked').length == $('.vehicleOut').length) {
-        $('#outDetails').removeClass('d-none');
-    } else {
-        $('#outDetails').addClass('d-none');
-    }
-});
-
-
-$('.evehicleDetails').on('change', function () {
+}
+function updateEditStatus() {
     var selectBox = document.getElementById('estatus');
     var value = selectBox.value;
-    if ($('.evehicleDetails:checked').length == $('.evehicleDetails').length) {
+
+    if (($('.evehicleIn:checked').length == $('.evehicleIn').length) || ($('.evehicleOut:checked').length == $('.evehicleOut').length)) {
         $("#estatus option[value='completed']").remove();
         selectBox.innerHTML += `<option value="completed">Completed</option>`;
     } else {
@@ -331,21 +485,58 @@ $('.evehicleDetails').on('change', function () {
     }
     $('select[name=estatus]').val(value);
     $('.selectpicker').selectpicker('refresh');
+}
+
+
+$('.vehicleIn').on('change', function () {
+    if ($('#invReceived:checked').val()) {
+        $('#inDetails').removeClass('d-none');
+    } else {
+        $('#inDetails').addClass('d-none');
+    }
+    updateStatus();
 });
+
+$('.vehicleOut').on('change', function () {
+    if ($('#invSent:checked').val()) {
+        $('#outDetails').removeClass('d-none');
+    } else {
+        $('#outDetails').addClass('d-none');
+    }
+    updateStatus();
+});
+
+
+// $('.evehicleDetails').on('change', function () {
+//     var selectBox = document.getElementById('estatus');
+//     var value = selectBox.value;
+//     if ($('.evehicleDetails:checked').length == $('.evehicleDetails').length) {
+//         $("#estatus option[value='completed']").remove();
+//         selectBox.innerHTML += `<option value="completed">Completed</option>`;
+//     } else {
+//         $("#estatus option[value='completed']").remove();
+//     }
+//     $('select[name=estatus]').val(value);
+//     $('.selectpicker').selectpicker('refresh');
+// });
+
 $('.evehicleIn').on('change', function () {
-    if ($('.evehicleIn:checked').length == $('.evehicleIn').length) {
+
+    if ($('#einvReceived:checked').val()) {
         $('#einDetails').removeClass('d-none');
     } else {
         $('#einDetails').addClass('d-none');
     }
+    updateEditStatus();
 });
 
 $('.evehicleOut').on('change', function () {
-    if ($('.evehicleOut:checked').length == $('.evehicleOut').length) {
+    if ($('#einvSent:checked').val()) {
         $('#eoutDetails').removeClass('d-none');
     } else {
         $('#eoutDetails').addClass('d-none');
     }
+    updateEditStatus();
 });
 
 
@@ -371,6 +562,9 @@ function calculateCost(inv, hb, HBT, hdag, adds, target) {
 
     var newCost = (Number(invVal - hbVal - HBTVal - hdagVal) + Number(addsVal));
 
+    // newCost = newCost.toFixed(2);  // to fix limit
+    newCost = Math.round((newCost + Number.EPSILON) * 100) / 100;   //  to set a limit of decimal 
+
 
     $('#' + target).val(newCost);
 
@@ -382,9 +576,6 @@ function loadStock() {
         url: '../php_action/fetchInvForSearch.php',
         type: "POST",
         dataType: 'json',
-        beforeSend: function () {
-            // selectBox.setAttribute("disabled", true);
-        },
         success: function (response) {
             stockArray = response.data;
             // console.log(stockArray);
@@ -403,6 +594,28 @@ function loadStock() {
     });
 }
 
+function loadSaleConsultant() {
+    // var sales_consultant_id = 38;
+    var sales_consultant_id = 66;
+    $.ajax({
+        url: '../php_action/fetchUsersWithRoleForSearch.php',
+        type: "POST",
+        dataType: 'json',
+        data: { id: sales_consultant_id },
+        success: function (response) {
+            var saleCnsltntArray = response.data;
+            var selectBox = document.getElementsByClassName('salesPerson');
+            selectBox.forEach(element => {
+                for (var i = 0; i < saleCnsltntArray.length; i++) {
+                    var item = saleCnsltntArray[i];
+                    element.innerHTML += `<option value="${item[0]}" title="${item[1]}">${item[1]} || ${item[2]} </option>`;
+                }
+
+            });
+            $('.selectpicker').selectpicker('refresh');
+        }
+    });
+}
 
 function loadLocations() {
     $.ajax({
@@ -415,19 +628,25 @@ function loadLocations() {
             var selectBoxes = document.getElementsByClassName('fromDealer');
 
             selectBoxes.forEach(element => {
+                element.innerHTML = `<option value="0" selected disabled>From Dealer</option>`;
                 for (var i = 0; i < locationArray.length; i++) {
                     var item = locationArray[i];
                     element.innerHTML += `<option value="${item[0]}" title="${item[2]}">${item[1]} || ${item[2]} ||  ${item[3]} </option>`;
                 }
             });
 
-            // $('.selectpicker').selectpicker('refresh');
+            $('.selectpicker').selectpicker('refresh');
         },
         error: function (params) {
             console.log(params);
 
         }
     });
+}
+
+function resetDealerFrom() {
+    $("#fromDealer").val('default').selectpicker("refresh");
+    $("#efromDealer").val('default').selectpicker("refresh");
 }
 
 function changeStockDetails(ele, vehicle, color, vin) {
@@ -462,7 +681,12 @@ function editDetails(id = null) {
 
 
                 $('#swapId').val(response.id);
+
+                $("#editBtnPrint").attr("onclick", `printDetails(${response.id})`);
+
                 $('#efromDealer').val(response.from_dealer);
+                $('#esalesPerson').val(response.sales_consultant);
+                $('#submittedBy').html(response.submitted_by);
 
 
                 $('#estockIn').val(response.stock_in);
@@ -472,7 +696,7 @@ function editDetails(id = null) {
 
                 $("#einvReceived").prop("checked", (response.inv_received == 'on') ? true : false);
                 $("#etransferredIn").prop("checked", (response.transferred_in == 'on') ? true : false);
-                if (response.inv_received == 'on' && response.transferred_in == 'on') {
+                if (response.inv_received == 'on') {
                     $('.evehicleIn').change();
                 }
 
@@ -502,8 +726,9 @@ function editDetails(id = null) {
 
                 $("#einvSent").prop("checked", (response.inv_sent == 'on') ? true : false);
                 $("#etransferredOut").prop("checked", (response.transferred_out == 'on') ? true : false);
+                $("#etagged").prop("checked", (response.tagged == 'on') ? true : false);
 
-                if (response.inv_sent == 'on' && response.transferred_out == 'on') {
+                if (response.inv_sent == 'on') {
                     $('.evehicleOut').change();
                 }
 
@@ -525,7 +750,8 @@ function editDetails(id = null) {
                 $('#edealNote').val(response.notes);
 
                 // chnage status
-                $('.evehicleDetails').change();
+                // $('.evehicleDetails').change();
+                updateEditStatus();
                 $('#estatus').val(response.swap_status);
 
                 $('.selectpicker').selectpicker('refresh');
@@ -577,34 +803,43 @@ function removeDetails(id = null) {
 // print order function
 function printDetails(id = null) {
     if (id) {
-
         $.ajax({
             url: '../php_action/printSwap.php',
             type: 'post',
             data: { id: id },
             dataType: 'text',
             success: function (response) {
-                var mywindow = window.open('', 'Swaps', 'height=400,width=600');
-                mywindow.document.write('<html><head><title></title>');
-                mywindow.document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">');
-                mywindow.document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>');
-                mywindow.document.write('<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>');
-                // mywindow.document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">');
-                // mywindow.document.write('<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&amp;family=Roboto+Mono&amp;display=swap" rel="stylesheet">');
-                // mywindow.document.write('<link href="../assets/build/styles/ltr-core.css" rel="stylesheet">');
-                // mywindow.document.write('<link href="../assets/build/styles/ltr-vendor.css" rel="stylesheet">');
-                mywindow.document.write('</head><body>');
-                mywindow.document.write(response);
-                mywindow.document.write('</body>');
-                mywindow.document.write('</html>');
-                mywindow.document.close(); // necessary for IE >= 10
-                // mywindow.focus(); // necessary for IE >= 10
-                mywindow.print();
+                if (response) {
+                    var mywindow = window.open('', 'Swaps', 'height=400,width=600');
+                    mywindow.document.write('<html><head><title></title>');
+                    mywindow.document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">');
+
+                    // mywindow.document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">');
+                    // mywindow.document.write('<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&amp;family=Roboto+Mono&amp;display=swap" rel="stylesheet">');
+                    // mywindow.document.write('<link href="../assets/build/styles/ltr-core.css" rel="stylesheet">');
+                    // mywindow.document.write('<link href="../assets/build/styles/ltr-vendor.css" rel="stylesheet">');
+                    mywindow.document.write('</head><body>');
+                    mywindow.document.write(response);
+                    mywindow.document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>');
+                    mywindow.document.write('<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>');
+                    mywindow.document.write('</body>');
+                    mywindow.document.write('</html>');
+                    mywindow.document.close(); // necessary for IE >= 10
+                    mywindow.focus(); // necessary for IE >= 10
+                    $(mywindow).on("load", function (e) {
+                        setTimeout(() => {
+                            mywindow.print();
+                        }, 100);
+                    });
+                }
                 // mywindow.close();
 
             } // /success function
         }); // /ajax function to fetch the printable order
-    } // /if orderId
+
+    } else {
+        Swal.fire("Error!", "You must have to save first", "error")
+    }
 } // /print order function
 
 function toggleFilterClass() {

@@ -2,6 +2,10 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
+if (hasAccess("bodyshops", "Add") === 'false' && hasAccess("bodyshops", "Edit") === 'false' && hasAccess("bodyshops", "Remove") === 'false') {
+    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+}
+
 ?>
 
 <head>
@@ -28,9 +32,13 @@ include_once '../includes/header.php';
                     <div class="portlet-header portlet-header-bordered">
                         <h3 class="portlet-title">Bodyshop Contacts</h3>
 
-                        <button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
+                        <?php
+                        if (hasAccess("bodyshops", "Add") !== 'false') {
+                            echo ' <button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
                             <i class="fa fa-plus ml-1 mr-2"></i> Add New
-                        </button>
+                        </button>';
+                        }
+                        ?>
 
                     </div>
                     <div class="portlet-body">

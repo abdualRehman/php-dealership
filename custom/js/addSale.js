@@ -130,43 +130,41 @@ $(function () {
         submitHandler: function (form, event) {
             event.preventDefault();
 
-            var c = confirm('Do you really want to save this?');
-            if (c == true) {
-                var form = $('#addInvForm');
-                $.ajax({
-                    type: "POST",
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response);
 
-                        if (response.success == true) {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "success",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 2500,
-                            })
+            var form = $('#addInvForm');
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
 
-                            // form[0].reset();
-                            loadStock();
+                    if (response.success == true) {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500,
+                        })
 
-                        } else {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "error",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 2500
-                            })
-                        }
+                        // form[0].reset();
+                        loadStock();
 
-
+                    } else {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500
+                        })
                     }
-                });
-            }
+
+
+                }
+            });
 
             return false;
 
@@ -246,7 +244,7 @@ $(function () {
         submitHandler: function (form, event) {
             // return true;
             event.preventDefault();
-            // $('[disabled]').removeAttr('disabled');
+            $('[disabled]').removeAttr('disabled');
             var form = $('#addSaleForm');
             $.ajax({
                 type: "POST",
@@ -638,7 +636,7 @@ function chnageStyle(field) {
             }
             break;
         case 'salePStatus':
-            if (field.value == 'dealWritten') {
+            if (field.value == 'cancelled') {
                 ele.addClass('btn-outline-danger');
                 ele.removeClass('btn-outline-success');
             } else {

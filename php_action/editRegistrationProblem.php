@@ -23,7 +23,7 @@ if ($_POST) {
 
     $customerName = mysqli_real_escape_string($connect, $_POST['ecustomerName']);  // customerName
     $salesConsultant = mysqli_real_escape_string($connect, $_POST['esalesConsultant']);
-    $financeManager = mysqli_real_escape_string($connect, $_POST['efinanceManager']);
+    $financeManager = isset($_POST['efinanceManager']) ? mysqli_real_escape_string($connect, $_POST['efinanceManager']) : "";
     $stockId = mysqli_real_escape_string($connect, $_POST['estockId']);
     $vehicle = mysqli_real_escape_string($connect, $_POST['evehicle']);
     $problem = isset($_POST['eproblem']) ? mysqli_real_escape_string($connect, $_POST['eproblem']) : "";

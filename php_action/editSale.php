@@ -31,7 +31,8 @@ if ($_POST) {
     $status = mysqli_real_escape_string($connect, $_POST['status']);  // sale status
     $stockId = mysqli_real_escape_string($connect, $_POST['stockId']);
     $salesConsultant = mysqli_real_escape_string($connect, $_POST['salesPerson']);
-    $financeManager = mysqli_real_escape_string($connect, $_POST['financeManager']);    
+    // $financeManager = mysqli_real_escape_string($connect, $_POST['financeManager']);    
+    $financeManager = (isset($_POST['financeManager'])) ? mysqli_real_escape_string($connect, $_POST['financeManager']) : "";
     $dealType = (isset($_POST['dealType'])) ? mysqli_real_escape_string($connect, $_POST['dealType']) : "";  // sale dealType
     $dealNote = mysqli_real_escape_string($connect, $_POST['dealNote']);
     $iscertified = mysqli_real_escape_string($connect, $_POST['iscertified']);

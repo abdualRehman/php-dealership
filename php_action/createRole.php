@@ -41,6 +41,7 @@ if ($_POST) {
         addPermissions($role_id, 'swap', 'Add', (isset($_POST['swapAdd'])) ? "true" : "false");
         addPermissions($role_id, 'swap', 'Edit', (isset($_POST['swapEdit'])) ? "true" : "false");
         addPermissions($role_id, 'swap', 'Remove', (isset($_POST['swapRemove'])) ? "true" : "false");
+        addPermissions($role_id, 'swap', 'View', (isset($_POST['swapView'])) ? "true" : "false");
 
         // INCENTIVES
         addPermissions($role_id, 'incentives', 'Edit', (isset($_POST['incentivesEdit'])) ? "true" : "false");
@@ -53,6 +54,7 @@ if ($_POST) {
         addPermissions($role_id, 'sale', 'Add', (isset($_POST['saleAdd'])) ? "true" : "false");
         addPermissions($role_id, 'sale', 'Edit', (isset($_POST['saleEdit'])) ? "true" : "false");
         addPermissions($role_id, 'sale', 'Remove', (isset($_POST['saleRemove'])) ? "true" : "false");
+        addPermissions($role_id, 'sale', 'View', (isset($_POST['saleView'])) ? "true" : "false");
 
         // todo
         addPermissions($role_id, 'todo', 'Edit', (isset($_POST['todoEdit'])) ? "true" : "false");
@@ -61,6 +63,7 @@ if ($_POST) {
         addPermissions($role_id, 'regp', 'Add', (isset($_POST['regpAdd'])) ? "true" : "false");
         addPermissions($role_id, 'regp', 'Edit', (isset($_POST['regpEdit'])) ? "true" : "false");
         addPermissions($role_id, 'regp', 'Remove', (isset($_POST['regpRemove'])) ? "true" : "false");
+        addPermissions($role_id, 'regp', 'View', (isset($_POST['regpView'])) ? "true" : "false");
         // users
         addPermissions($role_id, 'user', 'Add', (isset($_POST['userAdd'])) ? "true" : "false");
         addPermissions($role_id, 'user', 'Edit', (isset($_POST['userEdit'])) ? "true" : "false");
@@ -81,7 +84,7 @@ if ($_POST) {
         addPermissions($role_id, 'sptr', 'Edit', (isset($_POST['sptrEdit'])) ? "true" : "false");
         addPermissions($role_id, 'sptr', 'Remove', (isset($_POST['sptrRemove'])) ? "true" : "false");
 
-        // sptr
+        // swploc
         addPermissions($role_id, 'swploc', 'Add', (isset($_POST['swplocAdd'])) ? "true" : "false");
         addPermissions($role_id, 'swploc', 'Edit', (isset($_POST['swplocEdit'])) ? "true" : "false");
         addPermissions($role_id, 'swploc', 'Remove', (isset($_POST['swplocRemove'])) ? "true" : "false");
@@ -115,11 +118,24 @@ if ($_POST) {
         addPermissions($role_id, 'cashincrule', 'Add', (isset($_POST['cashincruleAdd'])) ? "true" : "false");
         addPermissions($role_id, 'cashincrule', 'Edit', (isset($_POST['cashincruleEdit'])) ? "true" : "false");
         addPermissions($role_id, 'cashincrule', 'Remove', (isset($_POST['cashincruleRemove'])) ? "true" : "false");
-        
+
         // lotWizards
-        addPermissions($role_id, 'lotWizards', 'Add', (isset($_POST['lotWizardsAdd'])) ? "true" : "false");
-        addPermissions($role_id, 'usedCars', 'Add', (isset($_POST['usedCarsAdd'])) ? "true" : "false");
+        // addPermissions($role_id, 'lotWizards', 'Add', (isset($_POST['lotWizardsAdd'])) ? "true" : "false");
+        addPermissions($role_id, 'lotWizards', 'Edit', (isset($_POST['lotWizardsEdit'])) ? "true" : "false");
+        addPermissions($role_id, 'lotWizards', 'View', (isset($_POST['lotWizardsView'])) ? "true" : "false");
+
+        // used Cars
+        // addPermissions($role_id, 'usedCars', 'Add', (isset($_POST['usedCarsAdd'])) ? "true" : "false");
+        addPermissions($role_id, 'usedCars', 'Edit', (isset($_POST['usedCarsEdit'])) ? "true" : "false");
+        addPermissions($role_id, 'usedCars', 'View', (isset($_POST['usedCarsView'])) ? "true" : "false");
+
+        // bodyshops contact
+        addPermissions($role_id, 'bodyshops', 'Add', (isset($_POST['bodyshopsAdd'])) ? "true" : "false");
+        addPermissions($role_id, 'bodyshops', 'Edit', (isset($_POST['bodyshopsEdit'])) ? "true" : "false");
+        addPermissions($role_id, 'bodyshops', 'Remove', (isset($_POST['bodyshopsRemove'])) ? "true" : "false");
         
+        // Matrix Files Upload
+        addPermissions($role_id, 'matrixfile', 'Add', (isset($_POST['matrixfileAdd'])) ? "true" : "false");
 
 
 

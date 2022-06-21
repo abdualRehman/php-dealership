@@ -10,6 +10,7 @@ if ($_POST) {
     $id = $_POST['swapId'];
 
 
+    $sales_consultant = mysqli_real_escape_string($connect, $_POST['esalesPerson']);
     $fromDealer = mysqli_real_escape_string($connect, $_POST['efromDealer']);
     $status = mysqli_real_escape_string($connect, $_POST['estatus']);
 
@@ -36,6 +37,7 @@ if ($_POST) {
 
     $invSent = isset($_POST['einvSent']) ? mysqli_real_escape_string($connect, $_POST['einvSent']) : "off";
     $transferredOut = isset($_POST['etransferredOut']) ? mysqli_real_escape_string($connect, $_POST['etransferredOut']) : "off";
+    $tagged = isset($_POST['etagged']) ? mysqli_real_escape_string($connect, $_POST['etagged']) : "off";
 
     $vinOut = isset($_POST['evinOut']) ? mysqli_real_escape_string($connect, $_POST['evinOut']) : "";
     $invOut = isset($_POST['einvOut']) ? mysqli_real_escape_string($connect, $_POST['einvOut']) : "";
@@ -59,7 +61,7 @@ if ($_POST) {
     `stock_out`='$stockOut',`vehicle_out`='$vehicleOut',`color_out`='$colorOut',
     `inv_sent`='$invSent',`transferred_out`='$transferredOut',
     `vin_out`='$vinOut',`inv_out`='$invOut',`hb_out`='$hbOut',`msrp_out`='$msrpOut',`hdag_out`='$hdagOut',`adds_out`='$addsOut',`adds_out_notes`='$addsOutNotes',`hbt_out`='$hbtOut',`net_cost_out`='$netcostOut',
-    `notes`='$dealNote' WHERE id = '$id'";
+    `notes`='$dealNote' , `sales_consultant` = '$sales_consultant', `tagged` = '$tagged' WHERE id = '$id'";
 
     if ($connect->query($sql) === true) {
         $valid['success'] = true;

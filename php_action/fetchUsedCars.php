@@ -93,11 +93,11 @@ if ($result->num_rows > 0) {
 
 
         $button = '
-            <div class="show d-flex" >
-            <button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editUsedCar(' . $id . ')" >
+            <div class="show d-flex" >' .
+            (hasAccess("usedCars", "Edit") !== 'false' ?  '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editUsedCar(' . $id . ')" >
                     <i class="fa fa-car" ></i>
-                </button>
-               <!-- <button class="btn btn-label-primary btn-icon mr-1" onclick="removeShop(' . $id . ')" >
+                </button>' : "") .
+            '<!-- <button class="btn btn-label-primary btn-icon mr-1" onclick="removeShop(' . $id . ')" >
                     <i class="fa fa-trash"></i>
                 </button> -->
             </div>

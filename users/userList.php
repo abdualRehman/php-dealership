@@ -7,6 +7,35 @@ if (hasAccess("user", "Edit") === 'false' && hasAccess("user", "Remove") === 'fa
 }
 ?>
 
+<link href="https://cdn.jsdelivr.net/npm/timepicker@1.13.18/jquery.timepicker.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="../custom/css/customDatatable.css">
+
+<style>
+    body.theme-light #scheduleTable .was-validated .form-control:valid {
+        color: #424242;
+        background: #fff;
+        border-color: #e0e0e0;
+        padding: 5px !important;
+        background-image: none !important;
+    }
+
+    body.theme-dark #scheduleTable .was-validated .form-control:valid {
+        color: #f5f5f5;
+        background: #424242;
+        border-color: #9e9e9e;
+        padding: 5px !important;
+        background-image: none !important;
+    }
+
+    @media (min-width: 1025px) {
+
+        .modal-lg,
+        .modal-xl {
+            max-width: 1200px !important;
+        }
+    }
+</style>
+
 <div class="content">
     <div class="container-fluid">
         <div class="row">
@@ -53,7 +82,7 @@ if (hasAccess("user", "Edit") === 'false' && hasAccess("user", "Remove") === 'fa
 </div>
 
 <div class="modal fade" id="modal8">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header modal-header-bordered">
                 <h5 class="modal-title">Edit User</h5><button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
@@ -65,44 +94,231 @@ if (hasAccess("user", "Edit") === 'false' && hasAccess("user", "Remove") === 'fa
                         <div class="spinner-grow d-none" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div>
                     </div>
                     <div class="editUser-result">
-                        <div class="form-group">
-                            <label for="editusername">User Name</label>
-                            <input type="text" class="form-control" id="editusername" name="editusername">
-                            <!-- <small class="form-text text-muted">Please submit youremail</small> -->
+
+                        <div class="row">
+                            <div class="col-md-10 m-auto">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="editusername" class="col-form-label">User Name</label>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="editusername" id="editusername" autocomplete="off" autofill="off" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="editemail" class="col-form-label">Email</label>
+                                        <div class="form-group">
+                                            <input type="email" class="form-control" name="editemail" id="editemail" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="editrole" class="col-form-label">Role</label>
+                                        <div class="form-group">
+                                            <select id="editrole" name="editrole" class="form-control required">
+                                                <option value="0">Select</option>
+                                                <?php
+                                                $sql = "SELECT `role_id`, `role_name` FROM `role` WHERE role_status = 1";
+                                                $result = $connect->query($sql);
+                                                while ($itemData = $result->fetch_assoc()) {
+                                                    echo '<option value="' . $itemData['role_id'] . '">' . $itemData['role_name'] . '</option>';
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="location" class="col-form-label">Location</label>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="location" id="location" autocomplete="off" autofill="off" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="extention" class="col-form-label">Extention</label>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="extention" id="extention" autocomplete="off" autofill="off" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="mobile" class="col-form-label">Mobile</label>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="mobile" id="mobile" autocomplete="off" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="editemail">Email</label>
-                            <input type="email" class="form-control" id="editemail" name="editemail">
-                            <!-- <small class="form-text text-muted">Please submit youremail</small> -->
-                        </div>
-                        <div class="form-group">
-                            <label for="editrole">Role</label>
-                            <select id="editrole" name="editrole" class="form-control required">
-                                <option value="0">Select</option>
-                                <?php
-                                    $sql = "SELECT `role_id`, `role_name` FROM `role` WHERE role_status = 1";
-                                    $result = $connect->query($sql);
-                                    while ($itemData = $result->fetch_assoc()) {
-                                        echo '<option value="' . $itemData['role_id'] . '">' . $itemData['role_name'] . '</option>';
-                                    }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="editpassword">Password</label>
-                            <input type="password" class="form-control" id="editpassword" name="editpassword">
-                            <!-- <small class="form-text text-muted">Please submit youremail</small> -->
-                        </div>
-                        <div class="form-group">
-                            <label for="editconpassword">Confirm Password</label>
-                            <input type="password" class="form-control" id="editconpassword" name="editconpassword">
-                            <!-- <small class="form-text text-muted">Please submit youremail</small> -->
+
+                        <div class="row mt-5 mb-5" style="overflow:auto;">
+                            <div class="col-md-12 m-auto">
+                                <table id="scheduleTable" class="table table-bordered text-center">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="7">
+                                                <h2>Schedule</h2>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th>Monday</th>
+                                            <th>Tuesday</th>
+                                            <th>Wednesday</th>
+                                            <th>Thursday</th>
+                                            <th>Friday</th>
+                                            <th>Saturday</th>
+                                            <th>Sunday</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="monStart" name="monStart">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="monEnd" name="monEnd">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="tueStart" name="tueStart">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="tueEnd" name="tueEnd">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="wedStart" name="wedStart">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="wedEnd" name="wedEnd">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="thuStart" name="thuStart">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="thuEnd" name="thuEnd">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="friStart" name="friStart">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="friEnd" name="friEnd">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="satStart" name="satStart">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="satEnd" name="satEnd">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="sunStart" name="sunStart">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="sunEnd" name="sunEnd">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer modal-footer-bordered">
-                    <button class="btn btn-primary mr-2">Save Changes</button>
-                    <button class="btn btn-outline-danger" data-dismiss="modal">Reset</button>
+                    <button type="submit" class="btn btn-primary mr-2">Save Changes</button>
+                    <button type="reset" class="btn btn-outline-danger" data-dismiss="modal">Reset</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal9">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header modal-header-bordered">
+                <h5 class="modal-title">Edit User</h5><button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
+            </div>
+            <form class="form-horizontal" id="editPasswordForm" action="../php_action/editUserPasswords.php" method="post">
+                <div class="modal-body">
+                    <div class="text-center">
+                        <div class="spinner-grow d-none" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div>
+                    </div>
+                    <div class="editUserPassword-result">
+
+                        <div class="row">
+                            <div class="col-md-10 m-auto">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="editpassword" class="col-form-label">New Password</label>
+                                        <div class="form-group"><input type="password" class="form-control" name="editpassword" id="editpassword" autocomplete="off" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="editconpassword" class="col-form-label">Confirm Password</label>
+                                        <div class="form-group">
+                                            <input type="password" class="form-control" name="editconpassword" id="editconpassword" autocomplete="off" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-bordered">
+                    <button type="submit" class="btn btn-primary mr-2">Save Changes</button>
+                    <button type="reset" class="btn btn-outline-danger" data-dismiss="modal">Reset</button>
                 </div>
             </form>
 
@@ -113,4 +329,5 @@ if (hasAccess("user", "Edit") === 'false' && hasAccess("user", "Remove") === 'fa
 
 
 <?php require_once('../includes/footer.php') ?>
+<script src="https://cdn.jsdelivr.net/npm/timepicker@1.13.18/jquery.timepicker.js"></script>
 <script type="text/javascript" src="../custom/js/userList.js"></script>

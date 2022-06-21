@@ -41,7 +41,7 @@ $(function () {
                 cancelLabel: 'Clear'
             }
         });
-
+        // alert($('#isConsultant').val());
         manageSoldLogsTable = $("#datatable-1").DataTable({
 
             // scrollY:"50vh",
@@ -73,7 +73,7 @@ $(function () {
             searchPanes: {
                 cascadePanes: !0,
                 viewTotal: !0,
-                columns: [3, 4, 5, 14]
+                columns: [3, 4, 5, 16]
             },
             "pageLength": 25,
             autoWidth: false,
@@ -280,7 +280,7 @@ $(function () {
             columnDefs: [
                 { width: 200, targets: 11 },
                 {
-                    targets: [14, 15 , 16],
+                    targets: ($('#isConsultant').val() == "true") ? [3, 6, 9, 12, 16, 17, 18] : [13, 14, 16, 17, 18],
                     visible: false,
                 },
                 {
@@ -292,11 +292,11 @@ $(function () {
                 },
                 {
                     searchPanes: {
-                        show:true,
-                        preSelect: ['NEW' , 'USED']
+                        show: true,
+                        preSelect: ['NEW', 'USED']
                         // preSelect: ['OTHER']
                     },
-                    targets: [14]
+                    targets: [16]
                 },
                 {
                     targets: 10,
@@ -314,13 +314,29 @@ $(function () {
                 {
                     targets: [4, 5],
                     createdCell: function (td, cellData, rowData, row, col) {
-                        if (rowData[15] > 0) {
+                        if (rowData[17] > 0) {
                             if (col == 4) {
                                 $(td).addClass('dublicate_left');
                             }
                             if (col == 5) {
                                 $(td).addClass('dublicate_right');
                             }
+                        }
+                    }
+                },
+                {
+                    targets: [14],
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        if (cellData == 'dealWritten') {
+                            $(td).html('<span class="badge badge-lg badge-success badge-pill">Deal Written</span>');
+                        } else if (cellData == 'gmdSubmit') {
+                            $(td).html('<span class="badge badge-lg badge-success badge-pill">GMD Submit</span>');
+                        } else if (cellData == 'contracted') {
+                            $(td).html('<span class="badge badge-lg badge-success badge-pill">Contracted</span>');
+                        } else if (cellData == 'cancelled') {
+                            $(td).html('<span class="badge badge-lg badge-danger badge-pill">Cancelled</span>');
+                        } else if (cellData == 'delivered') {
+                            $(td).html('<span class="badge badge-lg badge-success badge-pill">Delivered</span>');
                         }
                     }
                 }
@@ -349,7 +365,7 @@ $(function () {
                     $('#' + group + 'Count').html(filteredData.length);
 
                     return $('<tr/>')
-                        .append('<td colspan="14">' + group + ' (' + filteredData.length + ')</td>')
+                        .append('<td colspan="16">' + group + ' (' + filteredData.length + ')</td>')
                         .attr('data-name', group)
                         .toggleClass('collapsed', collapsed);
                 }
@@ -423,7 +439,7 @@ $(function () {
                 $(row).attr({
                     "data-toggle": "modal",
                     "data-target": "#showDetails",
-                    "onclick": "showDetails(" + data[16] + ")"
+                    "onclick": "showDetails(" + data[18] + ")"
                 });
             },
             "order": [[10, "desc"], [3, "asc"], [0, "asc"]]
@@ -581,7 +597,7 @@ $(function () {
                     data: form.serialize(),
                     dataType: 'json',
                     success: function (response) {
-                        console.log(response);
+                        // console.log(response);
 
                         if (response.success == true) {
                             e1.fire({
@@ -590,7 +606,8 @@ $(function () {
                                 title: response.messages,
                                 showConfirmButton: !1,
                                 timer: 2500,
-                            })
+                            });
+                            manageSoldLogsTable.ajax.reload(null, false);
 
 
                         } else {
@@ -825,7 +842,6 @@ $(function () {
                     // return true;
                     event.preventDefault();
 
-
                     $('[disabled]').removeAttr('disabled');
                     var form = $('#editSaleForm');
                     $.ajax({
@@ -944,7 +960,9 @@ function fetchSelectedInvForSearch(id = null) {
 
 
 function writeStatusHTML() {
-    document.getElementById('statusFilterDiv').innerHTML = `<div class="row">
+    var element = document.getElementById('statusFilterDiv');
+    if (element) {
+        element.innerHTML = `<div class="row">
         <div class="col-md-12">
             <div id="year">
                 <div class="btn-group-toggle" data-toggle="buttons">
@@ -964,6 +982,7 @@ function writeStatusHTML() {
             </div>
         </div>
     </div>`;
+    }
 }
 
 function toggleFilterClass() {
@@ -1021,7 +1040,7 @@ function showDetails(id = null) {
                     `)
                 }
 
-                var detailsDiv = `${response.stocktype} ${response.year} ${response.make} ${response.model} \n Vin: ${response.vin} \n Mileage: ${response.mileage} \n Age: ${response.age} \n Lot: ${response.lot} \n Balance: ${response.balance} \n ${response.stocktype == "USED" ? `Gross:` + Number(response.gross) : ''} `;
+                var detailsDiv = `${response.stocktype} ${response.year} ${response.make} ${response.model} \n Vin: ${response.vin} \n Mileage: ${response.mileage} \n Age: ${response.age} \n Lot: ${response.lot} ${($('#isConsultant').val() == "true") ? `` : `\n Balance: ${response.balance} \n ${response.stocktype == "USED" ? `Gross:` + Number(response.gross) : ''}`} `;
 
 
                 $('#selectedDetails').html(detailsDiv);
@@ -1045,6 +1064,11 @@ function showDetails(id = null) {
 
                 $('#dealNote').val(response.deal_notes);
                 $('#iscertified').val((response.certified == "on" ? "YES" : "NO"));
+
+
+                $('#salePStatus').val(response.salesperson_status);
+                $('.selectpicker').selectpicker('refresh');
+                chnageStyle({ id: 'salePStatus', value: response.salesperson_status });
 
                 $('#consultantNote').val(response.consultant_notes);
                 $('#thankyouCard').prop('checked', response.thankyou_cards == 'on' ? true : false);
@@ -1448,7 +1472,7 @@ function chnageStyle(field) {
             }
             break;
         case 'salePStatus':
-            if (field.value == 'dealWritten') {
+            if (field.value == 'cancelled') {
                 ele.addClass('btn-outline-danger');
                 ele.removeClass('btn-outline-success');
             } else {

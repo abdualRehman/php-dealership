@@ -47,7 +47,15 @@ $(function () {
     manageDataTable = $("#datatable-1").DataTable({
         responsive: !0,
         'ajax': '../php_action/fetchRegistrationPrblm.php',
-        dom: "PfBrtip",
+        // dom: "PfBrtip",
+        dom: `\n     
+        <'row'<'col-12'P>>\n      
+        <'row'<'col-sm-12 text-sm-left col-md-4 mb-2'<'#statusFilterDiv'> > <'col-sm-12 col-md-4 text-center'B> <'col-sm-12 col-md-4 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
+       <'row'<'col-12'tr>>\n      
+       <'row align-items-baseline'
+       <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
+       <'col-md-5'p>>\n`,
+
         searchPanes: {
             cascadePanes: !0,
             viewTotal: !0,
@@ -57,32 +65,32 @@ $(function () {
         buttons: [
             {
                 extend: 'copyHtml5',
-                title: function(){
+                title: function () {
                     var printTitle = 'Registration Problems';
                     return printTitle
                 },
                 exportOptions: {
-                    columns: [0,1,2,3,4,5,6,7,8]
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                 }
             },
             {
                 extend: 'excelHtml5',
-                title: function(){
+                title: function () {
                     var printTitle = 'Registration Problems';
                     return printTitle
                 },
                 exportOptions: {
-                    columns: [0,1,2,3,4,5,6,7,8]
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                 }
             },
             {
                 extend: 'print',
-                title: function(){
+                title: function () {
                     var printTitle = 'Registration Problems';
                     return printTitle
                 },
                 exportOptions: {
-                    columns: [0,1,2,3,4,5,6,7,8]
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                 }
             },
         ],
@@ -93,23 +101,99 @@ $(function () {
                 },
                 targets: [0, 1, 2, 3],
             },
+            {
+                targets: ($('#isConsultant').val() == "true") ? [4] : [],
+                visible: false,
+            },
+            {
+                targets: [9],
+                visible: false,
+            },
+            { width: 300, targets: [7, 8] },
         ],
-        select: {
-            'style': 'multi', // 'single', 'multi', 'os', 'multi+shift'
-            selector: 'tr',
-        },
         language: {
             searchPanes: {
                 count: "{total} found",
                 countFiltered: "{shown} / {total}"
             }
         },
+        "drawCallback": function (settings, start, end, max, total, pre) {
+            $('.editCheckbox').on('change', function () {
+                changeProblemStatus($(this)[0].id);
+            });
+        },
+        "drawCallback": function (settings, start, end, max, total, pre) {
+            var json = this.fnSettings().json;
+            if (json) {
+                var obj = json.data;
+                var fixedCount = 0, notFixedCount = 0;
+
+                for (const [key, value] of Object.entries(obj)) {                    
+                    var rowStatus = value[9];
+                    if (rowStatus == '0') {
+                        fixedCount += 1;
+                    } else if (rowStatus == '1') {
+                        notFixedCount += 1;
+                    }
+                }
+                $(`#notFixedCount`).html(notFixedCount);
+                $(`#fixedCount`).html(fixedCount);
+            }
+        },
+
         "order": [[0, "asc"]]
     })
 
+    writeStatusHTML();
     loadTypeHeadCustomerName();
     loadSaleConsultant();
     loadFinanceManager();
+    $('#searchStatusNotFixed').click();
+
+
+    $.fn.dataTable.ext.search.push(
+        function (settings, searchData, index, rowData, counter) {
+            var tableNode = manageDataTable.table().node();
+
+            var searchStatus = $('input:radio[name="searchStatus"]:checked').map(function () {
+                if (this.value !== "") {
+                    return this.value;
+                }
+            }).get();
+
+            if (searchStatus.length === 0) {
+                return true;
+            }
+
+            if (searchStatus.indexOf(searchData[9]) !== -1) {
+                return true;
+            }
+            if (settings.nTable !== tableNode) {
+                return true;
+            }
+            return false;
+        }
+    );
+
+
+    $('input:radio').on('change', function () {
+        $('#datatable-1').block({
+            message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+            timeout: 1e3
+        });
+        manageDataTable.draw();  // working
+        manageDataTable.searchPanes.rebuildPane();
+    });
+
+
+
+
+
+
+
+
+
+
 
     function requireSelectBox(params) {
         var id = params.id;
@@ -141,9 +225,9 @@ $(function () {
             "salesConsultant": {
                 required: requireSelectBox,
             },
-            "financeManager": {
-                required: requireSelectBox,
-            },
+            // "financeManager": {
+            //     required: requireSelectBox,
+            // },
             // "stockId": {
             //     required: !0,
             // },
@@ -155,47 +239,46 @@ $(function () {
         submitHandler: function (form, e) {
             // return true;
             e.preventDefault();
-            var c = confirm('Do you really want to save this?');
-            if (c) {
-                var form = $('#addNewProblem');
-                $.ajax({
-                    type: "POST",
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response);
 
-                        if ((response.errorMessages) && response.errorMessages.length > 0) {
-                            response.errorMessages.forEach(message => {
-                                toastr.error(message, 'Error while Adding');
-                            });
-                        }
-                        if (response.success == true) {
-                            e1.fire({
-                                position: "center",
-                                icon: "success",
-                                title: response.messages.length > 0 ? response.messages[0] : "Successfully Added",
-                                showConfirmButton: !1,
-                                timer: 1500
-                            })
-                            manageDataTable.ajax.reload(null, false);
-                        } else {
-                            e1.fire({
-                                // position: "center",
-                                icon: "error",
-                                title: response.messages.length > 0 ? response.messages[0] : "Error while Adding",
-                                showConfirmButton: !1,
-                                timer: 2500
-                            })
+            var form = $('#addNewProblem');
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
 
-                            // form[0].reset();
-                        }
-
-
+                    if ((response.errorMessages) && response.errorMessages.length > 0) {
+                        response.errorMessages.forEach(message => {
+                            toastr.error(message, 'Error while Adding');
+                        });
                     }
-                });
-            }
+                    if (response.success == true) {
+                        e1.fire({
+                            position: "center",
+                            icon: "success",
+                            title: response.messages.length > 0 ? response.messages[0] : "Successfully Added",
+                            showConfirmButton: !1,
+                            timer: 1500
+                        })
+                        manageDataTable.ajax.reload(null, false);
+                    } else {
+                        e1.fire({
+                            // position: "center",
+                            icon: "error",
+                            title: response.messages.length > 0 ? response.messages[0] : "Error while Adding",
+                            showConfirmButton: !1,
+                            timer: 2500
+                        })
+
+                        // form[0].reset();
+                    }
+
+
+                }
+            });
+
             return false;
 
         }
@@ -218,9 +301,9 @@ $(function () {
             "esalesConsultant": {
                 required: requireSelectBox,
             },
-            "efinanceManager": {
-                required: requireSelectBox,
-            },
+            // "efinanceManager": {
+            //     required: requireSelectBox,
+            // },
             // "estockId": {
             //     required: !0,
             // },
@@ -232,52 +315,96 @@ $(function () {
         submitHandler: function (form, e) {
             // return true
             e.preventDefault();
-            var c = confirm('Do you really want to save this?');
-            if (c) {
-                var form = $('#editProblemForm');
-                $.ajax({
-                    type: "POST",
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response);
 
-                        if (response.success == true) {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "success",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 1500
-                            })
-                            // form[0].reset();
-                            manageDataTable.ajax.reload(null, false);
+            var form = $('#editProblemForm');
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
 
-                        } else {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "error",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 2500
-                            })
+                    if (response.success == true) {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 1500
+                        })
+                        // form[0].reset();
+                        manageDataTable.ajax.reload(null, false);
 
-                        }
-
+                    } else {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500
+                        })
 
                     }
-                });
-            }
+
+
+                }
+            });
+
             return false;
 
         }
 
-    })
+    });
 
 
 
-})
+
+});
+
+// $('input:checkbox').on('change', function () {
+//     console.log("funcall");
+//     console.log($(this));  
+// });
+
+
+function writeStatusHTML() {
+    var element = document.getElementById('statusFilterDiv');
+    if (element) {
+        // checked="checked"
+        element.innerHTML = `
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-flat-primary">
+                <input type="radio" name="searchStatus" id="searchStatusNotFixed" value="1" >Not Fixed <span class="badge badge-lg p-1" id="notFixedCount" ></span>
+            </label>
+            <label class="btn btn-flat-primary">
+                <input type="radio" name="searchStatus" id="searchStatusFixed" value="0">Fixed <span class="badge badge-lg p-1" id="fixedCount" ></span>
+            </label> 
+            
+        </div>`;
+        // element.innerHTML = `
+        // <div class="row">
+        //     <div class="col-md-12">
+        //         <div id="year">
+        //             <div class="btn-group-toggle" data-toggle="buttons">
+        //                 <label class="btn btn-outline-primary">
+        //                     <input type="radio" name="searchStatus" id="searchStatusAll" value=""> ALL
+        //                 </label>
+        //                 <label class="btn btn-outline-info">
+        //                     <input type="radio" name="searchStatus" value="pending"> Pending <span class="badge badge-lg p-1" id="pendingCount" ></span>
+        //                 </label>
+        //                 <label class="btn btn-outline-success">
+        //                     <input type="radio" name="searchStatus" value="delivered"> Delivered <span class="badge badge-lg p-1" id="deliveredCount" ></span>
+        //                 </label>
+        //                 <label class="btn btn-outline-danger">
+        //                     <input type="radio" name="searchStatus" value="cancelled"> Cancelled <span class="badge badge-lg p-0" id="cancelledCount" ></span>
+        //                 </label>
+        //             </div>
+        //         </div>
+        //     </div>
+        // </div>`;
+    }
+}
 
 function loadTypeHeadCustomerName() {
 
@@ -447,6 +574,35 @@ function removeProblem(probId = null) {
                     success: function (response) {
                         if (response.success == true) {
                             Swal.fire("Deleted!", "Your file has been deleted.", "success")
+                            manageDataTable.ajax.reload(null, false);
+                        } // /response messages
+                    }
+                }); // /ajax function to remove the brand
+
+            }
+        });
+    }
+}
+function changeProblemStatus(probId = null) {
+    if (probId) {
+        e1.fire({
+            title: "Are you sure?",
+            text: "Do you really want to change status?",
+            icon: "warning",
+            showCancelButton: !0,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Change it!"
+        }).then(function (t) {
+            if (t.isConfirmed == true) {
+                $.ajax({
+                    url: '../php_action/changeProblemStatus.php',
+                    type: 'post',
+                    data: { id: probId },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success == true) {
+                            Swal.fire("Changed!", "Status has been changes.", "success")
                             manageDataTable.ajax.reload(null, false);
                         } // /response messages
                     }

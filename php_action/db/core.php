@@ -8,6 +8,8 @@ $siteurl = "http://localhost/carshop";
 // $siteurl ="https://www.laughingalbattani5c25df.binfarooqtextile.com";
 
 $salesConsultantID = 66; // sets in the database role 
+$salesManagerID = 67; // sets in the database role 
+$generalManagerID = 69; // sets in the database role 
 
 function hasAccess($module, $function)
 {

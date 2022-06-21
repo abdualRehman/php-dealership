@@ -4,17 +4,13 @@ require_once './db/core.php';
 
 $valid['success'] = array('success' => false, 'messages' => array(), 'id' => '');
 
-// function reformatDate($date, $from_format = 'm-d-Y H:i', $to_format = 'Y-m-d H:i')
-// {
-//     $date_aux = date_create_from_format($from_format, $date);
-//     return date_format($date_aux, $to_format);
-// }
-// $problemDate = reformatDate($problemDate);  // for date 
 
 if ($_POST) {
-    
-    $sales_consultant = $_SESSION['userId'];
-    
+
+    $submitted_by = $_SESSION['userId'];
+
+    $sales_consultant = mysqli_real_escape_string($connect, $_POST['salesPerson']);
+
     $fromDealer = mysqli_real_escape_string($connect, $_POST['fromDealer']);
     $status = mysqli_real_escape_string($connect, $_POST['status']);
 
@@ -42,6 +38,8 @@ if ($_POST) {
     $invSent = isset($_POST['invSent']) ? mysqli_real_escape_string($connect, $_POST['invSent']) : "off";
     $transferredOut = isset($_POST['transferredOut']) ? mysqli_real_escape_string($connect, $_POST['transferredOut']) : "off";
 
+    $tagged = isset($_POST['tagged']) ? mysqli_real_escape_string($connect, $_POST['tagged']) : "off";
+
     $vinOut = isset($_POST['vinOut']) ? mysqli_real_escape_string($connect, $_POST['vinOut']) : "";
     $invOut = isset($_POST['invOut']) ? mysqli_real_escape_string($connect, $_POST['invOut']) : "";
     $hbOut = isset($_POST['hbOut']) ? mysqli_real_escape_string($connect, $_POST['hbOut']) : "";
@@ -58,17 +56,18 @@ if ($_POST) {
     $sql = "INSERT INTO `swaps`(
         `from_dealer`, `swap_status`, 
         `stock_in`, `vehicle_in`, `color_in`, `inv_received`, `transferred_in`, `vin_in`, `inv_in`, `hb_in`, `msrp_in`, `hdag_in`, `adds_in`, `adds_in_notes`, `hbt_in`, `net_cost_in`, 
-        `stock_out`, `vehicle_out`, `color_out`, `inv_sent`, `transferred_out`, `vin_out`, `inv_out`, `hb_out`, `msrp_out`, `hdag_out`, `adds_out`, `adds_out_notes`, `hbt_out`, `net_cost_out`, `notes` , `sales_consultant` , `status`) 
+        `stock_out`, `vehicle_out`, `color_out`, `inv_sent`, `transferred_out`, `vin_out`, `inv_out`, `hb_out`, `msrp_out`, `hdag_out`, `adds_out`, `adds_out_notes`, `hbt_out`, `net_cost_out`, `notes` , `sales_consultant` , `tagged` , `submitted_by`, `status`) 
     VALUES ('$fromDealer' , '$status' , 
         '$stockIn', '$vehicleIn' , '$colorIn' , '$invReceived' , '$transferredIn' , '$vinIn' , '$invIn' , '$hbIn' , '$msrpIn' , '$hdagIn' , '$addsIn' , '$addsInNotes' , '$hbtIn' , '$netcostIn',
-        '$stockOut' , '$vehicleOut' , '$colorOut' , '$invSent' , '$transferredOut' , '$vinOut' , '$invOut' , '$hbOut' , '$msrpOut' , '$hdagOut' , '$addsOut' , '$addsOutNotes' , '$hbtOut' , '$netcostOut' , '$dealNote' , '$sales_consultant' , 1 )";
+        '$stockOut' , '$vehicleOut' , '$colorOut' , '$invSent' , '$transferredOut' , '$vinOut' , '$invOut' , '$hbOut' , '$msrpOut' , '$hdagOut' , '$addsOut' , '$addsOutNotes' , '$hbtOut' , '$netcostOut' , '$dealNote' , '$sales_consultant' , '$tagged' , '$submitted_by' , 1 )";
 
     if ($connect->query($sql) === true) {
-
+        $valid['id'] = $connect->insert_id;
         $valid['success'] = true;
-        $valid['messages'] = "Successfully Updated";
+        $valid['messages'] = "Successfully Created";
     } else {
         $valid['success'] = false;
+        $valid['id'] = null;
         $valid['messages'] = $connect->error;
         $valid['messages'] = mysqli_error($connect);
     }

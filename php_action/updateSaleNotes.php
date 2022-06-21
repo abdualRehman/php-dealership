@@ -8,9 +8,8 @@ if ($_POST) {
 
     $sale_id = $_POST['sale_id'];
 
-
-
-    $consultantNote = mysqli_real_escape_string($connect, $_POST['consultantNote']);
+    $salePStatus = isset($_POST['salePStatus']) ? mysqli_real_escape_string($connect, $_POST['salePStatus']) : "";
+    $consultantNote = isset($_POST['consultantNote']) ? mysqli_real_escape_string($connect, $_POST['consultantNote']) : "";
     $thankyouCard = isset($_POST['thankyouCard']) ? mysqli_real_escape_string($connect, $_POST['thankyouCard']) : '';
 
     if ($sale_id) {
@@ -19,7 +18,9 @@ if ($_POST) {
         `thankyou_cards`='$thankyouCard'
         WHERE sale_id = '$sale_id' ";
 
-        if ($connect->query($sql) === true) {
+        $sql1 = "UPDATE `sale_todo` SET `salesperson_status` = '$salePStatus' WHERE `sale_todo`.`sale_id` = '$sale_id'";
+
+        if ($connect->query($sql) === true && $connect->query($sql1) === true) {
             $valid['success'] = true;
             $valid['messages'] = "Successfully Updated";
         } else {

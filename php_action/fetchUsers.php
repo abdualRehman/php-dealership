@@ -22,7 +22,7 @@ if ($result->num_rows > 0) {
             $button = '<div class="dropdown show">
                 <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Action</button>
                     <div class="dropdown-menu dropdown-menu-left" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 29px, 0px);">' .
-                (hasAccess("user", "Edit") !== 'false' ?  '<a class="dropdown-item" data-toggle="modal" data-target="#modal8" onclick="editUser(' . $userid . ')" >Edit</a>' : "") .
+                (hasAccess("user", "Edit") !== 'false' ?  '<a class="dropdown-item" data-toggle="modal" data-target="#modal8" onclick="editUser(' . $userid . ')" >Edit Details</a> <a class="dropdown-item" data-toggle="modal" data-target="#modal9" onclick="editPasswords(' . $userid . ')" >Edit Password</a>' : "") .
                 (hasAccess("user", "Remove") !== 'false' ? '<a class="dropdown-item" data-toggle="modal" data-target="#modal7" onclick="removeUser(' . $userid . ')" >Remove</a>' : "") .
                 '</div>
                 </div>';

@@ -1,15 +1,22 @@
 "use strict";
 $(function () {
+
+    $('.timeInterval').timepicker({ 'timeFormat': 'H:i', 'showDuration': true });
+
+
     $.validator.addMethod("valueNotEquals", function (value, element, arg) {
-        // I use element.value instead value here, value parameter was always null
         return arg != element.value;
     }, "Value must not equal arg.");
-
     $("#addUserForm").validate({
         rules: {
             username: {
                 required: !0,
-
+            },
+            mobile: {
+                required: !0,
+            },
+            extention: {
+                required: !0,
             },
             email: {
                 required: !0,
@@ -26,6 +33,27 @@ $(function () {
             },
             role: {
                 valueNotEquals: "0"
+            },
+            monEnd: {
+                required: () => $('#monStart').val() ? true : false,
+            },
+            tueEnd: {
+                required: () => $('#tueStart').val() ? true : false,
+            },
+            wedEnd: {
+                required: () => $('#wedStart').val() ? true : false,
+            },
+            thuEnd: {
+                required: () => $('#thuStart').val() ? true : false,
+            },
+            friEnd: {
+                required: () => $('#friStart').val() ? true : false,
+            },
+            satEnd: {
+                required: () => $('#satStart').val() ? true : false,
+            },
+            sunEnd: {
+                required: () => $('#sunStart').val() ? true : false,
             },
         },
         messages: {
@@ -92,5 +120,5 @@ $(function () {
             return false;
 
         }
-    })
+    });
 });

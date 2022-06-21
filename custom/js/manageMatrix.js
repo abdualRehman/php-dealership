@@ -55,7 +55,7 @@ $(function () {
                 },
                 {
                     targets: [0, 1, 2],
-                    className:'font-weight-bolder'
+                    className: 'font-weight-bolder'
                 }
                 // {
                 //     targets: [0],
@@ -178,15 +178,17 @@ function showDetails(id = null) {
 
 
                 $('#title').html(`${response.year} ${response.model} ${response.trim} <br /> ${response.model_code}`);
-                $('#net').html("$" + response.net);
-                $('#hb').html("$" + response.hb);
-                $('#invoice').html("$" + response.invoice);
-                $('#msrp').html("$" + response['m.s.r.p']);
-                $('#bdc').html("$" + response.bdc);
 
-                $('#dealer').html("$" + ((response.dealer) ? response.dealer : ""));
-                $('#other').html("$" + ((response.other) ? response.other : ""));
-                $('#lease').html("$" + ((response.lease) ? response.lease : ""));
+
+                $('#net').html("$" + Number(response.net).toLocaleString("en-US"));
+                $('#hb').html("$" + Number(response.hb).toLocaleString("en-US"));
+                $('#invoice').html("$" + Number(response.invoice).toLocaleString("en-US"));
+                $('#msrp').html("$" + Number(response['m.s.r.p']).toLocaleString("en-US"));
+                $('#bdc').html("$" + Number(response.bdc).toLocaleString("en-US"));
+
+                $('#dealer').html("$" + ((response.dealer) ? Number(response.dealer).toLocaleString("en-US") : ""));
+                $('#other').html("$" + ((response.other) ? Number(response.other).toLocaleString("en-US") : ""));
+                $('#lease').html("$" + ((response.lease) ? Number(response.lease).toLocaleString("en-US") : ""));
 
 
                 var f_status = false;

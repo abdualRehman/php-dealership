@@ -2,7 +2,7 @@
 
 require_once 'db/core.php';
 
-$sql = "SELECT `id`, `business_name`, `shop`, `address`, `city`, `state`, `zip`, `contact_person`, `contact_number`, `status` FROM `bodyshops` WHERE status = 1 ORDER BY id DESC";
+$sql = "SELECT `id`, `business_name`, `shop`, `address`, `city`, `state`, `zip`, `contact_person`, `contact_number`, `status` FROM `bodyshops` WHERE `status` = 1 ORDER BY `id` DESC";
 $result = $connect->query($sql);
 
 $output = array('data' => array());
@@ -14,14 +14,14 @@ if ($result->num_rows > 0) {
 
 
         $button = '
-            <div class="show d-flex" >
-            <button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editShop(' . $id . ')" >
+            <div class="show d-flex" >' .
+            (hasAccess("bodyshops", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editShop(' . $id . ')" >
                     <i class="fa fa-edit"></i>
-                </button>
-                <button class="btn btn-label-primary btn-icon mr-1" onclick="removeShop(' . $id . ')" >
+                </button>' : "") .
+            (hasAccess("bodyshops", "Remove") !== 'false' ?  '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeShop(' . $id . ')" >
                     <i class="fa fa-trash"></i>
-                </button>
-            </div>
+                </button>' : "") .
+            '</div>
         ';
 
 
@@ -34,7 +34,7 @@ if ($result->num_rows > 0) {
             $row[6],
             $row[7],
             $row[8],
-            $button,
+            $button
         );
     } // /while 
 

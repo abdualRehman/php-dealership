@@ -110,6 +110,10 @@ if ($_GET['r'] == 'add') {
                                                             <input type="checkbox" class="custom-control-input" id="swapRemove" name="swapRemove">
                                                             <label class="custom-control-label h5" for="swapRemove">REMOVE</label>
                                                         </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="swapView" name="swapView">
+                                                            <label class="custom-control-label h5" for="swapView">VIEW</label>
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -165,6 +169,10 @@ if ($_GET['r'] == 'add') {
                                                             <input type="checkbox" class="custom-control-input" id="saleRemove" name="saleRemove">
                                                             <label class="custom-control-label h5" for="saleRemove">REMOVE</label>
                                                         </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="saleView" name="saleView">
+                                                            <label class="custom-control-label h5" for="saleView">View</label>
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -198,6 +206,10 @@ if ($_GET['r'] == 'add') {
                                                         <div class="custom-control custom-control-lg custom-checkbox">
                                                             <input type="checkbox" class="custom-control-input" id="regpRemove" name="regpRemove">
                                                             <label class="custom-control-label h5" for="regpRemove">REMOVE</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="regpView" name="regpView">
+                                                            <label class="custom-control-label h5" for="regpView">View</label>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -439,18 +451,18 @@ if ($_GET['r'] == 'add') {
                                                 </td>
                                                 <td>
                                                     <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                        <!-- <div class="custom-control custom-control-lg custom-checkbox">
                                                             <input type="checkbox" class="custom-control-input" id="lotWizardsAdd" name="lotWizardsAdd">
                                                             <label class="custom-control-label h5" for="lotWizardsAdd">Add</label>
-                                                        </div>
-                                                        <!-- <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="cashincruleEdit" name="cashincruleEdit">
-                                                            <label class="custom-control-label h5" for="cashincruleEdit">EDIT</label>
+                                                        </div> -->
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="lotWizardsEdit" name="lotWizardsEdit">
+                                                            <label class="custom-control-label h5" for="lotWizardsEdit">EDIT</label>
                                                         </div>
                                                         <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="cashincruleRemove" name="cashincruleRemove">
-                                                            <label class="custom-control-label h5" for="cashincruleRemove">REMOVE</label>
-                                                        </div> -->
+                                                            <input type="checkbox" class="custom-control-input" id="lotWizardsView" name="lotWizardsView">
+                                                            <label class="custom-control-label h5" for="lotWizardsView">View</label>
+                                                        </div>
                                                     </div>
                                                 </td>
                                             <tr>
@@ -459,18 +471,52 @@ if ($_GET['r'] == 'add') {
                                                 </td>
                                                 <td>
                                                     <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                        <!-- <div class="custom-control custom-control-lg custom-checkbox">
                                                             <input type="checkbox" class="custom-control-input" id="usedCarsAdd" name="usedCarsAdd">
                                                             <label class="custom-control-label h5" for="usedCarsAdd">Add</label>
-                                                        </div>
-                                                        <!-- <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="cashincruleEdit" name="cashincruleEdit">
-                                                            <label class="custom-control-label h5" for="cashincruleEdit">EDIT</label>
+                                                        </div> -->
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="usedCarsEdit" name="usedCarsEdit">
+                                                            <label class="custom-control-label h5" for="usedCarsEdit">EDIT</label>
                                                         </div>
                                                         <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="cashincruleRemove" name="cashincruleRemove">
-                                                            <label class="custom-control-label h5" for="cashincruleRemove">REMOVE</label>
-                                                        </div> -->
+                                                            <input type="checkbox" class="custom-control-input" id="usedCarsView" name="usedCarsView">
+                                                            <label class="custom-control-label h5" for="usedCarsView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Bodyshop Contacts</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="bodyshopsAdd" name="bodyshopsAdd">
+                                                            <label class="custom-control-label h5" for="bodyshopsAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="bodyshopsEdit" name="bodyshopsEdit">
+                                                            <label class="custom-control-label h5" for="bodyshopsEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="bodyshopsRemove" name="bodyshopsRemove">
+                                                            <label class="custom-control-label h5" for="bodyshopsRemove">REMOVE</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Matrix Files</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="matrixfileAdd" name="matrixfileAdd">
+                                                            <label class="custom-control-label h5" for="matrixfileAdd">Upload</label>
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -645,6 +691,8 @@ if ($_GET['r'] == 'add') {
                                                     $Name = "SWAP LOCATION";
                                                 } else if ($module === 'manprice') {
                                                     $Name = "NEW CAR PRICE BY MANUFACTURE";
+                                                } else if ($module === 'bodyshops') {
+                                                    $Name = "Bodyshop Contacts";
                                                 } else if ($module === 'matrixrule') {
                                                     $Name = "MATRIX RULES";
                                                 } else if ($module === 'bdcrule') {
@@ -659,6 +707,8 @@ if ($_GET['r'] == 'add') {
                                                     $Name = "Lot Wizards";
                                                 } else if ($module === 'usedCars') {
                                                     $Name = "Used Cars";
+                                                } else if ($module === 'matrixfile') {
+                                                    $Name = "Matrix Files";
                                                 }
                                             ?>
                                                 <tr>
@@ -684,6 +734,7 @@ if ($_GET['r'] == 'add') {
                                                                     echo serPermissions($itemPData, 'Add', 'swapAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'swapEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'swapRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'swapView');
                                                                 } else if ($module === 'incentives') {
                                                                     echo serPermissions($itemPData, 'Edit', 'incentivesEdit');
                                                                 } else if ($module === 'inventory') {
@@ -694,12 +745,14 @@ if ($_GET['r'] == 'add') {
                                                                     echo serPermissions($itemPData, 'Add', 'saleAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'saleEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'saleRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'saleView');
                                                                 } else if ($module === 'todo') {
                                                                     echo serPermissions($itemPData, 'Edit', 'todoEdit');
                                                                 } else if ($module === 'regp') {
                                                                     echo serPermissions($itemPData, 'Add', 'regpAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'regpEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'regpRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'regpView');
                                                                 } else if ($module === 'user') {
                                                                     echo serPermissions($itemPData, 'Add', 'userAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'userEdit');
@@ -725,6 +778,10 @@ if ($_GET['r'] == 'add') {
                                                                     echo serPermissions($itemPData, 'Add', 'manpriceAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'manpriceEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'manpriceRemove');
+                                                                } else if ($module === 'bodyshops') {
+                                                                    echo serPermissions($itemPData, 'Add', 'bodyshopsAdd');
+                                                                    echo serPermissions($itemPData, 'Edit', 'bodyshopsEdit');
+                                                                    echo serPermissions($itemPData, 'Remove', 'bodyshopsRemove');
                                                                 } else if ($module === 'matrixrule') {
                                                                     echo serPermissions($itemPData, 'Add', 'matrixruleAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'matrixruleEdit');
@@ -746,9 +803,15 @@ if ($_GET['r'] == 'add') {
                                                                     echo serPermissions($itemPData, 'Edit', 'cashincruleEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'cashincruleRemove');
                                                                 } else if ($module === 'lotWizards') {
-                                                                    echo serPermissions($itemPData, 'Add', 'lotWizardsAdd');
+                                                                    // echo serPermissions($itemPData, 'Add', 'lotWizardsAdd');
+                                                                    echo serPermissions($itemPData, 'Edit', 'lotWizardsEdit');
+                                                                    echo serPermissions($itemPData, 'View', 'lotWizardsView');
                                                                 } else if ($module === 'usedCars') {
-                                                                    echo serPermissions($itemPData, 'Add', 'usedCarsAdd');
+                                                                    // echo serPermissions($itemPData, 'Add', 'usedCarsAdd');
+                                                                    echo serPermissions($itemPData, 'Edit', 'usedCarsEdit');
+                                                                    echo serPermissions($itemPData, 'View', 'usedCarsView');
+                                                                } else if ($module === 'matrixfile') {
+                                                                    echo serPermissions($itemPData, 'Add', 'matrixfileAdd');
                                                                 }
                                                             }
 

@@ -33,7 +33,7 @@ if ($_POST) {
             $password = md5($password);
             // echo $password;
             // exists
-            $mainSql = "SELECT users.* , role.role_name FROM users LEFT JOIN role ON users.role = role.role_id WHERE users.email = '$email' AND users.password = '$password'";
+            $mainSql = "SELECT users.* , role.role_name FROM users LEFT JOIN role ON users.role = role.role_id WHERE users.email = '$email' AND users.password = '$password' AND users.status = 1";
             $mainResult = $connect->query($mainSql);
 
             if ($mainResult->num_rows == 1) {

@@ -124,11 +124,11 @@ if ($result->num_rows > 0) {
 
 
         $button = '
-            <div class="show d-flex" >
-            <button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editInspection(' . $id . ')" >
+            <div class="show d-flex" >' .
+            (hasAccess("lotWizards", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editInspection(' . $id . ')" >
                     <i class="fa fa-car" ></i>
-                </button>
-               <!-- <button class="btn btn-label-primary btn-icon mr-1" onclick="removeShop(' . $id . ')" >
+                </button>' : "") .
+            '<!-- <button class="btn btn-label-primary btn-icon mr-1" onclick="removeShop(' . $id . ')" >
                     <i class="fa fa-trash"></i>
                 </button> -->
             </div>

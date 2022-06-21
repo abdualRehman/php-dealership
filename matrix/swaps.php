@@ -2,13 +2,20 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
-if (hasAccess("swap", "Add") === 'false' && hasAccess("swap", "Edit") === 'false' && hasAccess("swap", "Remove") === 'false') {
+// if (hasAccess("swap", "Add") === 'false' && hasAccess("swap", "Edit") === 'false' && hasAccess("swap", "Remove") === 'false') {
+if (hasAccess("swap", "View") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+}
+if (hasAccess("swap", "Edit") === 'false') {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
 }
 ?>
 
 
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/timepicker@1.13.18/jquery.timepicker.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../custom/css/customDatatable.css">
 </head>
 
@@ -28,6 +35,10 @@ if (hasAccess("swap", "Add") === 'false' && hasAccess("swap", "Edit") === 'false
         padding: 0px !important;
     }
 
+    .font-initial {
+        font-size: initial;
+    }
+
     @media (min-width: 1025px) {
 
         .modal-lg,
@@ -37,38 +48,90 @@ if (hasAccess("swap", "Add") === 'false' && hasAccess("swap", "Edit") === 'false
     }
 </style>
 
+<?php
+// if (hasAccess("swap", "Edit") === 'false') {
+//     echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+// } else {
+//     echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+// }
+?>
+
 <div class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 <div class="portlet">
                     <div class="portlet-header portlet-header-bordered">
-                        <h3 class="portlet-title">Swaps List</h3>
-                        <button class="btn btn-primary mr-2 p-2" onclick="toggleFilterClass()">
-                            <i class="fa fa-align-center ml-1 mr-2"></i> Filter
-                        </button>
-                        <?php
-                        if (hasAccess("swap", "Add") !== 'false') {
-                        ?>
-                            <button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
-                                <i class="fa fa-plus ml-1 mr-2"></i> Add Swap
-                            </button>
-                        <?php
-                        }
-                        ?>
+                        <div class="row w-100 p-0 m-0">
+                            <div class="col-md-2 d-flex align-items-center p-0 mb-2">
+                                <h3 class="portlet-title">Swaps List</h3>
+                            </div>
+                            <div class="col-md-8 d-flex justify-content-center align-items-center p-0 mb-2">
+                                <div class="row d-flex justify-content-center flex-row p-0 m-0">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                <label class="btn btn-flat-primary">
+                                                    <input type="radio" name="radio-status" id="pending" value="pending">
+                                                    Pending
+                                                    <span class="badge badge-lg p-1" id="pendingCount"></span>
+                                                </label>
+                                                <label class="btn btn-flat-primary">
+                                                    <input type="radio" name="radio-status" value="paperWork">
+                                                    Paperwork Done
+                                                    <span class="badge badge-lg p-1" id="paperWorkCount"></span>
+                                                </label>
+                                                <label class="btn btn-flat-primary">
+                                                    <input type="radio" name="radio-status" value="completed">
+                                                    Completed
+                                                    <span class="badge badge-lg p-1" id="completedCount"></span>
+                                                </label>
+                                                <label class="btn btn-flat-primary">
+                                                    <input type="radio" name="radio-status" value="all" id="modAll">
+                                                    Show All
+                                                    <span class="badge badge-lg p-1" id="AllCount"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-2 p-1 d-flex justify-content-end align-items-center">
+                                <div class="d-inline-flex">
+                                    <button class="btn btn-primary mr-2 p-2" onclick="toggleFilterClass()">
+                                        <i class="fa fa-align-center ml-1 mr-2"></i> Filter
+                                    </button>
+                                    <?php
+                                    if (hasAccess("swap", "Add") !== 'false') {
+                                    ?>
+                                        <button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
+                                            <i class="fa fa-plus ml-1 mr-2"></i> Add Swap
+                                        </button>
+                                    <?php
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+
+
+                        </div>
                     </div>
                     <div class="portlet-body">
                         <div class="remove-messages"></div>
                         <table id="datatable-1" class="table table-bordered table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>From Dealer</th>
-                                    <th>Vehicle In Details</th>
-                                    <th>Vehicle Out Details</th>
-                                    <th>Sales Consultant</th>
-                                    <th>Notes</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
+                                    <th style="width:10%;">From Dealer</th>
+                                    <th style="width:10%;">Vehicle In Details</th>
+                                    <th style="width:10%;">Vehicle Out Details</th>
+                                    <th style="width:10%;">Sales Consultant</th>
+                                    <th style="width:20%;">Notes</th>
+                                    <th style="width:10%;">Transferred In</th>
+                                    <th style="width:10%;">Transferred Out</th>
+                                    <th style="width:10%;">Status</th>
+                                    <th style="width:10%;">Action</th>
+                                    <th style="width:10%;">ID</th>
                                 </tr>
                             </thead>
                         </table>
@@ -86,7 +149,7 @@ if (hasAccess("swap", "Add") === 'false' && hasAccess("swap", "Edit") === 'false
         <div class="modal-content">
             <div class="modal-header modal-header-bordered">
                 <h5 class="modal-title">Edit Swaps</h5>
-                <button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                <button type="button" class="btn btn-label-danger btn-icon closeBtn" data-dismiss="modal"><i class="fa fa-times"></i></button>
             </div>
             <form class="form-horizontal" id="editSwapForm" action="../php_action/editSwap.php" method="post">
                 <div class="modal-body">
@@ -98,18 +161,37 @@ if (hasAccess("swap", "Add") === 'false' && hasAccess("swap", "Edit") === 'false
                         <input type="hidden" name="swapId" id="swapId">
 
                         <div class="form-row">
-                            <div class="col-md-6">
-                                <label for="efromDealer" class="col-form-label text-md-center">From Dealer:</label>
-                                <div class="form-group">
-                                    <select class="selectpicker required" name="efromDealer" id="efromDealer" data-live-search="true" data-size="4">
-                                        <optgroup class="fromDealer">
-                                            <option value="0" selected disabled>From Dealer</option>
-                                        </optgroup>
-                                    </select>
-                                    <!-- <input type="text" class="form-control" id="fromDealer" name="fromDealer" placeholder="From Dealer"> -->
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <label for="efromDealer" class="col-form-label text-md-center">From Dealer:</label>
+                                        <div class="form-group">
+                                            <select class="selectpicker required" name="efromDealer" id="efromDealer" data-live-search="true" data-size="4">
+                                                <optgroup class="fromDealer">
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="clearBtn" class="col-form-label text-md-center">&nbsp;</label>
+                                        <div class="form-group" id="clearBtn">
+                                            <button type="button" class="badge badge-outline-danger badge-square badge-lg cursor-pointer" onclick="resetDealerFrom()">X</button>
+                                            <button type="button" data-toggle="modal" data-target="#addNewLocation" class="badge badge-outline-primary badge-square badge-lg cursor-pointer"> <i class="fa fa-plus"></i> </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <label class="col-form-label" for="esalesConsultant">Sales Consultant:</label>
+                                <div class="form-group">
+                                    <select class="selectpicker" name="esalesPerson" id="esalesPerson" data-live-search="true" data-size="4">
+                                        <optgroup class="salesPerson">
+                                            <option value="0" selected disabled>Sales Consultant</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
                                 <label for="estatus" class="col-form-label text-md-center">Status:</label>
                                 <select class="form-control selectpicker w-auto" name="estatus" id="estatus">
                                     <option value="pending" selected>Pending</option>
@@ -272,7 +354,7 @@ if (hasAccess("swap", "Add") === 'false' && hasAccess("swap", "Edit") === 'false
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">$</span>
                                                 </div>
-                                                <input type="text" class="form-control" id="enetcostIn" name="enetcostIn" readonly>
+                                                <input type="text" class="form-control font-initial" id="enetcostIn" name="enetcostIn" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -316,6 +398,10 @@ if (hasAccess("swap", "Add") === 'false' && hasAccess("swap", "Edit") === 'false
                                     <div class="custom-control-lg custom-checkbox">
                                         <input type="checkbox" class="custom-control-input evehicleDetails evehicleOut" id="einvSent" name="einvSent">
                                         <label class="custom-control-label" for="einvSent">Invoice Sent</label>
+                                    </div>
+                                    <div class="custom-control-lg custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input evehicleOut" id="etagged" name="etagged">
+                                        <label class="custom-control-label" for="etagged">Tagged</label>
                                     </div>
                                     <div class="custom-control-lg custom-checkbox">
                                         <input type="checkbox" class="custom-control-input evehicleDetails evehicleOut" id="etransferredOut" name="etransferredOut">
@@ -438,7 +524,7 @@ if (hasAccess("swap", "Add") === 'false' && hasAccess("swap", "Edit") === 'false
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">$</span>
                                                 </div>
-                                                <input type="text" class="form-control" id="enetcostOut" name="enetcostOut" readonly>
+                                                <input type="text" class="form-control font-initial" id="enetcostOut" name="enetcostOut" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -452,9 +538,19 @@ if (hasAccess("swap", "Add") === 'false' && hasAccess("swap", "Edit") === 'false
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer modal-footer-bordered">
-                    <button class="btn btn-primary mr-2">Update Changes</button>
-                    <button class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                <div class="modal-footer modal-footer-bordered justify-content-space-between">
+                    <div class="row w-100">
+                        <div class="col-md-6">
+                            <label for="submittedBy" class="col-form-label">Submitted By: <strong id="submittedBy"> </strong> </label>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <button type="submit" class="btn btn-primary mr-2">Update Changes</button>
+                            <button type="button" class="btn btn-label-primary btn-icon mr-1" id="editBtnPrint" onclick="printDetails()">
+                                <i class="fa fa-print"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
                 </div>
             </form>
 
@@ -473,18 +569,37 @@ if (hasAccess("swap", "Add") === 'false' && hasAccess("swap", "Edit") === 'false
                 <!-- <form id="addNewSwap" autocomplete="off" method="post" action="#"> -->
                 <div class="modal-body">
                     <div class="form-row">
-                        <div class="col-md-6">
-                            <label for="fromDealer" class="col-form-label text-md-center">From Dealer:</label>
-                            <div class="form-group">
-                                <select class="selectpicker required" name="fromDealer" id="fromDealer" data-live-search="true" data-size="4">
-                                    <optgroup class="fromDealer">
-                                        <option value="0" selected disabled>From Dealer</option>
-                                    </optgroup>
-                                </select>
-                                <!-- <input type="text" class="form-control" id="fromDealer" name="fromDealer" placeholder="From Dealer"> -->
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label for="fromDealer" class="col-form-label text-md-center">From Dealer:</label>
+                                    <div class="form-group">
+                                        <select class="selectpicker required" name="fromDealer" id="fromDealer" data-live-search="true" data-size="4">
+                                            <optgroup class="fromDealer">
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="clearBtn" class="col-form-label text-md-center">&nbsp;</label>
+                                    <div class="form-group" id="clearBtn">
+                                        <button type="button" class="badge badge-outline-danger badge-square badge-lg cursor-pointer" onclick="resetDealerFrom()">X</button>
+                                        <button type="button" data-toggle="modal" data-target="#addNewLocation" class="badge badge-outline-primary badge-square badge-lg cursor-pointer"> <i class="fa fa-plus"></i> </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <label class="col-form-label" for="salesConsultant">Sales Consultant:</label>
+                            <div class="form-group">
+                                <select class="selectpicker" name="salesPerson" id="salesPerson" data-live-search="true" data-size="4">
+                                    <optgroup class="salesPerson">
+                                        <option value="0" selected disabled>Sales Consultant</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
                             <label for="status" class="col-form-label text-md-center">Status:</label>
                             <select class="form-control selectpicker w-auto" name="status" id="status">
                                 <option value="pending" selected>Pending</option>
@@ -656,7 +771,7 @@ if (hasAccess("swap", "Add") === 'false' && hasAccess("swap", "Edit") === 'false
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">$</span>
                                             </div>
-                                            <input type="text" class="form-control" id="netcostIn" name="netcostIn" readonly>
+                                            <input type="text" class="form-control font-initial" id="netcostIn" name="netcostIn" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -700,6 +815,10 @@ if (hasAccess("swap", "Add") === 'false' && hasAccess("swap", "Edit") === 'false
                                 <div class="custom-control-lg custom-checkbox">
                                     <input type="checkbox" class="custom-control-input vehicleDetails vehicleOut" id="invSent" name="invSent">
                                     <label class="custom-control-label" for="invSent">Invoice Sent</label>
+                                </div>
+                                <div class="custom-control-lg custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input vehicleOut" id="tagged" name="tagged">
+                                    <label class="custom-control-label" for="tagged">Tagged</label>
                                 </div>
                                 <div class="custom-control-lg custom-checkbox">
                                     <input type="checkbox" class="custom-control-input vehicleDetails vehicleOut" id="transferredOut" name="transferredOut">
@@ -821,7 +940,7 @@ if (hasAccess("swap", "Add") === 'false' && hasAccess("swap", "Edit") === 'false
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">$</span>
                                             </div>
-                                            <input type="text" class="form-control" id="netcostOut" name="netcostOut" readonly>
+                                            <input type="text" class="form-control font-initial" id="netcostOut" name="netcostOut" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -839,8 +958,11 @@ if (hasAccess("swap", "Add") === 'false' && hasAccess("swap", "Edit") === 'false
 
                 </div>
                 <div class="modal-footer modal-footer-bordered">
-                    <button class="btn btn-primary mr-2">Submit</button>
-                    <button class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <button type="button" class="btn btn-label-primary btn-icon mr-1" id="createBtnPrint" onclick="printDetails()">
+                        <i class="fa fa-print"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
                 </div>
             </form>
         </div>
@@ -848,6 +970,184 @@ if (hasAccess("swap", "Add") === 'false' && hasAccess("swap", "Edit") === 'false
 </div>
 
 
+<div class="modal fade" id="addNewLocation">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header modal-header-bordered">
+                <h5 class="modal-title">New Swap Location</h5>
+                <button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
+            </div>
+            <form id="addNewSwapLocation" autocomplete="off" method="post" action="../php_action/createLocation.php">
+                <!-- <form id="addNewSwap" autocomplete="off" method="post" action="#"> -->
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <label for="dealerno">Dealer #</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="dealerno" name="dealerno">
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3"><label for="dealership">Dealership</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="dealership" name="dealership">
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3"><label for="address">Address</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="address" name="address">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-3 mb-3">
+                            <label for="city">City</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="city" name="city">
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="state">State</label>
+                            <div class="form-group">
+                                <select class="form-control selectpicker w-auto" name="state" id="state" data-live-search="true" data-size="4">
+                                    <option value="0" selected disabled>State</option>
+                                    <option value="MA">MA</option>
+                                    <option value="RI">RI</option>
+                                    <option value="CT">CT</option>
+                                    <option value="NH">NH</option>
+                                    <option value="AL">AL</option>
+                                    <option value="AK">AK</option>
+                                    <option value="AZ">AZ</option>
+                                    <option value="AR">AR</option>
+                                    <option value="CA">CA</option>
+                                    <option value="CO">CO</option>
+                                    <option value="DC">DC</option>
+                                    <option value="DE">DE</option>
+                                    <option value="FL">FL</option>
+                                    <option value="GA">GA</option>
+                                    <option value="HI">HI</option>
+                                    <option value="ID">ID</option>
+                                    <option value="IL">IL</option>
+                                    <option value="IN">IN</option>
+                                    <option value="IA">IA</option>
+                                    <option value="KS">KS</option>
+                                    <option value="KY">KY</option>
+                                    <option value="LA">LA</option>
+                                    <option value="ME">ME</option>
+                                    <option value="MD">MD</option>
+                                    <option value="MI">MI</option>
+                                    <option value="MN">MN</option>
+                                    <option value="MS">MS</option>
+                                    <option value="MO">MO</option>
+                                    <option value="MT">MT</option>
+                                    <option value="NE">NE</option>
+                                    <option value="NV">NV</option>
+                                    <option value="NJ">NJ</option>
+                                    <option value="NM">NM</option>
+                                    <option value="NY">NY</option>
+                                    <option value="NC">NC</option>
+                                    <option value="ND">ND</option>
+                                    <option value="OH">OH</option>
+                                    <option value="OK">OK</option>
+                                    <option value="OR">OR</option>
+                                    <option value="PA">PA</option>
+                                    <option value="SC">SC</option>
+                                    <option value="SD">SD</option>
+                                    <option value="TN">TN</option>
+                                    <option value="TX">TX</option>
+                                    <option value="UT">UT</option>
+                                    <option value="VT">VT</option>
+                                    <option value="VA">VA</option>
+                                    <option value="WA">WA</option>
+                                    <option value="WV">WV</option>
+                                    <option value="WI">WI</option>
+                                    <option value="WY">WY</option>
+                                    <option value="N/A">N/A</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="zip">Zip</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="zip" name="zip">
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="miles">Miles</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="miles" name="miles">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-3 mb-3">
+                            <label for="travelTime">Travel Time</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="travelTime" name="travelTime">
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="roundTrip">Round Trip</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="roundTrip" name="roundTrip">
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="phone">Phone</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="phone" name="phone">
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="fax">Fax</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="fax" name="fax">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+
+                        <div class="col-md-4 mb-3">
+                            <label for="mcontact">Main Contact</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="mcontact" name="mcontact">
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="cell">Cell</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="cell" name="cell">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label for="preffer">Preffer Call or Text</label>
+                            <div class="d-flex">
+                                <div class="custom-control custom-checkbox mr-5">
+                                    <input type="checkbox" class="custom-control-input" id="call" name="call">
+                                    <label class="custom-control-label" for="call">Call</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="text" name="text">
+                                    <label class="custom-control-label" for="text">Text</label>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <hr>
+                    <button class="btn btn-primary" type="submit">Create</button>
+                    <button class="btn btn-danger" type="button" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
 <?php require_once('../includes/footer.php') ?>
-<!-- <script type="text/javascript" src="../custom/js/matrixRules.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/timepicker@1.13.18/jquery.timepicker.js"></script>
 <script type="text/javascript" src="../custom/js/swaps.js"></script>

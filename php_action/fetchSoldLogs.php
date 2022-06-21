@@ -2,28 +2,43 @@
 
 require_once 'db/core.php';
 
-// $sql = "SELECT sales.date ,  inventory.stockno , sales.fname , sales.lname , users.username, sales.sale_status , sales.deal_notes , 
-// inventory.year, inventory.make , inventory.model , sales.gross , sales.sale_id
-// FROM `sales` INNER JOIN inventory ON sales.stock_id = inventory.id INNER JOIN users ON users.id = sales.sales_consultant WHERE sales.status = 1";
+$userRole;
+if ($_SESSION['userRole']) {
+    $userRole = $_SESSION['userRole'];
+}
 
-$sql = "SELECT sales.date ,  inventory.stockno , sales.fname , sales.lname , users.username, sales.sale_status , sales.deal_notes , 
-inventory.year, inventory.make , inventory.model , sales.gross , sales.sale_id , inventory.lot , inventory.certified, inventory.balance , 
-inventory.status , inventory.age , inventory.stocktype , sales.stock_id
-FROM `sales` INNER JOIN inventory ON sales.stock_id = inventory.id INNER JOIN users ON users.id = sales.sales_consultant WHERE sales.status = 1";
+/* sales consultant id */
+if ($userRole != '66') {
+    $sql = "SELECT sales.date ,  inventory.stockno , sales.fname , sales.lname , users.username, sales.sale_status , sales.deal_notes , 
+    inventory.year, inventory.make , inventory.model , sales.gross , sales.sale_id , inventory.lot , inventory.certified, inventory.balance , 
+    inventory.status , inventory.age , inventory.stocktype , sales.stock_id , sales.consultant_notes
+    FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant WHERE sales.status = 1";
+} else {
+    $uid = $_SESSION['userId'];
+    $sql = "SELECT sales.date ,  inventory.stockno , sales.fname , sales.lname , users.username, sales.sale_status , sales.deal_notes , 
+    inventory.year, inventory.make , inventory.model , sales.gross , sales.sale_id , inventory.lot , inventory.certified, inventory.balance , 
+    inventory.status , inventory.age , inventory.stocktype , sales.stock_id , sales.consultant_notes
+    FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant WHERE sales.status = 1 AND sales.sales_consultant = '$uid'";
+}
+
 $result = $connect->query($sql);
 
 $output = array('data' => array());
 
-function asDollars($value) {
-    if ($value<0) return "-".asDollars(-$value);
+function asDollars($value)
+{
+    if ($value < 0) return "-" . asDollars(-$value);
     return '$' . number_format($value, 2);
-  }
+}
 
 if ($result->num_rows > 0) {
 
     while ($row = $result->fetch_array()) {
 
         $stock_id = $row[18];
+        $id = $row[11];
+        $consultant_notes = $row[19];
+        $sales_consultant_status = "";
 
         $countRow = 0;
 
@@ -32,6 +47,12 @@ if ($result->num_rows > 0) {
         if ($result1->num_rows > 0) {
             $row1 = $result1->fetch_array();
             $countRow = $row1[1];
+        }
+        $sql2 = "SELECT salesperson_status FROM `sale_todo` WHERE sale_id = '$id'";
+        $result2 = $connect->query($sql2);
+        if ($result2->num_rows > 0) {
+            $row2 = $result2->fetch_array();
+            $sales_consultant_status = $row2[0];
         }
 
 
@@ -47,7 +68,6 @@ if ($result->num_rows > 0) {
         // $lot = $row[12];
 
 
-        $id = $row[11];
 
         $date = $row[0];
         $date = date("M-d-Y", strtotime($date));  // formating date
@@ -82,11 +102,12 @@ if ($result->num_rows > 0) {
             $row[5],
             $row[6],
             $balance,
+            $consultant_notes,
+            $sales_consultant_status,
             $button,
             $row[17],
             $countRow,
-            $id,
-
+            $id
         );
     } // /while 
 

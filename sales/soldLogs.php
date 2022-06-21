@@ -3,12 +3,13 @@ include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
 if ($_GET['r'] == 'man') {
-    if ($salesConsultantID != $_SESSION['userRole']) {
-        if (hasAccess("sale", "Edit") === 'false' && hasAccess("sale", "Remove") === 'false') {
-            // echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
-            echo "Dont Allow";
-        }
+    // if ($salesConsultantID != $_SESSION['userRole']) {
+    // if (hasAccess("sale", "Edit") === 'false' && hasAccess("sale", "Remove") === 'false') {
+    if (hasAccess("sale", "View") === 'false') {
+        echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+        // echo "Dont Allow";
     }
+    // }
     echo "<div class='div-request d-none'>man</div>";
 } else if ($_GET['r'] == 'edit') {
     if (hasAccess("sale", "Edit") === 'false') {
@@ -24,6 +25,11 @@ if ($_GET['r'] == 'man') {
     <link rel="stylesheet" href="../custom/css/customDatatable.css">
 </head>
 <style>
+    .makeDisable {
+        pointer-events: none;
+        opacity: 0.8;
+    }
+
     .customerDetailBody,
     .loadIncentives,
     .loadSalesPersonTodo {
@@ -113,6 +119,12 @@ if ($_GET['r'] == 'man') {
 
 if ($_GET['r'] == 'man') {
 
+    if ($salesConsultantID != $_SESSION['userRole']) {
+        echo '<input type="hidden" name="isConsultant" id="isConsultant" value="false" />';
+    } else {
+        echo '<input type="hidden" name="isConsultant" id="isConsultant" value="true" />';
+    }
+
 ?>
 
     <div class="content">
@@ -165,7 +177,7 @@ if ($_GET['r'] == 'man') {
                                                     <input type="text" class="form-control" placeholder="Select Date" name="datefilter" value="" />
                                                 </div>
                                             </div>
-    
+
                                         </div>
                                     </div>
                                     <div class="d-inline-flex">
@@ -177,6 +189,7 @@ if ($_GET['r'] == 'man') {
                             </div>
                         </div>
                         <div class="portlet-body">
+
                             <table id="datatable-1" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
@@ -193,6 +206,8 @@ if ($_GET['r'] == 'man') {
                                         <th>Status</th>
                                         <th>Notes</th>
                                         <th>Balance</th>
+                                        <th>Consultant Notes</th>
+                                        <th>Salesperson Status</th>
                                         <th>Action</th>
                                         <th>Stock Type</th>
                                         <th>count</th>
@@ -313,19 +328,57 @@ if ($_GET['r'] == 'man') {
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row">
-
-                                <div class="form-group col-md-12">
-                                    <label class="col-form-label" for="consultantNote">Consultant Notes</label>
-                                    <textarea class="form-control autosize" name="consultantNote" id="consultantNote" placeholder="Consultant Notes..."></textarea>
-                                </div>
-                                <div class="col-md-12 mb-2">
-                                    <div class="custom-control custom-control-lg custom-checkbox">
-                                        <input type="checkbox" name="thankyouCard" class="custom-control-input" id="thankyouCard">
-                                        <label class="custom-control-label" for="thankyouCard">Thank you card</label> 
+                            <?php
+                            if ($salesConsultantID == $_SESSION['userRole'] || $salesManagerID == $_SESSION['userRole']) {
+                            ?>
+                                <div class="form-row <?php echo ($salesConsultantID == $_SESSION['userRole']) ?: "makeDisable"; ?>">
+                                    <div class="form-group col-md-4">
+                                        <label class="col-form-label" for="salePStatus">SalesPerson Status</label>
+                                        <select class="selectpicker" onchange="chnageStyle(this)" id="salePStatus" name="salePStatus" data-style="btn-outline-danger">
+                                            <option value="dealWritten">Deal Written</option>
+                                            <option value="gmdSubmit">GMD Submit</option>
+                                            <option value="contracted">Contracted</option>
+                                            <option value="cancelled">Cancelled</option>
+                                            <option value="delivered">Delivered</option>
+                                        </select>
+                                        <div class="custom-control custom-control-lg custom-checkbox mb-3 mt-3">
+                                            <input type="checkbox" name="thankyouCard" class="custom-control-input" id="thankyouCard">
+                                            <label class="custom-control-label" for="thankyouCard">Thank you card</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-8">
+                                        <label class="col-form-label" for="consultantNote">Consultant Notes</label>
+                                        <textarea class="form-control autosize" name="consultantNote" id="consultantNote" placeholder="Consultant Notes..."></textarea>
                                     </div>
                                 </div>
-                            </div>
+                            <?php
+                            } else if ($generalManagerID == $_SESSION['userRole']) {
+                            ?>
+                                <div class="form-row <?php echo ($salesConsultantID == $_SESSION['userRole']) ?: "makeDisable"; ?>">
+                                    <div class="form-group col-md-4">
+                                        <div class="d-none">
+                                            <label class="col-form-label" for="salePStatus">SalesPerson Status</label>
+                                            <select class="selectpicker" onchange="chnageStyle(this)" id="salePStatus" name="salePStatus" data-style="btn-outline-danger">
+                                                <option value="dealWritten">Deal Written</option>
+                                                <option value="gmdSubmit">GMD Submit</option>
+                                                <option value="contracted">Contracted</option>
+                                                <option value="cancelled">Cancelled</option>
+                                                <option value="delivered">Delivered</option>
+                                            </select>
+                                        </div>
+                                        <div class="custom-control custom-control-lg custom-checkbox mb-3 mt-3">
+                                            <input type="checkbox" name="thankyouCard" class="custom-control-input" id="thankyouCard">
+                                            <label class="custom-control-label" for="thankyouCard">Thank you card</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-8 d-none">
+                                        <label class="col-form-label" for="consultantNote">Consultant Notes</label>
+                                        <textarea class="form-control autosize" name="consultantNote" id="consultantNote" placeholder="Consultant Notes..."></textarea>
+                                    </div>
+                                </div>
+                            <?php
+                            }
+                            ?>
                             <div class="form-row">
                                 <div class="col-md-12">
                                     <div class="form-group input-group d-flex flex-md-row flex-sm-column">
@@ -414,8 +467,14 @@ if ($_GET['r'] == 'man') {
                         </div>
                     </div>
                     <div class="modal-footer modal-footer-bordered">
-                        <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=edit&i=" class="btn btn-primary mr-2 d-none" id="editBtn">Edit</a>
-                        <button type="submit" class="btn btn-success mr-2">Update Sale</button>
+                        <?php
+                        if ($salesConsultantID == $_SESSION['userRole']) {
+                            echo '<button type="submit" class="btn btn-success mr-2">Update Sale</button>';
+                            echo '<a href="' . $GLOBALS['siteurl'] . '/sales/soldLogs.php?r=edit&i=" class="btn btn-primary mr-2 d-none" id="editBtn">Edit</a>';
+                        } else {
+                            echo '<a href="' . $GLOBALS['siteurl'] . '/sales/soldLogs.php?r=edit&i=" class="btn btn-primary mr-2" id="editBtn">Edit</a>';
+                        }
+                        ?>
                         <button class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
                     </div>
                 </form>

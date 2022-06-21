@@ -2,7 +2,8 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
-if (hasAccess("regp", "Add") === 'false' && hasAccess("regp", "Edit") === 'false' && hasAccess("regp", "Remove") === 'false') {
+// if (hasAccess("regp", "Add") === 'false' && hasAccess("regp", "Edit") === 'false' && hasAccess("regp", "Remove") === 'false') {
+if (hasAccess("regp", "View") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
 
@@ -36,7 +37,25 @@ if (hasAccess("regp", "Add") === 'false' && hasAccess("regp", "Edit") === 'false
         background-color: #c9c8c8 !important;
         color: #FFFFFF !important;
     }
+
+    .theme-light .custom-control-label::before {
+        background: #f5f5f5;
+        border-color: #8b8b8b;
+    }
+
+    .theme-dark .custom-control-label::before {
+        background: #616161;
+        border-color: #e0e0e0;
+    }
 </style>
+
+<?php
+if ($salesConsultantID != $_SESSION['userRole']) {
+    echo '<input type="hidden" name="isConsultant" id="isConsultant" value="false" />';
+} else {
+    echo '<input type="hidden" name="isConsultant" id="isConsultant" value="true" />';
+}
+?>
 
 <div class="content">
     <div class="container-fluid">
@@ -72,6 +91,7 @@ if (hasAccess("regp", "Add") === 'false' && hasAccess("regp", "Edit") === 'false
                                     <th>Vehicle</th>
                                     <th>Problem</th>
                                     <th>Sales Consultant Notes</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -89,106 +109,136 @@ if (hasAccess("regp", "Add") === 'false' && hasAccess("regp", "Edit") === 'false
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header modal-header-bordered">
-                <h5 class="modal-title">Edit Matrix Rule</h5><button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                <h5 class="modal-title">Edit Registration Problem</h5><button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
             </div>
-            <form class="form-horizontal" id="editProblemForm" action="../php_action/editRegistrationProblem.php" method="post">
-                <div class="modal-body">
-                    <div id="edit-messages"></div>
-                    <div class="text-center">
-                        <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div>
-                    </div>
-                    <div class="showResult d-none">
-                        <input type="hidden" name="problemId" id="problemId">
-                        <div class="form-row">
-                            <label for="econtractDate" class="col-sm-2 col-form-label text-md-center">Contract Date:</label>
-                            <div class="col-sm-4">
-                                <div class="form-group input-group">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text"><i class="fa fa-calendar"></i>
-                                        </span>
+            <?php
+            if ($salesConsultantID != $_SESSION['userRole']) {
+            ?>
+
+
+                <form class="form-horizontal" id="editProblemForm" action="../php_action/editRegistrationProblem.php" method="post">
+                    <div class="modal-body">
+                        <div id="edit-messages"></div>
+                        <div class="text-center">
+                            <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div>
+                        </div>
+                        <div class="showResult d-none">
+                            <input type="hidden" name="problemId" id="problemId">
+                            <div class="form-row">
+                                <label for="econtractDate" class="col-sm-2 col-form-label text-md-center">Contract Date:</label>
+                                <div class="col-sm-4">
+                                    <div class="form-group input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control setDate" name="econtractDate" placeholder="Select date" id="econtractDate">
                                     </div>
-                                    <input type="text" class="form-control setDate" name="econtractDate" placeholder="Select date" id="econtractDate">
                                 </div>
-                            </div>
-                            <label for="eproblemDate" class="col-sm-2 col-form-label text-md-center">Problem Date:</label>
-                            <div class="col-sm-4">
-                                <div class="form-group input-group">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text"><i class="fa fa-calendar"></i>
-                                        </span>
+                                <label for="eproblemDate" class="col-sm-2 col-form-label text-md-center">Problem Date:</label>
+                                <div class="col-sm-4">
+                                    <div class="form-group input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control setDate" name="eproblemDate" placeholder="Select date" id="eproblemDate">
                                     </div>
-                                    <input type="text" class="form-control setDate" name="eproblemDate" placeholder="Select date" id="eproblemDate">
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-4">
-                                <label for="ecustomerName" class="col-form-label text-md-center">Customer Name:</label>
-                                <div class="form-group">
-                                    <input type="text" class="form-control typeahead typeahead1" id="ecustomerName" name="ecustomerName" placeholder="Customer Name*">
+                            <div class="form-row">
+                                <div class="col-md-4">
+                                    <label for="ecustomerName" class="col-form-label text-md-center">Customer Name:</label>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control typeahead typeahead1" id="ecustomerName" name="ecustomerName" placeholder="Customer Name*">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="col-form-label" for="esalesConsultant">Sales Consultant:</label>
+                                    <div class="form-group">
+                                        <select class="selectpicker" name="esalesConsultant" id="esalesConsultant" data-live-search="true" data-size="4">
+                                            <optgroup class="salesConsultantList">
+                                                <option value="0" selected disabled>Sales Consultant</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="col-form-label" for="efinanceManager">Finance Manager:</label>
+                                    <div class="form-group">
+                                        <select class="selectpicker" name="efinanceManager" id="efinanceManager" data-live-search="true" data-size="4">
+                                            <optgroup class="financeManagerList">
+                                                <option value="0" selected disabled>Finance Manager</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <label class="col-form-label" for="esalesConsultant">Sales Consultant:</label>
-                                <div class="form-group">
-                                    <select class="selectpicker" name="esalesConsultant" id="esalesConsultant" data-live-search="true" data-size="4">
-                                        <optgroup class="salesConsultantList">
-                                            <option value="0" selected disabled>Sales Consultant</option>
-                                        </optgroup>
-                                    </select>
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <label class="col-form-label" for="estockId">Stock No.</label>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="estockId" name="estockId" placeholder="Stock No.">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="col-form-label" for="evehicle">Vehicle</label>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="evehicle" name="evehicle" placeholder="Vehicle">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <label class="col-form-label" for="efinanceManager">Finance Manager:</label>
-                                <div class="form-group">
-                                    <select class="selectpicker" name="efinanceManager" id="efinanceManager" data-live-search="true" data-size="4">
-                                        <optgroup class="financeManagerList">
-                                            <option value="0" selected disabled>Finance Manager</option>
-                                        </optgroup>
-                                    </select>
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <label class="col-form-label" for="eproblem">Problem</label>
+                                    <div class="form-group">
+                                        <textarea class="form-control autosize" name="eproblem" id="eproblem" placeholder="Problem..."></textarea>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-6">
-                                <label class="col-form-label" for="estockId">Stock No.</label>
-                                <div class="form-group">
-                                    <!-- <select class="selectpicker" onchange="changeStockDetails(this , 'evehicle')" name="estockId" id="estockId" data-live-search="true" data-size="4">
-                                        <optgroup class="stockIdList">
-                                            <option value="0" selected disabled>Stock No:</option>
-                                        </optgroup>
-                                    </select> -->
-                                    <input type="text" class="form-control" id="estockId" name="estockId" placeholder="Stock No.">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="col-form-label" for="evehicle">Vehicle</label>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="evehicle" name="evehicle" placeholder="Vehicle">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-6">
-                                <label class="col-form-label" for="eproblem">Problem</label>
-                                <div class="form-group">
-                                    <textarea class="form-control autosize" name="eproblem" id="eproblem" placeholder="Problem..."></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="col-form-label" for="enotes">Sales Consultant Notes</label>
-                                <div class="form-group">
-                                    <textarea class="form-control autosize" name="enotes" id="enotes" placeholder="Sales Consultant Notes..."></textarea>
+                                <div class="col-md-6">
+                                    <label class="col-form-label" for="enotes">Sales Consultant Notes</label>
+                                    <div class="form-group">
+                                        <textarea class="form-control autosize" name="enotes" id="enotes" placeholder="Sales Consultant Notes..."></textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer modal-footer-bordered">
-                    <button class="btn btn-primary mr-2">Update Changes</button>
-                    <button class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
-                </div>
-            </form>
+                    <div class="modal-footer modal-footer-bordered">
+                        <button type="submit" class="btn btn-primary mr-2">Update Changes</button>
+                        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+
+            <?php
+            } else {
+            ?>
+                <form class="form-horizontal" id="editProblemForm" action="../php_action/editRegistrationProblemNotes.php" method="post">
+                    <div class="modal-body">
+                        <div id="edit-messages"></div>
+                        <div class="text-center">
+                            <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div>
+                        </div>
+                        <div class="showResult d-none">
+                            <input type="hidden" name="problemId" id="problemId">
+                            <div class="form-row">
+                                <div class="col-md-12">
+                                    <label class="col-form-label" for="enotes">Sales Consultant Notes</label>
+                                    <div class="form-group">
+                                        <textarea class="form-control autosize" name="enotes" id="enotes" placeholder="Sales Consultant Notes..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer modal-footer-bordered">
+                        <button type="submit" class="btn btn-primary mr-2">Update Changes</button>
+                        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            <?php
+            }
+            ?>
 
         </div>
     </div>
