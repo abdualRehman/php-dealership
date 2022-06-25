@@ -436,7 +436,12 @@ $(function () {
                 }
             },
             createdRow: function (row, data, dataIndex) {
-                $(row).attr({
+                // $(row).attr({
+                //     "data-toggle": "modal",
+                //     "data-target": "#showDetails",
+                //     "onclick": "showDetails(" + data[18] + ")"
+                // });
+                $(row).children().not(':last-child').attr({
                     "data-toggle": "modal",
                     "data-target": "#showDetails",
                     "onclick": "showDetails(" + data[18] + ")"

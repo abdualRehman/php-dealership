@@ -106,7 +106,7 @@ $(function () {
                 visible: false,
             },
             {
-                targets: [9],
+                targets: [9, 11],
                 visible: false,
             },
             { width: 300, targets: [7, 8] },
@@ -118,17 +118,12 @@ $(function () {
             }
         },
         "drawCallback": function (settings, start, end, max, total, pre) {
-            $('.editCheckbox').on('change', function () {
-                changeProblemStatus($(this)[0].id);
-            });
-        },
-        "drawCallback": function (settings, start, end, max, total, pre) {
             var json = this.fnSettings().json;
             if (json) {
                 var obj = json.data;
                 var fixedCount = 0, notFixedCount = 0;
 
-                for (const [key, value] of Object.entries(obj)) {                    
+                for (const [key, value] of Object.entries(obj)) {
                     var rowStatus = value[9];
                     if (rowStatus == '0') {
                         fixedCount += 1;
@@ -138,6 +133,18 @@ $(function () {
                 }
                 $(`#notFixedCount`).html(notFixedCount);
                 $(`#fixedCount`).html(fixedCount);
+            }
+            $('.editCheckbox').on('change', function () {
+                changeProblemStatus($(this));
+            });
+        },
+        createdRow: function (row, data, dataIndex) {
+            if ($('#isEditAllowed').val() == "true") {
+                $(row).children().not(':last-child').attr({
+                    "data-toggle": "modal",
+                    "data-target": "#modal8",
+                    "onclick": "editProblem(" + data[11] + ")"
+                });
             }
         },
 
@@ -583,7 +590,8 @@ function removeProblem(probId = null) {
         });
     }
 }
-function changeProblemStatus(probId = null) {
+function changeProblemStatus(obj = null) {
+    var probId = obj[0].id;
     if (probId) {
         e1.fire({
             title: "Are you sure?",
@@ -608,6 +616,8 @@ function changeProblemStatus(probId = null) {
                     }
                 }); // /ajax function to remove the brand
 
+            } else {
+                // $(obj[0]).change();
             }
         });
     }

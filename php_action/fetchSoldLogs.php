@@ -8,7 +8,7 @@ if ($_SESSION['userRole']) {
 }
 
 /* sales consultant id */
-if ($userRole != '66') {
+if ($userRole != $salesConsultantID) {
     $sql = "SELECT sales.date ,  inventory.stockno , sales.fname , sales.lname , users.username, sales.sale_status , sales.deal_notes , 
     inventory.year, inventory.make , inventory.model , sales.gross , sales.sale_id , inventory.lot , inventory.certified, inventory.balance , 
     inventory.status , inventory.age , inventory.stocktype , sales.stock_id , sales.consultant_notes

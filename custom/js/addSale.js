@@ -452,8 +452,7 @@ function changeRules() {
         var startDate = moment(obj[17]).format('MM-DD-YYYY');
         var endDate = moment(obj[18]).format('MM-DD-YYYY');
 
-        var bool1 = moment(saleDate).isBetween
-            (startDate, endDate, null, '[]'); // true
+        var bool1 = moment(saleDate).isBetween(startDate, endDate, null, '[]'); // true
 
         // console.log(saleDate);
         // console.log("incentive start date", startDate);

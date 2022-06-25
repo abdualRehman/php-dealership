@@ -66,15 +66,15 @@ if ($result->num_rows > 0) {
 
         $button = '
             <div class="show d-flex" >' .
-            (hasAccess("regp", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editProblem(' . $id . ')" >
-                    <i class="fa fa-edit"></i>
-                </button>' : "") .
+            // (hasAccess("regp", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editProblem(' . $id . ')" >
+            //         <i class="fa fa-edit"></i>
+            //     </button>' : "") .
             // (hasAccess("regp", "Remove") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeProblem(' . $id . ')" >
             //         <i class="fa fa-trash"></i>
             //     </button>' : "") .
             (hasAccess("regp", "Remove") !== 'false' ? '
              <div class="custom-control custom-control-lg custom-checkbox">
-            <input type="checkbox" name="' . $id . 'checkbox" class="custom-control-input editCheckbox" id="' . $id . '" ' . (($row[10] == '1') ?: 'checked="checked"') . ' >
+            <input type="checkbox" name="' . $id . 'checkbox" class="custom-control-input editCheckbox" id="' . $id . '" ' . (($row[10] == '1') ?'': 'checked="checked"') . ' >
             <label class="custom-control-label" for="' . $id . '"></label> 
         </div>' : "") .
 
@@ -93,6 +93,7 @@ if ($result->num_rows > 0) {
             $row[7], // notes
             $row[10],
             $button,
+            $id,
         );
     } // /while 
 

@@ -162,7 +162,7 @@ if (hasAccess("swap", "Edit") === 'false') {
 
                         <div class="form-row">
                             <div class="col-md-4">
-                                <div class="row">
+                                <div class="row align-items-center">
                                     <div class="col-md-8">
                                         <label for="efromDealer" class="col-form-label text-md-center">From Dealer:</label>
                                         <div class="form-group">
@@ -570,7 +570,7 @@ if (hasAccess("swap", "Edit") === 'false') {
                 <div class="modal-body">
                     <div class="form-row">
                         <div class="col-md-4">
-                            <div class="row">
+                            <div class="row align-items-center">
                                 <div class="col-md-8">
                                     <label for="fromDealer" class="col-form-label text-md-center">From Dealer:</label>
                                     <div class="form-group">

@@ -97,9 +97,9 @@ $(function () {
                 phone: {
                     required: !0,
                 },
-                fax: {
-                    required: !0,
-                },
+                // fax: {
+                //     required: !0,
+                // },
 
             },
 
@@ -191,9 +191,9 @@ $(function () {
                     phone: {
                         required: !0,
                     },
-                    fax: {
-                        required: !0,
-                    },
+                    // fax: {
+                    //     required: !0,
+                    // },
 
                 },
 

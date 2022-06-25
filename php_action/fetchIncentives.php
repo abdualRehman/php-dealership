@@ -9,7 +9,7 @@ if ($_SESSION['userRole']) {
 }
 
 
-if ($userRole == 'Admin') {
+if ($userRole != $salesConsultantID) {
     $sql = "SELECT sale_incentives.incentive_id , users.username as sale_consultant , sales.date , sales.fname , sales.lname , sale_incentives.college , sale_incentives.military , sale_incentives.loyalty , sale_incentives.conquest, sale_incentives.misc1 , sale_incentives.misc2 , sale_incentives.misc3 , inventory.stockno ,  inventory.stocktype , inventory.year , inventory.model , inventory.make , sales.state ,
     sale_incentives.college_date, sale_incentives.military_date , sale_incentives.loyalty_date , sale_incentives.conquest_date , sale_incentives.misc1_date , sale_incentives.misc2_date , sale_incentives.misc3_date , sale_incentives.images
     FROM `sale_incentives` INNER JOIN sales ON sale_incentives.sale_id = sales.sale_id INNER JOIN users ON sales.sales_consultant = users.id INNER JOIN inventory ON sales.stock_id = inventory.id WHERE sales.status = 1 AND sale_incentives.status = 1 ORDER BY sales.sales_consultant ASC";

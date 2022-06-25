@@ -392,9 +392,6 @@ $(function () {
             phone: {
                 required: !0,
             },
-            fax: {
-                required: !0,
-            },
 
         },
 

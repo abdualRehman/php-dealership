@@ -7,6 +7,11 @@ if (hasAccess("regp", "View") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
 
+if (hasAccess("regp", "Edit") === 'false') {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+}
 ?>
 
 <head>
@@ -93,6 +98,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                     <th>Sales Consultant Notes</th>
                                     <th>Status</th>
                                     <th>Action</th>
+                                    <th>ID</th>
                                 </tr>
                             </thead>
                         </table>
