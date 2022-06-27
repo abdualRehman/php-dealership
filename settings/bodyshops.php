@@ -5,6 +5,11 @@ include_once '../includes/header.php';
 if (hasAccess("bodyshops", "Add") === 'false' && hasAccess("bodyshops", "Edit") === 'false' && hasAccess("bodyshops", "Remove") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
+if (hasAccess("bodyshops", "Edit") === 'false') {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+}
 
 ?>
 
@@ -55,6 +60,8 @@ if (hasAccess("bodyshops", "Add") === 'false' && hasAccess("bodyshops", "Edit") 
                                     <th>Contact</th>
                                     <th>Phone</th>
                                     <th>Action</th>
+                                    <th>Status</th>
+                                    <th>ID</th>
                                 </tr>
                             </thead>
                         </table>

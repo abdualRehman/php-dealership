@@ -5,7 +5,11 @@ include_once '../includes/header.php';
 if (hasAccess("cashincrule", "Add") === 'false' && hasAccess("cashincrule", "Edit") === 'false' && hasAccess("cashincrule", "Remove") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
-
+if (hasAccess("cashincrule", "Edit") === 'false') {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+}
 
 ?>
 
@@ -22,6 +26,18 @@ if (hasAccess("cashincrule", "Add") === 'false' && hasAccess("cashincrule", "Edi
 
     #datatable-1 tbody tr td {
         padding: 10px 6px;
+    }
+
+    @media (min-width: 1025px) {
+
+        .modal-lg,
+        .modal-xl {
+            max-width: 1000PX;
+        }
+
+        .modal-dialog table.detialsTable {
+            width: inherit;
+        }
     }
 </style>
 
@@ -53,15 +69,16 @@ if (hasAccess("cashincrule", "Add") === 'false' && hasAccess("cashincrule", "Edi
                                     <th>Year</th>
                                     <th>Model no.</th>
                                     <th>Exclude Model No</th>
+                                    <th>Expire In.</th>
                                     <th>Dealer</th>
                                     <th>Other</th>
                                     <th>Lease</th>
                                     <th>Action</th>
+                                    <th>ID</th>
                                 </tr>
                             </thead>
                         </table>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -83,6 +100,14 @@ if (hasAccess("cashincrule", "Add") === 'false' && hasAccess("cashincrule", "Edi
                     </div>
                     <div class="showResult d-none">
                         <input type="hidden" name="ruleId" id="ruleId">
+                        <div class="form-group row">
+                            <label for="dateRange" class="col-sm-2 offset-sm-1 col-form-label text-center">Select Date:</label>
+                            <div class="col-sm-3">
+                                <td class="form-group">
+                                    <input type="text" class="form-control" id="editexpireIn" name="editexpireIn" placeholder="Expire Date">
+                                </td>
+                            </div>
+                        </div>
                         <br>
                         <h3 class="h4">Stock Details:</h3>
                         <table class="table" id="productTable1">
@@ -180,6 +205,15 @@ if (hasAccess("cashincrule", "Add") === 'false' && hasAccess("cashincrule", "Edi
                 <!-- <form id="addNewRule" autocomplete="off" method="post" action="#"> -->
                 <div class="modal-body">
                     <br>
+                    <div class="form-group row">
+                        <label for="dateRange" class="col-sm-2 col-form-label text-center">Select Date:</label>
+                        <div class="col-sm-3">
+                            <td class="form-group">
+                                <input type="text" class="form-control" id="expireIn" name="expireIn" placeholder="Expire Date">
+                            </td>
+                        </div>
+                    </div>
+                    <br><br>
                     <h3 class="h4">Stock Details:</h3>
                     <table class="table" id="productTable">
                         <thead>

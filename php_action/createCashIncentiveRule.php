@@ -5,6 +5,10 @@ require_once './updateMatrixRules.php';
 
 $valid = array('success' => false, 'messages' => array(), 'errorMessages' => array(), 'id' => '' , 'settingError' => array() );
 
+function reformatDate($date, $from_format = 'm-d-Y', $to_format = 'Y-m-d') {
+    $date_aux = date_create_from_format($from_format, $date);
+    return date_format($date_aux,$to_format);
+}
 
 if ($_POST) {
 
@@ -12,6 +16,11 @@ if ($_POST) {
     $dealer = (isset($_POST['dealer'])) ? mysqli_real_escape_string($connect, $_POST['dealer']) : "";
     $other = (isset($_POST['other'])) ? mysqli_real_escape_string($connect, $_POST['other']) : "";
     $lease = (isset($_POST['lease'])) ? mysqli_real_escape_string($connect, $_POST['lease']) : "";
+
+    $expireIn = (isset($_POST['expireIn'])) ? mysqli_real_escape_string($connect, $_POST['expireIn']) : "";
+
+    $expireIn = ($expireIn === '') ? "" : reformatDate($expireIn);
+
 
 
 
@@ -32,8 +41,9 @@ if ($_POST) {
             $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . " is Already Exist";
         } else {
 
-            $sql = "INSERT INTO `cash_incentive_rules`( `model`, `year`, `modelno` , `ex_modelno`, `dealer`, `other` , `lease` , `status`) 
+            $sql = "INSERT INTO `cash_incentive_rules`( `expire_in`, `model`, `year`, `modelno` , `ex_modelno`, `dealer`, `other` , `lease` , `status`) 
             VALUES (
+                '$expireIn',
                 '$model',
                 '$year',
                 '$modelno',

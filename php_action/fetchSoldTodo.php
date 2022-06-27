@@ -9,7 +9,7 @@ if ($_SESSION['userRole']) {
 }
 
 
-if ($userRole == 'Admin') {
+if ($userRole != $salesConsultantID) {
     $sql = "SELECT sale_todo.sale_todo_id , users.username as sale_consultant , sales.date , sales.fname , sales.lname , sale_todo.vin_check , sale_todo.insurance , sale_todo.trade_title , sale_todo.registration , sale_todo.inspection , sale_todo.salesperson_status , sale_todo.paid , inventory.stockno ,  inventory.stocktype , inventory.year , inventory.model , inventory.make , sales.state
     FROM `sale_todo` INNER JOIN sales ON sale_todo.sale_id = sales.sale_id INNER JOIN users ON sales.sales_consultant = users.id INNER JOIN inventory ON sales.stock_id = inventory.id WHERE sales.status = 1 AND sale_todo.status = 1 ORDER BY sales.sales_consultant ASC";
 } else {
@@ -71,9 +71,6 @@ if ($result->num_rows > 0) {
             <button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#editDetails" onclick="editDetails(' . $id . ')" >
                 <i class="fa fa-edit"></i>
             </button>
-            <!-- <button class="btn btn-label-primary btn-icon" onclick="removeTodo(' . $id . ')" >
-                <i class="fa fa-trash"></i>
-            </button>    -->
         </div>';
 
         $output['data'][] = array(
@@ -89,7 +86,9 @@ if ($result->num_rows > 0) {
             $inspection,
             $salesperson_status,
             $paid,
-            $button,
+            $id,
+            $sale_consultant
+            // $button,
 
         );
     } // /while 

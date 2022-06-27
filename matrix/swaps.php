@@ -176,7 +176,13 @@ if (hasAccess("swap", "Edit") === 'false') {
                                         <label for="clearBtn" class="col-form-label text-md-center">&nbsp;</label>
                                         <div class="form-group" id="clearBtn">
                                             <button type="button" class="badge badge-outline-danger badge-square badge-lg cursor-pointer" onclick="resetDealerFrom()">X</button>
-                                            <button type="button" data-toggle="modal" data-target="#addNewLocation" class="badge badge-outline-primary badge-square badge-lg cursor-pointer"> <i class="fa fa-plus"></i> </button>
+                                            <?php
+                                            if (hasAccess("swploc", "Add") !== 'false') {
+                                            ?>
+                                                <button type="button" data-toggle="modal" data-target="#addNewLocation" class="badge badge-outline-primary badge-square badge-lg cursor-pointer"> <i class="fa fa-plus"></i> </button>
+                                            <?php
+                                            }
+                                            ?>
                                         </div>
                                     </div>
                                 </div>
@@ -584,7 +590,13 @@ if (hasAccess("swap", "Edit") === 'false') {
                                     <label for="clearBtn" class="col-form-label text-md-center">&nbsp;</label>
                                     <div class="form-group" id="clearBtn">
                                         <button type="button" class="badge badge-outline-danger badge-square badge-lg cursor-pointer" onclick="resetDealerFrom()">X</button>
-                                        <button type="button" data-toggle="modal" data-target="#addNewLocation" class="badge badge-outline-primary badge-square badge-lg cursor-pointer"> <i class="fa fa-plus"></i> </button>
+                                        <?php
+                                        if (hasAccess("swploc", "Add") !== 'false') {
+                                        ?>
+                                            <button type="button" data-toggle="modal" data-target="#addNewLocation" class="badge badge-outline-primary badge-square badge-lg cursor-pointer"> <i class="fa fa-plus"></i> </button>
+                                        <?php
+                                        }
+                                        ?>
                                     </div>
                                 </div>
                             </div>

@@ -28,6 +28,22 @@ toastr.options = {
 
 $(function () {
 
+    $("#expireIn").datepicker({
+        language: 'pt-BR',
+        format: 'mm-dd-yyyy',
+        todayHighlight: !0,
+        autoclose: true,
+        todayBtn: "linked",
+        language: 'pt-BR',
+    });
+    $("#editexpireIn").datepicker({
+        language: 'pt-BR',
+        format: 'mm-dd-yyyy',
+        todayHighlight: !0,
+        autoclose: true,
+        todayBtn: "linked",
+        language: 'pt-BR',
+    });
 
     loadTypeHead(1);
 
@@ -44,17 +60,41 @@ $(function () {
         "pageLength": 25,
         columnDefs: [
             {
+                targets: [9],
+                visible: false,
+            },
+            {
                 searchPanes: {
                     show: true
                 },
                 targets: [0, 1, 2, 3],
             },
+            {
+                targets: 4,
+                createdCell: function (td, cellData, rowData, row, col) {
+                    if (cellData == 'Expire') {
+                        $(td).html('<span class="badge badge-danger badge-pill">Expire</span>');
+                    } else {
+                        $(td).html('<span class="badge badge-info badge-pill">' + cellData + '</span>');
+                    }
+
+                }
+            }
         ],
 
         language: {
             searchPanes: {
                 count: "{total} found",
                 countFiltered: "{shown} / {total}"
+            }
+        },
+        createdRow: function (row, data, dataIndex) {
+            if ($('#isEditAllowed').val() == "true") {
+                $(row).children().not(':last-child').attr({
+                    "data-toggle": "modal",
+                    "data-target": "#modal8",
+                    "onclick": "editRule(" + data[9] + ")"
+                });
             }
         },
         "order": [[0, "asc"]]
@@ -65,6 +105,9 @@ $(function () {
     $("#addNewRule").validate({
         ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
         rules: {
+            expireIn: {
+                required: !0,
+            },
             "year[]": {
                 required: !0,
             },
@@ -103,50 +146,54 @@ $(function () {
 
 
         },
+        messages: {
+            expireIn: {
+                required: "",
+            },
+        },
         submitHandler: function (form, e) {
             // return true;
             e.preventDefault();
-            var c = confirm('Do you really want to save this?');
-            if (c) {
-                var form = $('#addNewRule');
-                $.ajax({
-                    type: "POST",
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response);
 
-                        if ((response.errorMessages) && response.errorMessages.length > 0) {
-                            response.errorMessages.forEach(message => {
-                                toastr.error(message, 'Error while Adding');
-                            });
-                        }
-                        if (response.success == true) {
-                            e1.fire({
-                                position: "center",
-                                icon: "success",
-                                title: response.messages.length > 0 ? response.messages[0] : "Successfully Added",
-                                showConfirmButton: !1,
-                                timer: 1500
-                            })
-                            manageDataTable.ajax.reload(null, false);
-                        } else {
-                            e1.fire({
-                                // position: "center",
-                                icon: "error",
-                                title: response.messages.length > 0 ? response.messages[0] : "Error while Adding",
-                                showConfirmButton: !1,
-                                timer: 2500
-                            })
+            var form = $('#addNewRule');
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
 
-                            // form[0].reset();
-                        }
-
-
+                    if ((response.errorMessages) && response.errorMessages.length > 0) {
+                        response.errorMessages.forEach(message => {
+                            toastr.error(message, 'Error while Adding');
+                        });
                     }
-                });
-            }
+                    if (response.success == true) {
+                        e1.fire({
+                            position: "center",
+                            icon: "success",
+                            title: response.messages.length > 0 ? response.messages[0] : "Successfully Added",
+                            showConfirmButton: !1,
+                            timer: 1500
+                        })
+                        manageDataTable.ajax.reload(null, false);
+                    } else {
+                        e1.fire({
+                            // position: "center",
+                            icon: "error",
+                            title: response.messages.length > 0 ? response.messages[0] : "Error while Adding",
+                            showConfirmButton: !1,
+                            timer: 2500
+                        })
+
+                        // form[0].reset();
+                    }
+
+
+                }
+            });
+
             return false;
 
         }
@@ -157,7 +204,9 @@ $(function () {
     $("#editRuleForm").validate({
         ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
         rules: {
-
+            editexpireIn: {
+                required: !0,
+            },
             editYear: {
                 required: !0,
             },
@@ -192,47 +241,50 @@ $(function () {
 
 
         },
-
+        messages: {
+            editexpireIn: {
+                required: "",
+            },
+        },
         submitHandler: function (form, e) {
             // return true
             e.preventDefault();
-            var c = confirm('Do you really want to save this?');
-            if (c) {
-                var form = $('#editRuleForm');
-                $.ajax({
-                    type: "POST",
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response);
 
-                        if (response.success == true) {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "success",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 1500
-                            })
-                            // form[0].reset();
-                            manageDataTable.ajax.reload(null, false);
+            var form = $('#editRuleForm');
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
 
-                        } else {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "error",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 2500
-                            })
+                    if (response.success == true) {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 1500
+                        })
+                        // form[0].reset();
+                        manageDataTable.ajax.reload(null, false);
 
-                        }
-
+                    } else {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500
+                        })
 
                     }
-                });
-            }
+
+
+                }
+            });
+
             return false;
 
         }
@@ -289,9 +341,15 @@ function editRule(ruleId = null) {
                 $('.modal-footer').removeClass('d-none');
 
                 $('#editRuleForm')[0].reset();
-
+                
+                $('editexpireIn').datepicker('setDate', null);
 
                 $('#ruleId').val(response.id);
+
+                var expire_in = moment(response.expire_in).format('MM-DD-YYYY');
+                
+
+                $('#editexpireIn').datepicker('update', expire_in);
 
                 $('#editModel').val(response.model);
                 $('#editYear').val(response.year);

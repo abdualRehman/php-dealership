@@ -1,6 +1,7 @@
 "use strict";
 var manageSoldLogsTable;
 var stockArray = [];
+var collapsedGroups = {};
 
 var e1 = Swal.mixin({
     customClass: {
@@ -19,131 +20,131 @@ $(function () {
         pickTime: false,
     });
 
-    function loadOpened() {
-        $.fn.dataTable.ext.search.pop();
-        manageSoldLogsTable.search('').draw();
-        // var tableNode = this.table(0).node();
-        var tableNode = $('#datatable-1')[0];
-        // console.log(tableNode);
-        $.fn.dataTable.ext.search.push(
-            function (settings, data, dataIndex) {
-                if (settings.nTable !== tableNode) {
-                    return true;
-                }
-                var vin_check = data[5];
-                var insurance = data[6];
-                var trade_title = data[7];
-                var registration = data[8];
-                var inspection = data[9];
-                var salesperson_status = data[10];
-                var paid = data[11];
-                if (
-                    salesperson_status !== 'cancelled' && salesperson_status !== 'delivered'
-                ) {
-
-                    return true;
-                }
-                return false
-            }
-        )
-        manageSoldLogsTable.draw();  // working
-        manageSoldLogsTable.button(0).active(true);
-        manageSoldLogsTable.button(1).active(false);
-    }
-
 
     manageSoldLogsTable = $("#datatable-1").DataTable({
 
 
 
         // responsive: !0,
-        // responsive: {
-        //     details: {
-        //         type: 'column',
-        //         target: 1
-        //     }
-        // },
-        // scrollY: 500,
-        scrollX: !0,
-        scrollCollapse: !0,
-        fixedColumns: {
-            leftColumns: 0,
-            rightColumns: 1
+        responsive: {
+            details: {
+                type: 'column',
+                target: 1
+            }
         },
+        // scrollY: 500,
+        // scrollX: !0,
+        // scrollCollapse: !0,
+        // fixedColumns: {
+        //     leftColumns: 0,
+        //     rightColumns: 1
+        // },
 
         'ajax': '../php_action/fetchSoldTodo.php',
 
         // working.... with both
         // dom: "Pfrtip",
+        // dom: `\n     
+        //      <'row'<'col-12'P>>\n      
+        //      <'row'<'col-sm-12 col-md-6'l>>\n  
+        //     \n     
+        //     <'row'<'col-sm-6 text-center text-sm-left p-3'B>
+        //         <'col-sm-6 text-center text-sm-right mt-2 mt-sm-0'f>>\n
+        //     <'row'<'col-12'tr>>\n      
+        //     <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
         dom: `\n     
-             <'row'<'col-12'P>>\n      
-             <'row'<'col-sm-12 col-md-6'l>>\n  
-            \n     
-            <'row'<'col-sm-6 text-center text-sm-left p-3'B>
-                <'col-sm-6 text-center text-sm-right mt-2 mt-sm-0'f>>\n
-            <'row'<'col-12'tr>>\n      
-            <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
+            <'row'<'col-12'P>>\n      
+            <'row'<'col-sm-12 text-sm-left col-md-3 mb-2'<'#statusFilterDiv'>> <'col-sm-12 col-md-6 text-center text-sm-left 'B> <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
+           <'row'<'col-12'tr>>\n      
+           <'row align-items-baseline'
+           <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
+           <'col-md-5'p>>\n`,
 
-        "pageLength": 25,
+        "pageLength": 50,
         searchPanes: {
             cascadePanes: !0,
             viewTotal: !0,
-            columns: [1, 2, 3, 4],
-            stateSave: true,
+            columns: [1, 2, 3, 4, 13],
         },
         buttons: [
             {
-                text: 'Opened',
-                action: function (e, dt, node, config) {
-                    loadOpened();
-                },
-
+                extend: 'copyHtml5',
+                title: 'Sold Todo',
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                }
             },
             {
-                text: 'Completed',
-                action: function (e, dt, node, config) {
-                    manageSoldLogsTable.button(0).active(false);
-                    manageSoldLogsTable.button(1).active(true);
-
-                    $.fn.dataTable.ext.search.pop();
-                    manageSoldLogsTable.search('').draw();
-                    var tableNode = this.table(0).node();
-                    // console.log(tableNode);
-                    $.fn.dataTable.ext.search.push(
-                        function (settings, data, dataIndex) {
-                            if (settings.nTable !== tableNode) {
-                                return true;
-                            }
-                            var vin_check = data[5];
-                            var insurance = data[6];
-                            var trade_title = data[7];
-                            var registration = data[8];
-                            var inspection = data[9];
-                            var salesperson_status = data[10];
-                            var paid = data[11];
-                            if (
-                                salesperson_status === 'cancelled' || salesperson_status === 'delivered'
-                            ) {
-                                return true;
-                            }
-                            return false
-                        }
-                    )
-                    manageSoldLogsTable.draw();  // working
-
-
-                },
-
-            }
+                extend: 'excelHtml5',
+                title: 'Sold Todo',
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                }
+            },
+            {
+                extend: 'print',
+                title: 'Sold Todo',
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                }
+            },
         ],
+        // buttons: [
+        //     {
+        //         text: 'Opened',
+        //         action: function (e, dt, node, config) {
+        //             loadOpened();
+        //         },
+
+        //     },
+        //     {
+        //         text: 'Completed',
+        //         action: function (e, dt, node, config) {
+        //             manageSoldLogsTable.button(0).active(false);
+        //             manageSoldLogsTable.button(1).active(true);
+
+        //             $.fn.dataTable.ext.search.pop();
+        //             manageSoldLogsTable.search('').draw();
+        //             var tableNode = this.table(0).node();
+        //             // console.log(tableNode);
+        //             $.fn.dataTable.ext.search.push(
+        //                 function (settings, data, dataIndex) {
+        //                     if (settings.nTable !== tableNode) {
+        //                         return true;
+        //                     }
+        //                     var vin_check = data[5];
+        //                     var insurance = data[6];
+        //                     var trade_title = data[7];
+        //                     var registration = data[8];
+        //                     var inspection = data[9];
+        //                     var salesperson_status = data[10];
+        //                     var paid = data[11];
+        //                     if (
+        //                         salesperson_status === 'cancelled' || salesperson_status === 'delivered'
+        //                     ) {
+        //                         return true;
+        //                     }
+        //                     return false
+        //                 }
+        //             )
+        //             manageSoldLogsTable.draw();  // working
+
+
+        //         },
+
+        //     }
+        // ],
 
         columnDefs: [
             {
                 searchPanes: {
                     show: true
                 },
-                targets: [1, 2, 3, 4],
-
+                targets: [1, 2, 3, 4, 13],
+            },
+            {
+                targets: [12, 13],
+                visible: false,
             },
             {
                 targets: 5,
@@ -190,16 +191,139 @@ $(function () {
         ],
 
         language: {
+            "infoFiltered": "",
             searchPanes: {
                 count: "{total} found",
                 countFiltered: "{shown} / {total}"
             }
         },
+
+        rowGroup: {
+            enable: $('#isConsultant').val() == 'false' ? true : false,
+            dataSrc: 13,
+            startRender: function (rows, group) {
+                var collapsed = !!collapsedGroups[group];
+
+                var filteredData = $('#datatable-1').DataTable()
+                    .rows({ search: 'applied' })
+                    .data()
+                    .filter(function (data, index) {
+                        return data[13] == group ? true : false;
+                    });
+
+                return $('<tr/>')
+                    .append('<td colspan="14">' + group + ' (' + filteredData.length + ')</td>')
+                    .attr('data-name', group)
+                    .toggleClass('collapsed', collapsed);
+            },
+        },
+
+        createdRow: function (row, data, dataIndex) {
+            $(row).attr({
+                "data-toggle": "modal",
+                "data-target": "#editDetails",
+                "onclick": "editDetails(" + data[12] + ")"
+            });
+        },
+        "order": [[13, "asc"], [12, "desc"]],
+
     });
 
+    writeStatusHTML();
+    $('#opened').click();
 
-    loadOpened();
 
+
+
+    $.fn.dataTable.ext.search.push(
+        function (settings, searchData, index) {
+            var tableNode = manageSoldLogsTable.table().node();
+
+            var searchStatus = $('input:radio[name="searchStatus"]:checked').map(function () {
+                if (this.value !== "") {
+                    return this.value;
+                }
+            }).get();
+
+            if (searchStatus.length === 0) {
+                return true;
+            }
+
+
+            if (searchStatus[0] === 'opened') {
+                var salesperson_status = searchData[10];
+                if (salesperson_status !== 'cancelled' && salesperson_status !== 'delivered') {
+                    return true;
+                }
+                // Delivered to do should stay in Opened status if anything else is in the RED…except paid
+                if (salesperson_status === 'delivered') {
+                    var vin_check = searchData[5];
+                    var insurance = searchData[6];
+                    var trade_title = searchData[7];
+                    var registration = searchData[8];
+                    var inspection = searchData[9];
+                    if (
+                        (vin_check !== 'checkTitle' && vin_check !== 'need') &&
+                        insurance !== 'need' && trade_title !== 'need' &&
+                        registration !== 'pending' && inspection !== 'need') {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+
+                return false;
+
+            }
+            if (searchStatus[0] === 'completed') {
+                var salesperson_status = searchData[10];
+
+                if (salesperson_status === 'cancelled' || salesperson_status === 'delivered') {
+
+                    // Delivered to do should stay in Opened status if anything else is in the RED…except paid
+                    if (salesperson_status === 'delivered') {
+                        var vin_check = searchData[5];
+                        var insurance = searchData[6];
+                        var trade_title = searchData[7];
+                        var registration = searchData[8];
+                        var inspection = searchData[9];
+                        if (
+                            (vin_check === 'checkTitle' || vin_check === 'need') ||
+                            insurance === 'need' || trade_title === 'need' ||
+                            registration === 'pending' || inspection === 'need'
+                        ) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    } else {
+                        return true;
+                    }
+                }
+
+                return false;
+
+            }
+
+            if (settings.nTable !== tableNode) {
+                return true;
+            }
+            return false;
+        }
+    );
+
+
+    $('input:radio').on('change', function () {
+
+        $('#datatable-1').block({
+            message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+            timeout: 1e3
+        });
+
+        manageSoldLogsTable.draw();  // working
+        manageSoldLogsTable.searchPanes.rebuildPane();
+
+    });
 
 
     // ---------------------- Edit Sale---------------------------
@@ -211,45 +335,43 @@ $(function () {
             // return true;
             event.preventDefault();
 
-            var c = confirm('Do you really want to save this?');
-            if (c == true) {
-                $('[disabled]').removeAttr('disabled');
-                var form = $('#editSoldTodoForm');
-                $.ajax({
-                    type: "POST",
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response);
+            $('[disabled]').removeAttr('disabled');
+            var form = $('#editSoldTodoForm');
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
 
-                        if (response.success == true) {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "success",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 2500,
-                            })
+                    if (response.success == true) {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500,
+                        })
 
-                            manageSoldLogsTable.ajax.reload();
-                            manageSoldLogsTable.ajax.reload(null, false);
-                            manageSoldLogsTable.searchPanes.rebuildPane();
+                        manageSoldLogsTable.ajax.reload();
+                        manageSoldLogsTable.ajax.reload(null, false);
+                        manageSoldLogsTable.searchPanes.rebuildPane();
 
-                        } else {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "error",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 2500
-                            })
-                        }
-
-
+                    } else {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500
+                        })
                     }
-                });
-            }
+
+
+                }
+            });
+
 
             return false;
 
@@ -261,6 +383,27 @@ $(function () {
 });
 
 
+
+
+function writeStatusHTML() {
+    var element = document.getElementById('statusFilterDiv');
+    if (element) {
+        element.innerHTML = `<div class="row">
+        <div class="col-md-12">
+            <div id="sort">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-flat-primary">
+                        <input type="radio" name="searchStatus" id="opened" value="opened"> Opened
+                    </label>
+                    <label class="btn btn-flat-primary">
+                        <input type="radio" name="searchStatus" id="completed" value="completed"> Completed
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>`;
+    }
+}
 
 function changePillCSS(data, title) {
     switch (title) {
@@ -303,7 +446,7 @@ function changePillCSS(data, title) {
             if (data == 'pending') {
                 return '<span class="badge badge-lg badge-danger badge-pill">Pending</span>';
             } else if (data == 'done') {
-                return '<span class="badge badge-lg badge-success badge-pill">Done</span>';
+                return '<span class="badge badge-lg badge-primary badge-pill">Done</span>';
             } else if (data == 'customerHas') {
                 return '<span class="badge badge-lg badge-success badge-pill">Customer Has</span>';
             } else if (data == 'mailed') {
@@ -329,7 +472,7 @@ function changePillCSS(data, title) {
             } else if (data == 'gmdSubmit') {
                 return '<span class="badge badge-lg badge-success badge-pill">GMD Submit</span>';
             } else if (data == 'contracted') {
-                return '<span class="badge badge-lg badge-success badge-pill">Contracted</span>';
+                return '<span class="badge badge-lg badge-primary badge-pill">Contracted</span>';
             } else if (data == 'cancelled') {
                 return '<span class="badge badge-lg badge-danger badge-pill">Cancelled</span>';
             } else if (data == 'delivered') {
@@ -490,18 +633,30 @@ function chnageStyle(field) {
             if (field.value == 'pending') {
                 ele.addClass('btn-outline-danger');
                 ele.removeClass('btn-outline-success');
+                ele.removeClass('btn-outline-primary');
+            } else if (field.value == 'done') {
+                ele.addClass('btn-outline-primary');
+                ele.removeClass('btn-outline-danger');
+                ele.removeClass('btn-outline-success');
             } else {
                 ele.addClass('btn-outline-success');
                 ele.removeClass('btn-outline-danger');
+                ele.removeClass('btn-outline-primary');
             }
             break;
         case 'salePStatus':
             if (field.value == 'dealWritten') {
                 ele.addClass('btn-outline-danger');
                 ele.removeClass('btn-outline-success');
+                ele.removeClass('btn-outline-primary');
+            } else if (field.value == 'contracted') {
+                ele.addClass('btn-outline-primary');
+                ele.removeClass('btn-outline-danger');
+                ele.removeClass('btn-outline-success');
             } else {
                 ele.addClass('btn-outline-success');
                 ele.removeClass('btn-outline-danger');
+                ele.removeClass('btn-outline-primary');
             }
             break;
         case 'paid':

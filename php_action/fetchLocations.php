@@ -16,10 +16,7 @@ if ($result->num_rows > 0) {
 
 
         $button = '
-        <div class="show" >
-            <button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#showDetails" onclick="showDetails(' . $id . ')" >
-                <i class="fa fa-eye"></i>
-            </button>' .
+        <div class="show" >' .
             (hasAccess("swploc", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#editDetails" onclick="editDetails(' . $id . ')" >
                 <i class="fa fa-edit"></i>
             </button>' : "") .
@@ -38,7 +35,8 @@ if ($result->num_rows > 0) {
             $row[13],
             $row[14],
             $row[9],
-            $button
+            $button,
+            $id
         );
     } // /while 
 

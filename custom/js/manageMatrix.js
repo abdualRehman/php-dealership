@@ -186,13 +186,10 @@ function showDetails(id = null) {
                 $('#msrp').html("$" + Number(response['m.s.r.p']).toLocaleString("en-US"));
                 $('#bdc').html("$" + Number(response.bdc).toLocaleString("en-US"));
 
-                $('#dealer').html("$" + ((response.dealer) ? Number(response.dealer).toLocaleString("en-US") : ""));
-                $('#other').html("$" + ((response.other) ? Number(response.other).toLocaleString("en-US") : ""));
-                $('#lease').html("$" + ((response.lease) ? Number(response.lease).toLocaleString("en-US") : ""));
-
 
                 var f_status = false;
                 var l_status = false;
+                var c_status = false;
 
                 var now = moment(new Date()); //todays date
                 var end = moment(response['f_expire']); // another date 
@@ -216,6 +213,22 @@ function showDetails(id = null) {
                 } else {
                     l_status = false;
                 }
+
+                var cend = moment(response['expire_in']); // another date
+                var cduration = moment.duration(cend.diff(now));
+                var cdays = cduration.asDays();
+                cdays = Math.ceil(cdays);
+
+                if (cdays >= 0) {
+                    c_status = true;
+                } else {
+                    c_status = false;
+                }
+
+
+                $('#dealer').html("$" + ((c_status && response.dealer) ? Number(response.dealer).toLocaleString("en-US") : ""));
+                $('#other').html("$" + ((c_status && response.other) ? Number(response.other).toLocaleString("en-US") : ""));
+                $('#lease').html("$" + ((c_status && response.lease) ? Number(response.lease).toLocaleString("en-US") : ""));
 
 
 

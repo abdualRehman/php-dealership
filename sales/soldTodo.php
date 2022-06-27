@@ -82,6 +82,13 @@ if (hasAccess("todo", "Edit") === 'false') {
 </style>
 
 
+<?php
+if ($salesConsultantID != $_SESSION['userRole']) {
+    echo '<input type="hidden" name="isConsultant" id="isConsultant" value="false" />';
+} else {
+    echo '<input type="hidden" name="isConsultant" id="isConsultant" value="true" />';
+}
+?>
 
 <div class="content">
     <div class="container-fluid">
@@ -95,7 +102,7 @@ if (hasAccess("todo", "Edit") === 'false') {
                         </button>
                     </div>
                     <div class="portlet-body">
-                        <table id="datatable-1" class="table table-bordered table-striped table-hover">
+                        <table id="datatable-1" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>Sold Date</th>
@@ -111,6 +118,7 @@ if (hasAccess("todo", "Edit") === 'false') {
                                     <th>Salesperson Status</th>
                                     <th>Paid</th>
                                     <th>Action</th>
+                                    <th>Sales Consultant</th>
                                 </tr>
                             </thead>
                         </table>

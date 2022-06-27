@@ -13,6 +13,10 @@ $(function () {
     var divRequest = $(".div-request").text();
 
     if (divRequest == "man") {
+        $('#travelTime').timepicker({ 'timeFormat': 'H:i', 'showDuration': true });
+        $('#roundTrip').timepicker({ 'timeFormat': 'H:i', 'showDuration': true });
+        $('#etravelTime').timepicker({ 'timeFormat': 'H:i', 'showDuration': true });
+        $('#eroundTrip').timepicker({ 'timeFormat': 'H:i', 'showDuration': true });
 
         manageLocTable = $("#datatable-1").DataTable({
 
@@ -29,9 +33,7 @@ $(function () {
             // working.... with both
             dom: `\n     
              <'row'<'col-12'P>>\n      
-             <'row'<'col-sm-12 col-md-6'l>>\n  
-            \n     
-            <'row'<'col-sm-6 text-center text-sm-left p-3'>
+            <'row'<'col-sm-6 text-center text-sm-left'B>
                 <'col-sm-6 text-center text-sm-right mt-2 mt-sm-0'f>>\n
             <'row'<'col-12'tr>>\n      
             <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
@@ -42,9 +44,36 @@ $(function () {
                 viewTotal: !0,
                 columns: [0, 1, 2]
             },
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    title: 'Swap Location',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    title: 'Swap Location',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    }
+                },
+                {
+                    extend: 'print',
+                    title: 'Swap Location',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    }
+                },
+            ],
 
             "pageLength": 25,
             columnDefs: [
+                {
+                    targets: [8],
+                    visible: false,
+                },
                 {
                     searchPanes: {
                         show: true
@@ -59,6 +88,13 @@ $(function () {
                     count: "{total} found",
                     countFiltered: "{shown} / {total}"
                 },
+            },
+            createdRow: function (row, data, dataIndex) {
+                $(row).children().not(':last-child').attr({
+                    "data-toggle": "modal",
+                    "data-target": "#showDetails",
+                    "onclick": "showDetails(" + data[8] + ")"
+                });
             },
             "order": [[0, "asc"]]
         })
@@ -106,43 +142,122 @@ $(function () {
             submitHandler: function (form, event) {
                 // return true;
                 event.preventDefault();
+                var form = $('#editLocationForm');
+                $.ajax({
+                    type: "POST",
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response);
 
-                var c = confirm('Do you really want to save this?');
-                if (c == true) {
-                    var form = $('#editLocationForm');
-                    $.ajax({
-                        type: "POST",
-                        url: form.attr('action'),
-                        data: form.serialize(),
-                        dataType: 'json',
-                        success: function (response) {
-                            console.log(response);
+                        if (response.success == true) {
 
-                            if (response.success == true) {
+                            e1.fire({
+                                position: "top-end",
+                                icon: "success",
+                                title: response.messages,
+                                showConfirmButton: !1,
+                                timer: 2500,
+                            })
 
-                                e1.fire({
-                                    position: "top-end",
-                                    icon: "success",
-                                    title: response.messages,
-                                    showConfirmButton: !1,
-                                    timer: 2500,
-                                })
+                            form[0].reset();
+                            manageLocTable.ajax.reload(null, false);
 
-                                form[0].reset();
-                                manageLocTable.ajax.reload(null, false);
-
-                            } else {
-                                e1.fire({
-                                    position: "top-end",
-                                    icon: "error",
-                                    title: response.messages,
-                                    showConfirmButton: !1,
-                                    timer: 2500
-                                })
-                            }
+                        } else {
+                            e1.fire({
+                                position: "top-end",
+                                icon: "error",
+                                title: response.messages,
+                                showConfirmButton: !1,
+                                timer: 2500
+                            })
                         }
-                    });
-                }
+                    }
+                });
+
+                return false;
+
+            }
+        });
+
+
+
+        $("#addNewSwapLocation").validate({
+            ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
+            rules: {
+                dealerno: {
+                    required: !0,
+                },
+                dealership: {
+                    required: !0,
+                },
+                address: {
+                    required: !0,
+                },
+                city: {
+                    required: !0,
+                },
+                state: {
+                    required: function (params) {
+                        if (params.value == 0) {
+                            params.classList.add('is-invalid');
+                            $('#state').selectpicker('refresh');
+                            params.classList.add('is-invalid');
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                },
+                zip: {
+                    required: !0,
+                },
+                phone: {
+                    required: !0,
+                },
+
+            },
+
+            submitHandler: function (form, event) {
+                event.preventDefault();
+
+                var form = $('#addNewSwapLocation');
+                $.ajax({
+                    type: "POST",
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response);
+
+                        if (response.success == true) {
+
+                            e1.fire({
+                                position: "top-end",
+                                icon: "success",
+                                title: response.messages,
+                                showConfirmButton: !1,
+                                timer: 2500,
+                            })
+
+                            form[0].reset();
+                            manageLocTable.ajax.reload(null, false);
+
+                        } else {
+                            e1.fire({
+                                position: "top-end",
+                                icon: "error",
+                                title: response.messages,
+                                showConfirmButton: !1,
+                                timer: 2500
+                            })
+                        }
+
+
+                    }
+                });
+
                 return false;
 
             }
@@ -200,43 +315,42 @@ $(function () {
                 submitHandler: function (form, event) {
                     event.preventDefault();
 
-                    var c = confirm('Do you really want to save this?');
-                    if (c == true) {
-                        var form = $('#addLocationForm');
-                        $.ajax({
-                            type: "POST",
-                            url: form.attr('action'),
-                            data: form.serialize(),
-                            dataType: 'json',
-                            success: function (response) {
-                                console.log(response);
 
-                                if (response.success == true) {
+                    var form = $('#addLocationForm');
+                    $.ajax({
+                        type: "POST",
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        dataType: 'json',
+                        success: function (response) {
+                            console.log(response);
 
-                                    e1.fire({
-                                        position: "top-end",
-                                        icon: "success",
-                                        title: response.messages,
-                                        showConfirmButton: !1,
-                                        timer: 2500,
-                                    })
+                            if (response.success == true) {
 
-                                    form[0].reset();
+                                e1.fire({
+                                    position: "top-end",
+                                    icon: "success",
+                                    title: response.messages,
+                                    showConfirmButton: !1,
+                                    timer: 2500,
+                                })
 
-                                } else {
-                                    e1.fire({
-                                        position: "top-end",
-                                        icon: "error",
-                                        title: response.messages,
-                                        showConfirmButton: !1,
-                                        timer: 2500
-                                    })
-                                }
+                                form[0].reset();
 
-
+                            } else {
+                                e1.fire({
+                                    position: "top-end",
+                                    icon: "error",
+                                    title: response.messages,
+                                    showConfirmButton: !1,
+                                    timer: 2500
+                                })
                             }
-                        });
-                    }
+
+
+                        }
+                    });
+
                     return false;
 
                 }
@@ -425,20 +539,20 @@ function editDetails(id = null) {
                 console.log(response);
 
                 $('#locId').val(response.id);
-                $('#dealerno').val(response.dealer_no);
-                $('#dealership').val(response.dealership);
-                $('#address').val(response.address);
-                $('#city').val(response.city);
-                $('#state').val(response.state);
-                $('#zip').val(response.zip);
-                $('#miles').val(response.miles);
-                $('#travelTime').val(response.travel_time);
-                $('#roundTrip').val(response.round_trip);
-                $('#phone').val(response.phone);
-                $('#fax').val(response.fax);
-                $('#mcontact').val(response.main_contact);
-                $('#cell').val(response.cell);
-                $('#preffer').val(response.preffer);
+                $('#edealerno').val(response.dealer_no);
+                $('#edealership').val(response.dealership);
+                $('#eaddress').val(response.address);
+                $('#ecity').val(response.city);
+                $('#estate').val(response.state);
+                $('#ezip').val(response.zip);
+                $('#emiles').val(response.miles);
+                $('#etravelTime').val(response.travel_time);
+                $('#eroundTrip').val(response.round_trip);
+                $('#ephone').val(response.phone);
+                $('#efax').val(response.fax);
+                $('#emcontact').val(response.main_contact);
+                $('#ecell').val(response.cell);
+                $('#epreffer').val(response.preffer);
 
                 $('.selectpicker').selectpicker('refresh');
 

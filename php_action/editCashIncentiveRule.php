@@ -5,9 +5,17 @@ require_once './updateMatrixRules.php';
 
 $valid['success'] = array('success' => false, 'messages' => array(), 'id' => '' , 'settingError' => array());
 
+function reformatDate($date, $from_format = 'm-d-Y', $to_format = 'Y-m-d') {
+    $date_aux = date_create_from_format($from_format, $date);
+    return date_format($date_aux,$to_format);
+}
+
 if ($_POST) {
 
     $ruleId = $_POST['ruleId'];
+
+    $editexpireIn = (isset($_POST['editexpireIn'])) ? mysqli_real_escape_string($connect, $_POST['editexpireIn']) : "";
+    $editexpireIn = ($editexpireIn === '') ? "" : reformatDate($editexpireIn);
 
 
     $model = mysqli_real_escape_string($connect, $_POST['editModel']);
@@ -35,6 +43,7 @@ if ($_POST) {
     } else {
 
         $sql = "UPDATE `cash_incentive_rules` SET 
+        `expire_in`='$editexpireIn',
         `model`='$model',
         `year`='$year',
         `modelno`='$modelno',

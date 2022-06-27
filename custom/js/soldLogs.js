@@ -1471,18 +1471,30 @@ function chnageStyle(field) {
             if (field.value == 'pending') {
                 ele.addClass('btn-outline-danger');
                 ele.removeClass('btn-outline-success');
-            } else {
-                ele.addClass('btn-outline-success');
+                ele.removeClass('btn-outline-primary');
+            } else if (field.value == 'done') {
+                ele.addClass('btn-outline-primary');
                 ele.removeClass('btn-outline-danger');
-            }
-            break;
-        case 'salePStatus':
-            if (field.value == 'cancelled') {
-                ele.addClass('btn-outline-danger');
                 ele.removeClass('btn-outline-success');
             } else {
                 ele.addClass('btn-outline-success');
                 ele.removeClass('btn-outline-danger');
+                ele.removeClass('btn-outline-primary');
+            }
+            break;
+        case 'salePStatus':
+            if (field.value == 'dealWritten') {
+                ele.addClass('btn-outline-danger');
+                ele.removeClass('btn-outline-success');
+                ele.removeClass('btn-outline-primary');
+            } else if (field.value == 'contracted') {
+                ele.addClass('btn-outline-primary');
+                ele.removeClass('btn-outline-danger');
+                ele.removeClass('btn-outline-success');
+            } else {
+                ele.addClass('btn-outline-success');
+                ele.removeClass('btn-outline-danger');
+                ele.removeClass('btn-outline-primary');
             }
             break;
         case 'paid':

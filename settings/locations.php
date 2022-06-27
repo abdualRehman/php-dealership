@@ -4,7 +4,7 @@ include_once '../includes/header.php';
 
 
 if ($_GET['r'] == 'man') {
-    if ( hasAccess("swploc", "Add") === 'false' && hasAccess("swploc", "Edit") === 'false' && hasAccess("swploc", "Remove") === 'false') {
+    if (hasAccess("swploc", "Add") === 'false' && hasAccess("swploc", "Edit") === 'false' && hasAccess("swploc", "Remove") === 'false') {
         echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
     }
     echo "<div class='div-request d-none'>man</div>";
@@ -35,6 +35,15 @@ if ($_GET['r'] == 'man') {
                     <div class="portlet">
                         <div class="portlet-header portlet-header-bordered">
                             <h3 class="portlet-title">Locations</h3>
+                            <?php
+                            if (hasAccess("swploc", "Add") !== 'false') {
+                            ?>
+                                <button type="button" data-toggle="modal" data-target="#addNewLocation" class="btn btn-primary mr-2 p-2">
+                                    <i class="fa fa-plus ml-1 mr-2"></i> Add Location
+                                </button>
+                            <?php
+                            }
+                            ?>
                             <button class="btn btn-info mr-2 p-2" onclick="toggleFilterClass()">
                                 <i class="fa fa-align-center ml-1 mr-2"></i> Filter
                             </button>
@@ -51,7 +60,7 @@ if ($_GET['r'] == 'man') {
                         </div>
                         <div class="portlet-body">
 
-                            <table id="datatable-1" class="table table-bordered table-striped table-hover">
+                            <table id="datatable-1" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         <th>Dealership</th>
@@ -62,6 +71,7 @@ if ($_GET['r'] == 'man') {
                                         <th>Call or Text</th>
                                         <th>Round Trip</th>
                                         <th>Action</th>
+                                        <th>ID</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -72,6 +82,182 @@ if ($_GET['r'] == 'man') {
         </div>
     </div>
 
+
+    <div class="modal fade" id="addNewLocation">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header modal-header-bordered">
+                    <h5 class="modal-title">New Swap Location</h5>
+                    <button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                </div>
+                <form id="addNewSwapLocation" autocomplete="off" method="post" action="../php_action/createLocation.php">
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="col-md-4 mb-3">
+                                <label for="dealerno">Dealer #</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="dealerno" name="dealerno">
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3"><label for="dealership">Dealership</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="dealership" name="dealership">
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3"><label for="address">Address</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="address" name="address">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-3 mb-3">
+                                <label for="city">City</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="city" name="city">
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="state">State</label>
+                                <div class="form-group">
+                                    <select class="form-control selectpicker w-auto" name="state" id="state" data-live-search="true" data-size="4">
+                                        <option value="0" selected disabled>State</option>
+                                        <option value="MA">MA</option>
+                                        <option value="RI">RI</option>
+                                        <option value="CT">CT</option>
+                                        <option value="NH">NH</option>
+                                        <option value="AL">AL</option>
+                                        <option value="AK">AK</option>
+                                        <option value="AZ">AZ</option>
+                                        <option value="AR">AR</option>
+                                        <option value="CA">CA</option>
+                                        <option value="CO">CO</option>
+                                        <option value="DC">DC</option>
+                                        <option value="DE">DE</option>
+                                        <option value="FL">FL</option>
+                                        <option value="GA">GA</option>
+                                        <option value="HI">HI</option>
+                                        <option value="ID">ID</option>
+                                        <option value="IL">IL</option>
+                                        <option value="IN">IN</option>
+                                        <option value="IA">IA</option>
+                                        <option value="KS">KS</option>
+                                        <option value="KY">KY</option>
+                                        <option value="LA">LA</option>
+                                        <option value="ME">ME</option>
+                                        <option value="MD">MD</option>
+                                        <option value="MI">MI</option>
+                                        <option value="MN">MN</option>
+                                        <option value="MS">MS</option>
+                                        <option value="MO">MO</option>
+                                        <option value="MT">MT</option>
+                                        <option value="NE">NE</option>
+                                        <option value="NV">NV</option>
+                                        <option value="NJ">NJ</option>
+                                        <option value="NM">NM</option>
+                                        <option value="NY">NY</option>
+                                        <option value="NC">NC</option>
+                                        <option value="ND">ND</option>
+                                        <option value="OH">OH</option>
+                                        <option value="OK">OK</option>
+                                        <option value="OR">OR</option>
+                                        <option value="PA">PA</option>
+                                        <option value="SC">SC</option>
+                                        <option value="SD">SD</option>
+                                        <option value="TN">TN</option>
+                                        <option value="TX">TX</option>
+                                        <option value="UT">UT</option>
+                                        <option value="VT">VT</option>
+                                        <option value="VA">VA</option>
+                                        <option value="WA">WA</option>
+                                        <option value="WV">WV</option>
+                                        <option value="WI">WI</option>
+                                        <option value="WY">WY</option>
+                                        <option value="N/A">N/A</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="zip">Zip</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="zip" name="zip">
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="miles">Miles</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="miles" name="miles">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-3 mb-3">
+                                <label for="travelTime">Travel Time</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="travelTime" name="travelTime">
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="roundTrip">Round Trip</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="roundTrip" name="roundTrip">
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="phone">Phone</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="phone" name="phone">
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="fax">Fax</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="fax" name="fax">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+
+                            <div class="col-md-4 mb-3">
+                                <label for="mcontact">Main Contact</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="mcontact" name="mcontact">
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="cell">Cell</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="cell" name="cell">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="preffer">Preffer Call or Text</label>
+                                <div class="d-flex">
+                                    <div class="custom-control custom-checkbox mr-5">
+                                        <input type="checkbox" class="custom-control-input" id="call" name="call">
+                                        <label class="custom-control-label" for="call">Call</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="text" name="text">
+                                        <label class="custom-control-label" for="text">Text</label>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer modal-footer-bordered">
+                        <button class="btn btn-primary mr-2" type="submit">Create</button>
+                        <button class="btn btn-danger" type="button" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="showDetails">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content modal-dialog-scrollable">
@@ -148,35 +334,35 @@ if ($_GET['r'] == 'man') {
 
                             <div class="form-row">
                                 <div class="col-md-4 mb-3">
-                                    <label for="dealerno">Dealer #</label>
+                                    <label for="edealerno">Dealer #</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="dealerno" name="dealerno">
+                                        <input type="text" class="form-control" id="edealerno" name="edealerno">
                                     </div>
                                 </div>
-                                <div class="col-md-4 mb-3"><label for="dealership">Dealership</label>
+                                <div class="col-md-4 mb-3"><label for="edealership">Dealership</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="dealership" name="dealership">
+                                        <input type="text" class="form-control" id="edealership" name="edealership">
                                     </div>
                                 </div>
-                                <div class="col-md-4 mb-3"><label for="address">Address</label>
+                                <div class="col-md-4 mb-3"><label for="eaddress">Address</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="address" name="address">
+                                        <input type="text" class="form-control" id="eaddress" name="eaddress">
                                     </div>
                                 </div>
 
                             </div>
                             <div class="form-row">
                                 <div class="col-md-3 mb-3">
-                                    <label for="city">City</label>
+                                    <label for="ecity">City</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="city" name="city">
+                                        <input type="text" class="form-control" id="ecity" name="ecity">
                                     </div>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label for="state">State</label>
+                                    <label for="estate">State</label>
                                     <div class="form-group">
                                         <!-- <input type="text" class="form-control" id="state" name="state"> -->
-                                        <select class="form-control selectpicker w-auto" name="state" id="state" data-live-search="true" data-size="4">
+                                        <select class="form-control selectpicker w-auto" name="estate" id="estate" data-live-search="true" data-size="4">
                                             <option value="0" selected disabled>State</option>
                                             <option value="MA">MA</option>
                                             <option value="RI">RI</option>
@@ -234,63 +420,63 @@ if ($_GET['r'] == 'man') {
                                     </div>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label for="zip">Zip</label>
+                                    <label for="ezip">Zip</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="zip" name="zip">
+                                        <input type="text" class="form-control" id="ezip" name="ezip">
                                     </div>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label for="miles">Miles</label>
+                                    <label for="emiles">Miles</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="miles" name="miles">
+                                        <input type="text" class="form-control" id="emiles" name="emiles">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="col-md-3 mb-3">
-                                    <label for="travelTime">Travel Time</label>
+                                    <label for="etravelTime">Travel Time</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="travelTime" name="travelTime">
+                                        <input type="text" class="form-control" id="etravelTime" name="etravelTime">
                                     </div>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label for="roundTrip">Round Trip</label>
+                                    <label for="eroundTrip">Round Trip</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="roundTrip" name="roundTrip">
+                                        <input type="text" class="form-control" id="eroundTrip" name="eroundTrip">
                                     </div>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label for="phone">Phone</label>
+                                    <label for="ephone">Phone</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="phone" name="phone">
+                                        <input type="text" class="form-control" id="ephone" name="ephone">
                                     </div>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label for="fax">Fax</label>
+                                    <label for="efax">Fax</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="fax" name="fax">
+                                        <input type="text" class="form-control" id="efax" name="efax">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-row">
 
                                 <div class="col-md-4 mb-3">
-                                    <label for="mcontact">Main Contact</label>
+                                    <label for="emcontact">Main Contact</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="mcontact" name="mcontact">
+                                        <input type="text" class="form-control" id="emcontact" name="emcontact">
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label for="cell">Cell</label>
+                                    <label for="ecell">Cell</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="cell" name="cell">
+                                        <input type="text" class="form-control" id="ecell" name="ecell">
                                     </div>
                                 </div>
 
                                 <div class="col-md-4 mb-3">
-                                    <label for="preffer">Preffer Call or Text</label>
+                                    <label for="epreffer">Preffer Call or Text</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="preffer" name="preffer">
+                                        <input type="text" class="form-control" id="epreffer" name="epreffer">
                                     </div>
                                 </div>
 
