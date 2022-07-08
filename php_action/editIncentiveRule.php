@@ -13,12 +13,6 @@ if ($_POST) {
 
     $ruleId = $_POST['ruleId'];
 
-    $fromDate = mysqli_real_escape_string($connect, $_POST['editfromDate']);
-    $fromDate = reformatDate($fromDate);
-
-    $toDate = mysqli_real_escape_string($connect, $_POST['edittoDate']);
-    $toDate = reformatDate($toDate);
-
     $model = mysqli_real_escape_string($connect, $_POST['editModel']);
     $year = mysqli_real_escape_string($connect, $_POST['editYear']);
     $modelno = mysqli_real_escape_string($connect, $_POST['editModelno']);
@@ -31,33 +25,58 @@ if ($_POST) {
     // echo $editExModelno;
 
     $college = "N/A";
+    $collegeE = "";
     if (isset($_POST['editCollege'])) {
-        $college = mysqli_real_escape_string($connect, $_POST['editCollege']);
+        $college = mysqli_real_escape_string($connect, $_POST['ecollegeV']);
+        $collegeE = mysqli_real_escape_string($connect, $_POST['ecollegeE']);
+        $collegeE = reformatDate($collegeE);
     }
     $military = "N/A";
+    $militaryE = "";
     if (isset($_POST['editMilitary'])) {
-        $military = mysqli_real_escape_string($connect, $_POST['editMilitary']);
+        $military = mysqli_real_escape_string($connect, $_POST['emilitaryV']);
+        $militaryE = mysqli_real_escape_string($connect, $_POST['emilitaryE']);
+        $militaryE = reformatDate($militaryE);
     }
     $loyalty = "N/A";
+    $loyaltyE = "";
     if (isset($_POST['editLoyalty'])) {
-        $loyalty = mysqli_real_escape_string($connect, $_POST['editLoyalty']);
+        $loyalty = mysqli_real_escape_string($connect, $_POST['eloyaltyV']);
+        $loyaltyE = mysqli_real_escape_string($connect, $_POST['eloyaltyE']);
+        $loyaltyE = reformatDate($loyaltyE);
     }
     $conquest = "N/A";
+    $conquestE = "";
     if (isset($_POST['editConquest'])) {
-        $conquest = mysqli_real_escape_string($connect, $_POST['editConquest']);
+        $conquest = mysqli_real_escape_string($connect, $_POST['econquestV']);
+        $conquestE = mysqli_real_escape_string($connect, $_POST['econquestE']);
+        $conquestE = reformatDate($conquestE);
     }
+
+    $leaseLoyalty = "N/A";
+    $leaseLoyaltyE = "";
+    if (isset($_POST['editLeaseLoyalty'])) {
+        $leaseLoyalty = mysqli_real_escape_string($connect, $_POST['eleaseLoyaltyV']);
+
+        $leaseLoyaltyE = mysqli_real_escape_string($connect, $_POST['eleaseLoyaltyE']);
+        $leaseLoyaltyE = reformatDate($leaseLoyaltyE);
+    }
+
     $misc1 = "N/A";
+    $misc1E = "";
     if (isset($_POST['editMisc1'])) {
-        $misc1 = mysqli_real_escape_string($connect, $_POST['editMisc1']);
+        $misc1 = mysqli_real_escape_string($connect, $_POST['emisc1V']);
+        $misc1E = mysqli_real_escape_string($connect, $_POST['emisc1E']);
+        $misc1E = reformatDate($misc1E);
     }
     $misc2 = "N/A";
+    $misc2E = "";
     if (isset($_POST['editMisc2'])) {
-        $misc2 = mysqli_real_escape_string($connect, $_POST['editMisc2']);
+        $misc2 = mysqli_real_escape_string($connect, $_POST['emisc2V']);
+        $misc2E = mysqli_real_escape_string($connect, $_POST['emisc2E']);
+        $misc2E = reformatDate($misc2E);
     }
-    $misc3 = "N/A";
-    if (isset($_POST['editMisc3'])) {
-        $misc3 = mysqli_real_escape_string($connect, $_POST['editMisc3']);
-    }
+    
 
 
     $checkSql = "SELECT * FROM `incentive_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND type = '$editModelType' AND status = 1 AND id != '$ruleId'";
@@ -71,20 +90,25 @@ if ($_POST) {
     } else {
 
         $sql = "UPDATE `incentive_rules` SET 
-        `from_date`='$fromDate',
-        `to_date`='$toDate',
         `model`='$model',
         `year`='$year',
         `modelno`='$modelno',
         `ex_modelno`='$editExModelno',
         `type`='$editModelType',
         `college`='$college',
+        `college_e`='$collegeE',
         `military`='$military',
+        `military_e`='$militaryE',
         `loyalty`='$loyalty',
+        `loyalty_e`='$loyaltyE',
         `conquest`='$conquest',
+        `conquest_e`='$conquestE',
         `misc1`='$misc1',
+        `misc1_e`='$misc1E',
         `misc2`='$misc2',
-        `misc3`='$misc3' WHERE id = '$ruleId' ";
+        `misc2_e`='$misc2E',
+        `lease_loyalty`='$leaseLoyalty',
+        `lease_loyalty_e`='$leaseLoyaltyE' WHERE id = '$ruleId' ";
 
         if ($connect->query($sql) === true) {
             $valid['success'] = true;

@@ -81,19 +81,16 @@ if (hasAccess("incentives", "Edit") === 'false') {
         height: 400px !important;
     }
 
+    div.dataTables_scrollHeadInner {
+        width: inherit !important;
+    }
+
     @media (max-width: 1025px) {
         .slick-lightbox-slick-item-inner>img {
             height: 400px !important;
         }
     }
 
-    @media (min-width: 1025px) {
-
-        .modal-lg,
-        .modal-xl {
-            max-width: 1000px !important;
-        }
-    }
 
     @media (max-width: 576px) {
         .slick-lightbox-slick-item-inner>img {
@@ -107,6 +104,23 @@ if (hasAccess("incentives", "Edit") === 'false') {
             margin: 1.75rem auto;
         }
     }
+
+    @media (min-width: 1025px) {
+
+        .modal-lg,
+        .modal-xl {
+            max-width: 1100px !important;
+        }
+    }
+
+    .border-red {
+        border: 1px solid red;
+    }
+
+    #datatable-1 thead tr {
+        text-align: center;
+    }
+
 
     /* ----------------- Slick ----------------------  */
     .slick-next,
@@ -155,7 +169,13 @@ if (hasAccess("incentives", "Edit") === 'false') {
     }
 </style>
 
-
+<?php
+if ($salesConsultantID != $_SESSION['userRole']) {
+    echo '<input type="hidden" name="isConsultant" id="isConsultant" value="false" />';
+} else {
+    echo '<input type="hidden" name="isConsultant" id="isConsultant" value="true" />';
+}
+?>
 
 <div class="content">
     <div class="container-fluid">
@@ -183,9 +203,9 @@ if (hasAccess("incentives", "Edit") === 'false') {
                                     <th>Military</th>
                                     <th>Loyalty</th>
                                     <th>Conquest</th>
+                                    <th>Lease Loyalty</th>
                                     <th>Misc 1</th>
                                     <th>Misc 2</th>
-                                    <th>Misc 3</th>
                                     <th>ColD</th>
                                     <th>MilD</th>
                                     <th>LoyD</th>
@@ -218,7 +238,7 @@ if (hasAccess("incentives", "Edit") === 'false') {
                         <div class="spinner-grow d-none" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div>
                     </div>
                     <div class="showResult">
-                        <div class="form-row">
+                        <div class="form-row flex-column-reverse flex-md-row">
                             <div class="col-md-8">
                                 <div class="row">
                                     <div class="form-group col-md-6">
@@ -374,6 +394,30 @@ if (hasAccess("incentives", "Edit") === 'false') {
                             </div>
                             <div class="col-md-6">
                                 <div class="row">
+                                    <label for="vincheck" class="col-md-2 col-form-label text-center">Lease Loyalty</label>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" id="leaseLoyalty" name="leaseLoyalty" data-size="5">
+                                                <optgroup>
+                                                    <option>No</option>
+                                                    <option>Yes</option>
+                                                </optgroup>
+                                                <optgroup class="salesManagerList" label="YES/APPROVED BY">
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group input-group">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control datePicker" name="leaseLoyaltyDate" placeholder="Select date" id="leaseLoyaltyDate">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <label for="vincheck" class="col-md-2 col-form-label text-center">Misc 1</label>
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -421,30 +465,7 @@ if (hasAccess("incentives", "Edit") === 'false') {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <label for="vincheck" class="col-md-2 col-form-label text-center">Misc 3</label>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" id="misc3" name="misc3" data-size="5">
-                                                <optgroup>
-                                                    <option>No</option>
-                                                    <option>Yes</option>
-                                                </optgroup>
-                                                <optgroup class="salesManagerList" label="YES/APPROVED BY">
-                                                </optgroup>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group input-group">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"><i class="fa fa-calendar"></i>
-                                                </span>
-                                            </div>
-                                            <input type="text" class="form-control datePicker" name="misc3Date" placeholder="Select date" id="misc3Date">
-                                        </div>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                     </div>

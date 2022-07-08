@@ -27,29 +27,22 @@ toastr.options = {
 };
 
 $(function () {
-    $(".input-daterange").datepicker({
-        // orientation: t,
+
+    $(".expireIn").datepicker({
+        language: 'pt-BR',
+        format: 'mm-dd-yyyy',
         todayHighlight: !0,
         autoclose: true,
         todayBtn: "linked",
         language: 'pt-BR',
-        format: 'mm-dd-yyyy',
-        // to disable time picker
-        minView: 2,
-        pickTime: false,
     });
+
 
     loadTypeHead(1);
 
 
     manageRuleTable = $("#datatable-1").DataTable({
-        // responsive: !0,
-        scrollX: !0,
-        scrollCollapse: !0,
-        fixedColumns: {
-            leftColumns: 0,
-            rightColumns: 1
-        },
+        responsive: !0,
         'ajax': '../php_action/fetchIncentiveRules.php',
         dom: "Pfrtip",
         searchPanes: {
@@ -66,12 +59,16 @@ $(function () {
                 targets: [0, 1, 2, 3, 4],
             },
             {
-                targets: 5,
+                targets: [13],
+                visible: false,
+            },
+            {
+                targets: [5, 6, 7, 8, 9, 10, 11],
                 createdCell: function (td, cellData, rowData, row, col) {
                     if (cellData == 'Expire') {
                         $(td).html('<span class="badge badge-danger badge-pill">Expire</span>');
                     } else {
-                        $(td).html('<span class="badge badge-info badge-pill">' + cellData + '</span>');
+                        $(td).html(cellData);
                     }
 
                 }
@@ -84,6 +81,15 @@ $(function () {
                 countFiltered: "{shown} / {total}"
             }
         },
+        createdRow: function (row, data, dataIndex) {
+            if ($('#isEditAllowed').val() == "true") {
+                $(row).children().not(':last-child').attr({
+                    "data-toggle": "modal",
+                    "data-target": "#modal8",
+                    "onclick": "editRule(" + data[13] + ")"
+                });
+            }
+        },
         "order": [[0, "asc"]]
     })
 
@@ -92,12 +98,6 @@ $(function () {
     $("#addNewRule").validate({
         ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
         rules: {
-            fromDate: {
-                required: !0,
-            },
-            toDate: {
-                required: !0,
-            },
             "year[]": {
                 required: !0,
             },
@@ -122,60 +122,51 @@ $(function () {
                 },
             },
         },
-        messages: {
-            fromDate: {
-                required: "",
-            },
-            toDate: {
-                required: "",
-            },
-        },
         submitHandler: function (form, e) {
             // return true;
             e.preventDefault();
-            var c = confirm('Do you really want to save this?');
-            if (c) {
-                var form = $('#addNewRule');
-                $.ajax({
-                    type: "POST",
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response);
 
-                        if ((response.errorMessages) && response.errorMessages.length > 0) {
-                            response.errorMessages.forEach(message => {
-                                toastr.error(message, 'Error while Adding');
-                            });
-                        }
-                        if (response.success == true) {
-                            e1.fire({
-                                position: "center",
-                                icon: "success",
-                                title: response.messages.length > 0 ? response.messages[0] : "Successfully Added",
-                                showConfirmButton: !1,
-                                timer: 1500
-                            })
-                            manageRuleTable.ajax.reload(null, false);
-                        } else {
-                            e1.fire({
-                                // position: "center",
-                                icon: "error",
-                                title: response.messages.length > 0 ? response.messages[0] : "Error while Adding",
-                                showConfirmButton: !1,
-                                timer: 2500
-                            })
+            var form = $('#addNewRule');
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
 
-                            // form[0].reset();
-                        }
-
-
-
-
+                    if ((response.errorMessages) && response.errorMessages.length > 0) {
+                        response.errorMessages.forEach(message => {
+                            toastr.error(message, 'Error while Adding');
+                        });
                     }
-                });
-            }
+                    if (response.success == true) {
+                        e1.fire({
+                            position: "center",
+                            icon: "success",
+                            title: response.messages.length > 0 ? response.messages[0] : "Successfully Added",
+                            showConfirmButton: !1,
+                            timer: 1500
+                        })
+                        manageRuleTable.ajax.reload(null, false);
+                    } else {
+                        e1.fire({
+                            // position: "center",
+                            icon: "error",
+                            title: response.messages.length > 0 ? response.messages[0] : "Error while Adding",
+                            showConfirmButton: !1,
+                            timer: 2500
+                        })
+
+                        // form[0].reset();
+                    }
+
+
+
+
+                }
+            });
+
             return false;
 
         }
@@ -185,12 +176,6 @@ $(function () {
     $("#editRuleForm").validate({
         ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
         rules: {
-            editfromDate: {
-                required: !0,
-            },
-            edittoDate: {
-                required: !0,
-            },
             editYear: {
                 required: !0,
             },
@@ -211,54 +196,45 @@ $(function () {
                 },
             },
         },
-        messages: {
-            editfromDate: {
-                required: "",
-            },
-            edittoDate: {
-                required: "",
-            },
-        },
         submitHandler: function (form, e) {
             // return true
             e.preventDefault();
-            var c = confirm('Do you really want to save this?');
-            if (c) {
-                var form = $('#editRuleForm');
-                $.ajax({
-                    type: "POST",
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response);
 
-                        if (response.success == true) {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "success",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 1500
-                            })
-                            // form[0].reset();
-                            manageRuleTable.ajax.reload(null, false);
+            var form = $('#editRuleForm');
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
 
-                        } else {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "error",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 2500
-                            })
+                    if (response.success == true) {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 1500
+                        })
+                        // form[0].reset();
+                        manageRuleTable.ajax.reload(null, false);
 
-                        }
-
+                    } else {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500
+                        })
 
                     }
-                });
-            }
+
+
+                }
+            });
+
             return false;
 
         }
@@ -312,16 +288,27 @@ function editRule(ruleId = null) {
                 // modal footer
                 $('.modal-footer').removeClass('d-none');
 
+                $('.editCheckbox input:checkbox').each(function () {
+                    var inputName = this.name;
+                    $("#" + inputName).prop("checked", false);
+                    $('.' + inputName + ' input:text').each(function () {
+                        $(this).attr('disabled', 'disabled');
+                        $(this).val('');
+                        $(this).rules("remove", "required");
+                        $(this).removeClass("is-invalid");
+                    });
+                });
+
                 $('#editRuleForm')[0].reset();
 
-                // var date  = new Date(response.from_date)
-                var from_date = moment(response.from_date).format('MM-DD-YYYY');
-                var to_date = moment(response.to_date).format('MM-DD-YYYY');
+                // // var date  = new Date(response.from_date)
+                // var from_date = moment(response.from_date).format('MM-DD-YYYY');
+                // var to_date = moment(response.to_date).format('MM-DD-YYYY');
 
                 $('#ruleId').val(response.id);
 
-                $('#editfromDate').datepicker('update', from_date);
-                $('#edittoDate').datepicker('update', to_date);
+                // $('#editfromDate').datepicker('update', from_date);
+                // $('#edittoDate').datepicker('update', to_date);
 
                 $('#editModel').val(response.model);
                 $('#editYear').val(response.year);
@@ -343,13 +330,42 @@ function editRule(ruleId = null) {
                 });
 
 
-                $('#editCollege').attr("checked", (response.college == 'on' ? true : false));
-                $('#editMilitary').attr("checked", (response.military == 'on' ? true : false));
-                $('#editLoyalty').attr("checked", (response.loyalty == 'on' ? true : false));
-                $('#editConquest').attr("checked", (response.conquest == 'on' ? true : false));
-                $('#editMisc1').attr("checked", (response.misc1 == 'on' ? true : false));
-                $('#editMisc2').attr("checked", (response.misc2 == 'on' ? true : false));
-                $('#editMisc3').attr("checked", (response.misc3 == 'on' ? true : false));
+                if (response.college != 'N/A') {
+                    $('#editCollege').click();
+                    $('#ecollegeV').val(response.college);
+                    $('#ecollegeE').val(moment(response.college_e).format('MM-DD-YYYY'));
+                }
+
+                if (response.military != 'N/A') {
+                    $('#editMilitary').click();
+                    $('#emilitaryV').val(response.military);
+                    $('#emilitaryE').val(moment(response.military_e).format('MM-DD-YYYY'));
+                }
+                if (response.loyalty != 'N/A') {
+                    $('#editLoyalty').click();
+                    $('#eloyaltyV').val(response.loyalty);
+                    $('#eloyaltyE').val(moment(response.loyalty_e).format('MM-DD-YYYY'));
+                }
+                if (response.conquest != 'N/A') {
+                    $('#editConquest').click();
+                    $('#econquestV').val(response.conquest);
+                    $('#econquestE').val(moment(response.conquest_e).format('MM-DD-YYYY'));
+                }
+                if (response.lease_loyalty != 'N/A') {
+                    $('#editLeaseLoyalty').click();
+                    $('#eleaseLoyaltyV').val(response.lease_loyalty);
+                    $('#eleaseLoyaltyE').val(moment(response.lease_loyalty_e).format('MM-DD-YYYY'));
+                }
+                if (response.misc1 != 'N/A') {
+                    $('#editMisc1').click();
+                    $('#emisc1V').val(response.misc1);
+                    $('#emisc1E').val(moment(response.misc1_e).format('MM-DD-YYYY'));
+                }
+                if (response.misc2 != 'N/A') {
+                    $('#editMisc2').click();
+                    $('#emisc2V').val(response.misc2);
+                    $('#emisc2E').val(moment(response.misc2_e).format('MM-DD-YYYY'));
+                }
 
 
                 $('.selectpicker').selectpicker('refresh');
@@ -395,10 +411,23 @@ function removeRule(ruleId = null) {
 }
 
 
-$('#selectAll').change(function () {
-    // $('#selectAll').prop("checked", this.checked)
-    $('#checkBoxRow .check').prop("checked", this.checked);
+$('input:checkbox').on('change', function () {
+    var inputName = this.name;
+    $('.' + inputName + ' input:text').each(function () {
+        this.disabled = !this.disabled;
+        if (!this.disabled) {
+            $(this).rules("add", "required");
+            $(this).attr('data-msg', '');
+        } else {
+            $(this).val('');
+            $(this).rules("remove", "required");
+            $(this).removeClass("is-invalid");
+
+        }
+    });
 });
+
+
 
 $('#editSelectAll').change(function () {
     // $('#selectAll').prop("checked", this.checked)

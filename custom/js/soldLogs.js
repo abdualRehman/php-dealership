@@ -732,7 +732,7 @@ $(function () {
                     $('#conquest').val(response.conquest);
                     $('#misc1').val(response.misc1);
                     $('#misc2').val(response.misc2);
-                    $('#misc3').val(response.misc3);
+                    $('#leaseLoyalty').val(response.lease_loyalty);
 
 
                     $('#vincheck').val(response.vin_check);
@@ -1254,7 +1254,7 @@ function changeStockDetails(ele) {
 
     $('#selectedStockType').val(obj[14]); // setting up stockType for sales person Todo
 
-    var detailsDiv = `${obj[14]} ${obj[2]} ${obj[3]} ${obj[4]} \n Vin: ${obj[8]} \n Mileage: ${obj[26] == 1 ? obj[9] : ""} \n Age: ${obj[26] == 1 ? obj[10] : ""} \n Lot: ${obj[26] == 1 ? obj[7] : ""} \n Balance: ${obj[26] == 1 ? obj[11] : ""} ${obj[26] == 2 ? "\n  Stock is Deleted" : ""} `;
+    var detailsDiv = `${obj[14]} ${obj[2]} ${obj[3]} ${obj[4]} \n Vin: ${obj[8]} \n Mileage: ${obj[31] == 1 ? obj[9] : ""} \n Age: ${obj[31] == 1 ? obj[10] : ""} \n Lot: ${obj[31] == 1 ? obj[7] : ""} \n Balance: ${obj[31] == 1 ? obj[11] : ""} ${obj[31] == 2 ? "\n  Stock is Deleted" : ""} `;
     $('#selectedDetails').html(detailsDiv);
     $('#selectedDetails').addClass('text-center');
 
@@ -1262,7 +1262,7 @@ function changeStockDetails(ele) {
     $('#grossDiv').removeClass('v-none'); // show gross field on both stock type new / used
 
     // for checking this stock is already in sale or not if it is in sale then and status is not cancelled then make it red
-    if ((obj[16] != null) && obj[16] != 'cancelled') {
+    if ((obj[16].length > 0) && obj[16].every(element => element != 'cancelled')) {
         $('#selectedDetails').addClass('text-center text-danger is-invalid');  // invalid selectarea section
         $('#saleDetailsDiv').addClass('is-invalid');  // invalid stock details div
         $('#grossDiv').addClass('v-none');  // hide gross div
@@ -1284,49 +1284,43 @@ function changeRules() {
     if (eleV) {
         let obj = stockArray.find(data => data[0] === eleV);
         console.log(obj);
+        console.log("obj", obj);
 
-        var saleDate = $('#saleDate').val();
-        saleDate = moment(saleDate).format('MM-DD-YYYY');
-
-        // setting Incentives Rulus
-        var startDate = moment(obj[17]).format('MM-DD-YYYY');
-        var endDate = moment(obj[18]).format('MM-DD-YYYY');
-
-        var bool1 = moment(saleDate).isBetween
-            (startDate, endDate, null, '[]'); // true
-
-        console.log(saleDate);
-        console.log("incentive start date", startDate);
-        console.log("incentive End date", endDate);
-        console.log("incentive Boolean", bool1);
-
-        if (bool1) {
-
-            $('#college').prop("disabled", obj[19] != 'N/A' ? false : true);
-            $('#military').prop("disabled", obj[20] != 'N/A' ? false : true);
-            $('#loyalty').prop("disabled", obj[21] != 'N/A' ? false : true);
-            $('#conquest').prop("disabled", obj[22] != 'N/A' ? false : true);
-            $('#misc1').prop("disabled", obj[23] != 'N/A' ? false : true);
-            $('#misc2').prop("disabled", obj[24] != 'N/A' ? false : true);
-            $('#misc3').prop("disabled", obj[25] != 'N/A' ? false : true);
-
-
-        } else {
-
-            $('#college').prop("disabled", true);
-            $('#military').prop("disabled", true);
-            $('#loyalty').prop("disabled", true);
-            $('#conquest').prop("disabled", true);
-            $('#misc1').prop("disabled", true);
-            $('#misc2').prop("disabled", true);
-            $('#misc3').prop("disabled", true);
-        }
+        chnageIncentiveStatus(obj[17], obj[18], 'college');
+        chnageIncentiveStatus(obj[19], obj[20], 'military');
+        chnageIncentiveStatus(obj[21], obj[22], 'loyalty');
+        chnageIncentiveStatus(obj[23], obj[24], 'conquest');
+        chnageIncentiveStatus(obj[25], obj[26], 'misc1');
+        chnageIncentiveStatus(obj[27], obj[28], 'misc2');
+        chnageIncentiveStatus(obj[29], obj[30], 'leaseLoyalty');
 
         $('.selectpicker').selectpicker('refresh');
 
         changeSalesPersonTodo();
     }
 
+}
+
+function chnageIncentiveStatus(value, date, element) {
+    if (value != 'N/A') {
+        $('#' + element + '_v').html('$' + value);
+        var saleDate = $('#saleDate').val();
+        saleDate = moment(saleDate).format('MM-DD-YYYY');
+
+        var edate = moment(date);
+        var cduration = moment.duration(edate.diff(saleDate));
+        var cdays = cduration.asDays();
+        cdays = Math.ceil(cdays);
+
+        if (cdays >= 0) {
+            $('#' + element).prop("disabled", false);
+        } else {
+            $('#' + element).prop("disabled", true);
+        }
+    } else {
+        $('#' + element).prop("disabled", true);
+        $('#' + element + '_v').html('');
+    }
 }
 
 function changeSalesPersonTodo() {

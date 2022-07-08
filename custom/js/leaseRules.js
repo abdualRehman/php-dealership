@@ -33,13 +33,7 @@ $(function () {
 
 
     manageDataTable = $("#datatable-1").DataTable({
-        // responsive: !0,
-        scrollX: !0,
-        scrollCollapse: !0,
-        fixedColumns: {
-            leftColumns: 0,
-            rightColumns: 1
-        },
+        responsive: !0,
         'ajax': '../php_action/fetchLeaseRules.php',
         dom: "Pfrtip",
         searchPanes: {
@@ -49,6 +43,10 @@ $(function () {
         },
         "pageLength": 25,
         columnDefs: [
+            {
+                targets: 18,
+                visible: false,
+            },
             {
                 searchPanes: {
                     show: true
@@ -61,6 +59,15 @@ $(function () {
             searchPanes: {
                 count: "{total} found",
                 countFiltered: "{shown} / {total}"
+            }
+        },
+        createdRow: function (row, data, dataIndex) {
+            if ($('#isAllowed').val() == 'true') {
+                $(row).children().not(':last-child').attr({
+                    "data-toggle": "modal",
+                    "data-target": "#modal8",
+                    "onclick": "editRule(" + data[18] + ")"
+                });
             }
         },
         "order": [[0, "asc"]]
@@ -354,6 +361,113 @@ $(function () {
 
         }
 
+    });
+
+
+    $("#ImportRule").validate({
+        rules: {
+            excelFile: {
+                required: true,
+            },
+            "12_24_33i": {
+                required: !0,
+                number: !0,
+            },
+            "12_36_48i": {
+                required: !0,
+                number: !0,
+            },
+            "10_24_33i": {
+                required: !0,
+                number: !0,
+            },
+            "10_36_48i": {
+                required: !0,
+                number: !0,
+            },
+        },
+        messages: {
+            excelFile: {
+                required: "File must be required",
+            }
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+
+            var allowedFiles = [".xlsx", ".xls", ".csv"];
+            var fileUpload = $("#excelFile");
+            var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(" + allowedFiles.join('|') + ")$");
+            if (!regex.test(fileUpload.val().toLowerCase())) {
+                e1.fire("Files having extensions: " + allowedFiles.join(', ') + " only.");
+                return false;
+            }
+
+            $('#import').block({
+                message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+                timeout: 1e3
+            });
+            $("#importSubmitBtn").attr("disabled", true);
+            $('#importSubmitBtn').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
+            // $('#importSubmitBtn').button("loading");
+
+            var form = $('#ImportRule');
+            var fd = new FormData(document.getElementById("ImportRule"));
+            fd.append("CustomField", "This is some extra data");
+
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: fd,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    response = JSON.parse(response);
+
+                    // console.log(response);
+                    // console.log(response.success);
+                    if (response.success == true) {
+
+                        e1.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500,
+                        })
+                        form[0].reset();
+                        $('#importSubmitBtn').html('Submit');
+                        $("#importSubmitBtn").removeAttr("disabled");
+
+                        if (response.error && response.error.length > 0) {
+                            var i = 0;
+                            $('#errorDiv').removeClass('d-none');
+                            // console.log(response.erorStock);
+                            while (response.error[i]) {
+                                console.log(response.error[i]);
+                                document.getElementById('errorList').innerHTML += `
+                                    <span class="list-group-item list-group-item-danger">
+                                    ${response.error[i]}
+                                </span> `;
+                                i++;
+                            }
+                        }
+
+                    } else {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: response.error,
+                            showConfirmButton: !1,
+                            timer: 2500
+                        })
+                    }
+
+
+                }
+            });
+            return false;
+
+        }
     })
 
 

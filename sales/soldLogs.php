@@ -864,7 +864,9 @@ if ($_GET['r'] == 'man') {
 
                                     <div class="mt-3 loadIncentives border rounded hidden" id="pbody" style="background-color: rgba(0,188,212,.1);">
                                         <div class="form-row p-3">
-                                            <label for="college" class="col-md-1 col-form-label">College</label>
+                                            <label for="college" class="col-md-1 col-form-label">College
+                                                <span class="badge-label-primary" id="college_v"></span>
+                                            </label>
                                             <div class="col-md-2">
                                                 <select class="selectpicker" data-live-search="true" id="college" name="college" data-size="5">
                                                     <optgroup>
@@ -876,7 +878,9 @@ if ($_GET['r'] == 'man') {
                                                     </optgroup>
                                                 </select>
                                             </div>
-                                            <label for="military" class="col-md-1 col-form-label">Military</label>
+                                            <label for="military" class="col-md-1 col-form-label">Military
+                                                <span class="badge-label-primary" id="military_v"></span>
+                                            </label>
                                             <div class="col-md-2">
                                                 <select class="selectpicker" data-live-search="true" id="military" name="military" data-size="5">
                                                     <optgroup>
@@ -888,7 +892,9 @@ if ($_GET['r'] == 'man') {
                                                     </optgroup>
                                                 </select>
                                             </div>
-                                            <label for="loyalty" class="col-md-1 col-form-label">Loyalty</label>
+                                            <label for="loyalty" class="col-md-1 col-form-label">Loyalty
+                                                <span class="badge-label-primary" id="loyalty_v"></span>
+                                            </label>
                                             <div class="col-md-2">
                                                 <select class="selectpicker" data-live-search="true" id="loyalty" name="loyalty" data-size="5">
                                                     <optgroup>
@@ -900,7 +906,9 @@ if ($_GET['r'] == 'man') {
                                                     </optgroup>
                                                 </select>
                                             </div>
-                                            <label for="conquest" class="col-md-1 col-form-label">Conquest</label>
+                                            <label for="conquest" class="col-md-1 col-form-label">Conquest
+                                                <span class="badge-label-primary" id="conquest_v"></span>
+                                            </label>
                                             <div class="col-md-2">
                                                 <select class="selectpicker" data-live-search="true" id="conquest" name="conquest" data-size="5">
                                                     <optgroup>
@@ -914,8 +922,23 @@ if ($_GET['r'] == 'man') {
                                             </div>
                                         </div>
                                         <div class="form-row pb-0 p-3">
+                                            <label for="leaseLoyalty" class="col-md-1 col-form-label">Lease Loyalty
+                                                <span class="badge-label-primary" id="leaseLoyalty_v"></span>
+                                            </label>
+                                            <div class="col-md-3">
+                                                <select class="selectpicker" data-live-search="true" id="leaseLoyalty" name="leaseLoyalty" data-size="5">
+                                                    <optgroup>
+                                                        <option>No</option>
+                                                        <option>Yes</option>
+                                                    </optgroup>
+                                                    <optgroup class="salesManagerList" label="YES/APPROVED BY">
 
-                                            <label for="misc1" class="col-md-1 col-form-label">Misc 1</label>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                            <label for="misc1" class="col-md-1 col-form-label">Misc 1
+                                                <span class="badge-label-primary" id="misc1_v"></span>
+                                            </label>
                                             <div class="col-md-3">
                                                 <select class="selectpicker" data-live-search="true" id="misc1" name="misc1" data-size="5">
                                                     <optgroup>
@@ -927,21 +950,11 @@ if ($_GET['r'] == 'man') {
                                                     </optgroup>
                                                 </select>
                                             </div>
-                                            <label for="misc2" class="col-md-1 col-form-label">Misc 2</label>
+                                            <label for="misc2" class="col-md-1 col-form-label">Misc 2
+                                                <span class="badge-label-primary" id="misc2_v"></span>
+                                            </label>
                                             <div class="col-md-3">
                                                 <select class="selectpicker" data-live-search="true" id="misc2" name="misc2" data-size="5">
-                                                    <optgroup>
-                                                        <option>No</option>
-                                                        <option>Yes</option>
-                                                    </optgroup>
-                                                    <optgroup class="salesManagerList" label="YES/APPROVED BY">
-
-                                                    </optgroup>
-                                                </select>
-                                            </div>
-                                            <label for="misc3" class="col-md-1 col-form-label">Misc 3</label>
-                                            <div class="col-md-3">
-                                                <select class="selectpicker" data-live-search="true" id="misc3" name="misc3" data-size="5">
                                                     <optgroup>
                                                         <option>No</option>
                                                         <option>Yes</option>

@@ -98,7 +98,7 @@ if (hasAccess("raterule", "Add") === 'false' && hasAccess("raterule", "Edit") ==
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header modal-header-bordered">
-                <h5 class="modal-title">Edit BDC Rule</h5><button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                <h5 class="modal-title">Edit Rate Rule</h5><button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
             </div>
             <form class="form-horizontal" id="editRuleForm" action="../php_action/editRateRule.php" method="post">
                 <div class="modal-body">

@@ -25,19 +25,12 @@ $(function () {
 
 
 
-        // responsive: !0,
-        responsive: {
-            details: {
-                type: 'column',
-                target: 1
-            }
-        },
-        // scrollY: 500,
-        // scrollX: !0,
-        // scrollCollapse: !0,
-        // fixedColumns: {
-        //     leftColumns: 0,
-        //     rightColumns: 1
+        responsive: !0,
+        // responsive: {
+        //     details: {
+        //         type: 'column',
+        //         target: 1
+        //     }
         // },
 
         'ajax': '../php_action/fetchSoldTodo.php',
@@ -54,7 +47,7 @@ $(function () {
         //     <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
         dom: `\n     
             <'row'<'col-12'P>>\n      
-            <'row'<'col-sm-12 text-sm-left col-md-3 mb-2'<'#statusFilterDiv'>> <'col-sm-12 col-md-6 text-center text-sm-left 'B> <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
+            <'row'<'col-sm-12 text-sm-left col-md-3 mb-2 '<'#statusFilterDiv'>> <'col-sm-12 col-md-6 text-center text-sm-left 'B> <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
            <'row'<'col-12'tr>>\n      
            <'row align-items-baseline'
            <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
@@ -62,9 +55,7 @@ $(function () {
 
         "pageLength": 50,
         searchPanes: {
-            cascadePanes: !0,
-            viewTotal: !0,
-            columns: [1, 2, 3, 4, 13],
+            columns: [1, 2, 3, 4],
         },
         buttons: [
             {
@@ -140,7 +131,7 @@ $(function () {
                 searchPanes: {
                     show: true
                 },
-                targets: [1, 2, 3, 4, 13],
+                targets: [1, 2, 3, 4],
             },
             {
                 targets: [12, 13],
@@ -249,37 +240,45 @@ $(function () {
                 return true;
             }
 
+            if (settings.nTable !== tableNode) {
+                return true;
+            }
 
             if (searchStatus[0] === 'opened') {
                 var salesperson_status = searchData[10];
-                if (salesperson_status !== 'cancelled' && salesperson_status !== 'delivered') {
-                    return true;
-                }
-                // Delivered to do should stay in Opened status if anything else is in the RED…except paid
-                if (salesperson_status === 'delivered') {
+                if (salesperson_status === 'cancelled') {
+                    return false;
+                } else {
+                    // Delivered AND all others to do should stay in Opened status if anything else is in the RED…except paid
                     var vin_check = searchData[5];
                     var insurance = searchData[6];
                     var trade_title = searchData[7];
                     var registration = searchData[8];
                     var inspection = searchData[9];
+                    // if (
+                    //     (vin_check !== 'checkTitle' && vin_check !== 'need') &&
+                    //     insurance !== 'need' && trade_title !== 'need' &&
+                    //     registration !== 'pending' && inspection !== 'need') {
+                    //     return false;
+                    // } else {
+                    //     return true;
+                    // }
                     if (
                         (vin_check !== 'checkTitle' && vin_check !== 'need') &&
                         insurance !== 'need' && trade_title !== 'need' &&
-                        registration !== 'pending' && inspection !== 'need') {
+                        (registration !== 'pending' && registration !== 'done') && inspection !== 'need') {
                         return false;
                     } else {
                         return true;
                     }
                 }
-
-                return false;
-
             }
             if (searchStatus[0] === 'completed') {
                 var salesperson_status = searchData[10];
 
                 if (salesperson_status === 'cancelled' || salesperson_status === 'delivered') {
 
+                    // return true;
                     // Delivered to do should stay in Opened status if anything else is in the RED…except paid
                     if (salesperson_status === 'delivered') {
                         var vin_check = searchData[5];
@@ -290,7 +289,7 @@ $(function () {
                         if (
                             (vin_check === 'checkTitle' || vin_check === 'need') ||
                             insurance === 'need' || trade_title === 'need' ||
-                            registration === 'pending' || inspection === 'need'
+                            (registration === 'pending' || registration === 'done') || inspection === 'need'
                         ) {
                             return false;
                         } else {
@@ -301,13 +300,26 @@ $(function () {
                     }
                 }
 
-                return false;
+                // var vin_check = searchData[5];
+                // var insurance = searchData[6];
+                // var trade_title = searchData[7];
+                // var registration = searchData[8];
+                // var inspection = searchData[9];
+                // if (
+                //     (vin_check === 'checkTitle' || vin_check === 'need') &&
+                //     insurance === 'need' && trade_title === 'need' &&
+                //     registration === 'pending' && inspection === 'need' &&
+                //     salesperson_status === 'dealwritten'
+                // ) {
+                //     return false;
+                // } else {
+                //     return true;
+                // }
+
 
             }
 
-            if (settings.nTable !== tableNode) {
-                return true;
-            }
+           
             return false;
         }
     );
@@ -468,7 +480,7 @@ function changePillCSS(data, title) {
             break;
         case 'salePStatus':
             if (data == 'dealWritten') {
-                return '<span class="badge badge-lg badge-success badge-pill">Deal Written</span>';
+                return '<span class="badge badge-lg badge-danger badge-pill">Deal Written</span>';
             } else if (data == 'gmdSubmit') {
                 return '<span class="badge badge-lg badge-success badge-pill">GMD Submit</span>';
             } else if (data == 'contracted') {

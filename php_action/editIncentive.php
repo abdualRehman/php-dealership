@@ -25,7 +25,7 @@ if ($_POST) {
     $conquest = mysqli_real_escape_string($connect, $_POST['conquest']);
     $misc1 = mysqli_real_escape_string($connect, $_POST['misc1']);
     $misc2 = mysqli_real_escape_string($connect, $_POST['misc2']);
-    $misc3 = mysqli_real_escape_string($connect, $_POST['misc3']);
+    $leaseLoyalty = mysqli_real_escape_string($connect, $_POST['leaseLoyalty']);
 
     $collegeDate = mysqli_real_escape_string($connect, $_POST['collegeDate']);
     $collegeDate = ($collegeDate) ? reformatDate($collegeDate) : "";
@@ -45,8 +45,8 @@ if ($_POST) {
     $misc2Date = mysqli_real_escape_string($connect, $_POST['misc2Date']);
     $misc2Date = ($misc2Date) ? reformatDate($misc2Date) : "";
 
-    $misc3Date = mysqli_real_escape_string($connect, $_POST['misc3Date']);
-    $misc3Date = ($misc3Date) ? reformatDate($misc3Date) : "";
+    $leaseLoyaltyDate = mysqli_real_escape_string($connect, $_POST['leaseLoyaltyDate']);
+    $leaseLoyaltyDate = ($leaseLoyaltyDate) ? reformatDate($leaseLoyaltyDate) : "";
 
 
     // echo $collegeDate . '<br />';
@@ -55,7 +55,7 @@ if ($_POST) {
     // echo $conquestDate . '<br />';
     // echo $misc1Date . '<br />';
     // echo $misc2Date . '<br />';
-    // echo $misc3Date . '<br />';
+    // echo $leaseLoyaltyDate . '<br />';
 
     $name = $_FILES['images']['name'];
     $temp_name  = $_FILES['images']['tmp_name'];
@@ -112,14 +112,14 @@ if ($_POST) {
         `conquest`='$conquest',
         `misc1`='$misc1',
         `misc2`='$misc2',
-        `misc3`='$misc3',
+        `lease_loyalty`='$leaseLoyalty',
         `college_date`='$collegeDate',
         `military_date`='$militaryDate',
         `loyalty_date`='$loyaltyDate',
         `conquest_date`='$conquestDate',
         `misc1_date`='$misc1Date',
         `misc2_date`='$misc2Date',
-        `misc3_date`='$misc3Date',
+        `lease_loyalty_date`='$leaseLoyaltyDate',
         `images`='$imageArray' 
         WHERE incentive_id = '$incentiveId'";
 

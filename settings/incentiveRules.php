@@ -6,6 +6,11 @@ if (hasAccess("incr", "Add") === 'false' && hasAccess("incr", "Edit") === 'false
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
 
+if (hasAccess("incr", "Edit") === 'false') {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+}
 ?>
 
 <head>
@@ -48,7 +53,7 @@ if (hasAccess("incr", "Add") === 'false' && hasAccess("incr", "Edit") === 'false
 
         .modal-lg,
         .modal-xl {
-            max-width: 1000PX;
+            max-width: 1200PX;
         }
 
         .modal-dialog table.detialsTable {
@@ -86,15 +91,15 @@ if (hasAccess("incr", "Add") === 'false' && hasAccess("incr", "Edit") === 'false
                                     <th>Model no.</th>
                                     <th>Model Type</th>
                                     <th>Ex Model No</th>
-                                    <th>Expire In.</th>
                                     <th>College</th>
                                     <th>Military</th>
                                     <th>Loyalty</th>
                                     <th>Conquest</th>
+                                    <th>Lease Loyalty</th>
                                     <th>Misc 1</th>
                                     <th>Misc 2</th>
-                                    <th>Misc 3</th>
                                     <th>Action</th>
+                                    <th>ID</th>
                                 </tr>
                             </thead>
                         </table>
@@ -121,71 +126,10 @@ if (hasAccess("incr", "Add") === 'false' && hasAccess("incr", "Edit") === 'false
                     </div>
                     <div class="showResult d-none">
                         <input type="hidden" name="ruleId" id="ruleId">
-                        <div class="form-group row">
-                            <label for="dateRange" class="col-sm-2 offset-sm-1 col-form-label text-right">Select Date:</label>
-                            <div class="col-sm-8">
-                                <div class="input-group input-daterange">
-                                    <input type="text" class="form-control" name="editfromDate" id="editfromDate" placeholder="From">
-                                    <div class="input-group-prepend input-group-append"><span class="input-group-text"><i class="fa fa-ellipsis-h"></i></span>
-                                    </div>
-                                    <input type="text" class="form-control" name="edittoDate" id="edittoDate" placeholder="To">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- <div class="form-row">
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="model">Model</label>
-                                    
-                                    <select class="form-control selectpicker w-auto" id="editModel" name="editModel" data-live-search="true" data-size="4">
-                                        <option value="0" selected disabled>Select Model</option>
-                                        <option value="ACCORD">ACCORD</option>
-                                        <option value="ACCORD HYBRID">ACCORD HYBRID</option>
-                                        <option value="CIVIC">CIVIC</option>
-                                        <option value="CR-V">CR-V</option>
-                                        <option value="CR-V HYBRID">CR-V HYBRID</option>
-                                        <option value="HR-V">HR-V</option>
-                                        <option value="INSIGHT">INSIGHT</option>
-                                        <option value="ODYSSEY">ODYSSEY</option>
-                                        <option value="PASSPORT">PASSPORT</option>
-                                        <option value="PILOT">PILOT</option>
-                                        <option value="RIDGELINE">RIDGELINE</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="year">Year</label>
-                                    
-                                    <input type="text" class="form-control typeahead" id="editYear" name="editYear" placeholder="Year">
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="modelno">Model No.</label>
-                                   
-                                    <input type="text" class="form-control typeahead" id="editModelno" name="editModelno" placeholder="Model No.">
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="modelno">Model Type</label>
-                                    <select class="form-control selectpicker w-auto" id="editModelType" name="editModel" data-live-search="true" data-size="4">
-                                        <option value="NEW" selected>NEW</option>
-                                        <option value="USED">USED</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div> -->
-
+                        <br><br>
                         <table class="table" id="productTable1">
                             <thead>
                                 <tr>
-                                    <!-- <th style="width:25%;text-align:center">Model</th>
-                                    <th style="width:20%;text-align:center">Year</th>
-                                    <th style="width:20%;text-align:center">Model No.</th>
-                                    <th style="width:20%;text-align:center">Model Type</th> -->
                                     <th style="width:20%;text-align:center">Model</th>
                                     <th style="width:20%;text-align:center">Year</th>
                                     <th style="width:20%;text-align:center">Model No.</th>
@@ -234,86 +178,129 @@ if (hasAccess("incr", "Add") === 'false' && hasAccess("incr", "Edit") === 'false
                                 </tr>
                             </tbody>
                         </table>
+                        <br><br>
 
+                        <div class="form-row editCheckbox">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <div class="col-sm-3 text-md-left mb-2 align-self-center">
+                                        <div class="custom-control-lg custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="editCollege" name="editCollege">
+                                            <label class="custom-control-label h5" for="editCollege">
+                                                College
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-9 editCollege">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="ecollegeV" id="ecollegeV" placeholder="$" disabled>
+                                            <input type="text" class="form-control expireIn" name="ecollegeE" id="ecollegeE" placeholder="Expire In" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-3 text-md-left mb-2 align-self-center">
+                                        <div class="custom-control-lg custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="editMilitary" name="editMilitary">
+                                            <label class="custom-control-label h5" for="editMilitary">
+                                                Military
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-9 editMilitary">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="emilitaryV" id="emilitaryV" placeholder="$" disabled />
+                                            <input type="text" class="form-control expireIn" name="emilitaryE" id="emilitaryE" placeholder="Expire In" disabled />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-3 text-md-left mb-2 align-self-center">
+                                        <div class="custom-control-lg custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="editLoyalty" name="editLoyalty">
+                                            <label class="custom-control-label h5" for="editLoyalty">
+                                                Loyalty
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-9 editLoyalty">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="eloyaltyV" id="eloyaltyV" placeholder="$" disabled />
+                                            <input type="text" class="form-control expireIn" name="eloyaltyE" id="eloyaltyE" placeholder="Expire In" disabled />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-3 text-md-left mb-2 align-self-center">
+                                        <div class="custom-control-lg custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="editConquest" name="editConquest">
+                                            <label class="custom-control-label h5" for="editConquest">
+                                                Conquest
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-9 editConquest">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="econquestV" id="econquestV" placeholder="$" disabled />
+                                            <input type="text" class="form-control expireIn" name="econquestE" id="econquestE" placeholder="Expire In" disabled />
+                                        </div>
+                                    </div>
+                                </div>
 
-                        <div class="form-row">
-                            <div class="col-md-12">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Select All</th>
-                                            <th>College</th>
-                                            <th>Military</th>
-                                            <th>Loyalty</th>
-                                            <th>Conquest</th>
-                                            <th>Misc 1</th>
-                                            <th>Misc 2</th>
-                                            <th>Misc 3</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="table-warning">
-                                        <tr id="checkBoxRow">
-                                            <th class="text-center">
-                                                <div class="custom-control-lg custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="editSelectAll">
-                                                    <label class="custom-control-label" for="editSelectAll">
-                                                    </label>
-                                                </div>
-                                            </th>
-                                            <th class="text-center">
-                                                <div class="custom-control-lg custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input check" name="editCollege" id="editCollege">
-                                                    <label class="custom-control-label" for="editCollege">
-                                                    </label>
-                                                </div>
-                                            </th>
-                                            <th class="text-center">
-                                                <div class="custom-control-lg custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input check" name="editMilitary" id="editMilitary">
-                                                    <label class="custom-control-label" for="editMilitary">
-                                                    </label>
-                                                </div>
-                                            </th>
-                                            <th class="text-center">
-                                                <div class="custom-control-lg custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input check" name="editLoyalty" id="editLoyalty">
-                                                    <label class="custom-control-label" for="editLoyalty">
-                                                    </label>
-                                                </div>
-                                            </th>
-                                            <th class="text-center">
-                                                <div class="custom-control-lg custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input check" name="editConquest" id="editConquest">
-                                                    <label class="custom-control-label" for="editConquest">
-                                                    </label>
-                                                </div>
-                                            </th>
-                                            <th class="text-center">
-                                                <div class="custom-control-lg custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input check" name="editMisc1" id="editMisc1">
-                                                    <label class="custom-control-label" for="editMisc1">
-                                                    </label>
-                                                </div>
-                                            </th>
-                                            <th class="text-center">
-                                                <div class="custom-control-lg custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input check" name="editMisc2" id="editMisc2">
-                                                    <label class="custom-control-label" for="editMisc2">
-                                                    </label>
-                                                </div>
-                                            </th>
-                                            <th class="text-center">
-                                                <div class="custom-control-lg custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input check" name="editMisc3" id="editMisc3">
-                                                    <label class="custom-control-label" for="editMisc3">
-                                                    </label>
-                                                </div>
-                                            </th>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <div class="col-sm-3 text-md-left mb-2 align-self-center">
+                                        <div class="custom-control-lg custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="editLeaseLoyalty" name="editLeaseLoyalty">
+                                            <label class="custom-control-label h5" for="editLeaseLoyalty">
+                                                Lease Loyalty
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-9 editLeaseLoyalty">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="eleaseLoyaltyV" id="eleaseLoyaltyV" placeholder="$" disabled />
+                                            <input type="text" class="form-control expireIn" name="eleaseLoyaltyE" id="eleaseLoyaltyE" placeholder="Expire In" disabled />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-3 text-md-left mb-2 align-self-center">
+                                        <div class="custom-control-lg custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="editMisc1" name="editMisc1">
+                                            <label class="custom-control-label h5" for="editMisc1">
+                                                Misc 1
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-9 editMisc1">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="emisc1V" id="emisc1V" placeholder="$" disabled />
+                                            <input type="text" class="form-control expireIn" name="emisc1E" id="emisc1E" placeholder="Expire In" disabled />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-3 text-md-left mb-2 align-self-center">
+                                        <div class="custom-control-lg custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="editMisc2" name="editMisc2">
+                                            <label class="custom-control-label h5" for="editMisc2">
+                                                Misc 2
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-9 editMisc2">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="emisc2V" id="emisc2V" placeholder="$" disabled />
+                                            <input type="text" class="form-control expireIn" name="emisc2E" id="emisc2E" placeholder="Expire In" disabled />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
                 <div class="modal-footer modal-footer-bordered">
@@ -336,20 +323,7 @@ if (hasAccess("incr", "Add") === 'false' && hasAccess("incr", "Edit") === 'false
             <form id="addNewRule" autocomplete="off" method="post" action="../php_action/createRule.php">
                 <!-- <form id="addNewRule" autocomplete="off" method="post" action="#"> -->
                 <div class="modal-body">
-                    <br>
-                    <div class="form-group row">
-                        <label for="dateRange" class="col-sm-2 offset-sm-1 col-form-label text-right">Select Date:</label>
-                        <div class="col-sm-8">
-                            <div class="input-group input-daterange">
-                                <input type="text" class="form-control" name="fromDate" id="fromDate" placeholder="From">
-                                <div class="input-group-prepend input-group-append"><span class="input-group-text"><i class="fa fa-ellipsis-h"></i></span>
-                                </div>
-                                <input type="text" class="form-control" name="toDate" id="toDate" placeholder="To">
-                            </div>
-                        </div>
-                    </div>
                     <br><br>
-
                     <table class="table" id="productTable">
                         <thead>
                             <tr>
@@ -405,140 +379,129 @@ if (hasAccess("incr", "Add") === 'false' && hasAccess("incr", "Edit") === 'false
                         </tbody>
                     </table>
 
-
-
-
-                    <!-- <div class="form-row">
-                        <div class="col-md-3">
-
-                            <div class="form-group">
-                                <label for="model">Model</label>
-                                <select class="form-control selectpicker w-auto" id="model" name="model" data-live-search="true" data-size="4">
-                                    <option value="0" selected disabled>Select Model</option>
-                                    <option value="ACCORD">ACCORD</option>
-                                    <option value="ACCORD HYBRID">ACCORD HYBRID</option>
-                                    <option value="CIVIC">CIVIC</option>
-                                    <option value="CR-V">CR-V</option>
-                                    <option value="CR-V HYBRID">CR-V HYBRID</option>
-                                    <option value="HR-V">HR-V</option>
-                                    <option value="INSIGHT">INSIGHT</option>
-                                    <option value="ODYSSEY">ODYSSEY</option>
-                                    <option value="PASSPORT">PASSPORT</option>
-                                    <option value="PILOT">PILOT</option>
-                                    <option value="RIDGELINE">RIDGELINE</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="year">Year</label>
-                                <input type="text" class="form-control typeahead" id="year" name="year" placeholder="Year">
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="modelno">Model No.</label>
-                                <input type="text" class="form-control typeahead" id="modelno" name="modelno" placeholder="Model No.">
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="modelno">Model Type</label>
-                                    <select class="form-control selectpicker w-auto" id="modelType" name="modelType">
-                                        <option value="NEW" selected>NEW</option>
-                                        <option value="USED">USED</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 form-group mb-1 align-content-center align-self-end">
-                                    <button class="btn btn-info" onclick="addRow()">Add New</button>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div> -->
-
-
-
                     <br><br>
+
                     <div class="form-row">
-                        <div class="col-md-12">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Select All</th>
-                                        <th>College</th>
-                                        <th>Military</th>
-                                        <th>Loyalty</th>
-                                        <th>Conquest</th>
-                                        <th>Misc 1</th>
-                                        <th>Misc 2</th>
-                                        <th>Misc 3</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="table-warning">
-                                    <tr id="checkBoxRow">
-                                        <th class="text-center">
-                                            <div class="custom-control-lg custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="selectAll">
-                                                <label class="custom-control-label" for="selectAll">
-                                                </label>
-                                            </div>
-                                        </th>
-                                        <th class="text-center">
-                                            <div class="custom-control-lg custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input check" name="college" id="college">
-                                                <label class="custom-control-label" for="college">
-                                                </label>
-                                            </div>
-                                        </th>
-                                        <th class="text-center">
-                                            <div class="custom-control-lg custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input check" name="military" id="military">
-                                                <label class="custom-control-label" for="military">
-                                                </label>
-                                            </div>
-                                        </th>
-                                        <th class="text-center">
-                                            <div class="custom-control-lg custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input check" name="loyalty" id="loyalty">
-                                                <label class="custom-control-label" for="loyalty">
-                                                </label>
-                                            </div>
-                                        </th>
-                                        <th class="text-center">
-                                            <div class="custom-control-lg custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input check" name="conquest" id="conquest">
-                                                <label class="custom-control-label" for="conquest">
-                                                </label>
-                                            </div>
-                                        </th>
-                                        <th class="text-center">
-                                            <div class="custom-control-lg custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input check" name="misc1" id="misc1">
-                                                <label class="custom-control-label" for="misc1">
-                                                </label>
-                                            </div>
-                                        </th>
-                                        <th class="text-center">
-                                            <div class="custom-control-lg custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input check" name="misc2" id="misc2">
-                                                <label class="custom-control-label" for="misc2">
-                                                </label>
-                                            </div>
-                                        </th>
-                                        <th class="text-center">
-                                            <div class="custom-control-lg custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input check" name="misc3" id="misc3">
-                                                <label class="custom-control-label" for="misc3">
-                                                </label>
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-sm-3 text-md-left mb-2 align-self-center">
+                                    <div class="custom-control-lg custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="college" name="college">
+                                        <label class="custom-control-label h5" for="college">
+                                            College
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-9 college">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="collegeV" id="collegeV" placeholder="$" disabled>
+                                        <input type="text" class="form-control expireIn" name="collegeE" id="collegeE" placeholder="Expire In" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-3 text-md-left mb-2 align-self-center">
+                                    <div class="custom-control-lg custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="military" name="military">
+                                        <label class="custom-control-label h5" for="military">
+                                            Military
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-9 military">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="militaryV" id="militaryV" placeholder="$" disabled />
+                                        <input type="text" class="form-control expireIn" name="militaryE" id="militaryE" placeholder="Expire In" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-3 text-md-left mb-2 align-self-center">
+                                    <div class="custom-control-lg custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="loyalty" name="loyalty">
+                                        <label class="custom-control-label h5" for="loyalty">
+                                            Loyalty
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-9 loyalty">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="loyaltyV" id="loyaltyV" placeholder="$" disabled />
+                                        <input type="text" class="form-control expireIn" name="loyaltyE" id="loyaltyE" placeholder="Expire In" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-3 text-md-left mb-2 align-self-center">
+                                    <div class="custom-control-lg custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="conquest" name="conquest">
+                                        <label class="custom-control-label h5" for="conquest">
+                                            Conquest
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-9 conquest">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="conquestV" id="conquestV" placeholder="$" disabled />
+                                        <input type="text" class="form-control expireIn" name="conquestE" id="conquestE" placeholder="Expire In" disabled />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-sm-3 text-md-left mb-2 align-self-center">
+                                    <div class="custom-control-lg custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="leaseLoyalty" name="leaseLoyalty">
+                                        <label class="custom-control-label h5" for="leaseLoyalty">
+                                            Lease Loyalty
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-9 leaseLoyalty">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="leaseLoyaltyV" id="leaseLoyaltyV" placeholder="$" disabled />
+                                        <input type="text" class="form-control expireIn" name="leaseLoyaltyE" id="leaseLoyaltyE" placeholder="Expire In" disabled />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-3 text-md-left mb-2 align-self-center">
+                                    <div class="custom-control-lg custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="misc1" name="misc1">
+                                        <label class="custom-control-label h5" for="misc1">
+                                            Misc 1
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-9 misc1">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="misc1V" id="misc1V" placeholder="$" disabled />
+                                        <input type="text" class="form-control expireIn" name="misc1E" id="misc1E" placeholder="Expire In" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-3 text-md-left mb-2 align-self-center">
+                                    <div class="custom-control-lg custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="misc2" name="misc2">
+                                        <label class="custom-control-label h5" for="misc2">
+                                            Misc 2
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-9 misc2">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="misc2V" id="misc2V" placeholder="$" disabled />
+                                        <input type="text" class="form-control expireIn" name="misc2E" id="misc2E" placeholder="Expire In" disabled />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
                     <br><br>
 
 

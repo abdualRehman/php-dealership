@@ -97,7 +97,7 @@ if ($_POST) {
     $conquest = mysqli_real_escape_string($connect, $_POST['conquest']);
     $misc1 = mysqli_real_escape_string($connect, $_POST['misc1']);
     $misc2 = mysqli_real_escape_string($connect, $_POST['misc2']);
-    $misc3 = mysqli_real_escape_string($connect, $_POST['misc3']);
+    $leaseLoyalty = mysqli_real_escape_string($connect, $_POST['leaseLoyalty']);
 
 
     // echo $college . "<br />";
@@ -106,7 +106,7 @@ if ($_POST) {
     // echo $conquest . '<br />';
     // echo $misc1 . '<br />';
     // echo $misc2 . '<br />';
-    // echo $misc3 . '<br />';
+    // echo $leaseLoyalty . '<br />';
 
     // sales person Todo
     $vincheck = mysqli_real_escape_string($connect, $_POST['vincheck']);
@@ -177,7 +177,7 @@ if ($_POST) {
         `conquest`='$conquest',
         `misc1`='$misc1',
         `misc2`='$misc2',
-        `misc3`='$misc3' 
+        `lease_loyalty`='$leaseLoyalty' 
         WHERE sale_id = '$sale_id' ";
 
 

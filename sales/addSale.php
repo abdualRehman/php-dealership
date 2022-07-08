@@ -437,7 +437,9 @@ if (hasAccess("sale", "Add") === 'false') {
 
                             <div class="mt-3 loadIncentives border rounded hidden" id="pbody" style="background-color: rgba(0,188,212,.1);">
                                 <div class="form-row p-3">
-                                    <label for="college" class="col-md-1 col-form-label">College</label>
+                                    <label for="college" class="col-md-1 col-form-label text-md-center">College
+                                        <span class="badge-label-primary" id="college_v"></span>
+                                    </label>
                                     <div class="col-md-2">
                                         <select class="selectpicker" data-live-search="true" id="college" name="college" data-size="5">
                                             <optgroup>
@@ -449,7 +451,9 @@ if (hasAccess("sale", "Add") === 'false') {
                                             </optgroup>
                                         </select>
                                     </div>
-                                    <label for="military" class="col-md-1 col-form-label">Military</label>
+                                    <label for="military" class="col-md-1 col-form-label text-md-center">Military
+                                        <span class="badge-label-primary" id="military_v"></span>
+                                    </label>
                                     <div class="col-md-2">
                                         <select class="selectpicker" data-live-search="true" id="military" name="military" data-size="5">
                                             <optgroup>
@@ -461,7 +465,9 @@ if (hasAccess("sale", "Add") === 'false') {
                                             </optgroup>
                                         </select>
                                     </div>
-                                    <label for="loyalty" class="col-md-1 col-form-label">Loyalty</label>
+                                    <label for="loyalty" class="col-md-1 col-form-label text-md-center">Loyalty
+                                        <span class="badge-label-primary" id="loyalty_v"></span>
+                                    </label>
                                     <div class="col-md-2">
                                         <select class="selectpicker" data-live-search="true" id="loyalty" name="loyalty" data-size="5">
                                             <optgroup>
@@ -473,7 +479,9 @@ if (hasAccess("sale", "Add") === 'false') {
                                             </optgroup>
                                         </select>
                                     </div>
-                                    <label for="conquest" class="col-md-1 col-form-label">Conquest</label>
+                                    <label for="conquest" class="col-md-1 col-form-label text-md-center">Conquest
+                                        <span class="badge-label-primary" id="conquest_v"></span>
+                                    </label>
                                     <div class="col-md-2">
                                         <select class="selectpicker" data-live-search="true" id="conquest" name="conquest" data-size="5">
                                             <optgroup>
@@ -487,8 +495,24 @@ if (hasAccess("sale", "Add") === 'false') {
                                     </div>
                                 </div>
                                 <div class="form-row pb-0 p-3">
+                                    <label for="leaseLoyalty" class="col-md-1 col-form-label text-md-center">Lease Loyalty
+                                        <span class="badge-label-primary" id="leaseLoyalty_v"></span>
+                                    </label>
+                                    <div class="col-md-3">
+                                        <!-- <select class="selectpicker" data-live-search="true" id="misc3" name="misc3" data-size="5"> -->
+                                        <select class="selectpicker" data-live-search="true" id="leaseLoyalty" name="leaseLoyalty" data-size="5">
+                                            <optgroup>
+                                                <option>No</option>
+                                                <option>Yes</option>
+                                            </optgroup>
+                                            <optgroup class="salesManagerList" label="YES/APPROVED BY">
 
-                                    <label for="misc1" class="col-md-1 col-form-label">Misc 1</label>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                    <label for="misc1" class="col-md-1 col-form-label text-md-center">Misc 1
+                                        <span class="badge-label-primary" id="misc1_v"></span>
+                                    </label>
                                     <div class="col-md-3">
                                         <select class="selectpicker" data-live-search="true" id="misc1" name="misc1" data-size="5">
                                             <optgroup>
@@ -500,7 +524,9 @@ if (hasAccess("sale", "Add") === 'false') {
                                             </optgroup>
                                         </select>
                                     </div>
-                                    <label for="misc2" class="col-md-1 col-form-label">Misc 2</label>
+                                    <label for="misc2" class="col-md-1 col-form-label text-md-center">Misc 2
+                                        <span class="badge-label-primary" id="misc2_v"></span>
+                                    </label>
                                     <div class="col-md-3">
                                         <select class="selectpicker" data-live-search="true" id="misc2" name="misc2" data-size="5">
                                             <optgroup>
@@ -512,19 +538,6 @@ if (hasAccess("sale", "Add") === 'false') {
                                             </optgroup>
                                         </select>
                                     </div>
-                                    <label for="misc3" class="col-md-1 col-form-label">Misc 3</label>
-                                    <div class="col-md-3">
-                                        <select class="selectpicker" data-live-search="true" id="misc3" name="misc3" data-size="5">
-                                            <optgroup>
-                                                <option>No</option>
-                                                <option>Yes</option>
-                                            </optgroup>
-                                            <optgroup class="salesManagerList" label="YES/APPROVED BY">
-
-                                            </optgroup>
-                                        </select>
-                                    </div>
-
                                 </div>
 
                             </div>
@@ -538,7 +551,7 @@ if (hasAccess("sale", "Add") === 'false') {
 
                                 <div class="form-row p-3">
 
-                                    <label for="vincheck" class="col-md-1 col-form-label">Vin Check</label>
+                                    <label for="vincheck" class="col-md-1 col-form-label text-md-center">Vin Check</label>
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <select onchange="chnageStyle(this)" name="vincheck" id="vincheck" class="selectpicker" data-style="btn-outline-danger">
@@ -551,7 +564,7 @@ if (hasAccess("sale", "Add") === 'false') {
                                             </select>
                                         </div>
                                     </div>
-                                    <label for="insurance" class="col-md-1 col-form-label">Insurance</label>
+                                    <label for="insurance" class="col-md-1 col-form-label text-md-center">Insurance</label>
                                     <div class="col-md-2">
                                         <select class="selectpicker" onchange="chnageStyle(this)" id="insurance" name="insurance" data-style="btn-outline-danger">
                                             <option value="need">Need</option>
@@ -559,7 +572,7 @@ if (hasAccess("sale", "Add") === 'false') {
                                             <option value="n/a">N/A</option>
                                         </select>
                                     </div>
-                                    <label for="tradeTitle" class="col-md-1 col-form-label">Trade Title</label>
+                                    <label for="tradeTitle" class="col-md-1 col-form-label text-md-center">Trade Title</label>
                                     <div class="col-md-2">
                                         <select class="selectpicker" onchange="chnageStyle(this)" id="tradeTitle" name="tradeTitle" data-style="btn-outline-danger">
                                             <option value="need">Need</option>
@@ -568,7 +581,7 @@ if (hasAccess("sale", "Add") === 'false') {
                                             <option value="inHouse">In House</option>
                                         </select>
                                     </div>
-                                    <label for="registration" class="col-md-1 col-form-label">Registration</label>
+                                    <label for="registration" class="col-md-1 col-form-label text-md-center">Registration</label>
                                     <div class="col-md-2">
                                         <select class="selectpicker" onchange="chnageStyle(this)" id="registration" name="registration" data-style="btn-outline-danger">
                                             <option value="pending">Pending</option>
@@ -581,7 +594,7 @@ if (hasAccess("sale", "Add") === 'false') {
                                 </div>
                                 <div class="form-row pb-0 p-3">
 
-                                    <label for="inspection" class="col-md-1 col-form-label">Inspection</label>
+                                    <label for="inspection" class="col-md-1 col-form-label text-md-center">Inspection</label>
                                     <div class="col-md-3">
                                         <select class="selectpicker" onchange="chnageStyle(this)" id="inspection" name="inspection" data-style="btn-outline-danger">
                                             <option value="need">Need</option>
@@ -590,7 +603,7 @@ if (hasAccess("sale", "Add") === 'false') {
                                             <option value="n/a">N/A</option>
                                         </select>
                                     </div>
-                                    <label for="salePStatus" class="col-md-1 col-form-label">Salesperson Status</label>
+                                    <label for="salePStatus" class="col-md-1 col-form-label text-md-center">Salesperson Status</label>
                                     <div class="col-md-3">
                                         <select class="selectpicker" onchange="chnageStyle(this)" id="salePStatus" name="salePStatus" data-style="btn-outline-danger">
 
@@ -602,7 +615,7 @@ if (hasAccess("sale", "Add") === 'false') {
 
                                         </select>
                                     </div>
-                                    <label for="paid" class="col-md-1 col-form-label">Paid</label>
+                                    <label for="paid" class="col-md-1 col-form-label text-md-center">Paid</label>
                                     <div class="col-md-3">
                                         <select class="selectpicker" onchange="chnageStyle(this)" id="paid" name="paid" data-style="btn-outline-danger">
                                             <option value="no">No</option>

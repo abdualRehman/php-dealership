@@ -5,7 +5,11 @@ include_once '../includes/header.php';
 if (hasAccess("leaserule", "Add") === 'false' && hasAccess("leaserule", "Edit") === 'false' && hasAccess("leaserule", "Remove") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
-
+if (hasAccess("leaserule", "Edit") !== 'false') {
+    echo '<input type="hidden" name="isAllowed" id="isAllowed" value="true" />';
+} else {
+    echo '<input type="hidden" name="isAllowed" id="isAllowed" value="false" />';
+}
 ?>
 
 <head>
@@ -72,9 +76,12 @@ if (hasAccess("leaserule", "Add") === 'false' && hasAccess("leaserule", "Edit") 
                             echo '<button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
                             <i class="fa fa-plus ml-1 mr-2"></i> Set New Rule
                         </button>';
+                            echo '<button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#importNew">
+                            <i class="fa fa-plus ml-1 mr-2"></i> Import File
+                        </button>';
                         }
                         ?>
-                        
+
                     </div>
                     <div class="portlet-body">
                         <div class="remove-messages"></div>
@@ -99,6 +106,7 @@ if (hasAccess("leaserule", "Add") === 'false' && hasAccess("leaserule", "Edit") 
                                     <th>57</th>
                                     <th>60</th>
                                     <th>Action</th>
+                                    <th>ID</th>
                                 </tr>
                             </thead>
                         </table>
@@ -115,7 +123,7 @@ if (hasAccess("leaserule", "Add") === 'false' && hasAccess("leaserule", "Edit") 
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header modal-header-bordered">
-                <h5 class="modal-title">Edit BDC Rule</h5><button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                <h5 class="modal-title">Edit Lease Rule</h5><button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
             </div>
             <form class="form-horizontal" id="editRuleForm" action="../php_action/editLeaseRule.php" method="post">
                 <div class="modal-body">
@@ -462,6 +470,81 @@ if (hasAccess("leaserule", "Add") === 'false' && hasAccess("leaserule", "Edit") 
                 <div class="modal-footer modal-footer-bordered">
                     <button class="btn btn-primary mr-2">Submit</button>
                     <button class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="importNew">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header modal-header-bordered">
+                <h5 class="modal-title">Import File</h5>
+                <button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
+            </div>
+            <form id="ImportRule" autocomplete="off" method="post" action="../php_action/importLeaseRuleFile.php" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <h3 class="h4">Import RESIDUALS.CSV File:</h3>
+                    <br>
+                    <div class="form-group mb-0">
+                        <input type="file" class="form-control-file" id="excelFile" name="excelFile" />
+                    </div>
+                    <div class="row p-3">
+                        <div class="col-md-12">
+                            <div class="alert alert-outline-info fade show mb-0">
+                                <div class="alert-icon"><i class="fa fa-info"></i></div>
+                                <div class="alert-content">
+                                    <h4 class="alert-heading">Please Note!</h4>
+                                    <p>A record that already exists in the database will be updated by this file.</p>
+                                </div>
+                                <button type="button" class="btn btn-text-danger btn-icon alert-dismiss" data-dismiss="alert"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <hr>
+                    <div class="form-row mt-4 mb-4">
+                        <div class="col-md-6">
+                            <h3 class="h6 mb-3">12,000 Miles Per Year </h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="float-label">
+                                        <input type="text" id="12_24_33i" value="1" name="12_24_33i" class="form-control" placeholder=" ">
+                                        <label for="12_24_33i">24-33 -%</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="float-label">
+                                        <input type="text" id="12_36_48i" value="2" name="12_36_48i" class="form-control" placeholder=" ">
+                                        <label for="12_36_48i">36-48 -%</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h3 class="h6 mb-3">10,000 Miles Per Year </h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="float-label">
+                                        <input type="text" id="10_24_33i" value="2" name="10_24_33i" class="form-control" placeholder=" ">
+                                        <label for="10_24_33i">24-33 -%</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="float-label">
+                                        <input type="text" id="10_36_48i" value="3" name="10_36_48i" class="form-control" placeholder=" ">
+                                        <label for="10_36_48i">36-48 -%</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+                </div>
+                <div class="modal-footer modal-footer-bordered">
+                    <button type="submit" id="importSubmitBtn" class="btn btn-primary mr-2">Submit</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
                 </div>
             </form>
         </div>

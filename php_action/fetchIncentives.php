@@ -10,13 +10,13 @@ if ($_SESSION['userRole']) {
 
 
 if ($userRole != $salesConsultantID) {
-    $sql = "SELECT sale_incentives.incentive_id , users.username as sale_consultant , sales.date , sales.fname , sales.lname , sale_incentives.college , sale_incentives.military , sale_incentives.loyalty , sale_incentives.conquest, sale_incentives.misc1 , sale_incentives.misc2 , sale_incentives.misc3 , inventory.stockno ,  inventory.stocktype , inventory.year , inventory.model , inventory.make , sales.state ,
-    sale_incentives.college_date, sale_incentives.military_date , sale_incentives.loyalty_date , sale_incentives.conquest_date , sale_incentives.misc1_date , sale_incentives.misc2_date , sale_incentives.misc3_date , sale_incentives.images
+    $sql = "SELECT sale_incentives.incentive_id , users.username as sale_consultant , sales.date , sales.fname , sales.lname , sale_incentives.college , sale_incentives.military , sale_incentives.loyalty , sale_incentives.conquest, sale_incentives.misc1 , sale_incentives.misc2 , sale_incentives.lease_loyalty , inventory.stockno ,  inventory.stocktype , inventory.year , inventory.model , inventory.make , sales.state ,
+    sale_incentives.college_date, sale_incentives.military_date , sale_incentives.loyalty_date , sale_incentives.conquest_date , sale_incentives.misc1_date , sale_incentives.misc2_date , sale_incentives.lease_loyalty_date , sale_incentives.images
     FROM `sale_incentives` INNER JOIN sales ON sale_incentives.sale_id = sales.sale_id INNER JOIN users ON sales.sales_consultant = users.id INNER JOIN inventory ON sales.stock_id = inventory.id WHERE sales.status = 1 AND sale_incentives.status = 1 ORDER BY sales.sales_consultant ASC";
 } else {
     $uid = $_SESSION['userId'];
-    $sql = "SELECT sale_incentives.incentive_id , users.username as sale_consultant , sales.date , sales.fname , sales.lname , sale_incentives.college , sale_incentives.military , sale_incentives.loyalty , sale_incentives.conquest, sale_incentives.misc1 , sale_incentives.misc2 , sale_incentives.misc3 , inventory.stockno ,  inventory.stocktype , inventory.year , inventory.model , inventory.make , sales.state ,
-    sale_incentives.college_date, sale_incentives.military_date , sale_incentives.loyalty_date , sale_incentives.conquest_date , sale_incentives.misc1_date , sale_incentives.misc2_date , sale_incentives.misc3_date , sale_incentives.images
+    $sql = "SELECT sale_incentives.incentive_id , users.username as sale_consultant , sales.date , sales.fname , sales.lname , sale_incentives.college , sale_incentives.military , sale_incentives.loyalty , sale_incentives.conquest, sale_incentives.misc1 , sale_incentives.misc2 , sale_incentives.lease_loyalty , inventory.stockno ,  inventory.stocktype , inventory.year , inventory.model , inventory.make , sales.state ,
+    sale_incentives.college_date, sale_incentives.military_date , sale_incentives.loyalty_date , sale_incentives.conquest_date , sale_incentives.misc1_date , sale_incentives.misc2_date , sale_incentives.lease_loyalty_date , sale_incentives.images
     FROM `sale_incentives` INNER JOIN sales ON sale_incentives.sale_id = sales.sale_id INNER JOIN users ON sales.sales_consultant = users.id INNER JOIN inventory ON sales.stock_id = inventory.id WHERE sales.status = 1 AND sale_incentives.status = 1 AND sales.sales_consultant = '$uid' ORDER BY sales.sales_consultant ASC";
 }
 $result = $connect->query($sql);
@@ -52,7 +52,7 @@ if ($result->num_rows > 0) {
         $conquest = (is_numeric($row['conquest'])) ? "Yes/Approved by <br />" .fetchSalesManagerName($row['conquest']) : $row['conquest'];
         $misc1 = (is_numeric($row['misc1'])) ? "Yes/Approved by <br />" .fetchSalesManagerName($row['misc1']) : $row['misc1'];
         $misc2 = (is_numeric($row['misc2'])) ? "Yes/Approved by <br />" .fetchSalesManagerName($row['misc2']) : $row['misc2'];
-        $misc3 = (is_numeric($row['misc3'])) ? "Yes/Approved by <br />" .fetchSalesManagerName($row['misc3']) : $row['misc3'];
+        $lease_loyalty = (is_numeric($row['lease_loyalty'])) ? "Yes/Approved by <br />" .fetchSalesManagerName($row['lease_loyalty']) : $row['lease_loyalty'];
 
         $college_date = $row['college_date'];
         $military_date = $row['military_date'];
@@ -60,7 +60,7 @@ if ($result->num_rows > 0) {
         $conquest_date = $row['conquest_date'];
         $misc1_date = $row['misc1_date'];
         $misc2_date = $row['misc2_date'];
-        $misc3_date = $row['misc3_date'];
+        $lease_loyalty_date = $row['lease_loyalty_date'];
         $images = $row['images'];
     
         
@@ -87,18 +87,19 @@ if ($result->num_rows > 0) {
             $military,
             $loyalty,
             $conquest,
+            $lease_loyalty,
             $misc1,
             $misc2,
-            $misc3,
             $college_date,  
             $military_date,
             $loyalty_date, 
             $conquest_date,
             $misc1_date, 
             $misc2_date, 
-            $misc3_date,
+            $lease_loyalty_date,
             $images,
-            $button // 19 index
+            // $button // 19 index
+            $id // 19 index
         );
     } // /while 
 

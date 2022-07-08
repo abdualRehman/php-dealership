@@ -11,50 +11,65 @@ function reformatDate($date, $from_format = 'm-d-Y', $to_format = 'Y-m-d')
 
 if ($_POST) {
 
-    $fromDate = mysqli_real_escape_string($connect, $_POST['fromDate']);
-    $fromDate = reformatDate($fromDate);
-
-    $toDate = mysqli_real_escape_string($connect, $_POST['toDate']);
-    $toDate = reformatDate($toDate);
-
-
-    // echo $fromDate . '<br />';
-    // echo $toDate . '<br />';
-
-
-
+  
     $college = "N/A";
+    $collegeE = "";
     if (isset($_POST['college'])) {
-        $college = mysqli_real_escape_string($connect, $_POST['college']);
+        $college = mysqli_real_escape_string($connect, $_POST['collegeV']);
+
+        $collegeE = mysqli_real_escape_string($connect, $_POST['collegeE']);
+        $collegeE = reformatDate($collegeE);
     }
     $military = "N/A";
+    $militaryE = "";
     if (isset($_POST['military'])) {
-        $military = mysqli_real_escape_string($connect, $_POST['military']);
+        $military = mysqli_real_escape_string($connect, $_POST['militaryV']);
+        $militaryE = mysqli_real_escape_string($connect, $_POST['militaryE']);
+        $militaryE = reformatDate($militaryE);
     }
     $loyalty = "N/A";
+    $loyaltyE = "";
     if (isset($_POST['loyalty'])) {
-        $loyalty = mysqli_real_escape_string($connect, $_POST['loyalty']);
+        $loyalty = mysqli_real_escape_string($connect, $_POST['loyaltyV']);
+
+        $loyaltyE = mysqli_real_escape_string($connect, $_POST['loyaltyE']);
+        $loyaltyE = reformatDate($loyaltyE);
     }
     $conquest = "N/A";
+    $conquestE = "";
     if (isset($_POST['conquest'])) {
-        $conquest = mysqli_real_escape_string($connect, $_POST['conquest']);
-    }
-    $misc1 = "N/A";
-    if (isset($_POST['misc1'])) {
-        $misc1 = mysqli_real_escape_string($connect, $_POST['misc1']);
-    }
-    $misc2 = "N/A";
-    if (isset($_POST['misc2'])) {
-        $misc2 = mysqli_real_escape_string($connect, $_POST['misc2']);
-    }
-    $misc3 = "N/A";
-    if (isset($_POST['misc3'])) {
-        $misc3 = mysqli_real_escape_string($connect, $_POST['misc3']);
+        $conquest = mysqli_real_escape_string($connect, $_POST['conquestV']);
+
+        $conquestE = mysqli_real_escape_string($connect, $_POST['conquestE']);
+        $conquestE = reformatDate($conquestE);
     }
 
-    // echo $misc1 . '<br />';
-    // echo $misc2 . '<br />';
-    // echo $misc3 . '<br />';
+    $leaseLoyalty = "N/A";
+    $leaseLoyaltyE = "";
+    if (isset($_POST['leaseLoyalty'])) {
+        $leaseLoyalty = mysqli_real_escape_string($connect, $_POST['leaseLoyaltyV']);
+
+        $leaseLoyaltyE = mysqli_real_escape_string($connect, $_POST['leaseLoyaltyE']);
+        $leaseLoyaltyE = reformatDate($leaseLoyaltyE);
+    }
+
+    $misc1 = "N/A";
+    $misc1E = "";
+    if (isset($_POST['misc1'])) {
+        $misc1 = mysqli_real_escape_string($connect, $_POST['misc1V']);
+
+        $misc1E = mysqli_real_escape_string($connect, $_POST['misc1E']);
+        $misc1E = reformatDate($misc1E);
+    }
+    $misc2 = "N/A";
+    $misc2E = "";
+    if (isset($_POST['misc2'])) {
+        $misc2 = mysqli_real_escape_string($connect, $_POST['misc2V']);
+
+        $misc2E = mysqli_real_escape_string($connect, $_POST['misc2E']);
+        $misc2E = reformatDate($misc2E);
+    }
+
 
 
 
@@ -66,7 +81,7 @@ if ($_POST) {
         $modelno = mysqli_real_escape_string($connect, $_POST['modelno'][$x]);
         $modelType = mysqli_real_escape_string($connect, $_POST['modelType'][$x]);
 
-        $exModelno = (isset($_POST['exModelno' . $i] )) ? implode("_", $_POST['exModelno' . $i] ) : "";
+        $exModelno = (isset($_POST['exModelno' . $i])) ? implode("_", $_POST['exModelno' . $i]) : "";
         $exModelno = ($exModelno ===  "") ? "" :   "_" . $exModelno . "_";
 
         // echo $exModelno ."<br />";
@@ -78,22 +93,27 @@ if ($_POST) {
             $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . ' - ' . $modelType  . " is Already Exist";
         } else {
 
-            $sql = "INSERT INTO `incentive_rules`(`from_date`, `to_date`, `model`, `year`, `modelno` , `ex_modelno` , `type`, `college`, `military`, `loyalty`, `conquest`, `misc1`, `misc2`, `misc3`, `status`) 
+            $sql = "INSERT INTO `incentive_rules`( `model`, `year`, `modelno`, `ex_modelno`, `type`, `college`, `college_e`, `military`, `military_e`, `loyalty`, `loyalty_e`, `conquest`, `conquest_e`, `misc1`, `misc1_e`, `misc2`, `misc2_e`, `lease_loyalty`, `lease_loyalty_e`, `status`) 
             VALUES (
-                '$fromDate',
-                '$toDate',
                 '$model',
                 '$year',
                 '$modelno',
                 '$exModelno',
                 '$modelType',
                 '$college',
+                '$collegeE',
                 '$military',
+                '$militaryE',
                 '$loyalty',
+                '$loyaltyE',
                 '$conquest',
+                '$conquestE',
                 '$misc1',
+                '$misc1E',
                 '$misc2',
-                '$misc3', 1 )";
+                '$misc2E',
+                '$leaseLoyalty',
+                '$leaseLoyaltyE' , 1 )";
 
             if ($connect->query($sql) === true) {
                 $valid['success'] = true;

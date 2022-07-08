@@ -17,9 +17,9 @@ if ($result->num_rows > 0) {
 
         $button = '
             <div class="show d-flex" >' .
-            (hasAccess("leaserule", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editRule(' . $id . ')" >
-                    <i class="fa fa-edit"></i>
-                </button>' : "") .
+            // (hasAccess("leaserule", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editRule(' . $id . ')" >
+            //         <i class="fa fa-edit"></i>
+            //     </button>' : "") .
             (hasAccess("leaserule", "Remove") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeRule(' . $id . ')" >
                     <i class="fa fa-trash"></i>
                 </button>' : "") .
@@ -46,6 +46,7 @@ if ($result->num_rows > 0) {
             $row[16],
             $row[17],
             $button,
+            $id,
         );
     } // /while 
 
