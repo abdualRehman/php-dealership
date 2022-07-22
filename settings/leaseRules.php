@@ -92,6 +92,7 @@ if (hasAccess("leaserule", "Edit") !== 'false') {
                                     <th>Year</th>
                                     <th>Model no.</th>
                                     <th>Exclude Model No</th>
+                                    <th>Expire In</th>
                                     <th>24</th>
                                     <th>27</th>
                                     <th>30</th>
@@ -138,10 +139,11 @@ if (hasAccess("leaserule", "Edit") !== 'false') {
                         <table class="table" id="productTable1">
                             <thead>
                                 <tr>
-                                    <th style="width:25%;text-align:center">Model</th>
+                                    <th style="width:20%;text-align:center">Model</th>
                                     <th style="width:20%;text-align:center">Year</th>
                                     <th style="width:20%;text-align:center">Model No.</th>
                                     <th style="width:20%;text-align:center">Exclude Model No.</th>
+                                    <th style="width:20%;text-align:center">Expire In</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -175,6 +177,9 @@ if (hasAccess("leaserule", "Edit") !== 'false') {
                                             <optgroup label="Press Enter to add">
 
                                         </select>
+                                    </td>
+                                    <td class="form-group">
+                                        <input type="text" class="form-control" id="editExpireIn" name="editExpireIn" placeholder="Expire In.">
                                     </td>
                                 </tr>
                             </tbody>
@@ -288,8 +293,8 @@ if (hasAccess("leaserule", "Edit") !== 'false') {
                     </div>
                 </div>
                 <div class="modal-footer modal-footer-bordered">
-                    <button class="btn btn-primary mr-2">Update Changes</button>
-                    <button class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary mr-2">Update Changes</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
                 </div>
             </form>
 
@@ -307,16 +312,16 @@ if (hasAccess("leaserule", "Edit") !== 'false') {
             <form id="addNewRule" autocomplete="off" method="post" action="../php_action/createLeaseRule.php">
                 <!-- <form id="addNewRule" autocomplete="off" method="post" action="#"> -->
                 <div class="modal-body">
-                    <br>
                     <h3 class="h4">Stock Details:</h3>
                     <table class="table" id="productTable">
                         <thead>
                             <tr>
                                 <th style="width:25%;text-align:center">Model</th>
                                 <th style="width:20%;text-align:center">Year</th>
-                                <th style="width:20%;text-align:center">Model No.</th>
-                                <th style="width:20%;text-align:center">Exclude Model No.</th>
-                                <th style="width:15%;text-align:center"></th>
+                                <th style="width:15%;text-align:center">Model No.</th>
+                                <th style="width:15%;text-align:center">Exclude Model No.</th>
+                                <th style="width:15%;text-align:center">Expire In</th>
+                                <th style="width:10%;text-align:center"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -350,7 +355,9 @@ if (hasAccess("leaserule", "Edit") !== 'false') {
                                         <optgroup label="Press Enter to add">
                                     </select>
                                 </td>
-
+                                <td class="form-group">
+                                    <input type="text" class="form-control" id="expireIn1" name="expireIn[]" placeholder="Expire In.">
+                                </td>
                                 <td class="form-group text-center">
                                     <button type="button" id="addRowBtn" class="btn btn-info" data-loading-text="Loading..." onclick="addRow()">Add New</button>
                                 </td>
@@ -468,8 +475,8 @@ if (hasAccess("leaserule", "Edit") !== 'false') {
 
                 </div>
                 <div class="modal-footer modal-footer-bordered">
-                    <button class="btn btn-primary mr-2">Submit</button>
-                    <button class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
                 </div>
             </form>
         </div>
@@ -486,8 +493,19 @@ if (hasAccess("leaserule", "Edit") !== 'false') {
                 <div class="modal-body">
                     <h3 class="h4">Import RESIDUALS.CSV File:</h3>
                     <br>
-                    <div class="form-group mb-0">
-                        <input type="file" class="form-control-file" id="excelFile" name="excelFile" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-0">
+                                <label for="excelFile">File</label>
+                                <input type="file" class="form-control-file" id="excelFile" name="excelFile" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="expireIni">Expire In.</label>
+                                <input type="text" class="form-control" id="expireIni" name="expireIni" placeholder="Expire In.">
+                            </div>
+                        </div>
                     </div>
                     <div class="row p-3">
                         <div class="col-md-12">

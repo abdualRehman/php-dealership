@@ -1,6 +1,7 @@
 "use strict";
 var manageSoldLogsTable, maxFileLimit = 10;
 var stockArray = [];
+var collapsedGroups = {};
 
 var e1 = Swal.mixin({
     customClass: {
@@ -147,9 +148,9 @@ $(function () {
             changePillCSS(row, data, 12, 5);
             changePillCSS(row, data, 13, 6);
             changePillCSS(row, data, 14, 7);
-            changePillCSS(row, data, 15, 8);
-            changePillCSS(row, data, 16, 9);
-            changePillCSS(row, data, 17, 10);
+            changePillCSS(row, data, 17, 8);
+            changePillCSS(row, data, 15, 9);
+            changePillCSS(row, data, 16, 10);
             $(row).attr({
                 "data-toggle": "modal",
                 "data-target": "#editDetails",
@@ -165,9 +166,29 @@ $(function () {
                 targets: [0, 1, 2, 3],
 
             },
-            { 'visible': false, 'targets': [11, 12, 13, 14, 15, 16, 17, 18, 19] }, //hide columns 
+            { 'visible': false, 'targets': [11, 12, 13, 14, 15, 16, 17, 18, 19, 20] }, //hide columns 
         ],
 
+        rowGroup: {
+            dataSrc: 20,
+            startRender: function (rows, group) {
+                var collapsed = !!collapsedGroups[group];
+
+                var filteredData = $('#datatable-1').DataTable()
+                    .rows({ search: 'applied' })
+                    .data()
+                    .filter(function (data, index) {
+                        return data[20] == group ? true : false;
+                    });
+                // setting total numbers
+                $('#' + group + 'Count').html(filteredData.length);
+
+                return $('<tr/>')
+                    .append('<td colspan="16">' + group + ' (' + filteredData.length + ')</td>')
+                    .attr('data-name', group)
+                    .toggleClass('collapsed', collapsed);
+            }
+        },
         language: {
             "infoFiltered": "",
             searchPanes: {
@@ -175,7 +196,7 @@ $(function () {
                 countFiltered: "{shown} / {total}"
             }
         },
-
+        "order": [[20, "asc"]]
     });
 
 
@@ -289,7 +310,7 @@ $(function () {
                         manageSoldLogsTable.ajax.reload();
                         manageSoldLogsTable.ajax.reload(null, false);
                         manageSoldLogsTable.searchPanes.rebuildPane();
-
+                        $('#editDetails').modal('hide');
                     } else {
                         e1.fire({
                             position: "top-end",
@@ -471,7 +492,7 @@ function editDetails(id = null) {
 
                 $('#incentiveId').val(id);
 
-                $('#customerName').val(response.sale_consultant);
+                $('#customerName').val(response.fname + ' ' + response.lname);
                 $('#stockNo').val(response.stockno);
                 $('#vehicle').val(`${response.stocktype} ${response.year} ${response.make} ${response.model}`);
                 $('#state').val(response.state);

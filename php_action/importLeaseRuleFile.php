@@ -6,14 +6,22 @@ require_once '../assets/plugin/php-excel-reader/excel_reader2.php';
 require_once '../assets/plugin/SpreadsheetReader.php';
 require_once './updateMatrixRules.php';
 
-$valid['success'] = array('success' => false, 'messages' => array(), 'error' => array() , 'settingError' => array() );
+$valid['success'] = array('success' => false, 'messages' => array(), 'error' => array(), 'settingError' => array());
 
+function reformatDate($date, $from_format = 'm-d-Y', $to_format = 'Y-m-d')
+{
+    $date_aux = date_create_from_format($from_format, $date);
+    return date_format($date_aux, $to_format);
+}
 
 if ($_POST) {
     $p12_24_33 = (isset($_POST['12_24_33i'])) ? mysqli_real_escape_string($connect, $_POST['12_24_33i']) : "";
     $p12_36_48 = (isset($_POST['12_36_48i'])) ? mysqli_real_escape_string($connect, $_POST['12_36_48i']) : "";
     $p10_24_33 = (isset($_POST['10_24_33i'])) ? mysqli_real_escape_string($connect, $_POST['10_24_33i']) : "";
     $p10_36_48 = (isset($_POST['10_36_48i'])) ? mysqli_real_escape_string($connect, $_POST['10_36_48i']) : "";
+    
+    $expireIn = (isset($_POST['expireIni'])) ? mysqli_real_escape_string($connect, $_POST['expireIni']) : "";
+    $expireIn = ($expireIn === '') ? "" : reformatDate($expireIn);
 
 
     // $allowedFileType = ['application/vnd.ms-excel', 'text/xls', 'text/xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' , '.Csv'];
@@ -126,6 +134,7 @@ if ($_POST) {
                                                 `model`='$model',
                                                 `year`='$year',
                                                 `modelno`='$modelcodeV',
+                                                `expire_in`='$expireIn',
                                                 `24`='$i24',
                                                 `27`='$i27',
                                                 `30`='$i30',
@@ -153,12 +162,13 @@ if ($_POST) {
                                         }
                                     }
                                 } else {
-                                    $sql = "INSERT INTO `lease_rule`( `model`, `year`, `modelno` , `ex_modelno`, `24`, `27`, `30`, `33`, `36`, `39`, `42`, `45`, `48`, `51`, `54`, `57`, `60`, `12_24_33`, `12_36_48`, `10_24_33`, `10_36_48`, `status`) 
+                                    $sql = "INSERT INTO `lease_rule`( `model`, `year`, `modelno` , `ex_modelno` , `expire_in`, `24`, `27`, `30`, `33`, `36`, `39`, `42`, `45`, `48`, `51`, `54`, `57`, `60`, `12_24_33`, `12_36_48`, `10_24_33`, `10_36_48`, `status`) 
                                     VALUES (
                                         '$model',
                                         '$year',
                                         '$modelcodeV',
                                         '',
+                                        '$expireIn',
                                         '$i24',
                                         '$i27',
                                         '$i30',

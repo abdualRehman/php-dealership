@@ -4,7 +4,7 @@ require_once 'db/core.php';
 
 $sql = "SELECT inventory.age , inventory.stockno , inventory.vin , inventory.model, inventory.year, inventory.make , inventory.color , 
 inventory.mileage, inventory.lot , inventory.balance, inventory.retail, inventory.certified, 
-inventory.stocktype , inventory.wholesale , inventory.id as invId , inspections.* FROM inventory LEFT JOIN inspections ON inventory.id = inspections.inv_id WHERE inventory.stocktype = 'USED' AND inventory.status = 1";
+inventory.stocktype , inventory.wholesale , inventory.id as invId , inspections.* FROM inventory LEFT JOIN inspections ON inventory.id = inspections.inv_id WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.status = 1";
 $result = $connect->query($sql);
 
 $output = array('data' => array());
@@ -21,6 +21,12 @@ $atBodyshop = 0;
 $backFromBodyshop = 0;
 $retailReady = 0;
 $Gone = 0;
+
+function reformatDate($date, $from_format = 'm-d-Y', $to_format = 'Y-m-d')
+{
+    $date_aux = date_create_from_format($from_format, $date);
+    return date_format($date_aux, $to_format);
+}
 
 
 if ($result->num_rows > 0) {
@@ -40,21 +46,32 @@ if ($result->num_rows > 0) {
         }
 
         // bodyshop name 
+        // $bodyShopName = "";
+        // $bodyShop = $row['shops'] ? $row['shops'] : "Null";
+        // $bodyShop = explode("__", $bodyShop);
+        // $bodyShop = array_slice($bodyShop, 1, -1);
+        // if (count($bodyShop) == 1) {
+        //     $bodyId = $bodyShop[0];
+        //     $sql2 = "SELECT * FROM `bodyshops` WHERE id = '$bodyId'";
+        //     $result2 = $connect->query($sql2);
+        //     $row2 = $result2->fetch_assoc();
+        //     $bodyShopName = $row2['shop'];
+        // } else if (count($bodyShop) > 1) {
+        //     $bodyShopName = "Multiple shops selected";
+        //     // echo $bodyShopName;
+        // } else if (count($bodyShop) == 0) {
+        //     $bodyShopName =  "blank";
+        // }
         $bodyShopName = "";
-        $bodyShop = $row['shops'] ? $row['shops'] : "Null";
-        $bodyShop = explode("__", $bodyShop);
-        $bodyShop = array_slice($bodyShop, 1, -1);
-        if (count($bodyShop) == 1) {
-            $bodyId = $bodyShop[0];
-            $sql2 = "SELECT * FROM `bodyshops` WHERE id = '$bodyId'";
+        $bodyShop = $row['shops'] ? $row['shops'] : "";
+
+        if ($bodyShop != "") {
+            $sql2 = "SELECT * FROM `bodyshops` WHERE id = '$bodyShop'";
             $result2 = $connect->query($sql2);
             $row2 = $result2->fetch_assoc();
             $bodyShopName = $row2['shop'];
-        } else if (count($bodyShop) > 1) {
-            $bodyShopName = "Multiple shops selected";
-            // echo $bodyShopName;
-        } else if (count($bodyShop) == 0) {
-            $bodyShopName =  "blank";
+        } else {
+            $bodyShopName = "blank";
         }
         // --------------------------------------------------------------------------------------------------------
 
@@ -95,25 +112,28 @@ if ($result->num_rows > 0) {
         if ($notes) {
             $LotNotes += 1;
         }
-        if ($doneEle) {
+        if (count($windshield1) > 0 && !$doneEle && ($balance && $balance != '0')) {
             $windshield += 1;
         }
-        if ($doneEleWheel) {
+        if (count($wheels1) > 0 &&  !$doneEleWheel && ($balance && $balance != '0')) {
             $wheels += 1;
         }
+        // To go = repairs selected….repair sent bank
         if (count($arr) > 0 && ($repairSent == "" || $repairSent == null)) {
             $toGo += 1;
         }
-        if (count($arr) > 0 && $repairSent) {
+        // At bodyshop- repairs, bodyshop & repair sent selected…….repair returned blank
+        if (count($arr) > 0 && ($repairSent != "" && $repairSent != null) && ($repairReturned == "" || $repairReturned == null)) {
             $atBodyshop += 1;
         }
-        if ($repairReturned && $repairSent) {
+        // Back from bodyshop- repair returned selected and recon is blank
+        if ($repairReturned && $repairSent && ($recon == "" || $recon == null)) {
             $backFromBodyshop += 1;
         }
         if ($recon == 'sent') {
             $retailReady += 1;
         }
-        if ($balance == '' || $balance == null) {
+        if ($balance == '' || $balance == null || $balance == '0') {
             $Gone += 1;
         }
 
@@ -125,25 +145,59 @@ if ($result->num_rows > 0) {
 
         $button = '
             <div class="show d-flex" >' .
-            (hasAccess("lotWizards", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editInspection(' . $id . ')" >
-                    <i class="fa fa-car" ></i>
-                </button>' : "") .
-            '<!-- <button class="btn btn-label-primary btn-icon mr-1" onclick="removeShop(' . $id . ')" >
+            // (hasAccess("lotWizards", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editInspection(' . $id . ')" >
+            //         <i class="fa fa-car" ></i>
+            //     </button>' : "") .
+            (hasAccess("lotWizards", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeInspections(' . $id . ')" >
                     <i class="fa fa-trash"></i>
-                </button> -->
-            </div>
+                </button>' : "") .
+            '</div>
         ';
+
+
+        $daysout = "NULL";
+        $TodayDate = date('Y-m-d');
+        $today = new DateTime($TodayDate);
+        $repairSent = $row['repair_sent'];
+        $repairReturned = $row['repair_returned'];
+
+        if ($repairSent != '' && !is_null($repairSent)) {
+            $repairSent = reformatDate($repairSent);
+            $repairSent = new DateTime($repairSent);
+        }
+        if ($repairReturned != '' && !is_null($repairReturned)) {
+            $repairReturned = reformatDate($repairReturned);
+            $repairReturned = new DateTime($repairReturned);
+        }
+
+        if (
+            ($repairReturned != '' && !is_null($repairSent)) && ($repairSent != '' && !is_null($repairSent))
+        ) {
+            // $daysout = ($repairSent != '' && !is_null($repairSent)) ? $repairReturned->diff($repairSent)->format("%r%a") : -1;
+            $daysout = ($repairSent != '' && !is_null($repairSent)) ? $repairSent->diff($repairReturned)->format("%r%a") : -1;
+        } else 
+        if (
+            ($repairSent != '' && !is_null($repairSent))
+        ) {
+            // $daysout = ($repairSent != '' && !is_null($repairSent)) ? $today->diff($repairSent)->format("%r%a") : -1;
+            $daysout = ($repairSent != '' && !is_null($repairSent)) ? $repairSent->diff($today)->format("%r%a") : -1;
+        }
+
+
+
         $output['data'][] = array(
             $button,
             $row['recon'],
             $row['submitted_by'],
             $row['lot_notes'],
             $bodyShopName,
-            $row[0], //model
+            $daysout,
+            $row[0], //age
             $stockDetails,
-            $row[3], //model
+            $row[1], // stock only
             $row[4], // year
             $row[5], // make
+            $row[3], //model
             $row[6], // color
             $row[7], // mileage
             $row[8], // lot
@@ -157,14 +211,17 @@ if ($result->num_rows > 0) {
             $row['repairs'],
             $row['repair_sent'],
             $row['repair_returned'],
-
-
+            $id,
         );
     } // /while 
 
 } // if num_rows
 
-$carsToDealsSql = "SELECT COUNT(inventory.stockno) as totalPending FROM inventory LEFT JOIN car_to_dealers ON inventory.id = car_to_dealers.inv_id WHERE inventory.stocktype = 'USED' AND inventory.status = 1 AND ( car_to_dealers.date_returned = '' OR car_to_dealers.date_returned IS NULL)";
+// $carsToDealsSql = "SELECT COUNT(inventory.stockno) as totalPending FROM inventory LEFT JOIN car_to_dealers ON inventory.id = car_to_dealers.inv_id 
+// WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.status = 1 AND ( car_to_dealers.date_returned = '' OR car_to_dealers.date_returned IS NULL)";
+$carsToDealsSql = "SELECT COUNT(inventory.stockno) as totalPending FROM inventory LEFT JOIN car_to_dealers ON inventory.id = car_to_dealers.inv_id 
+WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.status = 1 AND ( car_to_dealers.work_needed != '' AND car_to_dealers.work_needed IS NOT NULL) AND ( car_to_dealers.date_returned = '' OR car_to_dealers.date_returned IS NULL)";
+
 $result3 = $connect->query($carsToDealsSql);
 $row3 = $result3->fetch_assoc();
 $CarsToDealers = $row3['totalPending'];

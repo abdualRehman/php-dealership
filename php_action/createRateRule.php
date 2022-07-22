@@ -47,7 +47,7 @@ if ($_POST) {
         $checkSql = "SELECT * FROM `rate_rule` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND status = 1";
         $result = $connect->query($checkSql);
         if ($result && $result->num_rows > 0) {
-            $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . " is Already Exist";
+            $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . ", Already Exist";
         } else {
 
             $sql = "INSERT INTO `rate_rule`( 

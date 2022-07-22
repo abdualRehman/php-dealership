@@ -167,7 +167,7 @@ function showDetails(id = null) {
             data: { id: id },
             dataType: 'json',
             success: function (response) {
-
+                console.log(response);
                 $('.spinner-grow').addClass('d-none');
                 // modal result
                 $('.showResult').removeClass('d-none');
@@ -190,6 +190,7 @@ function showDetails(id = null) {
                 var f_status = false;
                 var l_status = false;
                 var c_status = false;
+                var r_status = false;
 
                 var now = moment(new Date()); //todays date
                 var end = moment(response['f_expire']); // another date 
@@ -224,6 +225,16 @@ function showDetails(id = null) {
                 } else {
                     c_status = false;
                 }
+                var rend = moment(response['residual_expire']); // another date
+                var rduration = moment.duration(rend.diff(now));
+                var rdays = rduration.asDays();
+                rdays = Math.ceil(rdays);
+
+                if (rdays >= 0) {
+                    r_status = true;
+                } else {
+                    r_status = false;
+                }
 
 
                 $('#dealer').html("$" + ((c_status && response.dealer) ? Number(response.dealer).toLocaleString("en-US") : ""));
@@ -255,25 +266,25 @@ function showDetails(id = null) {
                 var miles = 24;
                 for (var i = 0; i < 13; i++) {
                     // first fill all 15,000 values
-                    $('#15_' + miles).html((response[miles]) ? response[miles] + '%' : "");
+                    $('#15_' + miles).html((r_status && response[miles]) ? response[miles] + '%' : "");
 
                     if (miles >= 24 && miles <= 33) {
-                        var addittion_in_10k = (response['10_24_33']) ? response['10_24_33'] : 0;
-                        var addittion_in_12k = (response['12_24_33']) ? response['12_24_33'] : 0;
+                        var addittion_in_10k = (r_status && response['10_24_33']) ? response['10_24_33'] : 0;
+                        var addittion_in_12k = (r_status && response['12_24_33']) ? response['12_24_33'] : 0;
 
-                        $('#10_' + miles).html((response[miles]) ? (parseInt(response[miles]) + parseInt(addittion_in_10k)) + '%' : "");
-                        $('#12_' + miles).html((response[miles]) ? (parseInt(response[miles]) + parseInt(addittion_in_12k)) + '%' : "");
+                        $('#10_' + miles).html(( r_status && response[miles]) ? (parseInt(response[miles]) + parseInt(addittion_in_10k)) + '%' : "");
+                        $('#12_' + miles).html(( r_status && response[miles]) ? (parseInt(response[miles]) + parseInt(addittion_in_12k)) + '%' : "");
 
                     } else if (miles >= 36 && miles <= 48) {
 
-                        var addittion_in_10k = (response['10_36_48']) ? response['10_36_48'] : 0;
-                        var addittion_in_12k = (response['12_36_48']) ? response['12_36_48'] : 0;
+                        var addittion_in_10k = ( r_status && response['10_36_48']) ? response['10_36_48'] : 0;
+                        var addittion_in_12k = ( r_status && response['12_36_48']) ? response['12_36_48'] : 0;
 
-                        $('#10_' + miles).html((response[miles]) ? ((parseInt(response[miles]) + parseInt(addittion_in_10k)) + '%') : "");
-                        $('#12_' + miles).html((response[miles]) ? ((parseInt(response[miles]) + parseInt(addittion_in_12k)) + '%') : "");
+                        $('#10_' + miles).html(( r_status && response[miles]) ? ((parseInt(response[miles]) + parseInt(addittion_in_10k)) + '%') : "");
+                        $('#12_' + miles).html(( r_status && response[miles]) ? ((parseInt(response[miles]) + parseInt(addittion_in_12k)) + '%') : "");
                     } else {
-                        $('#10_' + miles).html((response[miles]) ? response[miles] + '%' : "");
-                        $('#12_' + miles).html((response[miles]) ? response[miles] + '%' : "");
+                        $('#10_' + miles).html(( r_status && response[miles]) ? response[miles] + '%' : "");
+                        $('#12_' + miles).html(( r_status && response[miles]) ? response[miles] + '%' : "");
                     }
 
                     miles += 3;

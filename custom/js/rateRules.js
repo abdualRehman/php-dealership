@@ -51,13 +51,7 @@ $(function () {
 
 
     manageDataTable = $("#datatable-1").DataTable({
-        // responsive: !0,
-        scrollX: !0,
-        scrollCollapse: !0,
-        fixedColumns: {
-            leftColumns: 0,
-            rightColumns: 1
-        },
+        responsive: !0,
         'ajax': '../php_action/fetchRateRules.php',
         dom: "Pfrtip",
         searchPanes: {
@@ -72,6 +66,11 @@ $(function () {
                     show: true
                 },
                 targets: [0, 1, 2, 3],
+            },
+            {
+                
+                targets: [11],
+                visible: false,
             },
             {
                 targets: 4,
@@ -96,7 +95,15 @@ $(function () {
                 }
             }
         ],
-
+        createdRow: function (row, data, dataIndex) {
+            if ($('#isEditAllowed').val() == "true") {
+                $(row).children().not(':last-child').attr({
+                    "data-toggle": "modal",
+                    "data-target": "#modal8",
+                    "onclick": "editRule(" + data[11] + ")"
+                });
+            }
+        },
         language: {
             searchPanes: {
                 count: "{total} found",

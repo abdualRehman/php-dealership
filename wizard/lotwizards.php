@@ -6,26 +6,39 @@ if (hasAccess("lotWizards", "View") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
 
+
+if (hasAccess("lotWizards", "Edit") === 'false') {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+}
 ?>
 
 <head>
     <link rel="stylesheet" href="../custom/css/customDatatable.css">
+    <!-- <link rel="stylesheet" href="../custom/css/jquery-ui.min.css"> -->
 </head>
 
 
 <style>
     label.btn-outline-primary,
-    label.btn-outline-success {
+    label.btn-outline-success,
+    label.btn-outline-danger {
         /* padding: 10px; */
         width: 150px;
         margin: 5px;
         /* font-size: medium; */
     }
 
-    label.btn-outline-success:hover {
+    label.btn-outline-success:hover,
+    label.btn-outline-danger:hover {
         color: white;
     }
 
+    .clear-selection {
+        text-decoration: underline;
+        cursor: pointer;
+    }
 
     .dtsp-panes1 {
         display: none;
@@ -46,6 +59,14 @@ if (hasAccess("lotWizards", "View") === 'false') {
 
     .dataTables_scroll {
         overflow: auto !important;
+    }
+
+    .dataTables_scrollHead {
+        width: auto !important;
+    }
+
+    .dataTables_scrollBody {
+        width: auto !important;
     }
 
     @media (min-width: 576px) {
@@ -120,7 +141,7 @@ if (hasAccess("lotWizards", "View") === 'false') {
 
     /* shift search to left side */
     .inspectionTable .dataTables_wrapper .dataTables_filter {
-        text-align: left !important;
+        text-align: right !important;
     }
 
     /* red border to select2 */
@@ -148,25 +169,25 @@ if (hasAccess("lotWizards", "View") === 'false') {
                             <div class="btn-group-toggle" id="mods" data-toggle="buttons">
                                 <div class="row p-2">
                                     <div class="col-md-12">
-                                        <label class="btn btn-outline-primary text-responsive active">
+                                        <label class="btn text-responsive active">
                                             <input type="radio" name="mod" value="notTouched" data-title="Not Touched"> Not Touched <br> <span></span>
                                         </label>
-                                        <label class="btn btn-outline-primary text-responsive">
+                                        <label class="btn text-responsive">
                                             <input type="radio" name="mod" value="holdForRecon" data-title="Hold For Recon"> Hold For Recon <br> <span></span>
                                         </label>
-                                        <label class="btn btn-outline-primary text-responsive">
+                                        <label class="btn text-responsive">
                                             <input type="radio" name="mod" value="sendToRecon" data-title="Send To Recon"> Send To Recon <br> <span></span>
                                         </label>
-                                        <label class="btn btn-outline-primary text-responsive">
+                                        <label class="btn text-responsive">
                                             <input type="radio" name="mod" value="LotNotes" data-title="Lot Notes"> Lot Notes <br> <span></span>
                                         </label>
-                                        <label class="btn btn-outline-success text-responsive">
+                                        <label class="btn text-responsive">
                                             <input type="radio" name="mod" value="CarsToDealers" data-title="Cars to Dealers"> Cars to Dealers <br> <span></span>
                                         </label>
-                                        <label class="btn btn-outline-primary text-responsive">
+                                        <label class="btn text-responsive">
                                             <input type="radio" name="mod" value="windshield" data-title="Windshield"> Windshield <br> <span></span>
                                         </label>
-                                        <label class="btn btn-outline-primary text-responsive">
+                                        <label class="btn text-responsive">
                                             <input type="radio" name="mod" value="wheels" data-title="Wheels"> Wheels <br> <span></span>
                                         </label>
 
@@ -177,19 +198,19 @@ if (hasAccess("lotWizards", "View") === 'false') {
                                     <div class="col-md-12">
                                         <div id="year">
                                             <!-- <div class="btn-group-toggle" data-toggle="buttons"> -->
-                                            <label class="btn btn-outline-primary text-responsive">
+                                            <label class="btn text-responsive">
                                                 <input type="radio" name="mod" value="toGo" data-title="To Go"> To Go <br> <span></span>
                                             </label>
-                                            <label class="btn btn-outline-primary text-responsive">
+                                            <label class="btn text-responsive">
                                                 <input type="radio" name="mod" value="atBodyshop" data-title="At Bodyshop"> At Bodyshop <br> <span></span>
                                             </label>
-                                            <label class="btn btn-outline-primary text-responsive">
+                                            <label class="btn text-responsive">
                                                 <input type="radio" name="mod" value="backFromBodyshop" data-title="Back From Bodyshop"> Back From Bodyshop <br> <span></span>
                                             </label>
-                                            <label class="btn btn-outline-primary text-responsive">
+                                            <label class="btn text-responsive">
                                                 <input type="radio" name="mod" value="retailReady" data-title="Retail Ready"> Retail Ready <br> <span></span>
                                             </label>
-                                            <label class="btn btn-outline-primary text-responsive">
+                                            <label class="btn text-responsive">
                                                 <input type="radio" name="mod" value="Gone" data-title="Gone"> Gone <br> <span></span>
                                             </label>
                                             <!-- </div> -->
@@ -210,26 +231,59 @@ if (hasAccess("lotWizards", "View") === 'false') {
                                 </div>
                             </div>
                             <table id="datatable-1" class="table table-bordered table-hover">
+                                <!-- <th style="min-width: 150px!important;">Lot Notes</th> -->
                                 <thead>
                                     <tr>
+                                        <!-- 0 -->
                                         <th>Action</th>
+                                        <!-- 1 -->
                                         <th>Recon</th>
+                                        <!-- 2 -->
                                         <th>Note Added By</th>
+                                        <!-- 3 -->
                                         <th>Lot Notes</th>
+                                        <!--- 4 -->
                                         <th>Bodyshop</th>
+                                        <!-- 5 -->
+                                        <th>Days Out</th>
+                                        <!-- 6 -->
                                         <th>Age</th>
+                                        <!-- 7 -->
                                         <th>Stock no || Vin</th>
-                                        <th>Model</th>
+                                        <!-- 8 -->
+                                        <th>Stock no</th>
+                                        <!-- 9 -->
                                         <th>Year</th>
+                                        <!-- 10 -->
                                         <th>Make</th>
+                                        <!-- 11 -->
+                                        <th>Model</th>
+                                        <!-- 12 -->
                                         <th>Color</th>
+                                        <!-- 13 -->
                                         <th>Mileage</th>
+                                        <!-- 14 -->
                                         <th>Lot</th>
+                                        <!-- 15 -->
                                         <th>Balance</th>
+                                        <!-- 16 -->
                                         <th>Retail</th>
+                                        <!-- 17 -->
                                         <th>Certified</th>
+                                        <!-- 18 -->
                                         <th>Stock Type</th>
+                                        <!-- 19 -->
                                         <th>Wholesale</th>
+                                        <!-- 20 -->
+                                        <th>ID</th>
+                                        <!-- 21 -->
+                                        <th>Repairs</th>
+                                        <!-- 22 -->
+                                        <th>Notes</th>
+                                        <!-- 23 -->
+                                        <th>Windshield</th>
+                                        <!-- 24 -->
+                                        <th>wheels</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -253,6 +307,7 @@ if (hasAccess("lotWizards", "View") === 'false') {
                                         <th>Notes</th>
                                         <th>Date Sent</th>
                                         <th>Date Returned</th>
+                                        <th>ID</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -272,6 +327,7 @@ if (hasAccess("lotWizards", "View") === 'false') {
                 <button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
             </div>
             <form id="updateInspectionForm" autocomplete="off" method="post" action="../php_action/updateInspections.php" enctype="multipart/form-data">
+                <!-- <form id="updateInspectionForm" autocomplete="off" method="post" action="#" enctype="multipart/form-data"> -->
                 <div class="modal-body">
                     <div class="text-center">
                         <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div>
@@ -287,12 +343,12 @@ if (hasAccess("lotWizards", "View") === 'false') {
                                     </div>
                                     <label for="lotNotes" class="col-sm-3 offset-sm-1 col-form-label">Lot Notes</label>
                                     <div class="form-group col-sm-8">
-                                        <input type="text" class="form-control" name="lotNotes" id="lotNotes" placeholder="Lot Notes" autocomplete="off" autofill="off" />
+                                        <input type="text" class="form-control" name="lotNotes" id="lotNotes" autocomplete="off" autofill="off" />
                                     </div>
                                     <label for="recon" class="col-sm-3 offset-sm-1 col-form-label">Recon</label>
-                                    <div class="form-group col-sm-8">
+                                    <div class="form-group col-sm-8" id="reconBtnGroup">
                                         <!-- <input type="text" class="form-control" name="recon" id="recon" placeholder="Recon" autocomplete="off" autofill="off" /> -->
-                                        <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
+                                        <div class="btn-group btn-group-toggle w-100" id="recon-btn-group" data-toggle="buttons">
                                             <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                                 <input type="radio" name="recon" value="hold" id="hold">
                                                 Hold Recon for service
@@ -305,15 +361,15 @@ if (hasAccess("lotWizards", "View") === 'false') {
                                                 <input type="radio" name="recon" value="sent" id="sent">
                                                 Sent
                                             </label>
-
                                         </div>
+                                        <span class="badge-text-primary pl-2 clear-selection" id="clear-selection">Clear Selection</span>
                                     </div>
                                     <label for="repais" class="col-sm-3 offset-sm-1 col-form-label">Repairs</label>
                                     <div class="form-group col-sm-8">
                                         <!-- <input type="text" class="form-control" name="repais" id="repais" placeholder="Repais" autocomplete="off" autofill="off" /> -->
-                                        <select class="form-control" id="repais" name="repais[]" multiple="multiple">
-                                            <option value="Front Bumper Lower">Front Bumper Lower</option>
+                                        <select class="form-control repairAndBodyshop" id="repais" name="repais[]" multiple="multiple">
                                             <option value="Front Bumper Top">Front Bumper Top</option>
+                                            <option value="Front Bumper Lower">Front Bumper Lower</option>
                                             <option value="Attach Front Bumper">Attach Front Bumper</option>
                                             <option value="Rear Bumper">Rear Bumper</option>
                                             <option value="Attach Rear Bumper">Attach Rear Bumper</option>
@@ -365,17 +421,7 @@ if (hasAccess("lotWizards", "View") === 'false') {
                                     <label for="bodyshop" class="col-sm-3 offset-sm-1 col-form-label">Bodyshop</label>
                                     <div class="form-group col-sm-8">
                                         <!-- <input type="text" class="form-control" name="bodyshop" id="bodyshop" placeholder="Bodyshop" autocomplete="off" autofill="off" /> -->
-                                        <select class="form-control required" id="bodyshop" name="bodyshop[]" multiple="multiple">
-                                            <?php
-                                            $sql = "SELECT * FROM `bodyshops` WHERE status = 1";
-                                            $result = $connect->query($sql);
-                                            $output = array('data' => array());
-                                            if ($result->num_rows > 0) {
-                                                while ($row = $result->fetch_array()) {
-                                                    echo '<option value="' . $row['id'] . '" >' . $row['shop'] . '</option>';
-                                                }
-                                            }
-                                            ?>
+                                        <select class="selectpicker repairAndBodyshop" name="bodyshop" id="bodyshop" data-live-search="true" data-size="4" required>
                                         </select>
                                     </div>
                                     <label for="bodyshopNotes" class="col-sm-3 offset-sm-1 col-form-label">Bodyshop Notes</label>
@@ -409,7 +455,7 @@ if (hasAccess("lotWizards", "View") === 'false') {
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control" name="repairSent" placeholder="Select date" id="repairSent">
+                                            <input type="text" class="form-control" name="repairSent" placeholder="Select date" id="repairSent" disabled>
                                         </div>
                                     </div>
                                     <label for="repairReturn" class="col-sm-2 col-form-label">Repair Return</label>
@@ -423,32 +469,41 @@ if (hasAccess("lotWizards", "View") === 'false') {
                                             <input type="text" class="form-control" name="repairReturn" placeholder="Select date" id="repairReturn">
                                         </div>
                                     </div>
-                                    <div class="form-group offset-sm-4 col-sm-10">
+                                    <div class="form-group offset-sm-4 col-sm-8">
                                         <div class="custom-control custom-control-lg custom-checkbox">
                                             <input type="checkbox" class="custom-control-input" name="resend" id="resend">
                                             <label class="custom-control-label" for="resend">Resend</label>
                                         </div>
                                     </div>
                                     <label for="windshield" class="col-sm-3 offset-sm-1 col-form-label">Windshield</label>
-                                    <div class="form-group col-sm-8">
+                                    <div class="form-group col-sm-6">
                                         <select class="selectpicker" id="windshield" name="windshield[]" multiple="multiple" data-actions-box="true">
                                             <option>Repair</option>
                                             <option>Replace</option>
                                             <option>Sent</option>
-                                            <option>Done</option>
                                         </select>
                                     </div>
+                                    <div class="col-sm-2">
+                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" name="windshield_done" id="windshield_done">
+                                            <label class="custom-control-label" style="font-size:15px;" for="windshield_done">Done</label>
+                                        </div>
+                                    </div>
                                     <label for="wheels" class="col-sm-3 offset-sm-1 col-form-label">Wheels</label>
-                                    <div class="form-group col-sm-8">
+                                    <div class="form-group col-sm-6">
                                         <select class="selectpicker" name="wheels[]" id="wheels" multiple="multiple" data-actions-box="true">
                                             <option>Driver Front</option>
                                             <option>Passenger Front</option>
                                             <option>Driver Rear</option>
                                             <option>Passenger Rear</option>
-                                            <option>Done</option>
                                         </select>
                                     </div>
-
+                                    <div class="col-sm-2">
+                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" name="wheels_done" id="wheels_done">
+                                            <label class="custom-control-label" style="font-size:15px;" for="wheels_done">Done</label>
+                                        </div>
+                                    </div>
 
                                 </div>
 
@@ -568,7 +623,7 @@ if (hasAccess("lotWizards", "View") === 'false') {
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control" name="dateSent" placeholder="Select date" id="dateSent">
+                                            <input type="text" class="form-control" disabled name="dateSent" placeholder="Select date" id="dateSent">
                                         </div>
                                     </div>
                                     <label for="dateReturn" class="col-sm-2 col-form-label">Date Returned</label>
@@ -578,7 +633,7 @@ if (hasAccess("lotWizards", "View") === 'false') {
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control" name="dateReturn" placeholder="Select date" id="dateReturn">
+                                            <input type="text" class="form-control" disabled name="dateReturn" placeholder="Select date" id="dateReturn">
                                         </div>
                                     </div>
                                 </div>
@@ -598,7 +653,7 @@ if (hasAccess("lotWizards", "View") === 'false') {
                 </div>
                 <div class="modal-footer modal-footer-bordered">
                     <button type="submit" class="btn btn-primary mr-2" id="updateBtn">Save Changes</button>
-                    <button class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
                 </div>
             </form>
         </div>
@@ -611,4 +666,5 @@ if (hasAccess("lotWizards", "View") === 'false') {
 
 
 <?php require_once('../includes/footer.php') ?>
+<!-- <script type="text/javascript" src="../custom/js/jquery-ui.min.js"></script> -->
 <script type="text/javascript" src="../custom/js/lotwidards.js"></script>

@@ -56,7 +56,7 @@ if ($_POST) {
     if ($result->num_rows > 0) {
 
         $valid['success'] = false;
-        $valid['messages'] = "Rule is Already Exist";
+        $valid['messages'] = "Rule Already Exist";
 
     } else {
 

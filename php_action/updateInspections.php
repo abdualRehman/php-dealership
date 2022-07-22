@@ -17,9 +17,11 @@ if ($_POST) {
     // $repais = (isset($_POST['repais'])) ? mysqli_real_escape_string($connect, $_POST['repais']) : "";
     $repais = (isset($_POST['repais'])) ? implode("__", $_POST['repais']) : "";
     $repais = ($repais ===  "") ? "" :   "__" . $repais . "__";
-    // $bodyshop = (isset($_POST['bodyshop'])) ? mysqli_real_escape_string($connect, $_POST['bodyshop']) : "";
-    $bodyshop = (isset($_POST['bodyshop'])) ? implode("__", $_POST['bodyshop']) : "";
-    $bodyshop = ($bodyshop ===  "") ? "" :   "__" . $bodyshop . "__";
+
+    $bodyshop = (isset($_POST['bodyshop'])) ? mysqli_real_escape_string($connect, $_POST['bodyshop']) : "0";
+    // $bodyshop = (isset($_POST['bodyshop'])) ? implode("__", $_POST['bodyshop']) : "";
+    // $bodyshop = ($bodyshop ===  "") ? "" :   "__" . $bodyshop . "__";
+
 
     $bodyshopNotes = (isset($_POST['bodyshopNotes'])) ? mysqli_real_escape_string($connect, $_POST['bodyshopNotes']) : "";
     $estimate = (isset($_POST['estimate'])) ? mysqli_real_escape_string($connect, $_POST['estimate']) : "";
@@ -30,9 +32,11 @@ if ($_POST) {
 
     $windshield = (isset($_POST['windshield'])) ? implode("__", $_POST['windshield']) : "";
     $windshield = ($windshield ===  "") ? "" :   "__" . $windshield . "__";
+    $windshield = (isset($_POST['windshield_done'])) ? $windshield . "Done__" : $windshield;
 
     $wheels = (isset($_POST['wheels'])) ? implode("__", $_POST['wheels']) : "";
     $wheels = ($wheels ===  "") ? "" :   "__" . $wheels . "__";
+    $wheels = (isset($_POST['wheels_done'])) ? $wheels . "Done__" : $wheels;
 
 
     $name = $_FILES['images']['name'];

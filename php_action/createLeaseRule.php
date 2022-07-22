@@ -3,8 +3,14 @@
 require_once './db/core.php';
 require_once './updateMatrixRules.php';
 
-$valid = array('success' => false, 'messages' => array(), 'errorMessages' => array(), 'id' => '' , 'settingError' => array() );
+$valid = array('success' => false, 'messages' => array(), 'errorMessages' => array(), 'id' => '', 'settingError' => array());
 
+
+function reformatDate($date, $from_format = 'm-d-Y', $to_format = 'Y-m-d')
+{
+    $date_aux = date_create_from_format($from_format, $date);
+    return date_format($date_aux, $to_format);
+}
 
 if ($_POST) {
 
@@ -13,7 +19,7 @@ if ($_POST) {
     $p12_36_48 = (isset($_POST['12_36_48'])) ? mysqli_real_escape_string($connect, $_POST['12_36_48']) : "";
     $p10_24_33 = (isset($_POST['10_24_33'])) ? mysqli_real_escape_string($connect, $_POST['10_24_33']) : "";
     $p10_36_48 = (isset($_POST['10_36_48'])) ? mysqli_real_escape_string($connect, $_POST['10_36_48']) : "";
-    
+
     $v24 = (isset($_POST['24'])) ? mysqli_real_escape_string($connect, $_POST['24']) : "";
     $v27 = (isset($_POST['27'])) ? mysqli_real_escape_string($connect, $_POST['27']) : "";
     $v30 = (isset($_POST['30'])) ? mysqli_real_escape_string($connect, $_POST['30']) : "";
@@ -33,27 +39,30 @@ if ($_POST) {
 
     for ($x = 0; $x < count($_POST['model']); $x++) {
         $i = $x + 1;
-        
+
         $model = mysqli_real_escape_string($connect, $_POST['model'][$x]);
         $year = mysqli_real_escape_string($connect, $_POST['year'][$x]);
         $modelno = mysqli_real_escape_string($connect, $_POST['modelno'][$x]);
-        $exModelno = (isset($_POST['exModelno'.$i])) ? implode(" ",$_POST['exModelno'.$i]): "";
-        $exModelno = ($exModelno ===  "") ? "" :   " ".$exModelno." " ;
+        $exModelno = (isset($_POST['exModelno' . $i])) ? implode(" ", $_POST['exModelno' . $i]) : "";
+        $exModelno = ($exModelno ===  "") ? "" :   " " . $exModelno . " ";
 
-          
+        $expireIn = (isset($_POST['expireIn'][$x])) ? mysqli_real_escape_string($connect, $_POST['expireIn'][$x]) : "";
+        $expireIn = ($expireIn === '') ? "" : reformatDate($expireIn);
+
 
         $checkSql = "SELECT * FROM `lease_rule` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND status = 1";
         $result = $connect->query($checkSql);
         if ($result && $result->num_rows > 0) {
-            $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . " is Already Exist";
+            $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . ", Already Exist";
         } else {
 
-            $sql = "INSERT INTO `lease_rule`( `model`, `year`, `modelno` , `ex_modelno`, `24`, `27`, `30`, `33`, `36`, `39`, `42`, `45`, `48`, `51`, `54`, `57`, `60`, `12_24_33`, `12_36_48`, `10_24_33`, `10_36_48`, `status`) 
+            $sql = "INSERT INTO `lease_rule`( `model`, `year`, `modelno` , `ex_modelno` , `expire_in` , `24`, `27`, `30`, `33`, `36`, `39`, `42`, `45`, `48`, `51`, `54`, `57`, `60`, `12_24_33`, `12_36_48`, `10_24_33`, `10_36_48`, `status`) 
             VALUES (
                 '$model',
                 '$year',
                 '$modelno',
                 '$exModelno',
+                '$expireIn',
                 '$v24',
                 '$v27',
                 '$v30',
@@ -82,7 +91,6 @@ if ($_POST) {
                 if ($obj->success === 'false') {
                     $valid['settingError'][] = $obj->messages;
                 }
-
             } else {
                 $valid['success'] = false;
                 $valid['messages'][] = $connect->error;

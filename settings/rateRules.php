@@ -5,6 +5,11 @@ include_once '../includes/header.php';
 if (hasAccess("raterule", "Add") === 'false' && hasAccess("raterule", "Edit") === 'false' && hasAccess("raterule", "Remove") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
+if (hasAccess("raterule", "Edit") === 'false') {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+}
 
 // if ($_GET['r'] == 'man') {
 //     echo "<div class='div-request d-none'>man</div>";
@@ -82,6 +87,7 @@ if (hasAccess("raterule", "Add") === 'false' && hasAccess("raterule", "Edit") ==
                                     <th>49-60</th>
                                     <th>61-72</th>
                                     <th>Action</th>
+                                    <th>ID</th>
                                 </tr>
                             </thead>
                         </table>

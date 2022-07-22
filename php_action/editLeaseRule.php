@@ -5,6 +5,11 @@ require_once './updateMatrixRules.php';
 
 $valid['success'] = array('success' => false, 'messages' => array(), 'id' => '', 'settingError' => array());
 
+function reformatDate($date, $from_format = 'm-d-Y', $to_format = 'Y-m-d') {
+    $date_aux = date_create_from_format($from_format, $date);
+    return date_format($date_aux,$to_format);
+}
+
 if ($_POST) {
 
     $ruleId = $_POST['ruleId'];
@@ -16,6 +21,9 @@ if ($_POST) {
 
     $editExModelno = (isset($_POST['editExModelno'])) ? implode(" ", $_POST['editExModelno']) : "";
     $editExModelno =  ($editExModelno ===  "") ? "" :  " " . $editExModelno . " ";
+
+    $editExpireIn = (isset($_POST['editExpireIn'])) ? mysqli_real_escape_string($connect, $_POST['editExpireIn']) : "";
+    $editExpireIn = ($editExpireIn === '') ? "" : reformatDate($editExpireIn);
 
 
     $p12_24_33 = (isset($_POST['e12_24_33'])) ? mysqli_real_escape_string($connect, $_POST['e12_24_33']) : "";
@@ -45,7 +53,7 @@ if ($_POST) {
     if ($result->num_rows > 0) {
 
         $valid['success'] = false;
-        $valid['messages'] = "Rule is Already Exist";
+        $valid['messages'] = "Rule Already Exist";
     } else {
 
         $sql = "UPDATE `lease_rule` SET 
@@ -53,6 +61,7 @@ if ($_POST) {
         `year`='$year',
         `modelno`='$modelno',
         `ex_modelno`='$editExModelno',
+        `expire_in`='$editExpireIn',
         `24`='$v24',
         `27`='$v27',
         `30`='$v30',

@@ -64,7 +64,7 @@ if ($_POST) {
         $result = $connect->query($checkSql);
         if ($result->num_rows > 0) {
             
-            $valid['errorMessages'][] = $model .' - '. $year . ' - ' . $modelno. ' - ' . $state . ' - ' . $modelType . " is Already Exist";
+            $valid['errorMessages'][] = $model .' - '. $year . ' - ' . $modelno. ' - ' . $state . ' - ' . $modelType . ", Already Exist";
         
         } else {
 

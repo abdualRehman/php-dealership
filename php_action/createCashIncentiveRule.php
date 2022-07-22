@@ -38,7 +38,7 @@ if ($_POST) {
         $checkSql = "SELECT * FROM `cash_incentive_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND status = 1";
         $result = $connect->query($checkSql);
         if ($result && $result->num_rows > 0) {
-            $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . " is Already Exist";
+            $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . ", Already Exist";
         } else {
 
             $sql = "INSERT INTO `cash_incentive_rules`( `expire_in`, `model`, `year`, `modelno` , `ex_modelno`, `dealer`, `other` , `lease` , `status`) 

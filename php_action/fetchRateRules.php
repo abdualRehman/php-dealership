@@ -41,9 +41,9 @@ if ($result->num_rows > 0) {
                 <!-- <button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#showDetails" onclick="showDetails(' . $id . ')" >
                     <i class="fa fa-eye"></i>
                 </button> -->' .
-            (hasAccess("raterule", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editRule(' . $id . ')" >
-                    <i class="fa fa-edit"></i>
-                </button>' : "") .
+            // (hasAccess("raterule", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editRule(' . $id . ')" >
+            //         <i class="fa fa-edit"></i>
+            //     </button>' : "") .
             (hasAccess("raterule", "Remove") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeRule(' . $id . ')" >
                     <i class="fa fa-trash"></i>
                 </button>' : "") .
@@ -63,6 +63,7 @@ if ($result->num_rows > 0) {
             $row[7],
             $row[8],
             $button,
+            $id,
         );
     } // /while 
 

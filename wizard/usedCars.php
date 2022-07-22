@@ -244,7 +244,7 @@ if (hasAccess("usedCars", "View") === 'false') {
                                     </div>
                                     <label for="retailStatus" class="col-sm-3 offset-sm-1 col-form-label">Retail Status</label>
                                     <div class="form-group col-sm-8">
-                                        <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="retailStatus" >
+                                        <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="retailStatus">
                                             <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                                 <input type="radio" name="retailStatus" value="retail" id="retail">
                                                 Retail
@@ -329,45 +329,6 @@ if (hasAccess("usedCars", "View") === 'false') {
                                     <div class="form-group col-sm-8">
                                         <input type="text" class="form-control" name="customerName" id="customerName" autocomplete="off" autofill="off" />
                                     </div>
-
-                                    <label for="dateSent" class="col-sm-3 offset-sm-1 col-form-label">Date Sent</label>
-                                    <div class="form-group col-sm-3">
-                                        <div class="form-group input-group">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"><i class="fa fa-calendar"></i>
-                                                </span>
-                                            </div>
-                                            <input type="text" class="form-control" name="dateSent" id="dateSent">
-                                        </div>
-                                    </div>
-                                    <label for="dateSold" class="col-sm-2 col-form-label text-center">Date Sold</label>
-                                    <div class="form-group col-sm-3">
-                                        <div class="form-group input-group">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"><i class="fa fa-calendar"></i>
-                                                </span>
-                                            </div>
-                                            <input type="text" class="form-control" name="dateSold" id="dateSold">
-                                        </div>
-                                    </div>
-
-                                    <label for="soldPrice" class="col-sm-3 offset-sm-1 col-form-label">Sold Price</label>
-                                    <div class="form-group col-sm-3">
-                                        <div class="form-group input-group">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"><i class="fa fa-dollar-sign"></i>
-                                                </span>
-                                            </div>
-                                            <input type="text" class="form-control" name="soldPrice" id="soldPrice">
-                                        </div>
-                                    </div>
-                                    <label for="keys" class="col-sm-2 col-form-label text-center">Keys</label>
-                                    <div class="col-sm-3">
-                                        <div class="custom-control custom-control-lg custom-checkbox" style="font-size: initial;">
-                                            <input type="checkbox" class="custom-control-input" name="keys" id="keys">
-                                            <label class="custom-control-label" for="keys">Keys</label>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -376,10 +337,48 @@ if (hasAccess("usedCars", "View") === 'false') {
                                     <textarea class="form-control autosize" name="titleNotes" id="titleNotes" placeholder="Title Notes..."></textarea>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-2 offset-sm-1">
+                                <div class="custom-control custom-control-lg custom-checkbox" style="font-size: initial;">
+                                    <input type="checkbox" class="custom-control-input" name="keys" id="keys">
+                                    <label class="custom-control-label" for="keys">Keys</label>
+                                </div>
+                            </div>
+                            <label for="dateSent" class="col-sm-1 col-form-label">Date Sent</label>
+                            <div class="form-group col-sm-2">
+                                <div class="form-group input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control" name="dateSent" id="dateSent">
+                                </div>
+                            </div>
+                            <label for="dateSold" class="col-sm-1 col-form-label text-center">Date Sold</label>
+                            <div class="form-group col-sm-2">
+                                <div class="form-group input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control" name="dateSold" id="dateSold">
+                                </div>
+                            </div>
 
+                            <label for="soldPrice" class="col-sm-1 col-form-label">Sold Price</label>
+                            <div class="form-group col-sm-2">
+                                <div class="form-group input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-dollar-sign"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control" name="soldPrice" id="soldPrice">
+                                </div>
+                            </div>
                         </div>
                         <div class="row justify-content-center m-auto">
-                            <div class="col-md-11">
+                            <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label for="onlineDescription" class="col-form-label text-center">Online Description</label>
@@ -407,8 +406,8 @@ if (hasAccess("usedCars", "View") === 'false') {
                         <div class="d-none" id="serviceDiv">
                             <hr>
                             <div class="row justify-content-center m-auto">
-                                <div class="col-md-11">
-                                    <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row align-items-end">
                                         <div class="col-md-3 p-2">
                                             <label for="uci" class="col-form-label">UCI</label>
                                             <div class="form-group">
@@ -426,7 +425,7 @@ if (hasAccess("usedCars", "View") === 'false') {
                                                 <input type="text" class="form-control" name="uciRo" id="uciRo" autocomplete="off" autofill="off" />
                                             </div>
                                         </div>
-                                        <div class="col-md-3 p-2">
+                                        <div class="col-md-2 p-2">
                                             <label for="uciApproved" class="col-form-label">UCI Approved</label>
                                             <div class="form-group">
                                                 <div class="form-group input-group">
@@ -438,7 +437,7 @@ if (hasAccess("usedCars", "View") === 'false') {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3 p-2">
+                                        <div class="col-md-2 p-2">
                                             <label for="uciClosed" class="col-form-label">UCI Closed</label>
                                             <div class="form-group">
                                                 <div class="form-group input-group">
@@ -450,12 +449,10 @@ if (hasAccess("usedCars", "View") === 'false') {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
                                         <div class="form-group col-md-2 text-center p-2">
                                             <div class="custom-control custom-control-lg custom-checkbox" style="font-size:initial;">
                                                 <input type="checkbox" class="custom-control-input" name="oci" id="oci">
-                                                <label class="custom-control-label" for="oci">OCI OK</label>
+                                                <label class="custom-control-label" for="oci">UCI OK</label>
                                             </div>
                                         </div>
                                     </div>

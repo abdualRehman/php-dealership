@@ -29,7 +29,7 @@ if ($_POST) {
         $checkSql = "SELECT * FROM `bdc_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND status = 1";
         $result = $connect->query($checkSql);
         if ($result && $result->num_rows > 0) {
-            $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . " is Already Exist";
+            $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . ",  Already Exist";
         } else {
 
             $sql = "INSERT INTO `bdc_rules`( `model`, `year`, `modelno` , `ex_modelno`, `calcfrom`, `calculation` , `num_to_calc` , `status`) 

@@ -90,7 +90,7 @@ if ($_POST) {
         $result = $connect->query($checkSql);
         if ($result->num_rows > 0) {
 
-            $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . ' - ' . $modelType  . " is Already Exist";
+            $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . ' - ' . $modelType  . ", Already Exist";
         } else {
 
             $sql = "INSERT INTO `incentive_rules`( `model`, `year`, `modelno`, `ex_modelno`, `type`, `college`, `college_e`, `military`, `military_e`, `loyalty`, `loyalty_e`, `conquest`, `conquest_e`, `misc1`, `misc1_e`, `misc2`, `misc2_e`, `lease_loyalty`, `lease_loyalty_e`, `status`) 

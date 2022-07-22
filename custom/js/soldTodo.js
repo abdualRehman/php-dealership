@@ -266,7 +266,7 @@ $(function () {
                     if (
                         (vin_check !== 'checkTitle' && vin_check !== 'need') &&
                         insurance !== 'need' && trade_title !== 'need' &&
-                        (registration !== 'pending' && registration !== 'done') && inspection !== 'need') {
+                        (registration !== 'pending' && registration !== 'done') && inspection !== 'need' && (salesperson_status === 'cancelled' ||  salesperson_status === 'delivered' )) {
                         return false;
                     } else {
                         return true;
@@ -319,7 +319,7 @@ $(function () {
 
             }
 
-           
+
             return false;
         }
     );
@@ -369,6 +369,7 @@ $(function () {
                         manageSoldLogsTable.ajax.reload();
                         manageSoldLogsTable.ajax.reload(null, false);
                         manageSoldLogsTable.searchPanes.rebuildPane();
+                        $('#editDetails').modal('hide');
 
                     } else {
                         e1.fire({
@@ -535,7 +536,7 @@ function editDetails(id = null) {
 
                 $('#soldTodoId').val(id);
 
-                $('#customerName').val(response.sale_consultant);
+                $('#customerName').val(response.fname + ' ' + response.lname);
                 $('#stockNo').val(response.stockno);
                 $('#vehicle').val(`${response.stocktype} ${response.year} ${response.make} ${response.model}`);
                 $('#state').val(response.state);

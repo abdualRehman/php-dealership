@@ -73,7 +73,7 @@ if (hasAccess("incentives", "Edit") === 'false') {
     }
 
     #datatable-1 tbody tr td {
-        text-align: center;
+        /* text-align: center; */
         padding: 10px;
     }
 
@@ -215,6 +215,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                     <th>M3D</th>
                                     <th>Images</th>
                                     <th>Action</th>
+                                    <th>Sale Status</th>
                                 </tr>
                             </thead>
                         </table>
