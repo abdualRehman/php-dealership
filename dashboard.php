@@ -1,6 +1,14 @@
 <?php include('php_action/db/core.php') ?>
 <?php include('includes/header.php') ?>
 
+<?php
+if ($_SESSION['userRole'] == $inventorySpecialistID) {
+    include('InvSpecialistDashboard.php');
+} else {
+    include('includes/footer.php');
+}
+?>
+
 <!-- <div class="content">
     <div class="container-fluid">
         <div class="row">
@@ -998,5 +1006,6 @@
 
 
 
-<?php include('includes/footer.php') ?>
+<?php // include('includes/footer.php') 
+?>
 <!-- <script type="text/javascript" src="./assets/app/home.js"></script> -->

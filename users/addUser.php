@@ -70,7 +70,7 @@ if (hasAccess("user", "Add") === 'false') {
                                                 <select id="role" name="role" class="form-control required">
                                                     <option value="0">Select</option>
                                                     <?php
-                                                    $sql = "SELECT `role_id`, `role_name` FROM `role` WHERE role_status = 1";
+                                                    $sql = "SELECT `role_id`, `role_name` FROM `role` WHERE role_status != 2";
                                                     $result = $connect->query($sql);
                                                     while ($itemData = $result->fetch_assoc()) {
                                                         echo '<option value="' . $itemData['role_id'] . '">' . $itemData['role_name'] . '</option>';

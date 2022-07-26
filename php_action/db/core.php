@@ -10,6 +10,9 @@ $siteurl = "http://localhost/carshop";
 $salesConsultantID = 66; // sets in the database role 
 $salesManagerID = 67; // sets in the database role 
 $generalManagerID = 69; // sets in the database role 
+$onlineManagerID = 70; // sets in the database role 
+$inventorySpecialistID = 71; // sets in the database role 
+$officeID = 65; // sets in the database role 
 
 function hasAccess($module, $function)
 {

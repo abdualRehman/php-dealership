@@ -4,7 +4,7 @@ require_once 'db/core.php';
 
 $sql = "SELECT inventory.age , inventory.stockno , inventory.vin , inventory.model, inventory.year, inventory.make , inventory.color , 
 inventory.mileage, inventory.lot , inventory.balance, inventory.retail, inventory.certified, 
-inventory.stocktype , inventory.wholesale , inventory.id as invId , used_cars.* FROM inventory LEFT JOIN used_cars ON inventory.id = used_cars.inv_id WHERE inventory.stocktype = 'USED' AND inventory.status = 1";
+inventory.stocktype , inventory.wholesale , inventory.id as invId , used_cars.* FROM inventory LEFT JOIN used_cars ON inventory.id = used_cars.inv_id WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO'  AND inventory.status = 1";
 $result = $connect->query($sql);
 
 $output = array('data' => array());
@@ -20,6 +20,12 @@ $retail = 0;
 $sold = 0;
 
 
+function reformatDate($date, $from_format = 'm-d-Y', $to_format = 'Y-m-d')
+{
+    $date_aux = date_create_from_format($from_format, $date);
+    return date_format($date_aux, $to_format);
+}
+
 
 if ($result->num_rows > 0) {
 
@@ -28,6 +34,8 @@ if ($result->num_rows > 0) {
         $id = $row['invId'];
         $stockDetails = $row[1] . ' ||  ' . $row[2];
         $submittedBy = $row['submitted_by'];
+        $sales_consultant = $row['sales_consultant'];
+
         if (isset($submittedBy)) {
             $sql1 = "SELECT * FROM `users` WHERE id = '$submittedBy'";
             $result1 = $connect->query($sql1);
@@ -35,6 +43,15 @@ if ($result->num_rows > 0) {
             $row['submitted_by'] = $row1['username'];
         } else {
             $row['submitted_by'] = "";
+        }
+
+        if (isset($sales_consultant)) {
+            $sql1 = "SELECT * FROM `users` WHERE id = '$sales_consultant'";
+            $result1 = $connect->query($sql1);
+            $row1 = $result1->fetch_assoc();
+            $sales_consultant = $row1['username'];
+        } else {
+            $sales_consultant = "";
         }
 
 
@@ -59,26 +76,35 @@ if ($result->num_rows > 0) {
             $missingDate += 1;
         }
 
-        if ($title == 'false' && $balance) {
+        // if ($title == 'false' && $balance) {
+        //     $titleIssue += 1;
+        // }
+        if (($title == 'false' || $title == null) && ($date_in != '' && $date_in != null)) {
             $titleIssue += 1;
         }
 
-        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'false') {
+        // if ($title == 'true' && $retail_status == 'wholesale' && $key == 'false') {
+        //     $readyToShip += 1;
+        // }
+        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'false' && ($date_in != '' && $date_in != null)) {
             $readyToShip += 1;
         }
 
-        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true') {
+        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && ($date_in != '' && $date_in != null) && !$date_sent && !$date_sold) {
             $keysPulled += 1;
         }
 
-        // if (($date_sent != "" || $date_sent != null) && ($date_sold == "" || $date_sold == null)) {
+        // if ($date_sent && !$date_sold) {
         //     $atAuction += 1;
         // }
-        if ($date_sent && !$date_sold) {
+        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && ($date_in != '' && $date_in != null) && $date_sent && !$date_sold) {
             $atAuction += 1;
         }
 
-        if ($date_sold != "" && $date_sold != null) {
+        // if ($date_sold != "" && $date_sold != null) {
+        //     $soldAtAuction += 1;
+        // }
+        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && ($date_in != '' && $date_in != null) && $date_sent && $date_sold) {
             $soldAtAuction += 1;
         }
 
@@ -88,6 +114,17 @@ if ($result->num_rows > 0) {
 
         if ($balance = "" || $balance == null) {
             $sold += 1;
+        }
+
+
+        $age = $row[0]; // age
+
+        if ($row['date_in'] != '' && !is_null($row['date_in'])) {
+            $date = date('Y-m-d');
+            $today = new DateTime($date);
+            $date_in = reformatDate($row['date_in']);
+            $date_in = new DateTime($date_in);
+            $age =  $date_in->diff($today)->format("%r%a");
         }
 
 
@@ -103,27 +140,61 @@ if ($result->num_rows > 0) {
             </div>
         ';
 
+        // $date_in = '
+        // <div class="show d-flex" >
+        //     <div class="custom-control custom-control-lg custom-checkbox">
+        //         <input type="checkbox" name="' . $id . 'checkbox" class="custom-control-input editCheckbox" id="' . $id . '" ' . (($row[10] == '1') ? '' : 'checked="checked"') . ' >
+        //         <label class="custom-control-label" for="' . $id . '"></label> 
+        //     </div>
+        // </div>';
+        if ($_SESSION['userRole'] == $onlineManagerID) {
+            $date_in = $row['date_in'];
+        } else {
+            $date_in = '
+            <div class="show d-flex" >
+                <input type="text" class="form-control" name="date_in_table" value="' . $row['date_in'] . '" data-attribute="date_in" data-id="' . $id . '" autocomplete="off"  />
+            </div>';
+        }
+
+
+        $balance = (isset($row[9]) && $row[9] != '') ? (float)str_replace(array(',', '$'), '', $row[9]) : 0;
+        $sold_price = (isset($row['sold_price']) && $row['sold_price'] != '')  ? $row['sold_price'] : 0;
+        $profit = (int)$sold_price - (int)$balance;
+        $profit = round($profit, 2);
+
+
         $output['data'][] = array(
-            $button,
-            $row[0], //age
+            // $button,
+            $id,
+            $age, //age
             $stockDetails,
-            $row[3], //model
+            $date_in,
+            $key,
             $row[4], // year
             $row[5], // make
+            $row[3], //model
             $row[6], // color
             $row[7], // mileage
             $row[8], // lot
+            $title,
+            $row['title_priority'],
+            $row['customer'],
+            $sales_consultant,
+            $row['title_notes'],
             $row[9], // balance
             $row[10], // retail
             $certified, // certificate
             $row[12], // stock type
             $wholesale, // wholesale
-            $row['date_in'],
-            $row['title'],
-            $row['key'],
             $row['date_sent'],
             $row['date_sold'],
             $row['retail_status'],
+            $row['date_in'],
+            $row['wholesale_notes'],
+            $row['sold_price'],
+            $profit,
+            $row['uci'],
+            $row['purchase_from'],
 
         );
     } // /while 

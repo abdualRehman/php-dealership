@@ -471,6 +471,12 @@
 
                                 ?>
 
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/rdrRules.php" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">RDR Rule</span>
+                                    </a>
+                                </div>
 
                             </div>
                         </div>
@@ -546,45 +552,31 @@
                                         </a>
                                     </div>
                                 </li> -->
-                                <!-- <li class="nav-item dropdown"><a href="#" class="nav-link" data-toggle="dropdown">Features</a>
+                                <li class="nav-item dropdown">
+                                    <a href="#" class="nav-link" data-toggle="dropdown">More</a>
                                     <div class="dropdown-menu dropdown-menu-left dropdown-menu-wide dropdown-menu-animated overflow-hidden">
                                         <div class="dropdown-row">
-                                            <div class="dropdown-col d-flex flex-column align-items-start justify-content-center bg-primary text-white">
-                                                <h2 class="font-weight-bolder">Welcome back!</h2>
-                                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium,
-                                                    commodi hic qui aspernatur doloremque quos tempora placeat culpa
-                                                    illum, voluptatibus delectus provident cumque aliquid enim, laborum
-                                                    aliquam. Quod, perferendis unde.</p><a href="pages/login/login-1.php" class="btn btn-light btn-wider">Login</a>
-                                            </div>
-                                            <div class="dropdown-col">
-                                                <h4 class="dropdown-header dropdown-header-lg">Features</h4>
-                                                <div class="grid-nav grid-nav-action">
-                                                    <div class="grid-nav-row"><a href="#" class="grid-nav-item">
-                                                            <div class="grid-nav-icon"><i class="far fa-window-restore"></i></div><span class="grid-nav-content">Dashboard</span>
-                                                        </a><a href="#" class="grid-nav-item">
-                                                            <div class="grid-nav-icon"><i class="far fa-clipboard"></i>
-                                                            </div><span class="grid-nav-content">TODO List</span>
-                                                        </a><a href="#" class="grid-nav-item">
-                                                            <div class="grid-nav-icon"><i class="far fa-question-circle"></i></div><span class="grid-nav-content">Help Center</span>
-                                                        </a></div>
-                                                    <div class="grid-nav-row"><a href="#" class="grid-nav-item">
-                                                            <div class="grid-nav-icon"><i class="far fa-images"></i>
-                                                            </div><span class="grid-nav-content">Galery</span>
-                                                        </a><a href="#" class="grid-nav-item">
-                                                            <div class="grid-nav-icon"><i class="far fa-chart-bar"></i>
-                                                            </div><span class="grid-nav-content">Scrumboard</span>
-                                                        </a><a href="#" class="grid-nav-item">
-                                                            <div class="grid-nav-icon"><i class="far fa-bookmark"></i>
-                                                            </div><span class="grid-nav-content">Docs</span>
-                                                        </a></div>
-                                                </div>
-                                            </div>
                                             <div class="dropdown-col border-left">
-                                                <h4 class="dropdown-header dropdown-header-lg">Tools</h4><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Components</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Form Wizard</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Documentation</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Knowledge Base</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Inventory Manager</span></a>
+                                                <!-- <h4 class="dropdown-header dropdown-header-lg">Tools</h4> -->
+                                                <a href="<?php echo $GLOBALS['siteurl']; ?>/more/rdr.php" class="dropdown-item">
+                                                    <i class="dropdown-bullet"></i> <span class="dropdown-content">RDR (RETAIL DELIVERY REGISTRATION)</span>
+                                                </a>
+                                                <a href="<?php echo $GLOBALS['siteurl']; ?>/more/transportation.php" class="dropdown-item">
+                                                    <i class="dropdown-bullet"></i> <span class="dropdown-content">Transportation Damage</span>
+                                                </a>
+                                                <!-- <a href="#" class="dropdown-item">
+                                                    <i class="dropdown-bullet"></i> <span class="dropdown-content">Documentation</span>
+                                                </a>
+                                                <a href="#" class="dropdown-item">
+                                                    <i class="dropdown-bullet"></i> <span class="dropdown-content">Knowledge Base</span>
+                                                </a>
+                                                <a href="#" class="dropdown-item">
+                                                    <i class="dropdown-bullet"></i> <span class="dropdown-content">Inventory Manager</span>
+                                                </a> -->
                                             </div>
                                         </div>
                                     </div>
-                                </li> -->
+                                </li>
                             </ul>
                         </div>
                         <div class="header-wrap header-wrap-block">
