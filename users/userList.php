@@ -34,6 +34,10 @@ if (hasAccess("user", "Edit") === 'false' && hasAccess("user", "Remove") === 'fa
             max-width: 1200px !important;
         }
     }
+
+    .ui-timepicker-wrapper {
+        width: 8.5em !important;
+    }
 </style>
 
 <div class="content">

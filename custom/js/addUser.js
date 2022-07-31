@@ -1,7 +1,15 @@
 "use strict";
 $(function () {
 
-    $('.timeInterval').timepicker({ 'timeFormat': 'H:i', 'showDuration': true });
+    // $('.timeInterval').timepicker({ 'timeFormat': 'H:i p', 'showDuration': true });
+    $('.timeInterval').timepicker({
+        dynamic: false,
+        dropdown: true,
+        'showDuration': false,
+        scrollbar: true,
+        show24Hours: false,
+        interval: 60,
+    });
 
 
     $.validator.addMethod("valueNotEquals", function (value, element, arg) {

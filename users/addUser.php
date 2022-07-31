@@ -28,6 +28,10 @@ if (hasAccess("user", "Add") === 'false') {
             padding: 5px !important;
             background-image: none !important;
         }
+
+        .ui-timepicker-wrapper {
+            width: 8.5em !important;
+        }
     </style>
 
 
@@ -116,7 +120,7 @@ if (hasAccess("user", "Add") === 'false') {
                                 </div>
                             </div>
                             <div class="row mt-5 mb-5" style="overflow:auto;">
-                                <div class="col-md-10 m-auto">
+                                <div class="col-md-12 m-auto">
                                     <table id="scheduleTable" class="table table-bordered text-center">
                                         <thead>
                                             <tr>

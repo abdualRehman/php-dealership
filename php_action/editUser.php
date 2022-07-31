@@ -49,7 +49,7 @@ if ($_POST) {
 			`sat_start`='$satStart',`sat_end`='$satEnd',`sun_start`='$sunStart',`sun_end`='$sunEnd' WHERE `user_id` = '$userId'";
 	} else {
 		$sql3 = "INSERT INTO `schedule`(`user_id`, `mon_start`, `mon_end`, `tue_start`, `tue_end`, `wed_start`, `wed_end`, `thu_start`, `thu_end`, `fri_start`, `fri_end`, `sat_start`, `sat_end`, `sun_start`, `sun_end`) 
-            VALUES ('$userId' , '$monStart' , '$monEnd' , '$tueStart' , '$thuEnd' , '$wedStart' , '$wedEnd' , '$thuStart' , '$thuEnd' , '$friStart' , '$friEnd' , '$satStart' , '$satEnd' , '$sunStart' , '$sunEnd')";
+            VALUES ('$userId' , '$monStart' , '$monEnd' , '$tueStart' , '$tueEnd' , '$wedStart' , '$wedEnd' , '$thuStart' , '$thuEnd' , '$friStart' , '$friEnd' , '$satStart' , '$satEnd' , '$sunStart' , '$sunEnd')";
 	}
 
 

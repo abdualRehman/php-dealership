@@ -51,6 +51,27 @@
                 left: 0rem;
             }
         }
+
+        #sidemenu-todo.sidemenu-wider {
+            width: 30rem;
+        }
+
+        .link-css {
+            font-size: inherit;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        #sidemenu-todo.sidemenu-wider.expanded {
+            width: 95% !important;
+        }
+
+        .font-initial {
+            font-size: initial !important;
+            text-decoration: underline;
+        }
     </style>
 
 
@@ -527,6 +548,9 @@
                                 <?php
                                 }
                                 ?>
+                                <li class="nav-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/bdc.php" id="bdcPage" class="nav-link">BDC</a>
+                                </li>
                                 <!-- <li class="nav-item dropdown"><a href="#" class="nav-link active" data-toggle="dropdown">Apps</a>
                                     <div class="dropdown-menu dropdown-menu-left dropdown-menu-animated"><a href="#" class="dropdown-item">
                                             <div class="dropdown-icon"><i class="fa fa-boxes"></i></div><span class="dropdown-content">Inventory Manager</span>
@@ -564,15 +588,15 @@
                                                 <a href="<?php echo $GLOBALS['siteurl']; ?>/more/transportation.php" class="dropdown-item">
                                                     <i class="dropdown-bullet"></i> <span class="dropdown-content">Transportation Damage</span>
                                                 </a>
-                                                <!-- <a href="#" class="dropdown-item">
-                                                    <i class="dropdown-bullet"></i> <span class="dropdown-content">Documentation</span>
+                                                <a href="<?php echo $GLOBALS['siteurl']; ?>/more/lotwizardsBill.php" class="dropdown-item">
+                                                    <i class="dropdown-bullet"></i> <span class="dropdown-content">Lot Wizards Bills</span>
                                                 </a>
-                                                <a href="#" class="dropdown-item">
-                                                    <i class="dropdown-bullet"></i> <span class="dropdown-content">Knowledge Base</span>
+                                                <a href="<?php echo $GLOBALS['siteurl']; ?>/more/transportationBills.php" class="dropdown-item">
+                                                    <i class="dropdown-bullet"></i> <span class="dropdown-content">Transportation Bills</span>
                                                 </a>
-                                                <a href="#" class="dropdown-item">
-                                                    <i class="dropdown-bullet"></i> <span class="dropdown-content">Inventory Manager</span>
-                                                </a> -->
+                                                <a href="<?php echo $GLOBALS['siteurl']; ?>/more/warrantyCancellation.php" class="dropdown-item">
+                                                    <i class="dropdown-bullet"></i> <span class="dropdown-content">Warranty Cancellation</span>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -728,10 +752,7 @@
                                     </div>
                                 </div>
                             </div> -->
-                            <!-- <button class="btn btn-label-primary btn-icon ml-2" data-toggle="sidemenu" data-target="#sidemenu-todo">
-                                <i class="far fa-calendar-alt"></i>
-                            </button>
-                            <button class="btn btn-label-primary btn-icon ml-2" data-toggle="sidemenu" data-target="#sidemenu-settings">
+                            <!-- <button class="btn btn-label-primary btn-icon ml-2" data-toggle="sidemenu" data-target="#sidemenu-settings">
                                 <i class="far fa-list-alt"></i>
                             </button> -->
                             <?php
@@ -759,6 +780,9 @@
                             }
 
                             ?>
+                            <button class="btn btn-label-primary btn-icon ml-2" data-toggle="sidemenu" data-target="#sidemenu-todo" onclick="loadSchedules()">
+                                <i class="far fa-calendar-alt"></i>
+                            </button>
                             <div class="dropdown ml-2"><button class="btn btn-flat-primary widget13" data-toggle="dropdown">
                                     <div class="widget13-text">Hi <strong> <?php echo $_SESSION['userName']; ?> </strong></div>
                                     <div class="avatar avatar-info widget13-avatar">

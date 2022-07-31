@@ -13,146 +13,41 @@
 </div>
 </div>
 
-
 <div class="scrolltop"><button class="btn btn-info btn-icon btn-lg"><i class="fa fa-angle-up"></i></button></div>
 
 <div class="sidemenu sidemenu-right sidemenu-wider" id="sidemenu-todo">
     <div class="sidemenu-header">
-        <h3 class="sidemenu-title">May 14, 2020</h3>
-        <div class="sidemenu-addon"><button class="btn btn-label-danger btn-icon" data-dismiss="sidemenu"><i class="fa fa-times"></i></button></div>
+        <h3 class="sidemenu-title" id="todayDate"></h3>
+        <div class="sidemenu-addon">
+            <button class="btn btn-label-info ml-2 btn-icon" onclick="toggleSidebar(this)">
+                <i class="fa fa-expand"></i>
+            </button>
+        </div>
     </div>
     <div class="sidemenu-body pb-0" data-simplebar="data-simplebar">
-        <div class="portlet portlet-bordered">
-            <div class="portlet-header portlet-header-bordered">
-                <div class="portlet-icon"><i class="fa fa-tasks"></i></div>
-                <h3 class="portlet-title">Upcoming events</h3>
-            </div>
-            <div class="portlet-body">
-                <div class="timeline rich-list-bordered">
-                    <div class="timeline-item">
-                        <div class="timeline-pin"><i class="marker marker-circle text-primary"></i></div>
-                        <div class="timeline-content">
-                            <div class="rich-list-item">
-                                <div class="rich-list-content">
-                                    <h5 class="rich-list-title">12:00</h5>
-                                    <p class="rich-list-paragraph">Donec laoreet fringilla justo a pellentesque</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-pin"><i class="marker marker-circle text-success"></i></div>
-                        <div class="timeline-content">
-                            <div class="rich-list-item">
-                                <div class="rich-list-content">
-                                    <h5 class="rich-list-title">13:20</h5>
-                                    <p class="rich-list-paragraph">Nunc quis massa nec enim</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-pin"><i class="marker marker-circle text-danger"></i></div>
-                        <div class="timeline-content">
-                            <div class="rich-list-item">
-                                <div class="rich-list-content">
-                                    <h5 class="rich-list-title">14:00</h5>
-                                    <p class="rich-list-paragraph">Praesent sit amet</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="portlet portlet-bordered">
-            <div class="portlet-header portlet-header-bordered">
-                <div class="portlet-icon"><i class="fa fa-users"></i></div>
-                <h3 class="portlet-title">Contacts</h3>
-                <div class="portlet-addon"><button class="btn btn-label-primary btn-icon"><i class="fa fa-plus"></i></button></div>
-            </div>
-            <div class="portlet-body p-0">
-                <div class="rich-list rich-list-flush rich-list-action"><a href="#" class="rich-list-item">
-                        <div class="rich-list-prepend">
-                            <div class="avatar avatar-circle">
-                                <div class="avatar-addon avatar-addon-top">
-                                    <div class="avatar-icon avatar-icon-info"><i class="fa fa-thumbtack"></i></div>
-                                </div>
-                                <!-- <div class="avatar-display"><img src="https://dashboard1.panely-html.blueupcode.com/assets/images/avatar/avatar-3.webp" alt="Avatar image"></div> -->
-                                <div class="avatar-addon avatar-addon-bottom"><i class="marker marker-dot text-secondary"></i></div>
-                            </div>
-                        </div>
-                        <div class="rich-list-content">
-                            <h4 class="rich-list-title">Charlie Stone</h4><span class="rich-list-subtitle">Art
-                                Director</span>
-                        </div>
-                        <div class="rich-list-append flex-column align-items-end"><span class="text-muted text-nowrap">1 min</span> <span class="badge badge-success badge-pill">1</span></div>
-                    </a><a href="#" class="rich-list-item">
-                        <div class="rich-list-prepend">
-                            <div class="avatar avatar-circle">
-                                <!-- <div class="avatar-display"><img src="https://dashboard1.panely-html.blueupcode.com/assets/images/avatar/avatar-5.webp" alt="Avatar image"></div> -->
-                                <div class="avatar-addon avatar-addon-bottom"><i class="marker marker-dot text-success"></i></div>
-                            </div>
-                        </div>
-                        <div class="rich-list-content">
-                            <h4 class="rich-list-title">Freddie Stevens</h4><span class="rich-list-subtitle">Journalist</span>
-                        </div>
-                        <div class="rich-list-append flex-column align-items-end"><span class="text-muted text-nowrap">2 hour</span> <span class="badge badge-success badge-pill">12</span></div>
-                    </a><a href="#" class="rich-list-item">
-                        <div class="rich-list-prepend">
-                            <div class="avatar avatar-circle">
-                                <!-- <div class="avatar-display"><img src="https://dashboard1.panely-html.blueupcode.com/assets/images/avatar/avatar-2.webp" alt="Avatar image"></div> -->
-                                <div class="avatar-addon avatar-addon-bottom"><i class="marker marker-dot text-success"></i></div>
-                            </div>
-                        </div>
-                        <div class="rich-list-content">
-                            <h4 class="rich-list-title">Tyler Clark</h4><span class="rich-list-subtitle">Programmer</span>
-                        </div>
-                        <div class="rich-list-append flex-column align-items-end"><span class="text-muted text-nowrap">5 hour</span></div>
-                    </a><a href="#" class="rich-list-item">
-                        <div class="rich-list-prepend">
-                            <div class="avatar avatar-circle">
-                                <div class="avatar-addon avatar-addon-top">
-                                    <div class="avatar-icon avatar-icon-success"><i class="fa fa-check"></i></div>
-                                </div>
-                                <!-- <div class="avatar-display"><img src="https://dashboard1.panely-html.blueupcode.com/assets/images/avatar/avatar-4.webp" alt="Avatar image"></div> -->
-                                <div class="avatar-addon avatar-addon-bottom"><i class="marker marker-dot text-secondary"></i></div>
-                            </div>
-                        </div>
-                        <div class="rich-list-content">
-                            <h4 class="rich-list-title">Darcy Harrison</h4><span class="rich-list-subtitle">Internet
-                                Marketer</span>
-                        </div>
-                        <div class="rich-list-append flex-column align-items-end"><span class="text-muted text-nowrap">1 day</span> <span class="badge badge-success badge-pill">2</span></div>
-                    </a><a href="#" class="rich-list-item">
-                        <div class="rich-list-prepend">
-                            <div class="avatar avatar-circle">
-                                <!-- <div class="avatar-display"><img src="https://dashboard1.panely-html.blueupcode.com/assets/images/avatar/avatar-7.webp" alt="Avatar image"></div> -->
-                                <div class="avatar-addon avatar-addon-bottom"><i class="marker marker-dot text-success"></i></div>
-                            </div>
-                        </div>
-                        <div class="rich-list-content">
-                            <h4 class="rich-list-title">Victor Payne</h4><span class="rich-list-subtitle">Accountant</span>
-                        </div>
-                        <div class="rich-list-append flex-column align-items-end"><span class="text-muted text-nowrap">1 day</span> <span class="badge badge-success badge-pill">5</span></div>
-                    </a><a href="#" class="rich-list-item">
-                        <div class="rich-list-prepend">
-                            <div class="avatar avatar-circle">
-                                <!-- <div class="avatar-display"><img src="https://dashboard1.panely-html.blueupcode.com/assets/images/avatar/avatar-9.webp" alt="Avatar image"></div> -->
-                                <div class="avatar-addon avatar-addon-bottom"><i class="marker marker-dot text-secondary"></i></div>
-                            </div>
-                        </div>
-                        <div class="rich-list-content">
-                            <h4 class="rich-list-title">Alberta Harris</h4><span class="rich-list-subtitle">UI
-                                Designer</span>
-                        </div>
-                        <div class="rich-list-append flex-column align-items-end"><span class="text-muted text-nowrap">2 day</span> <span class="badge badge-success badge-pill">4</span></div>
-                    </a></div>
-            </div>
+        <div class="portlet p-1 pt-5 pb-5">
+            <table id="datatable-4" class="table table-bordered m-0" style="margin:0px!important;">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Availibility</th>
+                        <th>Sales Consultant</th>
+                        <th>OFF BDC Notes</th>
+                        <th>Manager</th>
+                        <th>SUN</th>
+                        <th>MON</th>
+                        <th>TUE</th>
+                        <th>WED</th>
+                        <th>THU</th>
+                        <th>FRI</th>
+                        <th>SAT</th>
+                    </tr>
+                </thead>
+            </table>
         </div>
     </div>
 </div>
-
 
 <div class="sidemenu sidemenu-right sidemenu-wider" id="sidemenu-settings">
     <div class="sidemenu-header">
@@ -258,6 +153,56 @@
     </div>
 </div>
 
+<div class="modal fade" id="editSchedule">
+    <div class="modal-dialog modal modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header modal-header-bordered">
+                <h5 class="modal-title">Edit Availability</h5><button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
+            </div>
+            <form class="form-horizontal" id="editAvailibilityForm" method="post">
+                <div class="modal-body">
+                    <div id="edit-messages"></div>
+                    <div class="text-center">
+                        <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div>
+                    </div>
+                    <div class="showResult d-none">
+                        <input type="hidden" name="shceduleId" id="shceduleId" />
+                        <h3 class="h4">Today's Availability</h3>
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <label class="col-form-label" for="availability">Availability</label>
+                                <div class="form-group">
+                                    <select class="selectpicker required" name="availability" id="availability">
+                                        <option value="" selected disabled>Choose</option>
+                                        <option value="Available">Available</option>
+                                        <option value="With Customer">With Customer</option>
+                                        <option value="Lunch">Lunch</option>
+                                        <option value="OFF">Off</option>
+                                        <option value="Called out">Called out</option>
+                                        <option value="Vacation">Vacation</option>
+                                        <option value="See Notes">See Notes</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="col-form-label" for="offNotes">Off BDC Notes</label>
+                                <textarea class="form-control autosize" name="offNotes" id="offNotes"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-bordered">
+                    <button type="submit" class="btn btn-primary mr-2">Update Changes</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
 <div class="float-btn float-btn-right">
     <button class="btn btn-flat-primary btn-icon mb-2" id="theme-toggle" data-toggle="tooltip" data-placement="right" title="Change theme"><i class="fa fa-moon"></i></button>
 </div>
@@ -270,7 +215,7 @@
 
 <!-- <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script> -->
 <script src="https://cdn.datatables.net/rowgroup/1.0.2/js/dataTables.rowGroup.min.js"></script>
-
+<script type="text/javascript" src="<?php echo $GLOBALS['siteurl']; ?>/custom/js/footer.js"></script>
 </body>
 
 </html>

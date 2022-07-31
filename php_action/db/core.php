@@ -13,6 +13,9 @@ $generalManagerID = 69; // sets in the database role
 $onlineManagerID = 70; // sets in the database role 
 $inventorySpecialistID = 71; // sets in the database role 
 $officeID = 65; // sets in the database role 
+$deliveryCoordinatorID = 62; // sets in the database role 
+$bdcManagerID = 60; // sets in the database role 
+$ccsID = 72; // sets in the database role 
 
 function hasAccess($module, $function)
 {

@@ -10,7 +10,14 @@ var e1 = Swal.mixin({
 
 $(function () {
 
-    $('.timeInterval').timepicker({ 'timeFormat': 'H:i', 'showDuration': true });
+    // $('.timeInterval').timepicker({ 'timeFormat': 'H:i', 'showDuration': true });
+    $('.timeInterval').timepicker({
+        dynamic: false,
+        dropdown: true,
+        scrollbar: true,
+        show24Hours: false,
+        interval: 60,
+    });
 
     manageUserTable = $("#datatable-1").DataTable({
         responsive: !0,
