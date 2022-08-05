@@ -120,7 +120,7 @@ $(function () {
             {
                 targets: [4], // keys,
                 createdCell: function (td, cellData, rowData, row, col) {
-                    
+
                     if ($('#isRoleAllowed').val() == 'true') {
                         $(td).html(` <div class="custom-control custom-control-lg custom-checkbox">
                             <input type="checkbox" name="keyCheckbox" data-attribute="key" onchange="handletitleCheckbox(this)" data-id="${rowData[0]}" class="custom-control-input keyCheckbox" id="${rowData[0]}Key" ${((rowData[4] == 'false') ? '' : 'checked="checked"')} >
@@ -205,7 +205,7 @@ $(function () {
                     } else {
                         $(td).html(rowData[25]);
                     }
-                   
+
                 }
             },
             {
@@ -218,7 +218,7 @@ $(function () {
                     } else {
                         $(td).html(rowData[26]);
                     }
-                   
+
                 }
             },
             {
@@ -637,6 +637,18 @@ $(function () {
 
     loadSaleConsultant();
     writeStatusHTML();
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const filter = urlParams.get('filter');
+
+    if (filter == 'titleIssue') {
+        $('#searchTitleIssue').click();
+    }
+    else {
+        $('#searchAddToSheet').click();
+    }
+
 });
 
 

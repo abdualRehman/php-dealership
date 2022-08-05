@@ -260,7 +260,7 @@ $(function () {
                 return true;
             }
             else if (dateType == 'lastMonth') {
-                // const todayDate = moment(new Date()).format("MM-DD-YYYY");
+                const todayDate = moment(new Date()).format("MM-DD-YYYY");
                 var date = searchData[1];
                 const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('MM-DD-YYYY')
                 const lastDayOfPrevMonth = moment(todayDate).subtract(1, 'month').endOf('month').format('MM-DD-YYYY')
@@ -522,11 +522,6 @@ function applyDateRageFilter(startOfMonth = "", endOfMonth = "") {
     );
 }
 
-
-
-function loadTypeahead(vehicleArray) {
-
-}
 
 
 function editLead(leadId = null) {

@@ -13,6 +13,9 @@ var e1 = Swal.mixin({
 autosize($(".autosize"));
 
 $(function () {
+    $('.nav-link').removeClass('active');
+    $('#more').addClass('active');
+
     $(".datepicker").datepicker({
         todayHighlight: !0,
         autoclose: true,

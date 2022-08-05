@@ -13,6 +13,10 @@ var e1 = Swal.mixin({
 
 
 $(function () {
+
+    $('.nav-link').removeClass('active');
+    $('#more').addClass('active');
+    
     $("#saleDate").datetimepicker({
         language: 'pt-BR',
         format: 'M-dd-yyyy',

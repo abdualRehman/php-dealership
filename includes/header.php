@@ -551,6 +551,11 @@
                                 <li class="nav-item">
                                     <a href="<?php echo $GLOBALS['siteurl']; ?>/more/bdc.php" id="bdcPage" class="nav-link">BDC</a>
                                 </li>
+                                <!-- <li class="nav-item">
+                                    <a href="<?php // echo $GLOBALS['siteurl']; 
+                                                ?>/more/appointments.php" id="bdcPage" class="nav-link">Appointment Calender</a>
+                                </li> -->
+
                                 <!-- <li class="nav-item dropdown"><a href="#" class="nav-link active" data-toggle="dropdown">Apps</a>
                                     <div class="dropdown-menu dropdown-menu-left dropdown-menu-animated"><a href="#" class="dropdown-item">
                                             <div class="dropdown-icon"><i class="fa fa-boxes"></i></div><span class="dropdown-content">Inventory Manager</span>
@@ -577,11 +582,30 @@
                                     </div>
                                 </li> -->
                                 <li class="nav-item dropdown">
-                                    <a href="#" class="nav-link" data-toggle="dropdown">More</a>
+                                    <a href="#" class="nav-link" id="more" data-toggle="dropdown">More</a>
                                     <div class="dropdown-menu dropdown-menu-left dropdown-menu-wide dropdown-menu-animated overflow-hidden">
                                         <div class="dropdown-row">
+                                            <div class="dropdown-col">
+                                                <h4 class="dropdown-header dropdown-header-lg">Appointments</h4>
+                                                <div class="grid-nav grid-nav-action">
+                                                    <div class="grid-nav-row">
+                                                        <a href="<?php echo  $GLOBALS['siteurl']; ?>/more/appointments.php" class="grid-nav-item">
+                                                            <div class="grid-nav-icon">
+                                                                <i class="far fa-calendar-alt"></i>
+                                                            </div>
+                                                            <span class="grid-nav-content">Appointment Calendar</span>
+                                                        </a>
+                                                        <a href="<?php echo  $GLOBALS['siteurl']; ?>/more/deliveryCoordinators.php" class="grid-nav-item">
+                                                            <div class="grid-nav-icon">
+                                                                <i class="far fa-clipboard"></i>
+                                                            </div>
+                                                            <span class="grid-nav-content">Delivery Coordinator</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="dropdown-col border-left">
-                                                <!-- <h4 class="dropdown-header dropdown-header-lg">Tools</h4> -->
+                                                <h4 class="dropdown-header dropdown-header-lg">Tools</h4>
                                                 <a href="<?php echo $GLOBALS['siteurl']; ?>/more/rdr.php" class="dropdown-item">
                                                     <i class="dropdown-bullet"></i> <span class="dropdown-content">RDR (RETAIL DELIVERY REGISTRATION)</span>
                                                 </a>
@@ -865,7 +889,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="header-holder header-holder-desktop">
+                <!-- <div class="header-holder header-holder-desktop">
                     <div class="header-container container-fluid">
                         <h4 class="header-title">Dashboard</h4><i class="header-divider"></i>
                         <div class="header-wrap header-wrap-block justify-content-start">
@@ -874,12 +898,12 @@
                                 </a></div>
                         </div>
                         <div class="header-wrap">
-                            <!-- <div class="btn-group btn-group-toggle" data-toggle="buttons"><label class="btn btn-flat-primary active"><input type="radio" name="timeOption" id="timeOption1" checked="checked"> Today</label> <label class="btn btn-flat-primary"><input type="radio" name="timeOption" id="timeOption2">
-                                    Week</label> <label class="btn btn-flat-primary"><input type="radio" name="timeOption" id="timeOption3"> Month</label></div> -->
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons"><label class="btn btn-flat-primary active"><input type="radio" name="timeOption" id="timeOption1" checked="checked"> Today</label> <label class="btn btn-flat-primary"><input type="radio" name="timeOption" id="timeOption2">
+                                    Week</label> <label class="btn btn-flat-primary"><input type="radio" name="timeOption" id="timeOption3"> Month</label></div>
                             <button class="btn btn-label-info btn-icon ml-2" id="fullscreen-trigger" data-toggle="tooltip" title="Toggle fullscreen" data-placement="left"><i class="fa fa-expand fullscreen-icon-expand"></i> <i class="fa fa-compress fullscreen-icon-compress"></i></button>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="header-holder header-holder-mobile sticky-header" id="sticky-header-mobile">
                     <div class="header-container container-fluid">

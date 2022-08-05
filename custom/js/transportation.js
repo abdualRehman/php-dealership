@@ -29,7 +29,9 @@ toastr.options = {
 
 $(function () {
 
-
+    $('.nav-link').removeClass('active');
+    $('#more').addClass('active');
+    
     manageDataTable = $("#datatable-1").DataTable({
         responsive: !0,
         'ajax': '../php_action/fetchTransportations.php',

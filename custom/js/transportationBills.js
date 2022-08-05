@@ -13,6 +13,9 @@ var e1 = Swal.mixin({
 
 
 $(function () {
+    $('.nav-link').removeClass('active');
+    $('#more').addClass('active');
+    
     $("#date_in_paid").datepicker({
         language: 'pt-BR',
         format: 'mm-dd-yyyy',

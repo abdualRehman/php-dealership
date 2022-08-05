@@ -157,13 +157,13 @@ if ($_SESSION['userRole'] == $onlineManagerID) {
                                 <div class="row p-2">
                                     <div class="col-md-12">
                                         <label class="btn text-responsive active">
-                                            <input type="radio" name="mod" value="addToSheet" data-title="Add To Sheet"> Add To Sheet <br> <span></span>
+                                            <input type="radio" name="mod" value="addToSheet" id="searchAddToSheet" data-title="Add To Sheet"> Add To Sheet <br> <span></span>
                                         </label>
                                         <label class="btn text-responsive">
                                             <input type="radio" name="mod" value="missingDate" data-title="Missing Date"> Missing Date <br> <span></span>
                                         </label>
                                         <label class="btn text-responsive">
-                                            <input type="radio" name="mod" value="titleIssue" data-title="Title Issues"> Title Issues <br> <span></span>
+                                            <input type="radio" name="mod" value="titleIssue" id="searchTitleIssue" data-title="Title Issues"> Title Issues <br> <span></span>
                                         </label>
                                         <label class="btn text-responsive">
                                             <input type="radio" name="mod" value="readyToShip" data-title="W/S Ready To Ship"> W/S Ready To Ship <br> <span></span>

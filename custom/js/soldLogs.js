@@ -460,7 +460,11 @@ $(function () {
         if (filter == 'today') {
             $('#todayBtn').click();
             $('#searchStatusAll').click();
-        } else {
+        } else if(filter == 'pending'){
+            $('#modAll').click();
+            $('#searchPending').click();
+        }
+        else {
             $('#modAll').click();
             $('#searchStatusAll').click();
         }
@@ -975,7 +979,7 @@ function writeStatusHTML() {
                         <input type="radio" name="searchStatus" id="searchStatusAll" value=""> ALL
                     </label>
                     <label class="btn btn-outline-info">
-                        <input type="radio" name="searchStatus" value="pending"> Pending <span class="badge badge-lg p-1" id="pendingCount" ></span>
+                        <input type="radio" name="searchStatus" value="pending" id="searchPending" > Pending <span class="badge badge-lg p-1" id="pendingCount" ></span>
                     </label>
                     <label class="btn btn-outline-success">
                         <input type="radio" name="searchStatus" value="delivered"> Delivered <span class="badge badge-lg p-1" id="deliveredCount" ></span>
