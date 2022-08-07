@@ -89,6 +89,15 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
         font-weight: 900 !important;
         font-size: large;
     }
+
+    .clear-selection {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    .btn-group.btn-group-toggle label {
+        place-content: center !important;
+    }
 </style>
 
 <div class="content">
@@ -347,6 +356,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                                                 Show
                                             </label>
                                         </div>
+                                        <span class="badge-text-primary pl-2 clear-selection" data-id="eleadStatus">Clear Selection</span>
                                     </div>
                                 </div>
                             </div>
@@ -403,7 +413,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                                         Show Verified
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="evarifiedStatus" value="doNotCount" id="edoNotCount">
+                                        <input type="radio" name="evarifiedStatus" value="doesNotCount" id="edoesNotCount">
                                         Does Not Count
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
@@ -526,6 +536,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                                             Show
                                         </label>
                                     </div>
+                                    <span class="badge-text-primary pl-2 clear-selection" data-id="leadStatus">Clear Selection</span>
                                 </div>
                             </div>
                         </div>
@@ -582,7 +593,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                                     Show Verified
                                 </label>
                                 <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                    <input type="radio" name="varifiedStatus" value="doNotCount" id="doNotCount">
+                                    <input type="radio" name="varifiedStatus" value="doesNotCount" id="doesNotCount">
                                     Does Not Count
                                 </label>
                                 <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">

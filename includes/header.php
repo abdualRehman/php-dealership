@@ -628,8 +628,16 @@
                             </ul>
                         </div>
                         <div class="header-wrap header-wrap-block">
+                            <div class="input-group-icon input-group-lg widget15-compact">
+                                <div class="input-group-prepend">
+                                    <i class="fa fa-search text-primary"></i></div>
+                                <input type="text" class="form-control" name="searchcars" id="searchcars" placeholder="Type to search...">
+                            </div>
                             <!-- <div class="input-group-icon input-group-lg widget15-compact">
-                                <div class="input-group-prepend"><i class="fa fa-search text-primary"></i></div><input type="text" class="form-control" placeholder="Type to search...">
+                                <h3 class="portlet-title">
+                                    <a href="<?php // echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary" id="todaySoldStatus">
+                                    </a>
+                                </h3>
                             </div> -->
                         </div>
                         <div class="header-wrap">

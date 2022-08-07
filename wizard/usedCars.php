@@ -16,6 +16,15 @@ if ($_SESSION['userRole'] == $onlineManagerID) {
 } else {
     echo '<input type="hidden" name="isRoleAllowed" id="isRoleAllowed" value="true" />';
 }
+
+$allowedForOffice = false;
+if ($_SESSION['userRole'] == $officeID) {
+    echo '<input type="hidden" name="allowedForOffice" id="allowedForOffice" value="false" />';
+} else {
+    echo '<input type="hidden" name="allowedForOffice" id="allowedForOffice" value="true" />';
+    $allowedForOffice = true;
+}
+
 ?>
 
 <head>
@@ -143,6 +152,10 @@ if ($_SESSION['userRole'] == $onlineManagerID) {
         color: #424242;
         background: #fafafa;
     }
+
+    #mods label {
+        cursor: pointer;
+    }
 </style>
 
 
@@ -156,32 +169,42 @@ if ($_SESSION['userRole'] == $onlineManagerID) {
                             <div class="btn-group-toggle" id="mods" data-toggle="buttons">
                                 <div class="row p-2">
                                     <div class="col-md-12">
-                                        <label class="btn text-responsive active">
-                                            <input type="radio" name="mod" value="addToSheet" id="searchAddToSheet" data-title="Add To Sheet"> Add To Sheet <br> <span></span>
-                                        </label>
-                                        <label class="btn text-responsive">
-                                            <input type="radio" name="mod" value="missingDate" data-title="Missing Date"> Missing Date <br> <span></span>
-                                        </label>
-                                        <label class="btn text-responsive">
+                                        <?php
+                                        if ($allowedForOffice) {
+                                        ?>
+                                            <label class="btn text-responsive active">
+                                                <input type="radio" name="mod" value="addToSheet" id="searchAddToSheet" data-title="Add To Sheet"> Add To Sheet <br> <span></span>
+                                            </label>
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="missingDate" data-title="Missing Date"> Missing Date <br> <span></span>
+                                            </label>
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="titleIssue" id="searchTitleIssue" data-title="Title Issues"> Title Issues <br> <span></span>
+                                            </label>
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="readyToShip" data-title="W/S Ready To Ship"> W/S Ready To Ship <br> <span></span>
+                                            </label>
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="keysPulled" data-title="W/S Keys Pulled"> W/S Keys Pulled <br> <span></span>
+                                            </label>
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="atAuction" data-title="At Auction"> At Auction <br> <span></span>
+                                            </label>
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="soldAtAuction" data-title="Sold At Auction"> Sold At Auction <br> <span></span>
+                                            </label>
+                                        <?php
+                                        } else {
+                                            // title issue only
+                                            echo '<label class="btn text-responsive">
                                             <input type="radio" name="mod" value="titleIssue" id="searchTitleIssue" data-title="Title Issues"> Title Issues <br> <span></span>
-                                        </label>
-                                        <label class="btn text-responsive">
-                                            <input type="radio" name="mod" value="readyToShip" data-title="W/S Ready To Ship"> W/S Ready To Ship <br> <span></span>
-                                        </label>
-                                        <label class="btn text-responsive">
-                                            <input type="radio" name="mod" value="keysPulled" data-title="W/S Keys Pulled"> W/S Keys Pulled <br> <span></span>
-                                        </label>
-                                        <label class="btn text-responsive">
-                                            <input type="radio" name="mod" value="atAuction" data-title="At Auction"> At Auction <br> <span></span>
-                                        </label>
-                                        <label class="btn text-responsive">
-                                            <input type="radio" name="mod" value="soldAtAuction" data-title="Sold At Auction"> Sold At Auction <br> <span></span>
-                                        </label>
-
+                                        </label>';
+                                        }
+                                        ?>
                                     </div>
                                 </div>
 
-                                <div class="row p-2">
+                                <div class="row p-2 <?php echo ($allowedForOffice) ? "d-flex": "d-none"; ?>">
                                     <div class="col-md-12">
                                         <div id="year">
                                             <label class="btn text-responsive">

@@ -16,7 +16,7 @@ $(function () {
 
     $('.nav-link').removeClass('active');
     $('#more').addClass('active');
-    
+
     $("#saleDate").datetimepicker({
         language: 'pt-BR',
         format: 'M-dd-yyyy',
@@ -152,7 +152,7 @@ $(function () {
     $.fn.dataTable.ext.search.push(
         function (settings, searchData, index) {
             var tableNode = manageBillsTable.table().node();
-            var repairPaid =  searchData[7];
+            var repairPaid = searchData[7];
             var searchStatus = $('input:radio[name="searchStatus"]:checked').map(function () {
                 if (this.value !== "") {
                     return this.value;
@@ -168,12 +168,12 @@ $(function () {
             }
 
             if (searchStatus[0] === 'notPaid') {
-                if(repairPaid == '' || repairPaid == null){
+                if (repairPaid == '' || repairPaid == null) {
                     return true;
                 }
             }
             if (searchStatus[0] === 'paid') {
-                if(repairPaid != '' && repairPaid != null){
+                if (repairPaid != '' && repairPaid != null) {
                     return true;
                 }
 
@@ -291,33 +291,33 @@ function setfun() {
 function updateFieldsUsedCars(obj) {
     console.log(obj);
     if (obj) {
-        e1.fire({
-            title: "Are you sure?",
-            // text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: !0,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, Change this!"
-        }).then(function (t) {
-            if (t.isConfirmed == true) {
-                $.ajax({
-                    url: '../php_action/updateFieldsLotwizards.php',
-                    type: 'post',
-                    data: obj,
-                    dataType: 'json',
-                    success: function (response) {
-                        if (response.success == true) {
-                            Swal.fire("Added!", "Successfully Changed", "success")
-                            manageBillsTable.ajax.reload(null, false);
-                        } // /response messages
-                    }
-
-                }); // /ajax function to remove the brand
-            } else {
-                manageBillsTable.ajax.reload(null, false);
+        // e1.fire({
+        //     title: "Are you sure?",
+        //     // text: "You won't be able to revert this!",
+        //     icon: "warning",
+        //     showCancelButton: !0,
+        //     confirmButtonColor: "#3085d6",
+        //     cancelButtonColor: "#d33",
+        //     confirmButtonText: "Yes, Change this!"
+        // }).then(function (t) {
+        //     if (t.isConfirmed == true) {
+        $.ajax({
+            url: '../php_action/updateFieldsLotwizards.php',
+            type: 'post',
+            data: obj,
+            dataType: 'json',
+            success: function (response) {
+                if (response.success == true) {
+                    Swal.fire("Added!", "Successfully Changed", "success")
+                    manageBillsTable.ajax.reload(null, false);
+                } // /response messages
             }
-        });
+
+        }); // /ajax function to remove the brand
+        //     } else {
+        //         manageBillsTable.ajax.reload(null, false);
+        //     }
+        // });
     }
 }
 

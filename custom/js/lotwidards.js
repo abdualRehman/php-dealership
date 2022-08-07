@@ -1,6 +1,7 @@
 
 "use strict";
 var manageInvTable, TableData, maxFileLimit = 10, rowGroupSrc = 19; // 19; // wholesale 
+var searhStatusArray = [];
 var manageCarDealersTable;
 var collapsedGroups = {};
 var e1 = Swal.mixin({
@@ -53,6 +54,36 @@ $(function () {
         tags: !0
     })
     autosize($(".autosize"));
+
+
+    var a = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('stockDetails'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        local: searhStatusArray
+    });
+
+    $('#searchcars').typeahead({
+        hint: true,
+        highlight: true,
+        minLength: 1,
+    },
+        {
+            name: 'searhStatusArray',
+            display: 'stockDetails',
+            source: a,
+            templates: {
+                suggestion: function (data) {
+                    var stockAvailibilityArray = data.stockAvailibility;
+                    const template = `<div><p><strong>${data.stockDetails}</strong></p><div class="row pl-2 pr-2">${stockAvailibilityArray.map(e => (e) ? `<div class="col-sm-4 p-1"> <span class="badge badge-label-primary"> ${e} </span> </div>` : ``).join('')}</div>`;
+                    return template;
+                }
+            }
+        });
+
+
+
+
+
 
     $('.slick-2').each(function () {
         var slider = $(this);
@@ -248,6 +279,7 @@ $(function () {
         "drawCallback": function (settings, start, end, max, total, pre) {
             var json = this.fnSettings().json;
             if (json) {
+                // console.log(obj);
                 var obj = json.totalNumber;
                 for (const [key, value] of Object.entries(obj)) {
                     $(`input[name='mod'][value='${key}']`).next().next().html(value)
@@ -310,6 +342,9 @@ $(function () {
                 $('#completeCount').html(totalComplete);
 
 
+                a.clear();
+                a.local = searhStatusArray;
+                a.initialize(true);
 
 
             }
@@ -334,6 +369,14 @@ $(function () {
     $.fn.dataTable.ext.search.push(
         function (settings, searchData, index, rowData, counter) {
             var tableNode = manageInvTable.table().node();
+
+            if (rowData[7] && rowData[7] != 'undefined') {                
+                searhStatusArray.push({
+                    stockDetails: rowData[7],
+                    stockAvailibility: rowData[26],
+                })
+            }
+
 
             var activebtnvalue = $("#mods .btn.active input[name='mod']").val();
             // console.log(activebtnvalue);
@@ -477,7 +520,6 @@ $(function () {
         }
     );
 
-
     $('#mods input:radio').on('change', function () {
 
         $('#datatable-1').block({
@@ -498,6 +540,8 @@ $(function () {
 
             $('.inspectionTable').removeClass('d-none');
             $('.DealerTable').addClass('d-none');
+
+            searhStatusArray = [];
 
             switch (currentElement) {
                 case "notTouched":
@@ -558,8 +602,7 @@ $(function () {
             setTimeout(() => {
                 // manageInvTable.order([6, "desc"]).draw();
                 manageInvTable.searchPanes.rebuildPane();
-                var table_length = manageInvTable.rows({ search: 'applied' }).count();
-                // console.log(table_length);
+
             }, 500);
 
         } else if (currentElement == 'CarsToDealers') {
@@ -1156,7 +1199,7 @@ function editInspection(id) {
 
                 $("#repais option:selected").removeAttr("selected");
                 $("#repais option:selected").attr("selected", 0);
-                $('#repais').trigger('change');
+                $('#repais').val(null).trigger('change');
                 arr.forEach(element => {
                     if ((element !== '') || $('#repais').find("option[value='" + element + "']").length) {
                         $("#repais option[value='" + element + "']").attr("selected", 1);

@@ -2,7 +2,8 @@
 
 require_once 'db/core.php';
 
-$sql = "SELECT used_cars.* , inventory.stockno , inventory.vin , inventory.age , inventory.year , inventory.make , inventory.model  FROM `used_cars` LEFT JOIN inventory ON used_cars.inv_id = inventory.id WHERE used_cars.status = 1 AND retail_status != 'wholesale'";
+// $sql = "SELECT used_cars.* , inventory.stockno , inventory.vin , inventory.age , inventory.year , inventory.make , inventory.model  FROM `used_cars` LEFT JOIN inventory ON used_cars.inv_id = inventory.id WHERE used_cars.status = 1 AND retail_status != 'wholesale'";
+$sql = "SELECT used_cars.* , inventory.id as Inv_id , inventory.stockno , inventory.vin , inventory.age , inventory.year , inventory.make , inventory.model  FROM inventory LEFT JOIN used_cars ON inventory.id = used_cars.inv_id WHERE inventory.status = 1 AND (used_cars.retail_status != 'wholesale' OR used_cars.retail_status IS NULL)";
 $result = $connect->query($sql);
 
 $output = array('data' => array());
@@ -19,7 +20,7 @@ if ($result->num_rows > 0) {
 
     // while ($row = $result->fetch_assoc()) {
     while ($row = $result->fetch_array()) {
-        $id = $row['inv_id'];
+        $id = $row['Inv_id'];
 
         $stockDetails = $row['stockno'];
         $vin =  $row['vin'];

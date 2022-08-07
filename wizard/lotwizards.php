@@ -368,6 +368,7 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                     <div class="form-group col-sm-8">
                                         <!-- <input type="text" class="form-control" name="repais" id="repais" placeholder="Repais" autocomplete="off" autofill="off" /> -->
                                         <select class="form-control repairAndBodyshop" id="repais" name="repais[]" multiple="multiple">
+                                            <option value="Front Bumper">Front Bumper</option>
                                             <option value="Front Bumper Top">Front Bumper Top</option>
                                             <option value="Front Bumper Lower">Front Bumper Lower</option>
                                             <option value="Attach Front Bumper">Attach Front Bumper</option>

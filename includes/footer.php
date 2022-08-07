@@ -26,7 +26,7 @@
     </div>
     <div class="sidemenu-body pb-0" data-simplebar="data-simplebar">
         <div class="portlet p-1 pt-5 pb-5">
-            <table id="datatable-4" class="table table-bordered m-0" style="margin:0px!important;">
+            <table id="datatable-4" class="table table-bordered table-hover m-0" style="margin:0px!important;">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -154,7 +154,7 @@
 </div>
 
 <div class="modal fade" id="editSchedule">
-    <div class="modal-dialog modal modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header modal-header-bordered">
                 <h5 class="modal-title">Edit Availability</h5><button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
@@ -169,24 +169,149 @@
                         <input type="hidden" name="shceduleId" id="shceduleId" />
                         <h3 class="h4">Today's Availability</h3>
                         <div class="form-row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <label class="col-form-label" for="availability">Availability</label>
                                 <div class="form-group">
                                     <select class="selectpicker required" name="availability" id="availability">
                                         <option value="" selected disabled>Choose</option>
                                         <option value="Available">Available</option>
+                                        <option value="Late">Late</option>
+                                        <option value="OFF">Off</option>
                                         <option value="With Customer">With Customer</option>
                                         <option value="Lunch">Lunch</option>
-                                        <option value="OFF">Off</option>
                                         <option value="Called out">Called out</option>
                                         <option value="Vacation">Vacation</option>
                                         <option value="See Notes">See Notes</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <label class="col-form-label" for="offNotes">Off BDC Notes</label>
                                 <textarea class="form-control autosize" name="offNotes" id="offNotes"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mt-5 mb-5" style="overflow:auto;">
+                            <div class="col-md-12 m-auto">
+                                <table id="scheduleTable" class="table table-bordered text-center">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="7">
+                                                <h2>Schedule</h2>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th>Monday</th>
+                                            <th>Tuesday</th>
+                                            <th>Wednesday</th>
+                                            <th>Thursday</th>
+                                            <th>Friday</th>
+                                            <th>Saturday</th>
+                                            <th>Sunday</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="smonStart" name="smonStart">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="smonEnd" name="smonEnd">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="stueStart" name="stueStart">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="stueEnd" name="stueEnd">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="swedStart" name="swedStart">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="swedEnd" name="swedEnd">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="sthuStart" name="sthuStart">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="sthuEnd" name="sthuEnd">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="sfriStart" name="sfriStart">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="sfriEnd" name="sfriEnd">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="ssatStart" name="ssatStart">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="ssatEnd" name="ssatEnd">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="ssunStart" name="ssunStart">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group was-validated">
+                                                            <input type="text" class="form-control timeInterval" id="ssunEnd" name="ssunEnd">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -200,7 +325,41 @@
         </div>
     </div>
 </div>
+<style>
+    @media (min-width: 1025px) {
 
+        #editSchedule .modal-lg,
+        #editSchedule .modal-xl {
+            max-width: 1200px;
+        }
+    }
+
+    #editSchedule .form-control.is-valid,
+    #editSchedule .was-validated .form-control:valid {
+        background-image: none !important;
+        padding-right: 0px;
+    }
+
+    body.theme-light #scheduleTable .was-validated .form-control:valid {
+        color: #424242;
+        background: #fff;
+        border-color: #e0e0e0;
+        padding: 5px !important;
+        background-image: none !important;
+    }
+
+    body.theme-dark #scheduleTable .was-validated .form-control:valid {
+        color: #f5f5f5;
+        background: #424242;
+        border-color: #9e9e9e;
+        padding: 5px !important;
+        background-image: none !important;
+    }
+
+    .ui-timepicker-wrapper {
+        width: 8.5em !important;
+    }
+</style>
 
 
 <div class="float-btn float-btn-right">
@@ -215,7 +374,38 @@
 
 <!-- <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script> -->
 <script src="https://cdn.datatables.net/rowgroup/1.0.2/js/dataTables.rowGroup.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/timepicker@1.13.18/jquery.timepicker.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/timepicker@1.13.18/jquery.timepicker.js"></script>
 <script type="text/javascript" src="<?php echo $GLOBALS['siteurl']; ?>/custom/js/footer.js"></script>
+
+<script>
+    // let siteLink = localStorage.getItem('siteURL')
+    // var timer = null,
+    //     delay = 3000;
+    // function checkAndDisplayNewResults() {
+    //     // do some work
+    //     if (siteLink) {
+    //         $.ajax({
+    //             url: siteLink + '/php_action/getTodayData.php',
+    //             type: "GET",
+    //             dataType: 'json',
+    //             success: function(response) {
+    //                 var obj = response.data;
+    //                 if (obj) {
+    //                     $('#todaySoldStatus').html(`Sold Today: ${obj[0]} NEW, ${obj[1]} USED, ${obj[2]} Total`);
+    //                 }
+    //             }
+    //         });
+    //     }
+    //     // when the work is finished, set a timer to call again the function
+    //     timer = setTimeout(checkAndDisplayNewResults, delay);
+    //     // console.log(timer);
+    // }
+    // // call the function immediately
+    // checkAndDisplayNewResults();
+</script>
+
+
 </body>
 
 </html>

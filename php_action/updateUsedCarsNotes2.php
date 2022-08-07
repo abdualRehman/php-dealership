@@ -14,7 +14,6 @@ if ($_POST) {
 
     $notes_1 = (isset($_POST['notes_1'])) ? mysqli_real_escape_string($connect, $_POST['notes_1']) : "";
     $notes_2 = (isset($_POST['notes_2'])) ? mysqli_real_escape_string($connect, $_POST['notes_2']) : "";
-    $uci = (isset($_POST['uci'])) ? mysqli_real_escape_string($connect, $_POST['uci']) : "";
 
 
 
@@ -23,7 +22,7 @@ if ($_POST) {
     $result = $connect->query($checkSql);
     if ($result->num_rows > 0) {
         // update Inv data if this stock number already exist with deleted id with sale 
-        $updatekSql = "UPDATE `used_cars` SET `uci`='$uci', `notes_1`='$notes_1' ,
+        $updatekSql = "UPDATE `used_cars` SET `notes_1`='$notes_1' ,
         `notes_2`='$notes_2'  WHERE inv_id = '$vehicleId'";
 
         if ($connect->query($updatekSql) === true) {
@@ -36,9 +35,9 @@ if ($_POST) {
         }
     } else {
         $sql = "INSERT INTO `used_cars`(
-            `inv_id`, `uci` ,`notes_1`, 
+            `inv_id`, `notes_1`, 
             `notes_2`, `status`) VALUES (
-                '$vehicleId', '$uci' , '$notes_1',
+                '$vehicleId', '$notes_1',
                 '$notes_2' , 1 )";
 
         if ($connect->query($sql) === true) {

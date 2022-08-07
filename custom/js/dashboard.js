@@ -29,170 +29,175 @@ function x(n) {
 }
 $(function () {
 
-    fetchSalesGrapData();
+    let chart = document.querySelector("#chart");
+    if (chart) {
+        fetchSalesGrapData();
 
-    $("#daterangepicker-1").daterangepicker();
+        $("#daterangepicker-1").daterangepicker();
 
-    $('input[name="date_range"]').daterangepicker({
-        // "showDropdowns": false,
-        // timePicker: !0,
-        autoUpdateInput: false,
-        cleanable: true,
-        "opens": "left",
-        locale: {
-            format: 'MM-DD-YYYY',
-            applyLabel: 'Submit',
-            cancelLabel: 'Reset',
-        },
-    });
-
-    var e = "dark" == localStorage.getItem("theme-variant") ? "dark" : "light",
-        t = {
-            light: {
-                theme: {
-                    mode: "light",
-                    palette: "palette1"
-                }
+        $('input[name="date_range"]').daterangepicker({
+            // "showDropdowns": false,
+            // timePicker: !0,
+            autoUpdateInput: false,
+            cleanable: true,
+            "opens": "left",
+            locale: {
+                format: 'MM-DD-YYYY',
+                applyLabel: 'Submit',
+                cancelLabel: 'Reset',
             },
-            dark: {
-                theme: {
-                    mode: "dark",
-                    palette: "palette1"
-                }
-            }
-        };
+        });
 
-    r = new ApexCharts(document.querySelector("#chart"), x(x({}, t[e]), {}, {
-        series: [
-            {
-                name: "NEW",
-                data: newArray
-            },
-            {
-                name: "USED",
-                data: usedArray
-            },
-        ],
-        chart: {
-            type: "bar",
-            height: 350,
-            width: "100%",
-            background: "transparent",
-            animations: {
-                enabled: true,
-                easing: 'easeinout',
-                speed: 800,
-                animateGradually: {
-                    enabled: true,
-                    delay: 150
+        var e = "dark" == localStorage.getItem("theme-variant") ? "dark" : "light",
+            t = {
+                light: {
+                    theme: {
+                        mode: "light",
+                        palette: "palette1"
+                    }
                 },
-                dynamicAnimation: {
-                    enabled: true,
-                    speed: 350
+                dark: {
+                    theme: {
+                        mode: "dark",
+                        palette: "palette1"
+                    }
                 }
-            },
-            events: {
-                beforeResetZoom: function (chartContext, opts) {
-                    console.log("fun called");
-                }
-            }
-        },
-        plotOptions: {
-            bar: {
-                horizontal: !1,
-                endingShape: "rounded",
-                columnWidth: '150%',
-                rangeBarOverlap: true,
-                dataLabels: {
-                    position: 'center',
+            };
+
+
+        r = new ApexCharts(document.querySelector("#chart"), x(x({}, t[e]), {}, {
+            series: [
+                {
+                    name: "NEW",
+                    data: newArray
                 },
-            }
-        },
-        dataLabels: {
-            enabled: !0,
-            enabledOnSeries: undefined,
-            formatter: function (val, opts) {
-                return val
+                {
+                    name: "USED",
+                    data: usedArray
+                },
+            ],
+            chart: {
+                type: "bar",
+                height: 350,
+                width: "100%",
+                background: "transparent",
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 800,
+                    animateGradually: {
+                        enabled: true,
+                        delay: 150
+                    },
+                    dynamicAnimation: {
+                        enabled: true,
+                        speed: 350
+                    }
+                },
+                events: {
+                    beforeResetZoom: function (chartContext, opts) {
+                        console.log("fun called");
+                    }
+                }
             },
-            textAnchor: 'end',
-            distributed: false,
-            offsetX: 0,
-            offsetY: 10,
-            style: {
-                fontSize: '14px',
-                fontFamily: 'Helvetica, Arial, sans-serif',
-                fontWeight: 'bold',
-                colors: undefined
+            plotOptions: {
+                bar: {
+                    horizontal: !1,
+                    endingShape: "rounded",
+                    columnWidth: '170%',
+                    rangeBarOverlap: true,
+                    dataLabels: {
+                        position: 'center',
+                    },
+                }
             },
-            background: {
-                enabled: true,
-                foreColor: '#fff',
-                padding: 4,
-                borderRadius: 2,
-                borderWidth: 0,
-                borderColor: '#fff',
-                opacity: 1,
+            dataLabels: {
+                enabled: !0,
+                enabledOnSeries: undefined,
+                formatter: function (val, opts) {
+                    return val
+                },
+                textAnchor: 'end',
+                distributed: false,
+                offsetX: 3,
+                offsetY: 10,
+                style: {
+                    fontSize: '14px',
+                    fontFamily: 'Helvetica, Arial, sans-serif',
+                    fontWeight: 'bold',
+                    colors: undefined
+                },
+                background: {
+                    enabled: true,
+                    foreColor: '#fff',
+                    padding: 4,
+                    borderRadius: 2,
+                    borderWidth: 0,
+                    borderColor: '#fff',
+                    opacity: 1,
+                    dropShadow: {
+                        enabled: false,
+                        top: 1,
+                        left: 1,
+                        blur: 1,
+                        color: '#000',
+                        opacity: 1
+                    }
+                },
                 dropShadow: {
                     enabled: false,
                     top: 1,
                     left: 1,
                     blur: 1,
                     color: '#000',
-                    opacity: 1
+                    opacity: 0.45
                 }
             },
-            dropShadow: {
-                enabled: false,
-                top: 1,
-                left: 1,
-                blur: 1,
-                color: '#000',
-                opacity: 0.45
-            }
-        },
-        toolbar: {
-            tools: {
-                download: true,
-                selection: true,
-                zoom: true,
-                zoomin: true,
-                zoomout: true,
-                pan: true,
-                reset: false,
-                customIcons: []
-            }
-        },
-        stroke: {
-            // show: !0,
-            // width: 2,
-            colors: ["transparent"]
-        },
-        xaxis: {
-            type: 'datetime'
-        },
-        yaxis: {
-            title: {
-                text: "Quantity"
-            }
-        },
-        fill: {
-            opacity: 1
-        },
+            toolbar: {
+                tools: {
+                    download: true,
+                    selection: true,
+                    zoom: true,
+                    zoomin: true,
+                    zoomout: true,
+                    pan: true,
+                    reset: false,
+                    customIcons: []
+                }
+            },
+            stroke: {
+                // show: !0,
+                // width: 2,
+                colors: ["transparent"]
+            },
+            xaxis: {
+                type: 'datetime'
+            },
+            yaxis: {
+                title: {
+                    text: "Quantity"
+                }
+            },
+            fill: {
+                opacity: 1
+            },
 
-    }));
+        }));
 
-    r.render(),
-        $("#theme-toggle").on("click", function () {
-            console.log("dara");
-            var e = $("body").hasClass("theme-dark") ? "dark" : "light";
-            r.updateOptions(t[e]);
-        });
+        r.render(),
+            $("#theme-toggle").on("click", function () {
+                console.log("dara");
+                var e = $("body").hasClass("theme-dark") ? "dark" : "light";
+                r.updateOptions(t[e]);
+            });
+
+    }
 
 
     function fetchSalesGrapData() {
         // console.log("wdwd");
         $.ajax({
-            url: './php_action/fetchSoldLogGrap.php',
+            url: './php_action/fetchSoldLogGraph.php',
             type: "GET",
             dataType: 'json',
             success: function (response) {

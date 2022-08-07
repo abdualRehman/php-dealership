@@ -95,7 +95,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
             <div class="col-12">
                 <div class="portlet">
                     <div class="portlet-header portlet-header-bordered">
-                        <h3 class="portlet-title">(RETAIL DELIVERY REGISTRATION</h3>
+                        <h3 class="portlet-title">RETAIL DELIVERY REGISTRATION</h3>
                         <button class="btn btn-primary mr-2 p-2" onclick="toggleFilterClass()">
                             <i class="fa fa-align-center ml-1 mr-2"></i> Filter
                         </button>

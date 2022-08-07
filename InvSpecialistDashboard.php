@@ -118,7 +118,7 @@ echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" 
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <label for="notes_1" class="col-form-label text-center">Notes 1</label>
                                         <div class="form-group">
                                             <select class="selectpicker" name="notes_1" id="notes_1">
@@ -134,7 +134,7 @@ echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" 
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <label for="notes_2" class="col-form-label text-center">Notes 2</label>
                                         <div class="form-group">
                                             <select class="selectpicker" name="notes_2" id="notes_2">
@@ -151,7 +151,7 @@ echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" 
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-md-12">
                                         <label for="uci" class="col-form-label text-center">UCI</label>
                                         <div class="form-group">
@@ -166,7 +166,7 @@ echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" 
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="form-group col-sm-12 d-none">
                                     <select class="selectpicker d-none" name="salesConsultant" id="salesConsultant" data-live-search="true" data-size="4">
                                         <option value="0" selected disabled>Sales Consultant</option>

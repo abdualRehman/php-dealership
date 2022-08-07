@@ -12,10 +12,42 @@ autosize($(".autosize"));
 
 $(function () {
 
+    $('.timeInterval').timepicker({
+        dynamic: false,
+        dropdown: true,
+        'showDuration': false,
+        scrollbar: true,
+        show24Hours: false,
+        interval: 60,
+    });
+
     $('#todayDate').html(moment().format("MMM DD,YYYY"));
 
     $("#editAvailibilityForm").validate({
         ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
+        rules: {
+            smonEnd: {
+                required: () => $('#smonStart').val() ? true : false,
+            },
+            stueEnd: {
+                required: () => $('#stueStart').val() ? true : false,
+            },
+            swedEnd: {
+                required: () => $('#swedStart').val() ? true : false,
+            },
+            sthuEnd: {
+                required: () => $('#sthuStart').val() ? true : false,
+            },
+            sfriEnd: {
+                required: () => $('#sfriStart').val() ? true : false,
+            },
+            ssatEnd: {
+                required: () => $('#ssatStart').val() ? true : false,
+            },
+            ssunEnd: {
+                required: () => $('#ssunStart').val() ? true : false,
+            }
+        },
         submitHandler: function (form, e) {
             // return true;
             e.preventDefault();
@@ -66,10 +98,10 @@ function loadSchedules() {
             responsive: !0,
             'ajax': `${siteURL}/php_action/fetchAvailability.php`,
             dom: `
-        <'row'<'col-sm-12 text-center text-sm-right'f> >\n  
-       <'row'<'col-12'tr>>\n      
-       <'row align-items-baseline'
-       <'col-md-12'p>>\n`,
+            <'row'<'col-sm-12 text-center text-sm-right'f> >\n  
+            <'row'<'col-12'tr>>\n      
+            <'row align-items-baseline'
+            <'col-md-12'p>>\n`,
             "pageLength": 25,
             columnDefs: [
                 {
@@ -81,11 +113,6 @@ function loadSchedules() {
                     createdCell: function (td, cellData, rowData, row, col) {
                         $(td).html(rowData[15]);
                         $(td).addClass('link-css');
-                        $(td).attr({
-                            "data-toggle": "modal",
-                            "data-target": "#editSchedule",
-                            "onclick": "editSchedule(" + rowData[0] + ")"
-                        });
                     }
                 },
                 {
@@ -126,10 +153,15 @@ function loadSchedules() {
 
                         } else {
                             //status
-                            // console.log(rowData);
                             if (rowData[16] == 'Available') {
                                 $(td).html('<i class="marker marker-dot marker-lg text-success"></i> Available');
                                 $(td).addClass('text-success font-initial');
+                            } else if(rowData[16] == 'Late' || rowData[16] == 'Called out' || rowData[16] == 'See Notes' || rowData[16] == 'Vacation' ) {
+                                $(td).html(rowData[16]);
+                                $(td).addClass('text-danger font-initial');
+                            } else if(rowData[16] == 'With Customer' || rowData[16] == 'Lunch' || rowData[16] == 'See Notes' ) {
+                                $(td).html(rowData[16]);
+                                $(td).addClass('text-primary font-initial');
                             } else {
                                 $(td).html(rowData[16]);
                             }
@@ -248,6 +280,15 @@ function loadSchedules() {
                         .toggleClass('collapsed', collapsed);
                 }
             },
+            createdRow: function (row, data, dataIndex) {
+                // if ($('#isEditAllowed').val() == "true") {
+                $(row).children().attr({
+                    "data-toggle": "modal",
+                    "data-target": "#editSchedule",
+                    "onclick": "editSchedule(" + data[0] + ")"
+                });
+                // }
+            },
 
             "order": [[3, "desc"]]
         })
@@ -311,6 +352,24 @@ function editSchedule(id = null) {
                 $('#shceduleId').val(response.id);
                 $('#availability').val(response.today_availability);
                 $('#offNotes').val(response.off_notes);
+
+
+                $('#smonStart').val(response.mon_start);
+                $('#smonEnd').val(response.mon_end);
+                $('#stueStart').val(response.tue_start);
+                $('#stueEnd').val(response.tue_end);
+                $('#swedStart').val(response.wed_start);
+                $('#swedEnd').val(response.wed_end);
+                $('#sthuStart').val(response.thu_start);
+                $('#sthuEnd').val(response.thu_end);
+                $('#sfriStart').val(response.fri_start);
+                $('#sfriEnd').val(response.fri_end);
+                $('#ssatStart').val(response.sat_start);
+                $('#ssatEnd').val(response.sat_end);
+                $('#ssunStart').val(response.sun_end);
+                $('#ssunEnd').val(response.sun_start);
+
+
 
                 $('.selectpicker').selectpicker('refresh');
                 setTimeout(() => {

@@ -133,81 +133,84 @@ $(function () {
                 var obj = json.data;
                 var counterObj = {};
 
+                $('#datatable-1').DataTable()
+                    .rows({ search: 'applied' })
+                    .data()
+                    .filter(function (data, index) {
+                        var Status = data[8];
+                        var Type = data[9];
+                        var Source = data[10];
+                        var Verified = data[12];
+
+                        if (Status == 'Sold') {
+                            assignKey(counterObj, 'totalSold');
+                            if (Type == 'New') {
+                                assignKey(counterObj, 'newSold');
+                                if (Verified == 'Ok') {
+                                    assignKey(counterObj, 'newSoldv');
+                                    assignKey(counterObj, 'totalSoldv');
+                                }
+
+                            } else if (Type == 'Used') {
+                                assignKey(counterObj, 'usedSold');
+                                if (Verified == 'Ok') {
+                                    assignKey(counterObj, 'usedSoldv');
+                                    assignKey(counterObj, 'totalSoldv');
+                                }
+                            }
+                        }
+                        if (Source == 'Internet') {
+                            assignKey(counterObj, 'totalInt');
+                            if (Type == 'New') {
+                                assignKey(counterObj, 'newInt');
+                                if (Verified == 'Ok') {
+                                    assignKey(counterObj, 'newIntv');
+                                    assignKey(counterObj, 'totalIntv');
+                                }
+                            } else if (Type == 'Used') {
+                                assignKey(counterObj, 'usedInt');
+                                if (Verified == 'Ok') {
+                                    assignKey(counterObj, 'usedIntv');
+                                    assignKey(counterObj, 'totalIntv');
+                                }
+                            }
+                        }
+                        if (Source == 'Auto Alert') {
+                            assignKey(counterObj, 'totalAa');
+                            if (Type == 'New') {
+                                assignKey(counterObj, 'newAa');
+                                if (Verified == 'Ok') {
+                                    assignKey(counterObj, 'newAav');
+                                    assignKey(counterObj, 'totalAav');
+                                }
+                            } else if (Type == 'Used') {
+                                assignKey(counterObj, 'usedAa');
+                                if (Verified == 'Ok') {
+                                    assignKey(counterObj, 'usedAav');
+                                    assignKey(counterObj, 'totalAav');
+                                }
+                            }
+                        }
+
+
+                        if (Status == 'Show') {
+                            assignKey(counterObj, 'unSoldLead');
+                            assignKey(counterObj, 'totalLead');
+                            if (Verified == 'Show Verified') {
+                                assignKey(counterObj, 'unSoldLeadv');
+                                assignKey(counterObj, 'totalLeadv');
+                            }
+                        } else if (Status == 'Sold') {
+                            assignKey(counterObj, 'soldLead');
+                            assignKey(counterObj, 'totalLead');
+                            if (Verified == 'Ok') {
+                                assignKey(counterObj, 'SoldLeadv');
+                                assignKey(counterObj, 'totalLeadv');
+                            }
+                        }
+                    });
                 for (const [key, value] of Object.entries(obj)) {
                     vehicleArray.push(value[6]);
-
-                    var Status = value[8];
-                    var Type = value[9];
-                    var Source = value[10];
-                    var Verified = value[12];
-
-                    if (Status == 'Sold') {
-                        assignKey(counterObj, 'totalSold');
-                        if (Type == 'New') {
-                            assignKey(counterObj, 'newSold');
-                            if (Verified == 'Ok') {
-                                assignKey(counterObj, 'newSoldv');
-                                assignKey(counterObj, 'totalSoldv');
-                            }
-
-                        } else if (Type == 'Used') {
-                            assignKey(counterObj, 'usedSold');
-                            if (Verified == 'Ok') {
-                                assignKey(counterObj, 'usedSoldv');
-                                assignKey(counterObj, 'totalSoldv');
-                            }
-                        }
-                    }
-                    if (Source == 'Internet') {
-                        assignKey(counterObj, 'totalInt');
-                        if (Type == 'New') {
-                            assignKey(counterObj, 'newInt');
-                            if (Verified == 'Ok') {
-                                assignKey(counterObj, 'newIntv');
-                                assignKey(counterObj, 'totalIntv');
-                            }
-                        } else if (Type == 'Used') {
-                            assignKey(counterObj, 'usedInt');
-                            if (Verified == 'Ok') {
-                                assignKey(counterObj, 'usedIntv');
-                                assignKey(counterObj, 'totalIntv');
-                            }
-                        }
-                    }
-                    if (Source == 'Auto Alert') {
-                        assignKey(counterObj, 'totalAa');
-                        if (Type == 'New') {
-                            assignKey(counterObj, 'newAa');
-                            if (Verified == 'Ok') {
-                                assignKey(counterObj, 'newAav');
-                                assignKey(counterObj, 'totalAav');
-                            }
-                        } else if (Type == 'Used') {
-                            assignKey(counterObj, 'usedAa');
-                            if (Verified == 'Ok') {
-                                assignKey(counterObj, 'usedAav');
-                                assignKey(counterObj, 'totalAav');
-                            }
-                        }
-                    }
-
-
-                    if (Status == 'Show') {
-                        assignKey(counterObj, 'unSoldLead');
-                        assignKey(counterObj, 'totalLead');
-                        if (Verified == 'Show Verified') {
-                            assignKey(counterObj, 'unSoldLeadv');
-                            assignKey(counterObj, 'totalLeadv');
-                        }
-                    } else if (Status == 'Sold') {
-                        assignKey(counterObj, 'soldLead');
-                        assignKey(counterObj, 'totalLead');
-                        if (Verified == 'Ok') {
-                            assignKey(counterObj, 'SoldLeadv');
-                            assignKey(counterObj, 'totalLeadv');
-                        }
-                    }
-
                 }
                 a.clear();
                 a.local = vehicleArray;
@@ -241,63 +244,16 @@ $(function () {
     $('#thisMonth').click();
     loadSaleConsultant();
     disabledManagerDiv();
+    applyDateRageFilter();
 
-    $.fn.dataTable.ext.search.push(
-        function (settings, searchData, index, rowData, counter) {
-            var tableNode = manageLeadTable.table().node();
-
-            var dateType = $('input:radio[name="searchStatus"]:checked').map(function () {
-                if (this.value !== "") {
-                    return this.value;
-                }
-            }).get();
-
-            if (dateType.length === 0) {
-                return true;
-            }
-
-            if (dateType == 'all') {
-                return true;
-            }
-            else if (dateType == 'lastMonth') {
-                const todayDate = moment(new Date()).format("MM-DD-YYYY");
-                var date = searchData[1];
-                const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('MM-DD-YYYY')
-                const lastDayOfPrevMonth = moment(todayDate).subtract(1, 'month').endOf('month').format('MM-DD-YYYY')
-
-                var bool1 = moment(date).isBetween
-                    (startDayOfPrevMonth, lastDayOfPrevMonth, null, '[]');
-                if (bool1) {
-                    return true;
-                }
-
-            } else if (dateType == 'thisMonth') {
-                const startOfMonth = moment().startOf('month').format('MM-DD-YYYY');
-                const endOfMonth = moment().endOf('month').format('MM-DD-YYYY');
-
-                var date = searchData[1];
-                var bool1 = moment(date).isBetween
-                    (startOfMonth, endOfMonth, null, '[]');
-                if (bool1) {
-                    return true;
-                }
-            }
-
-
-            if (settings.nTable !== tableNode) {
-                return true;
-            }
-
-            return false;
-        }
-    );
-
-
+   
     $('input[name="searchStatus"]:radio').on('change', function () {
         $('#datatable-1').block({
             message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
             timeout: 1e3
         });
+        $('input[name="datefilter"]').val('');
+        applyDateRageFilter();
         manageLeadTable.draw();  // working
         manageLeadTable.searchPanes.rebuildPane();
     });
@@ -471,6 +427,12 @@ $(function () {
 })
 
 
+$('.clear-selection').click(function () {
+    var id = $(this).data('id');
+    $(`#${id} :radio`).prop('checked', false);
+    $(`#${id} .active`).removeClass('active');
+})
+
 
 function writeStatusHTML() {
     var element = document.getElementById('statusFilterDiv');
@@ -478,7 +440,7 @@ function writeStatusHTML() {
         element.innerHTML = `<div class="row">
         <div class="col-md-12">
             <div>
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons" id="searchStatus">
                     <label class="btn btn-flat-primary">
                         <input type="radio" name="searchStatus" id="searchStatusAll" value="all" > ALL <span class="badge badge-lg p-1" id="allCount" ></span>
                     </label>
@@ -496,7 +458,7 @@ function writeStatusHTML() {
 }
 
 
-function applyDateRageFilter(startOfMonth = "", endOfMonth = "") {
+function applyDateRageFilter(startFiterDate = "", endFilterDate = "") {
 
     $.fn.dataTable.ext.search.pop();
     manageLeadTable.search('').draw();
@@ -504,14 +466,63 @@ function applyDateRageFilter(startOfMonth = "", endOfMonth = "") {
         function (settings, searchData, index, rowData, counter) {
             var tableNode = manageLeadTable.table().node();
 
-            if (startOfMonth == "" || endOfMonth == "") {
-                return true;
+            var dateType = $('input:radio[name="searchStatus"]:checked').map(function () {
+                if (this.value !== "") {
+                    return this.value;
+                }
+            }).get();
+
+            if (dateType == 'all') {
+
+                if (startFiterDate == "" && endFilterDate == "") {
+                    return true;
+                } else {
+                    var date = searchData[1];
+                    var dateBolean = moment(date).isBetween(startFiterDate, endFilterDate, null, '[]');
+                    if (dateBolean) {
+                        return true;
+                    }
+                }
+
             }
-            var date = searchData[1];
-            var bool1 = moment(date).isBetween
-                (startOfMonth, endOfMonth, null, '[]');
-            if (bool1) {
-                return true;
+            else if (dateType == 'lastMonth') {
+                const todayDate = moment(new Date()).format("MM-DD-YYYY");
+                var date = searchData[1];
+                const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('MM-DD-YYYY')
+                const lastDayOfPrevMonth = moment(todayDate).subtract(1, 'month').endOf('month').format('MM-DD-YYYY')
+
+                var bool1 = moment(date).isBetween(startDayOfPrevMonth, lastDayOfPrevMonth, null, '[]');
+                if (bool1) {
+                    // return true;
+                    if (startFiterDate == "" && endFilterDate == "") {
+                        return true;
+                    } else {
+                        var date = searchData[1];
+                        var dateBolean = moment(date).isBetween(startFiterDate, endFilterDate, null, '[]');
+                        if (dateBolean) {
+                            return true;
+                        }
+                    }
+                }
+
+            } else if (dateType == 'thisMonth') {
+                const startOfMonth = moment().startOf('month').format('MM-DD-YYYY');
+                const endOfMonth = moment().endOf('month').format('MM-DD-YYYY');
+
+                var date = searchData[1];
+                var bool1 = moment(date).isBetween(startOfMonth, endOfMonth, null, '[]');
+                if (bool1) {
+                    // return true;
+                    if (startFiterDate == "" && endFilterDate == "") {
+                        return true;
+                    } else {
+                        var date = searchData[1];
+                        var dateBolean = moment(date).isBetween(startFiterDate, endFilterDate, null, '[]');
+                        if (dateBolean) {
+                            return true;
+                        }
+                    }
+                }
             }
 
             if (settings.nTable !== tableNode) {
@@ -520,6 +531,7 @@ function applyDateRageFilter(startOfMonth = "", endOfMonth = "") {
             return false;
         }
     );
+
 }
 
 

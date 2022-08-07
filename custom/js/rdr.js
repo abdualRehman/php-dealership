@@ -141,7 +141,7 @@ $(function () {
                 "onclick": "editDetails(" + data[0] + ")"
             });
         },
-        "order": [[1, "desc"]],
+        "order": [[1, "asc"]],
 
     });
 

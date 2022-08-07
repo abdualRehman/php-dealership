@@ -7,9 +7,11 @@ require_once 'db/core.php';
 // inventory.wholesale, inventory.status , sales.sale_status FROM inventory LEFT JOIN sales ON inventory.id = sales.stock_id 
 // WHERE inventory.status = 1 ORDER BY inventory.id ASC";
 
+$type = isset($_POST['type']) ? $_POST['type'] : "true";
+
 $sql = "SELECT inventory.id, inventory.stockno, inventory.year, inventory.make, inventory.model, inventory.modelno, inventory.color, 
 inventory.lot, inventory.vin, inventory.mileage, inventory.age, inventory.balance, inventory.retail, inventory.certified, inventory.stocktype, 
-inventory.wholesale, inventory.status FROM inventory WHERE inventory.status = 1 ORDER BY inventory.id ASC";
+inventory.wholesale, inventory.status FROM inventory WHERE inventory.status = 1 AND inventory.stocktype = " . ($type == "true" ? "inventory.stocktype" : "'$type'") . " ORDER BY inventory.id ASC";
 
 
 $result = $connect->query($sql);
@@ -99,7 +101,6 @@ if ($result->num_rows > 0) {
                 $misc2_e =  $row1['misc2_e'];
                 $lease_loyalty =  $row1['lease_loyalty'];
                 $lease_loyalty_e =  $row1['lease_loyalty_e'];
-                
             }
         }
 
@@ -162,18 +163,18 @@ if ($result->num_rows > 0) {
             $row['wholesale'], // wholesale // 15
             // $row['sale_status'], // sale Status // 16
             $saleStatusArray, // sale Status // 16
-            $college, 
+            $college,
             $college_e,
             $military,
-            $military_e, 
+            $military_e,
             $loyalty,
-            $loyalty_e, 
+            $loyalty_e,
             $conquest,
-            $conquest_e, 
+            $conquest_e,
             $misc1,
-            $misc1_e, 
-            $misc2, 
-            $misc2_e, 
+            $misc1_e,
+            $misc2,
+            $misc2_e,
             $lease_loyalty,
             $lease_loyalty_e,
             $row['status'],

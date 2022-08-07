@@ -25,6 +25,12 @@ function reformatDate($date, $from_format = 'm-d-Y', $to_format = 'Y-m-d')
     $date_aux = date_create_from_format($from_format, $date);
     return date_format($date_aux, $to_format);
 }
+function asDollars($value)
+{
+    if ($value < 0) return "-" . asDollars(-$value);
+    return '$' . number_format($value, 2);
+}
+
 
 
 if ($result->num_rows > 0) {
@@ -68,52 +74,76 @@ if ($result->num_rows > 0) {
         $date_sent = $row['date_sent'];
         $date_sold = $row['date_sold'];
 
-        if (($date_in != '' && $date_in != null) && $retail_status != 'wholesale') {
+
+        $_addToSheet = false;
+        $_missingDate = false;
+        $_titleIssue = false;
+        $_readyToship = false;
+        $_keyPulled = false;
+        $_atAuction = false;
+        $_soldAtAuction = false;
+        $_retail = false;
+        $_sold = false;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // if (($date_in != '' && $date_in != null) && $retail_status != 'wholesale') {
+        //     $addToSheet += 1;
+        // }
+        if ($date_in !== '' && $date_in === null) {
             $addToSheet += 1;
+            $_addToSheet = "Add To Sheet";
         }
 
-        if (($date_in == '' || $date_in == null) && $balance) {
+        if (($date_in === '' || $date_in === 'undefined') && $date_in !== null && $balance !== '') {
             $missingDate += 1;
+            $_missingDate = "Missing Date";
         }
 
-        // if ($title == 'false' && $balance) {
-        //     $titleIssue += 1;
-        // }
-        if (($title == 'false' || $title == null) && ($date_in != '' && $date_in != null)) {
+        if (($title == 'false' || $title == null) && ($date_in !== '' && $date_in !== null)) {
             $titleIssue += 1;
+            $_titleIssue = "Title Issue";
         }
 
-        // if ($title == 'true' && $retail_status == 'wholesale' && $key == 'false') {
-        //     $readyToShip += 1;
-        // }
-        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'false' && ($date_in != '' && $date_in != null)) {
+        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'false' && ($date_in !== '' && $date_in !== null)) {
             $readyToShip += 1;
+            $_readyToship = "Ready To Ship";
         }
 
-        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && ($date_in != '' && $date_in != null) && !$date_sent && !$date_sold) {
+        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && ($date_in !== '' && $date_in !== null) && !$date_sent && !$date_sold) {
             $keysPulled += 1;
+            $_keyPulled = "Keys Pulled";
         }
 
-        // if ($date_sent && !$date_sold) {
-        //     $atAuction += 1;
-        // }
-        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && ($date_in != '' && $date_in != null) && $date_sent && !$date_sold) {
+        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && ($date_in !== '' && $date_in !== null) && $date_sent && !$date_sold) {
             $atAuction += 1;
+            $_atAuction = "At Auction";
         }
 
-        // if ($date_sold != "" && $date_sold != null) {
-        //     $soldAtAuction += 1;
-        // }
-        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && ($date_in != '' && $date_in != null) && $date_sent && $date_sold) {
+        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && ($date_in !== '' && $date_in !== null) && $date_sent && $date_sold) {
             $soldAtAuction += 1;
+            $_soldAtAuction = "Sold At Auction";
         }
 
-        if ($wholesale == 'No' && $balance) {
+        if ($wholesale == 'No' && $balance !== '' && $date_in !== null) {
             $retail += 1;
+            $_retail = "Retail";
         }
 
-        if ($balance = "" || $balance == null) {
+        if (($balance === "" || $balance === null) && $date_in !== null) {
             $sold += 1;
+            $_sold = "Sold";
         }
 
 
@@ -161,6 +191,7 @@ if ($result->num_rows > 0) {
         $sold_price = (isset($row['sold_price']) && $row['sold_price'] != '')  ? $row['sold_price'] : 0;
         $profit = (int)$sold_price - (int)$balance;
         $profit = round($profit, 2);
+        $profit = asDollars($profit);
 
 
         $output['data'][] = array(
@@ -195,6 +226,7 @@ if ($result->num_rows > 0) {
             $profit,
             $row['uci'],
             $row['purchase_from'],
+            array($_addToSheet, $_missingDate, $_titleIssue, $_readyToship, $_keyPulled, $_atAuction, $_soldAtAuction, $_retail, $_sold),
 
         );
     } // /while 

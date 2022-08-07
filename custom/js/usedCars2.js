@@ -1,7 +1,6 @@
 
 "use strict";
 var manageInvTable, TableData, maxFileLimit = 10, rowGroupSrc = 23;
-var searhStatusArray = [];
 var manageCarDealersTable;
 var collapsedGroups = {};
 var e1 = Swal.mixin({
@@ -39,34 +38,6 @@ $(function () {
     });
 
     autosize($(".autosize"));
-
-    var a = new Bloodhound({
-        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('stockDetails'),
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        local: searhStatusArray
-    });
-
-    $('#searchcars').typeahead({
-        hint: true,
-        highlight: true,
-        minLength: 1,
-    },
-        {
-            name: 'searhStatusArray',
-            display: 'stockDetails',
-            source: a,
-            templates: {
-                suggestion: function (data) {
-                    var stockAvailibilityArray = data.stockAvailibility;
-                    const template = `<div><p><strong>${data.stockDetails}</strong></p><div class="row pl-2 pr-2">${stockAvailibilityArray.map(e => (e) ? `<div class="col-sm-4 p-1"> <span class="badge badge-label-primary"> ${e} </span> </div>` : ``).join('')}</div>`;
-                    return template;
-                }
-            }
-        });
-
-
-
-
 
     manageInvTable = $("#datatable-1").DataTable({
 
@@ -114,6 +85,14 @@ $(function () {
                         .css('font-size', 'inherit');
                 }
             },
+            // {
+            //     extend: 'button',
+            //     title: 'Add All',
+            //     class:"add-all",
+            //     action:function () {
+            //         console.log("button is called");
+            //     }
+            // }
         ],
 
         searchPanes: {
@@ -332,8 +311,7 @@ $(function () {
                         .data()
                         .filter(function (data, index) {
                             if (data[rowGroupSrc] == group) {
-                                var profit = parseFloat((data[27]).replace(/\$|,/g, ''))
-                                totalProfit += profit;
+                                totalProfit += data[27];
                                 return true;
                             } else {
                                 return false;
@@ -383,9 +361,6 @@ $(function () {
                 } else if (activebtnvalue == 'soldAtAuction') {
                     setInputChange();
                 }
-                a.clear();
-                a.local = searhStatusArray;
-                a.initialize(true);
             }
         },
 
@@ -393,6 +368,11 @@ $(function () {
             if ($('#isEditAllowed').val() == "true") {
                 var activebtnvalue = $("#mods .btn.active input[name='mod']").val();
                 if (activebtnvalue == 'missingDate') {
+                    // $(row).children().not(':nth-child(2)').attr({
+                    //     "data-toggle": "modal",
+                    //     "data-target": "#modal8",
+                    //     "onclick": "editUsedCar(" + data[0] + ")"
+                    // });
                     $(row).children().not(':nth-child(2)').not(':nth-child(9)').attr({
                         "data-toggle": "modal",
                         "data-target": "#modal8",
@@ -446,16 +426,6 @@ $(function () {
     $.fn.dataTable.ext.search.push(
         function (settings, searchData, index, rowData, counter) {
             var tableNode = manageInvTable.table().node();
-
-
-            if (rowData[2] && rowData[2] != 'undefined') {
-                searhStatusArray.push({
-                    stockDetails: rowData[2],
-                    stockAvailibility: rowData[30],
-                })
-            }
-
-
             var activebtnvalue = $("#mods .btn.active input[name='mod']").val();
 
             var balance = rowData[16];
@@ -471,19 +441,22 @@ $(function () {
 
 
             if (activebtnvalue == 'addToSheet') {
-                if (date_in != '' && date_in === null) {
+                if ((date_in != '' && date_in != null) && retail_status != 'wholesale') {
                     return true;
                 }
             }
             if (activebtnvalue == 'missingDate') {
-                if ((EmptyField(date_in) == false && date_in !== null) && balance !== '') {
+                if (EmptyField(date_in) == false && balance) {
                     return true;
                 }
             }
             if (activebtnvalue == 'titleIssue') {
+                // if (title == 'false' && balance) {
+                //     return true;
+                // }
                 var filter = $('#statusPriority').val();
-                if ((title == 'false' || title == null) && (date_in !== '' && date_in !== null)) {
 
+                if ((title == 'false' || title == null) && (date_in != '' && date_in != null)) {
                     if (filter != '' && filter == titlePriority) {
                         return true;
                     } else if (filter == '') {
@@ -492,34 +465,43 @@ $(function () {
                 }
             }
             if (activebtnvalue == 'readyToShip') {
-                if (title == 'true' && retail_status == 'wholesale' && key == 'false' && (date_in !== '' && date_in !== null)) {
+                // if (title == 'true' && retail_status == 'wholesale' && key == 'false') {
+                //     return true;
+                // }
+                if (title == 'true' && retail_status == 'wholesale' && key == 'false' && (date_in != '' && date_in != null)) {
                     return true;
                 }
             }
             if (activebtnvalue == 'keysPulled') {
-                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && (date_in !== '' && date_in !== null) && !date_sent && !date_sold) {
+                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && (date_in != '' && date_in != null) && !date_sent && !date_sold) {
                     return true;
                 }
             }
             if (activebtnvalue == 'atAuction') {
-
-                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && (date_in !== '' && date_in !== null) && date_sent && !date_sold) {
+                // if (date_sent && !date_sold) {
+                //     return true;
+                // }
+                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && (date_in != '' && date_in != null) && date_sent && !date_sold) {
                     return true;
                 }
             }
             if (activebtnvalue == 'soldAtAuction') {
-                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && (date_in !== '' && date_in !== null) && date_sent && date_sold) {
+
+                // if (date_sold != "" && date_sold != null) {
+                //     return true;
+                // }
+                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && (date_in != '' && date_in != null) && date_sent && date_sold) {
                     return true;
                 }
 
             }
             if (activebtnvalue == 'retail') {
-                if (wholesale == 'No' && balance !== '' && date_in !== null) {
+                if (wholesale == 'No' && balance) {
                     return true;
                 }
             }
             if (activebtnvalue == 'sold') {
-                if ((balance === "" || balance === null) && date_in !== null) {
+                if (balance == "" || balance == null) {
                     return true;
                 }
             }
@@ -555,7 +537,6 @@ $(function () {
             message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
             timeout: 1e3
         });
-        searhStatusArray = [];
         var currentElement = $(this).val();
         switch (currentElement) {
             case 'missingDate':
@@ -683,9 +664,8 @@ $(function () {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const filter = urlParams.get('filter');
-    const allowedForOffice = $('#allowedForOffice').val();
 
-    if (filter == 'titleIssue' || allowedForOffice == 'false') {
+    if (filter == 'titleIssue') {
         $('#searchTitleIssue').click();
     }
     else {
@@ -702,7 +682,8 @@ function setPlaceholder() {
 
 function EmptyField(field) {
     // field = String(field);
-    if (field != '' && field != 'undefined') {
+    console.log(field, typeof (field));
+    if (field != '' && field != "null" && field != null && field != 'undefined') {
         return true;
     } else {
         return false;

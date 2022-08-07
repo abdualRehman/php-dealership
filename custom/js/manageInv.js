@@ -27,16 +27,12 @@ $(function () {
             'ajax': '../php_action/fetchInv.php',
 
             // working.... with both
-            // dom: `\n     
-            //  <'row'<'col-12'P>>\n      
-            //  <'row'<'col-sm-12 col-md-6'l>>\n  
-            // \n     
-            // <'row'<'col-sm-6 text-center text-sm-left p-3'B>
-            //     <'col-sm-6 text-center text-sm-right mt-2 mt-sm-0'f>>\n
-            // <'row'<'col-12'tr>>\n      
-            // <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n    `,
-            // dom: `Pfrtip`,
-            dom: `Plfrtip`,
+            dom: `\n     
+             <'row'<'col-12'P>>\n      
+            <'row'<'col-sm-6 text-center text-sm-left p-1 pl-3'B>
+                <'col-sm-6 text-center text-sm-right p-1 pr-3'f>>\n
+            <'row'<'col-12'tr>>\n 
+            <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n    `,
 
 
             searchPanes: {

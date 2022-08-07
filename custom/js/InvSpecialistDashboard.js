@@ -33,9 +33,9 @@ $(function () {
                 targets: [7], // sold price
                 createdCell: function (td, cellData, rowData, row, col) {
                     if (rowData[7] == "Wholesale") {
-                        $(td).addClass('bg-danger');
+                        $(td).addClass('bg-danger text-white');
                     } else {
-                        $(td).removeClass('bg-danger');
+                        $(td).removeClass('bg-danger text-white');
                     }
 
 
@@ -45,9 +45,9 @@ $(function () {
                 targets: [8], // sold price
                 createdCell: function (td, cellData, rowData, row, col) {
                     if (rowData[8] == "Done") {
-                        $(td).addClass('bg-success');
+                        $(td).addClass('bg-success text-white');
                     } else {
-                        $(td).removeClass('bg-success');
+                        $(td).removeClass('bg-success text-white');
                     }
 
 
@@ -63,10 +63,13 @@ $(function () {
                     .rows()
                     .data()
                     .filter(function (data, index) {
-                        if (data[8] != '' && data[8] != 'Done') {
+                        if (data[8] == '' || data[8] == null || data[8] == 'Done') {
                             notDone += 1;
                         }
-                        if ((data[8] != '' && data[8] != 'Done') && data[9] == 'closed') {
+                        // if ((data[8] != '' && data[8] != 'Done') && data[9] == 'closed') {
+                        //     roclosed += 1;
+                        // }
+                        if (data[8] == 'Done' && data[9] == 'closed') {
                             roclosed += 1;
                         }
                         if (data[8] == 'Done') {
@@ -76,7 +79,9 @@ $(function () {
                         return true;
                     });
                 percentage = (totalDoneCount / allCount) * 100;
-                percentage = Math.round(percentage);
+                console.log(percentage);
+                // percentage = Math.round(percentage);
+                percentage = percentage.toFixed(2)
 
                 $(`#allCount`).html(allCount);
                 $('#notDoneCount').html(notDone);
@@ -137,17 +142,20 @@ $(function () {
                 return true;
             }
             if (searchStatus[0] === 'notDone') {
-                if ((data[8] != '' && data[8] != 'Done')) {
+                if ((data[8] == '' || data[8] == 'Done')) {
                     return true;
                 } else {
                     return false;
                 }
             }
             if (searchStatus[0] === 'roclosed') {
-                console.log(data);
-                if ((data[8] != '' && data[8] != 'Done') && data[9] == 'closed') {
+                console.log(data[8] == 'Done' ? data : '');
+                if (data[8] = 'Done' && data[9] == 'closed') {
                     return true;
                 }
+                // if ((data[8] != '' && data[8] != 'Done') && data[9] == 'closed') {
+                //     return true;
+                // }
             }
             return false;
         }
@@ -255,7 +263,6 @@ function writeStatusHTML() {
 
 function editUsedCar(id) {
     if (id) {
-        console.log(id);
         $('.spinner-grow').removeClass('d-none');
         // modal result
         $('.showResult').addClass('d-none')
@@ -294,7 +301,7 @@ function editUsedCar(id) {
 
                 $('#notes_1').val(response.notes_1 ? response.notes_1 : "");
                 $('#notes_2').val(response.notes_2 ? response.notes_2 : "");
-                $('#uci').val(response.uci ? response.uci : "");
+                // $('#uci').val(response.uci ? response.uci : "");
 
 
                 setTimeout(() => {
