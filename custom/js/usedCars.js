@@ -417,7 +417,7 @@ $(function () {
 
 
             if (activebtnvalue == 'addToSheet') {
-                if ((date_in != '' && date_in != null) && retail_status != 'wholesale') {
+                if (date_in == null) {
                     return true;
                 }
             }
