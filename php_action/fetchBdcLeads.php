@@ -48,8 +48,10 @@ if ($result->num_rows > 0) {
             $result1 = $connect->query($sql1);
             $row1 = $result1->fetch_assoc();
             $ccs = $row1['username'];
+            $colorCode = $row1['color'];
         } else {
             $ccs = "";
+            $colorCode = '';
         }
 
         if (isset($sales_consultant)) {
@@ -65,19 +67,12 @@ if ($result->num_rows > 0) {
 
 
         $button = '
-            <div class="show d-flex" >
-            <button class="btn btn-label-primary btn-icon mr-1" onclick="removeLead(' . $id . ')" >
-                    <i class="fa fa-trash"></i>
-                </button>
-            </div>
+            <div class="show d-flex" >' .
+            (hasAccess("bdc", "Remove") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeLead(' . $id . ')" >
+                <i class="fa fa-trash"></i>
+            </button>' : "") .
+            '</div>
         ';
-        // $button = '
-        //     <div class="show d-flex" >' .
-        //     (hasAccess("incr", "Remove") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeRule(' . $id . ')" >
-        //             <i class="fa fa-trash"></i>
-        //         </button>' : "") .
-        //     '</div>
-        // ';
 
 
 
@@ -96,6 +91,7 @@ if ($result->num_rows > 0) {
             $notes,
             ucfirst(preg_replace('/(?<=[a-z])[A-Z]|[A-Z](?=[a-z])/', ' $0', $verified)),
             $button,
+            $colorCode,
         );
     } // /while 
 

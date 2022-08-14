@@ -74,7 +74,7 @@ $(function () {
         dom: `<'row'<'col-12'P>>
         <'row' 
         <'col-sm-4 text-left text-sm-left pl-3'<'#statusFilterDiv'>>
-            <'col-sm-4 text-left text-sm-left pl-3'B>
+            <'col-sm-4 text-center pl-3'B>
             <'col-sm-4 text-right text-sm-right mt-2 mt-sm-0'f>>\n
         <'row'<'col-12'tr>>\n      
         <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
@@ -118,6 +118,23 @@ $(function () {
                 targets: [0],
                 visible: false,
             },
+            {
+                targets: [12],
+                createdCell: function (td, cellData, rowData, row, col) {
+                    console.log(rowData);
+                    if (cellData == 'Show Verified') {
+                        if(rowData[14] != ''){
+                            $(td).html(`<span class="badge badge-lg badge-pill" style="background-color:#${rowData[14]};text-shadow: 2px 2px 3px black;color: #ebe9e9;">${cellData}</span>`);
+                        }else{
+                            $(td).html(`<span class="badge badge-lg badge-primary badge-pill">${cellData}</span>`);
+                        }
+                    } else if(cellData == 'Does Not Count' || cellData == 'Last Month') {
+                        $(td).html(`<span class="badge badge-lg badge-danger badge-pill">${cellData}</span>`);
+                    }else{
+                        $(td).html(`<span class="badge badge-lg badge-primary badge-pill">${cellData}</span>`);
+                    }
+                }
+            }
         ],
 
 
@@ -246,7 +263,7 @@ $(function () {
     disabledManagerDiv();
     applyDateRageFilter();
 
-   
+
     $('input[name="searchStatus"]:radio').on('change', function () {
         $('#datatable-1').block({
             message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',

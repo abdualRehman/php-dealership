@@ -23,7 +23,7 @@ if ($rulesResults->num_rows > 0) {
         $rdr_type = $ruleRow['rdr_type'];
 
 
-        $sql = "SELECT sales.* , inventory.stockno, inventory.vin , inventory.year , inventory.make , inventory.model , inventory.stocktype , inventory.certified , rdr.delivered, rdr.entered, rdr.approved, rdr.rdr_notes 
+        $sql = "SELECT sales.* , inventory.stockno, inventory.vin , inventory.year , inventory.make , inventory.model , inventory.stocktype , sales.certified , rdr.delivered, rdr.entered, rdr.approved, rdr.rdr_notes 
         FROM sales LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN rdr ON sales.sale_id = rdr.sale_id 
         WHERE sales.status = 1 AND sales.sale_status != 'cancelled' 
         AND inventory.year = " . ($year == "true" ? "inventory.year"  : "'$year'") . " 

@@ -19,6 +19,11 @@ $(function () {
         interval: 60,
     });
 
+    $('#color').wheelColorPicker({
+        autoResize: false,
+        sliders: null
+    })
+
     manageUserTable = $("#datatable-1").DataTable({
         responsive: !0,
         "pageLength": 25,
@@ -40,15 +45,15 @@ $(function () {
             mobile: {
                 required: !0,
             },
-            extention: {
-                required: !0,
-            },
             editemail: {
                 required: !0,
                 email: !0
             },
             editrole: {
                 valueNotEquals: "0"
+            },
+            color: {
+                required: () => $('#editrole').val() == 72 ? true : false,
             },
             monEnd: {
                 required: () => $('#monStart').val() ? true : false,
@@ -224,6 +229,9 @@ function editUser(userId = null) {
                 $('#location').val(response.location);
                 $('#extention').val(response.extention);
                 $('#mobile').val(response.mobile);
+                $('#color').val(response.color);
+                $('#color').wheelColorPicker('color','#'+response.color);
+
 
 
                 $('#monStart').val(response.mon_start);

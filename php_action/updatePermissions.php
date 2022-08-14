@@ -4,7 +4,7 @@ require_once './db/core.php';
 
 $valid = array('success' => false, 'messages' => array());
 
-$sql = "SELECT * FROM `role` where role_status = 1";
+$sql = "SELECT * FROM `role` where role_status != 2";
 $result = $connect->query($sql);
 
 function updatePermission($role_id, $module, $fun, $permission)
@@ -35,15 +35,43 @@ if ($result->num_rows > 0) {
         
         // updatePermission($id, 'swap', 'View', "true");
 
-        // updatePermission($id, 'bodyshops', 'Add', "true");
-        // updatePermission($id, 'bodyshops', 'Edit', "true");
-        // updatePermission($id, 'bodyshops', 'Remove', "true");
+       
+        //    ---------------------------------------------------------------------------------------
+       
+        // updatePermission($id, 'invsplst', 'Edit', "true");
+        // updatePermission($id, 'invsplst', 'View', "true");
+        
+        // updatePermission($id, 'rdr', 'Edit', "true");
+        // updatePermission($id, 'rdr', 'View', "true");
+
+        // updatePermission($id, 'tansptDmg', 'Add', "true");
+        // updatePermission($id, 'tansptDmg', 'Edit', "true");
+        // updatePermission($id, 'tansptDmg', 'Remove', "true");
+
+        // updatePermission($id, 'wizardsBill', 'Edit', "true");
+        // updatePermission($id, 'wizardsBill', 'View', "true");
+
+        // updatePermission($id, 'appointment', 'Add', "true");
+        // updatePermission($id, 'appointment', 'Edit', "true");
+        // updatePermission($id, 'appointment', 'Remove', "true");
+
+        // updatePermission($id, 'tansptBill', 'Edit', "true");
+        // updatePermission($id, 'tansptBill', 'View', "true");
+        
+        // updatePermission($id, 'dbc', 'Add', "true");
+        // updatePermission($id, 'dbc', 'Edit', "true");
+        // updatePermission($id, 'dbc', 'Remove', "true");
+
+        // updatePermission($id, 'warranty', 'Add', "true");
+        // updatePermission($id, 'warranty', 'Edit', "true");
+        // updatePermission($id, 'warranty', 'Remove', "true");
+
+        // updatePermission($id, 'todayavail', 'Edit', "true");
+        // updatePermission($id, 'todayavail', 'View', "true");
 
 
-        // updatePermission($id, 'lotWizards', 'Edit', "true");
-        // updatePermission($id, 'lotWizards', 'View', "true");
-        // updatePermission($id, 'usedCars', 'Edit', "true");
-        // updatePermission($id, 'usedCars', 'View', "true");
+
+
 
         echo $id . ' - ' . $name . '<br />';
         // }

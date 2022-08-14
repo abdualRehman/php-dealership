@@ -10,7 +10,10 @@ $(function () {
         show24Hours: false,
         interval: 60,
     });
-
+    $('#color').wheelColorPicker({
+        autoResize: false,
+        sliders: null
+    })
 
     $.validator.addMethod("valueNotEquals", function (value, element, arg) {
         return arg != element.value;
@@ -21,9 +24,6 @@ $(function () {
                 required: !0,
             },
             mobile: {
-                required: !0,
-            },
-            extention: {
                 required: !0,
             },
             email: {
@@ -41,6 +41,9 @@ $(function () {
             },
             role: {
                 valueNotEquals: "0"
+            },
+            color: {
+                required: () => $('#role').val() == 72 ? true : false,
             },
             monEnd: {
                 required: () => $('#monStart').val() ? true : false,

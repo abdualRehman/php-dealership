@@ -31,7 +31,7 @@ $(function () {
         'ajax': '../php_action/fetchLotWizardsBills.php',
         dom: `\n     
             <'row'<'col-12'P>>\n      
-            <'row'<'col-sm-12 text-sm-left col-md-3 mb-2 '<'#statusFilterDiv'>> <'col-sm-12 col-md-6 text-center text-sm-left 'B> <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
+            <'row'<'col-sm-12 text-sm-left col-md-3 mb-2 '<'#statusFilterDiv'>> <'col-sm-12 col-md-6 text-center 'B> <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
            <'row'<'col-12'tr>>\n      
            <'row align-items-baseline'
            <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
@@ -88,9 +88,13 @@ $(function () {
                 targets: 7,
                 data: 7,
                 createdCell: function (td, cellData, rowData, row, col) {
-                    $(td).html(`<div class="show d-flex" >
-                        <input type="text" class="form-control" name="date_in_table" value="${rowData[7]}" data-attribute="repair_paid_date" data-id="${rowData[0]}" autocomplete="off"  />
-                    </div>`);
+                    if ($('#isEditAllowed').val() == "true") {
+                        $(td).html(`<div class="show d-flex" >
+                            <input type="text" class="form-control" name="date_in_table" value="${rowData[7]}" data-attribute="repair_paid_date" data-id="${rowData[0]}" autocomplete="off"  />
+                        </div>`);
+                    } else {
+                        $(td).html(rowData[7]);
+                    }
                 }
             },
 

@@ -112,6 +112,21 @@ if ($_GET['r'] == 'man') {
             max-width: 1000px !important;
         }
     }
+
+    body.theme-light .disabled-div {
+        background-color: #eee !important;
+        pointer-events: none;
+    }
+
+    body.theme-dark .disabled-div {
+        background-color: #757575 !important;
+        pointer-events: none;
+    }
+
+    .font-size-initial {
+        font-weight: 900 !important;
+        font-size: large;
+    }
 </style>
 
 
@@ -124,6 +139,10 @@ if ($_GET['r'] == 'man') {
     } else {
         echo '<input type="hidden" name="isConsultant" id="isConsultant" value="true" />';
     }
+    $userRole = $_SESSION['userRole'];
+    echo '<input type="hidden" name="loggedInUserRole" id="loggedInUserRole" value="' . $userRole . '" />';
+    echo '<input type="hidden" name="currentUser" id="currentUser" value="' . $_SESSION['userName'] . '">';
+    echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_SESSION['userId'] . '">';
 
 ?>
 
@@ -480,6 +499,207 @@ if ($_GET['r'] == 'man') {
                         }
                         ?>
                         <button class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addNewSchedule">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header modal-header-bordered">
+                    <h5 class="modal-title">Schedule Appointment</h5>
+                    <button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                </div>
+                <form id="editScheduleForm" autocomplete="off" method="post" action="../php_action/editSchedule.php">                
+                    <input type="hidden" name="scheduleId" id="scheduleId">
+                    <input type="hidden" name="ecallenderId" id="ecallenderId">
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div>
+                        </div>
+                        <div class="showResult d-none">
+
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="row align-items-baseline">
+                                        <label for="ecustomerName" class="col-sm-3 text-sm-center col-form-label">Customer Name</label>
+                                        <div class="form-group col-sm-9">
+                                            <input type="text" class="form-control" name="ecustomerName" id="ecustomerName" autocomplete="off" autofill="off" disabled />
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-baseline">
+                                        <label for="esale_id" class="col-sm-3 text-sm-center col-form-label">Stock No - Vin</label>
+                                        <div class="form-group col-sm-9">
+                                            <input type="hidden" class="form-control" name="esale_id" id="esale_id" autocomplete="off" autofill="off" />
+                                            <input type="hidden" class="form-control" name="estockno" id="estockno" />
+                                            <input type="text" class="form-control" name="estocknoDisplay" id="estocknoDisplay" readonly />
+                                            <!-- <select class="form-control selectpicker w-auto required" id="esale_id" onchange="echangeStockDetails(this)" name="esale_id" data-live-search="true" data-size="4">
+                                                <option value="" selected disabled>Select</option>
+                                                <optgroup class="stockno"></optgroup>
+                                            </select> -->
+                                        </div>
+                                        <label for="evechicle" class="col-sm-3 text-sm-center col-form-label"> Vehicle</label>
+                                        <div class="form-group col-sm-9">
+                                            <input type="text" class="form-control" name="evechicle" id="evechicle" autocomplete="off" autofill="off" disabled />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="esubmittedBy" class="col-form-label">submitted By</label>
+                                        <input type="text" class="form-control text-center" name="esubmittedBy" id="esubmittedBy" readonly autocomplete="off" autofill="off" />
+                                        <input type="hidden" class="form-control text-center" name="esubmittedByRole" id="esubmittedByRole" readonly autocomplete="off" autofill="off" />
+                                    </div>
+
+                                    <div class="form-group manager_override_div v-none" style="border-radius:5px;">
+                                        <input type="hidden" name="ehas_appointment" id="ehas_appointment" value="null" />
+                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" name="eoverrideBy" id="eoverrideBy">
+                                            <label class="custom-control-label" for="eoverrideBy">Manager Override</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control text-center" name="eoverrideByName" id="eoverrideByName" readonly autocomplete="off" autofill="off" />
+                                        <input type="hidden" class="form-control text-center" name="eoverrideById" id="eoverrideById" value="" readonly autocomplete="off" autofill="off" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <label for="escheduleDate" class="col-sm-3 text-sm-center col-form-label">Appointment Date</label>
+                                        <div class="col-sm-4">
+                                            <div class="form-group input-group">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="fa fa-calendar"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control scheduleDate handleDateTime" data-type="edit" name="escheduleDate" id="escheduleDate" />
+                                            </div>
+                                        </div>
+
+                                        <label for="escheduleTime" class="col-sm-1 text-md-center col-form-label">Time</label>
+                                        <div class="col-sm-4">
+                                            <div class="form-group input-group">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="fa fa-calendar"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control scheduleTime handleDateTime" data-type="edit" name="escheduleTime" id="escheduleTime" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row align-items-baseline">
+                                        <label for="ecoordinator" class="col-sm-3 col-form-label">Coordinator</label>
+                                        <div class="form-group col-sm-9">
+                                            <select class="form-control selectpicker w-auto required" id="ecoordinator" name="ecoordinator" data-live-search="true" data-size="4">
+                                                <option value="" selected disabled>Select</option>
+                                                <optgroup class="ecoordinator" id="ecoordinatorList"></optgroup>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="row d-flex flex-row align-items-center">
+                                <label for="edelivery" class="col-sm-2 text-sm-center col-form-label">Delivery</label>
+                                <div class="form-group col-sm-10">
+                                    <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="edelivery">
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="edelivery" value="spotDelivery" id="espotDelivery">
+                                            Spot Delivery
+                                        </label>
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="edelivery" value="appointmentDelivery" id="eappointmentDelivery">
+                                            Appointment Delivery
+                                        </label>
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="edelivery" value="outOfDealershipDelivery" id="eoutOfDealershipDelivery">
+                                            Out of Dealership Delivery
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-items-baseline">
+                                <label for="eadditionalServices" class="col-sm-2 text-sm-center col-form-label">Additional Services</label>
+                                <div class="form-group col-sm-10">
+                                    <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="eadditionalServices">
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="eadditionalServices" value="vinCheck" id="evinCheck">
+                                            Vin Check
+                                        </label>
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="eadditionalServices" value="maInspection" id="emaInspection">
+                                            MA Inspection
+                                        </label>
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="eadditionalServices" value="riInspection" id="eriInspection">
+                                            RI Inspection
+                                        </label>
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="eadditionalServices" value="paperworkSigned" id="epaperworkSigned">
+                                            Get Paperwork Signed
+                                        </label>
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="eadditionalServices" value="other" id="eother">
+                                            Other (See Notes)
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <label for="escheduleNotes" class="col-sm-2 text-sm-center col-form-label">Notes</label>
+                                <div class="form-group col-sm-10">
+                                    <textarea class="form-control autosize" name="escheduleNotes" id="escheduleNotes" placeholder="Notes..."></textarea>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row delivery_coordinator align-items-baseline" id="delivery_coordinator">
+
+                                <div class="col-md-12 mb-3 mt-3">
+                                    <p class="h5 text-center">
+                                        Coordinator
+                                    </p>
+                                </div>
+
+                                <label for="econfirmed" class="col-sm-2 text-sm-right col-form-label">Confirmed</label>
+                                <div class="col-md-4">
+                                    <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="econfirmed">
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="econfirmed" value="ok" id="conok">
+                                            OK
+                                        </label>
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="econfirmed" value="showVerified" id="conshowVerified">
+                                            Show Verified
+                                        </label>
+                                    </div>
+                                </div>
+                                <label for="ecomplete" class="col-sm-2 text-sm-right col-form-label">Complete</label>
+                                <div class="col-md-4">
+                                    <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="ecomplete">
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="ecomplete" value="ok" id="comok">
+                                            OK
+                                        </label>
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="ecomplete" value="showVerified" id="comshowVerified">
+                                            Show Verified
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer modal-footer-bordered">
+                        <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
                     </div>
                 </form>
             </div>

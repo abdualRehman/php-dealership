@@ -2,16 +2,14 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
-// if (hasAccess("regp", "View") === 'false') {
-//     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
-// }
-
-// if (hasAccess("regp", "Edit") === 'false') {
-//     echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
-// } else {
-//     echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
-// }
-echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+if (hasAccess("warranty", "Add") === 'false' && hasAccess("warranty", "Edit") === 'false' && hasAccess("warranty", "Remove") === 'false') {
+    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+}
+if (hasAccess("warranty", "Edit") === 'false') {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+}
 ?>
 
 <head>
@@ -85,13 +83,13 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                             <i class="fa fa-align-center ml-1 mr-2"></i> Filter
                         </button>
                         <?php
-                        // if (hasAccess("regp", "Add") !== 'false') {
+                        if (hasAccess("warranty", "Add") !== 'false') {
                         ?>
-                        <button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
-                            <i class="fa fa-plus ml-1 mr-2"></i> Add New
-                        </button>
+                            <button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
+                                <i class="fa fa-plus ml-1 mr-2"></i> Add New
+                            </button>
                         <?php
-                        // }
+                        }
                         ?>
                     </div>
                     <div class="portlet-body">

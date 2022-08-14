@@ -5,7 +5,7 @@
                 <p class="text-left mb-0">Copyright <i class="far fa-copyright"></i> <span id="copyright-year"></span> AR Webs. All rights reserved</p>
             </div>
             <div class="col-md-6 d-none d-md-block">
-                <p class="text-right mb-0">Hand-crafted and made with <i class="fa fa-heart text-danger"></i></p>
+                <p class="text-right mb-0"><a href="https://www.fiverr.com/share/yVzNwz" target="_blank" ><i class="fa fa-link text-info"></i> &nbsp; Contact Developer</a></p>
             </div>
         </div>
     </div>

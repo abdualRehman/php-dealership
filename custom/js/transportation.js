@@ -37,7 +37,7 @@ $(function () {
         'ajax': '../php_action/fetchTransportations.php',
         dom: `\n     
             <'row'<'col-12'P>>\n      
-            <'row'<'col-sm-12 text-sm-left col-md-3 mb-2 '<'#statusFilterDiv'>> <'col-sm-12 col-md-6 text-center text-sm-left 'B> <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
+            <'row'<'col-sm-12 text-sm-left col-md-3 mb-2 '<'#statusFilterDiv'>> <'col-sm-12 col-md-6 text-center 'B> <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
            <'row'<'col-12'tr>>\n      
            <'row align-items-baseline'
            <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
@@ -91,18 +91,13 @@ $(function () {
             }
         },
         createdRow: function (row, data, dataIndex) {
-            // if ($('#isAllowed').val() == 'true') {
-            //     $(row).children().not(':last-child').attr({
-            //         "data-toggle": "modal",
-            //         "data-target": "#modal8",
-            //         "onclick": "editFun(" + data[19] + ")"
-            //     });
-            // }
-            $(row).children().not(':last-child').attr({
-                "data-toggle": "modal",
-                "data-target": "#modal8",
-                "onclick": "editFun(" + data[0] + ")"
-            });
+            if ($('#isAllowed').val() == 'true') {
+                $(row).children().not(':last-child').attr({
+                    "data-toggle": "modal",
+                    "data-target": "#modal8",
+                    "onclick": "editFun(" + data[0] + ")"
+                });
+            }
 
         },
         "order": [[0, "asc"]]

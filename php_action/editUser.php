@@ -9,6 +9,7 @@ if ($_POST) {
 	$editusername = $_POST['editusername'];
 	$editemail = $_POST['editemail'];
 	$editrole = $_POST['editrole'];
+	$color = $_POST['color'];
 
 	$userId = $_POST['userId'];
 
@@ -37,7 +38,7 @@ if ($_POST) {
 
 
 
-	$sql = "UPDATE users SET `username` = '$editusername', `email` = '$editemail' , `role` = '$editrole' , `location` = '$location' , `extention` = '$extention' , `mobile` = '$mobile' WHERE `id` = '$userId'";
+	$sql = "UPDATE users SET `username` = '$editusername', `email` = '$editemail' , `role` = '$editrole' , `location` = '$location' , `extention` = '$extention' , `mobile` = '$mobile' , `color` = '$color' WHERE `id` = '$userId'";
 
 	$sql2 = "SELECT * FROM `schedule` WHERE `user_id` = '$userId'";
 	$result = $connect->query($sql2);

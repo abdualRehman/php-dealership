@@ -62,12 +62,12 @@ if ($result->num_rows > 0) {
 
 
         $button = '
-            <div class="show d-flex" >
-            <button class="btn btn-label-primary btn-icon mr-1" onclick="removeSchedule(' . $id . ')" >
-                    <i class="fa fa-trash"></i>
-                </button>
-            </div>
-        ';
+        <div class="show d-flex" >'.
+            ((hasAccess("appointment", "Remove") !== 'false') ? '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeSchedule(' . $id . ')" >
+            <i class="fa fa-trash"></i>
+        </button>'  : '') .
+        '</div>';
+
 
 
 

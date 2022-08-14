@@ -13,11 +13,16 @@ $output = array('data' => array());
 if ($result->num_rows > 0) {
 
     while ($row = $result->fetch_assoc()) {
-        $location = $row['location_number'];
-        $damage_type = $row['damage_type'];
-        $damage_severty = $row['damage_severty'];
-        $grid_loation = $row['grid_loation'];
+        // $location = $row['location_number'];
+        // $damage_type = $row['damage_type'];
+        // $damage_severty = $row['damage_severty'];
+        // $grid_loation = $row['grid_loation'];
 
+        $location = htmlspecialchars($row['location_number'], ENT_QUOTES);
+        $damage_type = htmlspecialchars($row['damage_type'], ENT_QUOTES);
+        $damage_severty = htmlspecialchars($row['damage_severty'], ENT_QUOTES);
+        $grid_loation = htmlspecialchars($row['grid_loation'], ENT_QUOTES);
+        
         // $location = str_replace("'", "\'", $location);
         // $damage_type = str_replace("'", "\'", $damage_type);
         // $damage_severty = str_replace("'", "\'", $damage_severty);

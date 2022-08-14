@@ -19,6 +19,7 @@ if ($_POST) {
     // on create form
     $submittedBy = $_SESSION['userId'];
     $calenderId = $_SESSION['userRole'];
+    $calenderId = $calenderId == "Admin" ? "1" : $calenderId;
 
 
     $scheduleDate = mysqli_real_escape_string($connect, $_POST['scheduleDate']);

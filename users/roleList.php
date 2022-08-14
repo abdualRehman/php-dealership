@@ -520,6 +520,175 @@ if ($_GET['r'] == 'add') {
                                                     </div>
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Inventory Specialist - Dashboard</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="invsplstEdit" name="invsplstEdit">
+                                                            <label class="custom-control-label h5" for="invsplstEdit">Edit</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="invsplstView" name="invsplstView">
+                                                            <label class="custom-control-label h5" for="invsplstView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Retail Delivery Registration</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="rdrEdit" name="rdrEdit">
+                                                            <label class="custom-control-label h5" for="rdrEdit">Edit</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="rdrView" name="rdrView">
+                                                            <label class="custom-control-label h5" for="rdrView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Transportation Damage</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="tansptDmgAdd" name="tansptDmgAdd">
+                                                            <label class="custom-control-label h5" for="tansptDmgAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="tansptDmgEdit" name="tansptDmgEdit">
+                                                            <label class="custom-control-label h5" for="tansptDmgEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="tansptDmgRemove" name="tansptDmgRemove">
+                                                            <label class="custom-control-label h5" for="tansptDmgRemove">REMOVE</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Lot Wizards Bills</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="wizardsBillEdit" name="wizardsBillEdit">
+                                                            <label class="custom-control-label h5" for="wizardsBillEdit">Edit</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="wizardsBillView" name="wizardsBillView">
+                                                            <label class="custom-control-label h5" for="wizardsBillView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Delivery Coordinator Appointments</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="appointmentAdd" name="appointmentAdd">
+                                                            <label class="custom-control-label h5" for="appointmentAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="appointmentEdit" name="appointmentEdit">
+                                                            <label class="custom-control-label h5" for="appointmentEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="appointmentRemove" name="appointmentRemove">
+                                                            <label class="custom-control-label h5" for="appointmentRemove">REMOVE</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Transportation Bills</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="tansptBillEdit" name="tansptBillEdit">
+                                                            <label class="custom-control-label h5" for="tansptBillEdit">Edit</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="tansptBillView" name="tansptBillView">
+                                                            <label class="custom-control-label h5" for="tansptBillView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">BDC - Leeds</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="bdcAdd" name="bdcAdd">
+                                                            <label class="custom-control-label h5" for="bdcAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="bdcEdit" name="bdcEdit">
+                                                            <label class="custom-control-label h5" for="bdcEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="bdcRemove" name="bdcRemove">
+                                                            <label class="custom-control-label h5" for="bdcRemove">REMOVE</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Warranty Cancellation</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="warrantyAdd" name="warrantyAdd">
+                                                            <label class="custom-control-label h5" for="warrantyAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="warrantyEdit" name="warrantyEdit">
+                                                            <label class="custom-control-label h5" for="warrantyEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="warrantyRemove" name="warrantyRemove">
+                                                            <label class="custom-control-label h5" for="warrantyRemove">REMOVE</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Today's Availability</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="todayavailEdit" name="todayavailEdit">
+                                                            <label class="custom-control-label h5" for="todayavailEdit">Edit</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="todayavailView" name="todayavailView">
+                                                            <label class="custom-control-label h5" for="todayavailView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -709,6 +878,24 @@ if ($_GET['r'] == 'add') {
                                                     $Name = "Used Cars";
                                                 } else if ($module === 'matrixfile') {
                                                     $Name = "Matrix Files";
+                                                } else if ($module === 'invsplst') {
+                                                    $Name = "Inventory Specialist - Dashboard";
+                                                } else if ($module === 'rdr') {
+                                                    $Name = "Retail Delivery Registration";
+                                                } else if ($module === 'tansptDmg') {
+                                                    $Name = "Transportation Damage";
+                                                } else if ($module === 'wizardsBill') {
+                                                    $Name = "Wizards Bill";
+                                                } else if ($module === 'appointment') {
+                                                    $Name = "Delivery Coordinator Appointments";
+                                                } else if ($module === 'tansptBill') {
+                                                    $Name = "Transportation Bills";
+                                                } else if ($module === 'bdc') {
+                                                    $Name = "BDC - Leeds";
+                                                } else if ($module === 'warranty') {
+                                                    $Name = "Warranty Cancellation";
+                                                } else if ($module === 'todayavail') {
+                                                    $Name = "Today's Availability";
                                                 }
                                             ?>
                                                 <tr>
@@ -812,6 +999,37 @@ if ($_GET['r'] == 'add') {
                                                                     echo serPermissions($itemPData, 'View', 'usedCarsView');
                                                                 } else if ($module === 'matrixfile') {
                                                                     echo serPermissions($itemPData, 'Add', 'matrixfileAdd');
+                                                                } else if ($module === 'invsplst') {
+                                                                    echo serPermissions($itemPData, 'Edit', 'invsplstEdit');
+                                                                    echo serPermissions($itemPData, 'View', 'invsplstView');
+                                                                } else if ($module === 'rdr') {
+                                                                    echo serPermissions($itemPData, 'Edit', 'rdrEdit');
+                                                                    echo serPermissions($itemPData, 'View', 'rdrView');
+                                                                } else if ($module === 'tansptDmg') {
+                                                                    echo serPermissions($itemPData, 'Add', 'tansptDmgAdd');
+                                                                    echo serPermissions($itemPData, 'Edit', 'tansptDmgEdit');
+                                                                    echo serPermissions($itemPData, 'Remove', 'tansptDmgRemove');
+                                                                } else if ($module === 'wizardsBill') {
+                                                                    echo serPermissions($itemPData, 'Edit', 'wizardsBillEdit');
+                                                                    echo serPermissions($itemPData, 'View', 'wizardsBillView');
+                                                                } else if ($module === 'appointment') {
+                                                                    echo serPermissions($itemPData, 'Add', 'appointmentAdd');
+                                                                    echo serPermissions($itemPData, 'Edit', 'appointmentEdit');
+                                                                    echo serPermissions($itemPData, 'Remove', 'appointmentRemove');
+                                                                } else if ($module === 'tansptBill') {
+                                                                    echo serPermissions($itemPData, 'Edit', 'tansptBillEdit');
+                                                                    echo serPermissions($itemPData, 'View', 'tansptBillView');
+                                                                } else if ($module === 'bdc') {
+                                                                    echo serPermissions($itemPData, 'Add', 'bdcAdd');
+                                                                    echo serPermissions($itemPData, 'Edit', 'bdcEdit');
+                                                                    echo serPermissions($itemPData, 'Remove', 'bdcRemove');
+                                                                } else if ($module === 'warranty') {
+                                                                    echo serPermissions($itemPData, 'Add', 'warrantyAdd');
+                                                                    echo serPermissions($itemPData, 'Edit', 'warrantyEdit');
+                                                                    echo serPermissions($itemPData, 'Remove', 'warrantyRemove');
+                                                                } else if ($module === 'todayavail') {
+                                                                    echo serPermissions($itemPData, 'Edit', 'todayavailEdit');
+                                                                    echo serPermissions($itemPData, 'View', 'todayavailView');
                                                                 }
                                                             }
 

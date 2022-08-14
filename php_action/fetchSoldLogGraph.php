@@ -19,7 +19,7 @@ if ($userRole != $salesConsultantID) {
     $sql2 = "SELECT 
         ( SELECT COUNT(registration_problems.id) FROM registration_problems WHERE registration_problems.status = 1 AND registration_problems.p_status = 1 ) as problem ,
         ( SELECT  COUNT(b.sale_todo_id)  FROM `sale_todo` as b INNER JOIN sales ON b.sale_id = sales.sale_id WHERE ( sales.status = 1 AND b.status = 1  AND ((b.vin_check = 'checkTitle' OR b.vin_check = 'need') OR b.inspection = 'need' OR b.trade_title = 'need' OR b.registration = 'pending' OR b.registration = 'done' OR b.inspection = 'need' ))) as todo , 
-        ( SELECT COUNT(used_cars.id) FROM `used_cars` WHERE title = 'false' ) as titleIssue WHERE 1";
+        ( SELECT COUNT(used_cars.id) FROM `used_cars` LEFT JOIN inventory ON (used_cars.inv_id = inventory.id AND inventory.status = 1 AND inventory.stocktype = 'USED' AND inventory.lot != 'LBO') WHERE (title = 'false' OR title IS NULL) AND date_in != '' AND date_in IS NOT NULL AND inventory.id IS NOT NULL ) as titleIssue WHERE 1";
 } else {
     $uid = $_SESSION['userId'];
     $sql = "SELECT sales.date ,  sales.sale_status, sales.sale_id, inventory.stocktype , inventory.balance 
@@ -29,7 +29,7 @@ if ($userRole != $salesConsultantID) {
     $sql2 = "SELECT 
         ( SELECT COUNT(registration_problems.id) FROM registration_problems WHERE registration_problems.status = 1 AND registration_problems.p_status = 1 AND registration_problems.sales_consultant = '$uid') as problem ,
         ( SELECT  COUNT(b.sale_todo_id)  FROM `sale_todo` as b INNER JOIN sales ON b.sale_id = sales.sale_id WHERE ( sales.sales_consultant = '$uid' AND sales.status = 1 AND b.status = 1  AND ((b.vin_check = 'checkTitle' OR b.vin_check = 'need') OR b.inspection = 'need' OR b.trade_title = 'need' OR b.registration = 'pending' OR b.registration = 'done' OR b.inspection = 'need' ))) as todo , 
-        ( SELECT COUNT(used_cars.id) FROM `used_cars` WHERE title = 'false' ) as titleIssue WHERE 1";
+        ( SELECT COUNT(used_cars.id) FROM `used_cars` LEFT JOIN inventory ON (used_cars.inv_id = inventory.id AND inventory.status = 1 AND inventory.stocktype = 'USED' AND inventory.lot != 'LBO') WHERE (title = 'false' OR title IS NULL) AND date_in != '' AND date_in IS NOT NULL AND inventory.id IS NOT NULL ) as titleIssue WHERE 1";
 }
 
 
@@ -41,6 +41,9 @@ $output = array('data' => array(), 'graph' => array());
 $outputArray = array();
 
 
+$monthNewCount = 0;
+$monthUsedCount = 0;
+$monthAllCount = 0;
 
 $todayN = 0;
 $todayU = 0;
@@ -66,10 +69,27 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
 
         $TodayDate = date("Y-m-d");
-        // $TodayDate = "2022-06-05";
+        // $TodayDate = "2022-08-01";
         $timezone = $row['date'];
         $timezone = strtotime($row['date']);
         $timezone = date("Y-m-d", $timezone);
+
+
+        $first_date = date('Y-m-d', strtotime('first day of this month'));
+        $last_date = date('Y-m-d', strtotime('last day of this month'));
+        
+        if (($timezone >= $first_date) && ($timezone <= $last_date)) {
+            // $monthAllCount += 1;
+            if ($row['stocktype'] == 'NEW') {
+                $monthNewCount += 1;
+            }
+            if ($row['stocktype'] == 'USED') {
+                $monthUsedCount += 1;
+            }
+        }
+
+
+
 
         if (!key_exists($timezone, $outputArray)) {
             $outputArray[$timezone] = array(
@@ -133,15 +153,15 @@ if ($result2->num_rows > 0) {
 
 
 
-$connect->close();
-
 $outputArray = array_values($outputArray);
 $output['graph'] = $outputArray;
-
 
 $avgn = ($todayNCount != 0) ? $todayN / $todayNCount : 0;
 $avgu = ($todayUCount != 0) ? $todayU / $todayUCount : 0;
 $avga = ($todayTCount != 0) ? $todayT / $todayTCount : 0;
+
+// exclude stock type used here
+$monthAllCount = $monthNewCount + $monthUsedCount;
 
 $output['data'] = array(
     $avgn,
@@ -155,8 +175,18 @@ $output['data'] = array(
     $pent,
     $regCount,
     $todoCount,
-    $tittleCount
+    $tittleCount,
+
+    $monthNewCount,
+    $monthUsedCount,
+    $monthAllCount,
+
+    $todayNCount,
+    $todayUCount,
+    $todayTCount,
 
 );
 
+
+$connect->close();
 echo json_encode($output);

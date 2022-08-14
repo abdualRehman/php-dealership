@@ -1,12 +1,10 @@
 <?php
 
-
-// if (hasAccess("usedCars", "Edit") === 'false') { 
-//     echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
-// } else {
-// echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
-// }
-echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+if (hasAccess("invsplst", "Edit") === 'false') {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+}
 ?>
 
 <style>

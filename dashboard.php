@@ -3,137 +3,287 @@
 
 <?php
 if ($_SESSION['userRole'] == $inventorySpecialistID) {
-    include('InvSpecialistDashboard.php');
+    if (hasAccess("invsplst", "View") === 'true') {
+        include('InvSpecialistDashboard.php');
+    } else {
+        include('includes/footer.php');
+    }
 } else {
-    // include('includes/footer.php');
 
 ?>
+    <style>
+        .font-small{
+            font-size: 1rem!important;
+        }
+    </style>
 
     <div class="content">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="portlet text-center">
-                        <div class="portlet-header portlet-header-bordered">
-                            <h3 class="portlet-title"> <a href="<?php echo  $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary"> Today's Avarage </a></h3>
+
+
+            <?php
+            if ($_SESSION['userRole'] == $salesManagerID || $_SESSION['userRole'] == 'Admin') {
+            ?>
+
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="portlet text-center">
+                            <div class="portlet-header portlet-header-bordered">
+                                <h3 class="portlet-title"> <a href="<?php echo  $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary"> Today's Avarage </a></h3>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="widget10 widget10-vertical-md">
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="avgN"></h2>
+                                            <span class="widget10-subtitle">New</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="avgU"></h2>
+                                            <span class="widget10-subtitle">Used</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="avgT"></h2>
+                                            <span class="widget10-subtitle">All</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="portlet-body">
+                    </div>
+                    <div class="col-md-4">
+                        <div class="portlet text-center">
+                            <div class="portlet-header portlet-header-bordered">
+                                <h3 class="portlet-title"> <a href="<?php echo  $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary"> Today's Total </a></h3>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="widget10 widget10-vertical-md">
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="todayN"></h2>
+                                            <span class="widget10-subtitle">New</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="todayU"></h2>
+                                            <span class="widget10-subtitle">Used</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="todayT"></h2>
+                                            <span class="widget10-subtitle">All</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="portlet text-center">
+                            <div class="portlet-header portlet-header-bordered">
+                                <h3 class="portlet-title"> <a href="<?php echo  $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=pending" class="link-primary"> Pending</a></h3>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="widget10 widget10-vertical-md">
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="penN"></h2>
+                                            <span class="widget10-subtitle">New</span>
+                                        </div>
+                                    </div>
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="penU"></h2>
+                                            <span class="widget10-subtitle">Used</span>
+                                        </div>
+                                    </div>
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="penT"></h2>
+                                            <span class="widget10-subtitle">All</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="portlet text-center">
                             <div class="widget10 widget10-vertical-md">
                                 <div class="widget10-item">
                                     <div class="widget10-content">
-                                        <h2 class="widget10-title" id="avgN"></h2>
-                                        <span class="widget10-subtitle">New</span>
+                                        <h2 class="widget10-title" id="regC"></h2>
+                                        <span class="widget10-subtitle">
+                                            <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/registrationProblem.php" class="link-primary">Registration Problems</a>
+                                        </span>
                                     </div>
-
                                 </div>
                                 <div class="widget10-item">
                                     <div class="widget10-content">
-                                        <h2 class="widget10-title" id="avgU"></h2>
-                                        <span class="widget10-subtitle">Used</span>
+                                        <h2 class="widget10-title" id="todoC"></h2>
+                                        <span class="widget10-subtitle">
+                                            <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldTodo.php" class="link-primary">Sales Consultants To Do’s</a>
+                                        </span>
                                     </div>
-
                                 </div>
                                 <div class="widget10-item">
                                     <div class="widget10-content">
-                                        <h2 class="widget10-title" id="avgT"></h2>
-                                        <span class="widget10-subtitle">All</span>
+                                        <h2 class="widget10-title" id="titleC"></h2>
+                                        <span class="widget10-subtitle">
+                                            <a href="<?php echo $GLOBALS['siteurl']; ?>/wizard/usedCars.php?filter=titleIssue" class="link-primary">Used Cars No Title</a>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="portlet text-center">
-                        <div class="portlet-header portlet-header-bordered">
-                            <h3 class="portlet-title"> <a href="<?php echo  $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary"> Today's Total </a></h3>
-                        </div>
-                        <div class="portlet-body">
-                            <div class="widget10 widget10-vertical-md">
-                                <div class="widget10-item">
-                                    <div class="widget10-content">
-                                        <h2 class="widget10-title" id="todayN"></h2>
-                                        <span class="widget10-subtitle">New</span>
-                                    </div>
 
-                                </div>
-                                <div class="widget10-item">
-                                    <div class="widget10-content">
-                                        <h2 class="widget10-title" id="todayU"></h2>
-                                        <span class="widget10-subtitle">Used</span>
-                                    </div>
+            <?php
+            } else {
+            ?>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="portlet text-center">
+                            <div class="portlet-header portlet-header-bordered">
+                                <h3 class="portlet-title">
+                                    <!-- <a href="<?php echo  $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary"> Today's Avarage </a> -->
+                                    <a href="<?php echo  $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary"> Sold This Month </a>
+                                </h3>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="widget10 widget10-vertical-md">
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="currentMonthN"></h2>
+                                            <span class="widget10-subtitle">New</span>
+                                        </div>
 
+                                    </div>
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="currentMonthU"></h2>
+                                            <span class="widget10-subtitle">Used</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="currentMonthT"></h2>
+                                            <span class="widget10-subtitle">All</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="widget10-item">
-                                    <div class="widget10-content">
-                                        <h2 class="widget10-title" id="todayT"></h2>
-                                        <span class="widget10-subtitle">All</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="portlet text-center">
+                            <div class="portlet-header portlet-header-bordered">
+                                <h3 class="portlet-title"> <a href="<?php echo  $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary"> Today's Total </a></h3>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="widget10 widget10-vertical-md">
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="todayCN"></h2>
+                                            <span class="widget10-subtitle">New</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="todayCU"></h2>
+                                            <span class="widget10-subtitle">Used</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="todayCT"></h2>
+                                            <span class="widget10-subtitle">All</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="portlet text-center">
+                            <div class="portlet-header portlet-header-bordered">
+                                <h3 class="portlet-title"> <a href="<?php echo  $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=pending" class="link-primary"> Pending</a></h3>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="widget10 widget10-vertical-md">
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="penN"></h2>
+                                            <span class="widget10-subtitle">New</span>
+                                        </div>
+                                    </div>
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="penU"></h2>
+                                            <span class="widget10-subtitle">Used</span>
+                                        </div>
+                                    </div>
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="penT"></h2>
+                                            <span class="widget10-subtitle">All</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="portlet text-center">
+                            <div class="portlet-header portlet-header-bordered">
+                                <div class="row w-100">
+                                    <div class="col-sm-6">
+                                        <h4 class="portlet-title font-small text-center"> <a href="<?php echo  $GLOBALS['siteurl']; ?>/sales/registrationProblem.php" class="link-primary"> Registration Problems</a></h4>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <h4 class="portlet-title font-small text-center"> <a href="<?php echo  $GLOBALS['siteurl']; ?>/sales/soldTodo.php" class="link-primary"> Sales Consultants To Do’s</a></h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="widget10 widget10-vertical-md">
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="regC"></h2>
+                                            <span class="widget10-subtitle">&nbsp;</span>
+                                        </div>
+                                    </div>
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title" id="todoC"></h2>
+                                            <span class="widget10-subtitle">&nbsp;</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="portlet text-center">
-                        <div class="portlet-header portlet-header-bordered">
-                            <h3 class="portlet-title"> <a href="<?php echo  $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=pending" class="link-primary"> Pending</a></h3>
-                        </div>
-                        <div class="portlet-body">
-                            <div class="widget10 widget10-vertical-md">
-                                <div class="widget10-item">
-                                    <div class="widget10-content">
-                                        <h2 class="widget10-title" id="penN"></h2>
-                                        <span class="widget10-subtitle">New</span>
-                                    </div>
-                                </div>
-                                <div class="widget10-item">
-                                    <div class="widget10-content">
-                                        <h2 class="widget10-title" id="penU"></h2>
-                                        <span class="widget10-subtitle">Used</span>
-                                    </div>
-                                </div>
-                                <div class="widget10-item">
-                                    <div class="widget10-content">
-                                        <h2 class="widget10-title" id="penT"></h2>
-                                        <span class="widget10-subtitle">All</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="portlet text-center">
-                        <div class="widget10 widget10-vertical-md">
-                            <div class="widget10-item">
-                                <div class="widget10-content">
-                                    <h2 class="widget10-title" id="regC"></h2>
-                                    <span class="widget10-subtitle">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/registrationProblem.php" class="link-primary">Registration Problems</a>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="widget10-item">
-                                <div class="widget10-content">
-                                    <h2 class="widget10-title" id="todoC"></h2>
-                                    <span class="widget10-subtitle">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldTodo.php" class="link-primary">Sales Consultants To Do’s</a>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="widget10-item">
-                                <div class="widget10-content">
-                                    <h2 class="widget10-title" id="titleC"></h2>
-                                    <span class="widget10-subtitle">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/wizard/usedCars.php?filter=titleIssue" class="link-primary">Used Cars No Title</a>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php
+            }
+
+            ?>
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="portlet">
@@ -148,7 +298,7 @@ if ($_SESSION['userRole'] == $inventorySpecialistID) {
                                     <input type="radio" name="searchStatus" value="lastMonth"> Last Month <span class="badge badge-lg p-1" id="lastMonthCount"></span>
                                 </label>
                                 <label class="btn btn-flat-primary">
-                                    <input type="radio" name="searchStatus" value="thisMonth" id="thisMonth"> This Month <span class="badge badge-lg p-1" id="thisMonthCount"></span>
+                                    <input type="radio" name="searchStatus" value="thisMonth" id="thisMonth" > This Month <span class="badge badge-lg p-1" id="thisMonthCount"></span>
                                 </label>
                             </div>
                             <!-- </div> -->

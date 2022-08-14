@@ -5,7 +5,7 @@ require_once 'db/core.php';
 $userId = $_POST['userId'];
 
 // $sql = "SELECT username, email, password, role FROM users WHERE id = $userId";
-$sql = "SELECT users.username , users.email, users.role , users.location, users.extention , users.mobile , schedule.* FROM `users` LEFT JOIN schedule ON users.id = schedule.user_id WHERE users.id = '$userId'";
+$sql = "SELECT users.username , users.email, users.role , users.location, users.extention , users.mobile , users.color , schedule.* FROM `users` LEFT JOIN schedule ON users.id = schedule.user_id WHERE users.id = '$userId'";
 
 $result = $connect->query($sql);
 

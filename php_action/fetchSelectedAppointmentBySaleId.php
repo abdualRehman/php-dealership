@@ -4,14 +4,14 @@ require_once 'db/core.php';
 
 $id = $_POST['id'];
 
-// $sql = "SELECT a.id , b.fname, b.lname , b.sale_id , c.stocktype , c.year , c.make , c.model  , a.stock_id, a.appointment_date, a.appointment_time, a.coordinator, a.delivery, a.additional_services, a.notes, a.submitted_by, a.manager_override, a.confirmed, a.complete, a.schedule_start, a.schedule_end, a.calender_id, a.status FROM `appointments` as a LEFT JOIN sales as b ON a.sale_id = b.sale_id LEFT JOIN inventory as c ON a.stock_id = c.id WHERE a.id = '$id'";
-$sql = "SELECT `id`, `sale_id`, `stock_id`, `appointment_date`, `appointment_time`, `coordinator`, `delivery`, `additional_services`, `notes`, `submitted_by`, `manager_override`, `confirmed`, `complete`, `schedule_start`, `schedule_end`, `calender_id`, `status` FROM `appointments` WHERE id = '$id'";
+
+$sql = "SELECT appointments.* , sales.fname , sales.lname , inventory.id as stock_id , inventory.stockno , inventory.year, inventory.make , inventory.model , inventory.vin, inventory.stocktype FROM sales LEFT JOIN appointments ON (appointments.sale_id = sales.sale_id AND appointments.status = 1) RIGHT JOIN inventory ON sales.stock_id = inventory.id WHERE sales.sale_id = '$id'";
 $result = $connect->query($sql);
 $output = array();
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-
     $output = $row;
+    $output['sale_id'] = $id;
     $submittedBy = $row['submitted_by'];
     $manager_override = $row['manager_override'];
 

@@ -10,13 +10,13 @@ if ($_SESSION['userRole']) {
 /* sales consultant id */
 if ($userRole != $salesConsultantID) {
     $sql = "SELECT sales.date ,  inventory.stockno , sales.fname , sales.lname , users.username, sales.sale_status , sales.deal_notes , 
-    inventory.year, inventory.make , inventory.model , sales.gross , sales.sale_id , inventory.lot , inventory.certified, inventory.balance , 
+    inventory.year, inventory.make , inventory.model , sales.gross , sales.sale_id , inventory.lot , sales.certified, inventory.balance , 
     inventory.status , inventory.age , inventory.stocktype , sales.stock_id , sales.consultant_notes
     FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant WHERE sales.status = 1";
 } else {
     $uid = $_SESSION['userId'];
     $sql = "SELECT sales.date ,  inventory.stockno , sales.fname , sales.lname , users.username, sales.sale_status , sales.deal_notes , 
-    inventory.year, inventory.make , inventory.model , sales.gross , sales.sale_id , inventory.lot , inventory.certified, inventory.balance , 
+    inventory.year, inventory.make , inventory.model , sales.gross , sales.sale_id , inventory.lot , sales.certified, inventory.balance , 
     inventory.status , inventory.age , inventory.stocktype , sales.stock_id , sales.consultant_notes
     FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant WHERE sales.status = 1 AND sales.sales_consultant = '$uid'";
 }
@@ -78,7 +78,11 @@ if ($result->num_rows > 0) {
 
 
         $button = '
-        <div class="show d-inline-flex" >' .
+        <div class="show d-inline-flex" >
+        ' .
+            (hasAccess("appointment", "Add") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#addNewSchedule" onclick="addNewSchedule(' . $id . ')" >
+                <i class="far fa-calendar-alt"></i>
+            </button>' : "") .
             (hasAccess("sale", "Edit") !== 'false' ? '<a href="' . $GLOBALS['siteurl'] . '/sales/soldLogs.php?r=edit&i=' . $id . '" class="btn btn-label-primary btn-icon mr-1" >
                 <i class="fa fa-edit"></i>
             </a>' : "") .

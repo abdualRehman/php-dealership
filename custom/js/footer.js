@@ -156,10 +156,10 @@ function loadSchedules() {
                             if (rowData[16] == 'Available') {
                                 $(td).html('<i class="marker marker-dot marker-lg text-success"></i> Available');
                                 $(td).addClass('text-success font-initial');
-                            } else if(rowData[16] == 'Late' || rowData[16] == 'Called out' || rowData[16] == 'See Notes' || rowData[16] == 'Vacation' ) {
+                            } else if (rowData[16] == 'Late' || rowData[16] == 'Called out' || rowData[16] == 'See Notes' || rowData[16] == 'Vacation') {
                                 $(td).html(rowData[16]);
                                 $(td).addClass('text-danger font-initial');
-                            } else if(rowData[16] == 'With Customer' || rowData[16] == 'Lunch' || rowData[16] == 'See Notes' ) {
+                            } else if (rowData[16] == 'With Customer' || rowData[16] == 'Lunch' || rowData[16] == 'See Notes') {
                                 $(td).html(rowData[16]);
                                 $(td).addClass('text-primary font-initial');
                             } else {
@@ -281,13 +281,13 @@ function loadSchedules() {
                 }
             },
             createdRow: function (row, data, dataIndex) {
-                // if ($('#isEditAllowed').val() == "true") {
-                $(row).children().attr({
-                    "data-toggle": "modal",
-                    "data-target": "#editSchedule",
-                    "onclick": "editSchedule(" + data[0] + ")"
-                });
-                // }
+                if ($('#isAvailibilityEditable').val() == "true") {
+                    $(row).children().attr({
+                        "data-toggle": "modal",
+                        "data-target": "#editSchedule",
+                        "onclick": "editSchedule(" + data[0] + ")"
+                    });
+                }
             },
 
             "order": [[3, "desc"]]

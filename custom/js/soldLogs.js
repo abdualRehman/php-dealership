@@ -1,6 +1,6 @@
 "use strict";
 var manageSoldLogsTable, rowGroupSrc = 10; // status
-var stockArray = [];
+var stockArray = [], deliveryCoordinatorArray = [];
 var collapsedGroups = {};
 
 var e1 = Swal.mixin({
@@ -28,6 +28,23 @@ $(function () {
         format: 'mm-dd-yyyy',
     });
 
+    $(".scheduleDate").datepicker({
+        language: 'pt-BR',
+        format: 'mm-dd-yyyy',
+        todayHighlight: !0,
+        autoclose: true,
+        todayBtn: "linked",
+        autoclose: true,
+    });
+
+    $('.scheduleTime').timepicker({
+        dynamic: true,
+        dropdown: true,
+        'showDuration': false,
+        scrollbar: true,
+        show24Hours: false,
+        interval: 60,
+    });
 
     autosize($(".autosize"));
 
@@ -100,183 +117,6 @@ $(function () {
                     }
                 },
             ],
-            // buttons: [
-            //     {
-
-            //         text: 'Today',
-            //         attr: {
-            //             title: 'Today',
-            //             id: 'todayBtn'
-            //         },
-            //         action: function (e, dt, node, config) {
-            //             // $.fn.dataTable.ext.search = [];
-            //             // var date2 = new Date("03-15-2022");
-            //             var date2 = new Date();
-            //             var today = moment(date2).format("MMM-DD-YYYY");
-            //             // manageSoldLogsTable.columns(0).search(today).draw();
-
-            //             $.fn.dataTable.ext.search.pop();
-            //             manageSoldLogsTable.search('').draw();
-            //             var tableNode = this.table(0).node();
-            //             $.fn.dataTable.ext.search.push(
-            //                 function (settings, data, dataIndex) {
-            //                     if (settings.nTable !== tableNode) {
-            //                         return true;
-            //                     }
-            //                     var date = data[0];
-            //                     if (
-            //                         (today === date)
-            //                     ) {
-            //                         return true;
-            //                     }
-            //                     return false
-            //                 }
-            //             )
-            //             manageSoldLogsTable.draw();  // working
-
-            //             // manageSoldLogsTable.searchPanes.rebuildPane();
-
-            //             manageSoldLogsTable.button(0).active(true);
-            //             manageSoldLogsTable.button(1).active(false);
-            //             manageSoldLogsTable.button(2).active(false);
-            //             manageSoldLogsTable.button(3).active(false);
-            //         },
-
-            //     },
-            //     {
-            //         text: 'Yesterday',
-            //         action: function (e, dt, node, config) {
-            //             // $.fn.dataTable.ext.search = [];
-            //             // var date2 = moment(new Date('03-13-2022'), "MMM-DD-YYYY").subtract(1, 'days');
-            //             var date2 = moment(new Date(), "MMM-DD-YYYY").subtract(1, 'days');
-            //             var yesterday = moment(date2).format("MMM-DD-YYYY")
-            //             // console.log(yesterday);
-            //             // manageSoldLogsTable.columns(0).search(yesterday).draw();
-
-
-            //             $.fn.dataTable.ext.search.pop();
-            //             manageSoldLogsTable.search('').draw();
-            //             var tableNode = this.table(0).node();
-            //             $.fn.dataTable.ext.search.push(
-            //                 function (settings, data, dataIndex) {
-            //                     if (settings.nTable !== tableNode) {
-            //                         return true;
-            //                     }
-            //                     var date = data[0];
-            //                     if (
-            //                         (yesterday === date)
-            //                     ) {
-            //                         return true;
-            //                     }
-            //                     return false
-            //                 }
-            //             )
-            //             manageSoldLogsTable.draw();  // working
-            //             // manageSoldLogsTable.searchPanes.rebuildPane();
-
-            //             manageSoldLogsTable.button(0).active(false);
-            //             manageSoldLogsTable.button(1).active(true);
-            //             manageSoldLogsTable.button(2).active(false);
-            //             manageSoldLogsTable.button(3).active(false);
-
-
-            //         },
-
-            //     },
-            //     {
-            //         text: 'Current Month',
-            //         action: function (e, dt, node, config) {
-            //             // manageSoldLogsTable.search('').draw();
-            //             // $.fn.dataTable.ext.search = [];
-            //             // manageSoldLogsTable.columns(0).search('').draw();
-
-            //             // $.fn.dataTable.ext.search = [];
-            //             $.fn.dataTable.ext.search.pop();
-            //             manageSoldLogsTable.search('').draw();
-            //             var tableNode = this.table(0).node();
-
-            //             const startOfMonth = moment().startOf('month').format('MMM-DD-YYYY');
-            //             const endOfMonth = moment().endOf('month').format('MMM-DD-YYYY');
-            //             var date;
-            //             $.fn.dataTable.ext.search.push(
-            //                 function (settings, data, dataIndex) {
-            //                     if (settings.nTable !== tableNode) {
-            //                         return true;
-            //                     }
-            //                     var min = startOfMonth;
-            //                     var max = endOfMonth;
-            //                     date = data[0];
-            //                     if (
-            //                         (min === null && max === null) ||
-            //                         (min === null && date <= max) ||
-            //                         (min <= date && max === null) ||
-            //                         (min <= date && date <= max)
-            //                     ) {
-            //                         return true;
-            //                     }
-
-            //                     return false;
-            //                 }
-            //             );
-
-            //             manageSoldLogsTable.draw();  // working
-            //             // manageSoldLogsTable.searchPanes.rebuildPane();
-            //             manageSoldLogsTable.button(0).active(false);
-            //             manageSoldLogsTable.button(1).active(false);
-            //             manageSoldLogsTable.button(2).active(true);
-            //             manageSoldLogsTable.button(3).active(false);
-
-
-            //         },
-
-            //     },
-            //     {
-            //         text: "Show All",
-            //         action: function (e, dt, node, config) {
-            //             // $.fn.dataTable.ext.search = [];
-
-            //             // manageSoldLogsTable.clear().draw();
-            //             $.fn.dataTable.ext.search.pop();
-            //             manageSoldLogsTable.search('').draw();
-            //             // manageSoldLogsTable.draw();  // working
-            //             // manageSoldLogsTable.fnReloadAjax();
-            //             // manageSoldLogsTable.searchPanes.rebuildPane();
-            //             // manageSoldLogsTable.ajax.reload();
-
-
-            //             // $('#datatable-1').DataTable().searchPanes.clearSelections();
-
-            //             // manageSoldLogsTable.search('').draw();
-
-
-            //             var tableNode = this.table(0).node();
-            //             $.fn.dataTable.ext.search.push(
-            //                 function (settings, data, dataIndex) {
-
-            //                     // Check that the search is running on the intended table
-            //                     if (settings.nTable !== tableNode) {
-            //                         return true;
-            //                     }
-            //                     if (data[0]) {
-            //                         return true;
-            //                     }
-            //                     return false;
-            //                 }
-            //             );
-            //             manageSoldLogsTable.draw();  // working
-
-            //             manageSoldLogsTable.ajax.reload(null, false);
-            //             // manageSoldLogsTable.searchPanes.rebuildPane();
-
-            //             manageSoldLogsTable.button(0).active(false);
-            //             manageSoldLogsTable.button(1).active(false);
-            //             manageSoldLogsTable.button(2).active(false);
-            //             manageSoldLogsTable.button(3).active(true);
-
-
-            //         }
-            //     }
-            // ],
             columnDefs: [
                 { width: 200, targets: 11 },
                 {
@@ -452,6 +292,8 @@ $(function () {
 
 
         writeStatusHTML();
+        disabledManagerDiv();
+        loadDeliveryCoordinator();
 
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
@@ -460,7 +302,7 @@ $(function () {
         if (filter == 'today') {
             $('#todayBtn').click();
             $('#searchStatusAll').click();
-        } else if(filter == 'pending'){
+        } else if (filter == 'pending') {
             $('#modAll').click();
             $('#searchPending').click();
         }
@@ -557,7 +399,7 @@ $(function () {
         );
 
 
-        $('input:radio').on('change', function () {
+        $('input:radio[name="searchStatus"]').on('change', function () {
             $('#datatable-1').block({
                 message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
                 timeout: 1e3
@@ -638,6 +480,99 @@ $(function () {
             }
         });
 
+        $("#editScheduleForm").validate({
+            ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
+            rules: {
+                ecustomerName: "required",
+                escheduleTime: "required",
+                escheduleDate: "required",
+                estockno: "required",
+                ecoordinator: "required",
+                eoverrideBy: {
+                    required: function (params) {
+                        var has_appointment = $('#ehas_appointment').val();
+                        if (has_appointment) {
+                            return true;
+                        } else {
+                            $(params).removeClass('is-invalid');
+                            return false;
+                        }
+                    },
+                },
+                'edelivery': {
+                    required: function (params) {
+                        var opt = $('input:radio[name="eadditionalServices"]:checked').val();
+                        if (!opt) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    },
+                },
+                'eadditionalServices': {
+                    required: function (params) {
+                        var opt = $('input:radio[name="edelivery"]:checked').val();
+                        if (!opt) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    },
+                },
+                'escheduleNotes': {
+                    required: function (params) {
+                        var opt = $('input:radio[name="eadditionalServices"]:checked').val();
+                        if (opt == 'other') {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    },
+                }
+            },
+            submitHandler: function (form, e) {
+                e.preventDefault();
+    
+                var time = $('#escheduleTime').val();
+                const number = moment(time, ["h:mmA"]).format("HH:mm");
+                $('#escheduleTime').val(number);
+    
+                var form = $('#editScheduleForm');
+                $.ajax({
+                    type: "POST",
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response);
+                        if (response.success == true) {
+                            e1.fire({
+                                position: "center",
+                                icon: "success",
+                                title: response.messages,
+                                showConfirmButton: !1,
+                                timer: 1500
+                            });
+                            $('#editScheduleModel').modal('hide');
+                            manageSoldLogsTable.ajax.reload(null, false);
+                        } else {
+                            e1.fire({
+                                // position: "center",
+                                icon: "error",
+                                title: response.messages,
+                                showConfirmButton: !1,
+                                timer: 2500
+                            })
+                        }
+                    }
+                });
+    
+                return false;
+    
+            }
+    
+    
+        });
 
 
     } else if (divRequest == 'edit') {
@@ -898,8 +833,168 @@ $(function () {
 
 
 });
+// ------------------------------------------------------------------------------------------------------------
 
 
+
+
+
+
+function addNewSchedule(id = null) {
+    if (id) {
+        $.ajax({
+            url: '../php_action/fetchSelectedAppointmentBySaleId.php',
+            type: 'post',
+            data: { id: id },
+            dataType: 'json',
+            success: function (response) {
+
+                $('.spinner-grow').addClass('d-none');
+                // modal result
+                $('.showResult').removeClass('d-none');
+                // modal footer
+                $('.modal-footer').removeClass('d-none');
+
+                $('#editScheduleForm')[0].reset();
+
+                $('#scheduleId').val(response.id);
+                $('#ecallenderId').val(response.calender_id);
+                $('#esale_id').val(response.sale_id);
+                // echangeStockDetails({ value: response.sale_id }, false);
+
+                $('#ecustomerName').val(response.fname + ' ' + response.lname);
+                $('#evechicle').val(response.stocktype + ' ' + response.year + ' ' + response.make);
+                $('#estockno').val(response.stock_id)
+                $('#estocknoDisplay').val(response.stockno)
+                $('#ehas_appointment').val("");
+                $('#esubmittedBy').val(response.submitted_by);
+                $('#esubmittedByRole').val(response.submitted_by_role);
+                $('#eoverrideBy').prop('checked', (response.manager_override != "" && response.manager_override != null) ? true : false);
+                $('#eoverrideByName').val(response.manager_overrideName);
+                $('#eoverrideById').val(response.eoverrideById);
+
+                const number = response.appointment_time ? moment(response.appointment_time, ["HH:mm"]).format("h:mma") : "";
+                $('#escheduleTime').val(number);
+                var date = response.appointment_date ? moment(response.appointment_date, 'YYYY-MM-DD').format('MM-DD-YYYY') : "";
+                $('#escheduleDate').val(date);
+                $('#escheduleDate').datepicker('update', date);
+                $('#edelivery :radio[name="edelivery"]').prop('checked', false);
+                $('#edelivery .active').removeClass('active');
+                (response.delivery) ? $('#e' + response.delivery).prop('checked', true).click() : null;
+                $('#eadditionalServices :radio[name="eadditionalServices"]').prop('checked', false);
+                $('#eadditionalServices .active').removeClass('active');
+                (response.additional_services) ? $('#e' + response.additional_services).prop('checked', true).click() : null;
+                $('#escheduleNotes').val(response.notes);
+                $('#econfirmed :radio[name="econfirmed"]').prop('checked', false);
+                $('#econfirmed .active').removeClass('active');
+                (response.confirmed) ? $('#con' + response.confirmed).prop('checked', true).click() : null;
+                $('#ecomplete :radio[name="ecomplete"]').prop('checked', false);
+                $('#ecomplete .active').removeClass('active');
+                (response.complete) ? $('#com' + response.complete).prop('checked', true).click() : null;
+                if ($('#ecoordinatorList').children().length > 0) {
+                    $('#ecoordinator').val(response.coordinator);
+                    $('.selectpicker').selectpicker('refresh');
+                }
+
+            }, // /success
+            error: function (err) {
+                console.log(err);
+            }
+        }); // ajax function
+    }
+}
+$('#eoverrideBy').change(function () {
+    if ($(this).prop('checked')) {
+        var cN = $('#currentUser').val();
+        var cId = $('#currentUserId').val();
+        $('#eoverrideByName').val(cN);
+        $('#eoverrideById').val(cId);
+    } else {
+        $('#eoverrideByName').val("");
+        $('#eoverrideById').val("");
+    }
+})
+function disabledManagerDiv() {
+    let currentUser = $('#loggedInUserRole').val();
+    var delivery_coordinator_id = 62;
+    if (currentUser != delivery_coordinator_id && currentUser != 'Admin') {
+        $('.delivery_coordinator').addClass('disabled-div');
+        // $(".delivery_coordinator").find("*").prop("disabled", true);
+        $(".delivery_coordinator").find("*").prop("readonly", true);
+    } else {
+        $('.delivery_coordinator').removeClass('disabled-div');
+        // $(".delivery_coordinator").find("*").prop("disabled", true);
+        $(".delivery_coordinator").find("*").prop("readonly", false);
+    }
+    var sales_manager_id = 67;
+    var general_manager_id = 69;
+    if (currentUser != 'Admin' && currentUser != sales_manager_id && currentUser != general_manager_id) {
+        $('.manager_override_div').addClass('disabled-div');
+        // $(".manager_override_div").find("*").prop("disabled", true);
+        $(".manager_override_div").find("*").prop("readonly", true);
+    } else {
+        $('.manager_override_div').removeClass('disabled-div');
+        // $(".manager_override_div").find("*").prop("disabled", true);
+        $(".manager_override_div").find("*").prop("readonly", false);
+    }
+
+}
+
+function loadDeliveryCoordinator() {
+    var id = 62;
+    $.ajax({
+        url: '../php_action/fetchUsersWithRoleForSearch.php',
+        type: "POST",
+        data: { id: id },
+        dataType: 'json',
+        success: function (response) {
+            deliveryCoordinatorArray = response.data;
+        }
+    });
+}
+
+$('.handleDateTime').on('change', function () {
+    var date, time, selectBox;
+
+    if ($(this).data('type') == 'add') {
+        date = $('#scheduleDate').val();
+        time = $('#scheduleTime').val();
+        selectBox = document.getElementById('coordinatorList');
+    } else {
+        date = $('#escheduleDate').val();
+        time = $('#escheduleTime').val();
+        selectBox = document.getElementById('ecoordinatorList');
+    }
+    selectBox.innerHTML = "";
+    $('.selectpicker').selectpicker('refresh');
+    if (date != '' && time != '') {
+        let dayname = moment(date).format('dddd').toLowerCase();
+        deliveryCoordinatorArray.forEach(element => {
+            let startTime = element[3][dayname][0];
+            let endTime = element[3][dayname][1];
+            if (startTime && endTime) {
+
+                time = moment(moment(time, ["h:mmA"]).format("HH:mm"), 'hh:mm');
+                startTime = moment(moment(startTime, ["h:mmA"]).format("HH:mm"), 'hh:mm');
+                endTime = moment(moment(endTime, ["h:mmA"]).format("HH:mm"), 'hh:mm');
+
+                if (time.isBetween(startTime, endTime)) {
+                    selectBox.innerHTML += `<option value="${element[0]}" title="${element[1]} - ${element[2]}">${element[1]} - ${element[2]} </option>`;
+                    $('.selectpicker').selectpicker('refresh');
+                }
+            }
+        });
+    }
+
+})
+
+
+
+
+
+
+
+// ------------------------------------------------------------------------------------------------------------
 function applyDateRageFilter(startOfMonth = "", endOfMonth = "") {
 
     // console.log(startOfMonth, endOfMonth);

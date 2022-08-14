@@ -156,6 +156,10 @@ if ($_SESSION['userRole'] == $officeID) {
     #mods label {
         cursor: pointer;
     }
+
+    /* .w-inherit {
+        width: "-webkit-fill-available"!important;
+    } */
 </style>
 
 
@@ -204,7 +208,7 @@ if ($_SESSION['userRole'] == $officeID) {
                                     </div>
                                 </div>
 
-                                <div class="row p-2 <?php echo ($allowedForOffice) ? "d-flex": "d-none"; ?>">
+                                <div class="row p-2 <?php echo ($allowedForOffice) ? "d-flex" : "d-none"; ?>">
                                     <div class="col-md-12">
                                         <div id="year">
                                             <label class="btn text-responsive">
@@ -271,6 +275,7 @@ if ($_SESSION['userRole'] == $officeID) {
                                         <th>UCI</th>
                                         <th>Purchase From</th>
                                         <th>Date Sold</th>
+                                        <th>Action</th>
 
                                     </tr>
                                 </thead>
@@ -364,6 +369,7 @@ if ($_SESSION['userRole'] != $onlineManagerID && $_SESSION['userRole'] != $offic
                                                     Intercompany
                                                 </label>
                                             </div>
+                                            <span class="badge-text-primary pl-2 clear-selection" data-id="purchaseFrom">Clear Selection</span>
                                         </div>
                                         <div class="form-group offset-sm-4 col-sm-4">
                                             <div class="custom-control custom-control-lg custom-checkbox" style="font-size: initial;">

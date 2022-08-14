@@ -2,14 +2,11 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
-// if (hasAccess("incr", "Add") === 'false' && hasAccess("incr", "Edit") === 'false' && hasAccess("incr", "Remove") === 'false') {
-//     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
-// }
-// if (hasAccess("incr", "Edit") === 'false') {
-//     echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
-// } else {
-//     echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
-// }
+if (hasAccess("appointment", "Edit") === 'false') {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+}
 
 $userRole = $_SESSION['userRole'];
 echo '<input type="hidden" name="loggedInUserRole" id="loggedInUserRole" value="' . $userRole . '" />';
@@ -20,8 +17,6 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
 
 
 <head>
-    <!-- <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css">
-  <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css"> -->
     <link rel="stylesheet" href="../custom/css/customDatatable.css">
     <link rel="stylesheet" href="../custom/dist/tui-calendar.css">
     <!-- <link rel="stylesheet" href="../custom/css/default.css"> -->
@@ -108,10 +103,14 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
             <div class="col-12">
                 <div class="portlet">
                     <div class="portlet-header portlet-header-bordered">
-                        <h3 class="portlet-title">Appointment Calender</h3>
-                        <button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
+                        <h3 class="portlet-title">Appointment Calendar</h3>
+                        <?php
+                        if (hasAccess("appointment", "Add") !== 'false') {
+                            echo '<button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
                             <i class="fa fa-plus ml-1 mr-2"></i> Add New Schedules
-                        </button>
+                        </button>';
+                        }
+                        ?>
                     </div>
                     <div class="portlet-body">
                         <div>
@@ -220,7 +219,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                 <label for="leadDate" class="col-form-label">submitted By</label>
                                 <input type="text" class="form-control text-center" name="submittedBy" id="submittedBy" value="<?php echo $_SESSION['userName']; ?>" readonly autocomplete="off" autofill="off" />
                             </div>
-                            <div class="form-group">
+                            <div class="form-group manager_override_div" style="border-radius:5px;">
                                 <input type="hidden" name="has_appointment" id="has_appointment" value="null" />
                                 <div class="custom-control custom-control-lg custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" name="overrideBy" id="overrideBy">
@@ -243,7 +242,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                             <span class="input-group-text"><i class="fa fa-calendar"></i>
                                             </span>
                                         </div>
-                                        <input type="text" class="form-control scheduleDate" name="scheduleDate" id="scheduleDate" />
+                                        <input type="text" class="form-control scheduleDate handleDateTime" data-type="add" name="scheduleDate" id="scheduleDate" />
                                     </div>
                                 </div>
 
@@ -254,7 +253,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                             <span class="input-group-text"><i class="fa fa-calendar"></i>
                                             </span>
                                         </div>
-                                        <input type="text" class="form-control scheduleTime" name="scheduleTime" id="scheduleTime" />
+                                        <input type="text" class="form-control scheduleTime handleDateTime" data-type="add" name="scheduleTime" id="scheduleTime" />
                                     </div>
                                 </div>
                             </div>
@@ -266,7 +265,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                 <div class="form-group col-sm-9">
                                     <select class="form-control selectpicker w-auto required" id="coordinator" name="coordinator" data-live-search="true" data-size="4">
                                         <option value="" selected disabled>Select</option>
-                                        <optgroup class="coordinator"></optgroup>
+                                        <optgroup class="coordinator" id="coordinatorList" ></optgroup>
                                     </select>
                                 </div>
                             </div>
@@ -403,7 +402,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                     <label for="esale_id" class="col-sm-3 text-sm-center col-form-label">Stock No - Vin</label>
                                     <div class="form-group col-sm-9">
                                         <input type="hidden" class="form-control" name="estockno" id="estockno" />
-                                        <select class="form-control selectpicker w-auto required" id="esale_id" onchange="changeStockDetails(this)" name="esale_id" data-live-search="true" data-size="4">
+                                        <select class="form-control selectpicker w-auto required" id="esale_id" onchange="echangeStockDetails(this)" name="esale_id" data-live-search="true" data-size="4">
                                             <option value="" selected disabled>Select</option>
                                             <optgroup class="stockno"></optgroup>
                                         </select>
@@ -420,7 +419,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                     <input type="text" class="form-control text-center" name="esubmittedBy" id="esubmittedBy" readonly autocomplete="off" autofill="off" />
                                     <input type="hidden" class="form-control text-center" name="esubmittedByRole" id="esubmittedByRole" readonly autocomplete="off" autofill="off" />
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group manager_override_div" style="border-radius:5px;" >
                                     <input type="hidden" name="ehas_appointment" id="ehas_appointment" value="null" />
                                     <div class="custom-control custom-control-lg custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" name="eoverrideBy" id="eoverrideBy">
@@ -443,7 +442,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control scheduleDate" name="escheduleDate" id="escheduleDate" />
+                                            <input type="text" class="form-control scheduleDate handleDateTime" data-type="edit" name="escheduleDate" id="escheduleDate" />
                                         </div>
                                     </div>
 
@@ -454,7 +453,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control scheduleTime" name="escheduleTime" id="escheduleTime" />
+                                            <input type="text" class="form-control scheduleTime handleDateTime" data-type="edit" name="escheduleTime" id="escheduleTime" />
                                         </div>
                                     </div>
                                 </div>
@@ -466,7 +465,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                     <div class="form-group col-sm-9">
                                         <select class="form-control selectpicker w-auto required" id="ecoordinator" name="ecoordinator" data-live-search="true" data-size="4">
                                             <option value="" selected disabled>Select</option>
-                                            <optgroup class="coordinator"></optgroup>
+                                            <optgroup class="coordinator" id="ecoordinatorList" ></optgroup>
                                         </select>
                                     </div>
                                 </div>

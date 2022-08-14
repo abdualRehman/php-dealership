@@ -63,12 +63,12 @@ $(function () {
                     .rows()
                     .data()
                     .filter(function (data, index) {
-                        if (data[8] == '' || data[8] == null || data[8] == 'Done') {
+                        var retail_status = data[10];
+
+                        if (retail_status != 'wholesale' && retail_status != null) {
                             notDone += 1;
                         }
-                        // if ((data[8] != '' && data[8] != 'Done') && data[9] == 'closed') {
-                        //     roclosed += 1;
-                        // }
+
                         if (data[8] == 'Done' && data[9] == 'closed') {
                             roclosed += 1;
                         }
@@ -79,7 +79,6 @@ $(function () {
                         return true;
                     });
                 percentage = (totalDoneCount / allCount) * 100;
-                console.log(percentage);
                 // percentage = Math.round(percentage);
                 percentage = percentage.toFixed(2)
 
@@ -121,9 +120,9 @@ $(function () {
     $('#all').click();
 
     $.fn.dataTable.ext.search.push(
-        function (settings, data, index) {
+        function (settings, data, index, rowData) {
             var tableNode = manageTable.table().node();
-
+            var retail_status = rowData[10];
             var searchStatus = $('input:radio[name="searchStatus"]:checked').map(function () {
                 if (this.value !== "") {
                     return this.value;
@@ -142,15 +141,20 @@ $(function () {
                 return true;
             }
             if (searchStatus[0] === 'notDone') {
-                if ((data[8] == '' || data[8] == 'Done')) {
+                if (retail_status != 'wholesale' && retail_status != null) {
                     return true;
                 } else {
                     return false;
                 }
+                // if ((data[8] == '' || data[8] == 'Done')) {
+                //     return true;
+                // } else {
+                //     return false;
+                // }
             }
             if (searchStatus[0] === 'roclosed') {
                 console.log(data[8] == 'Done' ? data : '');
-                if (data[8] = 'Done' && data[9] == 'closed') {
+                if (data[8] == 'Done' && data[9] == 'closed') {
                     return true;
                 }
                 // if ((data[8] != '' && data[8] != 'Done') && data[9] == 'closed') {
@@ -283,7 +287,12 @@ function editUsedCar(id) {
 
 
                 let age = response.age;
-
+                // get day difference
+                if (response.date_in != '' && response.date_in != null) {
+                    var given = moment(response.date_in, "MM-DD-YYYY").subtract(1, 'days');
+                    var current = moment().startOf('day');
+                    age = moment.duration(current.diff(given)).asDays();
+                }
 
 
                 // // stockno  stock and vin

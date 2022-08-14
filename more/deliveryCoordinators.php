@@ -1,19 +1,17 @@
 <?php
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
-
-// if (hasAccess("incr", "Add") === 'false' && hasAccess("incr", "Edit") === 'false' && hasAccess("incr", "Remove") === 'false') {
-//     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
-// }
-// if (hasAccess("incr", "Edit") === 'false') {
-//     echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
-// } else {
-//     echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
-// }
+// if user has his add permission and edit permission then he can access this page
+if (hasAccess("appointment", "Add") === 'false' && hasAccess("appointment", "Edit") === 'false') {
+    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+}
+if (hasAccess("appointment", "Edit") === 'false') {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+}
 $userRole = $_SESSION['userRole'];
 echo '<input type="hidden" name="loggedInUserRole" id="loggedInUserRole" value="' . $userRole . '" />';
-echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
-
 echo '<input type="hidden" name="currentUser" id="currentUser" value="' . $_SESSION['userName'] . '">';
 echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_SESSION['userId'] . '">';
 
@@ -31,6 +29,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
 
 
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/timepicker@1.13.18/jquery.timepicker.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../custom/css/customDatatable.css">
 </head>
 
@@ -104,15 +103,12 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                         <button class="btn btn-primary mr-2 p-2" onclick="toggleFilterClass()">
                             <i class="fa fa-align-center ml-1 mr-2"></i> Filter
                         </button>
-                        <button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
-                            <i class="fa fa-plus ml-1 mr-2"></i> Add New Schedules
-                        </button>
                         <?php
-                        // if (hasAccess("incr", "Add") !== 'false') {
-                        //     echo '<button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
-                        //     <i class="fa fa-plus ml-1 mr-2"></i> Set New Rule
-                        // </button>';
-                        // }
+                        if (hasAccess("appointment", "Add") !== 'false') {
+                            echo '<button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
+                            <i class="fa fa-plus ml-1 mr-2"></i> Add New Schedules
+                        </button>';
+                        }
                         ?>
 
                     </div>
@@ -183,7 +179,8 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                                 <label for="leadDate" class="col-form-label">submitted By</label>
                                 <input type="text" class="form-control text-center" name="submittedBy" id="submittedBy" value="<?php echo $_SESSION['userName']; ?>" readonly autocomplete="off" autofill="off" />
                             </div>
-                            <div class="form-group">
+
+                            <div class="form-group manager_override_div" style="border-radius:5px;">
                                 <input type="hidden" name="has_appointment" id="has_appointment" value="null" />
                                 <div class="custom-control custom-control-lg custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" name="overrideBy" id="overrideBy">
@@ -206,7 +203,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                                             <span class="input-group-text"><i class="fa fa-calendar"></i>
                                             </span>
                                         </div>
-                                        <input type="text" class="form-control scheduleDate" name="scheduleDate" id="scheduleDate" />
+                                        <input type="text" class="form-control scheduleDate handleDateTime" data-type="add" name="scheduleDate" id="scheduleDate" />
                                     </div>
                                 </div>
 
@@ -217,7 +214,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                                             <span class="input-group-text"><i class="fa fa-calendar"></i>
                                             </span>
                                         </div>
-                                        <input type="text" class="form-control scheduleTime" name="scheduleTime" id="scheduleTime" />
+                                        <input type="text" class="form-control scheduleTime handleDateTime" data-type="add" name="scheduleTime" id="scheduleTime" />
                                     </div>
                                 </div>
                             </div>
@@ -229,7 +226,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                                 <div class="form-group col-sm-9">
                                     <select class="form-control selectpicker w-auto required" id="coordinator" name="coordinator" data-live-search="true" data-size="4">
                                         <option value="" selected disabled>Select</option>
-                                        <optgroup class="coordinator"></optgroup>
+                                        <optgroup class="coordinator" id="coordinatorList"></optgroup>
                                     </select>
                                 </div>
                             </div>
@@ -366,7 +363,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                                     <label for="esale_id" class="col-sm-3 text-sm-center col-form-label">Stock No - Vin</label>
                                     <div class="form-group col-sm-9">
                                         <input type="hidden" class="form-control" name="estockno" id="estockno" />
-                                        <select class="form-control selectpicker w-auto required" id="esale_id" onchange="changeStockDetails(this)" name="esale_id" data-live-search="true" data-size="4">
+                                        <select class="form-control selectpicker w-auto required" id="esale_id" onchange="echangeStockDetails(this)" name="esale_id" data-live-search="true" data-size="4">
                                             <option value="" selected disabled>Select</option>
                                             <optgroup class="stockno"></optgroup>
                                         </select>
@@ -383,7 +380,8 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                                     <input type="text" class="form-control text-center" name="esubmittedBy" id="esubmittedBy" readonly autocomplete="off" autofill="off" />
                                     <input type="hidden" class="form-control text-center" name="esubmittedByRole" id="esubmittedByRole" readonly autocomplete="off" autofill="off" />
                                 </div>
-                                <div class="form-group">
+
+                                <div class="form-group manager_override_div" style="border-radius:5px;" >
                                     <input type="hidden" name="ehas_appointment" id="ehas_appointment" value="null" />
                                     <div class="custom-control custom-control-lg custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" name="eoverrideBy" id="eoverrideBy">
@@ -406,7 +404,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control scheduleDate" name="escheduleDate" id="escheduleDate" />
+                                            <input type="text" class="form-control scheduleDate handleDateTime" data-type="edit" name="escheduleDate" id="escheduleDate" />
                                         </div>
                                     </div>
 
@@ -417,7 +415,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control scheduleTime" name="escheduleTime" id="escheduleTime" />
+                                            <input type="text" class="form-control scheduleTime handleDateTime" data-type="edit" name="escheduleTime" id="escheduleTime" />
                                         </div>
                                     </div>
                                 </div>
@@ -429,7 +427,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                                     <div class="form-group col-sm-9">
                                         <select class="form-control selectpicker w-auto required" id="ecoordinator" name="ecoordinator" data-live-search="true" data-size="4">
                                             <option value="" selected disabled>Select</option>
-                                            <optgroup class="coordinator"></optgroup>
+                                            <optgroup class="ecoordinator" id="ecoordinatorList"></optgroup>
                                         </select>
                                     </div>
                                 </div>
@@ -540,4 +538,5 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
 
 
 <?php require_once('../includes/footer.php') ?>
+<script src="https://cdn.jsdelivr.net/npm/timepicker@1.13.18/jquery.timepicker.js"></script>
 <script type="text/javascript" src="../custom/js/deliveryCoordinators.js"></script>

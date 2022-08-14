@@ -10,6 +10,7 @@ if ($_POST) {
     $username = $_POST['username'];
     $email = $_POST['email'];
     $role = $_POST['role'];
+    $color = $_POST['color'];
     $password = $_POST['password'];
     $conpassword = $_POST['conpassword'];
 
@@ -41,8 +42,8 @@ if ($_POST) {
     if ($password == $conpassword) {
         $password = md5($password);
 
-        $sql = "INSERT INTO `users`( `username`, `email`, `password`, `role`, `status`, `permissions`, `location`, `extention`, `mobile`) 
-            VALUES ('$username' , '$email' , '$password' , '$role' , 1 , '0' , '$location' , '$extention' , '$mobile' )";
+        $sql = "INSERT INTO `users`( `username`, `email`, `password`, `role`, `status`, `permissions`, `location`, `extention`, `mobile` , `color`) 
+            VALUES ('$username' , '$email' , '$password' , '$role' , 1 , '0' , '$location' , '$extention' , '$mobile' , '$color' )";
 
         if ($connect->query($sql) === true) {
             $uid = $connect->insert_id;

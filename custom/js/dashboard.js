@@ -33,11 +33,9 @@ $(function () {
     if (chart) {
         fetchSalesGrapData();
 
-        $("#daterangepicker-1").daterangepicker();
+        // $("#daterangepicker-1").daterangepicker();
 
         $('input[name="date_range"]').daterangepicker({
-            // "showDropdowns": false,
-            // timePicker: !0,
             autoUpdateInput: false,
             cleanable: true,
             "opens": "left",
@@ -186,7 +184,6 @@ $(function () {
 
         r.render(),
             $("#theme-toggle").on("click", function () {
-                console.log("dara");
                 var e = $("body").hasClass("theme-dark") ? "dark" : "light";
                 r.updateOptions(t[e]);
             });
@@ -195,13 +192,11 @@ $(function () {
 
 
     function fetchSalesGrapData() {
-        // console.log("wdwd");
         $.ajax({
             url: './php_action/fetchSoldLogGraph.php',
             type: "GET",
             dataType: 'json',
             success: function (response) {
-                console.log(response);
                 dataArray = response.data;
                 var graphArray = response.graph;
 
@@ -212,14 +207,11 @@ $(function () {
                         newArray.push([item['time'], item['qty']]);
                     }
                 });
-                // console.log(newArray);
-                // console.log(usedArray);
+
 
                 var e = $("body").hasClass("theme-dark") ? "dark" : "light";
                 r.updateOptions(t[e]);
 
-                // console.log(Number(price).toLocaleString('en'));
-                console.log(response.data);
 
 
                 $('#avgN').html(dataArray[0] ? '$' + Number((dataArray[0]).toFixed(2)).toLocaleString('en') : "$0");
@@ -238,16 +230,18 @@ $(function () {
                 $('#todoC').html(dataArray[10] ? Number(dataArray[10]) : "0");
                 $('#titleC').html(dataArray[11] ? Number(dataArray[11]) : "0");
 
+
+                $('#currentMonthN').html(dataArray[12] ? Number(dataArray[12]) : "0");
+                $('#currentMonthU').html(dataArray[13] ? Number(dataArray[13]) : "0");
+                $('#currentMonthT').html(dataArray[14] ? Number(dataArray[14]) : "0");
+                
+                $('#todayCN').html(dataArray[15] ? Number(dataArray[15]) : "0");
+                $('#todayCU').html(dataArray[16] ? Number(dataArray[16]) : "0");
+                $('#todayCT').html(dataArray[17] ? Number(dataArray[17]) : "0");
+
             }
         });
     }
-
-    $('#filterBtn').on('click', function (e) {
-        // console.log(e);
-        r.zoomX(new Date('2022-05-29').getTime(), new Date('2022-06-22').getTime());
-        var e = $("body").hasClass("theme-dark") ? "dark" : "light";
-        r.updateOptions(t[e], true);
-    });
 
     $('input[name="date_range"]').on('cancel.daterangepicker', function (ev, picker) {
         $(this).val('');
@@ -278,15 +272,12 @@ $(function () {
             }
         }).get();
 
-        console.log(dateType);
 
         if (dateType == 'lastMonth') {
-
 
             const todayDate = moment(new Date()).format("YYYY-MM-DD");
             const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('YYYY-MM-DD')
             const lastDayOfPrevMonth = moment(todayDate).subtract(1, 'month').endOf('month').format('YYYY-MM-DD')
-
 
             r.zoomX(new Date(startDayOfPrevMonth).getTime(), new Date(lastDayOfPrevMonth).getTime());
             var e = $("body").hasClass("theme-dark") ? "dark" : "light";
@@ -299,12 +290,8 @@ $(function () {
             r.zoomX(new Date(startOfMonth).getTime(), new Date(endOfMonth).getTime());
             var e = $("body").hasClass("theme-dark") ? "dark" : "light";
             r.updateOptions(t[e], true);
-
-
         }
-
-
     });
-
+    $('#thisMonth').click();
 });
 

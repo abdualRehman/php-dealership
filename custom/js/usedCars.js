@@ -2,7 +2,6 @@
 "use strict";
 var manageInvTable, TableData, maxFileLimit = 10, rowGroupSrc = 23;
 var searhStatusArray = [];
-var manageCarDealersTable;
 var collapsedGroups = {};
 var e1 = Swal.mixin({
     customClass: {
@@ -40,32 +39,29 @@ $(function () {
 
     autosize($(".autosize"));
 
-    var a = new Bloodhound({
-        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('stockDetails'),
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        local: searhStatusArray
-    });
+    // var a = new Bloodhound({
+    //     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('stockDetails'),
+    //     queryTokenizer: Bloodhound.tokenizers.whitespace,
+    //     local: searhStatusArray
+    // });
 
-    $('#searchcars').typeahead({
-        hint: true,
-        highlight: true,
-        minLength: 1,
-    },
-        {
-            name: 'searhStatusArray',
-            display: 'stockDetails',
-            source: a,
-            templates: {
-                suggestion: function (data) {
-                    var stockAvailibilityArray = data.stockAvailibility;
-                    const template = `<div><p><strong>${data.stockDetails}</strong></p><div class="row pl-2 pr-2">${stockAvailibilityArray.map(e => (e) ? `<div class="col-sm-4 p-1"> <span class="badge badge-label-primary"> ${e} </span> </div>` : ``).join('')}</div>`;
-                    return template;
-                }
-            }
-        });
-
-
-
+    // $('#searchcars').typeahead({
+    //     hint: true,
+    //     highlight: true,
+    //     minLength: 1,
+    // },
+    //     {
+    //         name: 'searhStatusArray',
+    //         display: 'stockDetails',
+    //         source: a,
+    // templates: {
+    //     suggestion: function (data) {
+    //         var stockAvailibilityArray = data.stockAvailibility;
+    //         const template = `<div><p><strong>${data.stockDetails}</strong></p><div class="row pl-2 pr-2">${stockAvailibilityArray.map(e => (e) ? `<div class="col-sm-4 p-1"> <span class="badge badge-label-primary"> ${e} </span> </div>` : ``).join('')}</div>`;
+    //         return template;
+    //     }
+    // }
+    //     });
 
 
     manageInvTable = $("#datatable-1").DataTable({
@@ -80,7 +76,7 @@ $(function () {
         dom: `<'row'<'col-12'P>>
         <'row' 
         <'col-sm-4 text-left text-sm-left pl-3'<'#statusFilterDiv'>>
-            <'col-sm-4 text-left text-sm-left pl-3'B>
+            <'col-sm-4 text-sm-center pl-3'B>
             <'col-sm-4 text-right text-sm-right mt-2 mt-sm-0'f>>\n
         <'row'<'col-12'tr>>\n      
         <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
@@ -124,7 +120,7 @@ $(function () {
 
         columnDefs: [
             {
-                targets: [0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28],
+                targets: [0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 29],
                 visible: false,
             },
             { width: 400, targets: [15] },
@@ -207,6 +203,13 @@ $(function () {
                         } else {
                             $(td).addClass('font-weight-bold p');
                         }
+                    } else if (activebtnvalue == 'retail') {
+                        var data = $(td).html();
+                        if (data == 'Yes') {
+                            $(td).addClass('h5 font-weight-bolder text-danger');
+                        } else {
+                            $(td).addClass('font-weight-bold p');
+                        }
                     } else {
                         return data;
                     }
@@ -285,6 +288,12 @@ $(function () {
                 },
             },
             {
+                targets: [29], // action
+                render: function (data, type, row) {
+                    return row[31];
+                },
+            },
+            {
                 searchPanes: {
                     show: true
                 },
@@ -341,7 +350,7 @@ $(function () {
                         });
                     // console.log(filteredData);
                     return $('<tr/>')
-                        .append('<td colspan="17">' + group + ' (' + totalProfit + ')</td>')
+                        .append('<td colspan="17">' + group + ' (' + formatToCurrency(totalProfit) + ')</td>')
                         .attr('data-name', group)
                         .toggleClass('collapsed', collapsed);
                 }
@@ -383,9 +392,11 @@ $(function () {
                 } else if (activebtnvalue == 'soldAtAuction') {
                     setInputChange();
                 }
-                a.clear();
-                a.local = searhStatusArray;
-                a.initialize(true);
+                // a.clear();
+                // a.local = searhStatusArray;
+                // a.initialize(true);
+                setSearchTypehead(searhStatusArray);
+                searhStatusArray = [];
             }
         },
 
@@ -393,41 +404,46 @@ $(function () {
             if ($('#isEditAllowed').val() == "true") {
                 var activebtnvalue = $("#mods .btn.active input[name='mod']").val();
                 if (activebtnvalue == 'missingDate') {
-                    $(row).children().not(':nth-child(2)').not(':nth-child(9)').attr({
+                    $(row).children().not(':nth-child(2)').not(':nth-child(9)').not(':last-child').attr({
                         "data-toggle": "modal",
                         "data-target": "#modal8",
                         "onclick": "editUsedCar(" + data[0] + ")"
                     });
                 } else if (activebtnvalue == 'titleIssue') {
 
-                    $(row).children().not(':nth-child(9)').attr({
+                    $(row).children().not(':nth-child(9)').not(':last-child').attr({
                         "data-toggle": "modal",
                         "data-target": "#modal8",
                         "onclick": "editUsedCar(" + data[0] + ")"
                     });
                 } else if (activebtnvalue == 'readyToShip') {
 
-                    $(row).children().not(':nth-child(3)').not(':nth-child(10)').attr({
+                    $(row).children().not(':nth-child(3)').not(':nth-child(10)').not(':last-child').attr({
                         "data-toggle": "modal",
                         "data-target": "#modal8",
                         "onclick": "editUsedCar(" + data[0] + ")"
                     });
                 } else if (activebtnvalue == 'keysPulled' || activebtnvalue == 'atAuction') {
 
-                    $(row).children().not(':nth-child(3)').not(':nth-child(13)').not(':nth-child(10)').not(':nth-child(14)').attr({
+                    $(row).children().not(':nth-child(3)').not(':nth-child(13)').not(':nth-child(10)').not(':nth-child(14)').not(':last-child').attr({
                         "data-toggle": "modal",
                         "data-target": "#modal8",
                         "onclick": "editUsedCar(" + data[0] + ")"
                     });
                 } else if (activebtnvalue == 'soldAtAuction') {
 
-                    $(row).children().not(':nth-child(3)').not(':nth-child(10)').not(':nth-child(12)').attr({
+                    $(row).children().not(':nth-child(3)').not(':nth-child(10)').not(':nth-child(12)').not(':last-child').attr({
                         "data-toggle": "modal",
                         "data-target": "#modal8",
                         "onclick": "editUsedCar(" + data[0] + ")"
                     });
-                }
-                else {
+                } else if (activebtnvalue == 'addToSheet') {
+                    $(row).children().not(':last-child').attr({
+                        "data-toggle": "modal",
+                        "data-target": "#modal8",
+                        "onclick": "editUsedCar(" + data[0] + ")"
+                    });
+                } else {
                     $(row).children().attr({
                         "data-toggle": "modal",
                         "data-target": "#modal8",
@@ -448,7 +464,7 @@ $(function () {
             var tableNode = manageInvTable.table().node();
 
 
-            if (rowData[2] && rowData[2] != 'undefined') {
+            if (rowData[2] != 'undefined' && rowData[2] && rowData[2] != 'undefined') {
                 searhStatusArray.push({
                     stockDetails: rowData[2],
                     stockAvailibility: rowData[30],
@@ -468,6 +484,7 @@ $(function () {
             var date_sent = rowData[21];
             var date_sold = rowData[22];
             var retail_status = rowData[23];
+            var carshopId = rowData[32];
 
 
             if (activebtnvalue == 'addToSheet') {
@@ -514,7 +531,10 @@ $(function () {
 
             }
             if (activebtnvalue == 'retail') {
-                if (wholesale == 'No' && balance !== '' && date_in !== null) {
+                // if (wholesale == 'No' && balance !== '' && date_in !== null) {
+                //     return true;
+                // }
+                if (retail_status != 'wholesale' && balance !== '' && (carshopId !== '' && carshopId !== null)) {
                     return true;
                 }
             }
@@ -585,6 +605,10 @@ $(function () {
                 manageInvTable.rowGroup().enable().draw();
                 manageInvTable.dataSrc(rowGroupSrc);
                 break;
+            case 'addToSheet':
+                setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28 , 29]);
+                manageInvTable.rowGroup().disable().draw();
+                break;
             default:
                 setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28]);
                 manageInvTable.rowGroup().disable().draw();
@@ -611,10 +635,9 @@ $(function () {
         // ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
         ignore: 'input[type=hidden], .select2-input, .select2-focusser',
         rules: {
-            // "bodyshop": {
-            //     required: !0,
-            // },
-
+            "retailStatus": {
+                required: !0,
+            },
             "soldPrice": {
                 number: !0,
             },
@@ -694,6 +717,53 @@ $(function () {
 
 });
 
+function setSearchTypehead(searhStatusArray) {
+    $('#searchcars').typeahead('destroy');
+
+    function substringMatcher(strs) {
+        return function findMatches(q, cb) {
+            var matches = [];
+            var substrRegex = new RegExp(q, 'i');
+            $.each(strs,
+                function (i, str) {
+                    if (substrRegex.test(str.stockDetails)) {
+                        matches.push(str);
+                    }
+                });
+            cb(matches);
+        };
+    };
+    $('#searchcars').typeahead({
+        hint: true,
+        highlight: true,
+        minLength: 0,
+        autoselect: false
+    },
+        {
+            displayKey: "stockDetails",
+            name: "searhStatusArray",
+            source: substringMatcher(searhStatusArray),
+            templates: {
+                suggestion: function (data) {
+                    var stockAvailibilityArray = data.stockAvailibility;
+                    const template = `<div><p><strong>${data.stockDetails}</strong></p><div class="row pl-2 pr-2">${stockAvailibilityArray.map(e => (e) ? `<div class="col-sm-4 p-1"> <span class="badge badge-label-primary"> ${e} </span> </div>` : ``).join('')}</div></div>`;
+                    return template;
+
+                }
+            },
+        })
+        .on('typeahead:cursorchanged', function ($e, datum) {
+            $("#searchcars").typeahead('val', datum.stockDetails)
+        })
+        .on('typeahead:selected', function ($e, datum) {
+            $("#searchcars").typeahead('val', datum.stockDetails)
+        })
+
+    $('.form-control.tt-input').next().addClass('w-inherit');
+
+}
+
+
 function setPlaceholder() {
     var element = $('.dtsp-searchPane')[3];
     var input = $(element).find('.dtsp-paneInputButton.form-control');
@@ -762,7 +832,7 @@ function handletitleCheckbox(e) {
     if ($(e).is(':checked')) {
         value = "true";
     }
-    updateFieldsUsedCars({ id, attribute, value });
+    updateFieldsUsedCars({ id, attribute, value } , false);
 }
 
 
@@ -824,7 +894,7 @@ function editUsedCar(id) {
                 let age = response.age;
                 // get day difference
                 if (response.date_in != '' && response.date_in != null) {
-                    var given = moment(response.date_in, "MM-DD-YYYY");
+                    var given = moment(response.date_in, "MM-DD-YYYY").subtract(1, 'days');
                     var current = moment().startOf('day');
                     age = moment.duration(current.diff(given)).asDays();
                 }
@@ -985,7 +1055,7 @@ function setColumVisibility(columnArray) {
     manageInvTable.columns.adjust().draw();
 }
 
-function updateFieldsUsedCars(obj) {
+function updateFieldsUsedCars(obj , notify = true) {
     console.log(obj);
     if (obj) {
         // e1.fire({
@@ -1004,8 +1074,10 @@ function updateFieldsUsedCars(obj) {
             dataType: 'json',
             success: function (response) {
                 if (response.success == true) {
-                    Swal.fire("Added!", "Successfully Changed", "success")
                     manageInvTable.ajax.reload(null, false);
+                    if(notify == true){
+                        Swal.fire("Added!", "Successfully Changed", "success");
+                    }
                 } // /response messages
             }
 
@@ -1024,4 +1096,43 @@ function filterDatatable() {
     });
     manageInvTable.draw();
     manageInvTable.searchPanes.rebuildPane();
+}
+
+const formatToCurrency = amount => {
+    if (amount > 0) {
+        return "$" + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
+    } else {
+        amount = Math.abs(amount);
+        return "-$" + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
+    }
+};
+
+function removeCarshop(id = null) {
+    if (id) {
+        e1.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: !0,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then(function (t) {
+            if (t.isConfirmed == true) {
+                $.ajax({
+                    url: '../php_action/removeCarshop.php',
+                    type: 'post',
+                    data: { id: id },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success == true) {
+                            Swal.fire("Deleted!", "Your file has been deleted.", "success")
+                            manageInvTable.ajax.reload(null, false);
+                        } // /response messages
+                    }
+                }); // /ajax function to remove the brand
+
+            }
+        });
+    }
 }

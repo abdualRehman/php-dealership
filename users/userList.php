@@ -8,6 +8,7 @@ if (hasAccess("user", "Edit") === 'false' && hasAccess("user", "Remove") === 'fa
 ?>
 
 <link href="https://cdn.jsdelivr.net/npm/timepicker@1.13.18/jquery.timepicker.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/jquery-wheelcolorpicker@3.0.9/css/wheelcolorpicker.css" rel="stylesheet" />
 <link rel="stylesheet" href="../custom/css/customDatatable.css">
 
 <style>
@@ -37,6 +38,12 @@ if (hasAccess("user", "Edit") === 'false' && hasAccess("user", "Remove") === 'fa
 
     .ui-timepicker-wrapper {
         width: 8.5em !important;
+    }
+
+    .jQWCP-wWidget {
+        min-width: max-content !important;
+        height: initial !important;
+        z-index: 9999;
     }
 </style>
 
@@ -131,22 +138,28 @@ if (hasAccess("user", "Edit") === 'false' && hasAccess("user", "Remove") === 'fa
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <label for="location" class="col-form-label">Location</label>
                                         <div class="form-group">
                                             <input type="text" class="form-control" name="location" id="location" autocomplete="off" autofill="off" />
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <label for="extention" class="col-form-label">Extention</label>
                                         <div class="form-group">
                                             <input type="text" class="form-control" name="extention" id="extention" autocomplete="off" autofill="off" />
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <label for="mobile" class="col-form-label">Mobile</label>
                                         <div class="form-group">
                                             <input type="text" class="form-control" name="mobile" id="mobile" autocomplete="off" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="mobile" class="col-form-label">Color</label>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" data-wheelcolorpicker="" data-wcp-preview="true" id="color" name="color">
                                         </div>
                                     </div>
                                 </div>
@@ -334,4 +347,5 @@ if (hasAccess("user", "Edit") === 'false' && hasAccess("user", "Remove") === 'fa
 
 <?php require_once('../includes/footer.php') ?>
 <script src="https://cdn.jsdelivr.net/npm/timepicker@1.13.18/jquery.timepicker.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-wheelcolorpicker@3.0.9/jquery.wheelcolorpicker.min.js"></script>
 <script type="text/javascript" src="../custom/js/userList.js"></script>

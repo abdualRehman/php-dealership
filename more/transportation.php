@@ -2,14 +2,14 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
-// if (hasAccess("leaserule", "Add") === 'false' && hasAccess("leaserule", "Edit") === 'false' && hasAccess("leaserule", "Remove") === 'false') {
-//     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
-// }
-// if (hasAccess("leaserule", "Edit") !== 'false') {
-//     echo '<input type="hidden" name="isAllowed" id="isAllowed" value="true" />';
-// } else {
-//     echo '<input type="hidden" name="isAllowed" id="isAllowed" value="false" />';
-// }
+if (hasAccess("tansptDmg", "Add") === 'false' && hasAccess("tansptDmg", "Edit") === 'false' && hasAccess("tansptDmg", "Remove") === 'false') {
+    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+}
+if (hasAccess("tansptDmg", "Edit") !== 'false') {
+    echo '<input type="hidden" name="isAllowed" id="isAllowed" value="true" />';
+} else {
+    echo '<input type="hidden" name="isAllowed" id="isAllowed" value="false" />';
+}
 ?>
 
 <head>
@@ -71,18 +71,12 @@ include_once '../includes/header.php';
                         <button class="btn btn-primary mr-2 p-2" onclick="toggleFilterClass()">
                             <i class="fa fa-align-center ml-1 mr-2"></i> Filter
                         </button>
-                        <button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
-                            <i class="fa fa-plus ml-1 mr-2"></i> Add Vehicle
-                        </button>
-                        <button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#importNew">
-                            <i class="fa fa-plus ml-1 mr-2"></i> Import File
-                        </button>
                         <?php
-                        // if (hasAccess("leaserule", "Add") !== 'false') {
-                        //     echo '<button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
-                        //     <i class="fa fa-plus ml-1 mr-2"></i> Add Vehicle
-                        // </button>';
-                        // }
+                        if (hasAccess("tansptDmg", "Add") !== 'false') {
+                            echo '<button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
+                            <i class="fa fa-plus ml-1 mr-2"></i> Add Vehicle
+                        </button>';
+                        }
                         ?>
 
 

@@ -2,17 +2,16 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
-// if (hasAccess("incr", "Add") === 'false' && hasAccess("incr", "Edit") === 'false' && hasAccess("incr", "Remove") === 'false') {
-//     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
-// }
-// if (hasAccess("incr", "Edit") === 'false') {
-//     echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
-// } else {
-//     echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
-// }
+if (hasAccess("bdc", "Add") === 'false' && hasAccess("bdc", "Edit") === 'false' && hasAccess("bdc", "Remove") === 'false') {
+    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+}
+if (hasAccess("bdc", "Edit") === 'false') {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+}
 $userRole = $_SESSION['userRole'];
 echo '<input type="hidden" name="loggedInUserRole" id="loggedInUserRole" value="' . $userRole . '" />';
-echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
 
 
 
@@ -208,15 +207,12 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                         <button class="btn btn-primary mr-2 p-2" onclick="toggleFilterClass()">
                             <i class="fa fa-align-center ml-1 mr-2"></i> Filter
                         </button>
-                        <button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
-                            <i class="fa fa-plus ml-1 mr-2"></i> Add New
-                        </button>
                         <?php
-                        // if (hasAccess("incr", "Add") !== 'false') {
-                        //     echo '<button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
-                        //     <i class="fa fa-plus ml-1 mr-2"></i> Set New Rule
-                        // </button>';
-                        // }
+                        if (hasAccess("bdc", "Add") !== 'false') {
+                            echo '<button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
+                            <i class="fa fa-plus ml-1 mr-2"></i> Add New
+                        </button>';
+                        }
                         ?>
 
                     </div>
@@ -345,7 +341,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                             <div class="col-md-4">
                                 <div class="row align-items-baseline">
                                     <label for="eleadStatus" class="col-sm-4 col-form-label">Sold / Show</label>
-                                    <div class="form-group col-sm-8">
+                                    <div class="form-group col-sm-8 text-center">
                                         <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="eleadStatus">
                                             <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                                 <input type="radio" name="eleadStatus" value="sold" id="esold" />
@@ -525,7 +521,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                         <div class="col-md-4">
                             <div class="row align-items-baseline">
                                 <label for="leadStatus" class="col-sm-4 col-form-label">Sold / Show</label>
-                                <div class="form-group col-sm-8">
+                                <div class="form-group col-sm-8 text-center">
                                     <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="leadStatus">
                                         <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                             <input type="radio" name="leadStatus" value="sold" id="leadStatusSold" />

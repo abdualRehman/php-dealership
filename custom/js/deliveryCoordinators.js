@@ -1,5 +1,6 @@
 "use strict";
 var manageAppointmentsTable;
+var deliveryCoordinatorArray = [];
 var o, vehicleArray = ["All"];
 var e1 = Swal.mixin({
     customClass: {
@@ -8,6 +9,25 @@ var e1 = Swal.mixin({
     },
     buttonsStyling: !1
 });
+
+toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": 0,
+    "extendedTimeOut": 0,
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut",
+    "tapToDismiss": true
+};
 
 $(function () {
 
@@ -25,15 +45,25 @@ $(function () {
         autoclose: true,
     });
 
-    $(".scheduleTime").datetimepicker({
-        todayHighlight: 0,
-        minView: 0,
-        startView: 1,
-        maxView: 1,
-        showMeridian: !0,
-        format: "hh:ii",
-        autoclose: true,
-    })
+    // $(".scheduleTime").datetimepicker({
+    //     todayHighlight: !0,
+    //     minView: 1,
+    //     startView: 1,
+    //     maxView: 1,
+    //     showMeridian: !0,
+    //     format: "hh:00",
+    //     autoclose: true,
+    //     forceParse: false,
+    // });
+    $('.scheduleTime').timepicker({
+        dynamic: true,
+        dropdown: true,
+        'showDuration': false,
+        scrollbar: true,
+        show24Hours: false,
+        interval: 60,
+    });
+
 
 
     function assignKey(obj, key) {
@@ -47,7 +77,7 @@ $(function () {
         dom: `<'row'<'col-12'P>>
         <'row' 
         <'col-sm-4 text-left text-sm-left pl-3'<'#statusFilterDiv'>>
-            <'col-sm-4 text-left text-sm-left pl-3'B>
+            <'col-sm-4 text-center pl-3'B>
             <'col-sm-4 text-right text-sm-right mt-2 mt-sm-0'f>>\n
         <'row'<'col-12'tr>>\n      
         <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
@@ -300,6 +330,11 @@ $(function () {
         submitHandler: function (form, e) {
             // return true;
             e.preventDefault();
+
+            var time = $('#scheduleTime').val();
+            const number = moment(time, ["h:mmA"]).format("HH:mm");
+            $('#scheduleTime').val(number);
+
             var form = $('#addNewSchedule');
             $.ajax({
                 type: "POST",
@@ -316,7 +351,9 @@ $(function () {
                             showConfirmButton: !1,
                             timer: 1500
                         });
+                        $('#addNewSchedule')[0].reset();
                         $('#addNew').modal('hide');
+                        loadSoldLogs();
                         manageAppointmentsTable.ajax.reload(null, false);
                     } else {
                         e1.fire({
@@ -390,6 +427,11 @@ $(function () {
         submitHandler: function (form, e) {
             // return true;
             e.preventDefault();
+
+            var time = $('#escheduleTime').val();
+            const number = moment(time, ["h:mmA"]).format("HH:mm");
+            $('#escheduleTime').val(number);
+
             var form = $('#editScheduleForm');
             $.ajax({
                 type: "POST",
@@ -501,7 +543,7 @@ function toggleFilterClass() {
 function disabledManagerDiv() {
     let currentUser = $('#loggedInUserRole').val();
     var delivery_coordinator_id = 62;
-    if (currentUser != delivery_coordinator_id) {
+    if (currentUser != delivery_coordinator_id && currentUser != 'Admin') {
         $('.delivery_coordinator').addClass('disabled-div');
         // $(".delivery_coordinator").find("*").prop("disabled", true);
         $(".delivery_coordinator").find("*").prop("readonly", true);
@@ -510,15 +552,32 @@ function disabledManagerDiv() {
         // $(".delivery_coordinator").find("*").prop("disabled", true);
         $(".delivery_coordinator").find("*").prop("readonly", false);
     }
+    var sales_manager_id = 67;
+    var general_manager_id = 69;
+    if (currentUser != 'Admin' && currentUser != sales_manager_id && currentUser != general_manager_id) {
+        $('.manager_override_div').addClass('disabled-div');
+        // $(".manager_override_div").find("*").prop("disabled", true);
+        $(".manager_override_div").find("*").prop("readonly", true);
+    } else {
+        $('.manager_override_div').removeClass('disabled-div');
+        // $(".manager_override_div").find("*").prop("disabled", true);
+        $(".manager_override_div").find("*").prop("readonly", false);
+    }
+
 }
 function loadSoldLogs() {
+    var selectBoxes = document.getElementsByClassName('stockno');
+    selectBoxes.forEach(element => {
+        element.innerHTML = ``;
+    });
+    $('.selectpicker').selectpicker('refresh');
+
     $.ajax({
         url: '../php_action/fetchSoldLogsForAppointmenst.php',
         type: "GET",
         dataType: 'json',
         success: function (response) {
             stockArray = response.data;
-            var selectBoxes = document.getElementsByClassName('stockno');
             selectBoxes.forEach(element => {
                 for (var i = 0; i < stockArray.length; i++) {
                     var item = stockArray[i];
@@ -537,18 +596,53 @@ function loadDeliveryCoordinator() {
         data: { id: id },
         dataType: 'json',
         success: function (response) {
-            var Array = response.data;
-            var selectBoxes = document.getElementsByClassName('coordinator');
-            selectBoxes.forEach(element => {
-                for (var i = 0; i < Array.length; i++) {
-                    var item = Array[i];
-                    element.innerHTML += `<option value="${item[0]}" title="${item[1]} - ${item[2]}">${item[1]} - ${item[2]} </option>`;
-                }
-            });
-            $('.selectpicker').selectpicker('refresh');
+            deliveryCoordinatorArray = response.data;
         }
     });
 }
+
+$('.handleDateTime').on('change', function () {
+    var date, time, selectBox;
+
+    if ($(this).data('type') == 'add') {
+        date = $('#scheduleDate').val();
+        time = $('#scheduleTime').val();
+        selectBox = document.getElementById('coordinatorList');
+    } else {
+        date = $('#escheduleDate').val();
+        time = $('#escheduleTime').val();
+        selectBox = document.getElementById('ecoordinatorList');
+
+        console.log(date, time, selectBox);
+    }
+    selectBox.innerHTML = "";
+    $('.selectpicker').selectpicker('refresh');
+    if (date != '' && time != '') {
+        let dayname = moment(date).format('dddd').toLowerCase();
+        deliveryCoordinatorArray.forEach(element => {
+            let startTime = element[3][dayname][0];
+            let endTime = element[3][dayname][1];
+            if (startTime && endTime) {
+
+                time = moment(moment(time, ["h:mmA"]).format("HH:mm"), 'hh:mm');
+                startTime = moment(moment(startTime, ["h:mmA"]).format("HH:mm"), 'hh:mm');
+                endTime = moment(moment(endTime, ["h:mmA"]).format("HH:mm"), 'hh:mm');
+
+                if (time.isBetween(startTime, endTime)) {
+                    selectBox.innerHTML += `<option value="${element[0]}" title="${element[1]} - ${element[2]}">${element[1]} - ${element[2]} </option>`;
+                    $('.selectpicker').selectpicker('refresh');
+                }
+            }
+        });
+    }
+
+})
+
+
+
+
+
+
 function editShedule(id = null) {
 
     if (id) {
@@ -570,7 +664,7 @@ function editShedule(id = null) {
                 $('#ecallenderId').val(response.calender_id);
 
                 $('#esale_id').val(response.sale_id);
-                echangeStockDetails({ value: response.sale_id });
+                echangeStockDetails({ value: response.sale_id} , false);
                 $('#ehas_appointment').val("");
 
                 $('#esubmittedBy').val(response.submitted_by);
@@ -581,14 +675,13 @@ function editShedule(id = null) {
                 $('#eoverrideById').val(response.eoverrideById);
 
 
+                const number = moment(response.appointment_time, ["HH:mm"]).format("h:mma");
+                $('#escheduleTime').val(number);
+
                 var date = moment(response.appointment_date, 'YYYY-MM-DD').format('MM-DD-YYYY');
                 $('#escheduleDate').val(date);
+
                 $('#escheduleDate').datepicker('update', date);
-
-                $('#escheduleTime').val(response.appointment_time);
-                $('#escheduleTime').datetimepicker({ format: "hh:mm" }).val(response.appointment_time);
-
-                $('#ecoordinator').val(response.coordinator);
 
 
 
@@ -613,7 +706,10 @@ function editShedule(id = null) {
                 (response.complete) ? $('#com' + response.complete).prop('checked', true).click() : null;
 
 
-                $('.selectpicker').selectpicker('refresh');
+                if ($('#ecoordinatorList').children().length > 0) {
+                    $('#ecoordinator').val(response.coordinator);
+                    $('.selectpicker').selectpicker('refresh');
+                }
 
             }, // /success
             error: function (err) {
@@ -626,12 +722,24 @@ function editShedule(id = null) {
 
 function changeStockDetails(ele) {
     let obj = stockArray.find(data => data[0] === ele.value);
-    console.log(obj);
     $('#customerName').val("");
     $('#vechicle').val("");
     $('#stockno').val("");
     $('#has_appointment').val("null");
     if (obj) {
+        let currentUser = $('#loggedInUserRole').val();
+        var apptStatus = obj[10];
+        var sales_manager_id = 67;
+        var general_manager_id = 69;
+        if (apptStatus != null && currentUser != sales_manager_id && currentUser != general_manager_id && currentUser != 'Admin') {
+            toastr.error('Error! - Appointment Allready Exist');
+
+            $('#sale_id').val('');
+            $('.selectpicker').selectpicker('refresh');
+            return false;
+        }
+
+
         $('#customerName').val(obj[2] + ' ' + obj[3]);
         $('#vechicle').val(obj[6] + ' ' + obj[7] + ' ' + obj[9]);
         $('#has_appointment').val(obj[10])
@@ -639,13 +747,26 @@ function changeStockDetails(ele) {
     }
 
 }
-function echangeStockDetails(ele) {
+function echangeStockDetails(ele , checkAppt = true) {
+    
     let obj = stockArray.find(data => data[0] === ele.value);
     $('#ecustomerName').val("");
     $('#evechicle').val("");
     $('#estockno').val("");
     $('#ehas_appointment').val("null");
     if (obj) {
+        if(checkAppt && checkAppt == true){
+            let currentUser = $('#loggedInUserRole').val();
+            var apptStatus = obj[10];
+            var sales_manager_id = 67;
+            var general_manager_id = 69;
+            if (apptStatus != null && currentUser != sales_manager_id && currentUser != general_manager_id && currentUser != 'Admin') {
+                toastr.error('Error! - Appointment Allready Exist');
+                $('#esale_id').val('');
+                $('.selectpicker').selectpicker('refresh');
+                return false;
+            }
+        }
         $('#ecustomerName').val(obj[2] + ' ' + obj[3]);
         $('#evechicle').val(obj[6] + ' ' + obj[7] + ' ' + obj[9]);
         $('#ehas_appointment').val(obj[10])

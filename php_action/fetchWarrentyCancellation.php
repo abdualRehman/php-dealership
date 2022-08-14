@@ -43,24 +43,14 @@ if ($result->num_rows > 0) {
         $notes = $row['notes'];
 
 
-       
 
-        // $button = '
-        //     <div class="show d-flex" >' .
-        //     // (hasAccess("regp", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editProblem(' . $id . ')" >
-        //     //         <i class="fa fa-edit"></i>
-        //     //     </button>' : "") .
-        //     // (hasAccess("regp", "Remove") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeProblem(' . $id . ')" >
-        //     //         <i class="fa fa-trash"></i>
-        //     //     </button>' : "") .
-        //     '</div>';
+
         $button = '
-            <div class="show d-flex" >
-                <button class="btn btn-label-primary btn-icon mr-1" onclick="removeCancellation(' . $id . ')" >
+            <div class="show d-flex" >' .
+            (hasAccess("warranty", "Remove") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeCancellation(' . $id . ')" >
                 <i class="fa fa-trash"></i>
-                </button>
-            </div>';
-
+                </button>' : "") .
+            '</div>';
 
         $output['data'][] = array(
             $id,

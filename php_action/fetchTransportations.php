@@ -19,7 +19,7 @@ if ($result->num_rows > 0) {
         $damage_type = $row['damage_type'];
         $damage_severity = $row['damage_severity'];
         $damage_grid = $row['damage_grid'];
-        
+
         $stockno = $row['stockno'];
         $vin = $row['vin'];
         $model = $row['model'];
@@ -35,24 +35,19 @@ if ($result->num_rows > 0) {
         }
 
 
-        // $button = '
-        // <div class="show d-inline-flex" >'.
-        //     ((hasAccess("swap", "Remove") !== 'false') ? '<button class="btn btn-label-primary btn-icon" onclick="removeDetails(' . $id . ')" >
-        //         <i class="fa fa-trash"></i>
-        //     </button>'  : '') .
-        //     '</div>';
         $button = '
-        <div class="show d-inline-flex" >
-            <button class="btn btn-label-primary btn-icon" onclick="removeDetails(' . $id . ')" >
+        <div class="show d-inline-flex" >' .
+            ((hasAccess("tansptDmg", "Remove") !== 'false') ? '<button class="btn btn-label-primary btn-icon" onclick="removeDetails(' . $id . ')" >
                 <i class="fa fa-trash"></i>
-            </button>
-        </div>';
+            </button>'  : '') .
+            '</div>';
+
 
         $output['data'][] = array(
             $id,
-            $stockno . ' - '. $vin,
+            $stockno . ' - ' . $vin,
             $model,
-            $loc_num . ' - '. $damage_type .' - ' . $damage_severity . ' - ' . $damage_grid,
+            $loc_num . ' - ' . $damage_type . ' - ' . $damage_severity . ' - ' . $damage_grid,
             $status,
             $button,
         );

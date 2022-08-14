@@ -7,6 +7,10 @@ require_once 'db_connect.php';
 $siteurl = "http://localhost/carshop";
 // $siteurl ="https://www.laughingalbattani5c25df.binfarooqtextile.com";
 
+// date_default_timezone_set('Asia/Karachi');
+
+
+
 $salesConsultantID = 66; // sets in the database role 
 $salesManagerID = 67; // sets in the database role 
 $generalManagerID = 69; // sets in the database role 

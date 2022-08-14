@@ -4,7 +4,7 @@ require_once 'db/core.php';
 
 $sql = "SELECT inventory.age , inventory.stockno , inventory.vin , inventory.model, inventory.year, inventory.make , inventory.color , 
 inventory.mileage, inventory.lot , inventory.balance, inventory.retail, inventory.certified, 
-inventory.stocktype , inventory.wholesale , inventory.id as invId , used_cars.* FROM inventory LEFT JOIN used_cars ON inventory.id = used_cars.inv_id WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO'  AND inventory.status = 1";
+inventory.stocktype , inventory.wholesale , inventory.id as invId , used_cars.* FROM inventory LEFT JOIN used_cars ON inventory.id = used_cars.inv_id WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.status = 1";
 $result = $connect->query($sql);
 
 $output = array('data' => array());
@@ -37,6 +37,7 @@ if ($result->num_rows > 0) {
 
     // while ($row = $result->fetch_assoc()) {
     while ($row = $result->fetch_array()) {
+        $carshopId = $row['id'];
         $id = $row['invId'];
         $stockDetails = $row[1] . ' ||  ' . $row[2];
         $submittedBy = $row['submitted_by'];
@@ -136,7 +137,11 @@ if ($result->num_rows > 0) {
             $_soldAtAuction = "Sold At Auction";
         }
 
-        if ($wholesale == 'No' && $balance !== '' && $date_in !== null) {
+        // if ($wholesale == 'No' && $balance !== '' && $date_in !== null) {
+        //     $retail += 1;
+        //     $_retail = "Retail";
+        // }
+        if ($retail_status != 'wholesale' && $balance !== '' && ( $carshopId !== '' && $carshopId !== null)) {
             $retail += 1;
             $_retail = "Retail";
         }
@@ -147,26 +152,41 @@ if ($result->num_rows > 0) {
         }
 
 
-        $age = $row[0]; // age
+        // $age = $row[0]; // age
+        $age = "";
 
         if ($row['date_in'] != '' && !is_null($row['date_in'])) {
-            $date = date('Y-m-d');
-            $today = new DateTime($date);
+            // date_default_timezone_set('Asia/Karachi');
+            $date = strtotime(date('Y-m-d'));
             $date_in = reformatDate($row['date_in']);
-            $date_in = new DateTime($date_in);
-            $age =  $date_in->diff($today)->format("%r%a");
+            $date_in = date('Y-m-d', strtotime('-1 day', strtotime($date_in)));
+            $date_in = strtotime($date_in);
+            $age = ceil(abs($date_in - $date) / 86400);
+
+            // $date = date('Y-m-d', strtotime('+2 days'));
+            // $today = new DateTime($date);
+            // $date_in = reformatDate($row['date_in']);
+            // $date_in = new DateTime($date_in);
+            // $age =  $date_in->diff($today)->format("%r%a");
         }
 
 
 
+        // $button = '
+        //     <div class="show d-flex" >' .
+        //     (hasAccess("usedCars", "Edit") !== 'false' ?  '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editUsedCar(' . $id . ')" >
+        //             <i class="fa fa-car" ></i>
+        //         </button>' : "") .
+        //     '<!-- <button class="btn btn-label-primary btn-icon mr-1" onclick="removeShop(' . $id . ')" >
+        //             <i class="fa fa-trash"></i>
+        //         </button> -->
+        //     </div>
+        // ';
         $button = '
-            <div class="show d-flex" >' .
-            (hasAccess("usedCars", "Edit") !== 'false' ?  '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editUsedCar(' . $id . ')" >
-                    <i class="fa fa-car" ></i>
-                </button>' : "") .
-            '<!-- <button class="btn btn-label-primary btn-icon mr-1" onclick="removeShop(' . $id . ')" >
+            <div class="show d-flex" >
+                <button class="btn btn-label-primary btn-icon mr-1" onclick="removeCarshop(' . $id . ')" >
                     <i class="fa fa-trash"></i>
-                </button> -->
+                </button>
             </div>
         ';
 
@@ -195,7 +215,6 @@ if ($result->num_rows > 0) {
 
 
         $output['data'][] = array(
-            // $button,
             $id,
             $age, //age
             $stockDetails,
@@ -227,6 +246,8 @@ if ($result->num_rows > 0) {
             $row['uci'],
             $row['purchase_from'],
             array($_addToSheet, $_missingDate, $_titleIssue, $_readyToship, $_keyPulled, $_atAuction, $_soldAtAuction, $_retail, $_sold),
+            $button,
+            $row['id'],
 
         );
     } // /while 
