@@ -73,7 +73,7 @@ if (hasAccess("incentives", "Edit") === 'false') {
     }
 
     #datatable-1 tbody tr td {
-        /* text-align: center; */
+        text-align: center;
         padding: 10px;
     }
 

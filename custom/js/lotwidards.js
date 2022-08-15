@@ -56,29 +56,30 @@ $(function () {
     autosize($(".autosize"));
 
 
-    var a = new Bloodhound({
-        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('stockDetails'),
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        local: searhStatusArray
-    });
+    // var a = new Bloodhound({
+    //     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('stockDetails'),
+    //     queryTokenizer: Bloodhound.tokenizers.whitespace,
+    //     local: searhStatusArray
+    // });
 
-    $('#searchcars').typeahead({
-        hint: true,
-        highlight: true,
-        minLength: 1,
-    },
-        {
-            name: 'searhStatusArray',
-            display: 'stockDetails',
-            source: a,
-            templates: {
-                suggestion: function (data) {
-                    var stockAvailibilityArray = data.stockAvailibility;
-                    const template = `<div><p><strong>${data.stockDetails}</strong></p><div class="row pl-2 pr-2">${stockAvailibilityArray.map(e => (e) ? `<div class="col-sm-4 p-1"> <span class="badge badge-label-primary"> ${e} </span> </div>` : ``).join('')}</div>`;
-                    return template;
-                }
-            }
-        });
+    // $('#searchcars').typeahead({
+    //     hint: true,
+    //     highlight: true,
+    //     minLength: 1,
+    // },
+    //     {
+    //         name: 'searhStatusArray',
+    //         display: 'stockDetails',
+    //         source: a,
+    //         templates: {
+    //             suggestion: function (data) {
+    //                 var stockAvailibilityArray = data.stockAvailibility;
+    //                 const template = `<div><p><strong>${data.stockDetails}</strong></p><div class="row pl-2 pr-2">${stockAvailibilityArray.map(e => (e) ? `<div class="col-sm-4 p-1"> <span class="badge badge-label-primary"> ${e} </span> </div>` : ``).join('')}</div>`;
+    //                 return template;
+    //             }
+    //         }
+    //     }
+    // );
 
 
 
@@ -342,9 +343,11 @@ $(function () {
                 $('#completeCount').html(totalComplete);
 
 
-                a.clear();
-                a.local = searhStatusArray;
-                a.initialize(true);
+                // a.clear();
+                // a.local = searhStatusArray;
+                // a.initialize(true);
+                setSearchTypehead(searhStatusArray);
+                searhStatusArray = [];
 
 
             }
@@ -370,7 +373,7 @@ $(function () {
         function (settings, searchData, index, rowData, counter) {
             var tableNode = manageInvTable.table().node();
 
-            if (rowData[7] && rowData[7] != 'undefined') {                
+            if (rowData[7] && rowData[7] != 'undefined') {
                 searhStatusArray.push({
                     stockDetails: rowData[7],
                     stockAvailibility: rowData[26],
@@ -601,6 +604,7 @@ $(function () {
 
             setTimeout(() => {
                 // manageInvTable.order([6, "desc"]).draw();
+                $("#datatable-1").dataTable().fnFilter("");
                 manageInvTable.searchPanes.rebuildPane();
 
             }, 500);
@@ -805,24 +809,6 @@ $(function () {
 
 });
 
-// function initTableWithoutRowGroup() {
-// $('#datatable-1').DataTable().rowGroup().disabled()
-// $('#datatable-1').DataTable().rowGroup().disable().draw();
-// }
-
-// function initTableWithRowGroup() {
-// manageInvTable.rowGroup().enable().draw();
-// manageInvTable.rowGroup().disable().draw();
-// $('#datatable-1').DataTable().rowGroup().disable().draw();
-
-// console.log($('#datatable-1').DataTable().rowGroup().enabled());
-// console.log(manageInvTable.rowGroup().enable());
-// $('#datatable-1').DataTable().rowGroup().enabled(true);
-// $('#datatable-1').DataTable().rowGroup().dataSrc($("#datatable-1").DataTable().data(4));
-// $('#datatable-1').dataTable().fnClearTable();
-// $('#datatable-1').dataTable().fnDestroy();
-// }
-
 
 function loadbodyshops() {
     $.ajax({
@@ -845,6 +831,106 @@ function loadbodyshops() {
     });
 }
 
+
+
+
+function setSearchTypehead(searhStatusArray) {
+    $('#searchcars').typeahead('destroy');
+
+    function substringMatcher(strs) {
+        return function findMatches(q, cb) {
+            var matches = [];
+            var substrRegex = new RegExp(q, 'i');
+            $.each(strs,
+                function (i, str) {
+                    if (substrRegex.test(str.stockDetails)) {
+                        matches.push(str);
+                    }
+                });
+            cb(matches);
+        };
+    };
+    $('#searchcars').typeahead({
+        hint: true,
+        highlight: true,
+        minLength: 0,
+        autoselect: false
+    },
+        {
+            displayKey: "stockDetails",
+            name: "searhStatusArray",
+            source: substringMatcher(searhStatusArray),
+            templates: {
+                suggestion: function (data) {
+                    var stockAvailibilityArray = data.stockAvailibility;
+                    const template = `<div><p><strong>${data.stockDetails}</strong></p><div class="row pl-2 pr-2">${stockAvailibilityArray.map(e => (e) ? `<div class="col-sm-4 p-1"> <button class="badge badge-label-primary cursor-pointer searchStockBtn" onclick="searchStockBtn(this)"  data-head="${e}" data-search="${data.stockDetails}" > ${e} </button> </div>` : ``).join('')}</div></div>`;
+                    return template;
+                }
+            },
+        })
+        .on('typeahead:cursorchanged', function ($e, datum) {
+            $("#searchcars").typeahead('val', datum.stockDetails)
+        })
+        .on('typeahead:selected', function ($e, datum) {
+            $("#searchcars").typeahead('val', datum.stockDetails)
+        })
+
+    $('.form-control.tt-input').next().addClass('w-inherit');
+
+}
+
+function searchStockBtn(params) {
+    let head = $(params).data('head');
+    let search = $(params).data('search');
+    console.log(head);
+    console.log(search);
+    switch (head) {
+        case 'Not Touched':
+            head = 'notTouched';
+            break;
+        case 'Hold Recon':
+            head = 'holdForRecon';
+            break;
+        case 'Send Recon':
+            head = 'sendToRecon';
+            break;
+        case 'Lot Notes':
+            head = 'LotNotes';
+            break;
+        case 'Windshield':
+            head = 'windshield';
+            break;
+        case 'Wheels':
+            head = 'wheels';
+            break;
+        case 'To Go':
+            head = 'toGo';
+            break;
+        case 'At Bodyshop':
+            head = 'atBodyshop';
+            break;
+        case 'Back Bodyshop':
+            head = 'backFromBodyshop';
+            break;
+        case 'Retail Ready':
+            head = 'retailReady';
+            break;
+        case 'Gone':
+            head = 'Gone';
+            break;
+        default:
+            head = '';
+            break;
+    }
+    let tab = $('#mods :radio[name=mod][value=' + head + ']').parent().button('toggle');
+    if (tab) {
+        setTimeout(() => {
+            $("#datatable-1").dataTable().fnFilter(search);
+            manageInvTable.order([6, 'desc']).draw();
+            manageInvTable.ajax.reload(null, false);
+        }, 1000);
+    }
+}
 
 
 

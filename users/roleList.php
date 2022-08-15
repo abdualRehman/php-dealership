@@ -173,6 +173,10 @@ if ($_GET['r'] == 'add') {
                                                             <input type="checkbox" class="custom-control-input" id="saleView" name="saleView">
                                                             <label class="custom-control-label h5" for="saleView">View</label>
                                                         </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="saleDetails" name="saleDetails">
+                                                            <label class="custom-control-label h5" for="saleDetails">Cutomer Details</label>
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -689,6 +693,23 @@ if ($_GET['r'] == 'add') {
                                                     </div>
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Writedowns</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="writedownEdit" name="writedownEdit">
+                                                            <label class="custom-control-label h5" for="writedownEdit">Edit</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="writedownView" name="writedownView">
+                                                            <label class="custom-control-label h5" for="writedownView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -896,6 +917,8 @@ if ($_GET['r'] == 'add') {
                                                     $Name = "Warranty Cancellation";
                                                 } else if ($module === 'todayavail') {
                                                     $Name = "Today's Availability";
+                                                } else if($module === 'writedown'){
+                                                    $Name = "Writedowns";
                                                 }
                                             ?>
                                                 <tr>
@@ -933,6 +956,7 @@ if ($_GET['r'] == 'add') {
                                                                     echo serPermissions($itemPData, 'Edit', 'saleEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'saleRemove');
                                                                     echo serPermissions($itemPData, 'View', 'saleView');
+                                                                    echo serPermissions($itemPData, 'Details', 'saleDetails');
                                                                 } else if ($module === 'todo') {
                                                                     echo serPermissions($itemPData, 'Edit', 'todoEdit');
                                                                 } else if ($module === 'regp') {
@@ -1030,6 +1054,9 @@ if ($_GET['r'] == 'add') {
                                                                 } else if ($module === 'todayavail') {
                                                                     echo serPermissions($itemPData, 'Edit', 'todayavailEdit');
                                                                     echo serPermissions($itemPData, 'View', 'todayavailView');
+                                                                } else if ($module === 'writedown') {
+                                                                    echo serPermissions($itemPData, 'Edit', 'writedownEdit');
+                                                                    echo serPermissions($itemPData, 'View', 'writedownView');
                                                                 }
                                                             }
 

@@ -34,15 +34,39 @@ $(function () {
         'ajax': '../php_action/fetchBodyshops.php',
         "pageLength": 25,
         dom: `
-        <'row'<'col-sm-12 text-sm-left col-md-4 mb-2'<'#statusFilterDiv'> > <'col-sm-12 col-md-4 text-center'> <'col-sm-12 col-md-4 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
+        <'row'<'col-sm-12 text-sm-left col-md-4 mb-2'<'#statusFilterDiv'> > <'col-sm-12 col-md-4 text-center'B> <'col-sm-12 col-md-4 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
        <'row'<'col-12'tr>>\n      
        <'row align-items-baseline'
        <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
-       <'col-md-5'p>>\n`,        
+       <'col-md-5'p>>\n`,
+        buttons: [
+            {
+                extend: 'copyHtml5',
+                title: 'Bodyshops',
+                exportOptions: {
+                    columns: [':visible:not(:last-child)']
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                title: 'Bodyshops',
+                exportOptions: {
+                    columns: [':visible:not(:last-child)']
+                }
+            },
+            {
+                extend: 'print',
+                title: 'Bodyshops',
+                exportOptions: {
+                    columns: [':visible:not(:last-child)']
+                }
+            },
+        ],
+
         columnDefs: [
             {
                 visible: false,
-                targets: [9 , 10],
+                targets: [9, 10],
             },
         ],
 

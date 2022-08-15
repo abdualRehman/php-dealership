@@ -57,6 +57,16 @@ $(function () {
                 countFiltered: "{shown} / {total}"
             }
         },
+        createdRow: function (row, data, dataIndex) {
+            if ($('#isEditAllowed').val() == "true") {
+                $(row).children().not(':last-child').attr({
+                    "data-toggle": "modal",
+                    "data-target": "#modal8",
+                    "onclick": "editRule(" + data[7] + ")"
+                });
+            }
+        },
+
         "order": [[0, "asc"]]
     })
 

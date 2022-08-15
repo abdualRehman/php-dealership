@@ -14,6 +14,9 @@ $(function () {
 
     if (divRequest == "man") {
 
+        $('.nav-link').removeClass('active');
+        $('#matrixPage').addClass('active');
+
         manageInvTable = $("#datatable-1").DataTable({
 
             responsive: !0,
@@ -272,19 +275,19 @@ function showDetails(id = null) {
                         var addittion_in_10k = (r_status && response['10_24_33']) ? response['10_24_33'] : 0;
                         var addittion_in_12k = (r_status && response['12_24_33']) ? response['12_24_33'] : 0;
 
-                        $('#10_' + miles).html(( r_status && response[miles]) ? (parseInt(response[miles]) + parseInt(addittion_in_10k)) + '%' : "");
-                        $('#12_' + miles).html(( r_status && response[miles]) ? (parseInt(response[miles]) + parseInt(addittion_in_12k)) + '%' : "");
+                        $('#10_' + miles).html((r_status && response[miles]) ? (parseInt(response[miles]) + parseInt(addittion_in_10k)) + '%' : "");
+                        $('#12_' + miles).html((r_status && response[miles]) ? (parseInt(response[miles]) + parseInt(addittion_in_12k)) + '%' : "");
 
                     } else if (miles >= 36 && miles <= 48) {
 
-                        var addittion_in_10k = ( r_status && response['10_36_48']) ? response['10_36_48'] : 0;
-                        var addittion_in_12k = ( r_status && response['12_36_48']) ? response['12_36_48'] : 0;
+                        var addittion_in_10k = (r_status && response['10_36_48']) ? response['10_36_48'] : 0;
+                        var addittion_in_12k = (r_status && response['12_36_48']) ? response['12_36_48'] : 0;
 
-                        $('#10_' + miles).html(( r_status && response[miles]) ? ((parseInt(response[miles]) + parseInt(addittion_in_10k)) + '%') : "");
-                        $('#12_' + miles).html(( r_status && response[miles]) ? ((parseInt(response[miles]) + parseInt(addittion_in_12k)) + '%') : "");
+                        $('#10_' + miles).html((r_status && response[miles]) ? ((parseInt(response[miles]) + parseInt(addittion_in_10k)) + '%') : "");
+                        $('#12_' + miles).html((r_status && response[miles]) ? ((parseInt(response[miles]) + parseInt(addittion_in_12k)) + '%') : "");
                     } else {
-                        $('#10_' + miles).html(( r_status && response[miles]) ? response[miles] + '%' : "");
-                        $('#12_' + miles).html(( r_status && response[miles]) ? response[miles] + '%' : "");
+                        $('#10_' + miles).html((r_status && response[miles]) ? response[miles] + '%' : "");
+                        $('#12_' + miles).html((r_status && response[miles]) ? response[miles] + '%' : "");
                     }
 
                     miles += 3;

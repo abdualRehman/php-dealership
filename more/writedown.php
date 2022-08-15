@@ -2,18 +2,17 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
-// if (hasAccess("bdc", "Add") === 'false' && hasAccess("bdc", "Edit") === 'false' && hasAccess("bdc", "Remove") === 'false') {
-//     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
-// }
-// if (hasAccess("bdc", "Edit") === 'false') {
-//     echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
-// } else {
-//     echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
-// }
+if (hasAccess("writedown", "View") === 'false') {
+    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+}
+if (hasAccess("writedown", "Edit") === 'false') {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+}
 
 $userRole = $_SESSION['userRole'];
 echo '<input type="hidden" name="loggedInUserRole" id="loggedInUserRole" value="' . $userRole . '" />';
-echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
 
 ?>
 

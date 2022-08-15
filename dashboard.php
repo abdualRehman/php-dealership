@@ -30,7 +30,7 @@ if ($_SESSION['userRole'] == $inventorySpecialistID) {
                     <div class="col-md-4">
                         <div class="portlet text-center">
                             <div class="portlet-header portlet-header-bordered">
-                                <h3 class="portlet-title"> <a href="<?php echo  $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary"> Today's Avarage </a></h3>
+                                <h3 class="portlet-title"> <a href="<?php echo  $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary"> Today's Average </a></h3>
                             </div>
                             <div class="portlet-body">
                                 <div class="widget10 widget10-vertical-md">
@@ -158,8 +158,8 @@ if ($_SESSION['userRole'] == $inventorySpecialistID) {
                         <div class="portlet text-center">
                             <div class="portlet-header portlet-header-bordered">
                                 <h3 class="portlet-title">
-                                    <!-- <a href="<?php echo  $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary"> Today's Avarage </a> -->
-                                    <a href="<?php echo  $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary"> Sold This Month </a>
+                                    <!-- <a href="<?php echo  $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary"> Today's Average </a> -->
+                                    <a href="<?php echo  $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=month" class="link-primary"> Sold This Month </a>
                                 </h3>
                             </div>
                             <div class="portlet-body">
@@ -1143,7 +1143,7 @@ if ($_SESSION['userRole'] == $inventorySpecialistID) {
                                                 <div class="widget4 mb-3">
                                                     <div class="widget4-group">
                                                         <div class="widget4-display">
-                                                            <h3 class="widget4-subtitle">Avarage Product Price</h3>
+                                                            <h3 class="widget4-subtitle">Average Product Price</h3>
                                                             <h2 class="widget4-hightlight">$67,50</h2>
                                                         </div>
                                                     </div>

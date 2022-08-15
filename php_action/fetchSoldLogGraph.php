@@ -1,5 +1,7 @@
 <?php
 
+use function PHPSTORM_META\type;
+
 require_once 'db/core.php';
 
 $userRole;
@@ -9,12 +11,13 @@ if ($_SESSION['userRole']) {
 
 /* sales consultant id */
 if ($userRole != $salesConsultantID) {
-    $sql = "SELECT sales.date ,  sales.sale_status, sales.sale_id, inventory.stocktype , inventory.balance 
-    FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant 
-    WHERE sales.status = 1 ORDER BY sales.date ASC";
-    // $sql = "SELECT sales.date ,  sales.sale_status, sales.sale_id, inventory.stocktype , inventory.balance 
+
+    // $sql = "SELECT sales.date ,  sales.sale_status, sales.sale_id, inventory.stocktype , sales.gross 
     // FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant 
-    // WHERE sales.status = 1 AND sales.date >= '2022-06-01 23:49' AND sales.date <='2022-06-22 17:40' ORDER BY sales.date ASC";
+    // WHERE sales.status = 1 ORDER BY sales.date ASC";
+    $sql = "SELECT sales.date , sales.reconcileDate , sales.sales_consultant as consultant_id , users.username as sales_consultant , sales.sale_status, sales.sale_id, inventory.stocktype , sales.gross 
+    FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant 
+    WHERE sales.status = 1 AND inventory.stocktype !='OTHER' ORDER BY sales.sales_consultant ASC, sales.reconcileDate ASC";
 
     $sql2 = "SELECT 
         ( SELECT COUNT(registration_problems.id) FROM registration_problems WHERE registration_problems.status = 1 AND registration_problems.p_status = 1 ) as problem ,
@@ -22,9 +25,9 @@ if ($userRole != $salesConsultantID) {
         ( SELECT COUNT(used_cars.id) FROM `used_cars` LEFT JOIN inventory ON (used_cars.inv_id = inventory.id AND inventory.status = 1 AND inventory.stocktype = 'USED' AND inventory.lot != 'LBO') WHERE (title = 'false' OR title IS NULL) AND date_in != '' AND date_in IS NOT NULL AND inventory.id IS NOT NULL ) as titleIssue WHERE 1";
 } else {
     $uid = $_SESSION['userId'];
-    $sql = "SELECT sales.date ,  sales.sale_status, sales.sale_id, inventory.stocktype , inventory.balance 
+    $sql = "SELECT sales.date ,sales.reconcileDate , sales.sales_consultant as consultant_id , users.username as sales_consultant , sales.sale_status, sales.sale_id, inventory.stocktype , sales.gross 
     FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant 
-    WHERE sales.status = 1 AND sales.sales_consultant = '$uid' ORDER BY sales.date ASC";
+    WHERE sales.status = 1 AND inventory.stocktype !='OTHER' AND sales.sales_consultant = '$uid' ORDER BY sales.reconcileDate ASC";
 
     $sql2 = "SELECT 
         ( SELECT COUNT(registration_problems.id) FROM registration_problems WHERE registration_problems.status = 1 AND registration_problems.p_status = 1 AND registration_problems.sales_consultant = '$uid') as problem ,
@@ -77,7 +80,7 @@ if ($result->num_rows > 0) {
 
         $first_date = date('Y-m-d', strtotime('first day of this month'));
         $last_date = date('Y-m-d', strtotime('last day of this month'));
-        
+
         if (($timezone >= $first_date) && ($timezone <= $last_date)) {
             // $monthAllCount += 1;
             if ($row['stocktype'] == 'NEW') {
@@ -89,38 +92,71 @@ if ($result->num_rows > 0) {
         }
 
 
+        // using date
+        // if (!key_exists($timezone, $outputArray)) {
+        //     $outputArray[$timezone] = array(
+        //         'time' => '',
+        //         'stocktype' => '',
+        //         'qty' => 0
+        //     );
+        // }
+        // $outputArray[$timezone] = array(
+        //     'time' => $timezone,
+        //     'stocktype' => $row['stocktype'],
+        //     'qty' => $outputArray[$timezone]['qty'] + 1,
+        // );
 
 
-        if (!key_exists($timezone, $outputArray)) {
-            $outputArray[$timezone] = array(
-                'time' => '',
-                'stocktype' => '',
-                'qty' => 0
+
+
+        $sales_consultant = $row['sales_consultant'];
+        $consultant_id = $row['consultant_id'];
+        
+        $reconcileDate = $row['reconcileDate'];
+        $reconcileDate = ($reconcileDate != '') ? strtotime($reconcileDate) : "";
+        $reconcileDate = ($reconcileDate != '') ? date("Y-m-d", $reconcileDate) : "";
+
+        if (!key_exists($consultant_id, $outputArray)) {
+            $outputArray[$consultant_id] = array(
+                'name' => $sales_consultant,
+                'data' => array()
             );
         }
-        $outputArray[$timezone] = array(
-            'time' => $timezone,
-            'stocktype' => $row['stocktype'],
-            'qty' => $outputArray[$timezone]['qty'] + 1,
-        );
+
+        $key = array_search($reconcileDate, array_column($outputArray[$consultant_id]['data'], 'time'));
+        if ($key) {
+            if ($row['stocktype'] == 'NEW') {
+                $outputArray[$consultant_id]['data'][$key]['new'] += 1;
+            }
+            if ($row['stocktype'] == 'USED') {
+                $outputArray[$consultant_id]['data'][$key]['used'] += 1;
+            }
+        } else {
+            $outputArray[$consultant_id]['data'][] = array(
+                'new' => ($row['stocktype'] == 'NEW') ? 1 : 0,
+                'used' => ($row['stocktype'] == 'USED') ? 1 : 0,
+                'time' => $reconcileDate,
+            );
+        }
 
 
 
 
-        $balance = floatval(preg_replace("/[^0-9.]/", '', $row['balance']));
+        $gross = floatval(preg_replace("/[^0-9.]/", '', $row['gross']));
 
         if ($timezone == $TodayDate) {
             if ($row['stocktype'] == 'NEW') {
-                $todayN += $balance;
-                $todayT += $balance;
+                $todayN += $gross;
+                $todayT += $gross;
                 $todayNCount += 1;
+                $todayTCount += 1;
             }
             if ($row['stocktype'] == 'USED') {
-                $todayU += $balance;
-                $todayT += $balance;
+                $todayU += $gross;
+                $todayT += $gross;
                 $todayUCount += 1;
+                $todayTCount += 1;
             }
-            $todayTCount += 1;
         }
 
         if ($row['sale_status'] == 'pending' && $row['stocktype'] == 'USED') {
@@ -152,8 +188,8 @@ if ($result2->num_rows > 0) {
 
 
 
-
 $outputArray = array_values($outputArray);
+
 $output['graph'] = $outputArray;
 
 $avgn = ($todayNCount != 0) ? $todayN / $todayNCount : 0;

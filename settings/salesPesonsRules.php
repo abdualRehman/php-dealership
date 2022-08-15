@@ -5,7 +5,11 @@ include_once '../includes/header.php';
 if (hasAccess("sptr", "Add") === 'false' && hasAccess("sptr", "Edit") === 'false' && hasAccess("sptr", "Remove") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
-
+if (hasAccess("sptr", "Edit") === 'false') {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+}
 ?>
 
 <head>

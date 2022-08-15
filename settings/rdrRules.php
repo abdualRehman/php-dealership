@@ -3,9 +3,16 @@ include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
 
-// if (hasAccess("bdcrule", "Add") === 'false' && hasAccess("bdcrule", "Edit") === 'false' && hasAccess("bdcrule", "Remove") === 'false') {
-//     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
-// }
+if (hasAccess("rdr", "Add") === 'false') {
+    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+}
+
+if (hasAccess("rdr", "Edit") === 'false') {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+}
+
 
 ?>
 

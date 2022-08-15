@@ -7,6 +7,12 @@ if (hasAccess("bdcrule", "Add") === 'false' && hasAccess("bdcrule", "Edit") === 
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
 
+if (hasAccess("bdcrule", "Edit") === 'false') {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+}
+
 ?>
 
 <head>

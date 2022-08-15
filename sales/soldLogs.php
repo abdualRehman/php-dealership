@@ -81,22 +81,22 @@ if ($_GET['r'] == 'man') {
     }
 
     body.theme-dark #datatable-1 tbody td.dublicate_left {
-        border: 5px solid red;
+        border: 3px solid red;
         border-right: 0.1px solid #757575;
     }
 
     body.theme-dark #datatable-1 tbody td.dublicate_right {
-        border: 5px solid red;
+        border: 3px solid red;
         border-left: 0.1px solid #757575;
     }
 
     body.theme-light #datatable-1 tbody td.dublicate_left {
-        border: 5px solid red;
+        border: 3px solid red;
         border-right: 0.1px solid #f5f5f5;
     }
 
     body.theme-light #datatable-1 tbody td.dublicate_right {
-        border: 5px solid red;
+        border: 3px solid red;
         border-left: 0.1px solid #f5f5f5;
     }
 
@@ -153,11 +153,11 @@ if ($_GET['r'] == 'man') {
                     <div class="portlet">
                         <div class="portlet-header portlet-header-bordered">
                             <div class="row w-100 p-0 m-0">
-                                <div class="col-md-2 d-flex align-items-center p-0 mb-2">
+                                <div class="col-md-3 d-flex align-items-center p-0 mb-2">
                                     <h3 class="portlet-title">Sold Logs</h3>
                                 </div>
 
-                                <div class="col-md-4 d-flex justify-content-center align-items-center p-0 mb-2">
+                                <div class="col-md-6 d-flex justify-content-center align-items-center p-0 mb-2">
                                     <div class="row d-flex justify-content-center flex-row p-0 m-0">
                                         <div class="row">
                                             <div class="col-md-12">
@@ -173,7 +173,7 @@ if ($_GET['r'] == 'man') {
                                                         <span class="badge badge-lg p-1" id="yesterdayCount"></span>
                                                     </label>
                                                     <label class="btn btn-flat-primary">
-                                                        <input type="radio" name="radio-date" value="currentMonth">
+                                                        <input type="radio" name="radio-date" id="currentMonth" value="currentMonth">
                                                         Current Month
                                                         <span class="badge badge-lg p-1" id="currentMonthCount"></span>
                                                     </label>
@@ -188,7 +188,7 @@ if ($_GET['r'] == 'man') {
 
                                     </div>
                                 </div>
-                                <div class="col-md-6 p-1 d-flex justify-content-end align-items-center">
+                                <div class="col-md-3 p-1 d-flex justify-content-end align-items-center">
                                     <div class="justify-content-right align-items-center">
                                         <div class="row d-flex justify-content-center flex-row p-0 mb-2 w-100">
                                             <div class="row w-100">
@@ -255,7 +255,7 @@ if ($_GET['r'] == 'man') {
                         <div class="showResult d-none">
 
                             <div class="form-row">
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <div class="row">
                                         <label for="inputEmail4" class="col-sm-2 col-form-label text-md-center">Date:</label>
                                         <div class="col-sm-10">
@@ -269,7 +269,7 @@ if ($_GET['r'] == 'man') {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <div class="row">
                                         <label for="inputPassword4" class="col-sm-1 offset-sm-1 col-form-label text-md-right">Status</label>
                                         <div class="col-sm-6 m-auto">
@@ -280,7 +280,7 @@ if ($_GET['r'] == 'man') {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <div class="row">
                                         <label for="inputEmail4" class="col-sm-4 col-form-label">Reconcile</label>
                                         <div class="col-sm-8">
@@ -294,7 +294,7 @@ if ($_GET['r'] == 'man') {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 mb-3">
+                                <!-- <div class="col-md-3 mb-3">
                                     <div class="row">
                                         <label for="inputPassword4" class="col-sm-5 col-form-label">Submitted By</label>
                                         <div class="col-sm-7 m-auto">
@@ -303,7 +303,7 @@ if ($_GET['r'] == 'man') {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="form-row">
 
@@ -348,38 +348,111 @@ if ($_GET['r'] == 'man') {
                                 </div>
                             </div>
                             <?php
+                            if (hasAccess("sale", "Details") === 'true') {
+                            ?>
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="form-group input-group d-flex flex-md-row flex-sm-column">
+                                            <input type="text" name="fname" id="fname" class="form-control w-auto" disabled placeholder="First name">
+                                            <input type="text" name="mname" id="mname" class="form-control w-auto" disabled placeholder="Middle name">
+                                            <input type="text" name="lname" id="lname" class="form-control w-auto" disabled placeholder="Last name">
+                                            <input type="text" name="state" id="state" class="form-control w-auto" disabled placeholder="State">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-3 mb-3">
+                                        <label for="address1">Address 1</label>
+                                        <input type="text" class="form-control" id="address1" disabled>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="address2">Address 2</label>
+                                        <input type="text" class="form-control" id="address2" disabled>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="city">City</label>
+                                        <input type="text" class="form-control" id="city" disabled>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="country">Country</label>
+                                        <input type="text" class="form-control" id="country" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-3 mb-3">
+                                        <label for="zipCode">Zip Code</label>
+                                        <input type="text" class="form-control" id="zipCode" disabled>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="mobile">Mobile</label>
+                                        <input type="text" class="form-control" id="mobile" disabled>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="altContact">Contact #</label>
+                                        <input type="text" class="form-control" id="altContact" disabled>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="email">Email</label>
+                                        <input type="text" class="form-control" id="email" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <h4 class="h4">Co-Buyer Details</h4>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-3 mb-3">
+                                        <label for="cbAddress1">Address 1</label>
+                                        <input type="text" class="form-control" id="cbAddress1" disabled>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="cbAddress2">Address 2</label>
+                                        <input type="text" class="form-control" id="cbAddress2" disabled>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="cbCity">City</label>
+                                        <input type="text" class="form-control" id="cbCity" disabled>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="cbCountry">Country</label>
+                                        <input type="text" class="form-control" id="cbCountry" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-3 mb-3">
+                                        <label for="cbZipCode">Zip Code</label>
+                                        <input type="text" class="form-control" id="cbZipCode" disabled>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="cbMobile">Mobile</label>
+                                        <input type="text" class="form-control" id="cbMobile" disabled>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="cbAltContact">Contact #</label>
+                                        <input type="text" class="form-control" id="cbAltContact" disabled>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="cbEmail">Email</label>
+                                        <input type="text" class="form-control" id="cbEmail" disabled>
+                                    </div>
+                                </div>
+                            <?php
+                            }
                             if ($salesConsultantID == $_SESSION['userRole'] || $salesManagerID == $_SESSION['userRole'] || $generalManagerID == $_SESSION['userRole']) {
                             ?>
                                 <div class="form-row">
-                                    <div class="form-group col-md-4">
-                                        <div class="<?php echo ($salesConsultantID == $_SESSION['userRole']) ?: "makeDisable"; ?>">
-                                            <label class="col-form-label" for="salePStatus">SalesPerson Status</label>
-                                            <select class="selectpicker" onchange="chnageStyle(this)" id="salePStatus" name="salePStatus" data-style="btn-outline-danger">
-                                                <option value="dealWritten">Deal Written</option>
-                                                <option value="gmdSubmit">GMD Submit</option>
-                                                <option value="contracted">Contracted</option>
-                                                <option value="cancelled">Cancelled</option>
-                                                <option value="delivered">Delivered</option>
-                                            </select>
+                                    <div class="col-md-12">
+                                        <div class="form-group <?php echo ($salesConsultantID == $_SESSION['userRole']) ?: "makeDisable"; ?>">
+                                            <label class="col-form-label" for="consultantNote">Consultant Notes</label>
+                                            <textarea class="form-control autosize" name="consultantNote" id="consultantNote" placeholder="Consultant Notes..."></textarea>
                                         </div>
                                         <div class="custom-control custom-control-lg custom-checkbox mb-3 mt-3 <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
                                             <input type="checkbox" name="thankyouCard" class="custom-control-input" id="thankyouCard">
                                             <label class="custom-control-label" for="thankyouCard">Thank you card</label>
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-8 <?php echo ($salesConsultantID == $_SESSION['userRole']) ?: "makeDisable"; ?>">
-                                        <label class="col-form-label" for="consultantNote">Consultant Notes</label>
-                                        <textarea class="form-control autosize" name="consultantNote" id="consultantNote" placeholder="Consultant Notes..."></textarea>
-                                    </div>
-                                </div>
-                            <?php
-                            }
-                            // else if ($generalManagerID == $_SESSION['userRole']) {
-                            ?>
-                            <!-- <div class="form-row <?php // echo ($salesConsultantID == $_SESSION['userRole']) ?: "makeDisable"; 
-                                                        ?>">
-                                    <div class="form-group col-md-4">
-                                        <div class="d-none">
+                                    <!-- <div class="form-group col-md-4">
+                                        <div class="<?php //echo ($salesConsultantID == $_SESSION['userRole']) ?: "makeDisable"; 
+                                                    ?>">
                                             <label class="col-form-label" for="salePStatus">SalesPerson Status</label>
                                             <select class="selectpicker" onchange="chnageStyle(this)" id="salePStatus" name="salePStatus" data-style="btn-outline-danger">
                                                 <option value="dealWritten">Deal Written</option>
@@ -389,104 +462,96 @@ if ($_GET['r'] == 'man') {
                                                 <option value="delivered">Delivered</option>
                                             </select>
                                         </div>
-                                        <div class="custom-control custom-control-lg custom-checkbox mb-3 mt-3">
-                                            <input type="checkbox" name="thankyouCard" class="custom-control-input" id="thankyouCard">
-                                            <label class="custom-control-label" for="thankyouCard">Thank you card</label>
+                                    </div> -->
+                                </div>
+                                <?php
+                                if (hasAccess("todo", "Edit") === 'true' && $salesConsultantID == $_SESSION['userRole']) {
+                                ?>
+                                    <div class="form-row">
+                                        <label for="vincheck" class="col-md-1 col-form-label">Vin Check</label>
+                                        <input type="hidden" name="soldTodoId" id="soldTodoId">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <select onchange="chnageStyle(this)" name="vincheck" id="vincheck" class="selectpicker" data-style="btn-outline-danger">
+                                                    <option value="checkTitle">Check Title</option>
+                                                    <option value="need">Need</option>
+                                                    <option value="notNeed">Doesn't Need</option>
+                                                    <option value="n/a">N/A</option>
+                                                    <option value="onHold">On Hold</option>
+                                                    <option value="done">Done</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <label for="insurance" class="col-md-1 col-form-label">Insurance</label>
+                                        <div class="col-md-2">
+                                            <select class="selectpicker" onchange="chnageStyle(this)" id="insurance" name="insurance" data-style="btn-outline-danger">
+                                                <option value="need">Need</option>
+                                                <option value="inHouse">In House</option>
+                                                <option value="n/a">N/A</option>
+                                            </select>
+                                        </div>
+                                        <label for="tradeTitle" class="col-md-1 col-form-label">Trade Title</label>
+                                        <div class="col-md-2">
+                                            <select class="selectpicker" onchange="chnageStyle(this)" id="tradeTitle" name="tradeTitle" data-style="btn-outline-danger">
+                                                <option value="need">Need</option>
+                                                <option value="payoff">Payoff</option>
+                                                <option value="noTrade">No Trade</option>
+                                                <option value="inHouse">In House</option>
+                                            </select>
+                                        </div>
+                                        <label for="registration" class="col-md-1 col-form-label">Registration</label>
+                                        <div class="col-md-2">
+                                            <select class="selectpicker" onchange="chnageStyle(this)" id="registration" name="registration" data-style="btn-outline-danger">
+                                                <option value="pending">Pending</option>
+                                                <option value="done">Done</option>
+                                                <option value="customerHas">Customer Has</option>
+                                                <option value="mailed">Mailed</option>
+                                                <option value="n/a">N/A</option>
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-8 d-none">
-                                        <label class="col-form-label" for="consultantNote">Consultant Notes</label>
-                                        <textarea class="form-control autosize" name="consultantNote" id="consultantNote" placeholder="Consultant Notes..."></textarea>
+                                    <div class="form-row">
+
+                                        <label for="inspection" class="col-md-1 col-form-label">Inspection</label>
+                                        <div class="col-md-3">
+                                            <select class="selectpicker" onchange="chnageStyle(this)" id="inspection" name="inspection" data-style="btn-outline-danger">
+                                                <option value="need">Need</option>
+                                                <option value="notNeed">Doesn't Need</option>
+                                                <option value="done">Done</option>
+                                                <option value="n/a">N/A</option>
+                                            </select>
+                                        </div>
+                                        <label for="salePStatus" class="col-md-1 col-form-label">Salesperson Status</label>
+                                        <div class="col-md-3">
+                                            <select class="selectpicker" onchange="chnageStyle(this)" id="salePStatus" name="salePStatus" data-style="btn-outline-danger">
+
+                                                <option value="dealWritten">Deal Written</option>
+                                                <option value="gmdSubmit">GMD Submit</option>
+                                                <option value="contracted">Contracted</option>
+                                                <option value="cancelled">Cancelled</option>
+                                                <option value="delivered">Delivered</option>
+
+                                            </select>
+                                        </div>
+                                        <label for="paid" class="col-md-1 col-form-label">Paid</label>
+                                        <div class="col-md-3">
+                                            <select class="selectpicker" onchange="chnageStyle(this)" id="paid" name="paid" data-style="btn-outline-danger">
+                                                <option value="no">No</option>
+                                                <option value="yes">Yes</option>
+                                            </select>
+                                        </div>
+
                                     </div>
-                                </div> -->
+                                <?php
+                                }
+                                ?>
+
                             <?php
-                            // }
+                            }
+
                             ?>
-                            <div class="form-row">
-                                <div class="col-md-12">
-                                    <div class="form-group input-group d-flex flex-md-row flex-sm-column">
-                                        <input type="text" name="fname" id="fname" class="form-control w-auto" disabled placeholder="First name">
-                                        <input type="text" name="mname" id="mname" class="form-control w-auto" disabled placeholder="Middle name">
-                                        <input type="text" name="lname" id="lname" class="form-control w-auto" disabled placeholder="Last name">
-                                        <input type="text" name="state" id="state" class="form-control w-auto" disabled placeholder="State">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-md-3 mb-3">
-                                    <label for="address1">Address 1</label>
-                                    <input type="text" class="form-control" id="address1" disabled>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="address2">Address 2</label>
-                                    <input type="text" class="form-control" id="address2" disabled>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="city">City</label>
-                                    <input type="text" class="form-control" id="city" disabled>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="country">Country</label>
-                                    <input type="text" class="form-control" id="country" disabled>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-md-3 mb-3">
-                                    <label for="zipCode">Zip Code</label>
-                                    <input type="text" class="form-control" id="zipCode" disabled>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="mobile">Mobile</label>
-                                    <input type="text" class="form-control" id="mobile" disabled>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="altContact">Contact #</label>
-                                    <input type="text" class="form-control" id="altContact" disabled>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="email">Email</label>
-                                    <input type="text" class="form-control" id="email" disabled>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <h4 class="h4">Co-Buyer Details</h4>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-md-3 mb-3">
-                                    <label for="cbAddress1">Address 1</label>
-                                    <input type="text" class="form-control" id="cbAddress1" disabled>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="cbAddress2">Address 2</label>
-                                    <input type="text" class="form-control" id="cbAddress2" disabled>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="cbCity">City</label>
-                                    <input type="text" class="form-control" id="cbCity" disabled>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="cbCountry">Country</label>
-                                    <input type="text" class="form-control" id="cbCountry" disabled>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-md-3 mb-3">
-                                    <label for="cbZipCode">Zip Code</label>
-                                    <input type="text" class="form-control" id="cbZipCode" disabled>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="cbMobile">Mobile</label>
-                                    <input type="text" class="form-control" id="cbMobile" disabled>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="cbAltContact">Contact #</label>
-                                    <input type="text" class="form-control" id="cbAltContact" disabled>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="cbEmail">Email</label>
-                                    <input type="text" class="form-control" id="cbEmail" disabled>
-                                </div>
-                            </div>
+
+
                         </div>
                     </div>
                     <div class="modal-footer modal-footer-bordered">
@@ -512,7 +577,7 @@ if ($_GET['r'] == 'man') {
                     <h5 class="modal-title">Schedule Appointment</h5>
                     <button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
                 </div>
-                <form id="editScheduleForm" autocomplete="off" method="post" action="../php_action/editSchedule.php">                
+                <form id="editScheduleForm" autocomplete="off" method="post" action="../php_action/editSchedule.php">
                     <input type="hidden" name="scheduleId" id="scheduleId">
                     <input type="hidden" name="ecallenderId" id="ecallenderId">
                     <div class="modal-body">
@@ -548,7 +613,7 @@ if ($_GET['r'] == 'man') {
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="esubmittedBy" class="col-form-label">submitted By</label>
+                                        <label for="esubmittedBy" class="col-form-label">Submitted By</label>
                                         <input type="text" class="form-control text-center" name="esubmittedBy" id="esubmittedBy" readonly autocomplete="off" autofill="off" />
                                         <input type="hidden" class="form-control text-center" name="esubmittedByRole" id="esubmittedByRole" readonly autocomplete="off" autofill="off" />
                                     </div>
@@ -866,6 +931,12 @@ if ($_GET['r'] == 'man') {
                                         </div>
                                         <div class="col-md-6" id="detailsSection">
                                             <div class="form-group row">
+                                                <label class="col-md-2 offset-md-1 col-form-label text-md-right" for="submittedBy">Submitted By</label>
+                                                <div class="col-md-8 d-flex justify-content-around">
+                                                    <input type="text" class="form-control text-center" id="submittedBy" placeholder="Submitte By" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
                                                 <label class="col-md-2 offset-md-1 col-form-label text-md-right" for="iscertified">Certified</label>
                                                 <div class="col-md-8 d-flex justify-content-around">
                                                     <!-- <input type="text" class="form-control" id="iscertified" placeholder="yes" readonly> -->
@@ -976,7 +1047,7 @@ if ($_GET['r'] == 'man') {
 
                                     <div class="mt-3 customerDetailBody border rounded hidden" id="pbody" style="background-color: rgba(0,188,212,.1);">
                                         <div class="form-row p-3">
-                                            <label for="address1" class="col-md-1 col-form-label">Address 1*</label>
+                                            <label for="address1" class="col-md-1 col-form-label text-center">Address 1*</label>
                                             <div class="form-group col-md-5">
                                                 <div class="input-group-icon">
                                                     <input type="text" class="form-control" name="address1" id="address1" placeholder="Your address here">
@@ -984,7 +1055,7 @@ if ($_GET['r'] == 'man') {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <label for="address2" class="col-md-1 col-form-label">Address 2</label>
+                                            <label for="address2" class="col-md-1 col-form-label text-center">Address 2</label>
                                             <div class="form-group col-md-5">
                                                 <div class="input-group-icon">
                                                     <input type="text" class="form-control" name="address2" id="address2" placeholder="Your address here">
@@ -1023,16 +1094,79 @@ if ($_GET['r'] == 'man') {
 
                                     </div>
 
-                                    <h5 class="my-4 pl-2 d-flex justify-content-between align-items-center border rounded">
-                                        Co-Buyer
-                                        &nbsp;
-                                        <a href="javascript:;" class="col-md-2 text-center w-100 btn btn-info ml-2 align-item-streach" onclick="toggleInfo('coBuyer')">
+                                    <h5 class="my-4">Co-Buyer</h5>
+                                    <div class="form-row">
+                                        <div class="col-md-10">
+                                            <div class="form-group input-group d-flex flex-md-row flex-sm-column">
+                                                <input type="text" name="cbfname" id="cbfname" class="form-control w-auto " placeholder="First name">
+                                                <input type="text" name="cbmname" id="cbmname" class="form-control w-auto " placeholder="Middle name">
+                                                <input type="text" name="cblname" id="cblname" class="form-control w-auto " placeholder="Last name">
+                                                <select class="form-control selectpicker w-auto" onchange="changeSalesPersonTodo()" name="cbstate" id="cbstate" data-live-search="true" data-size="4">
+                                                    <option value="0" selected disabled>State</option>
+                                                    <option value="MA">MA</option>
+                                                    <option value="RI">RI</option>
+                                                    <option value="CT">CT</option>
+                                                    <option value="NH">NH</option>
+                                                    <option value="AL">AL</option>
+                                                    <option value="AK">AK</option>
+                                                    <option value="AZ">AZ</option>
+                                                    <option value="AR">AR</option>
+                                                    <option value="CA">CA</option>
+                                                    <option value="CO">CO</option>
+                                                    <option value="DC">DC</option>
+                                                    <option value="DE">DE</option>
+                                                    <option value="FL">FL</option>
+                                                    <option value="GA">GA</option>
+                                                    <option value="HI">HI</option>
+                                                    <option value="ID">ID</option>
+                                                    <option value="IL">IL</option>
+                                                    <option value="IN">IN</option>
+                                                    <option value="IA">IA</option>
+                                                    <option value="KS">KS</option>
+                                                    <option value="KY">KY</option>
+                                                    <option value="LA">LA</option>
+                                                    <option value="ME">ME</option>
+                                                    <option value="MD">MD</option>
+                                                    <option value="MI">MI</option>
+                                                    <option value="MN">MN</option>
+                                                    <option value="MS">MS</option>
+                                                    <option value="MO">MO</option>
+                                                    <option value="MT">MT</option>
+                                                    <option value="NE">NE</option>
+                                                    <option value="NV">NV</option>
+                                                    <option value="NJ">NJ</option>
+                                                    <option value="NM">NM</option>
+                                                    <option value="NY">NY</option>
+                                                    <option value="NC">NC</option>
+                                                    <option value="ND">ND</option>
+                                                    <option value="OH">OH</option>
+                                                    <option value="OK">OK</option>
+                                                    <option value="OR">OR</option>
+                                                    <option value="PA">PA</option>
+                                                    <option value="SC">SC</option>
+                                                    <option value="SD">SD</option>
+                                                    <option value="TN">TN</option>
+                                                    <option value="TX">TX</option>
+                                                    <option value="UT">UT</option>
+                                                    <option value="VT">VT</option>
+                                                    <option value="VA">VA</option>
+                                                    <option value="WA">WA</option>
+                                                    <option value="WV">WV</option>
+                                                    <option value="WI">WI</option>
+                                                    <option value="WY">WY</option>
+                                                    <option value="N/A">N/A</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <a href="javascript:;" class="form-group col-md-2 text-center w-100 btn btn-outline-info" onclick="toggleInfo('coBuyer')">
                                             Add Co-Buyer <i class="fa fa-angle-down"></i>
                                         </a>
-                                    </h5>
+
+                                    </div>
                                     <div class="mt-3 coBuyer border rounded hidden" id="pbody" style="background-color: rgba(0,188,212,.1);">
                                         <div class="form-row p-3">
-                                            <label for="cbAddress1" class="col-md-1 col-form-label">Address 1*</label>
+                                            <label for="cbAddress1" class="col-md-1 col-form-label text-center">Address 1*</label>
                                             <div class="form-group col-md-5">
                                                 <div class="input-group-icon">
                                                     <input type="text" class="form-control" name="cbAddress1" id="cbAddress1" placeholder="Your address here">
@@ -1040,7 +1174,7 @@ if ($_GET['r'] == 'man') {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <label for="cbAddress2" class="col-md-1 col-form-label">Address 2</label>
+                                            <label for="cbAddress2" class="col-md-1 col-form-label text-center">Address 2</label>
                                             <div class="form-group col-md-5">
                                                 <div class="input-group-icon">
                                                     <input type="text" class="form-control" name="cbAddress2" id="cbAddress2" placeholder="Your address here">

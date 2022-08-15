@@ -68,9 +68,9 @@ if ($result->num_rows > 0) {
 
         // updatePermission($id, 'todayavail', 'Edit', "true");
         // updatePermission($id, 'todayavail', 'View', "true");
-
-
-
+        // updatePermission($id, 'sale', 'Details', "true");
+        // updatePermission($id, 'writedown', 'Edit', "true");
+        // updatePermission($id, 'writedown', 'View', "true");
 
 
         echo $id . ' - ' . $name . '<br />';

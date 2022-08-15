@@ -17,9 +17,6 @@ if ($result->num_rows > 0) {
 
         $button = '
             <div class="show d-flex" >' .
-            (hasAccess("matrixrule", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#modal8" onclick="editRule(' . $id . ')" >
-                    <i class="fa fa-edit"></i>
-                </button>' : "") .
             (hasAccess("matrixrule", "Remove") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeRule(' . $id . ')" >
                     <i class="fa fa-trash"></i>
                 </button>' : "") .
@@ -35,6 +32,7 @@ if ($result->num_rows > 0) {
             $row[5],
             $row[6],
             $button,
+            $id,
         );
     } // /while 
 

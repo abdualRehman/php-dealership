@@ -35,13 +35,43 @@ $(function () {
     manageDataTable = $("#datatable-1").DataTable({
         responsive: !0,
         'ajax': '../php_action/fetchBdcRules.php',
-        dom: "Pfrtip",
+        // dom: "Pfrtip",
+        dom: `
+        <'row'<'col-sm-12 text-sm-left col-md-4 mb-2'<'#statusFilterDiv'> > <'col-sm-12 col-md-4 text-center'B> <'col-sm-12 col-md-4 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
+       <'row'<'col-12'tr>>\n      
+       <'row align-items-baseline'
+       <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
+       <'col-md-5'p>>\n`,
         searchPanes: {
             cascadePanes: !0,
             viewTotal: !0,
             columns: [0, 1, 2, 3],
         },
         "pageLength": 25,
+        buttons: [
+            {
+                extend: 'copyHtml5',
+                title: 'BDC Rules',
+                exportOptions: {
+                    columns: [':visible:not(:last-child)']
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                title: 'BDC Rules',
+                exportOptions: {
+                    columns: [':visible:not(:last-child)']
+                }
+            },
+            {
+                extend: 'print',
+                title: 'BDC Rules',
+                exportOptions: {
+                    columns: [':visible:not(:last-child)']
+                }
+            },
+        ],
+
         columnDefs: [
             {
                 searchPanes: {
@@ -55,6 +85,15 @@ $(function () {
             searchPanes: {
                 count: "{total} found",
                 countFiltered: "{shown} / {total}"
+            }
+        },
+        createdRow: function (row, data, dataIndex) {
+            if ($('#isEditAllowed').val() == "true") {
+                $(row).children().not(':last-child').attr({
+                    "data-toggle": "modal",
+                    "data-target": "#modal8",
+                    "onclick": "editRule(" + data[8] + ")"
+                });
             }
         },
         "order": [[0, "asc"]]

@@ -1,5 +1,7 @@
 "use strict";
 var r;
+var usedArray = [];
+var newArray = [];
 var dataArray = [];
 function t(t, e) {
     var a, n = Object.keys(t);
@@ -26,11 +28,6 @@ function x(n) {
     return n
 }
 $(function () {
-    var graphData = [];
-    var usedArray = [];
-    var newArray = [];
-    var userArray = [];
-
 
     let chart = document.querySelector("#chart");
     if (chart) {
@@ -69,19 +66,18 @@ $(function () {
         r = new ApexCharts(document.querySelector("#chart"), x(x({}, t[e]), {}, {
             series: [
                 {
-                    name: 'USED',
-                    // data: [13, 23, 20, 8, 13, 27]
-                    data: usedArray
-                }, {
-                    name: 'NEW',
-                    // data: [44, 55, 41, 67, 22, 43]
+                    name: "NEW",
                     data: newArray
-                }],
+                },
+                {
+                    name: "USED",
+                    data: usedArray
+                },
+            ],
             chart: {
                 type: "bar",
                 height: 350,
                 width: "100%",
-                stacked: true,
                 background: "transparent",
                 animations: {
                     enabled: true,
@@ -106,16 +102,74 @@ $(function () {
                 bar: {
                     horizontal: !1,
                     endingShape: "rounded",
+                    columnWidth: '170%',
+                    rangeBarOverlap: true,
+                    dataLabels: {
+                        position: 'center',
+                    },
+                }
+            },
+            dataLabels: {
+                enabled: !0,
+                enabledOnSeries: undefined,
+                formatter: function (val, opts) {
+                    return val
+                },
+                textAnchor: 'end',
+                distributed: false,
+                offsetX: 3,
+                offsetY: 10,
+                style: {
+                    fontSize: '14px',
+                    fontFamily: 'Helvetica, Arial, sans-serif',
+                    fontWeight: 'bold',
+                    colors: undefined
+                },
+                background: {
+                    enabled: true,
+                    foreColor: '#fff',
+                    padding: 4,
+                    borderRadius: 2,
+                    borderWidth: 0,
+                    borderColor: '#fff',
+                    opacity: 1,
+                    dropShadow: {
+                        enabled: false,
+                        top: 1,
+                        left: 1,
+                        blur: 1,
+                        color: '#000',
+                        opacity: 1
+                    }
+                },
+                dropShadow: {
+                    enabled: false,
+                    top: 1,
+                    left: 1,
+                    blur: 1,
+                    color: '#000',
+                    opacity: 0.45
+                }
+            },
+            toolbar: {
+                tools: {
+                    download: true,
+                    selection: true,
+                    zoom: true,
+                    zoomin: true,
+                    zoomout: true,
+                    pan: true,
+                    reset: false,
+                    customIcons: []
                 }
             },
             stroke: {
+                // show: !0,
+                // width: 2,
                 colors: ["transparent"]
             },
             xaxis: {
-                // type: 'category',
-                type: 'category',
-                // categories: ['Name 1', 'Name 2', 'Name 3', 'Name 4', 'Name 5', 'Name 6'],
-                categories: userArray,
+                type: 'datetime'
             },
             yaxis: {
                 title: {
@@ -143,38 +197,47 @@ $(function () {
             type: "GET",
             dataType: 'json',
             success: function (response) {
-                dataArray = response.data;                
-                graphData = response.graph;
-                console.log(graphData);
-                drawGraph();
+                dataArray = response.data;
+                var graphArray = response.graph;
 
-                // graphArray.map((item) => {
-                //     if (item['stocktype'] == 'USED') {
-                //         usedArray.push([item['time'], item['qty']]);
-                //     } else if (item['stocktype'] == 'NEW') {
-                //         newArray.push([item['time'], item['qty']]);
-                //     }
-                // });
+                graphArray.map((item) => {
+                    if (item['stocktype'] == 'USED') {
+                        usedArray.push([item['time'], item['qty']]);
+                    } else if (item['stocktype'] == 'NEW') {
+                        newArray.push([item['time'], item['qty']]);
+                    }
+                });
+
+
+                var e = $("body").hasClass("theme-dark") ? "dark" : "light";
+                r.updateOptions(t[e]);
+
+
 
                 $('#avgN').html(dataArray[0] ? '$' + Number((dataArray[0]).toFixed(2)).toLocaleString('en') : "$0");
                 $('#avgU').html(dataArray[1] ? '$' + Number((dataArray[1]).toFixed(2)).toLocaleString('en') : "$0");
                 $('#avgT').html(dataArray[2] ? '$' + Number((dataArray[2]).toFixed(2)).toLocaleString('en') : "$0");
+
                 $('#todayN').html(dataArray[3] ? '$' + Number((dataArray[3]).toFixed(2)).toLocaleString('en') : "$0");
                 $('#todayU').html(dataArray[4] ? '$' + Number((dataArray[4]).toFixed(2)).toLocaleString('en') : "$0");
                 $('#todayT').html(dataArray[5] ? '$' + Number((dataArray[5]).toFixed(2)).toLocaleString('en') : "$0");
+
                 $('#penN').html(dataArray[6] ? Number(dataArray[6]) : "0");
                 $('#penU').html(dataArray[7] ? Number(dataArray[7]) : "0");
                 $('#penT').html(dataArray[8] ? Number(dataArray[8]) : "0");
+
                 $('#regC').html(dataArray[9] ? Number(dataArray[9]) : "0");
                 $('#todoC').html(dataArray[10] ? Number(dataArray[10]) : "0");
                 $('#titleC').html(dataArray[11] ? Number(dataArray[11]) : "0");
+
+
                 $('#currentMonthN').html(dataArray[12] ? Number(dataArray[12]) : "0");
                 $('#currentMonthU').html(dataArray[13] ? Number(dataArray[13]) : "0");
                 $('#currentMonthT').html(dataArray[14] ? Number(dataArray[14]) : "0");
+                
                 $('#todayCN').html(dataArray[15] ? Number(dataArray[15]) : "0");
                 $('#todayCU').html(dataArray[16] ? Number(dataArray[16]) : "0");
                 $('#todayCT').html(dataArray[17] ? Number(dataArray[17]) : "0");
-                $('#thisMonth').click();
 
             }
         });
@@ -187,8 +250,7 @@ $(function () {
 
         $('#searchStatus :radio[name="searchStatus"]').prop('checked', false);
         $('#searchStatus .active').removeClass('active');
-        drawGraph();
-
+        r.resetSeries();
 
     });
     $('input[name="date_range"]').on('apply.daterangepicker', function (ev, picker) {
@@ -197,8 +259,9 @@ $(function () {
         $('#searchStatus .active').removeClass('active');
         var start = picker.startDate.format('YYYY-MM-DD');
         var end = picker.endDate.format('YYYY-MM-DD');
-
-        drawGraph(start, end);
+        r.zoomX(new Date(start).getTime(), new Date(end).getTime());
+        var e = $("body").hasClass("theme-dark") ? "dark" : "light";
+        r.updateOptions(t[e], true);
     });
 
 
@@ -216,60 +279,19 @@ $(function () {
             const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('YYYY-MM-DD')
             const lastDayOfPrevMonth = moment(todayDate).subtract(1, 'month').endOf('month').format('YYYY-MM-DD')
 
-            drawGraph(startDayOfPrevMonth, lastDayOfPrevMonth);
+            r.zoomX(new Date(startDayOfPrevMonth).getTime(), new Date(lastDayOfPrevMonth).getTime());
+            var e = $("body").hasClass("theme-dark") ? "dark" : "light";
+            r.updateOptions(t[e], true);
+
         } else if (dateType == 'thisMonth') {
             const startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
             const endOfMonth = moment().endOf('month').format('YYYY-MM-DD');
-            drawGraph(startOfMonth, endOfMonth)
+
+            r.zoomX(new Date(startOfMonth).getTime(), new Date(endOfMonth).getTime());
+            var e = $("body").hasClass("theme-dark") ? "dark" : "light";
+            r.updateOptions(t[e], true);
         }
     });
-    
-
-
-    function drawGraph(start = null, end = null) {
-        usedArray = []; newArray = []; userArray = [];
-        graphData.forEach(element => {
-            var nT = 0;
-            var uT = 0;
-            (element.data).map((e) => {
-                if (start != null && end != null) {
-                    let compareDate = moment((e.time), "YYYY-MM-DD").format('DD/MM/YYYY');
-                    compareDate = moment(compareDate, "DD/MM/YYYY")
-                    let startDate = moment(start, "YYYY-MM-DD").format('DD/MM/YYYY');
-                    startDate = moment(startDate, "DD/MM/YYYY");
-                    let endDate = moment(end, "YYYY-MM-DD").format('DD/MM/YYYY');
-                    endDate = moment(endDate, "DD/MM/YYYY");
-
-                    const isBetween = compareDate.isBetween(startDate, endDate, 'days', '[]');
-                    if (isBetween) {
-                        nT += e.new;
-                        uT += e.used;
-                    }
-                } else {
-                    nT += e.new;
-                    uT += e.used;
-                }
-
-            });
-            usedArray.push(uT);
-            newArray.push(nT);
-            userArray.push(element.name)
-        });
-
-        r.updateSeries([{
-            name: 'USED',
-            data: usedArray
-        }, {
-            name: 'NEW',
-            data: newArray
-        }]);
-
-        r.updateOptions({
-            xaxis: {
-                categories: userArray
-            }
-        }, true);
-
-    }
+    $('#thisMonth').click();
 });
 

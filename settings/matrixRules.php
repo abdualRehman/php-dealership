@@ -6,6 +6,13 @@ if (hasAccess("matrixrule", "Add") === 'false' && hasAccess("matrixrule", "Edit"
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
 
+if (hasAccess("matrixrule", "Edit") === 'false') {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+}
+
+
 ?>
 
 <head>

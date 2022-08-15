@@ -82,10 +82,10 @@ if (hasAccess("sale", "Add") === 'false') {
                                 </div>
 
                                 <div class="col-md-5">
-                                    <div class="row">
-                                        <label for="inputPassword4" class="col-sm-1 offset-sm-1 col-form-label text-md-right">Status</label>
+                                    <div class="row w-100">
+                                        <label for="inputPassword4" class="col-sm-4 col-form-label text-md-right">Status</label>
                                         <div class="col-sm-8">
-                                            <div class="form-group col-sm-6 text-center">
+                                            <div class="form-group">
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-flat-primary active d-flex align-items-center">
                                                         <input type="radio" name="status" value="pending" id="pending" checked="checked">
@@ -158,7 +158,7 @@ if (hasAccess("sale", "Add") === 'false') {
                                         <div class="col-md-9">
                                             <div class="form-group">
                                                 <select class="selectpicker" name="financeManager" id="financeManager" data-live-search="true" data-size="4">
-                                                    <option value="0" selected disabled>Finance Manager</option>
+                                                    <option value="0" selected>Select</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -172,23 +172,14 @@ if (hasAccess("sale", "Add") === 'false') {
                                                     <input type="radio" id="cash" name="dealType" value="cash" class="custom-control-input">
                                                     <label class="custom-control-label" for="cash">Cash</label>
                                                 </div>
-                                                <!-- &nbsp;
-                                                &nbsp;
-                                                &nbsp; -->
                                                 <div class="custom-control custom-control-lg custom-radio">
                                                     <input type="radio" id="lease" name="dealType" value="lease" class="custom-control-input">
                                                     <label class="custom-control-label" for="lease">Lease</label>
                                                 </div>
-                                                <!-- &nbsp;
-                                                &nbsp;
-                                                &nbsp; -->
                                                 <div class="custom-control custom-control-lg custom-radio">
                                                     <input type="radio" id="finance" name="dealType" value="finance" class="custom-control-input">
                                                     <label class="custom-control-label" for="finance">Finance</label>
                                                 </div>
-                                                <!-- &nbsp;
-                                                &nbsp;
-                                                &nbsp; -->
                                                 <div class="custom-control custom-control-lg custom-radio">
                                                     <input type="radio" id="other" name="dealType" value="other" class="custom-control-input">
                                                     <label class="custom-control-label" for="other">Other</label>
@@ -208,7 +199,6 @@ if (hasAccess("sale", "Add") === 'false') {
                                     <div class="form-group row">
                                         <label class="col-md-2 offset-md-1 col-form-label text-md-right" for="iscertified">Certified</label>
                                         <div class="col-md-8 d-flex justify-content-around">
-                                            <!-- <input type="text" class="form-control" id="iscertified" placeholder="yes" readonly> -->
                                             <div class="custom-control custom-control-lg custom-radio">
                                                 <input type="radio" id="yes" name="iscertified" class="custom-control-input">
                                                 <label class="custom-control-label" for="yes">Yes</label>
@@ -326,7 +316,7 @@ if (hasAccess("sale", "Add") === 'false') {
 
                             <div class="mt-3 customerDetailBody border rounded hidden" id="pbody" style="background-color: rgba(0,188,212,.1);">
                                 <div class="form-row p-3">
-                                    <label for="address1" class="col-md-1 col-form-label">Address 1*</label>
+                                    <label for="address1" class="col-md-1 col-form-label text-center">Address 1*</label>
                                     <div class="form-group col-md-5">
                                         <div class="input-group-icon">
                                             <input type="text" class="form-control" name="address1" id="address1" placeholder="Your address here">
@@ -334,7 +324,7 @@ if (hasAccess("sale", "Add") === 'false') {
                                             </div>
                                         </div>
                                     </div>
-                                    <label for="address2" class="col-md-1 col-form-label">Address 2</label>
+                                    <label for="address2" class="col-md-1 col-form-label text-center">Address 2</label>
                                     <div class="form-group col-md-5">
                                         <div class="input-group-icon">
                                             <input type="text" class="form-control" name="address2" id="address2" placeholder="Your address here">
@@ -373,17 +363,78 @@ if (hasAccess("sale", "Add") === 'false') {
 
                             </div>
 
-                            <h5 class="my-4 pl-2 d-flex justify-content-between align-items-center border rounded">
-                                Co-Buyer
-                                &nbsp;
-                                <a href="javascript:;" class="col-md-2 text-center w-100 btn btn-info ml-2 align-item-streach" onclick="toggleInfo('coBuyer')">
+                            <h5 class="my-4">Co-Buyer</h5>
+                            <div class="form-row">
+                                <div class="col-md-10">
+                                    <div class="form-group input-group d-flex flex-md-row flex-sm-column">
+                                        <input type="text" name="cbfname" id="cbfname" class="form-control w-auto " placeholder="First name">
+                                        <input type="text" name="cbmname" id="cbmname" class="form-control w-auto " placeholder="Middle name">
+                                        <input type="text" name="cblname" id="cblname" class="form-control w-auto " placeholder="Last name">
+                                        <select class="form-control selectpicker w-auto" name="cbstate" id="cbstate" data-live-search="true" data-size="4">
+                                            <option value="0" selected disabled>State</option>
+                                            <option value="MA">MA</option>
+                                            <option value="RI">RI</option>
+                                            <option value="CT">CT</option>
+                                            <option value="NH">NH</option>
+                                            <option value="AL">AL</option>
+                                            <option value="AK">AK</option>
+                                            <option value="AZ">AZ</option>
+                                            <option value="AR">AR</option>
+                                            <option value="CA">CA</option>
+                                            <option value="CO">CO</option>
+                                            <option value="DC">DC</option>
+                                            <option value="DE">DE</option>
+                                            <option value="FL">FL</option>
+                                            <option value="GA">GA</option>
+                                            <option value="HI">HI</option>
+                                            <option value="ID">ID</option>
+                                            <option value="IL">IL</option>
+                                            <option value="IN">IN</option>
+                                            <option value="IA">IA</option>
+                                            <option value="KS">KS</option>
+                                            <option value="KY">KY</option>
+                                            <option value="LA">LA</option>
+                                            <option value="ME">ME</option>
+                                            <option value="MD">MD</option>
+                                            <option value="MI">MI</option>
+                                            <option value="MN">MN</option>
+                                            <option value="MS">MS</option>
+                                            <option value="MO">MO</option>
+                                            <option value="MT">MT</option>
+                                            <option value="NE">NE</option>
+                                            <option value="NV">NV</option>
+                                            <option value="NJ">NJ</option>
+                                            <option value="NM">NM</option>
+                                            <option value="NY">NY</option>
+                                            <option value="NC">NC</option>
+                                            <option value="ND">ND</option>
+                                            <option value="OH">OH</option>
+                                            <option value="OK">OK</option>
+                                            <option value="OR">OR</option>
+                                            <option value="PA">PA</option>
+                                            <option value="SC">SC</option>
+                                            <option value="SD">SD</option>
+                                            <option value="TN">TN</option>
+                                            <option value="TX">TX</option>
+                                            <option value="UT">UT</option>
+                                            <option value="VT">VT</option>
+                                            <option value="VA">VA</option>
+                                            <option value="WA">WA</option>
+                                            <option value="WV">WV</option>
+                                            <option value="WI">WI</option>
+                                            <option value="WY">WY</option>
+                                            <option value="N/A">N/A</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <a href="javascript:;" class="form-group col-md-2 text-center w-100 btn btn-outline-info align-item-streach" onclick="toggleInfo('coBuyer')">
                                     Add Co-Buyer <i class="fa fa-angle-down"></i>
                                 </a>
-                            </h5>
+                            </div>
 
                             <div class="mt-3 coBuyer border rounded hidden" id="pbody" style="background-color: rgba(0,188,212,.1);">
                                 <div class="form-row p-3">
-                                    <label for="cbAddress1" class="col-md-1 col-form-label">Address 1*</label>
+                                    <label for="cbAddress1" class="col-md-1 col-form-label text-center">Address 1*</label>
                                     <div class="form-group col-md-5">
                                         <div class="input-group-icon">
                                             <input type="text" class="form-control" name="cbAddress1" id="cbAddress1" placeholder="Your address here">
@@ -391,7 +442,7 @@ if (hasAccess("sale", "Add") === 'false') {
                                             </div>
                                         </div>
                                     </div>
-                                    <label for="cbAddress2" class="col-md-1 col-form-label">Address 2</label>
+                                    <label for="cbAddress2" class="col-md-1 col-form-label text-center">Address 2</label>
                                     <div class="form-group col-md-5">
                                         <div class="input-group-icon">
                                             <input type="text" class="form-control" name="cbAddress2" id="cbAddress2" placeholder="Your address here">
@@ -642,7 +693,7 @@ if (hasAccess("sale", "Add") === 'false') {
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add New Item</h5><button type="button" class="btn btn-outline-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                <h5 class="modal-title">Add Vehicle</h5><button type="button" class="btn btn-outline-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
             </div>
             <form id="addInvForm" autocomplete="off" method="post" action="../php_action/createInv.php">
                 <!-- <form id="addInvForm" autocomplete="off" method="post" > -->

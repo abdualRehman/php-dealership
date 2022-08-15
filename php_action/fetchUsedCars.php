@@ -112,7 +112,11 @@ if ($result->num_rows > 0) {
             $_missingDate = "Missing Date";
         }
 
-        if (($title == 'false' || $title == null) && ($date_in !== '' && $date_in !== null)) {
+        // if (($title == 'false' || $title == null) && ($date_in !== '' && $date_in !== null)) {
+        //     $titleIssue += 1;
+        //     $_titleIssue = "Title Issue";
+        // }
+        if (($title == 'false' || $title == null) && ($date_in !== null)) {
             $titleIssue += 1;
             $_titleIssue = "Title Issue";
         }

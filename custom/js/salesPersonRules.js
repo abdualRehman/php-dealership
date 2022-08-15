@@ -43,13 +43,7 @@ $(function () {
 
 
     manageRuleTable = $("#datatable-1").DataTable({
-        // responsive: !0,
-        scrollX: !0,
-        scrollCollapse: !0,
-        fixedColumns: {
-            leftColumns: 0,
-            rightColumns: 1
-        },
+        responsive: !0,
         'ajax': '../php_action/fetchSalesPersonRules.php',
         dom: "Pfrtip",
         searchPanes: {
@@ -76,6 +70,15 @@ $(function () {
             searchPanes: {
                 count: "{total} found",
                 countFiltered: "{shown} / {total}"
+            }
+        },
+        createdRow: function (row, data, dataIndex) {
+            if ($('#isEditAllowed').val() == "true") {
+                $(row).children().not(':last-child').attr({
+                    "data-toggle": "modal",
+                    "data-target": "#modal8",
+                    "onclick": "editRule(" + data[14] + ")"
+                });
             }
         },
         "order": [[0, "asc"]]
@@ -312,14 +315,14 @@ function editRule(ruleId = null) {
                 $('#editRuleForm')[0].reset();
 
 
-                $('#ruleId').val(response.id);                
+                $('#ruleId').val(response.id);
 
                 $('#editModel').val(response.model);
                 $('#editYear').val(response.year);
                 $('#editModelno').val(response.modelno);
                 $('#editModelType').val(response.type);
                 $('#editState').val(response.state);
-                
+
                 var arr = (response.ex_modelno.trim()).split('_');
                 arr.shift(); //remove first space
                 arr.pop(); //remove last space

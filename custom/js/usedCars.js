@@ -499,8 +499,14 @@ $(function () {
             }
             if (activebtnvalue == 'titleIssue') {
                 var filter = $('#statusPriority').val();
-                if ((title == 'false' || title == null) && (date_in !== '' && date_in !== null)) {
-
+                // if ((title == 'false' || title == null) && (date_in !== '' && date_in !== null)) {
+                //     if (filter != '' && filter == titlePriority) {
+                //         return true;
+                //     } else if (filter == '') {
+                //         return true;
+                //     }
+                // }
+                if ((title == 'false' || title == null) && (date_in !== null)) {
                     if (filter != '' && filter == titlePriority) {
                         return true;
                     } else if (filter == '') {
@@ -606,7 +612,7 @@ $(function () {
                 manageInvTable.dataSrc(rowGroupSrc);
                 break;
             case 'addToSheet':
-                setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28 , 29]);
+                setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 29]);
                 manageInvTable.rowGroup().disable().draw();
                 break;
             default:
@@ -621,9 +627,11 @@ $(function () {
         }
 
         setTimeout(() => {
+            $("#datatable-1").dataTable().fnFilter("");
             manageInvTable.draw();
             manageInvTable.searchPanes.rebuildPane();
             manageInvTable.ajax.reload(null, false);
+
             setPlaceholder();
         }, 500);
 
@@ -746,9 +754,8 @@ function setSearchTypehead(searhStatusArray) {
             templates: {
                 suggestion: function (data) {
                     var stockAvailibilityArray = data.stockAvailibility;
-                    const template = `<div><p><strong>${data.stockDetails}</strong></p><div class="row pl-2 pr-2">${stockAvailibilityArray.map(e => (e) ? `<div class="col-sm-4 p-1"> <span class="badge badge-label-primary"> ${e} </span> </div>` : ``).join('')}</div></div>`;
+                    const template = `<div><p><strong>${data.stockDetails}</strong></p><div class="row pl-2 pr-2">${stockAvailibilityArray.map(e => (e) ? `<div class="col-sm-4 p-1"> <button class="badge badge-label-primary cursor-pointer searchStockBtn" onclick="searchStockBtn(this)"  data-head="${e}" data-search="${data.stockDetails}" > ${e} </button> </div>` : ``).join('')}</div></div>`;
                     return template;
-
                 }
             },
         })
@@ -760,6 +767,54 @@ function setSearchTypehead(searhStatusArray) {
         })
 
     $('.form-control.tt-input').next().addClass('w-inherit');
+
+}
+
+function searchStockBtn(params) {
+    let head = $(params).data('head');
+    let search = $(params).data('search');
+    switch (head) {
+        case 'Add To Sheet':
+            head = 'addToSheet';
+            break;
+        case 'Missing Date':
+            head = 'missingDate';
+            break;
+        case 'Title Issue':
+            head = 'titleIssue';
+            break;
+        case 'Ready To Ship':
+            head = 'readyToShip';
+            break;
+        case 'Keys Pulled':
+            head = 'keysPulled';
+            break;
+        case 'At Auction':
+            head = 'atAuction';
+            break;
+        case 'Sold At Auction':
+            head = 'soldAtAuction';
+            break;
+        case 'Retail':
+            head = 'retail';
+            break;
+        case 'Sold':
+            head = 'sold';
+            break;
+        default:
+            head = '';
+            break;
+    }
+    let tab = $('#mods :radio[name=mod][value=' + head + ']').parent().button('toggle');
+    if (tab) {
+        setTimeout(() => {
+            $("#datatable-1").dataTable().fnFilter(search);
+            manageInvTable.order([1, 'desc']).draw();
+            manageInvTable.ajax.reload(null, false);
+        }, 1000);
+    }
+
+
 
 }
 
@@ -832,7 +887,7 @@ function handletitleCheckbox(e) {
     if ($(e).is(':checked')) {
         value = "true";
     }
-    updateFieldsUsedCars({ id, attribute, value } , false);
+    updateFieldsUsedCars({ id, attribute, value }, false);
 }
 
 
@@ -1055,7 +1110,7 @@ function setColumVisibility(columnArray) {
     manageInvTable.columns.adjust().draw();
 }
 
-function updateFieldsUsedCars(obj , notify = true) {
+function updateFieldsUsedCars(obj, notify = true) {
     console.log(obj);
     if (obj) {
         // e1.fire({
@@ -1075,7 +1130,7 @@ function updateFieldsUsedCars(obj , notify = true) {
             success: function (response) {
                 if (response.success == true) {
                     manageInvTable.ajax.reload(null, false);
-                    if(notify == true){
+                    if (notify == true) {
                         Swal.fire("Added!", "Successfully Changed", "success");
                     }
                 } // /response messages

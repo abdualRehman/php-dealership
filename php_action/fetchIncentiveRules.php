@@ -27,7 +27,7 @@ if ($result->num_rows > 0) {
 
         $college_e = new DateTime($row['college_e']);
         $diff = $date1->diff($college_e)->format("%r%a");
-        if ($diff <= 0) {
+        if ($row['college_e'] == '' || $diff < 0) {
             $college = "Expire";
         } else {
             $college = ($row['college'] != '') ?  $row['college'] : "N/A";
@@ -35,38 +35,38 @@ if ($result->num_rows > 0) {
 
         $military_e = new DateTime($row['military_e']);
         $diff = $date1->diff($military_e)->format("%r%a");
-        if ($diff <= 0) {
+        if ($row['military_e'] == '' || $diff < 0) {
             $military = "Expire";
         } else {
-            $military = ($row['military'] !='') ? $row['military']  : "N/A";
+            $military = ($row['military'] != '') ? $row['military']  : "N/A";
         }
-        
+
         $loyalty_e = new DateTime($row['loyalty_e']);
         $diff = $date1->diff($loyalty_e)->format("%r%a");
-        if ($diff <= 0) {
+        if ($row['loyalty_e'] == '' || $diff < 0) {
             $loyalty = "Expire";
         } else {
-            $loyalty = ($row['loyalty'] !='') ? $row['loyalty']  : "N/A";
+            $loyalty = ($row['loyalty'] != '') ? $row['loyalty']  : "N/A";
         }
         $conquest_e = new DateTime($row['conquest_e']);
         $diff = $date1->diff($conquest_e)->format("%r%a");
-        if ($diff <= 0) {
+        if ($row['conquest_e'] == '' || $diff < 0) {
             $conquest = "Expire";
         } else {
-            $conquest = ($row['conquest'] !='') ? $row['conquest']  : "N/A";
+            $conquest = ($row['conquest'] != '') ? $row['conquest']  : "N/A";
         }
 
         $misc1_e = new DateTime($row['misc1_e']);
         $diff = $date1->diff($misc1_e)->format("%r%a");
-        if ($diff <= 0) {
+        if ($row['misc1_e'] == '' ||  $diff < 0) {
             $misc1 = "Expire";
         } else {
-            $misc1 = ($row['misc1'] !='') ? $row['misc1']  : "N/A";
+            $misc1 = ($row['misc1'] != '') ? $row['misc1']  : "N/A";
         }
 
         $misc2_e = new DateTime($row['misc2_e']);
         $diff = $date1->diff($misc2_e)->format("%r%a");
-        if ($diff <= 0) {
+        if ($row['misc2_e'] == '' ||  $diff < 0) {
             $misc2 = "Expire";
         } else {
             $misc2 = ($row['misc2'] != '') ? $row['misc2']  : "N/A";
@@ -74,7 +74,7 @@ if ($result->num_rows > 0) {
 
         $lease_loyalty_e = new DateTime($row['lease_loyalty_e']);
         $diff = $date1->diff($lease_loyalty_e)->format("%r%a");
-        if ($diff <= 0) {
+        if ($row['lease_loyalty_e'] == '' ||  $diff < 0) {
             $lease_loyalty = "Expire";
         } else {
             $lease_loyalty = ($row['lease_loyalty'] != '') ? $row['lease_loyalty']  : "N/A";
@@ -99,7 +99,7 @@ if ($result->num_rows > 0) {
             $row['year'],
             $row['modelno'],
             $row['type'],  // type
-            $ex_modelno,            
+            $ex_modelno,
             $college,
             $military,
             $loyalty,

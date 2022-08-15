@@ -71,6 +71,10 @@ if (hasAccess("todo", "Edit") === 'false') {
     #datatable-1 tbody tr td {
         padding: 7px;
     }
+    #datatable-1 thead tr th,
+    #datatable-1 tbody tr td {
+        text-align: center!important;
+    }
 
     @media (min-width: 1025px) {
 

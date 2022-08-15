@@ -112,11 +112,12 @@
             </div>
             <div class="aside-body" data-simplebar="data-simplebar">
                 <div class="menu">
-                    <div class="menu-item"><a href="<?php echo $GLOBALS['siteurl']; ?>/index.php" data-menu-path="/ltr/index.php" class="menu-item-link">
+                    <!-- <div class="menu-item"><a href="<?php // echo $GLOBALS['siteurl']; 
+                                                            ?>/index.php" data-menu-path="/ltr/index.php" class="menu-item-link">
                             <div class="menu-item-icon"><i class="fa fa-desktop"></i></div><span class="menu-item-text">Dashboard</span>
                             <div class="menu-item-addon"><span class="badge badge-success">New</span></div>
                         </a>
-                    </div>
+                    </div> -->
                     <!-- <div class="menu-section">
                         <div class="menu-section-icon"><i class="fa fa-ellipsis-h"></i></div>
                         <h2 class="menu-section-text">Inventory</h2>
@@ -571,11 +572,14 @@
                                     </li>
                                 <?php
                                 }
+                                if (hasAccess("writedown", "View") !== 'false') {
                                 ?>
-                                <li class="nav-item">
-                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/writedown.php" id="writedownPage" class="nav-link">Writedown</a>
-                                </li>
-
+                                    <li class="nav-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/more/writedown.php" id="writedownPage" class="nav-link">Writedown</a>
+                                    </li>
+                                <?php
+                                }
+                                ?>
                                 <!-- <li class="nav-item dropdown"><a href="#" class="nav-link active" data-toggle="dropdown">Apps</a>
                                     <div class="dropdown-menu dropdown-menu-left dropdown-menu-animated"><a href="#" class="dropdown-item">
                                             <div class="dropdown-icon"><i class="fa fa-boxes"></i></div><span class="dropdown-content">Inventory Manager</span>
@@ -839,38 +843,50 @@
                             <!-- <button class="btn btn-label-primary btn-icon ml-2" data-toggle="sidemenu" data-target="#sidemenu-settings">
                                 <i class="far fa-list-alt"></i>
                             </button> -->
-                            <?php
-                            if (hasAccess("matrix", "View") !== 'false') {
-                            ?>
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/manMatrix.php?r=man" class="btn btn-label-primary ml-2">
-                                    Matrix
-                                </a>
-                            <?php
-                            }
-                            if (hasAccess("sale", "Add") !== 'false') {
-                            ?>
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/addSale.php" class="btn btn-label-primary ml-2">
-                                    Add Sale
-                                </a>
-                            <?php
-                            }
-                            // if (hasAccess("sale", "Edit") !== 'false' || hasAccess("sale", "Remove") !== 'false' || $salesConsultantID == $_SESSION['userRole']) {
-                            if (hasAccess("sale", "View") !== 'false') {
-                            ?>
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man" class="btn btn-label-primary ml-2">
-                                    Sold Logs
-                                </a>
-                            <?php
-                            }
-                            if (hasAccess("todayavail", "View") !== 'false') {
-                            ?>
-                                <button class="btn btn-label-primary btn-icon ml-2" data-toggle="sidemenu" data-target="#sidemenu-todo" onclick="loadSchedules()">
-                                    <i class="far fa-calendar-alt"></i>
-                                </button>
-                            <?php
-                            }
 
-                            ?>
+                            <ul class="nav nav-pills">
+                                <?php
+                                if (hasAccess("matrix", "View") !== 'false') {
+                                ?>
+                                    <li class="nav-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/manMatrix.php?r=man" id="matrixPage" class="nav-link">
+                                            Matrix
+                                        </a>
+                                    </li>
+                                <?php
+                                }
+                                if (hasAccess("sale", "Add") !== 'false') {
+                                ?>
+                                    <li class="nav-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/addSale.php" id="addSalePage" class="nav-link">
+                                            Add Sale
+                                        </a>
+                                    </li>
+                                <?php
+                                }
+                                // if (hasAccess("sale", "Edit") !== 'false' || hasAccess("sale", "Remove") !== 'false' || $salesConsultantID == $_SESSION['userRole']) {
+                                if (hasAccess("sale", "View") !== 'false') {
+                                ?>
+                                    <li class="nav-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man" id="soldLogsPage" class="nav-link">
+                                            Sold Logs
+                                        </a>
+                                    </li>
+                                <?php
+                                }
+                                if (hasAccess("todayavail", "View") !== 'false') {
+                                ?>
+                                    <li class="nav-item">
+                                        <button class="btn btn-label-primary btn-icon mr-2" data-toggle="sidemenu" data-target="#sidemenu-todo" onclick="loadSchedules()">
+                                            <i class="far fa-calendar-alt"></i>
+                                        </button>
+                                    </li>
+
+                                <?php
+                                }
+
+                                ?>
+                            </ul>
                             <div class="dropdown ml-2"><button class="btn btn-flat-primary widget13" data-toggle="dropdown">
                                     <div class="widget13-text">Hi <strong> <?php echo $_SESSION['userName']; ?> </strong></div>
                                     <div class="avatar avatar-info widget13-avatar">
@@ -945,7 +961,8 @@
                                             </div>
                                         </div>
                                         <!-- <div class="portlet-footer portlet-footer-bordered rounded-0">
-                                            <a href="<?php echo $GLOBALS['siteurl']; ?>/logout.php" class="btn btn-label-danger">Sign out</a>
+                                            <a href="<?php // echo $GLOBALS['siteurl']; 
+                                                        ?>/logout.php" class="btn btn-label-danger">Sign out</a>
                                         </div> -->
                                     </div>
                                 </div>
@@ -977,54 +994,64 @@
                         </div>
                         <div class="header-wrap"><button class="btn btn-flat-primary btn-icon" data-toggle="sidemenu" data-target="#sidemenu-todo"><i class="far fa-calendar-alt"></i></button>
                             <div class="dropdown ml-2"><button class="btn btn-flat-primary widget13" data-toggle="dropdown">
-                                    <div class="widget13-text">Hi <strong>User</strong></div>
+                                    <div class="widget13-text">Hi <strong> <?php echo $_SESSION['userName']; ?> </strong></div>
                                     <div class="avatar avatar-info widget13-avatar">
-                                        <div class="avatar-display"><i class="fa fa-user-alt"></i></div>
+                                        <div class="avatar-display" style="width: inherit;height: inherit;">
+                                            <!-- <i class="fa fa-user-alt"></i> -->
+                                            <?php
+                                            if ($_SESSION['userProfile'] != "") {
+                                                echo '<img src="' . $GLOBALS['siteurl'] . '/assets/profiles/' . $_SESSION['userProfile'] . '" alt="Avatar image">';
+                                            } else {
+                                                echo '<img src="' . $GLOBALS['siteurl'] . '/assets/profiles/default.jpg" alt="Avatar image" >';
+                                            }
+                                            ?>
+                                        </div>
                                     </div>
                                 </button>
+
+
                                 <div class="dropdown-menu dropdown-menu-wide dropdown-menu-right dropdown-menu-animated overflow-hidden py-0">
                                     <div class="portlet border-0">
                                         <div class="portlet-header bg-primary rounded-0">
                                             <div class="rich-list-item w-100 p-0">
                                                 <div class="rich-list-prepend">
                                                     <div class="avatar avatar-circle">
-                                                        <!-- <div class="avatar-display"><img src="https://dashboard1.panely-html.blueupcode.com/assets/images/avatar/avatar-4.webp" alt="Avatar image"></div> -->
+                                                        <div class="avatar-display" style="width: inherit;height: inherit;">
+                                                            <?php
+                                                            if ($_SESSION['userProfile'] != "") {
+                                                                echo '<img src="' . $GLOBALS['siteurl'] . '/assets/profiles/' . $_SESSION['userProfile'] . '" alt="Avatar image">';
+                                                            } else {
+                                                                echo '<img src="' . $GLOBALS['siteurl'] . '/assets/profiles/default.jpg" alt="Avatar image" >';
+                                                            }
+                                                            ?>
+                                                        </div>
+                                                        <!-- <div class="avatar-display">
+                                                            <i class="fa fa-user-alt"></i>
+                                                        </div> -->
                                                     </div>
                                                 </div>
                                                 <div class="rich-list-content">
-                                                    <h3 class="rich-list-title text-white">Brielle Williamson</h3><span class="rich-list-subtitle text-white">Software Engineer</span>
+                                                    <h3 class="rich-list-title text-white"> <?php echo $_SESSION['userName']; ?> </h3><span class="rich-list-subtitle text-white"> <?php echo $_SESSION['userRoleName']; ?> </span>
                                                 </div>
-                                                <div class="rich-list-append"><span class="badge badge-warning badge-square badge-lg">9+</span>
+                                                <div class="rich-list-append"><a href="<?php echo $GLOBALS['siteurl']; ?>/logout.php" class="btn btn-danger">Sign out</a>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="portlet-body p-0">
                                             <div class="grid-nav grid-nav-flush grid-nav-action grid-nav-no-rounded">
-                                                <div class="grid-nav-row"><a href="#" class="grid-nav-item">
-                                                        <div class="grid-nav-icon"><i class="far fa-address-card"></i>
-                                                        </div><span class="grid-nav-content">Profile</span>
-                                                    </a><a href="#" class="grid-nav-item">
-                                                        <div class="grid-nav-icon"><i class="far fa-comments"></i></div>
-                                                        <span class="grid-nav-content">Messages</span>
-                                                    </a><a href="#" class="grid-nav-item">
-                                                        <div class="grid-nav-icon"><i class="far fa-clone"></i></div>
-                                                        <span class="grid-nav-content">Activities</span>
-                                                    </a></div>
-                                                <div class="grid-nav-row"><a href="#" class="grid-nav-item">
-                                                        <div class="grid-nav-icon"><i class="far fa-calendar-check"></i>
-                                                        </div><span class="grid-nav-content">Tasks</span>
-                                                    </a><a href="#" class="grid-nav-item">
-                                                        <div class="grid-nav-icon"><i class="far fa-sticky-note"></i>
-                                                        </div><span class="grid-nav-content">Notes</span>
-                                                    </a><a href="#" class="grid-nav-item">
-                                                        <div class="grid-nav-icon"><i class="far fa-bell"></i></div>
-                                                        <span class="grid-nav-content">Notification</span>
-                                                    </a></div>
+                                                <div class="grid-nav-row">
+                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/users/profile.php" class="grid-nav-item">
+                                                        <div class="grid-nav-icon">
+                                                            <i class="far fa-address-card"></i>
+                                                        </div>
+                                                        <span class="grid-nav-content">Profile Setting</span>
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="portlet-footer portlet-footer-bordered rounded-0"><a href="<?php echo $GLOBALS['siteurl']; ?>/logout.php" class="btn btn-label-danger">Sign out</a></div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>

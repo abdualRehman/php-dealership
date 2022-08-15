@@ -47,7 +47,7 @@ $(function () {
         //     <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
         dom: `\n     
             <'row'<'col-12'P>>\n      
-            <'row'<'col-sm-12 text-sm-left col-md-3 mb-2 '<'#statusFilterDiv'>> <'col-sm-12 col-md-6 text-center text-sm-left 'B> <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
+            <'row'<'col-sm-12 text-sm-left col-md-3 mb-2 '<'#statusFilterDiv'>> <'col-sm-12 col-md-6 text-center'B> <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
            <'row'<'col-12'tr>>\n      
            <'row align-items-baseline'
            <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
@@ -203,7 +203,7 @@ $(function () {
                     });
 
                 return $('<tr/>')
-                    .append('<td colspan="14">' + group + ' (' + filteredData.length + ')</td>')
+                    .append('<td style="text-align:left!important" colspan="14">' + group + ' (' + filteredData.length + ')</td>')
                     .attr('data-name', group)
                     .toggleClass('collapsed', collapsed);
             },

@@ -52,6 +52,9 @@ $(function () {
 
     if (divRequest == "man") {
 
+        $('.nav-link').removeClass('active');
+        $('#soldLogsPage').addClass('active');
+
         $('input[name="datefilter"]').daterangepicker({
             autoUpdateInput: false,
             locale: {
@@ -81,7 +84,7 @@ $(function () {
             // working.... with both
             dom: `\n     
             <'row'<'col-12'P>>\n      
-            <'row'<'col-sm-12 text-sm-left col-md-3 mb-2'B> <'col-sm-12 col-md-6 text-center text-sm-left '<'#statusFilterDiv'>  > <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
+            <'row'<'col-sm-12 text-sm-left col-md-3 mb-2'B> <'col-sm-12 col-md-6 text-center '<'#statusFilterDiv'>  > <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
            <'row'<'col-12'tr>>\n      
            <'row align-items-baseline'
            <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
@@ -305,8 +308,10 @@ $(function () {
         } else if (filter == 'pending') {
             $('#modAll').click();
             $('#searchPending').click();
-        }
-        else {
+        } else if (filter == 'month') {
+            $('#currentMonth').click();
+            $('#searchStatusAll').click();
+        } else {
             $('#modAll').click();
             $('#searchStatusAll').click();
         }
@@ -532,11 +537,11 @@ $(function () {
             },
             submitHandler: function (form, e) {
                 e.preventDefault();
-    
+
                 var time = $('#escheduleTime').val();
                 const number = moment(time, ["h:mmA"]).format("HH:mm");
                 $('#escheduleTime').val(number);
-    
+
                 var form = $('#editScheduleForm');
                 $.ajax({
                     type: "POST",
@@ -566,12 +571,12 @@ $(function () {
                         }
                     }
                 });
-    
+
                 return false;
-    
+
             }
-    
-    
+
+
         });
 
 
@@ -634,6 +639,8 @@ $(function () {
                         $('#' + response.deal_type).parent().addClass('active');
                     }
 
+                    $('#submittedBy').val(response.submittedBy);
+
                     $('#dealNote').val(response.deal_notes);
                     $('#fname').val(response.fname);
                     $('#mname').val(response.mname);
@@ -648,6 +655,10 @@ $(function () {
                     $('#altContact').val(response.altcontact);
                     $('#email').val(response.email);
 
+                    $('#cbfname').val(response.cb_fname);
+                    $('#cbmname').val(response.cb_mname);
+                    $('#cblname').val(response.cb_lname);
+                    $('#cbstate').val(response.cb_state);
                     $('#cbAddress1').val(response.cb_address1);
                     $('#cbAddress2').val(response.cb_address2);
                     $('#cbCity').val(response.cb_city);
@@ -1043,7 +1054,6 @@ function applyDateRageFilter(startOfMonth = "", endOfMonth = "") {
 }
 
 function fetchSelectedInvForSearch(id = null) {
-    // console.log(id);
     $.ajax({
         url: '../php_action/fetchSelectedInvForSearch.php',
         type: 'post',
@@ -1119,7 +1129,7 @@ function showDetails(id = null) {
                 if (response.reconcileDate != "") {
                     $('#reconcileDate').datepicker('update', moment(response.reconcileDate).format('MM-DD-YYYY'));
                 }
-                $('#submittedBy').val(response.submittedBy);
+                // $('#submittedBy').val(response.submittedBy);
 
                 if (response.sale_status == 'pending') {
                     $('#statusDiv').html(`
@@ -1170,9 +1180,27 @@ function showDetails(id = null) {
                 $('#iscertified').val((response.certified == "on" ? "YES" : "NO"));
 
 
+                $('#vincheck').val(response.vin_check);
+                $('#insurance').val(response.insurance);
+                $('#tradeTitle').val(response.trade_title);
+                $('#registration').val(response.registration);
+                $('#inspection').val(response.inspection);
                 $('#salePStatus').val(response.salesperson_status);
+                $('#paid').val(response.paid);
+
+
+
                 $('.selectpicker').selectpicker('refresh');
+
+
+                chnageStyle({ id: 'vincheck', value: response.vin_check });
+                chnageStyle({ id: 'insurance', value: response.insurance });
+                chnageStyle({ id: 'tradeTitle', value: response.trade_title });
+                chnageStyle({ id: 'registration', value: response.registration });
+                chnageStyle({ id: 'inspection', value: response.inspection });
                 chnageStyle({ id: 'salePStatus', value: response.salesperson_status });
+                chnageStyle({ id: 'paid', value: response.paid });
+                
 
                 $('#consultantNote').val(response.consultant_notes);
                 $('#thankyouCard').prop('checked', response.thankyou_cards == 'on' ? true : false);
@@ -1238,7 +1266,6 @@ function removeSale(saleId = null) {
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, delete it!"
         }).then(function (t) {
-            console.log(t);
             if (t.isConfirmed == true) {
 
                 $.ajax({
@@ -1271,16 +1298,11 @@ function loadStock() {
         },
         success: function (response) {
             stockArray = response.data;
-            // console.log(stockArray);
-            // console.log(selectBox);
             selectBox.innerHTML = `<option value="0" selected disabled>Stock No:</option>`;
             for (var i = 0; i < stockArray.length; i++) {
-                // for (var i = 0; i < 3; i++) {
                 var item = stockArray[i];
-                // console.log(item);
                 selectBox.innerHTML += `<option value="${item[0]}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`;
             }
-            // selectBox.removeAttribute("disabled");
             $('.selectpicker').selectpicker('refresh');
         }
     });
@@ -1335,7 +1357,7 @@ function changeStockDetails(ele) {
     $('#detailsSection').removeClass('d-none');
     let obj = stockArray.find(data => data[0] === ele.value);
 
-    console.log(obj);
+    // console.log(obj);
 
     var retail = obj[12];
     retail = parseFloat(retail.replace(/\$|,/g, ''))
@@ -1378,12 +1400,10 @@ function changeStockDetails(ele) {
 }
 
 function changeRules() {
-    // console.log("function call");
     var eleV = $('#stockId').val();
     if (eleV) {
         let obj = stockArray.find(data => data[0] === eleV);
-        console.log(obj);
-        console.log("obj", obj);
+        // console.log(obj);
 
         chnageIncentiveStatus(obj[17], obj[18], 'college');
         chnageIncentiveStatus(obj[19], obj[20], 'military');
@@ -1426,13 +1446,10 @@ function changeSalesPersonTodo() {
     var eleV = $('#stockId').val();
     if (eleV) {
         let obj = stockArray.find(data => data[0] === eleV);
-        // console.log(obj);
 
-        // sales Person's Todo Rules
-        // console.log(obj['spTodoArray']);
         var todoArray = obj['spTodoArray'];
         let state = $('#state').val();
-        console.log(todoArray);
+        // console.log(todoArray);
         var saleDate = $('#saleDate').val();
         if (state && todoArray && todoArray.length > 0) {
 
@@ -1440,7 +1457,7 @@ function changeSalesPersonTodo() {
 
             if (spTodoRulesObj) {
 
-                console.log("Data found \n", spTodoRulesObj);
+                // console.log("Data found \n", spTodoRulesObj);
                 changeSalesPersonTodoStyle("vincheck", spTodoRulesObj[5]);
                 changeSalesPersonTodoStyle("insurance", spTodoRulesObj[6]);
                 changeSalesPersonTodoStyle("tradeTitle", spTodoRulesObj[7]);

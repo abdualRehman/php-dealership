@@ -67,6 +67,12 @@ if ($_POST) {
     $altContact = mysqli_real_escape_string($connect, $_POST['altContact']);
     $email = mysqli_real_escape_string($connect, $_POST['email']);
 
+
+    $cbfname = mysqli_real_escape_string($connect, $_POST['cbfname']);
+    $cbmname = mysqli_real_escape_string($connect, $_POST['cbmname']);
+    $cblname = mysqli_real_escape_string($connect, $_POST['cblname']);
+    $cbstate = mysqli_real_escape_string($connect, $_POST['cbstate']);
+
     $cbAddress1 = mysqli_real_escape_string($connect, $_POST['cbAddress1']);
     $cbAddress2 = mysqli_real_escape_string($connect, $_POST['cbAddress2']);
     $cbCity = mysqli_real_escape_string($connect, $_POST['cbCity']);
@@ -146,7 +152,7 @@ if ($_POST) {
         `mobile`, 
         `altcontact`, 
         `email`,
-        `cb_address1`, `cb_address2`, `cb_city`, `cb_country`, `cb_zipcode`, `cb_mobile`, `cb_altcontact`, `cb_email` , `reconcileDate`, `finance_manager` , `deal_type`, `submitted_by`,
+        `cb_fname`, `cb_mname`, `cb_lname`, `cb_state`, `cb_address1`, `cb_address2`, `cb_city`, `cb_country`, `cb_zipcode`, `cb_mobile`, `cb_altcontact`, `cb_email` , `reconcileDate`, `finance_manager` , `deal_type`, `submitted_by`,
         `sale_status`, 
         `status`) VALUES (
             '$saleDate',
@@ -167,7 +173,7 @@ if ($_POST) {
             '$mobile',
             '$altContact',
             '$email',
-            '$cbAddress1' , '$cbAddress2' , '$cbCity' , '$cbCountry' , '$cbZipCode' , '$cbMobile' , '$cbAltContact' , '$cbEmail' , '$reconcileDate', '$financeManager' , '$dealType' , '$userId' , 
+            '$cbfname', '$cbmname' , '$cblname' , '$cbstate' , '$cbAddress1' , '$cbAddress2' , '$cbCity' , '$cbCountry' , '$cbZipCode' , '$cbMobile' , '$cbAltContact' , '$cbEmail' , '$reconcileDate', '$financeManager' , '$dealType' , '$userId' , 
             '$status', 1 )";
 
     $sale_id = "";

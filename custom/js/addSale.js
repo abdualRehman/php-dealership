@@ -2,6 +2,8 @@
 
 var stockArray = [];
 $(function () {
+    $('.nav-link').removeClass('active');
+    $('#addSalePage').addClass('active');
 
     loadStock();
     loadSaleConsultant();

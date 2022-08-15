@@ -51,13 +51,95 @@ $(function () {
     manageDataTable = $("#datatable-1").DataTable({
         responsive: !0,
         'ajax': '../php_action/fetchCashIncentiveRules.php',
-        dom: "Pfrtip",
+        // dom: "Pfrtip",
+        dom: `
+        <'row'<'col-sm-12 text-sm-left col-md-4 mb-2'<'#statusFilterDiv'> > <'col-sm-12 col-md-4 text-center'B> <'col-sm-12 col-md-4 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
+            <'row'<'col-12'tr>>\n      
+            <'row align-items-baseline'
+            <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
+        <'col-md-5'p>>\n`,
         searchPanes: {
             cascadePanes: !0,
             viewTotal: !0,
             columns: [0, 1, 2, 3],
         },
         "pageLength": 25,
+        buttons: [
+            {
+                text: 'Delete All',
+                action: function (e, dt, node, config) {
+                  
+                    var selData = manageDataTable.rows().data();
+
+                    if (selData.length > 0) {
+  
+                        e1.fire({
+                            title: "Are you sure?",
+                            text: `You won't be able to revert this!?`,
+                            icon: "warning",
+                            footer: `<b>Total Selected Rows: ${selData.length}</b>`,
+                            showCancelButton: !0,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Yes, delete it!"
+                        }).then(function (t) {
+
+                            if (t.isConfirmed == true) {
+                                console.log(t);
+
+                                $.ajax({
+                                    url: '../php_action/removeALLRecords.php',
+                                    type: 'post',
+                                    data: { data: 'cash_incentive_rules' },
+                                    dataType: 'json',
+                                    success: function (response) {
+                                        console.log(response);
+
+                                        if (response.success == true) {
+                                            Swal.fire("Deleted!", "Your file has been deleted.", "success")
+                                            manageDataTable.ajax.reload(null, false);
+                                        } // /response messages
+                                    },
+                                    error: function (err) {
+                                        console.log(err);
+                                    }
+                                }); // /ajax function to remove the brand
+
+                            }
+                        });;
+                    } else {
+
+                        e1.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "No Row Selected!",
+                        });
+                    }
+
+                }
+            },
+            {
+                extend: 'copyHtml5',
+                title: 'Dealer Cash Incentives Rules',
+                exportOptions: {
+                    columns: [':visible:not(:last-child)']
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                title: 'Dealer Cash Incentives Rules',
+                exportOptions: {
+                    columns: [':visible:not(:last-child)']
+                }
+            },
+            {
+                extend: 'print',
+                title: 'Dealer Cash Incentives Rules',
+                exportOptions: {
+                    columns: [':visible:not(:last-child)']
+                }
+            },
+        ],
         columnDefs: [
             {
                 targets: [9],

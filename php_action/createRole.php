@@ -55,6 +55,7 @@ if ($_POST) {
         addPermissions($role_id, 'sale', 'Edit', (isset($_POST['saleEdit'])) ? "true" : "false");
         addPermissions($role_id, 'sale', 'Remove', (isset($_POST['saleRemove'])) ? "true" : "false");
         addPermissions($role_id, 'sale', 'View', (isset($_POST['saleView'])) ? "true" : "false");
+        addPermissions($role_id, 'sale', 'Details', (isset($_POST['saleDetails'])) ? "true" : "false");
 
         // todo
         addPermissions($role_id, 'todo', 'Edit', (isset($_POST['todoEdit'])) ? "true" : "false");
@@ -176,6 +177,10 @@ if ($_POST) {
         // today availibility
         addPermissions($role_id, 'todayavail', 'Edit', (isset($_POST['todayavailEdit'])) ? "true" : "false");
         addPermissions($role_id, 'todayavail', 'View', (isset($_POST['todayavailView'])) ? "true" : "false");
+        
+        // writedowns
+        addPermissions($role_id, 'writedown', 'Edit', (isset($_POST['writedownEdit'])) ? "true" : "false");
+        addPermissions($role_id, 'writedown', 'View', (isset($_POST['writedownView'])) ? "true" : "false");
 
 
         $sql = "INSERT INTO `role_mod`(`role_id`, `modules`, `functions`, `permission`) VALUES " . implode(",", $filter) . "";

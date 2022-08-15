@@ -73,6 +73,10 @@ $(function () {
         ],
         columnDefs: [
             {
+                targets: 8,
+                width: 300
+            },
+            {
                 searchPanes: {
                     show: true
                 },
