@@ -22,7 +22,7 @@ if ($userRole != $salesConsultantID) {
     $sql2 = "SELECT 
         ( SELECT COUNT(registration_problems.id) FROM registration_problems WHERE registration_problems.status = 1 AND registration_problems.p_status = 1 ) as problem ,
         ( SELECT  COUNT(b.sale_todo_id)  FROM `sale_todo` as b INNER JOIN sales ON b.sale_id = sales.sale_id WHERE ( sales.status = 1 AND b.status = 1  AND ((b.vin_check = 'checkTitle' OR b.vin_check = 'need') OR b.inspection = 'need' OR b.trade_title = 'need' OR b.registration = 'pending' OR b.registration = 'done' OR b.inspection = 'need' ))) as todo , 
-        ( SELECT COUNT(used_cars.id) FROM `used_cars` LEFT JOIN inventory ON (used_cars.inv_id = inventory.id AND inventory.status = 1 AND inventory.stocktype = 'USED' AND inventory.lot != 'LBO') WHERE (title = 'false' OR title IS NULL) AND date_in != '' AND date_in IS NOT NULL AND inventory.id IS NOT NULL ) as titleIssue WHERE 1";
+        ( SELECT COUNT(used_cars.id) FROM `used_cars` LEFT JOIN inventory ON (used_cars.inv_id = inventory.id AND inventory.status = 1 AND inventory.stocktype = 'USED' AND inventory.lot != 'LBO') WHERE (title = 'false' OR title IS NULL) AND date_in IS NOT NULL AND inventory.id IS NOT NULL ) as titleIssue";
 } else {
     $uid = $_SESSION['userId'];
     $sql = "SELECT sales.date ,sales.reconcileDate , sales.sales_consultant as consultant_id , users.username as sales_consultant , sales.sale_status, sales.sale_id, inventory.stocktype , sales.gross 
@@ -32,7 +32,7 @@ if ($userRole != $salesConsultantID) {
     $sql2 = "SELECT 
         ( SELECT COUNT(registration_problems.id) FROM registration_problems WHERE registration_problems.status = 1 AND registration_problems.p_status = 1 AND registration_problems.sales_consultant = '$uid') as problem ,
         ( SELECT  COUNT(b.sale_todo_id)  FROM `sale_todo` as b INNER JOIN sales ON b.sale_id = sales.sale_id WHERE ( sales.sales_consultant = '$uid' AND sales.status = 1 AND b.status = 1  AND ((b.vin_check = 'checkTitle' OR b.vin_check = 'need') OR b.inspection = 'need' OR b.trade_title = 'need' OR b.registration = 'pending' OR b.registration = 'done' OR b.inspection = 'need' ))) as todo , 
-        ( SELECT COUNT(used_cars.id) FROM `used_cars` LEFT JOIN inventory ON (used_cars.inv_id = inventory.id AND inventory.status = 1 AND inventory.stocktype = 'USED' AND inventory.lot != 'LBO') WHERE (title = 'false' OR title IS NULL) AND date_in != '' AND date_in IS NOT NULL AND inventory.id IS NOT NULL ) as titleIssue WHERE 1";
+        ( SELECT COUNT(used_cars.id) FROM `used_cars` LEFT JOIN inventory ON (used_cars.inv_id = inventory.id AND inventory.status = 1 AND inventory.stocktype = 'USED' AND inventory.lot != 'LBO') WHERE (title = 'false' OR title IS NULL) AND date_in IS NOT NULL AND inventory.id IS NOT NULL ) as titleIssue";
 }
 
 

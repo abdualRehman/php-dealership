@@ -134,7 +134,7 @@ if ($_POST) {
         addPermissions($role_id, 'bodyshops', 'Add', (isset($_POST['bodyshopsAdd'])) ? "true" : "false");
         addPermissions($role_id, 'bodyshops', 'Edit', (isset($_POST['bodyshopsEdit'])) ? "true" : "false");
         addPermissions($role_id, 'bodyshops', 'Remove', (isset($_POST['bodyshopsRemove'])) ? "true" : "false");
-        
+
         // Matrix Files Upload
         addPermissions($role_id, 'matrixfile', 'Add', (isset($_POST['matrixfileAdd'])) ? "true" : "false");
 
@@ -145,43 +145,48 @@ if ($_POST) {
         // retail delivery registration
         addPermissions($role_id, 'rdr', 'Edit', (isset($_POST['rdrEdit'])) ? "true" : "false");
         addPermissions($role_id, 'rdr', 'View', (isset($_POST['rdrView'])) ? "true" : "false");
-        
+
         // transportation damage
         addPermissions($role_id, 'tansptDmg', 'Add', (isset($_POST['tansptDmgAdd'])) ? "true" : "false");
         addPermissions($role_id, 'tansptDmg', 'Edit', (isset($_POST['tansptDmgEdit'])) ? "true" : "false");
         addPermissions($role_id, 'tansptDmg', 'Remove', (isset($_POST['tansptDmgRemove'])) ? "true" : "false");
-        
+
         // lot wizards bills
         addPermissions($role_id, 'wizardsBill', 'Edit', (isset($_POST['wizardsBillEdit'])) ? "true" : "false");
         addPermissions($role_id, 'wizardsBill', 'View', (isset($_POST['wizardsBillView'])) ? "true" : "false");
-        
+
         // Delivery Coordinator Appointments
         addPermissions($role_id, 'appointment', 'Add', (isset($_POST['appointmentAdd'])) ? "true" : "false");
         addPermissions($role_id, 'appointment', 'Edit', (isset($_POST['appointmentEdit'])) ? "true" : "false");
         addPermissions($role_id, 'appointment', 'Remove', (isset($_POST['appointmentRemove'])) ? "true" : "false");
-        
+
         // lot transportation bills
         addPermissions($role_id, 'tansptBill', 'Edit', (isset($_POST['tansptBillEdit'])) ? "true" : "false");
         addPermissions($role_id, 'tansptBill', 'View', (isset($_POST['tansptBillView'])) ? "true" : "false");
-        
+
         // BDC - Leeds
         addPermissions($role_id, 'bdc', 'Add', (isset($_POST['bdcAdd'])) ? "true" : "false");
         addPermissions($role_id, 'bdc', 'Edit', (isset($_POST['bdcEdit'])) ? "true" : "false");
         addPermissions($role_id, 'bdc', 'Remove', (isset($_POST['bdcRemove'])) ? "true" : "false");
-        
+        addPermissions($role_id, 'bdc', 'View', (isset($_POST['bdcView'])) ? "true" : "false");
+
         // warranty cancellation 
         addPermissions($role_id, 'warranty', 'Add', (isset($_POST['warrantyAdd'])) ? "true" : "false");
         addPermissions($role_id, 'warranty', 'Edit', (isset($_POST['warrantyEdit'])) ? "true" : "false");
         addPermissions($role_id, 'warranty', 'Remove', (isset($_POST['warrantyRemove'])) ? "true" : "false");
-        
+
         // today availibility
         addPermissions($role_id, 'todayavail', 'Edit', (isset($_POST['todayavailEdit'])) ? "true" : "false");
         addPermissions($role_id, 'todayavail', 'View', (isset($_POST['todayavailView'])) ? "true" : "false");
-        
+
         // writedowns
         addPermissions($role_id, 'writedown', 'Edit', (isset($_POST['writedownEdit'])) ? "true" : "false");
         addPermissions($role_id, 'writedown', 'View', (isset($_POST['writedownView'])) ? "true" : "false");
 
+        // dealership contact
+        addPermissions($role_id, 'dealership', 'Add', (isset($_POST['dealershipAdd'])) ? "true" : "false");
+        addPermissions($role_id, 'dealership', 'Edit', (isset($_POST['dealershipEdit'])) ? "true" : "false");
+        addPermissions($role_id, 'dealership', 'Remove', (isset($_POST['dealershipRemove'])) ? "true" : "false");
 
         $sql = "INSERT INTO `role_mod`(`role_id`, `modules`, `functions`, `permission`) VALUES " . implode(",", $filter) . "";
         $connect->query($sql) === true;

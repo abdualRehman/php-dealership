@@ -11,7 +11,7 @@ $type = isset($_POST['type']) ? $_POST['type'] : "true";
 
 $sql = "SELECT inventory.id, inventory.stockno, inventory.year, inventory.make, inventory.model, inventory.modelno, inventory.color, 
 inventory.lot, inventory.vin, inventory.mileage, inventory.age, inventory.balance, inventory.retail, inventory.certified, inventory.stocktype, 
-inventory.wholesale, inventory.status FROM inventory WHERE inventory.status = 1 AND inventory.stocktype = " . ($type == "true" ? "inventory.stocktype" : "'$type'") . " ORDER BY inventory.id ASC";
+inventory.wholesale, inventory.status FROM inventory WHERE inventory.status = 1 AND inventory.stocktype = " . ($type == "true" ? "inventory.stocktype" : "'$type'") . " ORDER BY inventory.stockno DESC";
 
 
 $result = $connect->query($sql);

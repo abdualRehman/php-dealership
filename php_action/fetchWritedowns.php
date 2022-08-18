@@ -74,11 +74,10 @@ if ($result->num_rows > 0) {
 
         $writedown = 0;
 
-        $ruleSql = "SELECT * FROM `writedown_rules` WHERE status = 1 AND age_from <= '$endOfAge' AND age_to >= '$endOfAge' AND balance_from <= '$balance' AND balance_to >= '$balance' ORDER BY cast(age_from as int) ASC, cast(age_to as int) DESC , cast(balance_from as int) ASC, cast(balance_to as int) ASC LIMIT 1";
+        $ruleSql = "SELECT * FROM `writedown_rules` WHERE status = 1 AND age_from <= {$endOfAge} AND age_to >= {$endOfAge} AND balance_from <= {$balance} AND balance_to >= {$balance} ORDER BY cast(age_from as int) ASC, cast(age_to as int) DESC , cast(balance_from as int) ASC, cast(balance_to as int) ASC LIMIT 1";
         $result1 = $connect->query($ruleSql);
         if ($result1->num_rows > 0) {
             $row1 = $result1->fetch_assoc();
-
 
             $pencent_balance = $row1['pencent_balance'];
             $max_writedown = $row1['max_writedown'];
@@ -95,7 +94,7 @@ if ($result->num_rows > 0) {
                 $retailC += 1;
                 $retailV += $writedown;
 
-                
+
                 $priceInt = str_replace(array(',', '$'), '', $row['retail']);
 
                 if ($priceInt != '' && $priceInt != 0) {
@@ -110,11 +109,11 @@ if ($result->num_rows > 0) {
             if ($row['retail_status'] == 'wholesale' && $endOfAge >= 75) {
 
                 $wholesaleC += 1;
-                $wholesaleV += $retail;
+                $wholesaleV += $writedown;
             }
 
 
-            if ($row['retail_status'] == 'retail' &&  $endOfAge >= 75) {
+            if ($endOfAge >= 75) {
                 // if ($row['stockno'] == 'O73148XX') {
                 $output['data'][] = array(
                     $id,
@@ -133,6 +132,7 @@ if ($result->num_rows > 0) {
                     asDollars($mmr_balance),
                     asDollars($mmr_retail),
                     $row['Inv_id'],
+                    $row['retail_status'],
                 );
             }
         }

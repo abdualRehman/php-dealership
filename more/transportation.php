@@ -138,7 +138,7 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
                             <div class="col-md-3">
                                 <label class="col-form-label" for="estatus">Status</label>
                                 <div class="form-group">
-                                    <select class="selectpicker required" name="estatus" id="estatus">
+                                    <select class="selectpicker required" name="estatus" id="estatus" autocomplete="off" autocomplete="off">
                                         <option value="pending" selected>Pending</option>
                                         <option value="notRequired">Repair not require</option>
                                         <option value="done">Done</option>
@@ -150,7 +150,7 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
                             <div class="col-md-6">
                                 <label class="col-form-label" for="elocNum">Location Number</label>
                                 <div class="form-group">
-                                    <select class="selectpicker required" name="elocNum" id="elocNum" data-live-search="true" data-size="4">
+                                    <select class="selectpicker required" name="elocNum" id="elocNum" data-live-search="true" data-size="4" autocomplete="off">
                                         <option value="0" selected disabled>Select</option>
                                         <optgroup class="locNum defaultOptions">
                                         </optgroup>
@@ -160,7 +160,7 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
                             <div class="col-md-6">
                                 <label class="col-form-label" for="edamageType">Damage Type</label>
                                 <div class="form-group">
-                                    <select class="selectpicker required" name="edamageType" id="edamageType" data-live-search="true" data-size="4">
+                                    <select class="selectpicker required" name="edamageType" id="edamageType" data-live-search="true" data-size="4" autocomplete="off">
                                         <option value="0" selected disabled>Select</option>
                                         <optgroup class="damageType defaultOptions">
                                         </optgroup>
@@ -170,7 +170,7 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
                             <div class="col-md-6">
                                 <label class="col-form-label" for="edamageSeverity">Damager Severity</label>
                                 <div class="form-group">
-                                    <select class="selectpicker required" name="edamageSeverity" id="edamageSeverity" data-live-search="true" data-size="4">
+                                    <select class="selectpicker required" name="edamageSeverity" id="edamageSeverity" data-live-search="true" data-size="4" autocomplete="off">
                                         <option value="0" selected disabled>Select</option>
                                         <optgroup class="damageSeverity defaultOptions">
                                         </optgroup>
@@ -180,7 +180,7 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
                             <div class="col-md-6">
                                 <label class="col-form-label" for="edamageGrid">Damager Grid Location</label>
                                 <div class="form-group">
-                                    <select class="selectpicker required" name="edamageGrid" id="edamageGrid" data-live-search="true" data-size="4">
+                                    <select class="selectpicker required" name="edamageGrid" id="edamageGrid" data-live-search="true" data-size="4" autocomplete="off">
                                         <option value="0" selected disabled>Select</option>
                                         <optgroup class="damageGrid defaultOptions">
                                         </optgroup>
@@ -232,7 +232,7 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
                         <div class="col-md-3">
                             <label class="col-form-label" for="status">Status</label>
                             <div class="form-group">
-                                <select class="selectpicker required" name="status" id="status">
+                                <select class="selectpicker required" name="status" id="status" autocomplete="off">
                                     <option value="pending" selected>Pending</option>
                                     <option value="notRequired">Repair not require</option>
                                     <option value="done">Done</option>
@@ -244,7 +244,7 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
                         <div class="col-md-6">
                             <label class="col-form-label" for="locNum">Location Number</label>
                             <div class="form-group">
-                                <select class="selectpicker required" name="locNum" id="locNum" data-live-search="true" data-size="4">
+                                <select class="selectpicker required" name="locNum" id="locNum" data-live-search="true" data-size="4" autocomplete="off">
                                     <option value="0" selected disabled>Select</option>
                                     <optgroup class="locNum defaultOptions">
                                     </optgroup>
@@ -254,7 +254,7 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
                         <div class="col-md-6">
                             <label class="col-form-label" for="damageType">Damage Type</label>
                             <div class="form-group">
-                                <select class="selectpicker required" name="damageType" id="damageType" data-live-search="true" data-size="4">
+                                <select class="selectpicker required" name="damageType" id="damageType" data-live-search="true" data-size="4" autocomplete="off">
                                     <option value="0" selected disabled>Select</option>
                                     <optgroup class="damageType defaultOptions">
                                     </optgroup>
@@ -264,7 +264,7 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
                         <div class="col-md-6">
                             <label class="col-form-label" for="damageSeverity">Damager Severity</label>
                             <div class="form-group">
-                                <select class="selectpicker required" name="damageSeverity" id="damageSeverity" data-live-search="true" data-size="4">
+                                <select class="selectpicker required" name="damageSeverity" id="damageSeverity" data-live-search="true" data-size="4" autocomplete="off">
                                     <option value="0" selected disabled>Select</option>
                                     <optgroup class="damageSeverity defaultOptions">
                                     </optgroup>
@@ -274,7 +274,7 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
                         <div class="col-md-6">
                             <label class="col-form-label" for="damageGrid">Damager Grid Location</label>
                             <div class="form-group">
-                                <select class="selectpicker required" name="damageGrid" id="damageGrid" data-live-search="true" data-size="4">
+                                <select class="selectpicker required" name="damageGrid" id="damageGrid" data-live-search="true" data-size="4" autocomplete="off">
                                     <option value="0" selected disabled>Select</option>
                                     <optgroup class="damageGrid defaultOptions">
                                     </optgroup>
@@ -285,92 +285,6 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
                 </div>
                 <div class="modal-footer modal-footer-bordered">
                     <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="importNew">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header modal-header-bordered">
-                <h5 class="modal-title">Import File</h5>
-                <button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
-            </div>
-            <form id="ImportRule" autocomplete="off" method="post" action="../php_action/createTransportation.php" enctype="multipart/form-data">
-                <div class="modal-body">
-                    <h3 class="h4">Import RESIDUALS.CSV File:</h3>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group mb-0">
-                                <label for="excelFile">File</label>
-                                <input type="file" class="form-control-file" id="excelFile" name="excelFile" />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="expireIni">Expire In.</label>
-                                <input type="text" class="form-control" id="expireIni" name="expireIni" placeholder="Expire In.">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row p-3">
-                        <div class="col-md-12">
-                            <div class="alert alert-outline-info fade show mb-0">
-                                <div class="alert-icon"><i class="fa fa-info"></i></div>
-                                <div class="alert-content">
-                                    <h4 class="alert-heading">Please Note!</h4>
-                                    <p>A record that already exists in the database will be updated by this file.</p>
-                                </div>
-                                <button type="button" class="btn btn-text-danger btn-icon alert-dismiss" data-dismiss="alert"><i class="fa fa-times"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <hr>
-                    <div class="form-row mt-4 mb-4">
-                        <div class="col-md-6">
-                            <h3 class="h6 mb-3">12,000 Miles Per Year </h3>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="float-label">
-                                        <input type="text" id="12_24_33i" value="1" name="12_24_33i" class="form-control" placeholder=" ">
-                                        <label for="12_24_33i">24-33 -%</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="float-label">
-                                        <input type="text" id="12_36_48i" value="2" name="12_36_48i" class="form-control" placeholder=" ">
-                                        <label for="12_36_48i">36-48 -%</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <h3 class="h6 mb-3">10,000 Miles Per Year </h3>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="float-label">
-                                        <input type="text" id="10_24_33i" value="2" name="10_24_33i" class="form-control" placeholder=" ">
-                                        <label for="10_24_33i">24-33 -%</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="float-label">
-                                        <input type="text" id="10_36_48i" value="3" name="10_36_48i" class="form-control" placeholder=" ">
-                                        <label for="10_36_48i">36-48 -%</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <br>
-                </div>
-                <div class="modal-footer modal-footer-bordered">
-                    <button type="submit" id="importSubmitBtn" class="btn btn-primary mr-2">Submit</button>
                     <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
                 </div>
             </form>

@@ -472,7 +472,7 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                     </div>
                                     <div class="form-group offset-sm-4 col-sm-8">
                                         <div class="custom-control custom-control-lg custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" name="resend" id="resend">
+                                            <input type="checkbox" class="custom-control-input" name="resend" id="resend" />
                                             <label class="custom-control-label" for="resend">Resend</label>
                                         </div>
                                     </div>
@@ -525,7 +525,9 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                 <div class="carousel slick-2 mt-3" id="slickSlider" style="overflow: hidden">
 
                                 </div>
-
+                                <div class="resendDetailsDiv mt-3 d-none" id="resendDetailsDiv">
+                                    <textarea class="form-control autosize" name="resendDetails" style="border:none ;overflow-y: scroll!important;" id="resendDetails" readonly placeholder="Type Something..."></textarea>
+                                </div>
                             </div>
                         </div>
                         <!-- <div class="row">

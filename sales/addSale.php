@@ -200,11 +200,11 @@ if (hasAccess("sale", "Add") === 'false') {
                                         <label class="col-md-2 offset-md-1 col-form-label text-md-right" for="iscertified">Certified</label>
                                         <div class="col-md-8 d-flex justify-content-around">
                                             <div class="custom-control custom-control-lg custom-radio">
-                                                <input type="radio" id="yes" name="iscertified" class="custom-control-input">
+                                                <input type="radio" id="yes" value="on" name="iscertified" class="custom-control-input">
                                                 <label class="custom-control-label" for="yes">Yes</label>
                                             </div>
                                             <div class="custom-control custom-control-lg custom-radio">
-                                                <input type="radio" id="no" name="iscertified" class="custom-control-input">
+                                                <input type="radio" id="no" value="off" name="iscertified" class="custom-control-input">
                                                 <label class="custom-control-label" for="no">No</label>
                                             </div>
                                         </div>

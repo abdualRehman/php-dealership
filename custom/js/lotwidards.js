@@ -1,7 +1,7 @@
 
 "use strict";
 var manageInvTable, TableData, maxFileLimit = 10, rowGroupSrc = 19; // 19; // wholesale 
-var searhStatusArray = [];
+var searhStatusArray = [], editInspectionObj = {};
 var manageCarDealersTable;
 var collapsedGroups = {};
 var e1 = Swal.mixin({
@@ -15,6 +15,8 @@ var e1 = Swal.mixin({
 $(function () {
     $('.nav-link').removeClass('active');
     $('#lotWizars').addClass('active');
+    $('#statusBar').addClass('d-none');
+    $('#searchBar').removeClass('d-none');
 
     $("#repairSent").datepicker({
         language: 'pt-BR',
@@ -660,7 +662,6 @@ $(function () {
 
 
         submitHandler: function (form, e) {
-            // return true;
             e.preventDefault();
 
             if ($('#repais option:selected').length > 0 && $('#repairSent').val() != '' && $('#bodyshop').val() == 0) {
@@ -1251,6 +1252,131 @@ function clearErrorsList() {
     $('#errorList').html('');
 }
 
+$('#repairReturn').on('change', function () {
+    $('#resend').prop('disabled', $(this).val() != '' ? false : true);
+    $('#resend').prop('checked', $(this).val() == '' ? false : null)
+})
+
+
+$('#resend').on('change', function () {
+    console.log(this.checked);
+    var obj = editInspectionObj;
+    if (this.checked == true) {
+        $('#resendDetailsDiv').removeClass('d-none');
+        // console.log(obj);
+        var arr = obj.repairs ? (obj.repairs.trim()).split('__') : [];
+        arr.pop(); arr.shift();
+        var detailsDiv = `History  Sent ${obj.repair_sent}     Returned ${obj.repair_returned} \nRepairs: ${arr.map(element => element).join(' , ')} \nPaid: ${obj.repair_paid}`;
+        $('#resendDetails').html(detailsDiv);
+
+
+        // setting values to null
+
+        $('#lotNotes').val("");
+        $('.btn-group :radio[name="recon"]').prop('checked', false);
+        $('#reconBtnGroup .active').removeClass('active');
+        $("#repais option:selected").removeAttr("selected");
+        $("#repais option:selected").prop("selected", 0);
+        $('#repais').val(null).trigger('change');
+        $('#bodyshop').val(0);
+        $('#bodyshopNotes').val("");
+        $('#estimate').val("");
+        $('#repairPaid').val("");
+        $("#repairSent").datepicker("setDate", "");
+        $("#repairReturn").datepicker("setDate", "");
+        $('#repairSent').prop('disabled', true);
+        $('#repairReturn').prop('disabled', true);
+        $("#windshield").val('')
+        $("#windshield_done").prop('checked', false);
+        $("#wheels").val("")
+        $("#wheels_done").prop('checked', false);
+        $("#images").val(null);
+        $('.slick-slider').slick('slickRemove', null, null, true);
+        $("#slick-track").html("");
+        document.getElementById('slickSlider').innerHTML = "";
+        $('#maxLimit').html(10);
+        setTimeout(() => {
+            autosize.update($(".autosize"));
+            $('.slick-2').slick('refresh');
+        }, 500);
+        $('.selectpicker').selectpicker('refresh');
+    } else {
+        $('#resendDetailsDiv').addClass('d-none');
+
+        $('#stockno').val(obj.stockno + " || " + obj.vin);
+        $('#lotNotes').val(obj.lot_notes ? obj.lot_notes : "");
+
+        $('.btn-group :radio[name="recon"]').prop('checked', false);
+        $('#reconBtnGroup .active').removeClass('active');
+        (obj.recon) ? $('#' + obj.recon).prop('checked', true).click() : null;
+
+        var arr = obj.repairs ? (obj.repairs.trim()).split('__') : [];
+
+        $("#repais option:selected").removeAttr("selected");
+        $("#repais option:selected").prop("selected", 0);
+        $('#repais').val(null).trigger('change');
+        arr.forEach(element => {
+            if ((element !== '') || $('#repais').find("option[value='" + element + "']").length) {
+                $("#repais option[value='" + element + "']").prop("selected", 1);
+                $('#repais').trigger('change');
+            }
+        });
+
+        $('#bodyshop').val(obj.shops ? obj.shops : 0);
+        $('#bodyshopNotes').val(obj.shops_notes ? obj.shops_notes : "");
+        $('#estimate').val(obj.estimated ? obj.estimated : "");
+        $('#repairPaid').val(obj.repair_paid ? obj.repair_paid : "");
+        $("#repairSent").datepicker("setDate", obj.repair_sent ? obj.repair_sent : "");
+        $("#repairReturn").datepicker("setDate", obj.repair_returned ? obj.repair_returned : "");
+        $('#repairSent').prop('disabled', ((obj.shops != 0 || obj.shops != '' || obj.shops != null) && arr.length != 0) ? false : true);
+        $('#repairReturn').prop('disabled', ((obj.shops != 0 || obj.shops != '' || obj.shops != null) && (arr.length != 0) && (obj.repair_sent != '' || obj.repair_sent != null)) ? false : true);
+        
+        // $('#resend').prop('disabled', obj.repair_returned != "" ? false : true);  ////
+        // $('#resend').prop('checked', obj.resend == "true" ? true : false);
+
+        var arr = obj.windshield ? (obj.windshield.trim()).split('__') : [];
+        $("#windshield").val(arr)
+        $("#windshield_done").prop('checked', (arr.indexOf('Done') != -1) ? true : false);
+        var arr = obj.wheels ? (obj.wheels.trim()).split('__') : [];
+        $("#wheels").val(arr)
+        $("#wheels_done").prop('checked', (arr.indexOf('Done') != -1) ? true : false);
+        $('#submittedBy').val(obj.submitted_by);
+        var detailsDiv = `${obj.stocktype} ${obj.year} ${obj.make} ${obj.model} \n Mileage: ${obj.mileage} \n Age: ${obj.age} \n Lot: ${obj.lot} \n Balance: ${obj.balance}`;
+        $('#selectedDetails').html(detailsDiv);
+        $('#selectedDetails').addClass('text-center');
+        maxFileLimit = 10;
+        $("#images").val(null);
+        $('.slick-slider').slick('slickRemove', null, null, true);
+        $("#slick-track").html("");
+        document.getElementById('slickSlider').innerHTML = "";
+        if (obj.pictures) {
+            var images = (obj.pictures.trim()).split('__');
+            console.log(images);
+            images.forEach((element, index) => {
+                if (element !== "") {
+                    document.getElementById('slickSlider').innerHTML += `<div class="carousel-item">
+                            <img src="../assets/inspections/${element}" class="card-img">
+                            <input type="hidden" name="uploads[]" id="uploads${index + 1}" value="${element}">
+                            <div class="card" onclick="removeImage(this)">X</div>
+                        </div>`;
+                }
+            });
+            maxFileLimit = 10 - (images.length);
+            if (images.length > 1) {
+                setTimeout(() => {
+                    $('.slick-2').slick('refresh');
+                }, 500);
+            }
+        }
+        $('#maxLimit').html(maxFileLimit);
+        setTimeout(() => {
+            autosize.update($(".autosize"));
+        }, 500);
+        $('.selectpicker').selectpicker('refresh');
+
+    }
+})
+
 function editInspection(id) {
     console.log(id);
     if (id) {
@@ -1263,6 +1389,8 @@ function editInspection(id) {
             data: { id: id },
             dataType: 'json',
             success: function (response) {
+
+                editInspectionObj = response;
 
                 $('.spinner-grow').addClass('d-none');
                 $('.showResult').removeClass('d-none');
@@ -1281,17 +1409,17 @@ function editInspection(id) {
 
 
                 var arr = response.repairs ? (response.repairs.trim()).split('__') : [];
-                // console.log("repairs", arr);
 
                 $("#repais option:selected").removeAttr("selected");
-                $("#repais option:selected").attr("selected", 0);
+                $("#repais option:selected").prop("selected", false);
                 $('#repais').val(null).trigger('change');
                 arr.forEach(element => {
                     if ((element !== '') || $('#repais').find("option[value='" + element + "']").length) {
-                        $("#repais option[value='" + element + "']").attr("selected", 1);
+                        $("#repais option[value='" + element + "']").prop("selected", 1);
                         $('#repais').trigger('change');
                     }
                 });
+
                 // console.log('bodyshops', response.shops);
                 $('#bodyshop').val(response.shops ? response.shops : 0);
 
@@ -1315,13 +1443,31 @@ function editInspection(id) {
                 $("#repairReturn").datepicker("setDate", response.repair_returned ? response.repair_returned : "");
 
 
-                console.log(response.shops);
-                console.log(arr);
-                console.log(response.repair_sent);
+                // console.log(response.shops);
+                // console.log(arr);
+                // console.log(response.repair_sent);
                 $('#repairSent').prop('disabled', ((response.shops != 0 || response.shops != '' || response.shops != null) && arr.length != 0) ? false : true);
                 $('#repairReturn').prop('disabled', ((response.shops != 0 || response.shops != '' || response.shops != null) && (arr.length != 0) && (response.repair_sent != '' || response.repair_sent != null)) ? false : true);
 
+                $('#resend').prop('disabled', response.repair_returned != "" ? false : true);  ////
+                
                 $('#resend').prop('checked', response.resend == "true" ? true : false);
+
+                if (response.resend == "true") {
+                    $('#resendDetailsDiv').removeClass('d-none');
+                    var arr = response.repairs ? (response.repairs.trim()).split('__') : [];
+                    arr.pop(); arr.shift();
+                    var detailsDiv = `History  Sent ${response.repair_sent}     Returned ${response.repair_returned} \nRepairs: ${arr.map(element => element).join(' , ')} \nPaid: ${response.repair_paid}`;
+                    $('#resendDetails').html(detailsDiv);
+                }else{
+                    $('#resendDetailsDiv').addClass('d-none');
+                    $('#resendDetails').html("");
+                }
+
+
+
+
+
 
                 var arr = response.windshield ? (response.windshield.trim()).split('__') : [];
                 // console.log(arr.indexOf('Done'));
@@ -1365,16 +1511,14 @@ function editInspection(id) {
                     });
 
                     maxFileLimit = 10 - (images.length);
+                    if (images.length > 1) {
+                        setTimeout(() => {
+                            $('.slick-2').slick('refresh');
+                        }, 500);
+                    }
                 }
-
-                setTimeout(() => {
-                    $('.slick-2').slick('refresh');
-                }, 500);
                 // $('.slick-2').slick('refresh');
                 $('#maxLimit').html(maxFileLimit);
-
-
-
 
 
                 setTimeout(() => {

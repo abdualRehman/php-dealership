@@ -262,6 +262,7 @@ $(function () {
         dynamic: true,
         dropdown: true,
         'showDuration': false,
+        disableTextInput: true,
         scrollbar: true,
         show24Hours: false,
         interval: 60,
@@ -272,15 +273,25 @@ $(function () {
     $("#addNewSchedule").validate({
         ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
         rules: {
-            customerName: "required",
-            scheduleTime: "required",
-            scheduleDate: "required",
-            stockno: "required",
-            coordinator: "required",
+            customerName: {
+                required: $('#loggedInUserRole').val() == 62 ? false : true,
+            },
+            scheduleTime: {
+                required: $('#loggedInUserRole').val() == 62 ? false : true,
+            },
+            scheduleDate: {
+                required: $('#loggedInUserRole').val() == 62 ? false : true,
+            },
+            sale_id: {
+                required: $('#loggedInUserRole').val() == 62 ? false : true,
+            },
+            coordinator: {
+                required: $('#loggedInUserRole').val() == 62 ? false : true,
+            },
             overrideBy: {
                 required: function (params) {
                     var has_appointment = $('#has_appointment').val();
-                    if (has_appointment) {
+                    if (has_appointment && $('#loggedInUserRole').val() != 62) {
                         return true;
                     } else {
                         $(params).removeClass('is-invalid');
@@ -291,7 +302,7 @@ $(function () {
             'delivery': {
                 required: function (params) {
                     var opt = $('input:radio[name="additionalServices"]:checked').val();
-                    if (!opt) {
+                    if (!opt && $('#loggedInUserRole').val() != 62) {
                         return true;
                     } else {
                         return false;
@@ -301,7 +312,7 @@ $(function () {
             'additionalServices': {
                 required: function (params) {
                     var opt = $('input:radio[name="delivery"]:checked').val();
-                    if (!opt) {
+                    if (!opt && $('#loggedInUserRole').val() != 62) {
                         return true;
                     } else {
                         return false;
@@ -311,7 +322,7 @@ $(function () {
             'scheduleNotes': {
                 required: function (params) {
                     var opt = $('input:radio[name="additionalServices"]:checked').val();
-                    if (opt == 'other') {
+                    if (opt == 'other' && $('#loggedInUserRole').val() != 62) {
                         return true;
                     } else {
                         return false;
@@ -368,15 +379,25 @@ $(function () {
     $("#editScheduleForm").validate({
         ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
         rules: {
-            ecustomerName: "required",
-            escheduleTime: "required",
-            escheduleDate: "required",
-            estockno: "required",
-            ecoordinator: "required",
+            ecustomerName: {
+                required: $('#loggedInUserRole').val() == 62 ? false : true,
+            },
+            escheduleTime: {
+                required: $('#loggedInUserRole').val() == 62 ? false : true,
+            },
+            escheduleDate: {
+                required: $('#loggedInUserRole').val() == 62 ? false : true,
+            },
+            esale_id: {
+                required: $('#loggedInUserRole').val() == 62 ? false : true,
+            },
+            ecoordinator: {
+                required: $('#loggedInUserRole').val() == 62 ? false : true,
+            },
             eoverrideBy: {
                 required: function (params) {
                     var has_appointment = $('#ehas_appointment').val();
-                    if (has_appointment) {
+                    if (has_appointment && $('#loggedInUserRole').val() != 62) {
                         return true;
                     } else {
                         $(params).removeClass('is-invalid');
@@ -387,7 +408,7 @@ $(function () {
             'edelivery': {
                 required: function (params) {
                     var opt = $('input:radio[name="eadditionalServices"]:checked').val();
-                    if (!opt) {
+                    if (!opt && $('#loggedInUserRole').val() != 62) {
                         return true;
                     } else {
                         return false;
@@ -397,7 +418,7 @@ $(function () {
             'eadditionalServices': {
                 required: function (params) {
                     var opt = $('input:radio[name="edelivery"]:checked').val();
-                    if (!opt) {
+                    if (!opt && $('#loggedInUserRole').val() != 62) {
                         return true;
                     } else {
                         return false;
@@ -407,7 +428,7 @@ $(function () {
             'escheduleNotes': {
                 required: function (params) {
                     var opt = $('input:radio[name="eadditionalServices"]:checked').val();
-                    if (opt == 'other') {
+                    if (opt == 'other' && $('#loggedInUserRole').val() != 62) {
                         return true;
                     } else {
                         return false;
@@ -497,6 +518,7 @@ function loadDeliveryCoordinator() {
         data: { id: id },
         dataType: 'json',
         success: function (response) {
+            console.log(response);
             deliveryCoordinatorArray = response.data;
             // var Array = response.data;
             // var selectBoxes = document.getElementsByClassName('coordinator');
@@ -513,7 +535,6 @@ function loadDeliveryCoordinator() {
 
 $('.handleDateTime').on('change', function () {
     var date, time, selectBox;
-
     if ($(this).data('type') == 'add') {
         date = $('#scheduleDate').val();
         time = $('#scheduleTime').val();
@@ -522,54 +543,67 @@ $('.handleDateTime').on('change', function () {
         date = $('#escheduleDate').val();
         time = $('#escheduleTime').val();
         selectBox = document.getElementById('ecoordinatorList');
-
-        console.log(date, time, selectBox);
     }
     selectBox.innerHTML = "";
     $('.selectpicker').selectpicker('refresh');
-    if (date != '' && time != '') {
+    if ((date != '' && time != '') && moment(time, ["h:mmA"]).format("HH:mm") != 'Invalid date') {
         let dayname = moment(date).format('dddd').toLowerCase();
         deliveryCoordinatorArray.forEach(element => {
             let startTime = element[3][dayname][0];
             let endTime = element[3][dayname][1];
+            let scheduledAppointments = element[4];
             if (startTime && endTime) {
-
                 time = moment(moment(time, ["h:mmA"]).format("HH:mm"), 'hh:mm');
                 startTime = moment(moment(startTime, ["h:mmA"]).format("HH:mm"), 'hh:mm');
                 endTime = moment(moment(endTime, ["h:mmA"]).format("HH:mm"), 'hh:mm');
-
-                if (time.isBetween(startTime, endTime)) {
-                    selectBox.innerHTML += `<option value="${element[0]}" title="${element[1]} - ${element[2]}">${element[1]} - ${element[2]} </option>`;
-                    $('.selectpicker').selectpicker('refresh');
+                if (time.isBetween(startTime, endTime, null, '[]')) {
+                    let timeFormat = moment(time, ["h:mmA"]).format("HH:mm");
+                    let dateFormat = moment(date, 'MM-DD-YYYY').format('YYYY-MM-DD');
+                    let dateTime = moment(dateFormat + ' ' + timeFormat, 'YYYY-MM-DD hh:mm');
+                    let allready_appointed = false;
+                    scheduledAppointments.forEach(appointment => {
+                        let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm');
+                        let schedule_end = moment(appointment.schedule_end, 'YYYY-MM-DD hh:mm');
+                        if (dateTime.isBetween(schedule_start, schedule_end, null, '[]')) {
+                            allready_appointed = true;
+                        }
+                    });
+                    if (allready_appointed == false) {
+                        selectBox.innerHTML += `<option value="${element[0]}" title="${element[1]} - ${element[2]}">${element[1]} - ${element[2]} </option>`;
+                        $('.selectpicker').selectpicker('refresh');
+                    }
                 }
             }
         });
     }
-
-})
+});
 
 
 function disabledManagerDiv() {
     let currentUser = $('#loggedInUserRole').val();
     var delivery_coordinator_id = 62;
-    if (currentUser != delivery_coordinator_id && currentUser != 'Admin') {
-        $('.delivery_coordinator').addClass('disabled-div');
-        // $(".delivery_coordinator").find("*").prop("disabled", true);
-        $(".delivery_coordinator").find("*").prop("readonly", true);
-    } else {
-        $('.delivery_coordinator').removeClass('disabled-div');
-        // $(".delivery_coordinator").find("*").prop("disabled", true);
-        $(".delivery_coordinator").find("*").prop("readonly", false);
-    }
     var sales_manager_id = 67;
     var general_manager_id = 69;
+
+    if (currentUser != delivery_coordinator_id && currentUser != 'Admin') {
+        $('.delivery_coordinator').addClass('disabled-div');
+        $(".delivery_coordinator").find("*").prop("readonly", true);
+    } else {
+        if (currentUser == delivery_coordinator_id) {
+            $('.appointment_div').addClass('disabled-div');
+            $(".appointment_div").find("*").prop("readonly", true);
+        } else {
+            $('.appointment_div').removeClass('disabled-div');
+            $(".appointment_div").find("*").prop("readonly", false);
+        }
+        $('.delivery_coordinator').removeClass('disabled-div');
+        $(".delivery_coordinator").find("*").prop("readonly", false);
+    }
     if (currentUser != 'Admin' && currentUser != sales_manager_id && currentUser != general_manager_id) {
         $('.manager_override_div').addClass('disabled-div');
-        // $(".manager_override_div").find("*").prop("disabled", true);
         $(".manager_override_div").find("*").prop("readonly", true);
     } else {
         $('.manager_override_div').removeClass('disabled-div');
-        // $(".manager_override_div").find("*").prop("disabled", true);
         $(".manager_override_div").find("*").prop("readonly", false);
     }
 
@@ -584,7 +618,8 @@ function fetchSchedules() {
             ScheduleList = [];
             dataArray.forEach(element => {
                 console.log(element);
-                var calendar = CalendarList.find(calender => calender.id == element[2]);
+                let userRole = element[2] != 'Admin' ? element[2] : 1;
+                var calendar = CalendarList.find(calender => calender.id == userRole);
                 var start = moment(element[4] + ':00', 'YYYY-MM-DD HH:mm:ss').toDate();
                 var end = moment(element[5] + ':00', 'YYYY-MM-DD HH:mm:ss').toDate();
 
@@ -688,10 +723,14 @@ function editShedule(id = null) {
                 $('#ecomplete .active').removeClass('active');
                 (response.complete) ? $('#com' + response.complete).prop('checked', true).click() : null;
 
-                if ($('#ecoordinatorList').children().length > 0) {
+                $('#ecoordinator').val(response.coordinator);
+                var checkSelectValue = $('#ecoordinator').val();
+                if (!checkSelectValue) {
+                    var selectBox = document.getElementById('ecoordinatorList');
+                    selectBox.innerHTML += `<option value="${response.coordinator}" title="${response.coordinator_name} - ${response.coordinator_email}">${response.coordinator_name} - ${response.coordinator_email} </option>`;
                     $('#ecoordinator').val(response.coordinator);
-                    $('.selectpicker').selectpicker('refresh');
                 }
+                $('.selectpicker').selectpicker('refresh');
 
 
             }, // /success

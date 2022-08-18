@@ -24,19 +24,13 @@ if ($result->num_rows > 0) {
         $balanceT =  $row[5];
         $writedown =  $row[6];
 
-        // $button = '
-        //     <div class="show d-flex" >' .
-        //     (hasAccess("raterule", "Remove") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeRule(' . $id . ')" >
-        //             <i class="fa fa-trash"></i>
-        //         </button>' : "") .
-        //     '</div>
-        // ';
+        
         $button = '
-            <div class="show d-flex" >
-            <button class="btn btn-label-primary btn-icon mr-1" onclick="removeRule(' . $id . ')" >
+            <div class="show d-flex" >' .
+            (hasAccess("writedown", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeRule(' . $id . ')" >
                     <i class="fa fa-trash"></i>
-                </button>
-            </div>
+                </button>' : "") .
+            '</div>
         ';
 
 

@@ -5,7 +5,7 @@
                 <p class="text-left mb-0">Copyright <i class="far fa-copyright"></i> <span id="copyright-year"></span> AR Webs. All rights reserved</p>
             </div>
             <div class="col-md-6 d-none d-md-block">
-                <p class="text-right mb-0"><a href="https://www.fiverr.com/share/yVzNwz" target="_blank" ><i class="fa fa-link text-info"></i> &nbsp; Contact Developer</a></p>
+                <p class="text-right mb-0"><a href="https://www.fiverr.com/share/yVzNwz" target="_blank"><i class="fa fa-link text-info"></i> &nbsp; Contact Developer</a></p>
             </div>
         </div>
     </div>
@@ -325,6 +325,40 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="addWebsiteModal">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header modal-header-bordered">
+                <h5 class="modal-title">Website Link</h5><button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
+            </div>
+            <form class="form-horizontal" id="updateWebsiteForm" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="webLinkId" id="webLinkId" />
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <label class="col-form-label" for="webName">Name</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="webName" name="webName">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="col-form-label" for="webLink">Link</label>
+                            <textarea class="form-control autosize" name="webLink" id="webLink"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-bordered">
+                    <button type="submit" class="btn btn-primary mr-2">Save Changes</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
 <style>
     @media (min-width: 1025px) {
 
@@ -379,30 +413,40 @@
 <script type="text/javascript" src="<?php echo $GLOBALS['siteurl']; ?>/custom/js/footer.js"></script>
 
 <script>
-    // let siteLink = localStorage.getItem('siteURL')
-    // var timer = null,
-    //     delay = 3000;
-    // function checkAndDisplayNewResults() {
-    //     // do some work
-    //     if (siteLink) {
-    //         $.ajax({
-    //             url: siteLink + '/php_action/getTodayData.php',
-    //             type: "GET",
-    //             dataType: 'json',
-    //             success: function(response) {
-    //                 var obj = response.data;
-    //                 if (obj) {
-    //                     $('#todaySoldStatus').html(`Sold Today: ${obj[0]} NEW, ${obj[1]} USED, ${obj[2]} Total`);
-    //                 }
-    //             }
-    //         });
-    //     }
-    //     // when the work is finished, set a timer to call again the function
-    //     timer = setTimeout(checkAndDisplayNewResults, delay);
-    //     // console.log(timer);
-    // }
-    // // call the function immediately
-    // checkAndDisplayNewResults();
+    let statusBarDiv = $('#statusBar').hasClass('d-none');
+    if (statusBarDiv == false) {
+        let siteLink = localStorage.getItem('siteURL')
+        var timer = null,
+            delay = 5000,
+            maxCounter = 1;
+
+        function checkAndDisplayNewResults() {
+            let statusBarDiv = $('#statusBar').hasClass('d-none');
+            if (siteLink && !statusBarDiv && maxCounter < 20) {
+                $.ajax({
+                    url: siteLink + '/php_action/getTodayData.php',
+                    type: "GET",
+                    dataType: 'json',
+                    success: function(response) {
+                        var obj = response.data;
+                        if (obj) {
+                            $('#todaySoldStatus').html(`Sold Today: ${obj[0]} NEW, ${obj[1]} USED, ${obj[2]} Total`);
+                        }
+                        maxCounter++;
+                    },
+                    error: function(jqXHR, textStatus, errorthrown) {
+                        console.log(errorthrown);
+                    }
+                });
+            }
+            // when the work is finished, set a timer to call again the function
+            timer = setTimeout(checkAndDisplayNewResults, delay);
+        }
+        // call the function immediately
+        setTimeout(() => {
+            checkAndDisplayNewResults();
+        }, 3000);
+    }
 </script>
 
 

@@ -127,6 +127,20 @@ if ($_GET['r'] == 'man') {
         font-weight: 900 !important;
         font-size: large;
     }
+
+    body.theme-light .disabled-div,
+    body.theme-light .disabled-div .btn-group-toggle>.btn:not(.active),
+    body.theme-light .disabled-div .bootstrap-select .bs-btn-default {
+        background-color: #eee !important;
+        pointer-events: none;
+    }
+
+    body.theme-dark .disabled-div,
+    body.theme-dark .disabled-div .btn-group-toggle>.btn:not(.active),
+    body.theme-dark .disabled-div .bootstrap-select .bs-btn-default {
+        background-color: #757575 !important;
+        pointer-events: none;
+    }
 </style>
 
 
@@ -162,6 +176,11 @@ if ($_GET['r'] == 'man') {
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    <label class="btn btn-flat-primary">
+                                                        <input type="radio" name="radio-date" id="notDoneBtn" value="notDone">
+                                                        Not Done
+                                                        <span class="badge badge-lg p-1" id="notDoneCount"></span>
+                                                    </label>
                                                     <label class="btn btn-flat-primary">
                                                         <input type="radio" name="radio-date" id="todayBtn" value="today">
                                                         Today
@@ -208,32 +227,55 @@ if ($_GET['r'] == 'man') {
                             </div>
                         </div>
                         <div class="portlet-body">
-
-                            <table id="datatable-1" class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Sold Date</th>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
-                                        <th>Sales Consultant</th>
-                                        <th>Stock #</th>
-                                        <th>Vehicle</th>
-                                        <th>Age</th>
-                                        <th>Certified</th>
-                                        <th>Lot</th>
-                                        <th>Gross</th>
-                                        <th>Status</th>
-                                        <th>Notes</th>
-                                        <th>Balance</th>
-                                        <th>Consultant Notes</th>
-                                        <th>Salesperson Status</th>
-                                        <th>Action</th>
-                                        <th>Stock Type</th>
-                                        <th>count</th>
-                                        <th>ID</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                            <div class="soldLogs">
+                                <table id="datatable-1" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Sold Date</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Sales Consultant</th>
+                                            <th>Stock #</th>
+                                            <th>Vehicle</th>
+                                            <th>Age</th>
+                                            <th>Certified</th>
+                                            <th>Lot</th>
+                                            <th>Gross</th>
+                                            <th>Status</th>
+                                            <th>Notes</th>
+                                            <th>Balance</th>
+                                            <th>Consultant Notes</th>
+                                            <th>Salesperson Status</th>
+                                            <th>Action</th>
+                                            <th>Stock Type</th>
+                                            <th>count</th>
+                                            <th>ID</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="notDone d-none">
+                                <table id="datatable-2" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Sold Date</th>
+                                            <th>Reconcile Date</th>
+                                            <th>Customer Name</th>
+                                            <th>Sales Consultant</th>
+                                            <th>Stock #</th>
+                                            <th>Vehicle</th>
+                                            <th>Age</th>
+                                            <th>Certified</th>
+                                            <th>Lot</th>
+                                            <th>Gross</th>
+                                            <th>Status</th>
+                                            <th>Notes</th>
+                                            <th>Balance</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -348,7 +390,7 @@ if ($_GET['r'] == 'man') {
                                 </div>
                             </div>
                             <?php
-                            if (hasAccess("sale", "Details") === 'true') {
+                            if (hasAccess("sale", "Details") !== 'false') {
                             ?>
                                 <div class="form-row">
                                     <div class="col-md-12">
@@ -465,7 +507,7 @@ if ($_GET['r'] == 'man') {
                                     </div> -->
                                 </div>
                                 <?php
-                                if (hasAccess("todo", "Edit") === 'true' && $salesConsultantID == $_SESSION['userRole']) {
+                                if (hasAccess("todo", "Edit") !== 'false' && $salesConsultantID == $_SESSION['userRole']) {
                                 ?>
                                     <div class="form-row">
                                         <label for="vincheck" class="col-md-1 col-form-label">Vin Check</label>
@@ -585,143 +627,144 @@ if ($_GET['r'] == 'man') {
                             <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div>
                         </div>
                         <div class="showResult d-none">
-
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="row align-items-baseline">
-                                        <label for="ecustomerName" class="col-sm-3 text-sm-center col-form-label">Customer Name</label>
-                                        <div class="form-group col-sm-9">
-                                            <input type="text" class="form-control" name="ecustomerName" id="ecustomerName" autocomplete="off" autofill="off" disabled />
+                            <div class="w-100 appointment_div p-4">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="row align-items-baseline">
+                                            <label for="ecustomerName" class="col-sm-3 text-sm-center col-form-label">Customer Name</label>
+                                            <div class="form-group col-sm-9">
+                                                <input type="text" class="form-control" name="ecustomerName" id="ecustomerName" autocomplete="off" autofill="off" disabled />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row align-items-baseline">
-                                        <label for="esale_id" class="col-sm-3 text-sm-center col-form-label">Stock No - Vin</label>
-                                        <div class="form-group col-sm-9">
-                                            <input type="hidden" class="form-control" name="esale_id" id="esale_id" autocomplete="off" autofill="off" />
-                                            <input type="hidden" class="form-control" name="estockno" id="estockno" />
-                                            <input type="text" class="form-control" name="estocknoDisplay" id="estocknoDisplay" readonly />
-                                            <!-- <select class="form-control selectpicker w-auto required" id="esale_id" onchange="echangeStockDetails(this)" name="esale_id" data-live-search="true" data-size="4">
+                                        <div class="row align-items-baseline">
+                                            <label for="esale_id" class="col-sm-3 text-sm-center col-form-label">Stock No - Vin</label>
+                                            <div class="form-group col-sm-9">
+                                                <input type="hidden" class="form-control" name="esale_id" id="esale_id" autocomplete="off" autofill="off" />
+                                                <input type="hidden" class="form-control" name="estockno" id="estockno" />
+                                                <input type="text" class="form-control" name="estocknoDisplay" id="estocknoDisplay" readonly />
+                                                <!-- <select class="form-control selectpicker w-auto required" id="esale_id" onchange="echangeStockDetails(this)" name="esale_id" data-live-search="true" data-size="4">
                                                 <option value="" selected disabled>Select</option>
                                                 <optgroup class="stockno"></optgroup>
                                             </select> -->
-                                        </div>
-                                        <label for="evechicle" class="col-sm-3 text-sm-center col-form-label"> Vehicle</label>
-                                        <div class="form-group col-sm-9">
-                                            <input type="text" class="form-control" name="evechicle" id="evechicle" autocomplete="off" autofill="off" disabled />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="esubmittedBy" class="col-form-label">Submitted By</label>
-                                        <input type="text" class="form-control text-center" name="esubmittedBy" id="esubmittedBy" readonly autocomplete="off" autofill="off" />
-                                        <input type="hidden" class="form-control text-center" name="esubmittedByRole" id="esubmittedByRole" readonly autocomplete="off" autofill="off" />
-                                    </div>
-
-                                    <div class="form-group manager_override_div v-none" style="border-radius:5px;">
-                                        <input type="hidden" name="ehas_appointment" id="ehas_appointment" value="null" />
-                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" name="eoverrideBy" id="eoverrideBy">
-                                            <label class="custom-control-label" for="eoverrideBy">Manager Override</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control text-center" name="eoverrideByName" id="eoverrideByName" readonly autocomplete="off" autofill="off" />
-                                        <input type="hidden" class="form-control text-center" name="eoverrideById" id="eoverrideById" value="" readonly autocomplete="off" autofill="off" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="row">
-                                        <label for="escheduleDate" class="col-sm-3 text-sm-center col-form-label">Appointment Date</label>
-                                        <div class="col-sm-4">
-                                            <div class="form-group input-group">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text"><i class="fa fa-calendar"></i>
-                                                    </span>
-                                                </div>
-                                                <input type="text" class="form-control scheduleDate handleDateTime" data-type="edit" name="escheduleDate" id="escheduleDate" />
                                             </div>
-                                        </div>
-
-                                        <label for="escheduleTime" class="col-sm-1 text-md-center col-form-label">Time</label>
-                                        <div class="col-sm-4">
-                                            <div class="form-group input-group">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text"><i class="fa fa-calendar"></i>
-                                                    </span>
-                                                </div>
-                                                <input type="text" class="form-control scheduleTime handleDateTime" data-type="edit" name="escheduleTime" id="escheduleTime" />
+                                            <label for="evechicle" class="col-sm-3 text-sm-center col-form-label"> Vehicle</label>
+                                            <div class="form-group col-sm-9">
+                                                <input type="text" class="form-control" name="evechicle" id="evechicle" autocomplete="off" autofill="off" disabled />
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="esubmittedBy" class="col-form-label">Submitted By</label>
+                                            <input type="text" class="form-control text-center" name="esubmittedBy" id="esubmittedBy" readonly autocomplete="off" autofill="off" />
+                                            <input type="hidden" class="form-control text-center" name="esubmittedByRole" id="esubmittedByRole" readonly autocomplete="off" autofill="off" />
+                                        </div>
 
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="row align-items-baseline">
-                                        <label for="ecoordinator" class="col-sm-3 col-form-label">Coordinator</label>
-                                        <div class="form-group col-sm-9">
-                                            <select class="form-control selectpicker w-auto required" id="ecoordinator" name="ecoordinator" data-live-search="true" data-size="4">
-                                                <option value="" selected disabled>Select</option>
-                                                <optgroup class="ecoordinator" id="ecoordinatorList"></optgroup>
-                                            </select>
+                                        <div class="form-group manager_override_div v-none" style="border-radius:5px;">
+                                            <input type="hidden" name="ehas_appointment" id="ehas_appointment" value="null" />
+                                            <div class="custom-control custom-control-lg custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" name="eoverrideBy" id="eoverrideBy">
+                                                <label class="custom-control-label" for="eoverrideBy">Manager Override</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control text-center" name="eoverrideByName" id="eoverrideByName" readonly autocomplete="off" autofill="off" />
+                                            <input type="hidden" class="form-control text-center" name="eoverrideById" id="eoverrideById" value="" readonly autocomplete="off" autofill="off" />
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <label for="escheduleDate" class="col-sm-3 text-sm-center col-form-label">Appointment Date</label>
+                                            <div class="col-sm-4">
+                                                <div class="form-group input-group">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text"><i class="fa fa-calendar"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" class="form-control scheduleDate handleDateTime" data-type="edit" name="escheduleDate" id="escheduleDate" />
+                                                </div>
+                                            </div>
 
+                                            <label for="escheduleTime" class="col-sm-1 text-md-center col-form-label">Time</label>
+                                            <div class="col-sm-4">
+                                                <div class="form-group input-group">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text"><i class="fa fa-calendar"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" class="form-control scheduleTime handleDateTime" data-type="edit" name="escheduleTime" id="escheduleTime" />
+                                                </div>
+                                            </div>
+                                        </div>
 
-
-                            <div class="row d-flex flex-row align-items-center">
-                                <label for="edelivery" class="col-sm-2 text-sm-center col-form-label">Delivery</label>
-                                <div class="form-group col-sm-10">
-                                    <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="edelivery">
-                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                            <input type="radio" name="edelivery" value="spotDelivery" id="espotDelivery">
-                                            Spot Delivery
-                                        </label>
-                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                            <input type="radio" name="edelivery" value="appointmentDelivery" id="eappointmentDelivery">
-                                            Appointment Delivery
-                                        </label>
-                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                            <input type="radio" name="edelivery" value="outOfDealershipDelivery" id="eoutOfDealershipDelivery">
-                                            Out of Dealership Delivery
-                                        </label>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row align-items-baseline">
-                                <label for="eadditionalServices" class="col-sm-2 text-sm-center col-form-label">Additional Services</label>
-                                <div class="form-group col-sm-10">
-                                    <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="eadditionalServices">
-                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                            <input type="radio" name="eadditionalServices" value="vinCheck" id="evinCheck">
-                                            Vin Check
-                                        </label>
-                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                            <input type="radio" name="eadditionalServices" value="maInspection" id="emaInspection">
-                                            MA Inspection
-                                        </label>
-                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                            <input type="radio" name="eadditionalServices" value="riInspection" id="eriInspection">
-                                            RI Inspection
-                                        </label>
-                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                            <input type="radio" name="eadditionalServices" value="paperworkSigned" id="epaperworkSigned">
-                                            Get Paperwork Signed
-                                        </label>
-                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                            <input type="radio" name="eadditionalServices" value="other" id="eother">
-                                            Other (See Notes)
-                                        </label>
+                                    <div class="col-md-4">
+                                        <div class="row align-items-baseline">
+                                            <label for="ecoordinator" class="col-sm-3 col-form-label">Coordinator</label>
+                                            <div class="form-group col-sm-9">
+                                                <select class="form-control selectpicker w-auto required" id="ecoordinator" name="ecoordinator" data-live-search="true" data-size="4">
+                                                    <option value="" selected disabled>Select</option>
+                                                    <optgroup class="ecoordinator" id="ecoordinatorList"></optgroup>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <label for="escheduleNotes" class="col-sm-2 text-sm-center col-form-label">Notes</label>
-                                <div class="form-group col-sm-10">
-                                    <textarea class="form-control autosize" name="escheduleNotes" id="escheduleNotes" placeholder="Notes..."></textarea>
+
+
+                                <div class="row d-flex flex-row align-items-center">
+                                    <label for="edelivery" class="col-sm-2 text-sm-center col-form-label">Delivery</label>
+                                    <div class="form-group col-sm-10">
+                                        <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="edelivery">
+                                            <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                                <input type="radio" name="edelivery" value="spotDelivery" id="espotDelivery">
+                                                Spot Delivery
+                                            </label>
+                                            <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                                <input type="radio" name="edelivery" value="appointmentDelivery" id="eappointmentDelivery">
+                                                Appointment Delivery
+                                            </label>
+                                            <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                                <input type="radio" name="edelivery" value="outOfDealershipDelivery" id="eoutOfDealershipDelivery">
+                                                Out of Dealership Delivery
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row align-items-baseline">
+                                    <label for="eadditionalServices" class="col-sm-2 text-sm-center col-form-label">Additional Services</label>
+                                    <div class="form-group col-sm-10">
+                                        <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="eadditionalServices">
+                                            <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                                <input type="radio" name="eadditionalServices" value="vinCheck" id="evinCheck">
+                                                Vin Check
+                                            </label>
+                                            <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                                <input type="radio" name="eadditionalServices" value="maInspection" id="emaInspection">
+                                                MA Inspection
+                                            </label>
+                                            <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                                <input type="radio" name="eadditionalServices" value="riInspection" id="eriInspection">
+                                                RI Inspection
+                                            </label>
+                                            <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                                <input type="radio" name="eadditionalServices" value="paperworkSigned" id="epaperworkSigned">
+                                                Get Paperwork Signed
+                                            </label>
+                                            <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                                <input type="radio" name="eadditionalServices" value="other" id="eother">
+                                                Other (See Notes)
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <label for="escheduleNotes" class="col-sm-2 text-sm-center col-form-label">Notes</label>
+                                    <div class="form-group col-sm-10">
+                                        <textarea class="form-control autosize" name="escheduleNotes" id="escheduleNotes" placeholder="Notes..."></textarea>
+                                    </div>
                                 </div>
                             </div>
                             <hr>
@@ -738,11 +781,11 @@ if ($_GET['r'] == 'man') {
                                     <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="econfirmed">
                                         <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                             <input type="radio" name="econfirmed" value="ok" id="conok">
-                                            OK
+                                            Yes
                                         </label>
                                         <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                             <input type="radio" name="econfirmed" value="showVerified" id="conshowVerified">
-                                            Show Verified
+                                            No
                                         </label>
                                     </div>
                                 </div>
@@ -751,11 +794,11 @@ if ($_GET['r'] == 'man') {
                                     <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="ecomplete">
                                         <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                             <input type="radio" name="ecomplete" value="ok" id="comok">
-                                            OK
+                                            Yes
                                         </label>
                                         <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                             <input type="radio" name="ecomplete" value="showVerified" id="comshowVerified">
-                                            Show Verified
+                                            No
                                         </label>
                                     </div>
                                 </div>
@@ -941,11 +984,11 @@ if ($_GET['r'] == 'man') {
                                                 <div class="col-md-8 d-flex justify-content-around">
                                                     <!-- <input type="text" class="form-control" id="iscertified" placeholder="yes" readonly> -->
                                                     <div class="custom-control custom-control-lg custom-radio">
-                                                        <input type="radio" id="yes" name="iscertified" class="custom-control-input">
+                                                        <input type="radio" id="yes" value="on" name="iscertified" class="custom-control-input">
                                                         <label class="custom-control-label" for="yes">Yes</label>
                                                     </div>
                                                     <div class="custom-control custom-control-lg custom-radio">
-                                                        <input type="radio" id="no" name="iscertified" class="custom-control-input">
+                                                        <input type="radio" id="no" value="off" name="iscertified" class="custom-control-input">
                                                         <label class="custom-control-label" for="no">No</label>
                                                     </div>
                                                 </div>

@@ -188,6 +188,7 @@ if ($_POST) {
         addPermissions($role_id, 'bdc', 'Add', (isset($_POST['bdcAdd'])) ? "true" : "false");
         addPermissions($role_id, 'bdc', 'Edit', (isset($_POST['bdcEdit'])) ? "true" : "false");
         addPermissions($role_id, 'bdc', 'Remove', (isset($_POST['bdcRemove'])) ? "true" : "false");
+        addPermissions($role_id, 'bdc', 'View', (isset($_POST['bdcView'])) ? "true" : "false");
 
         // warranty cancellation 
         addPermissions($role_id, 'warranty', 'Add', (isset($_POST['warrantyAdd'])) ? "true" : "false");
@@ -197,12 +198,15 @@ if ($_POST) {
         // today availibility
         addPermissions($role_id, 'todayavail', 'Edit', (isset($_POST['todayavailEdit'])) ? "true" : "false");
         addPermissions($role_id, 'todayavail', 'View', (isset($_POST['todayavailView'])) ? "true" : "false");
-        
+
         // writedowns
         addPermissions($role_id, 'writedown', 'Edit', (isset($_POST['writedownEdit'])) ? "true" : "false");
         addPermissions($role_id, 'writedown', 'View', (isset($_POST['writedownView'])) ? "true" : "false");
-
         
+        // dealership contact
+        addPermissions($role_id, 'dealership', 'Add', (isset($_POST['dealershipAdd'])) ? "true" : "false");
+        addPermissions($role_id, 'dealership', 'Edit', (isset($_POST['dealershipEdit'])) ? "true" : "false");
+        addPermissions($role_id, 'dealership', 'Remove', (isset($_POST['dealershipRemove'])) ? "true" : "false");
     }
 
     $roleId = $_SESSION['userRole'];

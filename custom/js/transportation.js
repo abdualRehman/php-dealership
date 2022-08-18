@@ -188,6 +188,9 @@ $(function () {
                             timer: 1500
                         })
                         manageDataTable.ajax.reload(null, false);
+                        form[0].reset();
+                        $(".selectpicker").val('0').selectpicker("refresh");
+                        $("#status").val('pending').selectpicker("refresh");
                     } else {
                         e1.fire({
                             // position: "center",
@@ -197,7 +200,7 @@ $(function () {
                             timer: 2500
                         })
 
-                        // form[0].reset();
+                        
                     }
 
 

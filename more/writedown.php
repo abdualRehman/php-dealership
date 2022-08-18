@@ -202,6 +202,7 @@ echo '<input type="hidden" name="loggedInUserRole" id="loggedInUserRole" value="
                                     <th>MMR</th>
                                     <th>MMR vs COST</th>
                                     <th>MMR vs RETAIL</th>
+                                    <th>Retail Status</th>
                                 </tr>
                             </thead>
                         </table>

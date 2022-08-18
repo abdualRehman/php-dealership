@@ -2,12 +2,15 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
+if (hasAccess("writedown", "View") === 'false') {
+    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+}
 
-// if (hasAccess("bdcrule", "Add") === 'false' && hasAccess("bdcrule", "Edit") === 'false' && hasAccess("bdcrule", "Remove") === 'false') {
-//     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
-// }
-
-echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+if (hasAccess("writedown", "Edit") === 'false') {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+}
 ?>
 
 <head>
@@ -45,16 +48,12 @@ echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" 
                             <i class="fa fa-align-center ml-1 mr-2"></i> Filter
                         </button>
                         <?php
-                        // if (hasAccess("bdcrule", "Add") !== 'false') {
-                        //     echo '<button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
-                        //     <i class="fa fa-plus ml-1 mr-2"></i> Set New Rule
-                        // </button>';
-                        // }
-                        ?>
-                        <button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
+                        if (hasAccess("dealership", "Edit") !== 'false') {
+                            echo '<button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
                             <i class="fa fa-plus ml-1 mr-2"></i> Set New Rule
-                        </button>
-
+                        </button>';
+                        }
+                        ?>
                     </div>
                     <div class="portlet-body">
                         <div class="remove-messages"></div>
@@ -113,7 +112,7 @@ echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" 
                                     <th style="width:25%;text-align:center">Balance From</th>
                                     <th style="width:25%;text-align:center">Balance To</th>
                                     <th style="width:25%;text-align:center">Max Writedown</th>
-                                    
+
                                 </tr>
                             </thead>
                             <tbody>

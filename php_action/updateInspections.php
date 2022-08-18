@@ -74,22 +74,40 @@ if ($_POST) {
             array_push($imageArray, $_POST['uploads'][$i]);
         }
     }
-
-
     $imageArray = implode("__", $imageArray);
     // echo $imageArray . "<br />";
 
 
 
+
+    $repairSent_log = "";
+    $repairRetrun_log = "";
+    $repairs_log = "";
+    $repairPaid_log = "";
+
+
     $checkSql = "SELECT * FROM `inspections` WHERE inv_id = '$vehicleId' AND status = 1";
     $result = $connect->query($checkSql);
     if ($result->num_rows > 0) {
+
+        while ($row = $result->fetch_assoc()) {
+            if ($resend == 'true' && $row['resend'] == 'false') {
+                $repairSent_log = $row['repair_sent'];
+                $repairRetrun_log = $row['repair_returned'];
+                $repairs_log = $row['repairs'];
+                $repairPaid_log = $row['repair_paid'];
+            }
+        }
+
         // update Inv data if this stock number already exist with deleted id with sale 
         $updatekSql = "UPDATE `inspections` 
         SET `lot_notes`='$lotNotes',`recon`='$recon',`repairs`='$repais',`shops`='$bodyshop',
         `shops_notes`='$bodyshopNotes',`estimated`='$estimate',`repair_sent`='$repairSent',
         `repair_returned`='$repairReturn',`repair_paid`='$repairPaid',`resend`='$resend',
-        `pictures`='$imageArray',`windshield`='$windshield',`wheels`='$wheels',`submitted_by`='$submittedBy' WHERE inv_id = '$vehicleId'";
+        `pictures`='$imageArray',`windshield`='$windshield',`wheels`='$wheels',`submitted_by`='$submittedBy',
+        `repair_sent_log`='$repairSent_log',`repair_returned_log`='$repairRetrun_log',
+        `repairs_log`='$repairs_log',`repair_paid_log`='$repairPaid_log'
+        WHERE inv_id = '$vehicleId'";
 
         if ($connect->query($updatekSql) === true) {
             $valid['success'] = true;
@@ -155,6 +173,7 @@ if ($_POST) {
 
     $connect->close();
 
-    echo json_encode($valid);
+    // echo json_encode($valid);
+
 } // /if $_POST
-// echo json_encode($valid);
+echo json_encode($valid);

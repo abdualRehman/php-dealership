@@ -289,6 +289,7 @@ function editDetails(id = null) {
                 $('#purchaseFrom').val(response.purchase_from);
                 $('#purchaseFrom').css('textTransform', 'capitalize');
                 $('#date_in_paid').val(response.date_in_paid);
+                $('#date_in_paid').attr("disabled", (response.purchase_from == "auction" ? false : true));
                 $('#dateSent').val(response.date_sent);
                 $('#date_out_paid').val(response.date_out_paid);
                 $('#date_out_paid').attr("disabled", (response.date_sent != "" && response.date_sent != null ? false : true));

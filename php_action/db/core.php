@@ -39,7 +39,7 @@ function hasAccess($module, $function)
 
 
 
-	// // for testing with now
+	// for testing with now
 	// global $connect;
 	// $roleId = $_SESSION['userRole'];
 	// $checkSql = "SELECT permission FROM `role_mod` WHERE role_id = '$roleId' AND modules = '$module' AND functions = '$function'";

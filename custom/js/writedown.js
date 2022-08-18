@@ -1,5 +1,6 @@
 "use strict";
 var manageWritedownTable;
+var collapsedGroups = {};
 var e1 = Swal.mixin({
     customClass: {
         confirmButton: "btn btn-label-success btn-wide mx-1",
@@ -63,7 +64,7 @@ $(function () {
                 targets: [1, 2, 7, 9, 10],
             },
             {
-                targets: [0],
+                targets: [0, 15],
                 visible: false,
             },
             {
@@ -75,14 +76,33 @@ $(function () {
                 }
             },
         ],
-
-
         language: {
             searchPanes: {
                 count: "{total} found",
                 countFiltered: "{shown} / {total}"
             }
         },
+
+        rowGroup: {
+            dataSrc: 16,
+            startRender: function (rows, group) {
+                var collapsed = !!collapsedGroups[group];
+
+                var filteredData = $('#datatable-1').DataTable()
+                    .rows()
+                    .data()
+                    .filter(function (data, index) {
+                        return data[16] == group ? true : false;
+                    });
+                $('#' + group + 'Count').html(filteredData.length);
+                return $('<tr/>')
+                    .append('<td colspan="16" class="text-capitalize" >' + group + ' (' + filteredData.length + ')</td>')
+                    .attr('data-name', group)
+                    .toggleClass('collapsed', collapsed); // collapsed
+            }
+        },
+
+
         "drawCallback": function (settings, start, end, max, total, pre) {
             var json = this.fnSettings().json;
             if (json) {
@@ -95,14 +115,14 @@ $(function () {
                     $(element).html('0')
                 });
                 for (const [key, value] of Object.entries(counterObj)) {
-                    if (key == 'retailP' || key == 'retailA' || key == 'mmr_balanceV' || key == 'mmr_retailV'){
+                    if (key == 'retailP' || key == 'retailA' || key == 'mmr_balanceV' || key == 'mmr_retailV') {
                         $(`#` + key).removeClass('text-danger text-primary text-success');
                         let checkVal = parseFloat((value).replace(/\$|,/g, ''))
-                        if(checkVal <= 0){
+                        if (checkVal <= 0) {
                             $(`#` + key).addClass('text-danger');
-                        }else if(checkVal > 0 && (key == 'mmr_balanceV' || key == 'mmr_retailV')){
+                        } else if (checkVal > 0 && (key == 'mmr_balanceV' || key == 'mmr_retailV')) {
                             $(`#` + key).addClass('text-success');
-                        }else{
+                        } else {
                             $(`#` + key).addClass('text-primary');
                         }
                     }
@@ -120,7 +140,7 @@ $(function () {
                 });
             }
         },
-        "order": [[7, "desc"]]
+        "order": [[15, "desc"], [7, "desc"]]
     });
 
     // writeStatusHTML();

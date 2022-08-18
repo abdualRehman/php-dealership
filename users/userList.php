@@ -2,8 +2,13 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
+// if (hasAccess("user", "Edit") === 'false' && hasAccess("user", "Remove") === 'false') {
+//     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+// }
 if (hasAccess("user", "Edit") === 'false' && hasAccess("user", "Remove") === 'false') {
-    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
 }
 ?>
 
@@ -60,9 +65,11 @@ if (hasAccess("user", "Edit") === 'false' && hasAccess("user", "Remove") === 'fa
                         <table id="datatable-1" class="table table-bordered table-striped table-hover">
                             <thead>
                                 <tr>
+                                    <th>Role</th>
                                     <th>User Name</th>
                                     <th>Email</th>
-                                    <th>Role</th>
+                                    <th>Cell</th>
+                                    <th>Extention</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>

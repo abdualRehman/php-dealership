@@ -18,6 +18,7 @@ $atAuction = 0;
 $soldAtAuction = 0;
 $retail = 0;
 $sold = 0;
+$fixAge = 0;
 
 
 function reformatDate($date, $from_format = 'm-d-Y', $to_format = 'Y-m-d')
@@ -145,7 +146,7 @@ if ($result->num_rows > 0) {
         //     $retail += 1;
         //     $_retail = "Retail";
         // }
-        if ($retail_status != 'wholesale' && $balance !== '' && ( $carshopId !== '' && $carshopId !== null)) {
+        if ($retail_status != 'wholesale' && $balance !== '' && ($carshopId !== '' && $carshopId !== null)) {
             $retail += 1;
             $_retail = "Retail";
         }
@@ -156,8 +157,8 @@ if ($result->num_rows > 0) {
         }
 
 
-        // $age = $row[0]; // age
-        $age = "";
+        $age = $row[0]; // age
+        $cdkAge = "";
 
         if ($row['date_in'] != '' && !is_null($row['date_in'])) {
             // date_default_timezone_set('Asia/Karachi');
@@ -165,14 +166,23 @@ if ($result->num_rows > 0) {
             $date_in = reformatDate($row['date_in']);
             $date_in = date('Y-m-d', strtotime('-1 day', strtotime($date_in)));
             $date_in = strtotime($date_in);
-            $age = ceil(abs($date_in - $date) / 86400);
+            $cdkAge = ceil(abs($date_in - $date) / 86400);
 
             // $date = date('Y-m-d', strtotime('+2 days'));
             // $today = new DateTime($date);
             // $date_in = reformatDate($row['date_in']);
             // $date_in = new DateTime($date_in);
-            // $age =  $date_in->diff($today)->format("%r%a");
+            // $cdkAge =  $date_in->diff($today)->format("%r%a");
         }
+
+
+        $age = (int)$age;
+        $cdkAge = (int)$cdkAge;
+
+        if ($id != null && $carshopId != null && $row['date_in'] != '' && !is_null($row['date_in']) && $age != $cdkAge) {
+            $fixAge += 1;
+        }
+
 
 
 
@@ -220,7 +230,7 @@ if ($result->num_rows > 0) {
 
         $output['data'][] = array(
             $id,
-            $age, //age
+            $cdkAge, //age
             $stockDetails,
             $date_in,
             $key,
@@ -268,6 +278,7 @@ $output['totalNumber'] = array(
     "soldAtAuction" => $soldAtAuction,
     "retail" => $retail,
     "sold" => $sold,
+    "fixAge" => $fixAge,
 );
 
 

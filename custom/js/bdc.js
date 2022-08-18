@@ -119,18 +119,28 @@ $(function () {
                 visible: false,
             },
             {
+                targets: [8],
+                createdCell: function (td, cellData, rowData, row, col) {
+                    if (cellData == 'Show') {
+                        $(td).html(`<span class="badge badge-lg" style="background-color:#${rowData[14]};text-shadow: 2px 2px 3px black;color: #ebe9e9;">${cellData}</span>`);
+                    } else {
+                        $(td).html(`<span class="badge badge-lg badge-success">${cellData}</span>`);
+                    }
+                }
+            },
+            {
                 targets: [12],
                 createdCell: function (td, cellData, rowData, row, col) {
                     console.log(rowData);
                     if (cellData == 'Show Verified') {
-                        if(rowData[14] != ''){
+                        if (rowData[14] != '') {
                             $(td).html(`<span class="badge badge-lg badge-pill" style="background-color:#${rowData[14]};text-shadow: 2px 2px 3px black;color: #ebe9e9;">${cellData}</span>`);
-                        }else{
+                        } else {
                             $(td).html(`<span class="badge badge-lg badge-primary badge-pill">${cellData}</span>`);
                         }
-                    } else if(cellData == 'Does Not Count' || cellData == 'Last Month') {
+                    } else if (cellData == 'Does Not Count' || cellData == 'Last Month') {
                         $(td).html(`<span class="badge badge-lg badge-danger badge-pill">${cellData}</span>`);
-                    }else{
+                    } else {
                         $(td).html(`<span class="badge badge-lg badge-primary badge-pill">${cellData}</span>`);
                     }
                 }

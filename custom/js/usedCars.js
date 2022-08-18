@@ -2,6 +2,7 @@
 "use strict";
 var manageInvTable, TableData, maxFileLimit = 10, rowGroupSrc = 23;
 var searhStatusArray = [];
+var manageCDKAgeTable;
 var collapsedGroups = {};
 var e1 = Swal.mixin({
     customClass: {
@@ -14,6 +15,11 @@ var e1 = Swal.mixin({
 $(function () {
     $('.nav-link').removeClass('active');
     $('#usedCars').addClass('active');
+
+    $('#statusBar').addClass('d-none');
+    $('#searchBar').removeClass('d-none');
+
+
 
     $("#invDate").datepicker({
         language: 'pt-BR',
@@ -380,11 +386,16 @@ $(function () {
                         case 'sold':
                             $(`input[name='mod'][value='${key}']`).parent().addClass('btn-outline-success')
                             break;
+                        case 'fixAge':
+                            $(`input[name='mod'][value='fixAge`).parent().addClass('btn-outline-info')
+                            break;
                         default:
                             $(`input[name='mod'][value='${key}']`).parent().addClass('btn-outline-primary')
                             break;
                     }
                 }
+                // $(`input[name='mod'][value='fixAge`).parent().addClass('btn-outline-info');
+
                 var activebtnvalue = $("#mods .btn.active input[name='mod']").val();
                 if (activebtnvalue == 'missingDate' || activebtnvalue == 'keysPulled' || activebtnvalue == 'atAuction') {
                     setfun();
@@ -559,6 +570,10 @@ $(function () {
     );
 
 
+    $('#clear-selection').click(function () {
+        $('#purchaseFrom :radio').prop('checked', false);
+        $('#purchaseFrom .active').removeClass('active');
+    })
 
     $('.clear-selection').on('click', function () {
         var id = $(this).data('id');
@@ -583,57 +598,65 @@ $(function () {
         });
         searhStatusArray = [];
         var currentElement = $(this).val();
-        switch (currentElement) {
-            case 'missingDate':
-                setColumVisibility([0, 1, 4, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28]);
-                manageInvTable.rowGroup().disable().draw();
-                break;
-            case 'titleIssue':
-                setColumVisibility([0, 3, 4, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]);
-                manageInvTable.rowGroup().disable().draw();
-                break;
-            case 'readyToShip':
-                setColumVisibility([0, 3, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28]);
-                rowGroupSrc = 23;
-                manageInvTable.rowGroup().enable().draw();
-                manageInvTable.dataSrc(rowGroupSrc);
-                break;
-            case 'keysPulled':
-            case 'atAuction':
-                setColumVisibility([0, 3, 12, 13, 14, 15, 17, 18, 19, 21, 24, 25, 26, 27, 28]);
-                rowGroupSrc = 23;
-                manageInvTable.rowGroup().enable().draw();
-                manageInvTable.dataSrc(rowGroupSrc);
-                break;
-            case 'soldAtAuction':
-                setColumVisibility([0, 3, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 26, 27, 28]);
-                rowGroupSrc = 22; // sold date 
-                manageInvTable.rowGroup().enable().draw();
-                manageInvTable.dataSrc(rowGroupSrc);
-                break;
-            case 'addToSheet':
-                setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 29]);
-                manageInvTable.rowGroup().disable().draw();
-                break;
-            default:
-                setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28]);
-                manageInvTable.rowGroup().disable().draw();
-                break;
-        }
-        if (currentElement == 'addToSheet') {
-            $('#statusFilterDiv').removeClass('d-none');
-        } else {
-            $('#statusFilterDiv').addClass('d-none');
-        }
+        if (currentElement != 'fixAge') {
+            $('.inspectionTable').removeClass('d-none');
+            $('.FixSDKtable').addClass('d-none');
+            switch (currentElement) {
+                case 'missingDate':
+                    setColumVisibility([0, 1, 4, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28]);
+                    manageInvTable.rowGroup().disable().draw();
+                    break;
+                case 'titleIssue':
+                    setColumVisibility([0, 3, 4, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]);
+                    manageInvTable.rowGroup().disable().draw();
+                    break;
+                case 'readyToShip':
+                    setColumVisibility([0, 3, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28]);
+                    rowGroupSrc = 23;
+                    manageInvTable.rowGroup().enable().draw();
+                    manageInvTable.dataSrc(rowGroupSrc);
+                    break;
+                case 'keysPulled':
+                case 'atAuction':
+                    setColumVisibility([0, 3, 12, 13, 14, 15, 17, 18, 19, 21, 24, 25, 26, 27, 28]);
+                    rowGroupSrc = 23;
+                    manageInvTable.rowGroup().enable().draw();
+                    manageInvTable.dataSrc(rowGroupSrc);
+                    break;
+                case 'soldAtAuction':
+                    setColumVisibility([0, 3, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 26, 27, 28]);
+                    rowGroupSrc = 22; // sold date 
+                    manageInvTable.rowGroup().enable().draw();
+                    manageInvTable.dataSrc(rowGroupSrc);
+                    break;
+                case 'addToSheet':
+                    setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 29]);
+                    manageInvTable.rowGroup().disable().draw();
+                    break;
+                default:
+                    setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28]);
+                    manageInvTable.rowGroup().disable().draw();
+                    break;
+            }
+            if (currentElement == 'addToSheet') {
+                $('#statusFilterDiv').removeClass('d-none');
+            } else {
+                $('#statusFilterDiv').addClass('d-none');
+            }
 
-        setTimeout(() => {
-            $("#datatable-1").dataTable().fnFilter("");
-            manageInvTable.draw();
-            manageInvTable.searchPanes.rebuildPane();
-            manageInvTable.ajax.reload(null, false);
+            setTimeout(() => {
+                $("#datatable-1").dataTable().fnFilter("");
+                manageInvTable.draw();
+                manageInvTable.searchPanes.rebuildPane();
+                manageInvTable.ajax.reload(null, false);
 
-            setPlaceholder();
-        }, 500);
+                setPlaceholder();
+            }, 500);
+        } else if (currentElement == 'fixAge') {
+            fetchFixCDKAge();
+            $('.inspectionTable').addClass('d-none');
+            $('.FixSDKtable').removeClass('d-none');
+        }
 
     });
 
@@ -894,6 +917,119 @@ function handletitleCheckbox(e) {
 // setTimeout(() => {
 //     $('#mods input:radio[value=titleIssue]').click();
 // }, 1000);
+
+
+function fetchFixCDKAge() {
+    if ($.fn.dataTable.isDataTable('#datatable-2')) {
+    }
+    else {
+        manageCDKAgeTable = $("#datatable-2").DataTable({
+            responsive: !0,
+            'ajax': '../php_action/fetchFixCDKAge.php',
+            "paging": true,
+            "scrollX": true,
+            "orderClasses": false,
+            "deferRender": true,
+            "pageLength": 25,
+            autoWidth: false,
+            "order": [[1, "desc"]],
+
+            dom: `\n     
+            <'row'<'col-12'P>>\n
+            \n     
+           <'row'<'col-sm-6 text-center text-sm-left pl-3'B>
+                <'col-sm-6 text-right text-sm-right pl-3'f>>\n
+           <'row'<'col-12'tr>>\n      
+           <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
+
+            searchPanes: {
+                cascadePanes: !0,
+                viewTotal: !0,
+                columns: [1, 2, 4]
+            },
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    title: 'Fix CDK Age',
+                    exportOptions: {
+                        columns: [':visible']
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    title: 'Fix CDK Age',
+                    exportOptions: {
+                        columns: [':visible']
+                    }
+                },
+                {
+                    extend: 'print',
+                    title: 'Fix CDK Age',
+                    exportOptions: {
+                        columns: [':visible']
+                    }
+                },
+            ],
+            columnDefs: [
+                {
+                    targets: [0],
+                    visible: false,
+                },
+                {
+                    searchPanes: {
+                        show: true
+                    },
+                    targets: [1, 2, 4]
+                },
+                {
+                    targets: [2, 3],
+                    searchPanes: true,
+                    searchable: true,
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        var data = $(td).html();
+                        if (data > 4) {
+                            $(td).addClass('h5 font-weight-bolder text-danger');
+                        } else {
+                            $(td).addClass('font-weight-bold p');
+                        }
+                    }
+                },
+
+            ],
+
+
+
+            language: {
+                searchPanes: {
+                    count: "{total} found",
+                    countFiltered: "{shown} / {total}"
+                }
+            },
+            "drawCallback": function (settings, start, end, max, total, pre) {
+                var json = this.fnSettings().json;
+                if (json) {
+                    var obj = json.totalNumber;
+                    for (const [key, value] of Object.entries(obj)) {
+                        $(`input[name='mod'][value='${key}']`).next().next().html(value)
+                    }
+                }
+            },
+            // createdRow: function (row, data, dataIndex) {
+            //     if ($('#isEditAllowed').val() == "true") {
+            //         $(row).children().not(':first-child').attr({
+            //             "data-toggle": "modal",
+            //             "data-target": "#modal8",
+            //             "onclick": "editUsedCar(" + data[0] + ")"
+            //         });
+            //     }
+            // },
+        })
+    }
+}
+
+
+
+
 
 function loadSaleConsultant() {
     // var sales_consultant_id = 38;

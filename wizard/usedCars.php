@@ -39,7 +39,8 @@ if ($_SESSION['userRole'] == $officeID) {
 
     label.btn-outline-primary,
     label.btn-outline-success,
-    label.btn-outline-danger {
+    label.btn-outline-danger,
+    label.btn-outline-info {
         /* padding: 10px; */
         width: 150px;
         margin: 5px;
@@ -47,7 +48,8 @@ if ($_SESSION['userRole'] == $officeID) {
     }
 
     label.btn-outline-success:hover,
-    label.btn-outline-danger:hover {
+    label.btn-outline-danger:hover,
+    label.btn-outline-infor:hover {
         color: white;
     }
 
@@ -217,6 +219,9 @@ if ($_SESSION['userRole'] == $officeID) {
                                             <label class="btn text-responsive">
                                                 <input type="radio" name="mod" value="sold" data-title="Sold"> Sold <br> <span></span>
                                             </label>
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="fixAge" data-title="Fix Age"> Fix CDK AGE <br> <span></span>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -277,6 +282,37 @@ if ($_SESSION['userRole'] == $officeID) {
                                         <th>Date Sold</th>
                                         <th>Action</th>
 
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="FixSDKtable d-none">
+                            <div class="form-row text-right">
+                                <div class="col-md-12 p-1 pr-2">
+                                    <button class="btn btn-primary p-2" onclick="toggleFilterClass2()">
+                                        <i class="fa fa-align-center ml-1 mr-2"></i> Filter
+                                    </button>
+                                </div>
+                            </div>
+                            <table id="datatable-2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Inventory Date</th>
+                                        <th>AGE</th>
+                                        <th>CDK AGE</th>
+                                        <th>Stock no || Vin</th>
+                                        <th>Year</th>
+                                        <th>Make</th>
+                                        <th>Model</th>
+                                        <th>Color</th>
+                                        <th>Mileage</th>
+                                        <th>Lot</th>
+                                        <th>Balance</th>
+                                        <th>Retail</th>
+                                        <th>Certified</th>
+                                        <th>Stock Type</th>
+                                        <th>Wholesale</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -369,7 +405,7 @@ if ($_SESSION['userRole'] != $onlineManagerID && $_SESSION['userRole'] != $offic
                                                     Intercompany
                                                 </label>
                                             </div>
-                                            <span class="badge-text-primary pl-2 clear-selection" data-id="purchaseFrom">Clear Selection</span>
+                                            <span class="badge-text-primary pl-2 clear-selection" id="clear-selection" data-id="purchaseFrom">Clear Selection</span>
                                         </div>
                                         <div class="form-group offset-sm-4 col-sm-4">
                                             <div class="custom-control custom-control-lg custom-checkbox" style="font-size: initial;">

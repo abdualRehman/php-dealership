@@ -24,7 +24,7 @@ if ($_POST) {
     // $reconcileDate = mysqli_real_escape_string($connect, $_POST['reconcileDate']);
     // $reconcileDate = reformatDateOnly($reconcileDate);
     $reconcileDate = "";
-    if ($_POST['reconcileDate'] != "") {
+    if (isset($_POST['reconcileDate']) && $_POST['reconcileDate'] != "") {
         $reconcileDate = mysqli_real_escape_string($connect, $_POST['reconcileDate']);
         $reconcileDate = reformatDateOnly($reconcileDate);
     }
@@ -71,8 +71,7 @@ if ($_POST) {
     $cbfname = mysqli_real_escape_string($connect, $_POST['cbfname']);
     $cbmname = mysqli_real_escape_string($connect, $_POST['cbmname']);
     $cblname = mysqli_real_escape_string($connect, $_POST['cblname']);
-    $cbstate = mysqli_real_escape_string($connect, $_POST['cbstate']);
-
+    $cbstate = (isset($_POST['cbstate'])) ? mysqli_real_escape_string($connect, $_POST['cbstate']) : "0";
     $cbAddress1 = mysqli_real_escape_string($connect, $_POST['cbAddress1']);
     $cbAddress2 = mysqli_real_escape_string($connect, $_POST['cbAddress2']);
     $cbCity = mysqli_real_escape_string($connect, $_POST['cbCity']);
@@ -96,13 +95,13 @@ if ($_POST) {
 
 
     // incentives
-    $college = mysqli_real_escape_string($connect, $_POST['college']);
-    $military = mysqli_real_escape_string($connect, $_POST['military']);
-    $loyalty = mysqli_real_escape_string($connect, $_POST['loyalty']);
-    $conquest = mysqli_real_escape_string($connect, $_POST['conquest']);
-    $misc1 = mysqli_real_escape_string($connect, $_POST['misc1']);
-    $misc2 = mysqli_real_escape_string($connect, $_POST['misc2']);
-    $leaseLoyalty = mysqli_real_escape_string($connect, $_POST['leaseLoyalty']);
+    $college = (isset($_POST['college'])) ? mysqli_real_escape_string($connect, $_POST['college']) : "No";
+    $military = (isset($_POST['military'])) ? mysqli_real_escape_string($connect, $_POST['military']) : "No";
+    $loyalty = (isset($_POST['loyalty'])) ?  mysqli_real_escape_string($connect, $_POST['loyalty']) : "No";
+    $conquest = (isset($_POST['conquest'])) ?  mysqli_real_escape_string($connect, $_POST['conquest']) : "No";
+    $misc1 = (isset($_POST['misc1'])) ?  mysqli_real_escape_string($connect, $_POST['misc1']) : "No";
+    $misc2 = (isset($_POST['misc2'])) ?  mysqli_real_escape_string($connect, $_POST['misc2']) : "No";
+    $leaseLoyalty = (isset($_POST['leaseLoyalty'])) ?  mysqli_real_escape_string($connect, $_POST['leaseLoyalty']) : "No";
 
 
     // echo $college . "<br />";
@@ -114,13 +113,13 @@ if ($_POST) {
     // echo $leaseLoyalty . '<br />';
 
     // sales person Todo
-    $vincheck = mysqli_real_escape_string($connect, $_POST['vincheck']);
-    $insurance = mysqli_real_escape_string($connect, $_POST['insurance']);
-    $tradeTitle = mysqli_real_escape_string($connect, $_POST['tradeTitle']);
-    $registration = mysqli_real_escape_string($connect, $_POST['registration']);
-    $inspection = mysqli_real_escape_string($connect, $_POST['inspection']);
-    $salePStatus = mysqli_real_escape_string($connect, $_POST['salePStatus']);
-    $paid = mysqli_real_escape_string($connect, $_POST['paid']);
+    $vincheck = (isset($_POST['vincheck'])) ? mysqli_real_escape_string($connect, $_POST['vincheck']): "checkTitle";
+    $insurance = (isset($_POST['insurance'])) ? mysqli_real_escape_string($connect, $_POST['insurance']): "need";
+    $tradeTitle = (isset($_POST['tradeTitle'])) ? mysqli_real_escape_string($connect, $_POST['tradeTitle']): "need";
+    $registration = (isset($_POST['registration'])) ? mysqli_real_escape_string($connect, $_POST['registration']): "pending";
+    $inspection = (isset($_POST['inspection'])) ? mysqli_real_escape_string($connect, $_POST['inspection']): "need";
+    $salePStatus = (isset($_POST['salePStatus'])) ? mysqli_real_escape_string($connect, $_POST['salePStatus']): "dealWritten";
+    $paid = (isset($_POST['paid'])) ? mysqli_real_escape_string($connect, $_POST['paid']): "no";
 
     // echo $vincheck . "<br />";
     // echo $insurance . '<br />';

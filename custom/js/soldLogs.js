@@ -1,6 +1,6 @@
 "use strict";
 var manageSoldLogsTable, rowGroupSrc = 10; // status
-var stockArray = [], deliveryCoordinatorArray = [];
+var stockArray = [], deliveryCoordinatorArray = [], manageNotDoneTable;
 var collapsedGroups = {};
 
 var e1 = Swal.mixin({
@@ -41,6 +41,7 @@ $(function () {
         dynamic: true,
         dropdown: true,
         'showDuration': false,
+        disableTextInput: true,
         scrollbar: true,
         show24Hours: false,
         interval: 60,
@@ -63,25 +64,8 @@ $(function () {
         });
         // alert($('#isConsultant').val());
         manageSoldLogsTable = $("#datatable-1").DataTable({
-
-            // scrollY:"50vh",
-
             responsive: !0,
-            // responsive: {
-            //     details: {
-            //         type: 'column',
-            //         target: 1
-            //     }
-            // },
-
-            // scrollY: 500,
-            // scrollX: !0,
-            // scrollCollapse: !0,
-            // fixedColumns: !0,
-
             'ajax': '../php_action/fetchSoldLogs.php',
-
-            // working.... with both
             dom: `\n     
             <'row'<'col-12'P>>\n      
             <'row'<'col-sm-12 text-sm-left col-md-3 mb-2'B> <'col-sm-12 col-md-6 text-center '<'#statusFilterDiv'>  > <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
@@ -217,27 +201,35 @@ $(function () {
                 var json = this.fnSettings().json;
                 if (json) {
                     var obj = json.data;
-                    var todayCount = 0, yesterdayCount = 0, AllCount = obj.length, currentMonthCount = 0, pendingCount = 0, deliveredCount = 0, cancelledCount = 0;
+                    var todayCount = 0, yesterdayCount = 0, AllCount = obj.length, currentMonthCount = 0, pendingCount = 0, deliveredCount = 0, cancelledCount = 0, notDoneCount = 0;
+
+                    var date = new Date();
+                    var today = moment(date).format("MMM-DD-YYYY");
+
+                    var date2 = moment(new Date(), "MMM-DD-YYYY").subtract(1, 'days');
+                    var yesterday = moment(date2).format("MMM-DD-YYYY")
+
+                    const startOfMonth = moment().startOf('month').format('MMM-DD-YYYY');
+                    const endOfMonth = moment().endOf('month').format('MMM-DD-YYYY');
 
                     for (const [key, value] of Object.entries(obj)) {
                         // console.log(value[0]);
                         var rowDate = value[0];
 
-                        var date = new Date();
-                        var today = moment(date).format("MMM-DD-YYYY");
+                        let sale_status = value[10];
+                        let thankyou = value[19];
+
+                        if (sale_status == 'delivered' && thankyou != 'on') {
+                            notDoneCount += 1;
+                        }
+
                         if (today === rowDate) {
                             todayCount += 1;
                         }
-                        var date2 = moment(new Date(), "MMM-DD-YYYY").subtract(1, 'days');
-                        var yesterday = moment(date2).format("MMM-DD-YYYY")
 
                         if (yesterday === rowDate) {
                             yesterdayCount += 1;
                         }
-
-                        const startOfMonth = moment().startOf('month').format('MMM-DD-YYYY');
-                        const endOfMonth = moment().endOf('month').format('MMM-DD-YYYY');
-
 
                         var min = startOfMonth;
                         var max = endOfMonth;
@@ -270,6 +262,7 @@ $(function () {
                     $(`#todayCount`).html(todayCount);
                     $(`#yesterdayCount`).html(yesterdayCount);
                     $(`#currentMonthCount`).html(currentMonthCount);
+                    $('#notDoneCount').html(notDoneCount);
                     $(`#AllCount`).html(AllCount);
                     $('#pendingCount').html(pendingCount);
                     $('#deliveredCount').html(deliveredCount);
@@ -404,11 +397,33 @@ $(function () {
         );
 
 
+        $('input:radio[name="radio-date"]').on('change', function () {
+
+            var currentElement = $(this).val();
+            if (currentElement != "notDone") {
+                $('.soldLogs').removeClass('d-none');
+                $('.notDone').addClass('d-none');
+
+                $('#datatable-1').block({
+                    message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+                    timeout: 1e3
+                });
+
+                manageSoldLogsTable.draw();  // working
+                manageSoldLogsTable.searchPanes.rebuildPane();
+
+            } else if (currentElement == 'notDone') {
+                $('.soldLogs').addClass('d-none');
+                $('.notDone').removeClass('d-none');
+                fetchNotDoneSoldLogs();
+            }
+
+        });
+
+
+
+
         $('input:radio[name="searchStatus"]').on('change', function () {
-            $('#datatable-1').block({
-                message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
-                timeout: 1e3
-            });
             manageSoldLogsTable.draw();  // working
             manageSoldLogsTable.searchPanes.rebuildPane();
         });
@@ -488,15 +503,25 @@ $(function () {
         $("#editScheduleForm").validate({
             ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
             rules: {
-                ecustomerName: "required",
-                escheduleTime: "required",
-                escheduleDate: "required",
-                estockno: "required",
-                ecoordinator: "required",
+                ecustomerName: {
+                    required: $('#loggedInUserRole').val() == 62 ? false : true,
+                },
+                escheduleTime: {
+                    required: $('#loggedInUserRole').val() == 62 ? false : true,
+                },
+                escheduleDate: {
+                    required: $('#loggedInUserRole').val() == 62 ? false : true,
+                },
+                esale_id: {
+                    required: $('#loggedInUserRole').val() == 62 ? false : true,
+                },
+                ecoordinator: {
+                    required: $('#loggedInUserRole').val() == 62 ? false : true,
+                },
                 eoverrideBy: {
                     required: function (params) {
                         var has_appointment = $('#ehas_appointment').val();
-                        if (has_appointment) {
+                        if (has_appointment && $('#loggedInUserRole').val() != 62) {
                             return true;
                         } else {
                             $(params).removeClass('is-invalid');
@@ -507,7 +532,7 @@ $(function () {
                 'edelivery': {
                     required: function (params) {
                         var opt = $('input:radio[name="eadditionalServices"]:checked').val();
-                        if (!opt) {
+                        if (!opt && $('#loggedInUserRole').val() != 62) {
                             return true;
                         } else {
                             return false;
@@ -517,7 +542,7 @@ $(function () {
                 'eadditionalServices': {
                     required: function (params) {
                         var opt = $('input:radio[name="edelivery"]:checked').val();
-                        if (!opt) {
+                        if (!opt && $('#loggedInUserRole').val() != 62) {
                             return true;
                         } else {
                             return false;
@@ -527,7 +552,7 @@ $(function () {
                 'escheduleNotes': {
                     required: function (params) {
                         var opt = $('input:radio[name="eadditionalServices"]:checked').val();
-                        if (opt == 'other') {
+                        if (opt == 'other' && $('#loggedInUserRole').val() != 62) {
                             return true;
                         } else {
                             return false;
@@ -902,10 +927,15 @@ function addNewSchedule(id = null) {
                 $('#ecomplete :radio[name="ecomplete"]').prop('checked', false);
                 $('#ecomplete .active').removeClass('active');
                 (response.complete) ? $('#com' + response.complete).prop('checked', true).click() : null;
-                if ($('#ecoordinatorList').children().length > 0) {
+
+                $('#ecoordinator').val(response.coordinator);
+                var checkSelectValue = $('#ecoordinator').val();
+                if (!checkSelectValue) {
+                    var selectBox = document.getElementById('ecoordinatorList');
+                    selectBox.innerHTML += `<option value="${response.coordinator}" title="${response.coordinator_name} - ${response.coordinator_email}">${response.coordinator_name} - ${response.coordinator_email} </option>`;
                     $('#ecoordinator').val(response.coordinator);
-                    $('.selectpicker').selectpicker('refresh');
                 }
+                $('.selectpicker').selectpicker('refresh');
 
             }, // /success
             error: function (err) {
@@ -928,24 +958,27 @@ $('#eoverrideBy').change(function () {
 function disabledManagerDiv() {
     let currentUser = $('#loggedInUserRole').val();
     var delivery_coordinator_id = 62;
-    if (currentUser != delivery_coordinator_id && currentUser != 'Admin') {
-        $('.delivery_coordinator').addClass('disabled-div');
-        // $(".delivery_coordinator").find("*").prop("disabled", true);
-        $(".delivery_coordinator").find("*").prop("readonly", true);
-    } else {
-        $('.delivery_coordinator').removeClass('disabled-div');
-        // $(".delivery_coordinator").find("*").prop("disabled", true);
-        $(".delivery_coordinator").find("*").prop("readonly", false);
-    }
     var sales_manager_id = 67;
     var general_manager_id = 69;
+    if (currentUser != delivery_coordinator_id && currentUser != 'Admin') {
+        $('.delivery_coordinator').addClass('disabled-div');
+        $(".delivery_coordinator").find("*").prop("readonly", true);
+    } else {
+        if (currentUser == delivery_coordinator_id) {
+            $('.appointment_div').addClass('disabled-div');
+            $(".appointment_div").find("*").prop("readonly", true);
+        } else {
+            $('.appointment_div').removeClass('disabled-div');
+            $(".appointment_div").find("*").prop("readonly", false);
+        }
+        $('.delivery_coordinator').removeClass('disabled-div');
+        $(".delivery_coordinator").find("*").prop("readonly", false);
+    }
     if (currentUser != 'Admin' && currentUser != sales_manager_id && currentUser != general_manager_id) {
         $('.manager_override_div').addClass('disabled-div');
-        // $(".manager_override_div").find("*").prop("disabled", true);
         $(".manager_override_div").find("*").prop("readonly", true);
     } else {
         $('.manager_override_div').removeClass('disabled-div');
-        // $(".manager_override_div").find("*").prop("disabled", true);
         $(".manager_override_div").find("*").prop("readonly", false);
     }
 
@@ -966,7 +999,6 @@ function loadDeliveryCoordinator() {
 
 $('.handleDateTime').on('change', function () {
     var date, time, selectBox;
-
     if ($(this).data('type') == 'add') {
         date = $('#scheduleDate').val();
         time = $('#scheduleTime').val();
@@ -978,26 +1010,153 @@ $('.handleDateTime').on('change', function () {
     }
     selectBox.innerHTML = "";
     $('.selectpicker').selectpicker('refresh');
-    if (date != '' && time != '') {
+    if ((date != '' && time != '') && moment(time, ["h:mmA"]).format("HH:mm") != 'Invalid date') {
         let dayname = moment(date).format('dddd').toLowerCase();
         deliveryCoordinatorArray.forEach(element => {
             let startTime = element[3][dayname][0];
             let endTime = element[3][dayname][1];
+            let scheduledAppointments = element[4];
             if (startTime && endTime) {
-
                 time = moment(moment(time, ["h:mmA"]).format("HH:mm"), 'hh:mm');
                 startTime = moment(moment(startTime, ["h:mmA"]).format("HH:mm"), 'hh:mm');
                 endTime = moment(moment(endTime, ["h:mmA"]).format("HH:mm"), 'hh:mm');
-
-                if (time.isBetween(startTime, endTime)) {
-                    selectBox.innerHTML += `<option value="${element[0]}" title="${element[1]} - ${element[2]}">${element[1]} - ${element[2]} </option>`;
-                    $('.selectpicker').selectpicker('refresh');
+                if (time.isBetween(startTime, endTime, null, '[]')) {
+                    let timeFormat = moment(time, ["h:mmA"]).format("HH:mm");
+                    let dateFormat = moment(date, 'MM-DD-YYYY').format('YYYY-MM-DD');
+                    let dateTime = moment(dateFormat + ' ' + timeFormat, 'YYYY-MM-DD hh:mm');
+                    let allready_appointed = false;
+                    scheduledAppointments.forEach(appointment => {
+                        let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm');
+                        let schedule_end = moment(appointment.schedule_end, 'YYYY-MM-DD hh:mm');
+                        if (dateTime.isBetween(schedule_start, schedule_end, null, '[]')) {
+                            allready_appointed = true;
+                        }
+                    });
+                    if (allready_appointed == false) {
+                        selectBox.innerHTML += `<option value="${element[0]}" title="${element[1]} - ${element[2]}">${element[1]} - ${element[2]} </option>`;
+                        $('.selectpicker').selectpicker('refresh');
+                    }
                 }
             }
         });
     }
+});
+// ------------------------------------------------------------------------------------------------------------
 
-})
+
+function fetchNotDoneSoldLogs() {
+    if ($.fn.dataTable.isDataTable('#datatable-2')) {
+
+    }
+    else {
+        manageNotDoneTable = $("#datatable-2").DataTable({
+            responsive: !0,
+            'ajax': '../php_action/fetchNotDoneSoldLogs.php',
+            "paging": true,
+            "scrollX": true,
+            "orderClasses": false,
+            "deferRender": true,
+            "pageLength": 25,
+            autoWidth: false,
+            "order": [[1, "desc"]],
+            dom: `\n     
+            <'row'<'col-12'P>>\n
+           \n     
+           <'row'<'col-sm-6 text-center text-sm-left pl-3'B>
+                <'col-sm-6 text-right text-sm-right pl-3'f>>\n
+           <'row'<'col-12'tr>>\n      
+           <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
+
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    title: 'Not Done',
+                    exportOptions: {
+                        columns: [':visible']
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    title: 'Not Done',
+                    exportOptions: {
+                        columns: [':visible']
+                    }
+                },
+                {
+                    extend: 'print',
+                    title: 'Not Done',
+                    exportOptions: {
+                        columns: [':visible']
+                    }
+                },
+            ],
+            searchPanes: {
+                cascadePanes: !0,
+                viewTotal: !0,
+                columns: [3, 4, 5]
+            },
+            columnDefs: [
+                {
+                    targets: [0],
+                    visible: false,
+                },
+                {
+                    searchPanes: {
+                        show: true
+                    },
+                    targets: [3, 4, 5],
+                },
+                {
+                    targets: 11,
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        if (cellData == 'pending') {
+                            $(td).html('<span class="badge badge-info badge-pill">Pending</span>');
+                        } else if (cellData == 'delivered') {
+                            $(td).html('<span class="badge badge-success badge-pill">Delivered</span>');
+                        } else if (cellData == 'cancelled') {
+                            $(td).html('<span class="badge badge-danger badge-pill">Cancelled</span>');
+                        }
+
+                    }
+                },
+            ],
+
+            language: {
+                searchPanes: {
+                    count: "{total} found",
+                    countFiltered: "{shown} / {total}"
+                }
+            },
+            "drawCallback": function (settings, start, end, max, total, pre) {
+                var json = this.fnSettings().json;
+                if (json) {
+                    var obj = json.data;
+                    $('#notDoneCount').html(obj.length);
+                }
+            },
+            // createdRow: function (row, data, dataIndex) {
+            //     if ($('#isEditAllowed').val() == "true") {
+            //         $(row).children().not(':first-child').attr({
+            //             "data-toggle": "modal",
+            //             "data-target": "#modal9",
+            //             "onclick": "editCashToDealers(" + data[8] + ")"
+            //         });
+            //     }
+            // },
+        })
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1070,8 +1229,6 @@ function fetchSelectedInvForSearch(id = null) {
 
     }); // /ajax function to remove the brand
 }
-
-
 
 function writeStatusHTML() {
     var element = document.getElementById('statusFilterDiv');
@@ -1200,7 +1357,7 @@ function showDetails(id = null) {
                 chnageStyle({ id: 'inspection', value: response.inspection });
                 chnageStyle({ id: 'salePStatus', value: response.salesperson_status });
                 chnageStyle({ id: 'paid', value: response.paid });
-                
+
 
                 $('#consultantNote').val(response.consultant_notes);
                 $('#thankyouCard').prop('checked', response.thankyou_cards == 'on' ? true : false);
@@ -1422,7 +1579,6 @@ function changeRules() {
 
 function chnageIncentiveStatus(value, date, element) {
     if (value != 'N/A') {
-        $('#' + element + '_v').html('$' + value);
         var saleDate = $('#saleDate').val();
         saleDate = moment(saleDate).format('MM-DD-YYYY');
 
@@ -1433,6 +1589,7 @@ function chnageIncentiveStatus(value, date, element) {
 
         if (cdays >= 0) {
             $('#' + element).prop("disabled", false);
+            $('#' + element + '_v').html('$' + value);
         } else {
             $('#' + element).prop("disabled", true);
         }

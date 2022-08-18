@@ -30,6 +30,16 @@ $(function () {
                 visible: false,
             },
             {
+                targets: [1], // sold price
+                createdCell: function (td, cellData, rowData, row, col) {
+                    if (rowData[10] == "wholesale" || rowData[10] == null) {
+                        $(td).addClass('bg-danger text-white');
+                    } else {
+                        $(td).removeClass('bg-danger text-white');
+                    }
+                }
+            },
+            {
                 targets: [7], // sold price
                 createdCell: function (td, cellData, rowData, row, col) {
                     if (rowData[7] == "Wholesale") {
@@ -37,8 +47,6 @@ $(function () {
                     } else {
                         $(td).removeClass('bg-danger text-white');
                     }
-
-
                 }
             },
             {
@@ -64,18 +72,20 @@ $(function () {
                     .data()
                     .filter(function (data, index) {
                         var retail_status = data[10];
-
-                        if (retail_status != 'wholesale' && retail_status != null) {
+                        if (data[8] != 'Done') {
+                            allCount += 1;
+                        }
+                        if (retail_status != 'wholesale' && retail_status != null && data[8] == 'Done' && data[9] != 'closed') {
                             notDone += 1;
                         }
 
-                        if (data[8] == 'Done' && data[9] == 'closed') {
+                        if (retail_status != 'wholesale' && retail_status != null && data[8] == 'Done' && data[9] == 'closed') {
                             roclosed += 1;
                         }
-                        if (data[8] == 'Done') {
+                        if (retail_status != 'wholesale' && retail_status != null && data[8] == 'Done' && data[9] != 'closed') {
                             totalDoneCount += 1;
                         }
-                        allCount += 1;
+
                         return true;
                     });
                 percentage = (totalDoneCount / allCount) * 100;
@@ -114,7 +124,7 @@ $(function () {
                 });
             }
         },
-        "order": [[0, "asc"], [1, "asc"]],
+        "order": [[3, "desc"]],
     });
     writeStatusHTML();
     $('#all').click();
@@ -123,6 +133,8 @@ $(function () {
         function (settings, data, index, rowData) {
             var tableNode = manageTable.table().node();
             var retail_status = rowData[10];
+            var notes_2 = rowData[8];
+            var uci = rowData[9];
             var searchStatus = $('input:radio[name="searchStatus"]:checked').map(function () {
                 if (this.value !== "") {
                     return this.value;
@@ -138,28 +150,23 @@ $(function () {
             }
 
             if (searchStatus[0] === 'all') {
-                return true;
-            }
-            if (searchStatus[0] === 'notDone') {
-                if (retail_status != 'wholesale' && retail_status != null) {
+                if (notes_2 != 'Done') {
                     return true;
                 } else {
                     return false;
                 }
-                // if ((data[8] == '' || data[8] == 'Done')) {
-                //     return true;
-                // } else {
-                //     return false;
-                // }
+            }
+            if (searchStatus[0] === 'notDone') {
+                if (retail_status != 'wholesale' && retail_status != null && notes_2 == 'Done' && uci != 'closed') {
+                    return true;
+                } else {
+                    return false;
+                }
             }
             if (searchStatus[0] === 'roclosed') {
-                console.log(data[8] == 'Done' ? data : '');
-                if (data[8] == 'Done' && data[9] == 'closed') {
+                if (retail_status != 'wholesale' && retail_status != null && notes_2 == 'Done' && uci == 'closed') {
                     return true;
                 }
-                // if ((data[8] != '' && data[8] != 'Done') && data[9] == 'closed') {
-                //     return true;
-                // }
             }
             return false;
         }

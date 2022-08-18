@@ -636,7 +636,7 @@ if ($_GET['r'] == 'add') {
                                             </tr>
                                             <tr>
                                                 <td class="align-middle text-center">
-                                                    <h3 class="h5">BDC - Leeds</h3>
+                                                    <h3 class="h5">BDC - Leads</h3>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex justify-content-start">
@@ -651,6 +651,10 @@ if ($_GET['r'] == 'add') {
                                                         <div class="custom-control custom-control-lg custom-checkbox">
                                                             <input type="checkbox" class="custom-control-input" id="bdcRemove" name="bdcRemove">
                                                             <label class="custom-control-label h5" for="bdcRemove">REMOVE</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="bdcView" name="bdcView">
+                                                            <label class="custom-control-label h5" for="bdcView">View</label>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -706,6 +710,27 @@ if ($_GET['r'] == 'add') {
                                                         <div class="custom-control custom-control-lg custom-checkbox">
                                                             <input type="checkbox" class="custom-control-input" id="writedownView" name="writedownView">
                                                             <label class="custom-control-label h5" for="writedownView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Dealership Contacts</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="dealershipAdd" name="dealershipAdd">
+                                                            <label class="custom-control-label h5" for="dealershipAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="dealershipEdit" name="dealershipEdit">
+                                                            <label class="custom-control-label h5" for="dealershipEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="dealershipRemove" name="dealershipRemove">
+                                                            <label class="custom-control-label h5" for="dealershipRemove">REMOVE</label>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -912,13 +937,15 @@ if ($_GET['r'] == 'add') {
                                                 } else if ($module === 'tansptBill') {
                                                     $Name = "Transportation Bills";
                                                 } else if ($module === 'bdc') {
-                                                    $Name = "BDC - Leeds";
+                                                    $Name = "BDC - Leads";
                                                 } else if ($module === 'warranty') {
                                                     $Name = "Warranty Cancellation";
                                                 } else if ($module === 'todayavail') {
                                                     $Name = "Today's Availability";
                                                 } else if($module === 'writedown'){
                                                     $Name = "Writedowns";
+                                                } else if($module === 'dealership'){
+                                                    $Name = "Dealership Contacts";
                                                 }
                                             ?>
                                                 <tr>
@@ -1047,6 +1074,7 @@ if ($_GET['r'] == 'add') {
                                                                     echo serPermissions($itemPData, 'Add', 'bdcAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'bdcEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'bdcRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'bdcView');
                                                                 } else if ($module === 'warranty') {
                                                                     echo serPermissions($itemPData, 'Add', 'warrantyAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'warrantyEdit');
@@ -1057,6 +1085,10 @@ if ($_GET['r'] == 'add') {
                                                                 } else if ($module === 'writedown') {
                                                                     echo serPermissions($itemPData, 'Edit', 'writedownEdit');
                                                                     echo serPermissions($itemPData, 'View', 'writedownView');
+                                                                } else if ($module === 'dealership') {
+                                                                    echo serPermissions($itemPData, 'Add', 'dealershipAdd');
+                                                                    echo serPermissions($itemPData, 'Edit', 'dealershipEdit');
+                                                                    echo serPermissions($itemPData, 'Remove', 'dealershipRemove');
                                                                 }
                                                             }
 

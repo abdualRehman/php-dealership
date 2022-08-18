@@ -28,7 +28,42 @@ $(function () {
         responsive: !0,
         "pageLength": 25,
         'ajax': '../php_action/fetchUsers.php',
-        // data: [],
+        dom: `<'row'<'col-12'P>>
+        <'row' 
+        <'col-sm-4 text-left text-sm-left pl-3'<'#statusFilterDiv'>>
+            <'col-sm-4 text-sm-center pl-3'B>
+            <'col-sm-4 text-right text-sm-right mt-2 mt-sm-0'f>>\n
+        <'row'<'col-12'tr>>\n      
+        <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
+        buttons: [
+            {
+                extend: 'copyHtml5',
+                title: 'Users List',
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 4],
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                title: 'Users List',
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 4]
+                }
+            },
+            {
+                extend: 'print',
+                title: 'Users List',
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 4]
+                },
+            },
+        ],
+        columnDefs: [
+            {
+                targets: $('#isEditAllowed').val() == "false" ? [5] : [],
+                visible: false,
+            },
+        ]
     })
 
 
@@ -230,7 +265,7 @@ function editUser(userId = null) {
                 $('#extention').val(response.extention);
                 $('#mobile').val(response.mobile);
                 $('#color').val(response.color);
-                $('#color').wheelColorPicker('color','#'+response.color);
+                $('#color').wheelColorPicker('color', '#' + response.color);
 
 
 

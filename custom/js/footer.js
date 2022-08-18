@@ -1,5 +1,5 @@
 "use strict";
-var manageAvailTable, stockArray, collapsedGroups = {};
+var manageAvailTable, stockArray, collapsedGroups = {}, linksArray = [];
 var e1 = Swal.mixin({
     customClass: {
         confirmButton: "btn btn-label-success btn-wide mx-1",
@@ -77,6 +77,71 @@ $(function () {
                             timer: 2500
                         })
                     }
+                }
+            });
+
+            return false;
+
+        }
+    });
+
+    $("#updateWebsiteForm").validate({
+
+        rules: {
+            webName: {
+                required: true,
+            },
+            webLink: {
+                required: true,
+            },
+
+        },
+        submitHandler: function (form, e) {
+            // return true;
+            e.preventDefault();
+            var form = $('#updateWebsiteForm');
+            $.ajax({
+                type: "POST",
+                url: `${siteURL}/php_action/updateWebsiteLinks.php`,
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (response) {
+
+                    if (response.success == true) {
+                        e1.fire({
+                            position: "center",
+                            icon: "success",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 1500
+                        });
+                        linksArray = [];
+                        loadWebLinks();
+                        form[0].reset();
+                        $('#addWebsiteModal').modal('hide');
+                        $('#webLinkId').val("");
+                        $('#webName').val("");
+                        $('#webLink').val("");
+
+                    } else {
+                        e1.fire({
+                            position: "center",
+                            icon: "error",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500
+                        })
+                    }
+                },
+                error: function () {
+                    e1.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "Something Wrong!",
+                        text: "Please Login and Try again",
+                        showConfirmButton: !1,
+                        timer: 2500
+                    })
                 }
             });
 
@@ -296,6 +361,94 @@ function loadSchedules() {
 
 }
 
+function loadWebLinks() {
+    $('#webLinkId').val("");
+    $('#webName').val("");
+    $('#webLink').val("");
+    if (linksArray.length <= 1) {
+        $.ajax({
+            url: `${siteURL}/php_action/fetchWebLinks.php`,
+            type: "GET",
+            dataType: 'json',
+            success: function (response) {
+                linksArray = response.data;
+                writeWebLinks(linksArray);
+            }
+        });
+    } else {
+        writeWebLinks(linksArray);
+    }
+}
+function writeWebLinks(linksArray) {
+    var div = document.getElementById('webLinksList');
+    div.innerHTML = "";
+
+    linksArray.forEach(element => {
+        // Array.
+        div.innerHTML += `
+        <div class="rich-list-item">
+            <div class="rich-list-prepend">
+                <div class="avatar avatar-label-info">
+                    <div class="avatar-display">
+                        <i class="fa fa-solid fa-paperclip"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="rich-list-content">
+            <h4 class="rich-list-title"><a href="${element[2]}" target="_blank" >${element[1]}</a></h4>
+                <span class="rich-list-subtitle text-overflow-ellipsis">${element[2]}</span>
+            </div>
+            ${(element[3] == 'Admin' ? '<a class="rich-list-append" data-toggle="modal" data-target="#addWebsiteModal" onclick="editWebLink(' + element[0] + ')" ><i class="fa fa-edit"></i></a> <a class="rich-list-append" onclick="removeWebLink(' + element[0] + ')" ><i class="fa fa-trash"></i></a>' : '')}
+        </div>
+        `;
+    });
+}
+
+function editWebLink(id = null) {
+    var obj = linksArray.find((e) => e[0] == id);
+    if (obj.length > 0) {
+        $('#webLinkId').val(obj[0]);
+        $('#webName').val(obj[1]);
+        $('#webLink').val(obj[2]);
+    } else {
+        $('#webLinkId').val("");
+        $('#webName').val("");
+        $('#webLink').val("");
+    }
+}
+function removeWebLink(id = null) {
+    if (id) {
+
+        $.ajax({
+            url: `${siteURL}/php_action/removeWebLinks.php`,
+            type: 'post',
+            data: { id: id },
+            dataType: 'json',
+            success: function (response) {
+                if (response.success == true) {
+                    Swal.fire("Deleted!", "Your file has been deleted.", "success")
+                    var index = linksArray.findIndex(function (e) {
+                        return e[0] == id;
+                    })
+                    if (index !== -1) linksArray.splice(index, 1);
+                    loadWebLinks();
+                } // /response messages
+            },
+            error: function () {
+                e1.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "Something Wrong!",
+                    text: "Please Login and Try again",
+                    showConfirmButton: !1,
+                    timer: 2500
+                })
+            }
+        }); // /ajax function to remove the brand
+
+
+    }
+}
 
 function toggleSidebar(e) {
     if ($(e).children("i").hasClass("fa-compress")) {

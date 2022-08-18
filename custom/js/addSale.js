@@ -464,7 +464,6 @@ function changeRules() {
 
 function chnageIncentiveStatus(value, date, element) {
     if (value != 'N/A') {
-        $('#' + element + '_v').html('$' + value);
         var saleDate = $('#saleDate').val();
         saleDate = moment(saleDate).format('MM-DD-YYYY');
 
@@ -475,6 +474,7 @@ function chnageIncentiveStatus(value, date, element) {
 
         if (cdays >= 0) {
             $('#' + element).prop("disabled", false);
+            $('#' + element + '_v').html('$' + value);
         } else {
             $('#' + element).prop("disabled", true);
         }

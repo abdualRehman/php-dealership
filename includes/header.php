@@ -72,6 +72,14 @@
             font-size: initial !important;
             text-decoration: underline;
         }
+
+        .text-overflow-ellipsis {
+            display: inline-block;
+            width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
 
 
@@ -326,16 +334,16 @@
                                     </div>
                                 <?php
                                 }
-                                if (hasAccess("user", "Edit") !== 'false' || hasAccess("user", "Remove") !== 'false') {
+                                // if (hasAccess("user", "Edit") !== 'false' || hasAccess("user", "Remove") !== 'false') {
                                 ?>
-                                    <div class="menu-item">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/users/userList.php" class="menu-item-link">
-                                            <i class="menu-item-bullet"></i>
-                                            <span class="menu-item-text">User List</span>
-                                        </a>
-                                    </div>
+                                <div class="menu-item">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/users/userList.php" class="menu-item-link">
+                                        <i class="menu-item-bullet"></i>
+                                        <span class="menu-item-text">User List</span>
+                                    </a>
+                                </div>
                                 <?php
-                                }
+                                // }
                                 if (hasAccess("role", "Add") !== 'false' || hasAccess("role", "Edit") !== 'false' || hasAccess("role", "Remove") !== 'false') {
                                 ?>
                                     <div class="menu-item">
@@ -352,26 +360,73 @@
 
                     <?php
                     }
+                    if (
+                        hasAccess("swploc", "Add") !== 'false' || hasAccess("swploc", "Edit") !== 'false' || hasAccess("swploc", "Remove") !== 'false' ||
+                        hasAccess("bodyshops", "Add") !== 'false' || hasAccess("bodyshops", "Edit") !== 'false' || hasAccess("bodyshops", "Remove") !== 'false' ||
+                        hasAccess("dealership", "Add") !== 'false' || hasAccess("dealership", "Edit") !== 'false' || hasAccess("dealership", "Remove") !== 'false'
+                    ) {
                     ?>
+                        <div class="menu-item">
+                            <button class="menu-item-link menu-item-toggle">
+                                <div class="menu-item-icon">
+                                    <i class="fa fa-address-book"></i>
+                                </div>
+                                <span class="menu-item-text">Contacts</span>
+                                <div class="menu-item-addon"><i class="menu-item-caret caret"></i></div>
+                            </button>
+                            <div class="menu-submenu">
+                                <?php
 
-                    <!-- <div class="menu-section">
-                        <div class="menu-section-icon"><i class="fa fa-ellipsis-h"></i></div>
-                        <h2 class="menu-section-text">Settings</h2>
-                    </div> -->
+                                if (hasAccess("bodyshops", "Add") !== 'false' || hasAccess("bodyshops", "Edit") !== 'false' || hasAccess("bodyshops", "Remove") !== 'false') {
+                                ?>
+                                    <div class="menu-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/bodyshops.php" class="menu-item-link">
+                                            <i class="menu-item-bullet"></i>
+                                            <span class="menu-item-text">Bodyshop Contacts</span>
+                                        </a>
+                                    </div>
+                                <?php
+                                }
+                                if (hasAccess("dealership", "Add") !== 'false' || hasAccess("dealership", "Edit") !== 'false' || hasAccess("dealership", "Remove") !== 'false') {
+                                ?>
+                                    <div class="menu-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/dealershipContacts.php" class="menu-item-link">
+                                            <i class="menu-item-bullet"></i>
+                                            <span class="menu-item-text"> Dealership Contacts</span>
+                                        </a>
+                                    </div>
+
+                                <?php
+                                }
+                                if (hasAccess("swploc", "Add") !== 'false' || hasAccess("swploc", "Edit") !== 'false' || hasAccess("swploc", "Remove") !== 'false') {
+                                ?>
+                                    <div class="menu-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/locations.php?r=man" class="menu-item-link">
+                                            <i class="menu-item-bullet"></i>
+                                            <span class="menu-item-text">Swap Locations</span>
+                                        </a>
+                                    </div>
+                                <?php
+                                }
+                                ?>
+
+                            </div>
+                        </div>
+
 
                     <?php
+                    }
                     if (
                         hasAccess("incr", "Add") !== 'false' || hasAccess("incr", "Edit") !== 'false' || hasAccess("incr", "Remove") !== 'false' ||
                         hasAccess("sptr", "Add") !== 'false' || hasAccess("sptr", "Edit") !== 'false' || hasAccess("sptr", "Remove") !== 'false' ||
-                        hasAccess("swploc", "Add") !== 'false' || hasAccess("swploc", "Edit") !== 'false' || hasAccess("swploc", "Remove") !== 'false' ||
                         hasAccess("manprice", "Add") !== 'false' || hasAccess("manprice", "Edit") !== 'false' || hasAccess("manprice", "Remove") !== 'false' ||
-                        hasAccess("bodyshops", "Add") !== 'false' || hasAccess("bodyshops", "Edit") !== 'false' || hasAccess("bodyshops", "Remove") !== 'false' ||
                         hasAccess("matrixfile", "Add") !== 'false' ||
                         hasAccess("matrixrule", "Add") !== 'false' || hasAccess("matrixrule", "Edit") !== 'false' || hasAccess("matrixrule", "Remove") !== 'false' ||
                         hasAccess("bdcrule", "Add") !== 'false' || hasAccess("bdcrule", "Edit") !== 'false' || hasAccess("bdcrule", "Remove") !== 'false' ||
                         hasAccess("raterule", "Add") !== 'false' || hasAccess("raterule", "Edit") !== 'false' || hasAccess("raterule", "Remove") !== 'false' ||
                         hasAccess("leaserule", "Add") !== 'false' || hasAccess("leaserule", "Edit") !== 'false' || hasAccess("leaserule", "Remove") !== 'false' ||
-                        hasAccess("cashincrule", "Add") !== 'false' || hasAccess("cashincrule", "Edit") !== 'false' || hasAccess("cashincrule", "Remove") !== 'false'
+                        hasAccess("cashincrule", "Add") !== 'false' || hasAccess("cashincrule", "Edit") !== 'false' || hasAccess("cashincrule", "Remove") !== 'false' ||
+                        hasAccess("rdr", "Edit") !== 'false' || hasAccess("writedown", "View") !== 'false'
                     ) {
                     ?>
 
@@ -407,33 +462,12 @@
                                     </div>
                                 <?php
                                 }
-                                if (hasAccess("swploc", "Add") !== 'false' || hasAccess("swploc", "Edit") !== 'false' || hasAccess("swploc", "Remove") !== 'false') {
-                                ?>
-                                    <div class="menu-item">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/locations.php?r=man" class="menu-item-link">
-                                            <i class="menu-item-bullet"></i>
-                                            <span class="menu-item-text">Swap Locations</span>
-                                        </a>
-                                    </div>
-                                <?php
-                                }
                                 if (hasAccess("manprice", "Add") !== 'false' || hasAccess("manprice", "Edit") !== 'false' || hasAccess("manprice", "Remove") !== 'false') {
                                 ?>
                                     <div class="menu-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/manufaturePrice.php?r=man" class="menu-item-link">
                                             <i class="menu-item-bullet"></i>
                                             <span class="menu-item-text">Import Manufacture Price</span>
-                                        </a>
-                                    </div>
-                                <?php
-                                }
-
-                                if (hasAccess("bodyshops", "Add") !== 'false' || hasAccess("bodyshops", "Edit") !== 'false' || hasAccess("bodyshops", "Remove") !== 'false') {
-                                ?>
-                                    <div class="menu-item">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/bodyshops.php" class="menu-item-link">
-                                            <i class="menu-item-bullet"></i>
-                                            <span class="menu-item-text">Bodyshop Contacts</span>
                                         </a>
                                     </div>
                                 <?php
@@ -509,14 +543,17 @@
                                     </div>
                                 <?php
                                 }
+                                if (hasAccess("writedown", "View") !== 'false') {
                                 ?>
-                                <div class="menu-item">
-                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/writeDownRules.php" class="menu-item-link">
-                                        <i class="menu-item-bullet"></i>
-                                        <span class="menu-item-text">Write Down Rules</span>
-                                    </a>
-                                </div>
-
+                                    <div class="menu-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/writeDownRules.php" class="menu-item-link">
+                                            <i class="menu-item-bullet"></i>
+                                            <span class="menu-item-text">Write Down Rules</span>
+                                        </a>
+                                    </div>
+                                <?php
+                                }
+                                ?>
                             </div>
                         </div>
                         <!-- <div class="menu-item">
@@ -565,7 +602,7 @@
                                     </li>
                                 <?php
                                 }
-                                if (hasAccess("bdc", "Add") !== 'false' && hasAccess("bdc", "Edit") !== 'false' && hasAccess("bdc", "Remove") !== 'false') {
+                                if (hasAccess("bdc", "View") !== 'false') {
                                 ?>
                                     <li class="nav-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/more/bdc.php" id="bdcPage" class="nav-link">BDC</a>
@@ -682,115 +719,21 @@
                             </ul>
                         </div>
                         <div class="header-wrap header-wrap-block">
-                            <div class="input-group-icon input-group-lg widget15-compact">
+                            <div class="input-group-icon input-group-lg widget15-compact d-none" id="searchBar">
                                 <div class="input-group-prepend">
                                     <i class="fa fa-search text-primary"></i>
                                 </div>
                                 <input type="text" class="form-control" name="searchcars" id="searchcars" placeholder="Type to search...">
                             </div>
-                            <!-- <div class="input-group-icon input-group-lg widget15-compact">
+                            <div class="input-group-icon input-group-lg widget15-compact" id="statusBar">
                                 <h3 class="portlet-title">
-                                    <a href="<?php // echo $GLOBALS['siteurl']; 
-                                                ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary" id="todaySoldStatus">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary" id="todaySoldStatus">
                                     </a>
                                 </h3>
-                            </div> -->
+                            </div>
                         </div>
                         <div class="header-wrap">
-                            <!-- <div class="dropdown">
-                                <button class="btn btn-label-primary btn-icon" data-toggle="dropdown"><i class="far fa-bell"></i>
-                                    <div class="btn-marker"><i class="marker marker-dot text-success"></i></div>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-wide dropdown-menu-animated overflow-hidden py-0">
-                                    <div class="portlet border-0 portlet-scroll">
-                                        <div class="portlet-header bg-primary rounded-0">
-                                            <div class="portlet-icon text-white"><i class="far fa-bell"></i></div>
-                                            <h3 class="portlet-title text-white">Notification</h3>
-                                            <div class="portlet-addon"><span class="badge badge-warning badge-square badge-lg">9+</span></div>
-                                        </div>
-                                        <div class="portlet-body p-0 rounded-0" data-toggle="simplebar">
-                                            <div class="rich-list rich-list-action"><a href="#" class="rich-list-item">
-                                                    <div class="rich-list-prepend">
-                                                        <div class="avatar avatar-label-info">
-                                                            <div class="avatar-display"><i class="fa fa-file-invoice"></i></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="rich-list-content">
-                                                        <h4 class="rich-list-title">New report has been received</h4>
-                                                        <span class="rich-list-subtitle">2 min ago</span>
-                                                    </div>
-                                                    <div class="rich-list-append"><i class="caret mx-2"></i></div>
-                                                </a><a href="#" class="rich-list-item">
-                                                    <div class="rich-list-prepend">
-                                                        <div class="avatar avatar-label-success">
-                                                            <div class="avatar-display"><i class="fa fa-shopping-basket"></i></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="rich-list-content">
-                                                        <h4 class="rich-list-title">Last order was completed</h4><span class="rich-list-subtitle">1 hrs ago</span>
-                                                    </div>
-                                                    <div class="rich-list-append"><i class="caret mx-2"></i></div>
-                                                </a><a href="#" class="rich-list-item">
-                                                    <div class="rich-list-prepend">
-                                                        <div class="avatar avatar-label-danger">
-                                                            <div class="avatar-display"><i class="fa fa-users"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="rich-list-content">
-                                                        <h4 class="rich-list-title">Company meeting canceled</h4><span class="rich-list-subtitle">5 hrs ago</span>
-                                                    </div>
-                                                    <div class="rich-list-append"><i class="caret mx-2"></i></div>
-                                                </a><a href="#" class="rich-list-item">
-                                                    <div class="rich-list-prepend">
-                                                        <div class="avatar avatar-label-warning">
-                                                            <div class="avatar-display"><i class="fa fa-paper-plane"></i></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="rich-list-content">
-                                                        <h4 class="rich-list-title">New feedback received</h4><span class="rich-list-subtitle">6 hrs ago</span>
-                                                    </div>
-                                                    <div class="rich-list-append"><i class="caret mx-2"></i></div>
-                                                </a><a href="#" class="rich-list-item">
-                                                    <div class="rich-list-prepend">
-                                                        <div class="avatar avatar-label-primary">
-                                                            <div class="avatar-display"><i class="fa fa-download"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="rich-list-content">
-                                                        <h4 class="rich-list-title">New update was available</h4><span class="rich-list-subtitle">1 day ago</span>
-                                                    </div>
-                                                    <div class="rich-list-append"><i class="caret mx-2"></i></div>
-                                                </a><a href="#" class="rich-list-item">
-                                                    <div class="rich-list-prepend">
-                                                        <div class="avatar avatar-label-success">
-                                                            <div class="avatar-display"><i class="fa fa-asterisk"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="rich-list-content">
-                                                        <h4 class="rich-list-title">Your password was changed</h4><span class="rich-list-subtitle">2 day ago</span>
-                                                    </div>
-                                                    <div class="rich-list-append"><i class="caret mx-2"></i></div>
-                                                </a><a href="#" class="rich-list-item">
-                                                    <div class="rich-list-prepend">
-                                                        <div class="avatar avatar-label-info">
-                                                            <div class="avatar-display"><i class="fa fa-user-plus"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="rich-list-content">
-                                                        <h4 class="rich-list-title">New account has been registered</h4>
-                                                        <span class="rich-list-subtitle">5 day ago</span>
-                                                    </div>
-                                                    <div class="rich-list-append"><i class="caret mx-2"></i></div>
-                                                </a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="dropdown ml-2">
+                            <!-- <div class="dropdown ml-2">
                                 <button class="btn btn-label-primary btn-icon" data-toggle="dropdown"><i class="far fa-comments"></i>
                                     <div class="btn-marker"><i class="marker marker-dot text-success"></i></div>
                                 </button>
@@ -887,6 +830,38 @@
 
                                 ?>
                             </ul>
+                            <div class="dropdown">
+                                <button class="btn btn-label-primary btn-icon" data-toggle="dropdown" onclick="loadWebLinks()">
+                                    <i class="fa fa-globe"></i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-wide overflow-hidden py-0">
+                                    <div class="portlet border-0 portlet-scroll">
+                                        <div class="portlet-header bg-primary rounded-0">
+                                            <div class="portlet-icon text-white"><i class="fa fa-globe"></i></div>
+                                            <h3 class="portlet-title text-white">Websites Links</h3>
+                                            <button class="btn portlet-icon text-white" style="cursor:pointer" data-toggle="modal" data-target="#addWebsiteModal"><i class="fa fa-plus"></i></button>
+                                        </div>
+                                        <div class="portlet-body p-0 rounded-0" data-toggle="simplebar">
+                                            <div class="rich-list rich-list-action" id="webLinksList">
+                                                <div class="rich-list-item">
+                                                    <div class="rich-list-prepend">
+                                                        <div class="avatar avatar-label-info">
+                                                            <div class="avatar-display">
+                                                                <i class="fa fa-solid fa-paperclip"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="rich-list-content">
+                                                        <h4 class="rich-list-title">Website Name</h4>
+                                                        <span class="rich-list-subtitle text-overflow-ellipsis">https://github.com/abdualRehman?tab=repositories https://github.com/abdualRehman?tab=repositories https://github.com/abdualRehman?tab=repositories</span>
+                                                    </div>
+                                                    <div class="rich-list-append"><i class="caret mx-2"></i></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="dropdown ml-2"><button class="btn btn-flat-primary widget13" data-toggle="dropdown">
                                     <div class="widget13-text">Hi <strong> <?php echo $_SESSION['userName']; ?> </strong></div>
                                     <div class="avatar avatar-info widget13-avatar">

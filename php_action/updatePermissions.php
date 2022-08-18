@@ -9,12 +9,10 @@ $result = $connect->query($sql);
 
 function updatePermission($role_id, $module, $fun, $permission)
 {
-    // echo $role_id . ' - ' . $module . '<br />';
     global $connect;
     $sql = "SELECT * FROM `role_mod` WHERE role_id = '$role_id' AND modules = '$module' AND functions = '$fun' ";
     $result = $connect->query($sql);
     if ($result->num_rows > 0) {
-
         $sql1 = "UPDATE `role_mod` SET `permission`='$permission' WHERE role_id = '$role_id' AND modules = '$module' AND functions = '$fun' ";
         $connect->query($sql1);
     } else {
@@ -58,13 +56,14 @@ if ($result->num_rows > 0) {
         // updatePermission($id, 'tansptBill', 'Edit', "true");
         // updatePermission($id, 'tansptBill', 'View', "true");
         
-        // updatePermission($id, 'dbc', 'Add', "true");
-        // updatePermission($id, 'dbc', 'Edit', "true");
-        // updatePermission($id, 'dbc', 'Remove', "true");
+        // updatePermission($id, 'bdc', 'Add', "true");
+        // updatePermission($id, 'bdc', 'Edit', "true");
+        // updatePermission($id, 'bdc', 'Remove', "true");
+        // updatePermission($id, 'bdc', 'View', "true");
 
-        // updatePermission($id, 'warranty', 'Add', "true");
-        // updatePermission($id, 'warranty', 'Edit', "true");
-        // updatePermission($id, 'warranty', 'Remove', "true");
+        // updatePermission($id, 'dealership', 'Add', "true");
+        // updatePermission($id, 'dealership', 'Edit', "true");
+        // updatePermission($id, 'dealership', 'Remove', "true");
 
         // updatePermission($id, 'todayavail', 'Edit', "true");
         // updatePermission($id, 'todayavail', 'View', "true");
