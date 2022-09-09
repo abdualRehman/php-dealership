@@ -967,7 +967,8 @@
                         <div class="header-wrap header-wrap-block justify-content-start px-3">
                             <h4 class="header-brand">Logo</h4>
                         </div>
-                        <div class="header-wrap"><button class="btn btn-flat-primary btn-icon" data-toggle="sidemenu" data-target="#sidemenu-todo"><i class="far fa-calendar-alt"></i></button>
+                        <div class="header-wrap">
+                            <!-- <button class="btn btn-flat-primary btn-icon" data-toggle="sidemenu" data-target="#sidemenu-todo"><i class="far fa-calendar-alt"></i></button> -->
                             <div class="dropdown ml-2"><button class="btn btn-flat-primary widget13" data-toggle="dropdown">
                                     <div class="widget13-text">Hi <strong> <?php echo $_SESSION['userName']; ?> </strong></div>
                                     <div class="avatar avatar-info widget13-avatar">
@@ -1034,9 +1035,48 @@
                 <div class="header-holder header-holder-mobile">
                     <div class="header-container container-fluid">
                         <div class="header-wrap header-wrap-block justify-content-start w-100">
-                            <div class="breadcrumb"><a href="index.php" class="breadcrumb-item">
+                            <!-- <div class="breadcrumb">
+                                <a href="index.php" class="breadcrumb-item">
                                     <div class="breadcrumb-icon"><i data-feather="home"></i></div><span class="breadcrumb-text">Dashboard</span>
-                                </a></div>
+                                </a>
+                            </div> -->
+                            <!-- <div class="breadcrumb">
+                                <a href="index.php" class="breadcrumb-item">
+                                    <div class="breadcrumb-icon"><i data-feather="home"></i></div><span class="breadcrumb-text">Dashboard</span>
+                                </a>
+                            </div> -->
+
+                            <?php
+                            if (hasAccess("lotWizards", "View") !== 'false') {
+                            ?>
+                                <div class="breadcrumb mr-1">
+                                    <div class="breadcrumb-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/wizard/lotwizards.php" id="lotWizars" class="btn btn-flat-primary breadcrumb-text">Lot Wizards</a>
+                                    </div>
+                                </div>
+                            <?php
+                            }
+                            if (hasAccess("sale", "View") !== 'false') {
+                            ?>
+                                <div class="breadcrumb mr-1">
+                                    <div class="breadcrumb-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man" class="btn btn-flat-primary breadcrumb-text">Sold Logs</a>
+                                    </div>
+                                </div>
+                            <?php
+                            }
+
+                            if (hasAccess("matrix", "View") !== 'false') {
+                            ?>
+                                <div class="breadcrumb mr-1">
+                                    <div class="breadcrumb-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/manMatrix.php?r=man" class="btn btn-flat-primary breadcrumb-text">Matrix</a>
+                                    </div>
+                                </div>
+                            <?php
+                            }
+                            ?>
+
                         </div>
                     </div>
                 </div>

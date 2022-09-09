@@ -174,7 +174,7 @@ if (hasAccess("bodyshops", "Edit") === 'false') {
                         <div class="col-md-3">
                             <label for="zip" class="col-form-label">Zip</label>
                             <div class="form-group">
-                                <input type="text" class="form-control" name="zip" id="zip" placeholder="Zip" maxlength="5" autocomplete="off" autofill="off" />
+                                <input type="text" class="form-control zipCode" name="zip" id="zip" placeholder="Zip" maxlength="5" autocomplete="off" autofill="off" />
                             </div>
                         </div>
                     </div>
@@ -310,7 +310,7 @@ if (hasAccess("bodyshops", "Edit") === 'false') {
                                 <div class="col-md-3">
                                     <label for="ezip" class="col-form-label">Zip</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="ezip" id="ezip" placeholder="Zip" maxlength="5" autocomplete="off" autofill="off" />
+                                        <input type="text" class="form-control zipCode" name="ezip" id="ezip" placeholder="Zip" maxlength="5" autocomplete="off" autofill="off" />
                                     </div>
                                 </div>
                             </div>

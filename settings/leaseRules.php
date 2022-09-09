@@ -513,7 +513,10 @@ if (hasAccess("leaserule", "Edit") !== 'false') {
                                 <div class="alert-icon"><i class="fa fa-info"></i></div>
                                 <div class="alert-content">
                                     <h4 class="alert-heading">Please Note!</h4>
-                                    <p>A record that already exists in the database will be updated by this file.</p>
+                                    <a href="./files/Lease_Rules.xlsx" download class="btn btn-success float-right">Download Format File</a>
+                                    <p>The following Excel File column sequence should match the image below.</p>
+                                    <code>"Year" "Trim" "Model Code" "24" "27" ...</code>
+                                    <hr>
                                 </div>
                                 <button type="button" class="btn btn-text-danger btn-icon alert-dismiss" data-dismiss="alert"><i class="fa fa-times"></i></button>
                             </div>

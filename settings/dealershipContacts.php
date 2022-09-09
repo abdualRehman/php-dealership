@@ -170,7 +170,7 @@ if (hasAccess("dealership", "Edit") === 'false') {
                         <div class="col-md-3">
                             <label for="zip" class="col-form-label">Zip</label>
                             <div class="form-group">
-                                <input type="text" class="form-control" name="zip" id="zip" placeholder="Zip" maxlength="5" autocomplete="off" autofill="off" />
+                                <input type="text" class="form-control zipCode" name="zip" id="zip" placeholder="Zip" maxlength="5" autocomplete="off" autofill="off" />
                             </div>
                         </div>
                     </div>
@@ -232,13 +232,13 @@ if (hasAccess("dealership", "Edit") === 'false') {
                                 <div class="col-md-3">
                                     <label for="eaddress" class="col-form-label">Address</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="eaddress" id="eaddress"  autocomplete="off" autofill="off" />
+                                        <input type="text" class="form-control" name="eaddress" id="eaddress" autocomplete="off" autofill="off" />
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <label for="ecity" class="col-form-label">City</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="ecity" id="ecity"  autocomplete="off" autofill="off" />
+                                        <input type="text" class="form-control" name="ecity" id="ecity" autocomplete="off" autofill="off" />
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -304,7 +304,7 @@ if (hasAccess("dealership", "Edit") === 'false') {
                                 <div class="col-md-3">
                                     <label for="ezip" class="col-form-label">Zip</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="ezip" id="ezip"  autocomplete="off" autofill="off" />
+                                        <input type="text" class="form-control zipCode" name="ezip" id="ezip" maxlength="5" autocomplete="off" autofill="off" />
                                     </div>
                                 </div>
                             </div>
@@ -318,7 +318,7 @@ if (hasAccess("dealership", "Edit") === 'false') {
                                 <div class="col-md-6">
                                     <label for="efax" class="col-form-label">Fax</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="efax" id="efax" autocomplete="off" maxlength="5" autofill="off" />
+                                        <input type="text" class="form-control" name="efax" id="efax" autocomplete="off" autofill="off" />
                                     </div>
                                 </div>
                             </div>
@@ -332,7 +332,7 @@ if (hasAccess("dealership", "Edit") === 'false') {
                                 <div class="col-md-6">
                                     <label for="egeneralManagerContact" class="col-form-label">General Manager Contact</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="egeneralManagerContact" id="egeneralManagerContact"  autocomplete="off" autofill="off" />
+                                        <input type="text" class="form-control" name="egeneralManagerContact" id="egeneralManagerContact" autocomplete="off" autofill="off" />
                                     </div>
                                 </div>
                             </div>

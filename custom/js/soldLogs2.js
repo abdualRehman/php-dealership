@@ -277,13 +277,11 @@ $(function () {
                 //     "data-target": "#showDetails",
                 //     "onclick": "showDetails(" + data[18] + ")"
                 // });
-                if ($('#isEditAllowed').val() == "true") {
-                    $(row).children().not(':last-child').attr({
-                        "data-toggle": "modal",
-                        "data-target": "#editSaleModal",
-                        "onclick": "editSale(" + data[18] + ")"
-                    });
-                }
+                $(row).children().not(':last-child').attr({
+                    "data-toggle": "modal",
+                    "data-target": "#showDetails",
+                    "onclick": "showDetails(" + data[18] + ")"
+                });
             },
             "order": [[10, "desc"], [3, "asc"], [0, "asc"]]
         });
@@ -607,128 +605,267 @@ $(function () {
         });
 
 
-    }
-    $(function () {
+    } else if (divRequest == 'edit') {
+        $(function () {
 
-        loadStock();
-        loadSaleConsultant();
-        loadSaleManager();
-        loadFinanceManager();
+            loadStock();
+            loadSaleConsultant();
+            loadSaleManager();
+            loadFinanceManager();
 
+            var saleId = $('#saleId').val();
+            console.log(saleId);
+            $('.spinner-grow').removeClass('d-none');
+            // modal result
+            $('.showResult').addClass('d-none');
 
-        // ---------------------- Edit Sale---------------------------
-        // validateState
-        $("#editSaleForm").validate({
-            ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
-            rules: {
-                saleDate: {
-                    required: !0,
-                },
-                stockId: {
-                    required: function (params) {
-                        if (params.value == 0) {
-                            params.classList.add('is-invalid');
-                            $('#stockId').selectpicker('refresh');
-                            params.classList.add('is-invalid');
-                            return true;
-                        } else {
-                            return false;
-                        }
+            $.ajax({
+                url: '../php_action/fetchSelectedSale.php',
+                type: 'post',
+                data: { id: saleId },
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
+
+                    // modal loading
+                    $('.spinner-grow').addClass('d-none');
+                    // modal result
+                    $('.showResult').removeClass('d-none');
+
+                    // modal footer
+                    $('#saleDate').datetimepicker('update', response.date);
+
+                    if (response.reconcileDate != "") {
+                        $('#reconcileDate').datepicker('update', moment(response.reconcileDate).format('MM-DD-YYYY'));
                     }
-                },
-                salesPerson: {
-                    required: function (params) {
-                        if (params.value == 0) {
-                            params.classList.add('is-invalid');
-                            $('#salesPerson').selectpicker('refresh');
-                            params.classList.add('is-invalid');
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-                },
-                fname: {
-                    required: !0,
-                },
-                lname: {
-                    required: !0,
-                },
 
-                state: {
-                    required: function (params) {
-                        if (params.value == 0) {
-                            params.classList.add('is-invalid');
-                            $('#state').selectpicker('refresh');
-                            params.classList.add('is-invalid');
-                            return true;
-                        } else {
-                            return false;
+                    $('#' + response.sale_status).attr("checked", "checked");
+                    $('#' + response.sale_status).parent().addClass('active')
+
+                    $('#stockId').val(response.stock_id);
+
+                    if (response.certified == 'on') {
+                        $('#yes').attr('checked', 'checked')
+                    } else {
+                        $('#no').attr('checked', 'checked')
+                    }
+
+                    // show/calclulate gross if stockTypes is used gross is shows otherwise hide 
+                    if (response.stocktype == 'USED') {
+                        $('#grossDiv').removeClass('v-none');
+                    } else {
+                        $('#grossDiv').addClass('v-none');
+                    }
+                    $('#salesPerson').val(response.sales_consultant);
+
+                    $('#financeManager').val(response.finance_manager);
+                    if (response.deal_type) {
+                        $('#' + response.deal_type).attr("checked", "checked");
+                        $('#' + response.deal_type).parent().addClass('active');
+                    }
+
+                    $('#submittedBy').val(response.submittedBy);
+
+                    $('#dealNote').val(response.deal_notes);
+                    $('#fname').val(response.fname);
+                    $('#mname').val(response.mname);
+                    $('#lname').val(response.lname);
+                    $('#state').val(response.state);
+                    $('#address1').val(response.address1);
+                    $('#address2').val(response.address2);
+                    $('#city').val(response.city);
+                    $('#country').val(response.country);
+                    $('#zipCode').val(response.zipcode);
+                    $('#mobile').val(response.mobile);
+                    $('#altContact').val(response.altcontact);
+                    $('#email').val(response.email);
+
+                    $('#cbfname').val(response.cb_fname);
+                    $('#cbmname').val(response.cb_mname);
+                    $('#cblname').val(response.cb_lname);
+                    $('#cbstate').val(response.cb_state);
+                    $('#cbAddress1').val(response.cb_address1);
+                    $('#cbAddress2').val(response.cb_address2);
+                    $('#cbCity').val(response.cb_city);
+                    $('#cbCountry').val(response.cb_country);
+                    $('#cbZipCode').val(response.cb_zipcode);
+                    $('#cbMobile').val(response.cb_mobile);
+                    $('#cbAltContact').val(response.cb_altcontact);
+                    $('#cbEmail').val(response.cb_email);
+
+                    $('#profit').val(response.gross);
+
+                    var detailsDiv = `${response.stocktype} ${response.year} ${response.make} ${response.model} \n Vin: ${response.vin} \n Mileage: ${response.mileage} \n Age: ${response.age} \n Lot: ${response.lot} \n Balance: ${response.balance}`;
+
+                    $('#selectedDetails').html(detailsDiv);
+                    $('#selectedDetails').addClass('text-center');
+
+
+                    $('#college').val(response.college);
+                    $('#military').val(response.military);
+                    $('#loyalty').val(response.loyalty);
+                    $('#conquest').val(response.conquest);
+                    $('#misc1').val(response.misc1);
+                    $('#misc2').val(response.misc2);
+                    $('#leaseLoyalty').val(response.lease_loyalty);
+
+
+                    $('#vincheck').val(response.vin_check);
+                    $('#insurance').val(response.insurance);
+                    $('#tradeTitle').val(response.trade_title);
+                    $('#registration').val(response.registration);
+                    $('#inspection').val(response.inspection);
+                    $('#salePStatus').val(response.salesperson_status);
+                    $('#paid').val(response.paid);
+
+
+
+
+                    $('.selectpicker').selectpicker('refresh')
+                    autosize.update($(".autosize"));
+
+
+                    var checkValue = $('#stockId').val();
+                    if (!checkValue) {
+                        // if Inventory item was deleted then search from deleted inv data
+                        fetchSelectedInvForSearch(response.stock_id);
+                    } else {
+                        changeRules()
+                    }
+
+
+                    chnageStyle({ id: 'vincheck', value: response.vin_check });
+                    chnageStyle({ id: 'insurance', value: response.insurance });
+                    chnageStyle({ id: 'tradeTitle', value: response.trade_title });
+                    chnageStyle({ id: 'registration', value: response.registration });
+                    chnageStyle({ id: 'inspection', value: response.inspection });
+                    chnageStyle({ id: 'salePStatus', value: response.salesperson_status });
+                    chnageStyle({ id: 'paid', value: response.paid });
+
+                }, // /success
+                error: function (err) {
+                    console.log(err);
+                }
+
+
+
+            }); // ajax function
+
+
+            // ---------------------- Edit Sale---------------------------
+
+            // validateState
+            $("#editSaleForm").validate({
+                ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
+                rules: {
+                    saleDate: {
+                        required: !0,
+                    },
+                    stockId: {
+                        required: function (params) {
+                            if (params.value == 0) {
+                                params.classList.add('is-invalid');
+                                $('#stockId').selectpicker('refresh');
+                                params.classList.add('is-invalid');
+                                return true;
+                            } else {
+                                return false;
+                            }
                         }
                     },
-                },
-
-            },
-            messages: {
-                fname: {
-                    required: "",
-                },
-                lname: {
-                    required: "",
-                },
-
-                state: {
-                    required: "",
-                },
-            },
-            submitHandler: function (form, event) {
-                // return true;
-                event.preventDefault();
-
-                $('[disabled]').removeAttr('disabled');
-                var form = $('#editSaleForm');
-                $.ajax({
-                    type: "POST",
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response);
-
-                        if (response.success == true) {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "success",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 2500,
-                            })
-                            manageSoldLogsTable.ajax.reload(null, false);
-
-                        } else {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "error",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 2500
-                            })
+                    salesPerson: {
+                        required: function (params) {
+                            if (params.value == 0) {
+                                params.classList.add('is-invalid');
+                                $('#salesPerson').selectpicker('refresh');
+                                params.classList.add('is-invalid');
+                                return true;
+                            } else {
+                                return false;
+                            }
                         }
+                    },
+                    fname: {
+                        required: !0,
+                    },
+                    lname: {
+                        required: !0,
+                    },
+
+                    state: {
+                        required: function (params) {
+                            if (params.value == 0) {
+                                params.classList.add('is-invalid');
+                                $('#state').selectpicker('refresh');
+                                params.classList.add('is-invalid');
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        },
+                    },
+
+                },
+                messages: {
+                    fname: {
+                        required: "",
+                    },
+                    lname: {
+                        required: "",
+                    },
+
+                    state: {
+                        required: "",
+                    },
+                },
+                submitHandler: function (form, event) {
+                    // return true;
+                    event.preventDefault();
+
+                    $('[disabled]').removeAttr('disabled');
+                    var form = $('#editSaleForm');
+                    $.ajax({
+                        type: "POST",
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        dataType: 'json',
+                        success: function (response) {
+                            console.log(response);
+
+                            if (response.success == true) {
+                                e1.fire({
+                                    position: "top-end",
+                                    icon: "success",
+                                    title: response.messages,
+                                    showConfirmButton: !1,
+                                    timer: 2500,
+                                })
 
 
-                    }
-                });
+                            } else {
+                                e1.fire({
+                                    position: "top-end",
+                                    icon: "error",
+                                    title: response.messages,
+                                    showConfirmButton: !1,
+                                    timer: 2500
+                                })
+                            }
 
 
-                return false;
+                        }
+                    });
 
-            }
+
+                    return false;
+
+                }
+            });
+
+
+
         });
-
-
-
-    });
-
+    }
 
 
 });
@@ -1002,11 +1139,10 @@ function fetchNotDoneSoldLogs() {
                 startRender: function (rows, group) {
                     var collapsed = !!collapsedGroups[group];
 
-                    var filteredData = $('#datatable-2').DataTable()
+                    var filteredData = $('#datatable-1').DataTable()
                         .rows({ search: 'applied' })
                         .data()
                         .filter(function (data, index) {
-                            console.log(data);
                             return data[4] == group ? true : false;
                         });
                     // setting total numbers
@@ -1019,13 +1155,11 @@ function fetchNotDoneSoldLogs() {
                 }
             },
             createdRow: function (row, data, dataIndex) {
-                if ($('#isEditAllowed').val() == "true") {
-                    $(row).children().not(':last-child').attr({
-                        "data-toggle": "modal",
-                        "data-target": "#showDetails",
-                        "onclick": "showDetails(" + data[0] + ")"
-                    });
-                }
+                $(row).children().not(':last-child').attr({
+                    "data-toggle": "modal",
+                    "data-target": "#showDetails",
+                    "onclick": "showDetails(" + data[0] + ")"
+                });
             },
             "order": [[4, "asc"]],
         })
@@ -1034,9 +1168,7 @@ function fetchNotDoneSoldLogs() {
 
 
 
-$('input[name="iscertified"]').on('change' , function () {
-    $('#iscertified').val($(this).val());
-})
+
 
 
 
@@ -1111,7 +1243,7 @@ function fetchSelectedInvForSearch(id = null) {
             var selectBox = document.getElementById('stockId');
             selectBox.innerHTML += `<option value="${item[0]}" selected title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} || Stock Deleted</option>`;
             $('.selectpicker').selectpicker('refresh');
-            changeStockDetails({ value: item[0] } , true)
+            changeStockDetails({ value: item[0] })
         }
 
     }); // /ajax function to remove the brand
@@ -1146,12 +1278,12 @@ function writeStatusHTML() {
 function toggleFilterClass() {
     $('.dtsp-panes').toggle();
 }
-function editSale(id = null) {
+function showDetails(id = null) {
 
     if (id) {
         $('.spinner-grow').removeClass('d-none');
         // modal result
-        $('.eshowResult').addClass('d-none')
+        $('.showResult').addClass('d-none')
         $('.modal-footer').addClass('d-none')
         $.ajax({
             url: '../php_action/fetchSelectedSale.php',
@@ -1159,64 +1291,97 @@ function editSale(id = null) {
             data: { id: id },
             dataType: 'json',
             success: function (response) {
-                console.log(id);
+
                 console.log(response);
 
-                // modal loading
                 $('.spinner-grow').addClass('d-none');
                 // modal result
-                $('.eshowResult').removeClass('d-none');
+                $('.showResult').removeClass('d-none');
                 // modal footer
                 $('.modal-footer').removeClass('d-none');
 
-                // modal footer
-                $('#saleDate').datetimepicker('update', response.date);
-                $('#saleId').val(id);
+                $('#saleDate').datetimepicker('update', response.date)
 
                 if (response.reconcileDate != "") {
                     $('#reconcileDate').datepicker('update', moment(response.reconcileDate).format('MM-DD-YYYY'));
                 }
+                // $('#submittedBy').val(response.submittedBy);
 
-                $('input[name="status"]').prop('checked', false);
-                $('input[name="status"]').parent().removeClass('active')
-                $('#' + response.sale_status).click();
+                if (response.sale_status == 'pending') {
+                    $('#statusDiv').html(`
+                    <label class="btn btn-flat-primary active d-flex align-items-center">
+                        <input type="radio" name="status" value="pending" id="pending" checked="checked">
+                        <i class="fa fa-clock pr-1"></i> Pending
+                    </label>
+                    `)
+                } else if (response.sale_status == 'delivered') {
+                    $('#statusDiv').html(`
+                    <label class="btn btn-flat-success active d-flex align-items-center">
+                        <input type="radio" name="status" value="delivered" id="delivered" checked="checked">
+                        <i class="fa fa-check pr-1"></i> Delivered
+                    </label>
+                    `)
+                } else if (response.sale_status == 'cancelled') {
+                    $('#statusDiv').html(`
+                        <label class="btn btn-flat-danger active d-flex align-items-center">
+                            <input type="radio" name="status" value="cancelled" id="cancelled" checked="checked">
+                            <i class="fa fa-times pr-1"></i> Cancelled
+                        </label> 
+                    `)
+                }
 
-                // $('#' + response.sale_status).attr("checked", "checked");
-                // $('#' + response.sale_status).parent().addClass('active')
+                var detailsDiv = `${response.stocktype} ${response.year} ${response.make} ${response.model} \n Vin: ${response.vin} \n Mileage: ${response.mileage} \n Age: ${response.age} \n Lot: ${response.lot} ${($('#isConsultant').val() == "true") ? `` : `\n Balance: ${response.balance} \n ${response.stocktype == "USED" ? `Gross:` + Number(response.gross) : ''}`} `;
 
 
-                $('#stockId').val(response.stock_id);
+                $('#selectedDetails').html(detailsDiv);
+                $('#selectedDetails').addClass('text-center');
 
-                $('input[name="iscertified"]').prop('checked', false);
-                $('input[name="iscertified"]').parent().removeClass('active');
-                if (response.certified == 'on') {
-                    $('#yes').click();
-                    $('#iscertified').val('on');
+
+
+                if (response.stocktype == "USED") {
+                    $('#grossDiv').removeClass('v-none')
                 } else {
-                    $('#no').click();
-                    $('#iscertified').val('off');
+                    $('#grossDiv').addClass('v-none')
                 }
 
-                // show/calclulate gross if stockTypes is used gross is shows otherwise hide 
-                if (response.stocktype == 'USED' && $('#isConsultant').val() == "false" ) {
-                    $('#grossDiv').removeClass('v-none');
-                } else {
-                    $('#grossDiv').addClass('v-none');
-                }
-                $('#salesPerson').val(response.sales_consultant);
 
-                $('#financeManager').val(response.finance_manager);
+                $('#sale_id').val(response.sale_id);
+                $('#stockId').val(response.stockno);
+                $('#salesPerson').val(response.salesConsultant);
 
-                $('input[name="dealType"]').prop('checked', false);
-                $('input[name="dealType"]').parent().removeClass('active')
-                if (response.deal_type) {
-                    $('#' + response.deal_type).click();
-                }
+                $('#financeManager').val(response.financeManager);
+                $('#dealType').val(response.deal_type);
 
-                $('#submittedBy').val(response.submittedBy);
+                $('#dealNote').val(response.deal_notes);
+                $('#iscertified').val((response.certified == "on" ? "YES" : "NO"));
+
+
+                $('#vincheck').val(response.vin_check);
+                $('#insurance').val(response.insurance);
+                $('#tradeTitle').val(response.trade_title);
+                $('#registration').val(response.registration);
+                $('#inspection').val(response.inspection);
+                $('#salePStatus').val(response.salesperson_status);
+                $('#paid').val(response.paid);
+
+
+
+                $('.selectpicker').selectpicker('refresh');
+
+
+                chnageStyle({ id: 'vincheck', value: response.vin_check });
+                chnageStyle({ id: 'insurance', value: response.insurance });
+                chnageStyle({ id: 'tradeTitle', value: response.trade_title });
+                chnageStyle({ id: 'registration', value: response.registration });
+                chnageStyle({ id: 'inspection', value: response.inspection });
+                chnageStyle({ id: 'salePStatus', value: response.salesperson_status });
+                chnageStyle({ id: 'paid', value: response.paid });
+
+
                 $('#consultantNote').val(response.consultant_notes);
                 $('#thankyouCard').prop('checked', response.thankyou_cards == 'on' ? true : false);
-                $('#dealNote').val(response.deal_notes);
+
+
                 $('#fname').val(response.fname);
                 $('#mname').val(response.mname);
                 $('#lname').val(response.lname);
@@ -1230,10 +1395,6 @@ function editSale(id = null) {
                 $('#altContact').val(response.altcontact);
                 $('#email').val(response.email);
 
-                $('#cbfname').val(response.cb_fname);
-                $('#cbmname').val(response.cb_mname);
-                $('#cblname').val(response.cb_lname);
-                $('#cbstate').val(response.cb_state);
                 $('#cbAddress1').val(response.cb_address1);
                 $('#cbAddress2').val(response.cb_address2);
                 $('#cbCity').val(response.cb_city);
@@ -1243,83 +1404,27 @@ function editSale(id = null) {
                 $('#cbAltContact').val(response.cb_altcontact);
                 $('#cbEmail').val(response.cb_email);
 
-                $('#profit').val(response.gross);
-
-                // var detailsDiv = `${response.stocktype} ${response.year} ${response.make} ${response.model} \n Vin: ${response.vin} \n Mileage: ${response.mileage} \n Age: ${response.age} \n Lot: ${response.lot} \n Balance: ${response.balance}`;
-                var detailsDiv = `${response.stocktype} ${response.year} ${response.make} ${response.model} \n Vin: ${response.vin} \n Mileage: ${response.mileage} \n Age: ${response.age} \n Lot: ${response.lot} ${($('#isConsultant').val() == "true") ? `` : `\n Balance: ${response.balance} \n ${response.stocktype == "USED" ? `Gross:` + Number(response.gross) : ''}`} `;
-
-                $('#selectedDetails').html(detailsDiv);
-                $('#selectedDetails').addClass('text-center');
-
-
-                $('#college').val(response.college);
-                $('#military').val(response.military);
-                $('#loyalty').val(response.loyalty);
-                $('#conquest').val(response.conquest);
-                $('#misc1').val(response.misc1);
-                $('#misc2').val(response.misc2);
-                $('#leaseLoyalty').val(response.lease_loyalty);
-
-
-                $('#vincheck').val(response.vin_check);
-                $('#insurance').val(response.insurance);
-                $('#tradeTitle').val(response.trade_title);
-                $('#registration').val(response.registration);
-                $('#inspection').val(response.inspection);
-                $('#salePStatus').val(response.salesperson_status);
-                $('#paid').val(response.paid);
-
-
-
-
-
                 setTimeout(() => {
-                    $('.selectpicker').selectpicker('refresh')
                     autosize.update($(".autosize"));
                 }, 500);
 
+                var url = $('#editBtn').attr("href");
+                var domain = url.split('&i=')
 
-                var checkValue = $('#stockId').val();
-                if (!checkValue) {
-                    // if Inventory item was deleted then search from deleted inv data
-                    fetchSelectedInvForSearch(response.stock_id);
-                } else {
-                    // changeRules();
-                }
-
-
-                setTimeout(() => {
-                    chnageStyle({ id: 'vincheck', value: response.vin_check });
-                    chnageStyle({ id: 'insurance', value: response.insurance });
-                    chnageStyle({ id: 'tradeTitle', value: response.trade_title });
-                    chnageStyle({ id: 'registration', value: response.registration });
-                    chnageStyle({ id: 'inspection', value: response.inspection });
-                    chnageStyle({ id: 'salePStatus', value: response.salesperson_status });
-                    chnageStyle({ id: 'paid', value: response.paid });
-                }, 1000);
-
-
+                $('#editBtn').attr("href", domain[0] + '&i=' + response.sale_id);
 
 
             }, // /success
             error: function (err) {
                 console.log(err);
             }
-
-
-
         }); // ajax function
-
 
     } else {
         alert('error!! Refresh the page again');
     }
 
 }
-
-
-
-
 function changeReconcile() {
     if (!$('#reconcileDate').attr('disabled')) {
         $('#reconcileDate').val('')
@@ -1423,12 +1528,12 @@ function loadSaleManager() {
 }
 
 
-function changeStockDetails(ele , fromEdit = false) {
+function changeStockDetails(ele) {
 
     $('#detailsSection').removeClass('d-none');
     let obj = stockArray.find(data => data[0] === ele.value);
 
-    console.log(obj);
+    // console.log(obj);
 
     var retail = obj[12];
     retail = parseFloat(retail.replace(/\$|,/g, ''))
@@ -1439,23 +1544,19 @@ function changeStockDetails(ele , fromEdit = false) {
 
     if (obj[13] == 'on') {
         $("#yes").prop("checked", true);
-        $('#iscertified').val('on');
     } else {
         $("#no").prop("checked", true);
-        $('#iscertified').val('off');
     }
 
 
     $('#selectedStockType').val(obj[14]); // setting up stockType for sales person Todo
 
-    var detailsDiv = `${obj[14]} ${obj[2]} ${obj[3]} ${obj[4]} \n Vin: ${obj[8]} \n Mileage: ${obj[31] == 1 ? obj[9] : ""} \n Age: ${obj[31] == 1 ? obj[10] : ""} \n Lot: ${obj[31] == 1 ? obj[7] : ""}  ${($('#isConsultant').val() == "true") ? `` : `\n Balance: ${obj[31] == 1 ? obj[11] : ""} ${obj[31] == 2 ? "\n  Stock is Deleted" : ""}`}`;
+    var detailsDiv = `${obj[14]} ${obj[2]} ${obj[3]} ${obj[4]} \n Vin: ${obj[8]} \n Mileage: ${obj[31] == 1 ? obj[9] : ""} \n Age: ${obj[31] == 1 ? obj[10] : ""} \n Lot: ${obj[31] == 1 ? obj[7] : ""} \n Balance: ${obj[31] == 1 ? obj[11] : ""} ${obj[31] == 2 ? "\n  Stock is Deleted" : ""} `;
     $('#selectedDetails').html(detailsDiv);
     $('#selectedDetails').addClass('text-center');
 
 
-    if($('#isConsultant').val() == "false"){
-        $('#grossDiv').removeClass('v-none'); // show gross field on both stock type new / used
-    }
+    $('#grossDiv').removeClass('v-none'); // show gross field on both stock type new / used
 
     // for checking this stock is already in sale or not if it is in sale then and status is not cancelled then make it red
     if ((obj[16].length > 0) && obj[16].every(element => element != 'cancelled')) {
@@ -1470,10 +1571,7 @@ function changeStockDetails(ele , fromEdit = false) {
     }
 
     autosize.update($("#selectedDetails"));
-    
-    if(fromEdit == false){
-        changeRules();
-    }
+    changeRules()
 
 }
 
@@ -1513,11 +1611,9 @@ function chnageIncentiveStatus(value, date, element) {
             $('#' + element + '_v').html('$' + value);
         } else {
             $('#' + element).prop("disabled", true);
-            $('#' + element).val("No");
         }
     } else {
         $('#' + element).prop("disabled", true);
-        $('#' + element).val("No");
         $('#' + element + '_v').html('');
     }
 }
@@ -1570,6 +1666,47 @@ function changeSalesPersonTodo() {
         $(".selectpicker").selectpicker("refresh");
 
     }
+
+    // var stockType = $('#selectedStockType').val(); // setting stock type
+    // var state = $('#state').val();
+    // var obj = { id: 'vincheck', value: "" };
+
+
+    // if (stockType != '' && state != null) {
+
+    //     if (state !== "RI") {
+    //         // console.log("Doest need Not RI: ", state);
+    //         $('select[name=vincheck]').val('notNeed');
+    //         $('#vincheck').selectpicker('refresh');
+    //         obj.value = "notNeed";
+    //         chnageStyle(obj);
+    //         $('select[name=inspection]').val('need');
+    //         $('#inspection').selectpicker('refresh');
+    //         $('select[name=inspection]').selectpicker('setStyle', 'btn-outline-danger');
+    //     }
+    //     if ((state === "RI") && stockType === "USED") {
+    //         // console.log("CheckTitle:  ", state, stockType);
+    //         $('select[name=vincheck]').val('checkTitle');
+    //         $('#vincheck').selectpicker('refresh');
+    //         obj.value = "checkTitle";
+    //         chnageStyle(obj);
+    //         $('select[name=inspection]').val('need');
+    //         $('#inspection').selectpicker('refresh');
+    //         $('select[name=inspection]').selectpicker('setStyle', 'btn-outline-danger');
+    //     }
+    //     if ((state === "RI") && stockType === "NEW") {
+    //         // console.log("Doesn't Need:  ", state, stockType);
+    //         $('select[name=vincheck]').val('notNeed');
+    //         obj.value = "notNeed";
+    //         $('#vincheck').selectpicker('refresh');
+    //         chnageStyle(obj);
+    //         $('select[name=inspection]').val('notNeed');
+    //         $('#inspection').selectpicker('refresh');
+    //         $('select[name=inspection]').selectpicker('setStyle', 'btn-outline-success');
+    //     }
+
+
+    // }
 }
 
 function changeSalesPersonTodoStyle(elementID, value) {

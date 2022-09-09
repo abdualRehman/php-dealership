@@ -83,9 +83,9 @@ if ($result->num_rows > 0) {
             ( $row['sale_status'] != 'cancelled' && hasAccess("appointment", "Add") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#addNewSchedule" onclick="addNewSchedule(' . $id . ')" >
                 <i class="far fa-calendar-alt"></i>
             </button>' : "") .
-            (hasAccess("sale", "Edit") !== 'false' ? '<a href="' . $GLOBALS['siteurl'] . '/sales/soldLogs.php?r=edit&i=' . $id . '" class="btn btn-label-primary btn-icon mr-1" >
-                <i class="fa fa-edit"></i>
-            </a>' : "") .
+            // (hasAccess("sale", "Edit") !== 'false' ? '<a href="' . $GLOBALS['siteurl'] . '/sales/soldLogs.php?r=edit&i=' . $id . '" class="btn btn-label-primary btn-icon mr-1" >
+            //     <i class="fa fa-edit"></i>
+            // </a>' : "") .
             (hasAccess("sale", "Remove") !== 'false' ? '<button class="btn btn-label-primary btn-icon" onclick="removeSale(' . $id . ')" >
                 <i class="fa fa-trash"></i>
             </button>' : "")

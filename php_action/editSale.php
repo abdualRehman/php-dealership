@@ -82,6 +82,9 @@ if ($_POST) {
     $cbAltContact = mysqli_real_escape_string($connect, $_POST['cbAltContact']);
     $cbEmail = mysqli_real_escape_string($connect, $_POST['cbEmail']);
 
+    $consultantNote = isset($_POST['consultantNote']) ? mysqli_real_escape_string($connect, $_POST['consultantNote']) : "";
+    $thankyouCard = isset($_POST['thankyouCard']) ? mysqli_real_escape_string($connect, $_POST['thankyouCard']) : '';
+
     // echo $fname . "<br />";
     // echo $mname . '<br />';
     // echo $lname . '<br />';
@@ -114,13 +117,13 @@ if ($_POST) {
     // echo $leaseLoyalty . '<br />';
 
     // sales person Todo
-    $vincheck = (isset($_POST['vincheck'])) ? mysqli_real_escape_string($connect, $_POST['vincheck']): "checkTitle";
-    $insurance = (isset($_POST['insurance'])) ? mysqli_real_escape_string($connect, $_POST['insurance']): "need";
-    $tradeTitle = (isset($_POST['tradeTitle'])) ? mysqli_real_escape_string($connect, $_POST['tradeTitle']): "need";
-    $registration = (isset($_POST['registration'])) ? mysqli_real_escape_string($connect, $_POST['registration']): "pending";
-    $inspection = (isset($_POST['inspection'])) ? mysqli_real_escape_string($connect, $_POST['inspection']): "need";
-    $salePStatus = (isset($_POST['salePStatus'])) ? mysqli_real_escape_string($connect, $_POST['salePStatus']): "dealWritten";
-    $paid = (isset($_POST['paid'])) ? mysqli_real_escape_string($connect, $_POST['paid']): "no";
+    $vincheck = (isset($_POST['vincheck'])) ? mysqli_real_escape_string($connect, $_POST['vincheck']) : "checkTitle";
+    $insurance = (isset($_POST['insurance'])) ? mysqli_real_escape_string($connect, $_POST['insurance']) : "need";
+    $tradeTitle = (isset($_POST['tradeTitle'])) ? mysqli_real_escape_string($connect, $_POST['tradeTitle']) : "need";
+    $registration = (isset($_POST['registration'])) ? mysqli_real_escape_string($connect, $_POST['registration']) : "pending";
+    $inspection = (isset($_POST['inspection'])) ? mysqli_real_escape_string($connect, $_POST['inspection']) : "need";
+    $salePStatus = (isset($_POST['salePStatus'])) ? mysqli_real_escape_string($connect, $_POST['salePStatus']) : "dealWritten";
+    $paid = (isset($_POST['paid'])) ? mysqli_real_escape_string($connect, $_POST['paid']) : "no";
 
     // echo $vincheck . "<br />";
     // echo $insurance . '<br />';
@@ -170,33 +173,47 @@ if ($_POST) {
         `finance_manager`= '$financeManager' , 
         `deal_type` = '$dealType',
         
-        `sale_status`='$status'
+        `sale_status`='$status',
+        `consultant_notes`='$consultantNote',
+        `thankyou_cards`='$thankyouCard'
         WHERE sale_id = '$sale_id' ";
 
 
+        // `cb_fname`=" . (isset($_POST['cbfname']) ? "'$cbfname'" : "`cb_fname`") . ",
+        // `cb_mname`=" . (isset($_POST['cbmname']) ? "'$cbmname'" : "`cb_mname`") . ",
+        // `cb_lname`=" . (isset($_POST['cblname']) ? "'$cblname'" : "`cb_lname`") . ",
+        // `cb_state`=" . (isset($_POST['cbstate']) ? "'$cbstate'" : "`cb_state`") . ",
+        // `cb_address1`=" . (isset($_POST['cbAddress1']) ? "'$cbAddress1'" : "`cb_address1`") . ",
+        // `cb_address2`=" . (isset($_POST['cbAddress2']) ? "'$cbAddress2'" : "`cb_address2`") . ",
+        // `cb_city`=" . (isset($_POST['cbCity']) ? "'$cbCity'" : "`cb_city`") . ",
+        // `cb_country`=" . (isset($_POST['cbCountry']) ? "'$cbCountry'" : "`cb_country`") . ",
+        // `cb_zipcode`=" . (isset($_POST['cbZipCode']) ? "'$cbZipCode'" : "`cb_zipcode`") . ",
+        // `cb_mobile`=" . (isset($_POST['cbMobile']) ? "'$cbMobile'" : "`cb_mobile`") . ",
+        // `cb_altcontact`=" . (isset($_POST['cbAltContact']) ? "'$cbAltContact'" : "`cb_altcontact`") . ",
+        // `cb_email`=" . (isset($_POST['cbEmail']) ? "'$cbEmail'" : "`cb_email`") . ",
 
 
 
 
         $insentiveSql = "UPDATE `sale_incentives` SET 
-        `college`='$college',
-        `military`='$military',
-        `loyalty`='$loyalty',
-        `conquest`='$conquest',
-        `misc1`='$misc1',
-        `misc2`='$misc2',
-        `lease_loyalty`='$leaseLoyalty' 
+        `college`=" . (isset($_POST['college']) ? "'$college'" : "`college`") . ",
+        `military`=" . (isset($_POST['military']) ? "'$military'" : "`military`") . ",
+        `loyalty`=" . (isset($_POST['loyalty']) ? "'$loyalty'" : "`loyalty`") . ",
+        `conquest`=" . (isset($_POST['conquest']) ? "'$conquest'" : "`conquest`") . ",
+        `misc1`=" . (isset($_POST['misc1']) ? "'$misc1'" : "`misc1`") . ",
+        `misc2`=" . (isset($_POST['misc2']) ? "'$misc2'" : "`misc2`") . ",
+        `lease_loyalty`=" . (isset($_POST['leaseLoyalty']) ? "'$leaseLoyalty'" : "`lease_loyalty`") . "
         WHERE sale_id = '$sale_id' ";
 
 
         $saleTodoSql = "UPDATE `sale_todo` SET 
-        `vin_check`='$vincheck',
-        `insurance`='$insurance',
-        `trade_title`='$tradeTitle',
-        `registration`='$registration',
-        `inspection`='$inspection',
-        `salesperson_status`='$salePStatus',
-        `paid`='$paid' 
+        `vin_check`=" . (isset($_POST['vincheck']) ? "'$vincheck'" : "`vin_check`") . ",
+        `insurance`=" . (isset($_POST['insurance']) ? "'$insurance'" : "`insurance`") . ",
+        `trade_title`=" . (isset($_POST['tradeTitle']) ? "'$tradeTitle'" : "`trade_title`") . ",
+        `registration`=" . (isset($_POST['registration']) ? "'$registration'" : "`registration`") . ",
+        `inspection`=" . (isset($_POST['inspection']) ? "'$inspection'" : "`inspection`") . ",
+        `salesperson_status`=" . (isset($_POST['salePStatus']) ? "'$salePStatus'" : "`salesperson_status`") . ",
+        `paid`=" . (isset($_POST['paid']) ? "'$paid'" : "`paid`") . "
         WHERE sale_id = '$sale_id' ";
 
 
