@@ -21,15 +21,17 @@ if ($_POST) {
     $varifiedStatus = (isset($_POST['varifiedStatus'])) ? mysqli_real_escape_string($connect, $_POST['varifiedStatus']) : "";
     $approvedBy = (isset($_POST['approvedBy'])) ? mysqli_real_escape_string($connect, $_POST['approvedBy']) : "";    
 
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
+    
     $sql = "INSERT INTO `bdc_lead`(
         `date`, `ccs`, `lname`, `fname`, 
         `entity`, `vehicle`, `sales_consultant`, `lead_status`, 
-        `lead_type`, `source`, `notes`, `verified`, `verified_by` , `status` ) 
+        `lead_type`, `source`, `notes`, `verified`, `verified_by` , `status` , `location` ) 
     VALUES (
         '$leadDate' , '$submittedBy',  '$lname' , '$fname' , 
         '$entityId' , '$vehicle' , '$salesConsultant' , '$leadStatus',
-        '$leadType' , '$source' , '$leadNotes' , '$varifiedStatus' , '$approvedBy' , 1
+        '$leadType' , '$source' , '$leadNotes' , '$varifiedStatus' , '$approvedBy' , 1 , '$location'
     )";
 
     if ($connect->query($sql) === true) {

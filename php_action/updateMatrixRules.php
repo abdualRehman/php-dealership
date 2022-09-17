@@ -9,8 +9,10 @@ function updateManufacturePriceByRule($model, $year, $modelno)   // unlinked wit
     global $connect;
     global $validate;
 
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+
     $checkSql = "SELECT `id`, `destination`, `hb` , ex_modelno FROM `matrix_rule` WHERE ( model = '$model' OR model = 'All' ) 
-    AND ( year = '$year' OR year = 'All' ) AND ( modelno = '$modelno' OR modelno = 'All' ) AND status = 1 AND
+    AND ( year = '$year' OR year = 'All' ) AND ( modelno = '$modelno' OR modelno = 'All' ) AND status = 1 AND location = '$location' AND
     ex_modelno NOT LIKE '% " . $modelno . " %' ORDER BY FIELD(model, '$model') DESC, FIELD(year, '$year') DESC, FIELD(modelno, '$modelno') DESC LIMIT 1";
 
     // echo $checkSql .'<br />';
@@ -37,7 +39,7 @@ function updateManufacturePriceByRule($model, $year, $modelno)   // unlinked wit
 
 
             $sql = "SELECT id , dlr_inv , msrp FROM `manufature_price` WHERE model = ". $model1 ." AND year = " . $year1 . " 
-            AND model_code = " . $modelno1 . " AND status = 1";
+            AND model_code = " . $modelno1 . " AND status = 1 AND location = '$location'";
             // CV1F1NEW
             // echo $sql . '<br />';
 
@@ -85,7 +87,7 @@ function updateAllMaxtix()
 {
     global $connect;
     global $validate;
-
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
     // if (!is_null($removeId)) {
     //     $checkSql = "SELECT `id`, `model` , `year` , `modelno` , `destination`, `hb` , ex_modelno FROM `matrix_rule` WHERE id = '$removeId'";
@@ -104,10 +106,10 @@ function updateAllMaxtix()
     // }
 
     // First Update all the Matrixes Values as Null or empty
-    $updateSqlF = "UPDATE `manufature_price` SET `net`= '' , `hb`= '' , `invoice`= '' , `m.s.r.p`= '' WHERE status = 1";
+    $updateSqlF = "UPDATE `manufature_price` SET `net`= '' , `hb`= '' , `invoice`= '' , `m.s.r.p`= '' WHERE status = 1 AND location = '$location'";
     $connect->query($updateSqlF);
 
-    $checkSql = "SELECT `id`, `model` , `year` , `modelno` , `destination`, `hb` , ex_modelno FROM `matrix_rule` WHERE status = 1";
+    $checkSql = "SELECT `id`, `model` , `year` , `modelno` , `destination`, `hb` , ex_modelno FROM `matrix_rule` WHERE status = 1 AND location = '$location'";
     $result = $connect->query($checkSql);
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_array()) {
@@ -134,7 +136,7 @@ function updateAllMaxtix()
 
 
             $sql = "SELECT id , dlr_inv , msrp FROM `manufature_price` WHERE model = ". $model1 ." AND year = " . $year1 . " 
-            AND model_code = " . $modelno1 . " AND status = 1";
+            AND model_code = " . $modelno1 . " AND status = 1 AND location = '$location'";
 
             $mnpResult =  $connect->query($sql);
             if ($mnpResult && $mnpResult->num_rows > 0) {
@@ -193,13 +195,14 @@ function updateManufactureBDCByRule($model, $year, $modelno)  // unlinked with c
     global $connect;
     global $validate;
 
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
     // also working
     // $checkSql = "SELECT `id`, `calcfrom`, `calculation` , `num_to_calc` , ex_modelno FROM `bdc_rules` WHERE model = '$model' 
     // AND ( year = '$year' OR year = 'All' ) AND ( modelno = '$modelno' OR modelno = 'All' ) AND status = 1 AND
     // ex_modelno NOT LIKE '% " . $modelno . " %' ORDER BY IF(year = 'All', 1, 0) ASC, IF(modelno = 'All', 1, 0) ASC LIMIT 1";
 
     $checkSql = "SELECT `id`, `calcfrom`, `calculation` , `num_to_calc` , ex_modelno FROM `bdc_rules` WHERE ( model = '$model' OR model = 'All' ) 
-    AND ( year = '$year' OR year = 'All' ) AND ( modelno = '$modelno' OR modelno = 'All' ) AND status = 1 AND
+    AND ( year = '$year' OR year = 'All' ) AND ( modelno = '$modelno' OR modelno = 'All' ) AND status = 1 AND location = '$location' AND
     ex_modelno NOT LIKE '% " . $modelno . " %' ORDER BY FIELD(model, '$model') DESC, FIELD(year, '$year') DESC, FIELD(modelno, '$modelno') DESC LIMIT 1";
 
     // echo $checkSql . '<br />';
@@ -231,7 +234,7 @@ function updateManufactureBDCByRule($model, $year, $modelno)  // unlinked with c
 
 
             $sql = "SELECT id , `" . $calcfrom . "` FROM `manufature_price` WHERE model = " . $model1 . " AND year = " . $year1 . " 
-            AND model_code = " . $modelno1 . " AND status = 1 AND `" . $calcfrom . "` != '' ";
+            AND model_code = " . $modelno1 . " AND status = 1 AND location = '$location' AND `" . $calcfrom . "` != '' ";
 
             // echo $sql ."<br />";
 
@@ -276,6 +279,7 @@ function updateAllBdc()
     global $validate;
 
 
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
     // if (!is_null($removeId)) {
     //     $checkSql = "SELECT `id`, `model` , `year` FROM `bdc_rules` WHERE id = '$removeId'";
     //     $result = $connect->query($checkSql);
@@ -292,10 +296,10 @@ function updateAllBdc()
     // }
 
     // First Update all the models and years, Matrixes Values as Null or empty
-    $updateSqlF = "UPDATE `manufature_price` SET `bdc`= '' WHERE status = 1";
+    $updateSqlF = "UPDATE `manufature_price` SET `bdc`= '' WHERE status = 1 AND location = '$location'";
     $connect->query($updateSqlF);
 
-    $checkSql = "SELECT `id`, `model` , `year` , `modelno` , `ex_modelno` , `calcfrom`, `calculation`, `num_to_calc` FROM `bdc_rules` WHERE status = 1";
+    $checkSql = "SELECT `id`, `model` , `year` , `modelno` , `ex_modelno` , `calcfrom`, `calculation`, `num_to_calc` FROM `bdc_rules` WHERE status = 1 AND location = '$location'";
     $result = $connect->query($checkSql);
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_array()) {
@@ -324,7 +328,7 @@ function updateAllBdc()
 
 
             $sql = "SELECT id , `" . $calcfrom . "` FROM `manufature_price` WHERE model = " . $model1 . " AND year = " . $year1 . " 
-            AND model_code = " . $modelno1 . " AND status = 1 AND `" . $calcfrom . "` != '' ";
+            AND model_code = " . $modelno1 . " AND status = 1 AND location = '$location' AND `" . $calcfrom . "` != '' ";
 
             // echo $sql;
             $mnpResult =  $connect->query($sql);
@@ -369,13 +373,13 @@ function updateALLRates()
 {
     global $connect;
     global $validate;
-
-
+    
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
     // First Update all the rate_rule_id Values as Null or empty
-    $updateSqlF = "UPDATE `manufature_price` SET `rate_rule_id`= '' WHERE status = 1";
+    $updateSqlF = "UPDATE `manufature_price` SET `rate_rule_id`= '' WHERE status = 1 AND location = '$location'";
     $connect->query($updateSqlF);
 
-    $checkSql = "SELECT `id`, `model` , `year` , `modelno` , `ex_modelno` FROM `rate_rule` WHERE status = 1";
+    $checkSql = "SELECT `id`, `model` , `year` , `modelno` , `ex_modelno` FROM `rate_rule` WHERE status = 1 AND location = '$location'";
     $result = $connect->query($checkSql);
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_array()) {
@@ -401,7 +405,7 @@ function updateALLRates()
 
 
             $sql = "SELECT id FROM `manufature_price` WHERE model = " . $model1 . " AND year = " . $year1 . " 
-            AND model_code = " . $modelno1 . " AND status = 1";
+            AND model_code = " . $modelno1 . " AND status = 1 AND location = '$location'";
 
             // echo $sql;
             $mnpResult =  $connect->query($sql);
@@ -433,12 +437,12 @@ function updateAllLeaseRules()
     global $connect;
     global $validate;
 
-
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
     // First Update all the lease_rule_id Values as Null or empty
-    $updateSqlF = "UPDATE `manufature_price` SET `lease_rule_id`= '' WHERE status = 1";
+    $updateSqlF = "UPDATE `manufature_price` SET `lease_rule_id`= '' WHERE status = 1 AND location = '$location'";
     $connect->query($updateSqlF);
 
-    $checkSql = "SELECT `id`, `model` , `year` , `modelno` , `ex_modelno` FROM `lease_rule` WHERE status = 1";
+    $checkSql = "SELECT `id`, `model` , `year` , `modelno` , `ex_modelno` FROM `lease_rule` WHERE status = 1 AND location = '$location'";
     $result = $connect->query($checkSql);
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_array()) {
@@ -464,7 +468,7 @@ function updateAllLeaseRules()
 
 
             $sql = "SELECT id FROM `manufature_price` WHERE model = " . $model1 . " AND year = " . $year1 . " 
-            AND model_code = " . $modelno1 . " AND status = 1";
+            AND model_code = " . $modelno1 . " AND status = 1 AND location = '$location'";
 
             // echo $sql;
             $mnpResult =  $connect->query($sql);
@@ -497,12 +501,12 @@ function updateAllCashInventives()
 {
     global $connect;
     global $validate;
-
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
     // First Update all the models and years, Matrixes Values as Null or empty
-    $updateSqlF = "UPDATE `manufature_price` SET `cash_incentive_rule_id`= '' WHERE status = 1";
+    $updateSqlF = "UPDATE `manufature_price` SET `cash_incentive_rule_id`= '' WHERE status = 1 AND location = '$location'";
     $connect->query($updateSqlF);
 
-    $checkSql = "SELECT `id`, `model` , `year` , `modelno` , `ex_modelno` FROM `cash_incentive_rules` WHERE status = 1";
+    $checkSql = "SELECT `id`, `model` , `year` , `modelno` , `ex_modelno` FROM `cash_incentive_rules` WHERE status = 1 AND location = '$location'";
     $result = $connect->query($checkSql);
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_array()) {
@@ -527,7 +531,7 @@ function updateAllCashInventives()
 
 
             $sql = "SELECT id  FROM `manufature_price` WHERE model = " . $model1 . " AND year = " . $year1 . " 
-            AND model_code = " . $modelno1 . " AND status = 1 ";
+            AND model_code = " . $modelno1 . " AND status = 1 AND location = '$location'";
 
             // echo $sql;
             $mnpResult =  $connect->query($sql);

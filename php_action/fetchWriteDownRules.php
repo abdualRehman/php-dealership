@@ -2,7 +2,9 @@
 
 require_once 'db/core.php';
 
-$sql = "SELECT `id`, `age_from`, `age_to`, `pencent_balance`, `balance_from`, `balance_to`, `max_writedown` FROM `writedown_rules` WHERE status = 1";
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+
+$sql = "SELECT `id`, `age_from`, `age_to`, `pencent_balance`, `balance_from`, `balance_to`, `max_writedown` FROM `writedown_rules` WHERE status = 1 AND location = '$location'";
 $result = $connect->query($sql);
 
 $output = array('data' => array());

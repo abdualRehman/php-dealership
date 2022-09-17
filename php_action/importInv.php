@@ -154,15 +154,15 @@ if ($_POST) {
                         !empty($stockType) || !empty($certified) || !empty($wholesale)
                     ) {
 
-
+                        $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
                         // $checkSql = "SELECT id, stockno FROM inventory WHERE stockno LIKE ('$stockno'_%')";
-                        $checkSql = "SELECT * FROM `inventory` WHERE `stockno` = '$stockno'";
+                        $checkSql = "SELECT * FROM `inventory` WHERE `stockno` = '$stockno' AND location = '$location'";
                         $result = $connect->query($checkSql);
                         if ($result->num_rows > 0) {
                             // update Inv data if this stock number already exist with deleted id with sale 
                             $updatekSql = "UPDATE `inventory` SET `year`='$year', `make`='$make',
                                 `model`='$model',`modelno`='$modelno',`color`='$color',`lot`='$lot',`vin`='$vin',`mileage`='$mileage',`age`='$age',
-                                `balance`='$balance',`retail`='$retail',`certified`='$certified',`stocktype`='$stockType',`wholesale`='$wholesale' , `status`=1 WHERE stockno = '$stockno'";
+                                `balance`='$balance',`retail`='$retail',`certified`='$certified',`stocktype`='$stockType',`wholesale`='$wholesale' , `status`=1 WHERE stockno = '$stockno' AND location = '$location'";
 
                             if ($connect->query($updatekSql) === true) {
                                 $valid['success'] = true;
@@ -174,7 +174,7 @@ if ($_POST) {
                         } else {
 
 
-                            $sql = "INSERT INTO `inventory`(`stockno`, `year`, `make`, `model`, `modelno`, `color`, `lot`, `vin`, `mileage`, `age`, `balance`, `retail`, `certified`, `stocktype`, `wholesale`,  `status`) 
+                            $sql = "INSERT INTO `inventory`(`stockno`, `year`, `make`, `model`, `modelno`, `color`, `lot`, `vin`, `mileage`, `age`, `balance`, `retail`, `certified`, `stocktype`, `wholesale`,  `status` , `location`) 
                             VALUES (
                                 '$stockno',
                                 '$year',
@@ -191,7 +191,8 @@ if ($_POST) {
                                 '$certified',
                                 '$stockType',
                                 '$wholesale',
-                                1 )";
+                                1 ,
+                                '$location' )";
 
                             if ($connect->query($sql) === true) {
                                 $valid['success'] = true;

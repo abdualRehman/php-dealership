@@ -24,6 +24,8 @@ $(function () {
         sliders: null
     })
 
+    var ccsID = Number(localStorage.getItem('ccsID'));
+    
     manageUserTable = $("#datatable-1").DataTable({
         responsive: !0,
         "pageLength": 25,
@@ -88,7 +90,7 @@ $(function () {
                 valueNotEquals: "0"
             },
             color: {
-                required: () => $('#editrole').val() == 72 ? true : false,
+                required: () => $('#editrole').val() == ccsID ? true : false,
             },
             monEnd: {
                 required: () => $('#monStart').val() ? true : false,
@@ -260,13 +262,14 @@ function editUser(userId = null) {
 
                 $('#editusername').val(response.username);
                 $('#editemail').val(response.email);
-                $('#editrole').val(response.role);
                 $('#location').val(response.location);
                 $('#extention').val(response.extention);
                 $('#mobile').val(response.mobile);
                 $('#color').val(response.color);
                 $('#color').wheelColorPicker('color', '#' + response.color);
-
+                
+                $('#editrole').val(response.role);
+                $('.selectpicker').selectpicker('refresh');
 
 
                 $('#monStart').val(response.mon_start);
@@ -292,7 +295,6 @@ function editUser(userId = null) {
                 $("#userId").remove();
                 $(".editUser-result").after('<input type="hidden" name="userId" id="userId" value="' + userId + '" />');
 
-
             }, // /success
             error: function (err) {
                 console.log(err);
@@ -301,6 +303,30 @@ function editUser(userId = null) {
 
     } else {
         alert('error!! Refresh the page again');
+    }
+}
+
+function fetchUserRolesByLocation() {
+    let location = $('#location').val();
+    if (location != 0) {
+        $.ajax({
+            url: '../php_action/fetchUserRolesByLocation.php',
+            type: 'post',
+            data: { location: location },
+            dataType: 'json',
+            success: function (response) {
+                let list = response.data;
+                let _html = document.getElementById('roleList');
+                _html.innerHTML = '';
+                list.forEach(obj => {
+                    _html.innerHTML += `<option value="${obj[0]}">${obj[1]}</option>`;
+                });
+                $('.selectpicker').selectpicker('refresh');
+            }, // /success
+            error: function (err) {
+                console.log(err);
+            }
+        }); // ajax function
     }
 }
 

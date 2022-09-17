@@ -408,6 +408,18 @@
                                     </div>
                                 <?php
                                 }
+                                if ($_SESSION['userRole'] === 'Admin') {
+
+
+                                ?>
+                                    <div class="menu-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/userLocations.php" class="menu-item-link">
+                                            <i class="menu-item-bullet"></i>
+                                            <span class="menu-item-text">Locations</span>
+                                        </a>
+                                    </div>
+                                <?php
+                                }
                                 ?>
 
                             </div>
@@ -853,7 +865,7 @@
                                                     </div>
                                                     <div class="rich-list-content">
                                                         <h4 class="rich-list-title">Website Name</h4>
-                                                        <span class="rich-list-subtitle text-overflow-ellipsis">https://github.com/abdualRehman?tab=repositories https://github.com/abdualRehman?tab=repositories https://github.com/abdualRehman?tab=repositories</span>
+                                                        <span class="rich-list-subtitle text-overflow-ellipsis">https://github.com/abdualRehman?tab=repositories</span>
                                                     </div>
                                                     <div class="rich-list-append"><i class="caret mx-2"></i></div>
                                                 </div>

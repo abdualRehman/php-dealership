@@ -50,6 +50,7 @@ if ($_POST) {
     $scheduleEnd = strtotime((string)$scheduleStart . ':00 +59 minute');
     $scheduleEnd =  date('Y-m-d H:i:s', $scheduleEnd);
 
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
 
     $already_appointed = false;
@@ -59,7 +60,7 @@ if ($_POST) {
             ($confirmed == 'ok') && ($_SESSION['userRole'] == $deliveryCoordinatorID || $_SESSION['userRole'] == 'Admin' || $_SESSION['userRole'] == $generalManagerID || $_SESSION['userRole'] == $salesManagerID)
         ) {
 
-            $checkSql = "SELECT * FROM `appointments` WHERE coordinator = '$coordinator' AND id != '$scheduleId' AND status = 1 AND confirmed = 'ok' AND cast(schedule_start as datetime )<= '$scheduleStart' and cast(schedule_end as datetime) >= '$scheduleStart'";
+            $checkSql = "SELECT * FROM `appointments` WHERE coordinator = '$coordinator' AND id != '$scheduleId' AND status = 1 AND location = '$location' AND confirmed = 'ok' AND cast(schedule_start as datetime )<= '$scheduleStart' and cast(schedule_end as datetime) >= '$scheduleStart'";
             $result2 = $connect->query($checkSql);
             if ($result2->num_rows > 0) {
                 $already_appointed = true;
@@ -90,11 +91,11 @@ if ($_POST) {
             $insentiveSql = "INSERT INTO `appointments` ( 
                 `sale_id`, `stock_id`, `appointment_date`, `appointment_time`, 
                 `coordinator`, `delivery`, `additional_services`, `notes`, `submitted_by`, `manager_override`, 
-                `confirmed`, `complete`, `schedule_start`, `schedule_end`, `calender_id`, `status`
+                `confirmed`, `complete`, `schedule_start`, `schedule_end`, `calender_id`, `status` , `location`
                 ) VALUES (
                     '$sale_id' , '$stockno' , '$scheduleDate' , '$scheduleTime',
                     '$coordinator' , '$delivery' , '$additionalServices' , '$scheduleNotes' , '$submittedBy' , '$overrideBy',
-                    '$confirmed' , '$complete' , '$scheduleStart' , '$scheduleEnd' , '$calenderId' , 1
+                    '$confirmed' , '$complete' , '$scheduleStart' , '$scheduleEnd' , '$calenderId' , 1 , '$location'
                 )";
             if ($connect->query($insentiveSql) === true) {
                 $valid['success'] = true;

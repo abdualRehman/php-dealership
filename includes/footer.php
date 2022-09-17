@@ -31,7 +31,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>Availibility</th>
+                        <th>Availability</th>
                         <th>Sales Consultant</th>
                         <th>OFF BDC Notes</th>
                         <th>Manager</th>

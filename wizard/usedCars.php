@@ -11,9 +11,9 @@ if (hasAccess("usedCars", "Edit") === 'false') {
 } else {
     echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
 }
-if ($_SESSION['userRole'] == $onlineManagerID) {
+if ($_SESSION['userRole'] == $onlineManagerID || hasAccess("usedCars", "Edit") === 'false') {
     echo '<input type="hidden" name="isRoleAllowed" id="isRoleAllowed" value="false" />';
-} else {
+} else if ($_SESSION['userRole'] != $onlineManagerID && hasAccess("usedCars", "Edit") !== 'false') {
     echo '<input type="hidden" name="isRoleAllowed" id="isRoleAllowed" value="true" />';
 }
 
@@ -281,6 +281,7 @@ if ($_SESSION['userRole'] == $officeID) {
                                         <th>Purchase From</th>
                                         <th>Date Sold</th>
                                         <th>Action</th>
+                                        <th>UCI RO</th>
 
                                     </tr>
                                 </thead>
@@ -301,6 +302,7 @@ if ($_SESSION['userRole'] == $officeID) {
                                         <th>Inventory Date</th>
                                         <th>AGE</th>
                                         <th>CDK AGE</th>
+                                        <th>Action</th>
                                         <th>Stock no || Vin</th>
                                         <th>Year</th>
                                         <th>Make</th>
@@ -564,18 +566,6 @@ if ($_SESSION['userRole'] != $onlineManagerID && $_SESSION['userRole'] != $offic
                                                 </div>
                                             </div>
                                             <div class="col-md-2 p-2">
-                                                <label for="uciApproved" class="col-form-label">UCI Approved</label>
-                                                <div class="form-group">
-                                                    <div class="form-group input-group">
-                                                        <div class="input-group-append">
-                                                            <span class="input-group-text"><i class="fa fa-dollar-sign"></i>
-                                                            </span>
-                                                        </div>
-                                                        <input type="text" class="form-control" name="uciApproved" id="uciApproved">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2 p-2">
                                                 <label for="uciClosed" class="col-form-label">UCI Closed</label>
                                                 <div class="form-group">
                                                     <div class="form-group input-group">
@@ -584,6 +574,18 @@ if ($_SESSION['userRole'] != $onlineManagerID && $_SESSION['userRole'] != $offic
                                                             </span>
                                                         </div>
                                                         <input type="text" class="form-control" name="uciClosed" id="uciClosed">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 p-2">
+                                                <label for="uciApproved" class="col-form-label">UCI Approved</label>
+                                                <div class="form-group">
+                                                    <div class="form-group input-group">
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text"><i class="fa fa-dollar-sign"></i>
+                                                            </span>
+                                                        </div>
+                                                        <input type="text" class="form-control" name="uciApproved" id="uciApproved">
                                                     </div>
                                                 </div>
                                             </div>

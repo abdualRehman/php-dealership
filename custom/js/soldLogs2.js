@@ -55,6 +55,7 @@ $(function () {
 
         $('.nav-link').removeClass('active');
         $('#soldLogsPage').addClass('active');
+        var deliveryCoordinatorID = Number(localStorage.getItem('deliveryCoordinatorID'));
 
         $('input[name="datefilter"]').daterangepicker({
             autoUpdateInput: false,
@@ -504,24 +505,24 @@ $(function () {
             ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
             rules: {
                 ecustomerName: {
-                    required: $('#loggedInUserRole').val() == 62 ? false : true,
+                    required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
                 },
                 escheduleTime: {
-                    required: $('#loggedInUserRole').val() == 62 ? false : true,
+                    required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
                 },
                 escheduleDate: {
-                    required: $('#loggedInUserRole').val() == 62 ? false : true,
+                    required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
                 },
                 esale_id: {
-                    required: $('#loggedInUserRole').val() == 62 ? false : true,
+                    required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
                 },
                 ecoordinator: {
-                    required: $('#loggedInUserRole').val() == 62 ? false : true,
+                    required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
                 },
                 eoverrideBy: {
                     required: function (params) {
                         var has_appointment = $('#ehas_appointment').val();
-                        if (has_appointment && $('#loggedInUserRole').val() != 62) {
+                        if (has_appointment && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                             return true;
                         } else {
                             $(params).removeClass('is-invalid');
@@ -532,7 +533,7 @@ $(function () {
                 'edelivery': {
                     required: function (params) {
                         var opt = $('input:radio[name="eadditionalServices"]:checked').val();
-                        if (!opt && $('#loggedInUserRole').val() != 62) {
+                        if (!opt && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                             return true;
                         } else {
                             return false;
@@ -542,7 +543,7 @@ $(function () {
                 'eadditionalServices': {
                     required: function (params) {
                         var opt = $('input:radio[name="edelivery"]:checked').val();
-                        if (!opt && $('#loggedInUserRole').val() != 62) {
+                        if (!opt && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                             return true;
                         } else {
                             return false;
@@ -552,7 +553,7 @@ $(function () {
                 'escheduleNotes': {
                     required: function (params) {
                         var opt = $('input:radio[name="eadditionalServices"]:checked').val();
-                        if (opt == 'other' && $('#loggedInUserRole').val() != 62) {
+                        if (opt == 'other' && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                             return true;
                         } else {
                             return false;
@@ -957,9 +958,9 @@ $('#eoverrideBy').change(function () {
 })
 function disabledManagerDiv() {
     let currentUser = $('#loggedInUserRole').val();
-    var delivery_coordinator_id = 62;
-    var sales_manager_id = 67;
-    var general_manager_id = 69;
+    var delivery_coordinator_id = Number(localStorage.getItem('deliveryCoordinatorID'));
+    var sales_manager_id = Number(localStorage.getItem('salesManagerID'));
+    var general_manager_id = Number(localStorage.getItem('generalManagerID'));
     if (currentUser != delivery_coordinator_id && currentUser != 'Admin') {
         $('.delivery_coordinator').addClass('disabled-div');
         $(".delivery_coordinator").find("*").prop("readonly", true);
@@ -985,7 +986,7 @@ function disabledManagerDiv() {
 }
 
 function loadDeliveryCoordinator() {
-    var id = 62;
+    var id = Number(localStorage.getItem('deliveryCoordinatorID'));
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",
@@ -1485,8 +1486,7 @@ function loadStock() {
 }
 
 function loadSaleConsultant() {
-    // var sales_consultant_id = 38;
-    var sales_consultant_id = 66;
+    var sales_consultant_id = Number(localStorage.getItem('salesConsultantID'));
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",
@@ -1505,8 +1505,7 @@ function loadSaleConsultant() {
 }
 
 function loadSaleManager() {
-    // var sales_manager_id = 1;
-    var sales_manager_id = 67;
+    var sales_manager_id = Number(localStorage.getItem('salesManagerID'));
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",
@@ -1800,7 +1799,7 @@ function chnageStyle(field) {
 }
 
 function loadFinanceManager() {
-    var finance_manager_id = 64; //finance manager role id in database
+    var finance_manager_id = Number(localStorage.getItem('financeManagerID'));
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",

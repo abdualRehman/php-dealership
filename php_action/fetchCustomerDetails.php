@@ -3,7 +3,9 @@
 require_once 'db/core.php';
 
 // $sql = "SELECT fname , lname FROM `sales` WHERE status = 1";
-$sql = "SELECT fname , lname FROM `sales` WHERE status = 1 GROUP BY fname, lname";
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+
+$sql = "SELECT fname , lname FROM `sales` WHERE status = 1 AND location = '$location' GROUP BY fname, lname";
 $result = $connect->query($sql);
 $output = array('data' => array());
 

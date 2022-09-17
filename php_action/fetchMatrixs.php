@@ -2,7 +2,8 @@
 
 require_once 'db/core.php';
 
-$sql = "SELECT `id`, `year`, `model`, `model_code`, `msrp`, `dlr_inv`, `model_des`, `trim`, `net`, `hb`, `invoice`, `bdc`, `m.s.r.p` ,  `status` FROM `manufature_price` WHERE status = 1";
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+$sql = "SELECT `id`, `year`, `model`, `model_code`, `msrp`, `dlr_inv`, `model_des`, `trim`, `net`, `hb`, `invoice`, `bdc`, `m.s.r.p` ,  `status` FROM `manufature_price` WHERE status = 1 AND location='$location'";
 $result = $connect->query($sql);
 
 $output = array('data' => array());
@@ -22,7 +23,7 @@ if ($result->num_rows > 0) {
         // WHERE ( model = '$model' OR model = 'All' ) AND ( year = '$year' OR year = 'All' ) AND ( modelno = '$model_code' OR modelno = 'All' ) AND ex_modelno != '$model_code' AND status = 1 LIMIT 1";
 
         $matrixRuleSql = "SELECT `model`, `year`, `modelno`, `ex_modelno`, `destination`, `hb`, `status` FROM `matrix_rule` 
-        WHERE ( model = '$model' OR model = 'All' ) AND ( year = '$year' OR year = 'All' ) AND ( modelno = '$model_code' OR modelno = 'All' ) AND ex_modelno != '$model_code' AND status = 1
+        WHERE ( model = '$model' OR model = 'All' ) AND ( year = '$year' OR year = 'All' ) AND ( modelno = '$model_code' OR modelno = 'All' ) AND ex_modelno != '$model_code' AND status = 1 AND location = '$location'
             ORDER BY FIELD(model, '$model') DESC, FIELD(year, '$year') DESC, FIELD(modelno, '$model_code') DESC LIMIT 1";
         $rsult = $connect->query($matrixRuleSql);
         if (($rsult) && $rsult->num_rows > 0) {
@@ -44,11 +45,11 @@ if ($result->num_rows > 0) {
                 // $bdc =  "$" . ($row[11]) ? number_format($row[11], 0, '.', ',') : "";
                 // $msrp = "$" . ($row[12]) ? number_format($row[12], 0, '.', ',') : "";
 
-                $net =  ($row[8]) ? "$". number_format($row[8], 2, '.', ',') : "";
-                $hb =  ($row[9]) ? "$".number_format($row[9], 2, '.', ',') : "";
-                $invoice = ($row[10]) ? "$".number_format($row[10], 2, '.', ',') : "";
-                $bdc =   ($row[11]) ? "$".number_format($row[11], 0, '.', ',') : "";
-                $msrp = ($row[12]) ? "$".number_format($row[12], 0, '.', ',') : "";
+                $net =  ($row[8]) ? "$" . number_format($row[8], 2, '.', ',') : "";
+                $hb =  ($row[9]) ? "$" . number_format($row[9], 2, '.', ',') : "";
+                $invoice = ($row[10]) ? "$" . number_format($row[10], 2, '.', ',') : "";
+                $bdc =   ($row[11]) ? "$" . number_format($row[11], 0, '.', ',') : "";
+                $msrp = ($row[12]) ? "$" . number_format($row[12], 0, '.', ',') : "";
                 // calculation 
 
 

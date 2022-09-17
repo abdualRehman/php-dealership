@@ -45,6 +45,7 @@ if ($_POST) {
     $scheduleEnd = strtotime((string)$scheduleStart . ':00 +59 minute');
     $scheduleEnd =  date('Y-m-d H:i:s', $scheduleEnd);
 
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
     // $already_appointed = false;
     // // check if coordinator has any confirm appointment in time range
@@ -62,11 +63,11 @@ if ($_POST) {
         $insentiveSql = "INSERT INTO `appointments` ( 
             `sale_id`, `stock_id`, `appointment_date`, `appointment_time`, 
             `coordinator`, `delivery`, `additional_services`, `notes`, `submitted_by`, `manager_override`, 
-            `confirmed`, `complete`, `schedule_start`, `schedule_end`, `calender_id`, `status`
+            `confirmed`, `complete`, `schedule_start`, `schedule_end`, `calender_id`, `status` , `location`
             ) VALUES (
                 '$sale_id' , '$stockno' , '$scheduleDate' , '$scheduleTime',
                 '$coordinator' , '$delivery' , '$additionalServices' , '$scheduleNotes' , '$submittedBy' , '$overrideBy',
-                '$confirmed' , '$complete' , '$scheduleStart' , '$scheduleEnd' , '$calenderId' , 1
+                '$confirmed' , '$complete' , '$scheduleStart' , '$scheduleEnd' , '$calenderId' , 1 , '$location'
             )";
 
         if ($connect->query($insentiveSql) === true) {

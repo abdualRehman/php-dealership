@@ -83,17 +83,18 @@ if ($_POST) {
 
         $exModelno = (isset($_POST['exModelno' . $i])) ? implode("_", $_POST['exModelno' . $i]) : "";
         $exModelno = ($exModelno ===  "") ? "" :   "_" . $exModelno . "_";
+        $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
         // echo $exModelno ."<br />";
 
-        $checkSql = "SELECT * FROM `incentive_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND type='$modelType' AND status = 1";
+        $checkSql = "SELECT * FROM `incentive_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND type='$modelType' AND status = 1 AND location = '$location'";
         $result = $connect->query($checkSql);
         if ($result->num_rows > 0) {
 
             $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . ' - ' . $modelType  . ", Already Exist";
         } else {
 
-            $sql = "INSERT INTO `incentive_rules`( `model`, `year`, `modelno`, `ex_modelno`, `type`, `college`, `college_e`, `military`, `military_e`, `loyalty`, `loyalty_e`, `conquest`, `conquest_e`, `misc1`, `misc1_e`, `misc2`, `misc2_e`, `lease_loyalty`, `lease_loyalty_e`, `status`) 
+            $sql = "INSERT INTO `incentive_rules`( `model`, `year`, `modelno`, `ex_modelno`, `type`, `college`, `college_e`, `military`, `military_e`, `loyalty`, `loyalty_e`, `conquest`, `conquest_e`, `misc1`, `misc1_e`, `misc2`, `misc2_e`, `lease_loyalty`, `lease_loyalty_e`, `status` , `location`) 
             VALUES (
                 '$model',
                 '$year',
@@ -113,7 +114,7 @@ if ($_POST) {
                 '$misc2',
                 '$misc2E',
                 '$leaseLoyalty',
-                '$leaseLoyaltyE' , 1 )";
+                '$leaseLoyaltyE' , 1  , '$location' )";
 
             if ($connect->query($sql) === true) {
                 $valid['success'] = true;

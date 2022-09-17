@@ -2,7 +2,8 @@
 
 require_once 'db/core.php';
 
-$sql = "SELECT `id`, `business_name`, `shop`, `address`, `city`, `state`, `zip`, `contact_person`, `contact_number`, `status` FROM `bodyshops` WHERE `status` = 1 ORDER BY `id` DESC";
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+$sql = "SELECT `id`, `business_name`, `shop`, `address`, `city`, `state`, `zip`, `contact_person`, `contact_number`, `status` FROM `bodyshops` WHERE `status` = 1 AND `location` = '$location' ORDER BY `id` DESC";
 
 
 $result = $connect->query($sql);

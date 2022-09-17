@@ -129,6 +129,7 @@ if ($_POST) {
     // echo $salePStatus . '<br />';
     // echo $paid . '<br />';
 
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
 
 
@@ -153,7 +154,7 @@ if ($_POST) {
         `email`,
         `cb_fname`, `cb_mname`, `cb_lname`, `cb_state`, `cb_address1`, `cb_address2`, `cb_city`, `cb_country`, `cb_zipcode`, `cb_mobile`, `cb_altcontact`, `cb_email` , `reconcileDate`, `finance_manager` , `deal_type`, `submitted_by`,
         `sale_status`, 
-        `status`) VALUES (
+        `status` , `location`) VALUES (
             '$saleDate',
             '$stockId',
             '$salesConsultant',
@@ -173,7 +174,7 @@ if ($_POST) {
             '$altContact',
             '$email',
             '$cbfname', '$cbmname' , '$cblname' , '$cbstate' , '$cbAddress1' , '$cbAddress2' , '$cbCity' , '$cbCountry' , '$cbZipCode' , '$cbMobile' , '$cbAltContact' , '$cbEmail' , '$reconcileDate', '$financeManager' , '$dealType' , '$userId' , 
-            '$status', 1 )";
+            '$status', 1 , '$location' )";
 
     $sale_id = "";
     if ($connect->query($sql) === true) {

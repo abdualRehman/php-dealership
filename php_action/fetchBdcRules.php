@@ -1,8 +1,8 @@
 <?php
 
 require_once 'db/core.php';
-
-$sql = "SELECT `id`, `model`, `year`, `modelno`, `ex_modelno`, `calcfrom`, `calculation`, `num_to_calc` FROM `bdc_rules` WHERE status = 1";
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+$sql = "SELECT `id`, `model`, `year`, `modelno`, `ex_modelno`, `calcfrom`, `calculation`, `num_to_calc` FROM `bdc_rules` WHERE status = 1 AND location = '$location'";
 $result = $connect->query($sql);
 
 $output = array('data' => array());

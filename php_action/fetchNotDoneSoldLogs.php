@@ -7,18 +7,21 @@ if ($_SESSION['userRole']) {
     $userRole = $_SESSION['userRole'];
 }
 
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+
+
 /* sales consultant id */
 if ($userRole != $salesConsultantID) {
     $sql = "SELECT sales.date ,  inventory.stockno , sales.fname , sales.lname , users.username, sales.sale_status , sales.deal_notes , 
     inventory.year, inventory.make , inventory.model , sales.gross , sales.sale_id , inventory.lot , sales.certified, inventory.balance , 
     inventory.status , inventory.age , inventory.stocktype , sales.stock_id , sales.consultant_notes , sales.reconcileDate
-    FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant WHERE sales.status = 1  AND sales.sale_status = 'delivered' AND sales.thankyou_cards != 'on'";
+    FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant WHERE sales.status = 1 AND sales.location = '$location' AND sales.sale_status = 'delivered' AND sales.thankyou_cards != 'on'";
 } else {
     $uid = $_SESSION['userId'];
     $sql = "SELECT sales.date ,  inventory.stockno , sales.fname , sales.lname , users.username, sales.sale_status , sales.deal_notes , 
     inventory.year, inventory.make , inventory.model , sales.gross , sales.sale_id , inventory.lot , sales.certified, inventory.balance , 
     inventory.status , inventory.age , inventory.stocktype , sales.stock_id , sales.consultant_notes , sales.reconcileDate
-    FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant WHERE sales.status = 1  AND sales.sale_status = 'delivered' AND sales.thankyou_cards != 'on' AND sales.sales_consultant = '$uid'";
+    FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant WHERE sales.status = 1 AND sales.location = '$location' AND sales.sale_status = 'delivered' AND sales.thankyou_cards != 'on' AND sales.sales_consultant = '$uid'";
 }
 
 $result = $connect->query($sql);

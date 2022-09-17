@@ -284,7 +284,7 @@ if ($_GET['r'] == 'man') {
     </div>
 
 
-    <div class="modal fade" id="addNewSchedule">
+    <div class="modal fade" id="editScheduleModel">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header modal-header-bordered">
@@ -648,6 +648,10 @@ if ($_GET['r'] == 'man') {
                                                 <div class="custom-control custom-control-lg custom-radio">
                                                     <input type="radio" id="yes" value="on" name="iscertified" class="custom-control-input">
                                                     <label class="custom-control-label" for="yes">Yes</label>
+                                                </div>
+                                                <div class="custom-control custom-control-lg custom-radio">
+                                                    <input type="radio" id="yesOther" value="yesOther" name="iscertified" class="custom-control-input">
+                                                    <label class="custom-control-label" for="yesOther">Yes/Other</label>
                                                 </div>
                                                 <div class="custom-control custom-control-lg custom-radio">
                                                     <input type="radio" id="no" value="off" name="iscertified" class="custom-control-input">

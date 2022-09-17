@@ -247,43 +247,43 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                         <!-- 5 -->
                                         <th>Days Out</th>
                                         <!-- 6 -->
-                                        <th>Age</th>
-                                        <!-- 7 -->
-                                        <th>Stock no || Vin</th>
-                                        <!-- 8 -->
-                                        <th>Stock no</th>
-                                        <!-- 9 -->
-                                        <th>Year</th>
-                                        <!-- 10 -->
-                                        <th>Make</th>
-                                        <!-- 11 -->
-                                        <th>Model</th>
-                                        <!-- 12 -->
-                                        <th>Color</th>
-                                        <!-- 13 -->
-                                        <th>Mileage</th>
-                                        <!-- 14 -->
-                                        <th>Lot</th>
-                                        <!-- 15 -->
-                                        <th>Balance</th>
-                                        <!-- 16 -->
-                                        <th>Retail</th>
-                                        <!-- 17 -->
-                                        <th>Certified</th>
-                                        <!-- 18 -->
-                                        <th>Stock Type</th>
-                                        <!-- 19 -->
-                                        <th>Wholesale</th>
-                                        <!-- 20 -->
-                                        <th>ID</th>
-                                        <!-- 21 -->
-                                        <th>Repairs</th>
-                                        <!-- 22 -->
-                                        <th>Notes</th>
-                                        <!-- 23 -->
                                         <th>Windshield</th>
-                                        <!-- 24 -->
+                                        <!-- 7 -->
                                         <th>wheels</th>
+                                        <!-- 8 -->
+                                        <th>Age</th>
+                                        <!-- 9 -->
+                                        <th>Stock no || Vin</th>
+                                        <!-- 10 -->
+                                        <th>Stock no</th>
+                                        <!-- 11 -->
+                                        <th>Year</th>
+                                        <!-- 12 -->
+                                        <th>Make</th>
+                                        <!-- 13 -->
+                                        <th>Model</th>
+                                        <!-- 14 -->
+                                        <th>Color</th>
+                                        <!-- 15 -->
+                                        <th>Mileage</th>
+                                        <!-- 16 -->
+                                        <th>Lot</th>
+                                        <!-- 17 -->
+                                        <th>Balance</th>
+                                        <!-- 18 -->
+                                        <th>Retail</th>
+                                        <!-- 19 -->
+                                        <th>Certified</th>
+                                        <!-- 20 -->
+                                        <th>Stock Type</th>
+                                        <!-- 21 -->
+                                        <th>Wholesale</th>
+                                        <!-- 22 -->
+                                        <th>ID</th>
+                                        <!-- 23 -->
+                                        <th>Repairs</th>
+                                        <!-- 24 -->
+                                        <th>Notes</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -362,7 +362,6 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                                 Sent
                                             </label>
                                         </div>
-                                        <span class="badge-text-primary pl-2 clear-selection" id="clear-selection">Clear Selection</span>
                                     </div>
                                     <label for="repais" class="col-sm-3 offset-sm-1 col-form-label">Repairs</label>
                                     <div class="form-group col-sm-8">
@@ -422,7 +421,7 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                     <label for="bodyshop" class="col-sm-3 offset-sm-1 col-form-label">Bodyshop</label>
                                     <div class="form-group col-sm-8">
                                         <!-- <input type="text" class="form-control" name="bodyshop" id="bodyshop" placeholder="Bodyshop" autocomplete="off" autofill="off" /> -->
-                                        <select class="selectpicker repairAndBodyshop" name="bodyshop" id="bodyshop" data-live-search="true" data-size="4" required>
+                                        <select class="selectpicker repairAndBodyshop" name="bodyshop" id="bodyshop" data-live-search="true" required>
                                         </select>
                                     </div>
                                     <label for="bodyshopNotes" class="col-sm-3 offset-sm-1 col-form-label">Bodyshop Notes</label>
@@ -582,7 +581,7 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                     </div>
                 </div>
                 <div class="modal-footer modal-footer-bordered">
-                    <button type="submit" class="btn btn-primary mr-2" id="updateBtn">Save Changes</button>
+                    <button type="submit" data-loading-text="Loading..." class="btn btn-primary mr-2" id="updateInspectBtn">Save Changes</button>
                     <button class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
                 </div>
             </form>

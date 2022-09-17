@@ -405,8 +405,7 @@ function checkValue(ele) {
 
 
 function loadSaleManager() {
-    // var sales_manager_id = 1;
-    var sales_manager_id = 67;
+    var sales_manager_id = Number(localStorage.getItem('salesManagerID'));
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",

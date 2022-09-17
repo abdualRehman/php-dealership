@@ -134,7 +134,7 @@ if (hasAccess("sale", "Add") === 'false') {
                                         <div class="col-md-9">
                                             <div class="form-group">
                                                 <input type="hidden" name="selectedStockType" id="selectedStockType" />
-                                                <select class="selectpicker required" onchange="changeStockDetails(this)" name="stockId" id="stockId" data-live-search="true" data-size="4">
+                                                <select class="selectpicker required" data-focus-on="true" tabIndex="1" onchange="changeStockDetails(this)" name="stockId" id="stockId"  data-live-search="true" data-size="4" autofocus='autofocus' >
                                                     <option value="0" selected disabled>Stock No:</option>
 
                                                 </select>
@@ -202,6 +202,10 @@ if (hasAccess("sale", "Add") === 'false') {
                                             <div class="custom-control custom-control-lg custom-radio">
                                                 <input type="radio" id="yes" value="on" name="iscertified" class="custom-control-input">
                                                 <label class="custom-control-label" for="yes">Yes</label>
+                                            </div>
+                                            <div class="custom-control custom-control-lg custom-radio">
+                                                <input type="radio" id="yesOther" value="yesOther" name="iscertified" class="custom-control-input">
+                                                <label class="custom-control-label" for="yesOther">Yes</label>
                                             </div>
                                             <div class="custom-control custom-control-lg custom-radio">
                                                 <input type="radio" id="no" value="off" name="iscertified" class="custom-control-input">

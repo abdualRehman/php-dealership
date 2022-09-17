@@ -2,8 +2,10 @@
 
 require_once 'db/core.php';
 
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
-$sql = "SELECT * FROM `web_links` WHERE status = 1";
+
+$sql = "SELECT * FROM `web_links` WHERE status = 1 AND location = '$location'";
 $result = $connect->query($sql);
 $output = array('data' => array());
 if ($result->num_rows > 0) {

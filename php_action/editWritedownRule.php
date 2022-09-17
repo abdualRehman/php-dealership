@@ -22,8 +22,9 @@ if ($_POST) {
     
 
 
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
-    $checkSql = "SELECT * FROM `writedown_rules` WHERE age_from = '$eageFrom' AND age_to = '$eageTo' AND balance_from = '$ebalanceFrom' AND balance_to = '$ebalanceTo'  AND status = 1 AND id != '$ruleId'";
+    $checkSql = "SELECT * FROM `writedown_rules` WHERE age_from = '$eageFrom' AND age_to = '$eageTo' AND balance_from = '$ebalanceFrom' AND balance_to = '$ebalanceTo'  AND status = 1 AND location = '$location' AND id != '$ruleId'";
     $result = $connect->query($checkSql);
     if ($result->num_rows > 0) {
         $valid['success'] = false;

@@ -1,6 +1,6 @@
 
 "use strict";
-var manageInvTable, TableData, maxFileLimit = 10, rowGroupSrc = 19; // 19; // wholesale 
+var manageInvTable, TableData, maxFileLimit = 10, rowGroupSrc = 21; // 21; // wholesale 
 var searhStatusArray = [], editInspectionObj = {};
 var manageCarDealersTable;
 var collapsedGroups = {};
@@ -52,6 +52,7 @@ $(function () {
     $("#repais").select2({
         dropdownAutoWidth: !0,
         placeholder: "Select Repairs",
+        closeOnSelect: false,
         allowClear: !0,
         tags: !0
     })
@@ -128,16 +129,16 @@ $(function () {
         "scrollX": true,
         "orderClasses": false,
         "deferRender": true,
-        "pageLength": 25,
-        autoWidth: false,
+        "pageLength": 50,
+        // autoWidth: false,
         searchPanes: {
             cascadePanes: !0,
             viewTotal: !0,
-            columns: [7, 6, 4]
+            columns: [8, 9, 4]
         },
         dom: `<'row'<'col-12'P>>
         <'row' <'col-sm-4 text-left text-sm-left pl-3'B>
-            <'col-sm-4 text-left text-sm-left pl-3'<'#statusFilterDiv.d-none'>>
+            <'col-sm-4 text-left text-center pl-3'<'#statusFilterDiv.d-none'>>
             <'col-sm-4 text-right text-sm-right mt-2 mt-sm-0'f>>\n
         <'row'<'col-12'tr>>\n      
         <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
@@ -173,12 +174,13 @@ $(function () {
         ],
 
         columnDefs: [
+            { width: 400, targets: [3, 6, 7] },
             {
-                targets: [0, 1, 2, 3, 4, 5, 8, 20, 21, 22, 23, 24],
+                targets: [0, 1, 2, 3, 4, 5, 10, 6, 7, 22, 23, 24],
                 visible: false,
             },
             {
-                targets: [6],
+                targets: [8],
                 createdCell: function (td, cellData, rowData, row, col) {
                     var data = $(td).html();
                     if (data > 4) {
@@ -189,7 +191,7 @@ $(function () {
                 }
             },
             {
-                targets: [21],
+                targets: [23],
                 data: 22, // repairs 
                 render: function (data, type, row) {
                     var repairArr = data ? data.replace(/__/g, " , ") : '';
@@ -198,12 +200,12 @@ $(function () {
                 },
             },
             {
-                targets: [22],
+                targets: [24],
                 data: 3, // lot notes
             },
             {
-                targets: [23],
-                data: 20, // windshield
+                targets: [6],
+                data: 6, // windshield
                 render: function (data, type, row) {
                     var repairArr = data ? data.replace(/__/g, " , ") : '';
                     repairArr = repairArr.slice(3, -3);
@@ -211,8 +213,8 @@ $(function () {
                 },
             },
             {
-                targets: [24],
-                data: 21, // wheels
+                targets: [7],
+                data: 7, // wheels
                 render: function (data, type, row) {
                     var repairArr = data ? data.replace(/__/g, " , ") : '';
                     repairArr = repairArr.slice(3, -3);
@@ -223,7 +225,7 @@ $(function () {
                 searchPanes: {
                     show: true
                 },
-                targets: [7, 6, 4]
+                targets: [9, 8, 4]
             },
         ],
         language: {
@@ -265,7 +267,7 @@ $(function () {
                     .filter(function (data, index) {
                         return data[rowGroupSrc] == group ? true : false;
                     });
-                if (rowGroupSrc == 19) {
+                if (rowGroupSrc == 21) {
                     if (group == "No") {
                         group = "Retail";
                     } else if (group == "Yes") {
@@ -316,7 +318,7 @@ $(function () {
                         .rows()
                         .data()
                         .each(function (data, index) {
-                            var windshield = data[20]; // windshield
+                            var windshield = data[6]; // windshield
                             var arr = windshield ? (windshield.trim()).split('__') : [];
                             if (arr.length > 0 && arr.indexOf('Done') == -1) {
                                 totalPending += 1;
@@ -330,7 +332,7 @@ $(function () {
                         .rows()
                         .data()
                         .each(function (data, index) {
-                            var wheels = data[21]; // wheels
+                            var wheels = data[7]; // wheels
                             var arr = wheels ? (wheels.trim()).split('__') : [];
                             if (arr.length > 0 && arr.indexOf('Done') == -1) {
                                 totalPending += 1;
@@ -363,7 +365,7 @@ $(function () {
                 });
             }
         },
-        "order": [[19, "asc"], [6, "desc"]], // wholesale , age
+        "order": [[21, "asc"], [8, "desc"]], // wholesale , age
         // "order": [[4, "asc"], [5, "desc"]],
     });
 
@@ -375,9 +377,9 @@ $(function () {
         function (settings, searchData, index, rowData, counter) {
             var tableNode = manageInvTable.table().node();
 
-            if (rowData[7] && rowData[7] != 'undefined') {
+            if (rowData[9] && rowData[9] != 'undefined') {
                 searhStatusArray.push({
-                    stockDetails: rowData[7],
+                    stockDetails: rowData[9],
                     stockAvailibility: rowData[26],
                 })
             }
@@ -388,17 +390,17 @@ $(function () {
 
             if (activebtnvalue == 'notTouched') {
                 // console.log(rowData);
-                var balance = rowData[15];
+                var balance = rowData[17];
                 var recon = rowData[1];
                 var notes = rowData[3];
 
-                var windshield = rowData[20];
+                var windshield = rowData[6];
                 var arr = windshield ? (windshield.trim()).split('__') : [];
                 var doneEle = arr.find((element) => {
                     return element != "Done";
                 })
 
-                var wheels = rowData[21];
+                var wheels = rowData[7];
                 var arrWheels = wheels ? (wheels.trim()).split('__') : [];
                 var doneEleWheel = arrWheels.find((element) => {
                     return element != "Done";
@@ -420,7 +422,7 @@ $(function () {
             }
             if (activebtnvalue == 'holdForRecon') {
 
-                var balance = rowData[15];
+                var balance = rowData[17];
                 var recon = rowData[1];
                 if (recon == 'hold' && balance) {
                     return true;
@@ -428,7 +430,7 @@ $(function () {
             }
             if (activebtnvalue == 'sendToRecon') {
 
-                var balance = rowData[15];
+                var balance = rowData[17];
                 var recon = rowData[1];
                 if (recon == 'send' && balance) {
                     return true;
@@ -442,8 +444,8 @@ $(function () {
                 }
             }
             if (activebtnvalue == 'windshield') {
-                var windshield = rowData[20];
-                var balance = rowData[15];
+                var windshield = rowData[6];
+                var balance = rowData[17];
 
                 var arr = windshield ? (windshield.trim()).split('__') : [];
                 var filterValue = $('#statusFilterBtns input:radio:checked').val();
@@ -461,8 +463,8 @@ $(function () {
                 }
             }
             if (activebtnvalue == 'wheels') {
-                var wheels = rowData[21];
-                var balance = rowData[15];
+                var wheels = rowData[7];
+                var balance = rowData[17];
 
                 var arr = wheels ? (wheels.trim()).split('__') : [];
                 var filterValue = $('#statusFilterBtns input:radio:checked').val();
@@ -511,7 +513,7 @@ $(function () {
                 }
             }
             if (activebtnvalue == 'Gone') {
-                var balance = rowData[15];
+                var balance = rowData[17];
                 if (balance == '' || balance == null || balance == 0) {
                     return true;
                 }
@@ -550,11 +552,11 @@ $(function () {
 
             switch (currentElement) {
                 case "notTouched":
-                    rowGroupSrc = 19;
+                    rowGroupSrc = 21;
                     manageInvTable.rowGroup().enable().draw();
                     manageInvTable.rowGroup().dataSrc(rowGroupSrc);
-                    setColumVisibility([0, 1, 2, 3, 4, 5, 8, 20, 21, 22, 23, 24]);
-                    manageInvTable.order([19, "asc"], [6, "desc"]).draw(); // wholesale , age
+                    setColumVisibility([0, 1, 2, 3, 4, 5, 10, 22, 23, 24, 6, 7]);
+                    manageInvTable.order([21, "asc"], [8, "desc"]).draw(); // wholesale , age
                     break;
                 case "toGo":
                 case "atBodyshop":
@@ -564,14 +566,14 @@ $(function () {
                     manageInvTable.rowGroup().enable().draw();
                     manageInvTable.dataSrc(rowGroupSrc);
                     if (currentElement == 'toGo') {
-                        setColumVisibility([1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 23, 24]);
-                        manageInvTable.order([4, "asc"], [6, "desc"]).draw(); // bodyshop , age
+                        setColumVisibility([1, 2, 3, 4, 5, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 6, 7]);
+                        manageInvTable.order([4, "asc"], [8, "desc"]).draw(); // bodyshop , age
                     } else if (currentElement == 'atBodyshop' || currentElement == 'backFromBodyshop') {
-                        setColumVisibility([1, 2, 3, 4, 7, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 23, 24]);
+                        setColumVisibility([1, 2, 3, 4, 9, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 6, 7]);
                         manageInvTable.order([4, "asc"], [5, "asc"]).draw(); // bodyshop , daysout
                     } else {
-                        setColumVisibility([1, 2, 3, 4, 5, 8, 20, 21, 22, 23, 24]);
-                        manageInvTable.order([4, "asc"], [6, "desc"]).draw(); // bodyshop , age
+                        setColumVisibility([1, 2, 3, 4, 5, 10, 22, 23, 24, 6, 7]);
+                        manageInvTable.order([4, "asc"], [8, "desc"]).draw(); // bodyshop , age
                     }
                     break;
                 case "windshield":
@@ -581,18 +583,18 @@ $(function () {
                 case "retailReady":
                     manageInvTable.rowGroup().disable().draw();
                     if (currentElement == 'windshield') {
-                        setColumVisibility([1, 2, 3, 4, 5, 8, 20, 21, 22, 24]);
+                        setColumVisibility([1, 2, 3, 4, 5, 10, 16, 17, 18, 19, 20, 22, 23, 24, 7]);
                     } else if (currentElement == 'wheels') {
-                        setColumVisibility([1, 2, 3, 4, 5, 8, 20, 21, 22, 23]);
+                        setColumVisibility([1, 2, 3, 4, 5, 10, 16, 17, 18, 19, 20, 22, 23, 24, 6]);
                     } else {
-                        setColumVisibility([1, 2, 3, 4, 5, 8, 20, 21, 22, 23, 24]);
+                        setColumVisibility([1, 2, 3, 4, 5, 10, 22, 23, 24, 6, 7]);
                     }
-                    manageInvTable.order([19, "asc"], [6, "desc"]).draw(); // wholesale , age
+                    manageInvTable.order([21, "asc"], [8, "desc"]).draw(); // wholesale , age
                     break;
                 case "LotNotes":
                     manageInvTable.rowGroup().disable().draw();
-                    setColumVisibility([1, 4, 5, 8, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]);
-                    manageInvTable.order([19, "asc"], [6, "desc"]).draw(); // wholesale , age
+                    setColumVisibility([1, 4, 5, 10, 16, 17, 18, 19, 20, 21, 22, 23, 24, 6, 7]);
+                    manageInvTable.order([21, "asc"], [8, "desc"]).draw(); // wholesale , age
                     break;
                 default:
                     break;
@@ -605,7 +607,7 @@ $(function () {
             }
 
             setTimeout(() => {
-                // manageInvTable.order([6, "desc"]).draw();
+                // manageInvTable.order([8, "desc"]).draw();
                 $("#datatable-1").dataTable().fnFilter("");
                 manageInvTable.searchPanes.rebuildPane();
 
@@ -664,6 +666,8 @@ $(function () {
         submitHandler: function (form, e) {
             e.preventDefault();
 
+            $('#updateInspectionForm').block();
+
             if ($('#repais option:selected').length > 0 && $('#repairSent').val() != '' && $('#bodyshop').val() == 0) {
                 $('#bodyshop').addClass('is-invalid');
                 $('#bodyshop').removeClass('is-valid');
@@ -696,6 +700,7 @@ $(function () {
                             timer: 1500
                         })
                         manageInvTable.ajax.reload(null, false);
+                        $('#updateInspectionForm').unblock();
                         $('#modal8').modal('hide');
                     } else {
                         e1.fire({
@@ -705,7 +710,7 @@ $(function () {
                             showConfirmButton: !1,
                             timer: 2500
                         })
-
+                        $('#updateInspectionForm').unblock();
                     }
 
 
@@ -742,9 +747,15 @@ $(function () {
         }
     });
 
-    $('#clear-selection').click(function () {
-        $('#recon-btn-group :radio').prop('checked', false);
-        $('#recon-btn-group .active').removeClass('active');
+    $('#recon-btn-group label').on('click', function () {
+        let prev = $('#recon-btn-group .active :radio:checked').val();
+        let current = $(this).children(':radio[name=recon]').val();
+        if (prev == current) {
+            setTimeout(() => {
+                $('#recon-btn-group :radio').prop('checked', false);
+                $('#recon-btn-group .active').removeClass('active');
+            }, 100);
+        }
     })
 
 
@@ -927,7 +938,7 @@ function searchStockBtn(params) {
     if (tab) {
         setTimeout(() => {
             $("#datatable-1").dataTable().fnFilter(search);
-            manageInvTable.order([6, 'desc']).draw();
+            manageInvTable.order([8, 'desc']).draw();
             manageInvTable.ajax.reload(null, false);
         }, 1000);
     }
@@ -965,14 +976,15 @@ function fetchCarsToDealers() {
             "orderClasses": false,
             "deferRender": true,
             "pageLength": 25,
-            autoWidth: false,
+            // autoWidth: false,
             "order": [[1, "desc"]],
 
             dom: `\n     
             <'row'<'col-12'P>>\n
            \n     
-           <'row'<'col-sm-6 text-center text-sm-left pl-3'B>
-                <'col-sm-6 text-right text-sm-right pl-3'f>>\n
+           <'row'<'col-sm-4 text-left text-sm-left pl-3'B>
+                <'col-sm-4 text-left text-center pl-3'<'#carDealersFilterDiv'>>
+                <'col-sm-4 text-right text-sm-right mt-2 mt-sm-0'f>>\n
            <'row'<'col-12'tr>>\n      
            <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
 
@@ -981,7 +993,38 @@ function fetchCarsToDealers() {
                 viewTotal: !0,
                 columns: [1, 2, 3]
             },
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    title: 'Cars To Dealers',
+                    exportOptions: {
+                        columns: [':visible:not(:first-child)'],
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    title: 'Cars To Dealers',
+                    exportOptions: {
+                        columns: [':visible:not(:first-child)']
+                    }
+                },
+                {
+                    extend: 'print',
+                    title: 'Cars To Dealers',
+                    exportOptions: {
+                        columns: [':visible:not(:first-child)']
+                    },
+                    customize: function (win) {
+                        $(win.document.body)
+                            .css('font-size', '10pt');
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                },
+            ],
             columnDefs: [
+                { width: 400, targets: [4, 5] },
                 {
                     targets: [8],
                     visible: false,
@@ -1006,76 +1049,6 @@ function fetchCarsToDealers() {
                     }
                 },
 
-            ],
-
-
-            buttons: [
-                {
-                    text: 'Inventory',
-                    action: function (e, dt, node, config) {
-                        manageCarDealersTable.button(0).active(true);
-                        manageCarDealersTable.button(1).active(false);
-                        manageCarDealersTable.button(2).active(false);
-                        // manageCarDealersTable.columns(6).search('^$', true, false).draw();;
-                        $.fn.dataTable.ext.search.pop();
-                        manageCarDealersTable.search('').draw();
-                        var tableNode = this.table(0).node();
-                        // console.log(tableNode);
-                        $.fn.dataTable.ext.search.push(
-                            function (settings, data, dataIndex) {
-                                if (settings.nTable !== tableNode) {
-                                    return true;
-                                }
-                                if (data[4] == '' || data[4] == null) {
-                                    return true;
-                                }
-                                return false
-                            }
-                        )
-                        const column1 = manageCarDealersTable.column(0);
-                        column1.visible(false);
-                        manageCarDealersTable.draw();  // working
-
-                    },
-
-                },
-                {
-                    text: 'Pending',
-                    action: function (e, dt, node, config) {
-                        loadUncomplete();
-                    },
-
-                },
-                {
-                    text: 'Complete',
-                    action: function (e, dt, node, config) {
-                        manageCarDealersTable.button(0).active(false);
-                        manageCarDealersTable.button(1).active(false);
-                        manageCarDealersTable.button(2).active(true);
-                        // manageCarDealersTable.columns(6).search('^$', true, false).draw();;
-                        $.fn.dataTable.ext.search.pop();
-                        manageCarDealersTable.search('').draw();
-                        var tableNode = this.table(0).node();
-                        // console.log(tableNode);
-                        $.fn.dataTable.ext.search.push(
-                            function (settings, data, dataIndex) {
-                                if (settings.nTable !== tableNode) {
-                                    return true;
-                                }
-
-                                if (data[7] != '') {
-                                    return true;
-                                }
-                                return false;
-                            }
-                        )
-                        const column1 = manageCarDealersTable.column(0);
-                        column1.visible(true);
-                        manageCarDealersTable.draw();  // working
-
-                    },
-
-                }
             ],
 
             language: {
@@ -1103,34 +1076,93 @@ function fetchCarsToDealers() {
                 }
             },
         })
-        loadUncomplete();
+        carDealersFilterDivHTML();
     }
-}
-function loadUncomplete() {
-    manageCarDealersTable.button(0).active(false);
-    manageCarDealersTable.button(1).active(true);
-    manageCarDealersTable.button(2).active(false);
-
-    $.fn.dataTable.ext.search.pop();
-    manageCarDealersTable.search('').draw();
     var tableNode = $('#datatable-2')[0];
-
     $.fn.dataTable.ext.search.push(
-        function (settings, data, dataIndex) {
-            // console.log(data);
-            if (settings.nTable !== tableNode) {
-                return true;
+        function (settings, data, index, rowData, counter) {
+            // var tableNode = manageCarDealersTable.table().node();
+            var activebtnvalue = $("#carDealersFilterDiv .btn.active input[name='carstoDealerStatus']").val();
+
+            if (activebtnvalue == 'Inventory') {
+                if (data[4] == '' || data[4] == null) {
+                    return true;
+                }
             }
-            if (data[4] != '' && data[4] != null && data[7] == '') {
+
+            if (activebtnvalue == 'Pending') {
+                if (data[4] != '' && data[4] != null && data[7] == '') {
+                    return true;
+                }
+            }
+
+            if (activebtnvalue == 'Complete') {
+                if (data[7] != '') {
+                    return true;
+                }
+            }
+
+
+            if (settings.nTable !== tableNode) {
                 return true;
             }
 
             return false;
         }
     );
-    const column1 = manageCarDealersTable.column(0);
-    column1.visible(true);
-    manageCarDealersTable.draw();  // working
+}
+
+
+function carDealersFilterDivHTML() {
+    var element = document.getElementById('carDealersFilterDiv');
+    if (element) {
+        element.innerHTML = `<div class="row">
+            <div class="col-md-12">
+                <div id="carDealersFilterBtns">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-flat-primary">
+                            <input type="radio" name="carstoDealerStatus" id="Inventory" value="Inventory" > Inventory 
+                        </label>
+                        <label class="btn btn-flat-primary active">
+                            <input type="radio" name="carstoDealerStatus" id="PendingDealers" value="Pending" checked="checked" > Pending 
+                        </label>
+                        <label class="btn btn-flat-primary">
+                            <input type="radio" name="carstoDealerStatus" id="CompleteDealers" value="Complete"> Complete
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    }
+
+    $('#carDealersFilterBtns input:radio').on('change', function () {
+        $('#datatable-1').block({
+            message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+            timeout: 1e3
+        });
+        $('#datatable-2').block({
+            message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+            timeout: 1e3
+        });
+
+        let currentElement = $(this).val();
+        const column1 = manageCarDealersTable.column(0);
+        switch (currentElement) {
+            case "Pending":
+            case "Complete":
+                column1.visible(true);
+                break;
+            case "Inventory":
+                column1.visible(false);
+                break;
+            default:
+                break;
+        }
+        setTimeout(() => {
+            manageCarDealersTable.draw();
+            manageCarDealersTable.searchPanes.rebuildPane();
+        }, 500);
+    })
 }
 
 $('#workNeeded').on('input', function () {
@@ -1266,7 +1298,7 @@ $('#resend').on('change', function () {
         // console.log(obj);
         var arr = obj.repairs ? (obj.repairs.trim()).split('__') : [];
         arr.pop(); arr.shift();
-        var detailsDiv = `History  Sent ${obj.repair_sent}     Returned ${obj.repair_returned} \nRepairs: ${arr.map(element => element).join(' , ')} \nPaid: ${obj.repair_paid}`;
+        var detailsDiv = `History  Sent ${obj.repair_sent}     Returned ${obj.repair_returned} \nRepairs: ${arr.map(element => element).join(' , ')} \nBodyshop: ${obj.bodyshop_log} \nPaid: ${obj.repair_paid}`;
         $('#resendDetails').html(detailsDiv);
 
 
@@ -1330,7 +1362,7 @@ $('#resend').on('change', function () {
         $("#repairReturn").datepicker("setDate", obj.repair_returned ? obj.repair_returned : "");
         $('#repairSent').prop('disabled', ((obj.shops != 0 || obj.shops != '' || obj.shops != null) && arr.length != 0) ? false : true);
         $('#repairReturn').prop('disabled', ((obj.shops != 0 || obj.shops != '' || obj.shops != null) && (arr.length != 0) && (obj.repair_sent != '' || obj.repair_sent != null)) ? false : true);
-        
+
         // $('#resend').prop('disabled', obj.repair_returned != "" ? false : true);  ////
         // $('#resend').prop('checked', obj.resend == "true" ? true : false);
 
@@ -1450,16 +1482,16 @@ function editInspection(id) {
                 $('#repairReturn').prop('disabled', ((response.shops != 0 || response.shops != '' || response.shops != null) && (arr.length != 0) && (response.repair_sent != '' || response.repair_sent != null)) ? false : true);
 
                 $('#resend').prop('disabled', response.repair_returned != "" ? false : true);  ////
-                
+
                 $('#resend').prop('checked', response.resend == "true" ? true : false);
 
                 if (response.resend == "true") {
                     $('#resendDetailsDiv').removeClass('d-none');
                     var arr = response.repairs ? (response.repairs.trim()).split('__') : [];
                     arr.pop(); arr.shift();
-                    var detailsDiv = `History  Sent ${response.repair_sent}     Returned ${response.repair_returned} \nRepairs: ${arr.map(element => element).join(' , ')} \nPaid: ${response.repair_paid}`;
+                    var detailsDiv = `History  Sent ${response.repair_sent}     Returned ${response.repair_returned} \nRepairs: ${arr.map(element => element).join(' , ')} \nBodyshop: ${response.bodyshop_log} \nPaid: ${response.repair_paid}`;
                     $('#resendDetails').html(detailsDiv);
-                }else{
+                } else {
                     $('#resendDetailsDiv').addClass('d-none');
                     $('#resendDetails').html("");
                 }

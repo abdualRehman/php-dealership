@@ -34,7 +34,7 @@ if ($arrayObj) {
             // `date_sold`='' , `sold_price`='',`online_description`='',
             // `ro_online_notes`='',`submitted_by`='$submittedBy' WHERE inv_id = '$id'";
             $updatekSql = "UPDATE `used_cars` SET 
-            `retail_status`='$retailStatus', `uci`='$uci',
+            `retail_status`='$retailStatus', `date_in`='', `uci`='$uci',
             `title_priority`='$titlePriority',`submitted_by`='$submittedBy' WHERE inv_id = '$id'";
             if ($connect->query($updatekSql) === true) {
                 $valid['success'] = true;
@@ -62,9 +62,9 @@ if ($arrayObj) {
             //         '' , '$submittedBy' , 1
             //     )";
             $sql = "INSERT INTO `used_cars`(
-                `inv_id`, `retail_status`,
+                `inv_id`, `retail_status`, `date_in`, 
                 `uci`,  `title_priority`, `submitted_by`, `status`) VALUES (
-                    '$id', '$retailStatus' ,
+                    '$id', '$retailStatus', '',
                     '$uci' , '$titlePriority' , '$submittedBy' , 1 )";
 
             if ($connect->query($sql) === true) {

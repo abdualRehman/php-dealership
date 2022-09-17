@@ -2,9 +2,12 @@
 
 require_once 'db/core.php';
 
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+
+
 $sql = "SELECT inventory.age , inventory.stockno , inventory.vin , inventory.model, inventory.year, inventory.make , inventory.color , 
 inventory.mileage, inventory.lot , inventory.balance, inventory.retail, inventory.certified, 
-inventory.stocktype , inventory.wholesale , inventory.id as invId , inspections.* FROM inventory LEFT JOIN inspections ON inventory.id = inspections.inv_id WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.status = 1";
+inventory.stocktype , inventory.wholesale , inventory.id as invId , inspections.* FROM inventory LEFT JOIN inspections ON inventory.id = inspections.inv_id WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.status = 1 AND inventory.location = '$location'";
 $result = $connect->query($sql);
 
 $output = array('data' => array());
@@ -214,6 +217,38 @@ if ($result->num_rows > 0) {
 
 
 
+        
+        
+        // $output['data'][] = array(
+        //     $button,
+        //     $row['recon'],
+        //     $row['submitted_by'],
+        //     $row['lot_notes'],
+        //     $bodyShopName,
+        //     $daysout,
+        //     $row[0], //age
+        //     $stockDetails,
+        //     $row[1], // stock only
+        //     $row[4], // year
+        //     $row[5], // make
+        //     $row[3], //model
+        //     $row[6], // color
+        //     $row[7], // mileage
+        //     $row[8], // lot
+        //     $row[9], // balance
+        //     $row[10], // retail
+        //     $certified, // certificate
+        //     $row[12], // stock type
+        //     $wholesale, // wholesale
+        //     $row['windshield'],
+        //     $row['wheels'],
+        //     $row['repairs'],
+        //     $row['repair_sent'],
+        //     $row['repair_returned'],
+        //     $id,
+        //     array($_notTouched, $_holdRecon, $_sendRecon, $_lotNotes, $_windshield, $_wheels, $_toGo, $_atBodyshop, $_backBodyshop, $_retailReady, $_gone),
+        // );
+        
         $output['data'][] = array(
             $button,
             $row['recon'],
@@ -221,6 +256,8 @@ if ($result->num_rows > 0) {
             $row['lot_notes'],
             $bodyShopName,
             $daysout,
+            $row['windshield'],
+            $row['wheels'],
             $row[0], //age
             $stockDetails,
             $row[1], // stock only
@@ -235,8 +272,6 @@ if ($result->num_rows > 0) {
             $certified, // certificate
             $row[12], // stock type
             $wholesale, // wholesale
-            $row['windshield'],
-            $row['wheels'],
             $row['repairs'],
             $row['repair_sent'],
             $row['repair_returned'],
@@ -250,7 +285,7 @@ if ($result->num_rows > 0) {
 // $carsToDealsSql = "SELECT COUNT(inventory.stockno) as totalPending FROM inventory LEFT JOIN car_to_dealers ON inventory.id = car_to_dealers.inv_id 
 // WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.status = 1 AND ( car_to_dealers.date_returned = '' OR car_to_dealers.date_returned IS NULL)";
 $carsToDealsSql = "SELECT COUNT(inventory.stockno) as totalPending FROM inventory LEFT JOIN car_to_dealers ON inventory.id = car_to_dealers.inv_id 
-WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.status = 1 AND ( car_to_dealers.work_needed != '' AND car_to_dealers.work_needed IS NOT NULL) AND ( car_to_dealers.date_returned = '' OR car_to_dealers.date_returned IS NULL)";
+WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.status = 1 AND inventory.location = '$location' AND ( car_to_dealers.work_needed != '' AND car_to_dealers.work_needed IS NOT NULL) AND ( car_to_dealers.date_returned = '' OR car_to_dealers.date_returned IS NULL)";
 
 $result3 = $connect->query($carsToDealsSql);
 $row3 = $result3->fetch_assoc();

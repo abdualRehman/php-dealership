@@ -317,8 +317,7 @@ function writeStatusHTML() {
 
 
 function loadFinanceManager() {
-    // var finance_manager_id = 42; //finance manager role id in database
-    var finance_manager_id = 64; //finance manager role id in database
+    var finance_manager_id = Number(localStorage.getItem('financeManagerID'));
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",

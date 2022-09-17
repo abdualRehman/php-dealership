@@ -96,8 +96,8 @@ if ($_POST) {
                         !empty($cell) || !empty($preffer)
                     ) {
 
-
-                        $sql = "INSERT INTO `locations`(`dealer_no`, `dealership`, `address`, `city`, `state`, `zip`, `miles`, `travel_time`, `round_trip`, `phone`, `fax`, `main_contact`, `cell`, `preffer`, `status`)
+                        $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+                        $sql = "INSERT INTO `locations`(`dealer_no`, `dealership`, `address`, `city`, `state`, `zip`, `miles`, `travel_time`, `round_trip`, `phone`, `fax`, `main_contact`, `cell`, `preffer`, `status` , `location`)
                         VALUES (
                             '$dealerno',
                             '$dealership',
@@ -113,7 +113,8 @@ if ($_POST) {
                             '$maincontact',
                             '$cell',
                             '$preffer',
-                            1 )";
+                            1,
+                            '$location' )";
 
 
 

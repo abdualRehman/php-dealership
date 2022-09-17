@@ -20,7 +20,9 @@ if ($_POST) {
     $rdrType = mysqli_real_escape_string($connect, $_POST['erdrType']);
 
 
-    $checkSql = "SELECT * FROM `rdr_rules` WHERE `year` = '$year' AND `make` = '$make' AND `model`='$model' AND `model_type`='$modelType' AND `certified`='$certified' AND status = 1 AND id != '$ruleId'";
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+
+    $checkSql = "SELECT * FROM `rdr_rules` WHERE `year` = '$year' AND `make` = '$make' AND `model`='$model' AND `model_type`='$modelType' AND `certified`='$certified' AND status = 1 AND location = '$location' AND id != '$ruleId'";
     $result = $connect->query($checkSql);
 
     if ($result->num_rows > 0) {

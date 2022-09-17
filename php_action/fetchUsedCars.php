@@ -2,9 +2,11 @@
 
 require_once 'db/core.php';
 
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+
 $sql = "SELECT inventory.age , inventory.stockno , inventory.vin , inventory.model, inventory.year, inventory.make , inventory.color , 
 inventory.mileage, inventory.lot , inventory.balance, inventory.retail, inventory.certified, 
-inventory.stocktype , inventory.wholesale , inventory.id as invId , used_cars.* FROM inventory LEFT JOIN used_cars ON inventory.id = used_cars.inv_id WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.status = 1";
+inventory.stocktype , inventory.wholesale , inventory.id as invId , used_cars.* FROM inventory LEFT JOIN used_cars ON inventory.id = used_cars.inv_id WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.status = 1 AND inventory.location = '$location'";
 $result = $connect->query($sql);
 
 $output = array('data' => array());
@@ -108,7 +110,7 @@ if ($result->num_rows > 0) {
             $_addToSheet = "Add To Sheet";
         }
 
-        if (($date_in === '' || $date_in === 'undefined') && $date_in !== null && $balance !== '') {
+        if (($date_in === '' || $date_in === 'undefined') && $date_in !== null) {
             $missingDate += 1;
             $_missingDate = "Missing Date";
         }
@@ -122,22 +124,22 @@ if ($result->num_rows > 0) {
             $_titleIssue = "Title Issue";
         }
 
-        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'false' && ($date_in !== '' && $date_in !== null)) {
+        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'false') {
             $readyToShip += 1;
             $_readyToship = "Ready To Ship";
         }
 
-        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && ($date_in !== '' && $date_in !== null) && !$date_sent && !$date_sold) {
+        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && !$date_sent && !$date_sold) {
             $keysPulled += 1;
             $_keyPulled = "Keys Pulled";
         }
 
-        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && ($date_in !== '' && $date_in !== null) && $date_sent && !$date_sold) {
+        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && $date_sent && !$date_sold) {
             $atAuction += 1;
             $_atAuction = "At Auction";
         }
 
-        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && ($date_in !== '' && $date_in !== null) && $date_sent && $date_sold) {
+        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && $date_sent && $date_sold) {
             $soldAtAuction += 1;
             $_soldAtAuction = "Sold At Auction";
         }
@@ -179,7 +181,9 @@ if ($result->num_rows > 0) {
         $age = (int)$age;
         $cdkAge = (int)$cdkAge;
 
-        if ($id != null && $carshopId != null && $row['date_in'] != '' && !is_null($row['date_in']) && $age != $cdkAge) {
+        $fixed_status = $row['fixed_status']; // fixed_status
+        
+        if ($id != null && $carshopId != null && $row['date_in'] != '' && !is_null($row['date_in']) && $age != $cdkAge && $fixed_status != "true") {
             $fixAge += 1;
         }
 
@@ -198,9 +202,10 @@ if ($result->num_rows > 0) {
         // ';
         $button = '
             <div class="show d-flex" >
-                <button class="btn btn-label-primary btn-icon mr-1" onclick="removeCarshop(' . $id . ')" >
+            ' .
+            (hasAccess("usedCars", "Edit") !== 'false' ? ' <button class="btn btn-label-primary btn-icon mr-1" onclick="removeUsedCar(' . $id . ')" >
                     <i class="fa fa-trash"></i>
-                </button>
+                </button>' : '') . '
             </div>
         ';
 
@@ -211,13 +216,13 @@ if ($result->num_rows > 0) {
         //         <label class="custom-control-label" for="' . $id . '"></label> 
         //     </div>
         // </div>';
-        if ($_SESSION['userRole'] == $onlineManagerID) {
+        if ($_SESSION['userRole'] == $onlineManagerID || hasAccess("usedCars", "Edit") === 'false') {
             $date_in = $row['date_in'];
-        } else {
+        } else if ($_SESSION['userRole'] != $onlineManagerID && hasAccess("usedCars", "Edit") !== 'false') {
             $date_in = '
-            <div class="show d-flex" >
-                <input type="text" class="form-control" name="date_in_table" value="' . $row['date_in'] . '" data-attribute="date_in" data-id="' . $id . '" autocomplete="off"  />
-            </div>';
+                <div class="show d-flex" >
+                    <input type="text" class="form-control" name="date_in_table" value="' . $row['date_in'] . '" data-attribute="date_in" data-id="' . $id . '" autocomplete="off"  />
+                </div>';
         }
 
 
@@ -230,7 +235,7 @@ if ($result->num_rows > 0) {
 
         $output['data'][] = array(
             $id,
-            $cdkAge, //age
+            $cdkAge == 0 ? "" : $cdkAge, //age
             $stockDetails,
             $date_in,
             $key,
@@ -262,6 +267,7 @@ if ($result->num_rows > 0) {
             array($_addToSheet, $_missingDate, $_titleIssue, $_readyToship, $_keyPulled, $_atAuction, $_soldAtAuction, $_retail, $_sold),
             $button,
             $row['id'],
+            $row['uci_ro']
 
         );
     } // /while 

@@ -68,10 +68,12 @@ if ($result->num_rows > 0) {
         $paid = 'N/A';
 
 
+        $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+
         // $ruleSql = "SELECT * FROM `incentive_rules` WHERE model = '$model' AND ( year = '$year' OR year = 'ALL' ) AND ( modelno = '$modelno' OR modelno = 'ALL' ) AND type = '$stockType' AND status = 1 LIMIT 1";
         $ruleSql = "SELECT * FROM `incentive_rules` WHERE ( model = '$model' OR model = 'All' ) AND 
         ( year = '$year' OR year = 'All' ) AND ( modelno = '$modelno' OR modelno = 'All' ) AND 
-        (type = '$stockType' OR type = 'ALL' ) AND status = 1 AND
+        (type = '$stockType' OR type = 'ALL' ) AND status = 1 AND location = '$location' AND
         `ex_modelno` NOT LIKE '%_" . $modelno . "_%' ORDER BY FIELD(model, '$model') DESC, FIELD(year, '$year') DESC, FIELD(modelno, '$modelno') DESC, FIELD(type, '$stockType') DESC LIMIT 1";
         $result1 = $connect->query($ruleSql);
         if ($result1->num_rows > 0) {
@@ -96,7 +98,7 @@ if ($result->num_rows > 0) {
         // $ruleSql = "SELECT * FROM `salesperson_rules` WHERE model = '$model' AND ( year = '$year' OR year = 'ALL' ) AND ( modelno = '$modelno' OR modelno = 'ALL' ) AND type = '$stockType' AND status = 1 LIMIT 1";
         $ruleSql = "SELECT * FROM `salesperson_rules` WHERE ( model = '$model' OR model = 'All' ) AND 
         ( year = '$year' OR year = 'All' ) AND ( modelno = '$modelno' OR modelno = 'All' ) AND 
-        (type = '$stockType' OR type = 'ALL' )  AND status = 1 AND
+        (type = '$stockType' OR type = 'ALL' )  AND status = 1 AND location = '$location' AND
         `ex_modelno` NOT LIKE '%_" . $modelno . "_%' ORDER BY FIELD(model, '$model') DESC, FIELD(year, '$year') DESC, FIELD(modelno, '$modelno') DESC, FIELD(type, '$stockType') DESC";
 
         $result2 = $connect->query($ruleSql);

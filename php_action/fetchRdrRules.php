@@ -2,7 +2,9 @@
 
 require_once 'db/core.php';
 
-$sql = "SELECT `id`, `year`, `make`, `model`, `model_type`, `certified`, `rdr_type`, `status` FROM `rdr_rules` WHERE status = 1";
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+
+$sql = "SELECT `id`, `year`, `make`, `model`, `model_type`, `certified`, `rdr_type`, `status` FROM `rdr_rules` WHERE status = 1 AND location = '$location'";
 $result = $connect->query($sql);
 
 $output = array('data' => array());

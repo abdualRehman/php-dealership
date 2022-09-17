@@ -1,7 +1,6 @@
 <?php
 
 require_once './db/core.php';
-require_once './updateMatrixRules.php';
 
 $valid = array('success' => false, 'messages' => array(), 'errorMessages' => array(), 'id' => '', 'settingError' => array());
 
@@ -17,10 +16,11 @@ if ($_POST) {
     $zip = (isset($_POST['zip'])) ? mysqli_real_escape_string($connect, $_POST['zip']) : "";
     $contatperson = (isset($_POST['contatperson'])) ? mysqli_real_escape_string($connect, $_POST['contatperson']) : "";
     $contatnumber = (isset($_POST['contatnumber'])) ? mysqli_real_escape_string($connect, $_POST['contatnumber']) : "";
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
 
 
-    $sql = "INSERT INTO `bodyshops`(`business_name`, `shop`, `address`, `city`, `state`, `zip`, `contact_person`, `contact_number`, `status`) VALUES (
+    $sql = "INSERT INTO `bodyshops`(`business_name`, `shop`, `address`, `city`, `state`, `zip`, `contact_person`, `contact_number`, `status` , `location`) VALUES (
                 '$bName',
                 '$shop',
                 '$address',
@@ -29,7 +29,8 @@ if ($_POST) {
                 '$zip',
                 '$contatperson',
                 '$contatnumber',
-                1 )";
+                1,
+                '$location' )";
 
     if ($connect->query($sql) === true) {
         $valid['success'] = true;

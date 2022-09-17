@@ -112,18 +112,18 @@ if ($_POST) {
                         $model = 'All';
                         $modelcode = trim($modelcode, ' ');
                         $modelcode_arr = explode("/", $modelcode);
-
+                        $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
                         foreach ($modelcode_arr as $modelcodeV) {
                             if (strlen($modelcodeV) != 0) {
                                 $modelcodeV = trim($modelcodeV, ' ');
-                                $checkSql = "SELECT model FROM `manufature_price` WHERE year = '$year' AND model_code = '$modelcodeV' LIMIT 1";
+                                $checkSql = "SELECT model FROM `manufature_price` WHERE year = '$year' AND model_code = '$modelcodeV' AND location = '$location' LIMIT 1";
                                 $result = $connect->query($checkSql);
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
                                         $model = $row['model'];
                                     }
                                 }
-                                $checkleaseSql = "SELECT * FROM `lease_rule` WHERE model = '$model' AND year = '$year' AND modelno = '$modelcodeV' AND status = '1'";
+                                $checkleaseSql = "SELECT * FROM `lease_rule` WHERE model = '$model' AND year = '$year' AND modelno = '$modelcodeV' AND status = '1' AND location = '$location' ";
                                 $cresult = $connect->query($checkleaseSql);
                                 if ($cresult->num_rows > 0) {
 
@@ -162,7 +162,7 @@ if ($_POST) {
                                         }
                                     }
                                 } else {
-                                    $sql = "INSERT INTO `lease_rule`( `model`, `year`, `modelno` , `ex_modelno` , `expire_in`, `24`, `27`, `30`, `33`, `36`, `39`, `42`, `45`, `48`, `51`, `54`, `57`, `60`, `12_24_33`, `12_36_48`, `10_24_33`, `10_36_48`, `status`) 
+                                    $sql = "INSERT INTO `lease_rule`( `model`, `year`, `modelno` , `ex_modelno` , `expire_in`, `24`, `27`, `30`, `33`, `36`, `39`, `42`, `45`, `48`, `51`, `54`, `57`, `60`, `12_24_33`, `12_36_48`, `10_24_33`, `10_36_48`, `status` , `location`) 
                                     VALUES (
                                         '$model',
                                         '$year',
@@ -186,7 +186,7 @@ if ($_POST) {
                                         '$p12_36_48',
                                         '$p10_24_33',
                                         '$p10_36_48',
-                                        1 )";
+                                        1 , '$location' )";
 
                                     if ($connect->query($sql) === true) {
                                         $valid['success'] = true;

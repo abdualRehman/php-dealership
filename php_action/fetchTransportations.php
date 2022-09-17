@@ -2,8 +2,8 @@
 
 require_once 'db/core.php';
 
-
-$sql = "SELECT transportation.* , inventory.stockno , inventory.vin, inventory.model FROM `transportation` LEFT JOIN inventory ON transportation.stock_id = inventory.id WHERE transportation.status = 1";
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+$sql = "SELECT transportation.* , inventory.stockno , inventory.vin, inventory.model FROM `transportation` LEFT JOIN inventory ON transportation.stock_id = inventory.id WHERE transportation.status = 1 AND inventory.status = 1 AND transportation.location = '$location'";
 
 $result = $connect->query($sql);
 

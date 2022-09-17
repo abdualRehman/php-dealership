@@ -49,14 +49,16 @@ if ($_POST) {
         $expireIn = (isset($_POST['expireIn'][$x])) ? mysqli_real_escape_string($connect, $_POST['expireIn'][$x]) : "";
         $expireIn = ($expireIn === '') ? "" : reformatDate($expireIn);
 
+        $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
-        $checkSql = "SELECT * FROM `lease_rule` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND status = 1";
+
+        $checkSql = "SELECT * FROM `lease_rule` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND status = 1 AND location = '$location'";
         $result = $connect->query($checkSql);
         if ($result && $result->num_rows > 0) {
             $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . ", Already Exist";
         } else {
 
-            $sql = "INSERT INTO `lease_rule`( `model`, `year`, `modelno` , `ex_modelno` , `expire_in` , `24`, `27`, `30`, `33`, `36`, `39`, `42`, `45`, `48`, `51`, `54`, `57`, `60`, `12_24_33`, `12_36_48`, `10_24_33`, `10_36_48`, `status`) 
+            $sql = "INSERT INTO `lease_rule`( `model`, `year`, `modelno` , `ex_modelno` , `expire_in` , `24`, `27`, `30`, `33`, `36`, `39`, `42`, `45`, `48`, `51`, `54`, `57`, `60`, `12_24_33`, `12_36_48`, `10_24_33`, `10_36_48`, `status` , `location`) 
             VALUES (
                 '$model',
                 '$year',
@@ -80,7 +82,7 @@ if ($_POST) {
                 '$p12_36_48',
                 '$p10_24_33',
                 '$p10_36_48',
-                1 )";
+                1 , '$location' )";
 
             if ($connect->query($sql) === true) {
                 $valid['success'] = true;

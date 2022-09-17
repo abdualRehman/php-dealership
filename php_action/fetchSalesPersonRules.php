@@ -2,7 +2,8 @@
 
 require_once 'db/core.php';
 
-$sql = "SELECT `id`, `model`, `year`, `modelno`, `vin_check`, `insurance`, `trade_title`, `registration`, `inspection`, `salesperson_status`, `paid` , `type` , `ex_modelno` , `state` FROM `salesperson_rules` WHERE status = 1";
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+$sql = "SELECT `id`, `model`, `year`, `modelno`, `vin_check`, `insurance`, `trade_title`, `registration`, `inspection`, `salesperson_status`, `paid` , `type` , `ex_modelno` , `state` FROM `salesperson_rules` WHERE status = 1 AND location = '$location'";
 $result = $connect->query($sql);
 
 $output = array('data' => array());

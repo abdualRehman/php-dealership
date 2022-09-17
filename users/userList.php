@@ -50,6 +50,10 @@ if (hasAccess("user", "Edit") === 'false' && hasAccess("user", "Remove") === 'fa
         height: initial !important;
         z-index: 9999;
     }
+
+    .dropdown-header.optgroup-1 {
+        padding: 0px;
+    }
 </style>
 
 <div class="content">
@@ -123,32 +127,53 @@ if (hasAccess("user", "Edit") === 'false' && hasAccess("user", "Remove") === 'fa
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <label for="editemail" class="col-form-label">Email</label>
+                                        <label for="location" class="col-form-label">Location</label>
                                         <div class="form-group">
-                                            <input type="email" class="form-control" name="editemail" id="editemail" autocomplete="off">
+                                            <?php
+                                            if ($_SESSION['userRole'] == 'Admin') {
+                                            ?>
+                                                <select id="location" name="location" data-roleId="" class="selectpicker form-control required" onchange="fetchUserRolesByLocation()">
+                                                    <option value="0" selected disabled>Select</option>
+                                                    <?php
+                                                    $sql = "SELECT `id`, `name` FROM `user_location` WHERE status = 1";
+                                                    $result = $connect->query($sql);
+                                                    while ($itemData = $result->fetch_assoc()) {
+                                                        echo '<option value="' . $itemData['id'] . '">' . $itemData['name'] . '</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                            <?php
+                                            } else {
+                                                echo '<input type="hidden" class="form-control" name="location" value="' . $_SESSION['userLoc'] . '" id="location" autocomplete="off" autofill="off" />';
+                                                echo '<input type="text" class="form-control" name="locationName" value="' . $_SESSION['userLocName'] . '" id="locationName" autocomplete="off" autofill="off" readonly />';
+                                            }
+                                            ?>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <label for="editrole" class="col-form-label">Role</label>
                                         <div class="form-group">
-                                            <select id="editrole" name="editrole" class="form-control required">
+                                            <select id="editrole" name="editrole" class="selectpicker form-control required">
                                                 <option value="0">Select</option>
-                                                <?php
-                                                $sql = "SELECT `role_id`, `role_name` FROM `role` WHERE role_status != 2";
-                                                $result = $connect->query($sql);
-                                                while ($itemData = $result->fetch_assoc()) {
-                                                    echo '<option value="' . $itemData['role_id'] . '">' . $itemData['role_name'] . '</option>';
-                                                }
-                                                ?>
+                                                <optgroup id="roleList">
+                                                    <?php
+                                                    $location = $_SESSION['userLoc'] != '' ? $_SESSION['userLoc'] : '1';
+                                                    $sql = "SELECT `role_id`, `role_name` FROM `role` WHERE role_status != 2 AND location_id = '$location'";
+                                                    $result = $connect->query($sql);
+                                                    while ($itemData = $result->fetch_assoc()) {
+                                                        echo '<option value="' . $itemData['role_id'] . '">' . $itemData['role_name'] . '</option>';
+                                                    }
+                                                    ?>
+                                                </optgroup>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <label for="location" class="col-form-label">Location</label>
+                                        <label for="editemail" class="col-form-label">Email</label>
                                         <div class="form-group">
-                                            <input type="text" class="form-control" name="location" id="location" autocomplete="off" autofill="off" />
+                                            <input type="email" class="form-control" name="editemail" id="editemail" autocomplete="off">
                                         </div>
                                     </div>
                                     <div class="col-md-3">

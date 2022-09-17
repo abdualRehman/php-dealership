@@ -33,7 +33,7 @@ if ($_POST) {
             $password = md5($password);
             // echo $password;
             // exists
-            $mainSql = "SELECT users.* , role.role_name FROM users LEFT JOIN role ON users.role = role.role_id WHERE users.email = '$email' AND users.password = '$password' AND users.status = 1";
+            $mainSql = "SELECT users.* , role.role_name , user_location.name as locName FROM users LEFT JOIN role ON users.role = role.role_id LEFT JOIN user_location ON users.location = user_location.id WHERE users.email = '$email' AND users.password = '$password' AND users.status = 1";
             $mainResult = $connect->query($mainSql);
 
             if ($mainResult->num_rows == 1) {
@@ -48,6 +48,8 @@ if ($_POST) {
                 $_SESSION['userProfile'] = $value['profile'];
                 $_SESSION['userRoleName'] = $value['role_name'];
                 $_SESSION['userRole'] = $role_id;
+                $_SESSION['userLoc'] = $value['location'] != '' ? $value['location'] : 1;
+                $_SESSION['userLocName'] = $value['locName'];
 
                 $checkSql = "SELECT modules , functions , permission FROM `role_mod` WHERE role_id = '$role_id'";
                 $result = $connect->query($checkSql);
@@ -60,7 +62,6 @@ if ($_POST) {
                     }
                 }
                 $_SESSION['permissionsArray'] = $output;
-
                 header('location: dashboard.php');
             } else {
                 $errors[] = "Incorrect email/password combination";

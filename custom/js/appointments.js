@@ -238,6 +238,7 @@ $(function () {
 
     $('.nav-link').removeClass('active');
     $('#more').addClass('active');
+    var deliveryCoordinatorID = Number(localStorage.getItem('deliveryCoordinatorID'));
 
     setEventListener1();
 
@@ -269,29 +270,28 @@ $(function () {
     });
 
 
-
     $("#addNewSchedule").validate({
         ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
         rules: {
             customerName: {
-                required: $('#loggedInUserRole').val() == 62 ? false : true,
+                required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
             },
             scheduleTime: {
-                required: $('#loggedInUserRole').val() == 62 ? false : true,
+                required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
             },
             scheduleDate: {
-                required: $('#loggedInUserRole').val() == 62 ? false : true,
+                required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
             },
             sale_id: {
-                required: $('#loggedInUserRole').val() == 62 ? false : true,
+                required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
             },
             coordinator: {
-                required: $('#loggedInUserRole').val() == 62 ? false : true,
+                required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
             },
             overrideBy: {
                 required: function (params) {
                     var has_appointment = $('#has_appointment').val();
-                    if (has_appointment && $('#loggedInUserRole').val() != 62) {
+                    if (has_appointment && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                         return true;
                     } else {
                         $(params).removeClass('is-invalid');
@@ -302,7 +302,7 @@ $(function () {
             'delivery': {
                 required: function (params) {
                     var opt = $('input:radio[name="additionalServices"]:checked').val();
-                    if (!opt && $('#loggedInUserRole').val() != 62) {
+                    if (!opt && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                         return true;
                     } else {
                         return false;
@@ -312,7 +312,7 @@ $(function () {
             'additionalServices': {
                 required: function (params) {
                     var opt = $('input:radio[name="delivery"]:checked').val();
-                    if (!opt && $('#loggedInUserRole').val() != 62) {
+                    if (!opt && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                         return true;
                     } else {
                         return false;
@@ -322,7 +322,7 @@ $(function () {
             'scheduleNotes': {
                 required: function (params) {
                     var opt = $('input:radio[name="additionalServices"]:checked').val();
-                    if (opt == 'other' && $('#loggedInUserRole').val() != 62) {
+                    if (opt == 'other' && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                         return true;
                     } else {
                         return false;
@@ -380,24 +380,24 @@ $(function () {
         ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
         rules: {
             ecustomerName: {
-                required: $('#loggedInUserRole').val() == 62 ? false : true,
+                required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
             },
             escheduleTime: {
-                required: $('#loggedInUserRole').val() == 62 ? false : true,
+                required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
             },
             escheduleDate: {
-                required: $('#loggedInUserRole').val() == 62 ? false : true,
+                required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
             },
             esale_id: {
-                required: $('#loggedInUserRole').val() == 62 ? false : true,
+                required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
             },
             ecoordinator: {
-                required: $('#loggedInUserRole').val() == 62 ? false : true,
+                required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
             },
             eoverrideBy: {
                 required: function (params) {
                     var has_appointment = $('#ehas_appointment').val();
-                    if (has_appointment && $('#loggedInUserRole').val() != 62) {
+                    if (has_appointment && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                         return true;
                     } else {
                         $(params).removeClass('is-invalid');
@@ -408,7 +408,7 @@ $(function () {
             'edelivery': {
                 required: function (params) {
                     var opt = $('input:radio[name="eadditionalServices"]:checked').val();
-                    if (!opt && $('#loggedInUserRole').val() != 62) {
+                    if (!opt && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                         return true;
                     } else {
                         return false;
@@ -418,7 +418,7 @@ $(function () {
             'eadditionalServices': {
                 required: function (params) {
                     var opt = $('input:radio[name="edelivery"]:checked').val();
-                    if (!opt && $('#loggedInUserRole').val() != 62) {
+                    if (!opt && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                         return true;
                     } else {
                         return false;
@@ -428,7 +428,7 @@ $(function () {
             'escheduleNotes': {
                 required: function (params) {
                     var opt = $('input:radio[name="eadditionalServices"]:checked').val();
-                    if (opt == 'other' && $('#loggedInUserRole').val() != 62) {
+                    if (opt == 'other' && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                         return true;
                     } else {
                         return false;
@@ -511,7 +511,7 @@ function loadSoldLogs() {
     });
 }
 function loadDeliveryCoordinator() {
-    var id = 62;
+    var id = Number(localStorage.getItem('deliveryCoordinatorID'));
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",
@@ -581,9 +581,9 @@ $('.handleDateTime').on('change', function () {
 
 function disabledManagerDiv() {
     let currentUser = $('#loggedInUserRole').val();
-    var delivery_coordinator_id = 62;
-    var sales_manager_id = 67;
-    var general_manager_id = 69;
+    var delivery_coordinator_id = Number(localStorage.getItem('deliveryCoordinatorID'));;
+    var sales_manager_id = Number(localStorage.getItem('salesManagerID'));
+    var general_manager_id = Number(localStorage.getItem('generalManagerID'));
 
     if (currentUser != delivery_coordinator_id && currentUser != 'Admin') {
         $('.delivery_coordinator').addClass('disabled-div');
@@ -752,8 +752,8 @@ function changeStockDetails(ele) {
     if (obj) {
         let currentUser = $('#loggedInUserRole').val();
         var apptStatus = obj[10];
-        var sales_manager_id = 67;
-        var general_manager_id = 69;
+        var sales_manager_id = Number(localStorage.getItem('salesManagerID'));;
+        var general_manager_id = Number(localStorage.getItem('generalManagerID'));
         if (apptStatus != null && currentUser != sales_manager_id && currentUser != general_manager_id && currentUser != 'Admin') {
             toastr.error('Error! - Appointment Allready Exist');
 
@@ -778,8 +778,8 @@ function echangeStockDetails(ele, checkAppt = true) {
         if (checkAppt && checkAppt == true) {
             let currentUser = $('#loggedInUserRole').val();
             var apptStatus = obj[10];
-            var sales_manager_id = 67;
-            var general_manager_id = 69;
+            var sales_manager_id = Number(localStorage.getItem('salesManagerID'));;
+            var general_manager_id = Number(localStorage.getItem('generalManagerID'));
             if (apptStatus != null && currentUser != sales_manager_id && currentUser != general_manager_id && currentUser != 'Admin') {
                 toastr.error('Error! - Appointment Allready Exist');
                 $('#esale_id').val('');

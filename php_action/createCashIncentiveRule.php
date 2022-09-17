@@ -33,15 +33,16 @@ if ($_POST) {
         $exModelno = (isset($_POST['exModelno'.$i])) ? implode(" ",$_POST['exModelno'.$i]): "";
         $exModelno = ($exModelno ===  "") ? "" :   " ".$exModelno." " ;
 
+        $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
           
 
-        $checkSql = "SELECT * FROM `cash_incentive_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND status = 1";
+        $checkSql = "SELECT * FROM `cash_incentive_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND status = 1 AND location = '$location'";
         $result = $connect->query($checkSql);
         if ($result && $result->num_rows > 0) {
             $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . ", Already Exist";
         } else {
 
-            $sql = "INSERT INTO `cash_incentive_rules`( `expire_in`, `model`, `year`, `modelno` , `ex_modelno`, `dealer`, `other` , `lease` , `status`) 
+            $sql = "INSERT INTO `cash_incentive_rules`( `expire_in`, `model`, `year`, `modelno` , `ex_modelno`, `dealer`, `other` , `lease` , `status` , `location`) 
             VALUES (
                 '$expireIn',
                 '$model',
@@ -51,7 +52,7 @@ if ($_POST) {
                 '$dealer',
                 '$other',
                 '$lease',
-                1 )";
+                1 , '$location' )";
 
             if ($connect->query($sql) === true) {
                 $valid['success'] = true;

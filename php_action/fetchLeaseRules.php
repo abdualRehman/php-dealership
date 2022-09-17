@@ -1,8 +1,8 @@
 <?php
 
 require_once 'db/core.php';
-
-$sql = "SELECT `id`, `model`, `year`, `modelno`, `ex_modelno` , `expire_in`, `24`, `27`, `30`, `33`, `36`, `39`, `42`, `45`, `48`, `51`, `54`, `57`, `60`, `12_24_33`, `12_36_48`, `10_24_33`, `10_36_48`, `status` FROM `lease_rule` WHERE status = 1";
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+$sql = "SELECT `id`, `model`, `year`, `modelno`, `ex_modelno` , `expire_in`, `24`, `27`, `30`, `33`, `36`, `39`, `42`, `45`, `48`, `51`, `54`, `57`, `60`, `12_24_33`, `12_36_48`, `10_24_33`, `10_36_48`, `status` FROM `lease_rule` WHERE status = 1 AND location = '$location'";
 $result = $connect->query($sql);
 
 $output = array('data' => array());

@@ -12,16 +12,27 @@ $(function () {
     var divRequest = $(".div-request").text();
 
     if (divRequest == 'add') {
+
+        $.validator.addMethod("valueNotEquals", function (value, element, arg) {
+            // I use element.value instead value here, value parameter was always null
+            return arg != element.value;
+        }, "Value must not equal arg.");
         $("#createRoleForm").validate({
+            ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
             rules: {
                 roleName: {
                     required: !0,
-
+                },
+                location: {
+                    valueNotEquals: "0"
                 },
             },
             messages: {
                 roleName: {
                     required: "Please Enter Role Name",
+                },
+                location: {
+                    valueNotEquals: "Please select role",
                 }
             },
             submitHandler: function (form, e) {

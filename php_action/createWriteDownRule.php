@@ -23,16 +23,17 @@ if ($_POST) {
         $maxWritedown = mysqli_real_escape_string($connect, $_POST['maxWritedown'][$x]);
         $maxWritedown = str_replace(',', '', $maxWritedown);
 
+        $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
 
-        $checkSql = "SELECT * FROM `writedown_rules` WHERE age_from = '$ageFrom' AND age_to = '$ageTo' AND balance_from = '$balanceFrom' AND balance_to = '$balanceTo' AND status = 1";
+        $checkSql = "SELECT * FROM `writedown_rules` WHERE age_from = '$ageFrom' AND age_to = '$ageTo' AND balance_from = '$balanceFrom' AND balance_to = '$balanceTo' AND status = 1 AND location = '$location'";
         $result = $connect->query($checkSql);
         if ($result && $result->num_rows > 0) {
             $valid['errorMessages'][] = $ageFrom . ' - ' . $ageTo . ' - ' . $balanceFrom . ' - ' . $balanceTo . ", Already Exist";
         } else {
 
-            $sql = "INSERT INTO `writedown_rules`(`age_from`, `age_to`, `pencent_balance`, `balance_from`, `balance_to`, `max_writedown`, `status`) 
-            VALUES ('$ageFrom','$ageTo','$percntBalance','$balanceFrom','$balanceTo','$maxWritedown',1)";
+            $sql = "INSERT INTO `writedown_rules`(`age_from`, `age_to`, `pencent_balance`, `balance_from`, `balance_to`, `max_writedown`, `status` , `location`) 
+            VALUES ('$ageFrom','$ageTo','$percntBalance','$balanceFrom','$balanceTo','$maxWritedown',1 , '$location')";
 
             if ($connect->query($sql) === true) {
                 $valid['success'] = true;

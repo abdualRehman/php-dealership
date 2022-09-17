@@ -8,10 +8,11 @@ require_once 'db/core.php';
 // WHERE inventory.status = 1 ORDER BY inventory.id ASC";
 
 $type = isset($_POST['type']) ? $_POST['type'] : "true";
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
 $sql = "SELECT inventory.id, inventory.stockno, inventory.year, inventory.make, inventory.model, inventory.modelno, inventory.color, 
 inventory.lot, inventory.vin, inventory.mileage, inventory.age, inventory.balance, inventory.retail, inventory.certified, inventory.stocktype, 
-inventory.wholesale, inventory.status FROM inventory WHERE inventory.status = 1 AND inventory.stocktype = " . ($type == "true" ? "inventory.stocktype" : "'$type'") . " ORDER BY inventory.stockno DESC";
+inventory.wholesale, inventory.status FROM inventory WHERE inventory.status = 1 AND inventory.location = '$location' AND inventory.stocktype = " . ($type == "true" ? "inventory.stocktype" : "'$type'") . " ORDER BY inventory.stockno DESC";
 
 
 $result = $connect->query($sql);
@@ -76,7 +77,7 @@ if ($result->num_rows > 0) {
         // ( year = '$year' OR year = 'ALL' ) AND ( modelno = '$modelno' OR modelno = 'ALL' ) AND type = '$stockType' AND status = 1 LIMIT 1";
         $ruleSql = "SELECT * FROM `incentive_rules` WHERE ( model = '$model' OR model = 'All' ) AND 
         ( year = '$year' OR year = 'All' ) AND ( modelno = '$modelno' OR modelno = 'All' ) AND 
-        (type = '$stockType' OR type = 'ALL' ) AND status = 1 AND
+        (type = '$stockType' OR type = 'ALL' ) AND status = 1 AND location = '$location' AND
         `ex_modelno` NOT LIKE '%_" . $modelno . "_%' ORDER BY FIELD(model, '$model') DESC, FIELD(year, '$year') DESC, FIELD(modelno, '$modelno') DESC, FIELD(type, '$stockType') DESC LIMIT 1";
         $result1 = $connect->query($ruleSql);
         if ($result1->num_rows > 0) {
@@ -112,7 +113,7 @@ if ($result->num_rows > 0) {
 
         $ruleSql = "SELECT * FROM `salesperson_rules` WHERE ( model = '$model' OR model = 'All' ) AND 
         ( year = '$year' OR year = 'All' ) AND ( modelno = '$modelno' OR modelno = 'All' ) AND 
-        (type = '$stockType' OR type = 'ALL' )  AND status = 1 AND
+        (type = '$stockType' OR type = 'ALL' )  AND status = 1 AND location = '$location' AND
         `ex_modelno` NOT LIKE '%_" . $modelno . "_%' ORDER BY FIELD(model, '$model') DESC, FIELD(year, '$year') DESC, FIELD(modelno, '$modelno') DESC, FIELD(type, '$stockType') DESC";
 
         $result2 = $connect->query($ruleSql);

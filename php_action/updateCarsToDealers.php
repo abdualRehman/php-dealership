@@ -15,8 +15,9 @@ if ($_POST) {
     $dateSent = (isset($_POST['dateSent'])) ? mysqli_real_escape_string($connect, $_POST['dateSent']) : "";
     $dateReturn = (isset($_POST['dateReturn'])) ? mysqli_real_escape_string($connect, $_POST['dateReturn']) : "";
 
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
-    $checkSql = "SELECT * FROM `car_to_dealers` WHERE inv_id = '$vehicleId' AND status = 1";
+    $checkSql = "SELECT * FROM `car_to_dealers` WHERE inv_id = '$vehicleId' AND status = 1 AND location = '$location'";
     $result = $connect->query($checkSql);
     if ($result->num_rows > 0) {
         // update Inv data if this stock number already exist with deleted id with sale 
@@ -32,14 +33,14 @@ if ($_POST) {
             $valid['messages'] = mysqli_error($connect);
         }
     } else {
-        $sql = "INSERT INTO `car_to_dealers`( `inv_id`, `work_needed`, `notes`, `date_sent`, `date_returned`, `submitted_by`, `status`)
+        $sql = "INSERT INTO `car_to_dealers`( `inv_id`, `work_needed`, `notes`, `date_sent`, `date_returned`, `submitted_by`, `status` , `location`)
         VALUES (
             '$vehicleId',
             '$workNeeded',
             '$notes',
             '$dateSent',
             '$dateReturn',
-            '$submittedBy', 1 )";
+            '$submittedBy', 1 , '$location' )";
 
         if ($connect->query($sql) === true) {
             $valid['success'] = true;

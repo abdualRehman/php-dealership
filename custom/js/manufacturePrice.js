@@ -15,26 +15,18 @@ $(function () {
     if (divRequest == "man") {
         var x = 1;
         manageDataTable = $("#datatable-1").DataTable({
-
-            // responsive: !0,
-            scrollX: !0,
-            scrollCollapse: !0,
-            fixedColumns: {
-                leftColumns: 0,
-                rightColumns: 1
-            },
+            responsive: !0,
 
             'ajax': '../php_action/fetchManufaturePrice.php',
 
             // working.... with both
-            dom: `\n     
-             <'row'<'col-12'P>>\n      
-             <'row'<'col-sm-12 col-md-6'l>>\n  
-            \n     
-            <'row'<'col-sm-6 text-center text-sm-left p-3'B>
-                <'col-sm-6 text-center text-sm-right mt-2 mt-sm-0'f>>\n
-            <'row'<'col-12'tr>>\n      
-            <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
+            dom: `
+            <'row'<'col-12'P>>\n      
+            <'row'<'col-sm-12 text-sm-left col-md-4 mb-2'<'#statusFilterDiv'> > <'col-sm-12 col-md-4 text-center'B> <'col-sm-12 col-md-4 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
+           <'row'<'col-12'tr>>\n      
+           <'row align-items-baseline'
+           <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
+           <'col-md-5'p>>\n`,
 
 
             searchPanes: {
@@ -156,10 +148,10 @@ $(function () {
                     targets: [1, 2, 3]
                 },
                 // for hide columns as defaul
-                // { 
-                //     visible: false, 
-                //     targets: 2 
-                // }
+                {
+                    visible: false,
+                    targets: [9, 10]
+                },
                 {
                     targets: 0,
                     render: function (row, data, index) {
@@ -173,7 +165,6 @@ $(function () {
                 'style': 'multi', // 'single', 'multi', 'os', 'multi+shift'
                 selector: 'td:first-child',
             },
-
             language: {
                 searchPanes: {
                     count: "{total} found",
@@ -187,6 +178,36 @@ $(function () {
                 copyTitle: 'Copy to clipboard',
                 copyKeys: 'Press <i>ctrl</i> or <i>\u2318</i> + <i>C</i> to copy the table data<br>to your system clipboard.<br><br>To cancel, click this message or press escape.'
             },
+            "drawCallback": function (settings, start, end, max, total, pre) {
+                var json = this.fnSettings().json;
+                if (json) {
+                    var obj = json.data;
+                    var activeCount = 0, inactiveCount = 0;
+
+                    for (const [key, value] of Object.entries(obj)) {
+                        var rowStatus = value[10];
+                        if (rowStatus == '0') {
+                            inactiveCount += 1;
+                        } else if (rowStatus == '1') {
+                            activeCount += 1;
+                        }
+                    }
+                    $(`#activeCount`).html(activeCount);
+                    $(`#inactiveCount`).html(inactiveCount);
+                }
+                $('.editCheckbox').on('change', function () {
+                    changeStatus($(this));
+                });
+            },
+            createdRow: function (row, data, dataIndex) {
+                if ($('#isAllowed').val() == 'true') {
+                    $(row).children().not(':last-child').not(':first-child').attr({
+                        "data-toggle": "modal",
+                        "data-target": "#editDetails",
+                        "onclick": "editDetails(" + data[9] + ")"
+                    });
+                }
+            },
             "order": [[1, "asc"]]
         })
         $('#MyTableCheckAllButton').click(function () {
@@ -196,8 +217,7 @@ $(function () {
                 manageDataTable.rows().deselect();
                 return;
             }
-
-            manageDataTable.rows().select();
+            manageDataTable.rows({ "filter": "applied" }).select();
         });
 
         manageDataTable.on('select deselect', function (e, dt, type, indexes) {
@@ -224,7 +244,7 @@ $(function () {
             }
         });
 
-       
+
 
         $("#editForm").validate({
             ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
@@ -286,6 +306,40 @@ $(function () {
         });
 
 
+        writeStatusHTML();
+        $('#searchStatusActive').click();
+
+        $.fn.dataTable.ext.search.push(
+            function (settings, searchData, index, rowData, counter) {
+                var tableNode = manageDataTable.table().node();
+
+                var searchStatus = $('input:radio[name="searchStatus"]:checked').map(function () {
+                    if (this.value !== "") {
+                        return this.value;
+                    }
+                }).get();
+
+                if (searchStatus.length === 0) {
+                    return true;
+                }
+
+                if (searchStatus.indexOf(searchData[10]) !== -1) {
+                    return true;
+                }
+                if (settings.nTable !== tableNode) {
+                    return true;
+                }
+                return false;
+            }
+        );
+
+        $('input:radio').on('change', function () {
+            $('#datatable-1').block({
+                message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+                timeout: 1e3
+            });
+            manageDataTable.draw();  // working
+        });
 
 
     } else if (divRequest == "add") {
@@ -455,6 +509,57 @@ $(function () {
     }
 
 });
+
+
+function changeStatus(obj = null) {
+    console.log(obj);
+    var probId = obj[0].id;
+    console.log(probId);
+    if (probId) {
+        e1.fire({
+            title: "Are you sure?",
+            text: "Do you really want to change status?",
+            icon: "warning",
+            showCancelButton: !0,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Change it!"
+        }).then(function (t) {
+            if (t.isConfirmed == true) {
+                $.ajax({
+                    url: '../php_action/changeManufacturePriceStatus.php',
+                    type: 'post',
+                    data: { id: probId },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success == true) {
+                            Swal.fire("Changed!", "Status has been changes.", "success")
+                            manageDataTable.ajax.reload(null, false);
+                        } // /response messages
+                    }
+                }); // /ajax function to remove the brand
+
+            }
+        });
+    }
+}
+
+function writeStatusHTML() {
+    var element = document.getElementById('statusFilterDiv');
+    if (element) {
+        element.innerHTML = `
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-flat-primary">
+                <input type="radio" name="searchStatus" id="searchStatusInactive" value="0" >Inactive<span class="badge badge-lg p-1" id="inactiveCount" ></span>
+            </label>
+            <label class="btn btn-flat-primary">
+                <input type="radio" name="searchStatus" id="searchStatusActive" value="1">Active <span class="badge badge-lg p-1" id="activeCount" ></span>
+            </label> 
+            
+        </div>`;
+    }
+
+}
 
 
 function toggleFilterClass() {

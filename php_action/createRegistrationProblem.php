@@ -26,11 +26,12 @@ if ($_POST) {
     $problem = isset($_POST['problem']) ? mysqli_real_escape_string($connect, $_POST['problem']) : "";
     $notes = isset($_POST['notes']) ? mysqli_real_escape_string($connect, $_POST['notes']) : "";
 
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
 
 
-    $sql = "INSERT INTO `registration_problems`(`contract_date`, `problem_date`, `customer_name`, `sales_consultant`, `finance_manager`, `stock_id`, `vehicle`, `problem`, `notes`, `status`) 
-    VALUES ('$contractDate' , '$problemDate' , '$customerName' , '$salesConsultant' , '$financeManager' , '$stockId' , '$vehicle' , '$problem' , '$notes' , 1)";
+    $sql = "INSERT INTO `registration_problems`(`contract_date`, `problem_date`, `customer_name`, `sales_consultant`, `finance_manager`, `stock_id`, `vehicle`, `problem`, `notes`, `status` , `location`) 
+    VALUES ('$contractDate' , '$problemDate' , '$customerName' , '$salesConsultant' , '$financeManager' , '$stockId' , '$vehicle' , '$problem' , '$notes' , 1 , '$location')";
 
     if ($connect->query($sql) === true) {
         $valid['success'] = true;

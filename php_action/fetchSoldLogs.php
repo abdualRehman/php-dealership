@@ -6,19 +6,19 @@ $userRole;
 if ($_SESSION['userRole']) {
     $userRole = $_SESSION['userRole'];
 }
-
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 /* sales consultant id */
 if ($userRole != $salesConsultantID) {
     $sql = "SELECT sales.date ,  inventory.stockno , sales.fname , sales.lname , users.username, sales.sale_status , sales.deal_notes , 
     inventory.year, inventory.make , inventory.model , sales.gross , sales.sale_id , inventory.lot , sales.certified, inventory.balance , 
-    inventory.status , inventory.age , inventory.stocktype , sales.stock_id , sales.consultant_notes , sales.thankyou_cards
-    FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant WHERE sales.status = 1";
+    inventory.status , inventory.age , inventory.stocktype , sales.stock_id , sales.consultant_notes , sales.thankyou_cards , sales.reconcileDate
+    FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant WHERE sales.status = 1 AND sales.location = '$location'";
 } else {
     $uid = $_SESSION['userId'];
     $sql = "SELECT sales.date ,  inventory.stockno , sales.fname , sales.lname , users.username, sales.sale_status , sales.deal_notes , 
     inventory.year, inventory.make , inventory.model , sales.gross , sales.sale_id , inventory.lot , sales.certified, inventory.balance , 
-    inventory.status , inventory.age , inventory.stocktype , sales.stock_id , sales.consultant_notes , sales.thankyou_cards
-    FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant WHERE sales.status = 1 AND sales.sales_consultant = '$uid'";
+    inventory.status , inventory.age , inventory.stocktype , sales.stock_id , sales.consultant_notes , sales.thankyou_cards , sales.reconcileDate
+    FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant WHERE sales.status = 1 AND sales.sales_consultant = '$uid' AND sales.location = '$location'";
 }
 
 $result = $connect->query($sql);
@@ -69,8 +69,9 @@ if ($result->num_rows > 0) {
 
 
 
-        $date = $row[0];
-        $date = date("M-d-Y", strtotime($date));  // formating date
+        // $date = $row[0];
+        // $date = date("M-d-Y", strtotime($date));  // formating date
+        $date =  ($row[21] != '') ? date("M-d-Y", strtotime($row[21])): date("M-d-Y", strtotime($row[0]));  // get Reconcile Date is exist otherwise get date
         $vehicle = $row[17] . ' ' . $row[7] . ' ' . $row[8] . ' ' . $row[9]; // vehicle details
 
         $gross = round(($row[10]), 2);

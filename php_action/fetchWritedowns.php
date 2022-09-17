@@ -13,10 +13,11 @@ function asDollars($value)
     return '$' . number_format($value, 2);
 }
 
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
 $sql = "SELECT used_cars.retail_status , used_cars.date_in, inventory.id as Inv_id , inventory.stockno , inventory.vin , inventory.year, inventory.make, inventory.model, 
 inventory.mileage, used_cars.title, inventory.lot, used_cars.sold_price, inventory.age , inventory.retail , inventory.balance, used_cars.id as used_car_Id , used_cars.mmr
-FROM used_cars LEFT JOIN inventory ON used_cars.inv_id = inventory.id  WHERE used_cars.status = 1 AND inventory.status = 1";
+FROM used_cars LEFT JOIN inventory ON used_cars.inv_id = inventory.id  WHERE used_cars.status = 1 AND inventory.status = 1 AND inventory.location = '$location'";
 
 
 $result = $connect->query($sql);
@@ -74,7 +75,7 @@ if ($result->num_rows > 0) {
 
         $writedown = 0;
 
-        $ruleSql = "SELECT * FROM `writedown_rules` WHERE status = 1 AND age_from <= {$endOfAge} AND age_to >= {$endOfAge} AND balance_from <= {$balance} AND balance_to >= {$balance} ORDER BY cast(age_from as int) ASC, cast(age_to as int) DESC , cast(balance_from as int) ASC, cast(balance_to as int) ASC LIMIT 1";
+        $ruleSql = "SELECT * FROM `writedown_rules` WHERE status = 1 AND location = '$location' AND age_from <= {$endOfAge} AND age_to >= {$endOfAge} AND balance_from <= {$balance} AND balance_to >= {$balance} ORDER BY cast(age_from as int) ASC, cast(age_to as int) DESC , cast(balance_from as int) ASC, cast(balance_to as int) ASC LIMIT 1";
         $result1 = $connect->query($ruleSql);
         if ($result1->num_rows > 0) {
             $row1 = $result1->fetch_assoc();

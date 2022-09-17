@@ -13,12 +13,15 @@ $(function () {
     $('#color').wheelColorPicker({
         autoResize: false,
         sliders: null
-    })
+    });
+
+    var ccsID = Number(localStorage.getItem('ccsID'));
 
     $.validator.addMethod("valueNotEquals", function (value, element, arg) {
         return arg != element.value;
     }, "Value must not equal arg.");
     $("#addUserForm").validate({
+        ignore: ":hidden:not(.selectpicker)",
         rules: {
             username: {
                 required: !0,
@@ -43,7 +46,7 @@ $(function () {
                 valueNotEquals: "0"
             },
             color: {
-                required: () => $('#role').val() == 72 ? true : false,
+                required: () => $('#role').val() == ccsID ? true : false,
             },
             monEnd: {
                 required: () => $('#monStart').val() ? true : false,
@@ -133,3 +136,28 @@ $(function () {
         }
     });
 });
+
+
+function fetchUserRolesByLocation() {
+    let location = $('#location').val();
+    if (location != 0) {
+        $.ajax({
+            url: '../php_action/fetchUserRolesByLocation.php',
+            type: 'post',
+            data: { location: location },
+            dataType: 'json',
+            success: function (response) {
+                let list = response.data;
+                let _html = document.getElementById('roleList');
+                _html.innerHTML = '';
+                list.forEach(obj => {
+                    _html.innerHTML += `<option value="${obj[0]}">${obj[1]}</option>`;
+                });
+                $('.selectpicker').selectpicker('refresh');
+            }, // /success
+            error: function (err) {
+                console.log(err);
+            }
+        }); // ajax function
+    }
+}

@@ -2,7 +2,10 @@
 
 require_once 'db/core.php';
 
-$sql = "SELECT users.id, users.username, users.email, role.role_name , users.mobile , users.extention FROM `users` LEFT JOIN role ON users.role = role.role_id WHERE `status` = 1 ORDER BY role.role_name asc";
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+$sql = "SELECT users.id, users.username, users.email, role.role_name , users.mobile , users.extention FROM `users` LEFT JOIN role ON users.role = role.role_id WHERE `status` = 1 AND users.location = '$location' ORDER BY role.role_name asc";
+
+
 $result = $connect->query($sql);
 
 $output = array('data' => array());

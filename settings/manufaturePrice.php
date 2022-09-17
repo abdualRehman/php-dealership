@@ -15,6 +15,11 @@ if ($_GET['r'] == 'man') {
     echo "<div class='div-request d-none'>add</div>";
 } // /else manage order
 
+if (hasAccess("manprice", "Edit") !== 'false') {
+    echo '<input type="hidden" name="isAllowed" id="isAllowed" value="true" />';
+} else {
+    echo '<input type="hidden" name="isAllowed" id="isAllowed" value="false" />';
+}
 
 ?>
 
@@ -89,6 +94,8 @@ if ($_GET['r'] == 'man') {
                                         <th>Model Description</th>
                                         <th>Trim</th>
                                         <th>Action</th>
+                                        <th>ID</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                             </table>

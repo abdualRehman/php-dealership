@@ -24,8 +24,9 @@ if ($_POST) {
     $editNumToCalc = mysqli_real_escape_string($connect, $_POST['editNumToCalc']);
 
 
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
-    $checkSql = "SELECT * FROM `bdc_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND status = 1 AND id != '$ruleId'";
+    $checkSql = "SELECT * FROM `bdc_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND status = 1 AND location = '$location' AND id != '$ruleId'";
     $result = $connect->query($checkSql);
 
     if ($result->num_rows > 0) {

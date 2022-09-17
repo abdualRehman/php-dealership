@@ -16,9 +16,10 @@ if ($_POST) {
 
     $roleName = $_POST['roleName'];
     $roleDes = $_POST['roleDes'];
+    $location = $_POST['location'];
 
 
-    $sql = "INSERT INTO `role`(`role_name`, `role_des`, `role_status`) VALUES ('$roleName' , '$roleDes' , 1)";
+    $sql = "INSERT INTO `role`(`role_name`, `role_des`, `location_id`  ,`role_status`) VALUES ('$roleName' , '$roleDes'  , '$location', 1)";
 
     $role_id = "";
     if ($connect->query($sql) === true) {

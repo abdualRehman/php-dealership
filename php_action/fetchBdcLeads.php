@@ -8,12 +8,14 @@ if ($_SESSION['userRole']) {
     $userRole = $_SESSION['userRole'];
 }
 
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+
 
 if ($userRole != $ccsID) {
-    $sql = "SELECT `id`, `date`, `ccs`, `lname`, `fname`, `entity`, `vehicle`, `sales_consultant`, `lead_status`, `lead_type`, `source`, `notes`, `verified`, `verified_by` FROM `bdc_lead` WHERE status = 1";
+    $sql = "SELECT `id`, `date`, `ccs`, `lname`, `fname`, `entity`, `vehicle`, `sales_consultant`, `lead_status`, `lead_type`, `source`, `notes`, `verified`, `verified_by` FROM `bdc_lead` WHERE status = 1 AND location = '$location'";
 } else {
     $uid = $_SESSION['userId'];
-    $sql = "SELECT `id`, `date`, `ccs`, `lname`, `fname`, `entity`, `vehicle`, `sales_consultant`, `lead_status`, `lead_type`, `source`, `notes`, `verified`, `verified_by` FROM `bdc_lead` WHERE `status` = 1 AND `ccs` = '$uid'";
+    $sql = "SELECT `id`, `date`, `ccs`, `lname`, `fname`, `entity`, `vehicle`, `sales_consultant`, `lead_status`, `lead_type`, `source`, `notes`, `verified`, `verified_by` FROM `bdc_lead` WHERE `status` = 1 AND `ccs` = '$uid' AND location = '$location'";
 }
 
 

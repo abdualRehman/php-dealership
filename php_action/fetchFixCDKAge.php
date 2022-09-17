@@ -2,9 +2,11 @@
 
 require_once 'db/core.php';
 
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+
 $sql = "SELECT inventory.age , inventory.stockno , inventory.vin , inventory.model, inventory.year, inventory.make , inventory.color , 
 inventory.mileage, inventory.lot , inventory.balance, inventory.retail, inventory.certified, 
-inventory.stocktype , inventory.wholesale , inventory.id as invId , used_cars.* FROM inventory LEFT JOIN used_cars ON inventory.id = used_cars.inv_id WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.status = 1";
+inventory.stocktype , inventory.wholesale , inventory.id as invId , used_cars.* FROM inventory LEFT JOIN used_cars ON inventory.id = used_cars.inv_id WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.status = 1 AND inventory.location = '$location'";
 $result = $connect->query($sql);
 
 $output = array('data' => array());
@@ -60,13 +62,16 @@ if ($result->num_rows > 0) {
         $age = (int)$age;
         $cdkAge = (int)$cdkAge;
 
-        if ($id != null && $carshopId != null && $row['date_in'] != '' && !is_null($row['date_in']) && $age != $cdkAge) {
+        $fixed_status = $row['fixed_status']; // fixed_status
+
+        if ($id != null && $carshopId != null && $row['date_in'] != '' && !is_null($row['date_in']) && $age != $cdkAge && $fixed_status != "true") {
             $fixAge += 1;
             $output['data'][] = array(
                 $id,
                 $row['date_in'],
                 $age, //age
                 $cdkAge,
+                $fixed_status,
                 $stockDetails,
                 $row[4], // year
                 $row[5], // make

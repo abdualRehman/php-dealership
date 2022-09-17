@@ -59,8 +59,10 @@ if ($_POST) {
         $exModelno = (isset($_POST['exModelno' . $i] )) ? implode("_", $_POST['exModelno' . $i] ) : "";
         $exModelno = ($exModelno ===  "") ? "" :   "_" . $exModelno . "_";
        
+        $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
-        $checkSql = "SELECT * FROM `salesperson_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND type='$modelType' AND `state`='$state' AND status = 1";
+
+        $checkSql = "SELECT * FROM `salesperson_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND type='$modelType' AND `state`='$state' AND status = 1 AND location = '$location'";
         $result = $connect->query($checkSql);
         if ($result->num_rows > 0) {
             
@@ -68,7 +70,7 @@ if ($_POST) {
         
         } else {
 
-            $sql = "INSERT INTO `salesperson_rules`(`model`, `year`, `modelno` , `ex_modelno` , `type`, `state` , `vin_check`, `insurance`, `trade_title`, `registration`, `inspection`, `salesperson_status`, `paid`, `status`) 
+            $sql = "INSERT INTO `salesperson_rules`(`model`, `year`, `modelno` , `ex_modelno` , `type`, `state` , `vin_check`, `insurance`, `trade_title`, `registration`, `inspection`, `salesperson_status`, `paid`, `status` , `location`) 
             VALUES (
                 '$model',
                 '$year',
@@ -82,7 +84,7 @@ if ($_POST) {
                 '$registration',
                 '$inspection',
                 '$salespersonStatus',
-                '$paid', 1 )";
+                '$paid', 1 , '$location' )";
 
             if ($connect->query($sql) === true) {
                 $valid['success'] = true;

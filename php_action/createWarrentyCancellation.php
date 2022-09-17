@@ -23,6 +23,8 @@ if ($_POST) {
     $dateSold = isset($_POST['dateSold']) ? mysqli_real_escape_string($connect, $_POST['dateSold']) : "";
     $paid = isset($_POST['paid']) ? "Yes" : "No";
     $notes = isset($_POST['notes']) ? mysqli_real_escape_string($connect, $_POST['notes']) : "";
+    
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
 
 
@@ -30,10 +32,10 @@ if ($_POST) {
 
     $sql = "INSERT INTO `warrenty_cancellation`(
         `customer_name`, `warrenty`, `date_cancelled`, `refund_des`, 
-        `finance_manager`, `date_sold`, `paid`, `notes` , `status`
+        `finance_manager`, `date_sold`, `paid`, `notes` , `status` , `location`
         ) VALUES (
         '$customerName' , '$warranty' , '$dateCancelled' , '$refundDes' , 
-        '$financeManager' , '$dateSold' , '$paid' , '$notes' , 1)";
+        '$financeManager' , '$dateSold' , '$paid' , '$notes' , 1 , '$location')";
 
     if ($connect->query($sql) === true) {
         $valid['success'] = true;

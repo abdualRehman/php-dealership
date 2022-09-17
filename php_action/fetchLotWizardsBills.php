@@ -2,9 +2,11 @@
 
 require_once 'db/core.php';
 
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+
 $sql = "SELECT inspections.id , inventory.stockno , inventory.vin , inventory.stocktype ,  inventory.year , inventory.make , inventory.model , inventory.age , 
-inspections.repairs , inspections.shops , inspections.repair_sent , inspections.repair_returned , inspections.repair_paid_date 
-FROM `inspections` LEFT JOIN inventory ON inspections.inv_id = inventory.id WHERE inspections.status = 1 AND inspections.repair_returned != ''";
+inspections.repairs , inspections.shops , inspections.repair_sent , inspections.repair_returned , inspections.repair_paid_date , inspections.repair_paid
+FROM `inspections` LEFT JOIN inventory ON (inspections.inv_id = inventory.id AND inventory.location = '$location') WHERE inspections.status = 1 AND inspections.repair_returned != ''";
 $result = $connect->query($sql);
 
 $output = array('data' => array());
@@ -47,6 +49,7 @@ if ($result->num_rows > 0) {
         $repairSent =  $row['repair_sent'];
         $repairReturned =  $row['repair_returned'];
         $repair_paid_date =  $row['repair_paid_date'];
+        $repair_paid =  $row['repair_paid'];
 
         // $repair_paid_date = '
         // <div class="show d-flex" >
@@ -74,6 +77,7 @@ if ($result->num_rows > 0) {
             $row['repairs'],
             $repairSent,
             $repairReturned,
+            $repair_paid,
             $repair_paid_date,
             $bodyShopName,
         );

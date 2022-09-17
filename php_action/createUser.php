@@ -42,25 +42,36 @@ if ($_POST) {
     if ($password == $conpassword) {
         $password = md5($password);
 
-        $sql = "INSERT INTO `users`( `username`, `email`, `password`, `role`, `status`, `permissions`, `location`, `extention`, `mobile` , `color`) 
-            VALUES ('$username' , '$email' , '$password' , '$role' , 1 , '0' , '$location' , '$extention' , '$mobile' , '$color' )";
+        $checkSql = "SELECT users.* FROM users WHERE users.email = '$email' AND users.status = 1";
+        $checkResult = $connect->query($checkSql);
 
-        if ($connect->query($sql) === true) {
-            $uid = $connect->insert_id;
-
-            $sql1 = "INSERT INTO `schedule`(`user_id`, `mon_start`, `mon_end`, `tue_start`, `tue_end`, `wed_start`, `wed_end`, `thu_start`, `thu_end`, `fri_start`, `fri_end`, `sat_start`, `sat_end`, `sun_start`, `sun_end`) 
-            VALUES ('$uid' , '$monStart' , '$monEnd' , '$tueStart' , '$tueEnd' , '$wedStart' , '$wedEnd' , '$thuStart' , '$thuEnd' , '$friStart' , '$friEnd' , '$satStart' , '$satEnd' , '$sunStart' , '$sunEnd')";
-
-            if ($connect->query($sql1) === true) {
-
-                $valid['success'] = true;
-                $valid['messages'] = "Successfully Added";
+        if ($checkResult->num_rows <= 0) {
+            
+            $sql = "INSERT INTO `users`( `username`, `email`, `password`, `role`, `status`, `permissions`, `location`, `extention`, `mobile` , `color`) 
+                VALUES ('$username' , '$email' , '$password' , '$role' , 1 , '0' , '$location' , '$extention' , '$mobile' , '$color' )";
+    
+            if ($connect->query($sql) === true) {
+                $uid = $connect->insert_id;
+    
+                $sql1 = "INSERT INTO `schedule`(`user_id`, `mon_start`, `mon_end`, `tue_start`, `tue_end`, `wed_start`, `wed_end`, `thu_start`, `thu_end`, `fri_start`, `fri_end`, `sat_start`, `sat_end`, `sun_start`, `sun_end`) 
+                VALUES ('$uid' , '$monStart' , '$monEnd' , '$tueStart' , '$tueEnd' , '$wedStart' , '$wedEnd' , '$thuStart' , '$thuEnd' , '$friStart' , '$friEnd' , '$satStart' , '$satEnd' , '$sunStart' , '$sunEnd')";
+    
+                if ($connect->query($sql1) === true) {
+    
+                    $valid['success'] = true;
+                    $valid['messages'] = "Successfully Added";
+                }
+            } else {
+                $valid['success'] = false;
+                $valid['messages'] = $connect->error;
+                $valid['messages'] = mysqli_error($connect);
             }
-        } else {
+
+        }else{
             $valid['success'] = false;
-            $valid['messages'] = $connect->error;
-            $valid['messages'] = mysqli_error($connect);
+            $valid['messages'] = "Email Already Exist";
         }
+
     }
 
 

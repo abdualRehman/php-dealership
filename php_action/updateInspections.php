@@ -84,6 +84,7 @@ if ($_POST) {
     $repairRetrun_log = "";
     $repairs_log = "";
     $repairPaid_log = "";
+    $bodyshop_log = "";
 
 
     $checkSql = "SELECT * FROM `inspections` WHERE inv_id = '$vehicleId' AND status = 1";
@@ -96,6 +97,7 @@ if ($_POST) {
                 $repairRetrun_log = $row['repair_returned'];
                 $repairs_log = $row['repairs'];
                 $repairPaid_log = $row['repair_paid'];
+                $bodyshop_log = $row['shops'];
             }
         }
 
@@ -106,7 +108,7 @@ if ($_POST) {
         `repair_returned`='$repairReturn',`repair_paid`='$repairPaid',`resend`='$resend',
         `pictures`='$imageArray',`windshield`='$windshield',`wheels`='$wheels',`submitted_by`='$submittedBy',
         `repair_sent_log`='$repairSent_log',`repair_returned_log`='$repairRetrun_log',
-        `repairs_log`='$repairs_log',`repair_paid_log`='$repairPaid_log'
+        `repairs_log`='$repairs_log',`repair_paid_log`='$repairPaid_log',`bodyshop_log`='$bodyshop_log'
         WHERE inv_id = '$vehicleId'";
 
         if ($connect->query($updatekSql) === true) {

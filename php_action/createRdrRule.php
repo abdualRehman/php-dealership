@@ -15,15 +15,16 @@ if ($_POST) {
     $certified = (isset($_POST['certified'])) ? mysqli_real_escape_string($connect, $_POST['certified']) : "";
     $rdrType = (isset($_POST['rdrType'])) ? mysqli_real_escape_string($connect, $_POST['rdrType']) : "";
 
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
 
-    $checkSql = "SELECT * FROM `rdr_rules` WHERE `year` = '$year' AND `make` = '$make' AND `model` = '$model' AND `model_type` = '$modelType' AND `certified`='$certified'  AND status = 1";
+    $checkSql = "SELECT * FROM `rdr_rules` WHERE `year` = '$year' AND `make` = '$make' AND `model` = '$model' AND `model_type` = '$modelType' AND `certified`='$certified'  AND status = 1 AND location = '$location'";
     $result = $connect->query($checkSql);
     if ($result && $result->num_rows > 0) {
         $valid['errorMessages'][] = $year . ' - ' . $make . ' - ' . $model . ' - ' . $modelType . ' - ' . $certified . ",  Already Exist";
     } else {
 
-        $sql = "INSERT INTO `rdr_rules`( `year`, `make` , `model` , `model_type`, `certified`, `rdr_type` , `status`) 
+        $sql = "INSERT INTO `rdr_rules`( `year`, `make` , `model` , `model_type`, `certified`, `rdr_type` , `status` , `location`) 
             VALUES (
                 '$year',
                 '$make',
@@ -31,7 +32,7 @@ if ($_POST) {
                 '$modelType',
                 '$certified',
                 '$rdrType',
-                1 )";
+                1 , '$location' )";
 
         if ($connect->query($sql) === true) {
             $valid['success'] = true;

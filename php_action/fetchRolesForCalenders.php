@@ -1,8 +1,8 @@
 <?php
 
 require_once 'db/core.php';
-
-$sql = "SELECT `role_id`, `role_name`, `role_des`, `color_code`, `role_status` FROM `role` WHERE role_status != 2";
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+$sql = "SELECT `role_id`, `role_name`, `role_des`, `color_code`, `role_status` FROM `role` WHERE role_status != 2 AND location_id = '$location'";
 $result = $connect->query($sql);
 
 $output = array('data' => array());

@@ -9,11 +9,20 @@ $id = $_POST['id'];
 
 if ($id) {
 
-    $sql = "DELETE FROM used_cars WHERE inv_id = '$id'";
+    $sql = "UPDATE manufature_price SET status = 1 - status WHERE id = '$id'";
 
     if ($connect->query($sql) === TRUE) {
+
+        // update All Matrix Becaause we don't know about weather used delete exclude model no or not
+        $obj = updateAllMaxtix();
+        $obj = json_decode($obj);
+
+        if ($obj->success === 'false') {
+            $valid['settingError'][] = $obj->messages;
+        }
+        
         $valid['success'] = true;
-        $valid['messages'] = "Successfully Removed";
+        $valid['messages'] = "Successfully Updated";
     } else {
         $valid['success'] = false;
         $valid['messages'] = $connect->error;

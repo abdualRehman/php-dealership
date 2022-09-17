@@ -7,19 +7,20 @@ $userRole;
 if ($_SESSION['userRole']) {
     $userRole = $_SESSION['userRole'];
 }
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
 
 if ($userRole != $salesConsultantID) {
     $sql = "SELECT swaps.id , locations.dealer_no , locations.dealership , locations.address , 
     swaps.vehicle_in , swaps.color_in , swaps.stock_in , 
     swaps.vehicle_out , swaps.color_out , inventory.stockno as stock_out , swaps.sales_consultant , swaps.notes , users.username , swaps.swap_status , transferred_in , transferred_out
-    FROM `swaps` LEFT JOIN locations ON locations.id = swaps.from_dealer LEFT JOIN users ON users.id = swaps.sales_consultant LEFT JOIN inventory ON inventory.id = swaps.stock_out  WHERE swaps.status = 1";
+    FROM `swaps` LEFT JOIN locations ON locations.id = swaps.from_dealer LEFT JOIN users ON users.id = swaps.sales_consultant LEFT JOIN inventory ON inventory.id = swaps.stock_out  WHERE swaps.status = 1 AND swaps.location = '$location'";
 } else {
     $uid = $_SESSION['userId'];
     $sql = "SELECT swaps.id , locations.dealer_no , locations.dealership , locations.address , 
     swaps.vehicle_in , swaps.color_in , swaps.stock_in , 
     swaps.vehicle_out , swaps.color_out , inventory.stockno as stock_out , swaps.sales_consultant , swaps.notes , users.username , swaps.swap_status , transferred_in , transferred_out
-    FROM `swaps` LEFT JOIN locations ON locations.id = swaps.from_dealer LEFT JOIN users ON users.id = swaps.sales_consultant LEFT JOIN inventory ON inventory.id = swaps.stock_out  WHERE swaps.status = 1 AND swaps.sales_consultant = '$uid'";
+    FROM `swaps` LEFT JOIN locations ON locations.id = swaps.from_dealer LEFT JOIN users ON users.id = swaps.sales_consultant LEFT JOIN inventory ON inventory.id = swaps.stock_out  WHERE swaps.status = 1 AND swaps.sales_consultant = '$uid' AND swaps.location = '$location'";
 }
 
 $result = $connect->query($sql);

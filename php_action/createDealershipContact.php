@@ -14,11 +14,11 @@ if ($_POST) {
     $zip = (isset($_POST['zip'])) ? mysqli_real_escape_string($connect, $_POST['zip']) : "";
     $telephone = (isset($_POST['telephone'])) ? mysqli_real_escape_string($connect, $_POST['telephone']) : "";
     $fax = (isset($_POST['fax'])) ? mysqli_real_escape_string($connect, $_POST['fax']) : "";
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
 
-
-    $sql = "INSERT INTO `dealerships`(`brand`, `dealership`, `address`, `city`, `state`, `zip`, `telephone`, `fax` , `status`) 
-    VALUES ( '$brand' , '$dealership' , '$address' , '$city' , '$state' , '$zip' , '$telephone' , '$fax' ,1 )";
+    $sql = "INSERT INTO `dealerships`(`brand`, `dealership`, `address`, `city`, `state`, `zip`, `telephone`, `fax` , `status` , `location`) 
+    VALUES ( '$brand' , '$dealership' , '$address' , '$city' , '$state' , '$zip' , '$telephone' , '$fax' ,1 , '$location' )";
 
     if ($connect->query($sql) === true) {
         $valid['success'] = true;

@@ -23,8 +23,9 @@ if ($_POST) {
     $editHb = mysqli_real_escape_string($connect, $_POST['editHb']);
 
 
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
-    $checkSql = "SELECT * FROM `matrix_rule` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND status = 1 AND id != '$ruleId'";
+    $checkSql = "SELECT * FROM `matrix_rule` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND status = 1 AND location = '$location' AND id != '$ruleId'";
     $result = $connect->query($checkSql);
 
     if ($result->num_rows > 0) {

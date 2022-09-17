@@ -42,9 +42,11 @@ if ($_POST) {
         $exModelno = (isset($_POST['exModelno'.$i])) ? implode(" ",$_POST['exModelno'.$i]): "";
         $exModelno = ($exModelno ===  "") ? "" :   " ".$exModelno." " ;
 
+        $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+
           
 
-        $checkSql = "SELECT * FROM `rate_rule` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND status = 1";
+        $checkSql = "SELECT * FROM `rate_rule` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND status = 1 AND location = '$location'";
         $result = $connect->query($checkSql);
         if ($result && $result->num_rows > 0) {
             $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . ", Already Exist";
@@ -54,7 +56,7 @@ if ($_POST) {
                 `model`, `year`, `modelno`, `ex_modelno`, 
                 `f_24-36`, `f_37-48`, `f_49-60`, `f_61-72`, 
                 `f_659_610_24-36`, `f_659_610_37-60`, `f_659_610_61-72`, `f_expire`, 
-                `lease_660`, `lease_659_610`, `lease_one_pay_660`, `lease_one_pay_659_610`, `lease_expire` , `status`) 
+                `lease_660`, `lease_659_610`, `lease_one_pay_660`, `lease_one_pay_659_610`, `lease_expire` , `status` , `location`) 
             VALUES (
                 '$model',
                 '$year',
@@ -72,7 +74,7 @@ if ($_POST) {
                 '$lease_659_610',
                 '$lease_one_pay_660',
                 '$lease_one_pay_659_610',
-                '$lease_expire',1
+                '$lease_expire',1 , '$location'
             )";
 
             if ($connect->query($sql) === true) {

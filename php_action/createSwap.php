@@ -52,14 +52,16 @@ if ($_POST) {
 
     $dealNote = isset($_POST['dealNote']) ? mysqli_real_escape_string($connect, $_POST['dealNote']) : "";
 
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+
 
     $sql = "INSERT INTO `swaps`(
         `from_dealer`, `swap_status`, 
         `stock_in`, `vehicle_in`, `color_in`, `inv_received`, `transferred_in`, `vin_in`, `inv_in`, `hb_in`, `msrp_in`, `hdag_in`, `adds_in`, `adds_in_notes`, `hbt_in`, `net_cost_in`, 
-        `stock_out`, `vehicle_out`, `color_out`, `inv_sent`, `transferred_out`, `vin_out`, `inv_out`, `hb_out`, `msrp_out`, `hdag_out`, `adds_out`, `adds_out_notes`, `hbt_out`, `net_cost_out`, `notes` , `sales_consultant` , `tagged` , `submitted_by`, `status`) 
+        `stock_out`, `vehicle_out`, `color_out`, `inv_sent`, `transferred_out`, `vin_out`, `inv_out`, `hb_out`, `msrp_out`, `hdag_out`, `adds_out`, `adds_out_notes`, `hbt_out`, `net_cost_out`, `notes` , `sales_consultant` , `tagged` , `submitted_by`, `status` , `location`) 
     VALUES ('$fromDealer' , '$status' , 
         '$stockIn', '$vehicleIn' , '$colorIn' , '$invReceived' , '$transferredIn' , '$vinIn' , '$invIn' , '$hbIn' , '$msrpIn' , '$hdagIn' , '$addsIn' , '$addsInNotes' , '$hbtIn' , '$netcostIn',
-        '$stockOut' , '$vehicleOut' , '$colorOut' , '$invSent' , '$transferredOut' , '$vinOut' , '$invOut' , '$hbOut' , '$msrpOut' , '$hdagOut' , '$addsOut' , '$addsOutNotes' , '$hbtOut' , '$netcostOut' , '$dealNote' , '$sales_consultant' , '$tagged' , '$submitted_by' , 1 )";
+        '$stockOut' , '$vehicleOut' , '$colorOut' , '$invSent' , '$transferredOut' , '$vinOut' , '$invOut' , '$hbOut' , '$msrpOut' , '$hdagOut' , '$addsOut' , '$addsOutNotes' , '$hbtOut' , '$netcostOut' , '$dealNote' , '$sales_consultant' , '$tagged' , '$submitted_by' , 1 , '$location')";
 
     if ($connect->query($sql) === true) {
         $valid['id'] = $connect->insert_id;

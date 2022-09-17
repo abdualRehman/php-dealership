@@ -126,7 +126,7 @@ $(function () {
 
         columnDefs: [
             {
-                targets: [0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 29],
+                targets: [0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 29 , 30],
                 visible: false,
             },
             { width: 400, targets: [15] },
@@ -136,6 +136,18 @@ $(function () {
                     var data = $(td).html();
                     if (data > 4) {
                         $(td).addClass('h5 font-weight-bolder text-danger');
+                    } else {
+                        $(td).addClass('font-weight-bold p');
+                    }
+                }
+            },
+            {
+                targets: [2], // stockno || vin
+                createdCell: function (td, cellData, rowData, row, col) {
+                    let retailStatus = rowData[23];
+                    let wholesale = rowData[20];
+                    if (retailStatus == 'retail' && wholesale == 'Yes') {
+                        $(td).addClass('font-weight-bolder text-danger');
                     } else {
                         $(td).addClass('font-weight-bold p');
                     }
@@ -300,6 +312,12 @@ $(function () {
                 },
             },
             {
+                targets: [30], // Uci Ro
+                render: function (data, type, row) {
+                    return row[33];
+                },
+            },
+            {
                 searchPanes: {
                     show: true
                 },
@@ -406,7 +424,7 @@ $(function () {
                 // a.clear();
                 // a.local = searhStatusArray;
                 // a.initialize(true);
-                setSearchTypehead(searhStatusArray);
+                // setSearchTypehead(searhStatusArray);
                 searhStatusArray = [];
             }
         },
@@ -504,7 +522,7 @@ $(function () {
                 }
             }
             if (activebtnvalue == 'missingDate') {
-                if ((EmptyField(date_in) == false && date_in !== null) && balance !== '') {
+                if ((EmptyField(date_in) == false && date_in !== null)) {
                     return true;
                 }
             }
@@ -526,23 +544,23 @@ $(function () {
                 }
             }
             if (activebtnvalue == 'readyToShip') {
-                if (title == 'true' && retail_status == 'wholesale' && key == 'false' && (date_in !== '' && date_in !== null)) {
+                if (title == 'true' && retail_status == 'wholesale' && key == 'false') {
                     return true;
                 }
             }
             if (activebtnvalue == 'keysPulled') {
-                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && (date_in !== '' && date_in !== null) && !date_sent && !date_sold) {
+                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && !date_sent && !date_sold) {
                     return true;
                 }
             }
             if (activebtnvalue == 'atAuction') {
 
-                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && (date_in !== '' && date_in !== null) && date_sent && !date_sold) {
+                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && date_sent && !date_sold) {
                     return true;
                 }
             }
             if (activebtnvalue == 'soldAtAuction') {
-                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && (date_in !== '' && date_in !== null) && date_sent && date_sold) {
+                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && date_sent && date_sold) {
                     return true;
                 }
 
@@ -569,6 +587,7 @@ $(function () {
         }
     );
 
+    setSearchTypehead(searhStatusArray);
 
     $('#clear-selection').click(function () {
         $('#purchaseFrom :radio').prop('checked', false);
@@ -596,45 +615,49 @@ $(function () {
             message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
             timeout: 1e3
         });
-        searhStatusArray = [];
+        // searhStatusArray = [];
         var currentElement = $(this).val();
         if (currentElement != 'fixAge') {
             $('.inspectionTable').removeClass('d-none');
             $('.FixSDKtable').addClass('d-none');
             switch (currentElement) {
                 case 'missingDate':
-                    setColumVisibility([0, 1, 4, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28]);
+                    setColumVisibility([0, 1, 4, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28 , 30]);
                     manageInvTable.rowGroup().disable().draw();
                     break;
                 case 'titleIssue':
-                    setColumVisibility([0, 3, 4, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]);
+                    setColumVisibility([0, 3, 4, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28 , 30]);
                     manageInvTable.rowGroup().disable().draw();
                     break;
                 case 'readyToShip':
-                    setColumVisibility([0, 3, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28]);
+                    setColumVisibility([0, 3, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28 , 30]);
                     rowGroupSrc = 23;
                     manageInvTable.rowGroup().enable().draw();
                     manageInvTable.dataSrc(rowGroupSrc);
                     break;
                 case 'keysPulled':
                 case 'atAuction':
-                    setColumVisibility([0, 3, 12, 13, 14, 15, 17, 18, 19, 21, 24, 25, 26, 27, 28]);
+                    setColumVisibility([0, 3, 12, 13, 14, 15, 17, 18, 19, 21, 24, 25, 26, 27, 28 , 30]);
                     rowGroupSrc = 23;
                     manageInvTable.rowGroup().enable().draw();
                     manageInvTable.dataSrc(rowGroupSrc);
                     break;
                 case 'soldAtAuction':
-                    setColumVisibility([0, 3, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 26, 27, 28]);
+                    setColumVisibility([0, 3, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 26, 27, 28 , 30]);
                     rowGroupSrc = 22; // sold date 
                     manageInvTable.rowGroup().enable().draw();
                     manageInvTable.dataSrc(rowGroupSrc);
                     break;
                 case 'addToSheet':
-                    setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 29]);
+                    setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 29 , 30]);
+                    manageInvTable.rowGroup().disable().draw();
+                    break;
+                case 'retail':
+                    setColumVisibility([0, 3, 4, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28 , 30]);
                     manageInvTable.rowGroup().disable().draw();
                     break;
                 default:
-                    setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28]);
+                    setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28 , 30]);
                     manageInvTable.rowGroup().disable().draw();
                     break;
             }
@@ -649,6 +672,9 @@ $(function () {
                 manageInvTable.draw();
                 manageInvTable.searchPanes.rebuildPane();
                 manageInvTable.ajax.reload(null, false);
+                if(currentElement == 'soldAtAuction'){
+                    manageInvTable.order([22, 'asc'] ,[1, 'desc']).draw();
+                }
 
                 setPlaceholder();
             }, 500);
@@ -671,6 +697,13 @@ $(function () {
             },
             "soldPrice": {
                 number: !0,
+                required:function (params) {
+                    if($('#dateSold').val() != ''){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
             },
             "uciApproved": {
                 number: !0,
@@ -912,6 +945,17 @@ function handletitleCheckbox(e) {
     }
     updateFieldsUsedCars({ id, attribute, value }, false);
 }
+function handleFixedStatusCheckbox(e) {
+    let value = "false";
+    let id = $(e).data('id');
+    let attribute = $(e).data('attribute');
+    if ($(e).is(':checked')) {
+        value = "true";
+    }
+    console.log({ id, attribute, value });
+    updateFieldsUsedCars({ id, attribute, value });
+    manageCDKAgeTable.ajax.reload(null, false);
+}
 
 
 // setTimeout(() => {
@@ -945,28 +989,28 @@ function fetchFixCDKAge() {
             searchPanes: {
                 cascadePanes: !0,
                 viewTotal: !0,
-                columns: [1, 2, 4]
+                columns: [1, 2, 5]
             },
             buttons: [
                 {
                     extend: 'copyHtml5',
                     title: 'Fix CDK Age',
                     exportOptions: {
-                        columns: [':visible']
+                        columns: [':visible:not(:nth-child(4))']
                     }
                 },
                 {
                     extend: 'excelHtml5',
                     title: 'Fix CDK Age',
                     exportOptions: {
-                        columns: [':visible']
+                        columns: [':visible:not(:nth-child(4))']
                     }
                 },
                 {
                     extend: 'print',
                     title: 'Fix CDK Age',
                     exportOptions: {
-                        columns: [':visible']
+                        columns: [':visible:not(:nth-child(4))']
                     }
                 },
             ],
@@ -979,7 +1023,20 @@ function fetchFixCDKAge() {
                     searchPanes: {
                         show: true
                     },
-                    targets: [1, 2, 4]
+                    targets: [1, 2, 5]
+                },
+                {
+                    targets: [4],
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        if ($('#isEditAllowed').val() == 'true') {
+                            $(td).html(`<div class="custom-control custom-control-lg custom-checkbox">
+                                    <input type="checkbox" name="fixed_statusCheckbox" data-attribute="fixed_status" onchange="handleFixedStatusCheckbox(this)" data-id="${rowData[0]}" class="custom-control-input fixed_statusCheckbox" id="${rowData[0]}fixed_status" ${((rowData[4] == 'false') ? '' : 'checked="checked"')} >
+                                    <label class="custom-control-label" for="${rowData[0]}fixed_status"></label> 
+                                </div>`);
+                        } else {
+                            $(td).html(rowData[4]);
+                        }   
+                    }
                 },
                 {
                     targets: [2, 3],
@@ -1032,8 +1089,7 @@ function fetchFixCDKAge() {
 
 
 function loadSaleConsultant() {
-    // var sales_consultant_id = 38;
-    var sales_consultant_id = 66;
+    var sales_consultant_id = Number(localStorage.getItem('salesConsultantID'));
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",
@@ -1219,7 +1275,10 @@ function addALL() {
 
             success: function (response) {
                 if (response.success == true) {
-                    Swal.fire("Added!", "Your file has been Added.", "success")
+                    Swal.fire("Added!", "Your file has been Added.", "success");
+                    setTimeout(() => {
+                        Swal.close()
+                    }, 900);
                     manageInvTable.ajax.reload(null, false);
                 } // /response messages
             }
@@ -1268,6 +1327,9 @@ function updateFieldsUsedCars(obj, notify = true) {
                     manageInvTable.ajax.reload(null, false);
                     if (notify == true) {
                         Swal.fire("Added!", "Successfully Changed", "success");
+                        setTimeout(() => {
+                            Swal.close()
+                        }, 900);
                     }
                 } // /response messages
             }
@@ -1298,7 +1360,7 @@ const formatToCurrency = amount => {
     }
 };
 
-function removeCarshop(id = null) {
+function removeUsedCar(id = null) {
     if (id) {
         e1.fire({
             title: "Are you sure?",
@@ -1311,13 +1373,16 @@ function removeCarshop(id = null) {
         }).then(function (t) {
             if (t.isConfirmed == true) {
                 $.ajax({
-                    url: '../php_action/removeCarshop.php',
+                    url: '../php_action/removeUsedCar.php',
                     type: 'post',
                     data: { id: id },
                     dataType: 'json',
                     success: function (response) {
                         if (response.success == true) {
-                            Swal.fire("Deleted!", "Your file has been deleted.", "success")
+                            Swal.fire("Deleted!", "Your file has been deleted.", "success");
+                            setTimeout(() => {
+                                Swal.close()
+                            }, 900);
                             manageInvTable.ajax.reload(null, false);
                         } // /response messages
                     }

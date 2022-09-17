@@ -6,7 +6,7 @@ require_once './updateMatrixRules.php';
 require_once '../assets/plugin/php-excel-reader/excel_reader2.php';
 require_once '../assets/plugin/SpreadsheetReader.php';
 
-$valid['success'] = array('success' => false, 'messages' => array(), 'erorStock' => array() ,'settingError' => array());
+$valid['success'] = array('success' => false, 'messages' => array(), 'erorStock' => array(), 'settingError' => array());
 
 function tofloat($numberString)
 {
@@ -80,8 +80,9 @@ if ($_POST) {
 
                         $msrp = tofloat($msrp);
                         $dlrinv = tofloat($dlrinv);
+                        $location = $_SESSION['userLoc'];
 
-                        $sql = "INSERT INTO `manufature_price`(`year`, `model`, `model_code`, `msrp`, `dlr_inv`, `model_des`, `trim`, `status`) 
+                        $sql = "INSERT INTO `manufature_price`(`year`, `model`, `model_code`, `msrp`, `dlr_inv`, `model_des`, `trim`, `status` , `location`) 
                         VALUES (
                             '$year',
                             '$model',
@@ -90,7 +91,8 @@ if ($_POST) {
                             '$dlrinv',
                             '$modeldescription',
                             '$modeldescription',
-                            1
+                            1,
+                            '$location'
                         )";
 
 

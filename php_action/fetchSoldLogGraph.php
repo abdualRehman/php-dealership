@@ -8,6 +8,7 @@ $userRole;
 if ($_SESSION['userRole']) {
     $userRole = $_SESSION['userRole'];
 }
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
 /* sales consultant id */
 if ($userRole != $salesConsultantID) {
@@ -17,22 +18,22 @@ if ($userRole != $salesConsultantID) {
     // WHERE sales.status = 1 ORDER BY sales.date ASC";
     $sql = "SELECT sales.date , sales.reconcileDate , sales.sales_consultant as consultant_id , users.username as sales_consultant , sales.sale_status, sales.sale_id, inventory.stocktype , sales.gross 
     FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant 
-    WHERE sales.status = 1 AND inventory.stocktype !='OTHER' ORDER BY sales.sales_consultant ASC, sales.reconcileDate ASC";
+    WHERE sales.status = 1 AND sales.location = '$location' AND inventory.stocktype !='OTHER' ORDER BY sales.sales_consultant ASC, sales.reconcileDate ASC";
 
     $sql2 = "SELECT 
-        ( SELECT COUNT(registration_problems.id) FROM registration_problems WHERE registration_problems.status = 1 AND registration_problems.p_status = 1 ) as problem ,
-        ( SELECT  COUNT(b.sale_todo_id)  FROM `sale_todo` as b INNER JOIN sales ON b.sale_id = sales.sale_id WHERE ( sales.status = 1 AND b.status = 1  AND ((b.vin_check = 'checkTitle' OR b.vin_check = 'need') OR b.inspection = 'need' OR b.trade_title = 'need' OR b.registration = 'pending' OR b.registration = 'done' OR b.inspection = 'need' ))) as todo , 
-        ( SELECT COUNT(used_cars.id) FROM `used_cars` LEFT JOIN inventory ON (used_cars.inv_id = inventory.id AND inventory.status = 1 AND inventory.stocktype = 'USED' AND inventory.lot != 'LBO') WHERE (title = 'false' OR title IS NULL) AND date_in IS NOT NULL AND inventory.id IS NOT NULL ) as titleIssue";
+        ( SELECT COUNT(registration_problems.id) FROM registration_problems WHERE registration_problems.status = 1 AND registration_problems.location = '$location' AND registration_problems.p_status = 1 ) as problem ,
+        ( SELECT  COUNT(b.sale_todo_id)  FROM `sale_todo` as b INNER JOIN sales ON b.sale_id = sales.sale_id WHERE sales.status = 1 AND sales.location = '$location' AND b.status = 1 AND b.salesperson_status != 'cancelled' AND ((b.vin_check = 'checkTitle' OR b.vin_check = 'need') OR b.insurance = 'need' OR b.trade_title = 'need' OR (b.registration = 'pending' OR b.registration = 'done') OR b.inspection = 'need' OR b.salesperson_status != 'delivered' )) as todo , 
+        ( SELECT COUNT(used_cars.id) FROM `used_cars` LEFT JOIN inventory ON (used_cars.inv_id = inventory.id AND inventory.status = 1 AND inventory.location = '$location' AND inventory.stocktype = 'USED' AND inventory.lot != 'LBO') WHERE (title = 'false' OR title IS NULL) AND date_in IS NOT NULL AND inventory.id IS NOT NULL ) as titleIssue";
 } else {
     $uid = $_SESSION['userId'];
     $sql = "SELECT sales.date ,sales.reconcileDate , sales.sales_consultant as consultant_id , users.username as sales_consultant , sales.sale_status, sales.sale_id, inventory.stocktype , sales.gross 
     FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant 
-    WHERE sales.status = 1 AND inventory.stocktype !='OTHER' AND sales.sales_consultant = '$uid' ORDER BY sales.reconcileDate ASC";
+    WHERE sales.status = 1  AND sales.location = '$location' AND inventory.stocktype !='OTHER' AND sales.sales_consultant = '$uid' ORDER BY sales.reconcileDate ASC";
 
     $sql2 = "SELECT 
-        ( SELECT COUNT(registration_problems.id) FROM registration_problems WHERE registration_problems.status = 1 AND registration_problems.p_status = 1 AND registration_problems.sales_consultant = '$uid') as problem ,
-        ( SELECT  COUNT(b.sale_todo_id)  FROM `sale_todo` as b INNER JOIN sales ON b.sale_id = sales.sale_id WHERE ( sales.sales_consultant = '$uid' AND sales.status = 1 AND b.status = 1  AND ((b.vin_check = 'checkTitle' OR b.vin_check = 'need') OR b.inspection = 'need' OR b.trade_title = 'need' OR b.registration = 'pending' OR b.registration = 'done' OR b.inspection = 'need' ))) as todo , 
-        ( SELECT COUNT(used_cars.id) FROM `used_cars` LEFT JOIN inventory ON (used_cars.inv_id = inventory.id AND inventory.status = 1 AND inventory.stocktype = 'USED' AND inventory.lot != 'LBO') WHERE (title = 'false' OR title IS NULL) AND date_in IS NOT NULL AND inventory.id IS NOT NULL ) as titleIssue";
+        ( SELECT COUNT(registration_problems.id) FROM registration_problems WHERE registration_problems.status = 1 AND registration_problems.location = '$location' AND registration_problems.p_status = 1 AND registration_problems.sales_consultant = '$uid') as problem ,
+        ( SELECT  COUNT(b.sale_todo_id)  FROM `sale_todo` as b INNER JOIN sales ON b.sale_id = sales.sale_id WHERE ( sales.sales_consultant = '$uid' AND sales.location = '$location' AND sales.status = 1 AND b.status = 1 AND b.salesperson_status != 'cancelled' AND ((b.vin_check = 'checkTitle' OR b.vin_check = 'need') OR b.insurance = 'need' OR b.trade_title = 'need' OR (b.registration = 'pending' OR b.registration = 'done') OR b.inspection = 'need'  OR b.salesperson_status != 'delivered' )) as todo , 
+        ( SELECT COUNT(used_cars.id) FROM `used_cars` LEFT JOIN inventory ON (used_cars.inv_id = inventory.id AND inventory.status = 1 AND inventory.location = '$location' AND inventory.stocktype = 'USED' AND inventory.lot != 'LBO') WHERE (title = 'false' OR title IS NULL) AND date_in IS NOT NULL AND inventory.id IS NOT NULL ) as titleIssue";
 }
 
 
@@ -113,7 +114,8 @@ if ($result->num_rows > 0) {
         $consultant_id = $row['consultant_id'];
         
         $reconcileDate = $row['reconcileDate'];
-        $reconcileDate = ($reconcileDate != '') ? strtotime($reconcileDate) : "";
+        // $reconcileDate = ($reconcileDate != '') ? strtotime($reconcileDate) : "";
+        $reconcileDate = ($reconcileDate != '') ? strtotime($reconcileDate) : strtotime($row['date']);
         $reconcileDate = ($reconcileDate != '') ? date("Y-m-d", $reconcileDate) : "";
 
         if (!key_exists($consultant_id, $outputArray)) {

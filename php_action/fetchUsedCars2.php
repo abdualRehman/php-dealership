@@ -2,9 +2,10 @@
 
 require_once 'db/core.php';
 
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 // $sql = "SELECT used_cars.* , inventory.stockno , inventory.vin , inventory.age , inventory.year , inventory.make , inventory.model  FROM `used_cars` LEFT JOIN inventory ON used_cars.inv_id = inventory.id WHERE used_cars.status = 1 AND retail_status != 'wholesale'";
 $sql = "SELECT used_cars.* , inventory.id as Inv_id , inventory.stockno , inventory.vin , inventory.age , inventory.year , inventory.make , inventory.model  
-FROM inventory LEFT JOIN used_cars ON inventory.id = used_cars.inv_id WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.status = 1"; ///   AND used_cars.retail_status IS NOT NULL  // AND (used_cars.retail_status != 'wholesale' OR used_cars.retail_status IS NULL)
+FROM inventory LEFT JOIN used_cars ON inventory.id = used_cars.inv_id WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.status = 1 AND inventory.location = '$location'"; ///   AND used_cars.retail_status IS NOT NULL  // AND (used_cars.retail_status != 'wholesale' OR used_cars.retail_status IS NULL)
 
 $result = $connect->query($sql);
 

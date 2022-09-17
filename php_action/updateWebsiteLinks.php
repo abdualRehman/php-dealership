@@ -11,6 +11,8 @@ if ($_POST) {
     $webName = (isset($_POST['webName'])) ? mysqli_real_escape_string($connect, $_POST['webName']) : "";
     $webLink = (isset($_POST['webLink'])) ? mysqli_real_escape_string($connect, $_POST['webLink']) : "";
 
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+
 
 
     if ($webLinkId != false) {
@@ -24,7 +26,7 @@ if ($_POST) {
             $valid['messages'] = mysqli_error($connect);
         }
     } else {
-        $sql = "INSERT INTO `web_links` ( `name`, `link`, `status`) VALUES ('$webName','$webLink',1)";
+        $sql = "INSERT INTO `web_links` ( `name`, `link`, `status` , `location`) VALUES ('$webName','$webLink',1 , '$location')";
 
         if ($connect->query($sql) === true) {
             $valid['success'] = true;

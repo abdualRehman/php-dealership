@@ -664,7 +664,7 @@ function removeLead(leadId = null) {
 
 function loadSaleConsultant() {
 
-    var sales_consultant_id = 66;
+    var sales_consultant_id = Number(localStorage.getItem('salesConsultantID'));
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",
@@ -695,7 +695,7 @@ function disabledManagerDiv() {
 
     let currentUser = $('#loggedInUserRole').val();
     console.log(currentUser);
-    var bdc_manager_id = 60;
+    var bdc_manager_id = Number(localStorage.getItem('bdcManagerID'));
     if (currentUser != bdc_manager_id) {
         $('.bdc_manager').addClass('disabled-div');
         // $(".bdc_manager").find("*").prop("disabled", true);

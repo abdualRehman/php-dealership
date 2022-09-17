@@ -4,9 +4,12 @@ require_once 'db/core.php';
 
 // date_default_timezone_set('Asia/Karachi');
 
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+
+
 $sql = "SELECT schedule.* , users.username , users.role , role.role_name 
 FROM users LEFT JOIN schedule ON users.id = schedule.user_id LEFT JOIN role ON users.role = role.role_id 
-WHERE users.status = 1 AND ( users.role = '$salesConsultantID' OR users.role = '$deliveryCoordinatorID')";
+WHERE users.status = 1 AND users.location = '$location' AND ( users.role = '$salesConsultantID' OR users.role = '$deliveryCoordinatorID')";
 $result = $connect->query($sql);
 
 $output = array('data' => array());

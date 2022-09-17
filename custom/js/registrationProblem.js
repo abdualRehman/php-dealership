@@ -469,8 +469,7 @@ function loadTypeHeadCustomerName() {
 
 
 function loadSaleConsultant() {
-    // var sales_consultant_id = 38;
-    var sales_consultant_id = 66;
+    var sales_consultant_id = Number(localStorage.getItem('salesConsultantID'));
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",
@@ -491,8 +490,7 @@ function loadSaleConsultant() {
 }
 
 function loadFinanceManager() {
-    // var finance_manager_id = 42; //finance manager role id in database
-    var finance_manager_id = 64; //finance manager role id in database
+    var finance_manager_id = Number(localStorage.getItem('financeManagerID')); 
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",

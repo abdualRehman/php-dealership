@@ -8,8 +8,8 @@ $fileType = $_POST['fileType'];
 $fileName = $_POST['fileName'];
 
 if ($fileType) {
-	
-	$sql = "UPDATE settings SET `file_name` = '' WHERE file_type = '$fileType'";
+	$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+	$sql = "UPDATE settings SET `file_name` = '' WHERE file_type = '$fileType' AND location = '$location'";
 	$targetPath = "../assets/uploadMatrixRateFiles/" . $fileName;
 	unlink($targetPath);
 

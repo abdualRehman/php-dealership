@@ -2,7 +2,8 @@
 
 require_once 'db/core.php';
 
-$roleSQL = "SELECT `id` , `year` , `make` , `model` , `model_type` , `certified` , `rdr_type` FROM `rdr_rules` WHERE status = 1";
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+$roleSQL = "SELECT `id` , `year` , `make` , `model` , `model_type` , `certified` , `rdr_type` FROM `rdr_rules` WHERE status = 1 AND location = '$location'";
 $rulesResults = $connect->query($roleSQL);
 
 $output = array('data' => array());
@@ -30,7 +31,7 @@ if ($rulesResults->num_rows > 0) {
         AND inventory.make = " . ($make == "true" ? "inventory.make"  : "'$make'") . " 
         AND inventory.model = " . ($model == "true" ? "inventory.model"  : "'$model'") . "
         AND inventory.stocktype = " . ($model_type == "true" ? "inventory.stocktype"  : "'$model_type'") . "
-        AND sales.certified ='$certifiedv' ";
+        AND sales.certified ='$certifiedv' AND sales.location = '$location' ";
 
 
         $result = $connect->query($sql);

@@ -17,9 +17,10 @@ if ($_POST) {
     $year = trim($year);
     $model = ucwords(trim($model));
     $modelCode = trim($modelCode);
+    $location = $_SESSION['userLoc'];
 
 
-    $sql = "INSERT INTO `manufature_price`(`year`, `model`, `model_code`, `msrp`, `dlr_inv`, `model_des`, `trim`, `status`) 
+    $sql = "INSERT INTO `manufature_price`(`year`, `model`, `model_code`, `msrp`, `dlr_inv`, `model_des`, `trim`, `status` , `location`) 
             VALUES (
                 '$year',
                 '$model',
@@ -28,7 +29,8 @@ if ($_POST) {
                 '$dlrInv',
                 '$modelDescription',
                 '$modelDescription', 
-                1
+                1,
+                '$location'
             )";
 
 

@@ -99,6 +99,12 @@ $(function () {
                 events: {
                     beforeResetZoom: function (chartContext, opts) {
                         console.log("fun called");
+                    },
+                    click: (event, chartContext, config) => {
+                        document.location = 'sales/soldLogs.php?r=man';
+                        // console.log(config.config.series[config.seriesIndex])
+                        // console.log(config.config.series[config.seriesIndex].name)
+                        // console.log(config.config.series[config.seriesIndex].data[config.dataPointIndex])
                     }
                 }
             },
@@ -143,7 +149,7 @@ $(function () {
             type: "GET",
             dataType: 'json',
             success: function (response) {
-                dataArray = response.data;                
+                dataArray = response.data;
                 graphData = response.graph;
                 console.log(graphData);
                 drawGraph();
@@ -156,12 +162,12 @@ $(function () {
                 //     }
                 // });
 
-                $('#avgN').html(dataArray[0] ? '$' + Number((dataArray[0]).toFixed(2)).toLocaleString('en') : "$0");
-                $('#avgU').html(dataArray[1] ? '$' + Number((dataArray[1]).toFixed(2)).toLocaleString('en') : "$0");
-                $('#avgT').html(dataArray[2] ? '$' + Number((dataArray[2]).toFixed(2)).toLocaleString('en') : "$0");
-                $('#todayN').html(dataArray[3] ? '$' + Number((dataArray[3]).toFixed(2)).toLocaleString('en') : "$0");
-                $('#todayU').html(dataArray[4] ? '$' + Number((dataArray[4]).toFixed(2)).toLocaleString('en') : "$0");
-                $('#todayT').html(dataArray[5] ? '$' + Number((dataArray[5]).toFixed(2)).toLocaleString('en') : "$0");
+                $('#avgN').html(dataArray[0] ? '$' + Number((dataArray[0]).toFixed(2)).toFixed(2).toLocaleString('en') : "$0.00");
+                $('#avgU').html(dataArray[1] ? '$' + Number((dataArray[1]).toFixed(2)).toFixed(2).toLocaleString('en') : "$0.00");
+                $('#avgT').html(dataArray[2] ? '$' + Number((dataArray[2]).toFixed(2)).toFixed(2).toLocaleString('en') : "$0.00");
+                $('#todayN').html(dataArray[3] ? '$' + Number((dataArray[3]).toFixed(2)).toFixed(2).toLocaleString('en') : "$0.00");
+                $('#todayU').html(dataArray[4] ? '$' + Number((dataArray[4]).toFixed(2)).toFixed(2).toLocaleString('en') : "$0.00");
+                $('#todayT').html(dataArray[5] ? '$' + Number((dataArray[5]).toFixed(2)).toFixed(2).toLocaleString('en') : "$0.00");
                 $('#penN').html(dataArray[6] ? Number(dataArray[6]) : "0");
                 $('#penU').html(dataArray[7] ? Number(dataArray[7]) : "0");
                 $('#penT').html(dataArray[8] ? Number(dataArray[8]) : "0");
@@ -223,7 +229,7 @@ $(function () {
             drawGraph(startOfMonth, endOfMonth)
         }
     });
-    
+
 
 
     function drawGraph(start = null, end = null) {

@@ -2,6 +2,8 @@
 <?php include('includes/header.php') ?>
 
 <?php
+loadDefaultRoles();
+
 if ($_SESSION['userRole'] == $inventorySpecialistID) {
     if (hasAccess("invsplst", "View") === 'true') {
         include('InvSpecialistDashboard.php');

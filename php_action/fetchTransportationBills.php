@@ -2,9 +2,11 @@
 
 require_once 'db/core.php';
 
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+
 $sql = "SELECT used_cars.inv_id , inventory.stockno , inventory.vin ,  inventory.year , inventory.make , inventory.model , 
 used_cars.date_in , used_cars.purchase_from , used_cars.date_sent , used_cars.date_in_paid , used_cars.date_out_paid , used_cars.transportation_notes
-FROM used_cars LEFT JOIN inventory ON used_cars.inv_id = inventory.id WHERE used_cars.status = 1  AND (used_cars.purchase_from = 'auction' OR used_cars.date_sent != '')";
+FROM used_cars LEFT JOIN inventory ON (used_cars.inv_id = inventory.id AND inventory.location = '$location' ) WHERE used_cars.status = 1  AND (used_cars.purchase_from = 'auction' OR used_cars.date_sent != '')";
 
 $result = $connect->query($sql);
 

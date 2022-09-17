@@ -49,6 +49,7 @@ $(function () {
 
     autosize($(".autosize"));
 
+    var deliveryCoordinatorID = Number(localStorage.getItem('deliveryCoordinatorID'));
     var divRequest = $(".div-request").text();
 
     if (divRequest == "man") {
@@ -119,7 +120,7 @@ $(function () {
                 },
                 {
                     searchPanes: {
-                        show: true,
+                        // show: true,
                         preSelect: ['NEW', 'USED']
                         // preSelect: ['OTHER']
                     },
@@ -285,7 +286,7 @@ $(function () {
                     });
                 }
             },
-            "order": [[10, "desc"], [3, "asc"], [0, "asc"]]
+            "order": [[10, "desc"], [3, "asc"], [2, "asc"]]
         });
 
 
@@ -426,6 +427,10 @@ $(function () {
 
 
         $('input:radio[name="searchStatus"]').on('change', function () {
+            $('#datatable-1').block({
+                message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+                timeout: 1e3
+            });
             manageSoldLogsTable.draw();  // working
             manageSoldLogsTable.searchPanes.rebuildPane();
         });
@@ -457,73 +462,65 @@ $(function () {
 
 
 
-        $("#updateNotesForm").validate({
-
-            submitHandler: function (form, event) {
-                // return true;
-                event.preventDefault();
-                // $('[disabled]').removeAttr('disabled');
-                var form = $('#updateNotesForm');
-                $.ajax({
-                    type: "POST",
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (response) {
-                        // console.log(response);
-
-                        if (response.success == true) {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "success",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 2500,
-                            });
-                            manageSoldLogsTable.ajax.reload(null, false);
-
-
-                        } else {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "error",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 2500
-                            })
-                        }
-
-
-                    }
-                });
-
-                return false;
-
-            }
-        });
+        // $("#updateNotesForm").validate({
+        //     submitHandler: function (form, event) {
+        //         // return true;
+        //         event.preventDefault();
+        //         // $('[disabled]').removeAttr('disabled');
+        //         var form = $('#updateNotesForm');
+        //         $.ajax({
+        //             type: "POST",
+        //             url: form.attr('action'),
+        //             data: form.serialize(),
+        //             dataType: 'json',
+        //             success: function (response) {
+        //                 // console.log(response);
+        //                 if (response.success == true) {
+        //                     e1.fire({
+        //                         position: "top-end",
+        //                         icon: "success",
+        //                         title: response.messages,
+        //                         showConfirmButton: !1,
+        //                         timer: 2500,
+        //                     });
+        //                     manageSoldLogsTable.ajax.reload(null, false);
+        //                 } else {
+        //                     e1.fire({
+        //                         position: "top-end",
+        //                         icon: "error",
+        //                         title: response.messages,
+        //                         showConfirmButton: !1,
+        //                         timer: 2500
+        //                     })
+        //                 }
+        //             }
+        //         });
+        //         return false;
+        //     }
+        // });
 
         $("#editScheduleForm").validate({
             ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
             rules: {
                 ecustomerName: {
-                    required: $('#loggedInUserRole').val() == 62 ? false : true,
+                    required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
                 },
                 escheduleTime: {
-                    required: $('#loggedInUserRole').val() == 62 ? false : true,
+                    required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
                 },
                 escheduleDate: {
-                    required: $('#loggedInUserRole').val() == 62 ? false : true,
+                    required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
                 },
                 esale_id: {
-                    required: $('#loggedInUserRole').val() == 62 ? false : true,
+                    required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
                 },
                 ecoordinator: {
-                    required: $('#loggedInUserRole').val() == 62 ? false : true,
+                    required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
                 },
                 eoverrideBy: {
                     required: function (params) {
                         var has_appointment = $('#ehas_appointment').val();
-                        if (has_appointment && $('#loggedInUserRole').val() != 62) {
+                        if (has_appointment && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                             return true;
                         } else {
                             $(params).removeClass('is-invalid');
@@ -534,7 +531,7 @@ $(function () {
                 'edelivery': {
                     required: function (params) {
                         var opt = $('input:radio[name="eadditionalServices"]:checked').val();
-                        if (!opt && $('#loggedInUserRole').val() != 62) {
+                        if (!opt && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                             return true;
                         } else {
                             return false;
@@ -544,7 +541,7 @@ $(function () {
                 'eadditionalServices': {
                     required: function (params) {
                         var opt = $('input:radio[name="edelivery"]:checked').val();
-                        if (!opt && $('#loggedInUserRole').val() != 62) {
+                        if (!opt && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                             return true;
                         } else {
                             return false;
@@ -554,7 +551,7 @@ $(function () {
                 'escheduleNotes': {
                     required: function (params) {
                         var opt = $('input:radio[name="eadditionalServices"]:checked').val();
-                        if (opt == 'other' && $('#loggedInUserRole').val() != 62) {
+                        if (opt == 'other' && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                             return true;
                         } else {
                             return false;
@@ -704,7 +701,7 @@ $(function () {
                                 timer: 2500,
                             })
                             manageSoldLogsTable.ajax.reload(null, false);
-
+                            $('#editSaleModal').modal('hide');
                         } else {
                             e1.fire({
                                 position: "top-end",
@@ -820,9 +817,9 @@ $('#eoverrideBy').change(function () {
 })
 function disabledManagerDiv() {
     let currentUser = $('#loggedInUserRole').val();
-    var delivery_coordinator_id = 62;
-    var sales_manager_id = 67;
-    var general_manager_id = 69;
+    var delivery_coordinator_id = Number(localStorage.getItem('deliveryCoordinatorID'));
+    var sales_manager_id = Number(localStorage.getItem('salesManagerID'));
+    var general_manager_id = Number(localStorage.getItem('generalManagerID'));
     if (currentUser != delivery_coordinator_id && currentUser != 'Admin') {
         $('.delivery_coordinator').addClass('disabled-div');
         $(".delivery_coordinator").find("*").prop("readonly", true);
@@ -848,7 +845,7 @@ function disabledManagerDiv() {
 }
 
 function loadDeliveryCoordinator() {
-    var id = 62;
+    var id = Number(localStorage.getItem('deliveryCoordinatorID'));;
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",
@@ -1034,7 +1031,7 @@ function fetchNotDoneSoldLogs() {
 
 
 
-$('input[name="iscertified"]').on('change' , function () {
+$('input[name="iscertified"]').on('change', function () {
     $('#iscertified').val($(this).val());
 })
 
@@ -1111,7 +1108,7 @@ function fetchSelectedInvForSearch(id = null) {
             var selectBox = document.getElementById('stockId');
             selectBox.innerHTML += `<option value="${item[0]}" selected title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} || Stock Deleted</option>`;
             $('.selectpicker').selectpicker('refresh');
-            changeStockDetails({ value: item[0] } , true)
+            changeStockDetails({ value: item[0] }, true)
         }
 
     }); // /ajax function to remove the brand
@@ -1192,13 +1189,16 @@ function editSale(id = null) {
                 if (response.certified == 'on') {
                     $('#yes').click();
                     $('#iscertified').val('on');
-                } else {
+                } else if (response.certified == 'off') {
                     $('#no').click();
                     $('#iscertified').val('off');
+                } else {
+                    $('#yesOther').click();
+                    $('#iscertified').val('yesOther');
                 }
 
                 // show/calclulate gross if stockTypes is used gross is shows otherwise hide 
-                if (response.stocktype == 'USED' && $('#isConsultant').val() == "false" ) {
+                if (response.stocktype == 'USED' && $('#isConsultant').val() == "false") {
                     $('#grossDiv').removeClass('v-none');
                 } else {
                     $('#grossDiv').addClass('v-none');
@@ -1268,7 +1268,6 @@ function editSale(id = null) {
                 $('#inspection').val(response.inspection);
                 $('#salePStatus').val(response.salesperson_status);
                 $('#paid').val(response.paid);
-
 
 
 
@@ -1380,8 +1379,7 @@ function loadStock() {
 }
 
 function loadSaleConsultant() {
-    // var sales_consultant_id = 38;
-    var sales_consultant_id = 66;
+    var sales_consultant_id = Number(localStorage.getItem('salesConsultantID'));
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",
@@ -1400,8 +1398,7 @@ function loadSaleConsultant() {
 }
 
 function loadSaleManager() {
-    // var sales_manager_id = 1;
-    var sales_manager_id = 67;
+    var sales_manager_id = Number(localStorage.getItem('salesManagerID'));
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",
@@ -1423,7 +1420,7 @@ function loadSaleManager() {
 }
 
 
-function changeStockDetails(ele , fromEdit = false) {
+function changeStockDetails(ele, fromEdit = false) {
 
     $('#detailsSection').removeClass('d-none');
     let obj = stockArray.find(data => data[0] === ele.value);
@@ -1453,25 +1450,27 @@ function changeStockDetails(ele , fromEdit = false) {
     $('#selectedDetails').addClass('text-center');
 
 
-    if($('#isConsultant').val() == "false"){
+    if ($('#isConsultant').val() == "false") {
         $('#grossDiv').removeClass('v-none'); // show gross field on both stock type new / used
     }
 
-    // for checking this stock is already in sale or not if it is in sale then and status is not cancelled then make it red
-    if ((obj[16].length > 0) && obj[16].every(element => element != 'cancelled')) {
-        $('#selectedDetails').addClass('text-center text-danger is-invalid');  // invalid selectarea section
-        $('#saleDetailsDiv').addClass('is-invalid');  // invalid stock details div
-        $('#grossDiv').addClass('v-none');  // hide gross div
-        $('#stockId').parent().addClass('text-danger is-invalid'); // invalid stock input div
-    } else {
-        $('#selectedDetails').removeClass('text-danger is-invalid');  // valid selectarea section
-        $('#saleDetailsDiv').removeClass('is-invalid');  // valid stock details div
-        $('#stockId').parent().removeClass('text-danger is-invalid'); // valid stock input div
+    if (fromEdit == false) {
+        // for checking this stock is already in sale or not if it is in sale then and status is not cancelled then make it red
+        if ((obj[16].length > 0) && obj[16].every(element => element != 'cancelled')) {
+            $('#selectedDetails').addClass('text-center text-danger is-invalid');  // invalid selectarea section
+            $('#saleDetailsDiv').addClass('is-invalid');  // invalid stock details div
+            $('#grossDiv').addClass('v-none');  // hide gross div
+            $('#stockId').parent().addClass('text-danger is-invalid'); // invalid stock input div
+        } else {
+            $('#selectedDetails').removeClass('text-danger is-invalid');  // valid selectarea section
+            $('#saleDetailsDiv').removeClass('is-invalid');  // valid stock details div
+            $('#stockId').parent().removeClass('text-danger is-invalid'); // valid stock input div
+        }
     }
 
     autosize.update($("#selectedDetails"));
-    
-    if(fromEdit == false){
+
+    if (fromEdit == false) {
         changeRules();
     }
 
@@ -1663,7 +1662,7 @@ function chnageStyle(field) {
 }
 
 function loadFinanceManager() {
-    var finance_manager_id = 64; //finance manager role id in database
+    var finance_manager_id = Number(localStorage.getItem('financeManagerID'));
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",

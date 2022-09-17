@@ -2,7 +2,8 @@
 
 require_once 'db/core.php';
 
-$sql = "SELECT `id`, `model`, `year`, `modelno`, `ex_modelno`, `f_24-36`, `f_37-48`, `f_49-60`, `f_61-72` , `f_expire` , `lease_expire` FROM `rate_rule` WHERE status = 1";
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+$sql = "SELECT `id`, `model`, `year`, `modelno`, `ex_modelno`, `f_24-36`, `f_37-48`, `f_49-60`, `f_61-72` , `f_expire` , `lease_expire` FROM `rate_rule` WHERE status = 1 AND location = '$location'";
 $result = $connect->query($sql);
 
 $output = array('data' => array());

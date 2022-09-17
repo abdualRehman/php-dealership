@@ -49,6 +49,30 @@ if ($_GET['r'] == 'add') {
                                 <div class="row"><label for="roleName" class="col-sm-2 col-form-label">Role Name</label>
                                     <div class="form-group col-md-6 col-sm-10"><input type="text" class="form-control" id="roleName" name="roleName" placeholder="Please insert your role name"></div>
                                 </div>
+                                <div class="row">
+                                    <label for="location" class="col-sm-2 col-form-label">Location</label>
+                                    <div class="form-group col-md-6 col-sm-10">
+                                        <?php
+                                        if ($_SESSION['userRole'] == 'Admin') {
+                                        ?>
+                                            <select id="location" name="location" class="selectpicker form-control required" required>
+                                                <option value="0" selected disabled>Select</option>
+                                                <?php
+                                                $sql = "SELECT `id`, `name` FROM `user_location` WHERE status = 1";
+                                                $result = $connect->query($sql);
+                                                while ($itemData = $result->fetch_assoc()) {
+                                                    echo '<option value="' . $itemData['id'] . '">' . $itemData['name'] . '</option>';
+                                                }
+                                                ?>
+                                            </select>
+                                        <?php
+                                        } else {
+                                            echo '<input type="hidden" class="form-control" name="location" value="' . $_SESSION['userLoc'] . '" id="location" autocomplete="off" autofill="off" />';
+                                            echo '<input type="text" class="form-control" name="locationName" value="' . $_SESSION['userLocName'] . '" id="locationName" autocomplete="off" autofill="off" readonly />';
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
                                 <div class="form-group row"><label for="roleDes" class="col-sm-2 col-form-label">Description</label>
                                     <div class="col-md-6 col-sm-10">
                                         <textarea class="form-control" id="roleDes" name="roleDes" rows="3"></textarea>
@@ -742,7 +766,7 @@ if ($_GET['r'] == 'add') {
                                 <hr class="my-5">
 
                                 <button type="submit" class="btn btn-primary">Save Changes</button>
-                                <button class="btn btn-secondary">Cancel</button>
+                                <button type="button" class="btn btn-secondary">Cancel</button>
                             </form>
 
 
@@ -813,7 +837,8 @@ if ($_GET['r'] == 'add') {
                                 <?php
                                 $roleId = $_GET['i'];
 
-                                $sql = "SELECT `role_name`, `role_des` FROM `role` WHERE `role_id` = '$roleId'";
+                                // $sql = "SELECT `role_name`, `role_des` , `location_id` FROM `role` LEFT JOIN ``  WHERE `role_id` = '$roleId'";
+                                $sql = "SELECT `role_name`, `role_des` , `location_id` , user_location.name as locName FROM `role` LEFT JOIN user_location ON role.location_id = user_location.id WHERE `role_id` = '$roleId'";
 
                                 $result = $connect->query($sql);
                                 $data = $result->fetch_row();
@@ -824,6 +849,12 @@ if ($_GET['r'] == 'add') {
 
                                 <div class="row"><label for="editRoleName" class="col-sm-2 col-form-label">Role Name</label>
                                     <div class="form-group col-md-6 col-sm-10"><input type="text" class="form-control" id="editRoleName" name="editRoleName" value="<?php echo $data[0] ?>" placeholder="Please insert your role name"></div>
+                                </div>
+                                <div class="row"><label for="editLocation" class="col-sm-2 col-form-label">Location</label>
+                                    <div class="form-group col-md-6 col-sm-10">
+                                        <input type="hidden" class="form-control" id="editLocation" name="editLocation" value="<?php echo $data[2] ?>" />
+                                        <input type="text" class="form-control" id="editLocationName" name="editLocationName" value="<?php echo $data[3] ?>" disabled />
+                                    </div>
                                 </div>
                                 <div class="form-group row"><label for="editRoleDes" class="col-sm-2 col-form-label">Description</label>
                                     <div class="col-md-6 col-sm-10">
@@ -942,9 +973,9 @@ if ($_GET['r'] == 'add') {
                                                     $Name = "Warranty Cancellation";
                                                 } else if ($module === 'todayavail') {
                                                     $Name = "Today's Availability";
-                                                } else if($module === 'writedown'){
+                                                } else if ($module === 'writedown') {
                                                     $Name = "Writedowns";
-                                                } else if($module === 'dealership'){
+                                                } else if ($module === 'dealership') {
                                                     $Name = "Dealership Contacts";
                                                 }
                                             ?>

@@ -72,7 +72,7 @@ $(function () {
                 targets: [1, 2, 3],
             },
             {
-                targets: [0, 8],
+                targets: [0, 9],
                 visible: false,
             },
             {
@@ -90,10 +90,23 @@ $(function () {
                 createdCell: function (td, cellData, rowData, row, col) {
                     if ($('#isEditAllowed').val() == "true") {
                         $(td).html(`<div class="show d-flex" >
-                            <input type="text" class="form-control" name="date_in_table" value="${rowData[7]}" data-attribute="repair_paid_date" data-id="${rowData[0]}" autocomplete="off"  />
+                            <input type="text" class="form-control" name="input_field" value="${rowData[7]}" data-attribute="repair_paid" data-id="${rowData[0]}" autocomplete="off"  />
                         </div>`);
                     } else {
                         $(td).html(rowData[7]);
+                    }
+                }
+            },
+            {
+                targets: 8,
+                data: 8,
+                createdCell: function (td, cellData, rowData, row, col) {
+                    if ($('#isEditAllowed').val() == "true") {
+                        $(td).html(`<div class="show d-flex" >
+                            <input type="text" class="form-control" name="date_in_table" value="${rowData[8]}" data-attribute="repair_paid_date" data-id="${rowData[0]}" autocomplete="off"  />
+                        </div>`);
+                    } else {
+                        $(td).html(rowData[8]);
                     }
                 }
             },
@@ -110,7 +123,7 @@ $(function () {
 
         rowGroup: {
             enable: true,
-            dataSrc: 8,
+            dataSrc: 9,
             startRender: function (rows, group) {
                 var collapsed = !!collapsedGroups[group];
 
@@ -118,7 +131,7 @@ $(function () {
                     .rows({ search: 'applied' })
                     .data()
                     .filter(function (data, index) {
-                        return data[8] == group ? true : false;
+                        return data[9] == group ? true : false;
                     });
 
                 return $('<tr/>')
@@ -133,6 +146,7 @@ $(function () {
             if (json) {
                 var obj = json.totalNumber;
                 setfun();
+                setInputChange();
             }
         },
 
@@ -143,7 +157,7 @@ $(function () {
         //         "onclick": "editDetails(" + data[0] + ")"
         //     });
         // },
-        "order": [[8, "asc"], [1, "desc"]],
+        "order": [[9, "asc"], [1, "desc"]],
 
     });
 
@@ -156,7 +170,7 @@ $(function () {
     $.fn.dataTable.ext.search.push(
         function (settings, searchData, index) {
             var tableNode = manageBillsTable.table().node();
-            var repairPaid = searchData[7];
+            var repairPaid = searchData[8];
             var searchStatus = $('input:radio[name="searchStatus"]:checked').map(function () {
                 if (this.value !== "") {
                     return this.value;
@@ -290,6 +304,21 @@ function setfun() {
     });
 }
 
+
+function setInputChange() {
+    var inputs = document.querySelectorAll("input[name=input_field]");
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                let id = $(this).data('id');
+                let attribute = $(this).data('attribute');
+                let value = $(this).val();
+                updateFieldsUsedCars({ id, attribute, value });
+            }
+        });
+    }
+}
 
 
 function updateFieldsUsedCars(obj) {

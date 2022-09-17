@@ -27,15 +27,16 @@ if ($_POST) {
         // echo json_encode($model);
         // echo json_encode($exModelno);
 
+        $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
 
-        $checkSql = "SELECT * FROM `matrix_rule` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND status = 1";
+        $checkSql = "SELECT * FROM `matrix_rule` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND status = 1 AND location = '$location'";
         $result = $connect->query($checkSql);
         if ($result && $result->num_rows > 0) {
             $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . ", Already Exist";
         } else {
 
-            $sql = "INSERT INTO `matrix_rule`( `model`, `year`, `modelno` , `ex_modelno`, `destination`, `hb`, `status`) 
+            $sql = "INSERT INTO `matrix_rule`( `model`, `year`, `modelno` , `ex_modelno`, `destination`, `hb`, `status` , `location`) 
             VALUES (
                 '$model',
                 '$year',
@@ -43,7 +44,7 @@ if ($_POST) {
                 '$exModelno',
                 '$destination',
                 '$hb',
-                1 )";
+                1 , '$location' )";
 
             if ($connect->query($sql) === true) {
                 $valid['success'] = true;

@@ -592,8 +592,7 @@ function loadStock() {
 }
 
 function loadSaleConsultant() {
-    // var sales_consultant_id = 38;
-    var sales_consultant_id = 66;
+    var sales_consultant_id = Number(localStorage.getItem('salesConsultantID'));
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",

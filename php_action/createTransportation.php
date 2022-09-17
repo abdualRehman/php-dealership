@@ -14,10 +14,10 @@ if ($_POST) {
     $damageType = (isset($_POST['damageType'])) ? mysqli_real_escape_string($connect, $_POST['damageType']) : "";
     $damageSeverity = (isset($_POST['damageSeverity'])) ? mysqli_real_escape_string($connect, $_POST['damageSeverity']) : "";
     $damageGrid = (isset($_POST['damageGrid'])) ? mysqli_real_escape_string($connect, $_POST['damageGrid']) : "";
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
-
-    $sql = "INSERT INTO `transportation`(`stock_id`, `loc_num`, `damage_type`, `damage_severity`, `damage_grid`, `transport_status`, `status`) 
-    VALUES ('$stockId' , '$locNum' , '$damageType' , '$damageSeverity' , '$damageGrid' , '$status' , 1 )";
+    $sql = "INSERT INTO `transportation`(`stock_id`, `loc_num`, `damage_type`, `damage_severity`, `damage_grid`, `transport_status`, `status` , `location`) 
+    VALUES ('$stockId' , '$locNum' , '$damageType' , '$damageSeverity' , '$damageGrid' , '$status' , 1 , '$location' )";
 
     if ($connect->query($sql) === true) {
         $valid['success'] = true;

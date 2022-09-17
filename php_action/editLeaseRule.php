@@ -47,7 +47,9 @@ if ($_POST) {
 
 
 
-    $checkSql = "SELECT * FROM `lease_rule` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND status = 1 AND id != '$ruleId'";
+    $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+
+    $checkSql = "SELECT * FROM `lease_rule` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND status = 1 AND location = '$location' AND id != '$ruleId'";
     $result = $connect->query($checkSql);
 
     if ($result->num_rows > 0) {

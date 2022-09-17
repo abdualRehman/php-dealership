@@ -22,7 +22,9 @@ require_once 'db/core.php';
 //     WHERE a.status = 1 AND a.sales_consultant = '$uid'";
 // }
 
-$sql = "SELECT  warrenty_cancellation.id, warrenty_cancellation.customer_name, warrenty_cancellation.warrenty, warrenty_cancellation.date_cancelled, warrenty_cancellation.refund_des, users.username as finance_manager, warrenty_cancellation.date_sold, warrenty_cancellation.paid, warrenty_cancellation.notes FROM `warrenty_cancellation` LEFT JOIN users ON warrenty_cancellation.finance_manager = users.id WHERE warrenty_cancellation.status = 1";
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+
+$sql = "SELECT  warrenty_cancellation.id, warrenty_cancellation.customer_name, warrenty_cancellation.warrenty, warrenty_cancellation.date_cancelled, warrenty_cancellation.refund_des, users.username as finance_manager, warrenty_cancellation.date_sold, warrenty_cancellation.paid, warrenty_cancellation.notes FROM `warrenty_cancellation` LEFT JOIN users ON warrenty_cancellation.finance_manager = users.id WHERE warrenty_cancellation.status = 1 AND warrenty_cancellation.location = '$location'";
 
 $result = $connect->query($sql);
 

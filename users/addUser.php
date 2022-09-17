@@ -35,8 +35,11 @@ if (hasAccess("user", "Add") === 'false') {
         }
 
         .jQWCP-wWidget {
-            min-width: max-content!important;
-            height: initial!important;
+            min-width: max-content !important;
+            height: initial !important;
+        }
+        .dropdown-header.optgroup-1{
+            padding: 0px;
         }
     </style>
 
@@ -69,32 +72,45 @@ if (hasAccess("user", "Add") === 'false') {
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <label for="email" class="col-form-label">Email</label>
+                                            <label for="location" class="col-form-label">Location</label>
                                             <div class="form-group">
-                                                <input type="email" class="form-control" name="email" id="email" placeholder="Please insert your email" autocomplete="off">
+                                                <?php
+                                                if ($_SESSION['userRole'] == 'Admin') {
+                                                ?>
+                                                    <select id="location" name="location" class="selectpicker form-control required" onchange="fetchUserRolesByLocation()">
+                                                        <option value="0" selected disabled>Select</option>
+                                                        <?php
+                                                        $sql = "SELECT `id`, `name` FROM `user_location` WHERE status = 1";
+                                                        $result = $connect->query($sql);
+                                                        while ($itemData = $result->fetch_assoc()) {
+                                                            echo '<option value="' . $itemData['id'] . '">' . $itemData['name'] . '</option>';
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                <?php
+                                                } else {
+                                                    echo '<input type="hidden" class="form-control" name="location" value="' . $_SESSION['userLoc'] . '" id="location" autocomplete="off" autofill="off" />';
+                                                    echo '<input type="text" class="form-control" name="locationName" value="' . $_SESSION['userLocName'] . '" id="locationName" autocomplete="off" autofill="off" readonly />';
+                                                }
+                                                ?>
+
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <label for="role" class="col-form-label">Role</label>
                                             <div class="form-group">
-                                                <select id="role" name="role" class="form-control required">
+                                                <select id="role" name="role" class="selectpicker form-control required">
                                                     <option value="0">Select</option>
-                                                    <?php
-                                                    $sql = "SELECT `role_id`, `role_name` FROM `role` WHERE role_status != 2";
-                                                    $result = $connect->query($sql);
-                                                    while ($itemData = $result->fetch_assoc()) {
-                                                        echo '<option value="' . $itemData['role_id'] . '">' . $itemData['role_name'] . '</option>';
-                                                    }
-                                                    ?>
+                                                    <optgroup id="roleList"></optgroup>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label for="location" class="col-form-label">Location</label>
+                                            <label for="email" class="col-form-label">Email</label>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="location" id="location" autocomplete="off" autofill="off" />
+                                                <input type="email" class="form-control" name="email" id="email" placeholder="Please insert your email" autocomplete="off">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -112,7 +128,7 @@ if (hasAccess("user", "Add") === 'false') {
                                         <div class="col-md-3">
                                             <label for="mobile" class="col-form-label">Color</label>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" data-wheelcolorpicker="" data-wcp-preview="true" id="color" name="color" >
+                                                <input type="text" class="form-control" data-wheelcolorpicker="" data-wcp-preview="true" id="color" name="color">
                                             </div>
                                         </div>
 

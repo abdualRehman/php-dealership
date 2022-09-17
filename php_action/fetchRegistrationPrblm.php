@@ -9,18 +9,19 @@ $userRole;
 if ($_SESSION['userRole']) {
     $userRole = $_SESSION['userRole'];
 }
+$location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
 
 if ($userRole != $salesConsultantID) {
     $sql = "SELECT a.id , a.contract_date , a.problem_date , a.customer_name, inventory.stockno ,a.vehicle , a.problem , a.notes , b.username as sales_consultant , c.username as finance_manager , a.p_status 
     FROM `registration_problems` as a LEFT JOIN users as b ON b.id = a.sales_consultant LEFT JOIN users as c ON c.id = a.finance_manager LEFT JOIN inventory ON inventory.id = a.stock_id
-    WHERE a.status = 1";
+    WHERE a.status = 1 AND a.location = '$location'";
 } else {
     $uid = $_SESSION['userId'];
 
     $sql = "SELECT a.id , a.contract_date , a.problem_date , a.customer_name, inventory.stockno ,a.vehicle , a.problem , a.notes , b.username as sales_consultant , c.username as finance_manager , a.p_status
     FROM `registration_problems` as a LEFT JOIN users as b ON b.id = a.sales_consultant LEFT JOIN users as c ON c.id = a.finance_manager LEFT JOIN inventory ON inventory.id = a.stock_id
-    WHERE a.status = 1 AND a.sales_consultant = '$uid'";
+    WHERE a.status = 1 AND a.sales_consultant = '$uid' AND a.location = '$location'";
 }
 
 $result = $connect->query($sql);
