@@ -195,6 +195,13 @@ $(function () {
             startRender: function (rows, group) {
                 var collapsed = !!collapsedGroups[group];
 
+                rows.nodes().each(function (r) {
+                    r.style.display = 'none';
+                    if (collapsed) {
+                        r.style.display = '';
+                    }
+                });
+
                 var filteredData = $('#datatable-1').DataTable()
                     .rows({ search: 'applied' })
                     .data()
@@ -208,13 +215,22 @@ $(function () {
                     .toggleClass('collapsed', collapsed);
             },
         },
-
-        createdRow: function (row, data, dataIndex) {
-            $(row).attr({
-                "data-toggle": "modal",
-                "data-target": "#editDetails",
-                "onclick": "editDetails(" + data[12] + ")"
+        initComplete: function () {
+            // Start with closed groups
+            $('#datatable-1 tbody tr.dtrg-start').each(function () {
+                var name = $(this).data('name');
+                collapsedGroups[name] = !!collapsedGroups[name];
             });
+            manageSoldLogsTable.draw(false);
+        },
+        createdRow: function (row, data, dataIndex) {
+            if ($('#isEditAllowed').val() == "true") {
+                $(row).attr({
+                    "data-toggle": "modal",
+                    "data-target": "#editDetails",
+                    "onclick": "editDetails(" + data[12] + ")"
+                });
+            }
         },
         "order": [[13, "asc"], [12, "desc"]],
 
@@ -223,6 +239,12 @@ $(function () {
     writeStatusHTML();
     $('#opened').click();
 
+    // Collapse Groups
+    $('#datatable-1 tbody').on('click', 'tr.dtrg-start', function () {
+        var name = $(this).data('name');
+        collapsedGroups[name] = !collapsedGroups[name];
+        manageSoldLogsTable.draw(false);
+    });
 
 
 
@@ -266,7 +288,7 @@ $(function () {
                     if (
                         (vin_check !== 'checkTitle' && vin_check !== 'need') &&
                         insurance !== 'need' && trade_title !== 'need' &&
-                        (registration !== 'pending' && registration !== 'done') && inspection !== 'need' && (salesperson_status === 'cancelled' ||  salesperson_status === 'delivered' )) {
+                        (registration !== 'pending' && registration !== 'done') && inspection !== 'need' && (salesperson_status === 'cancelled' || salesperson_status === 'delivered')) {
                         return false;
                     } else {
                         return true;
@@ -481,9 +503,9 @@ function changePillCSS(data, title) {
             break;
         case 'salePStatus':
             if (data == 'dealWritten') {
-                return '<span class="badge badge-lg badge-danger badge-pill">Deal Written</span>';
+                return '<span class="badge badge-lg badge-primary badge-pill">Deal Written</span>';
             } else if (data == 'gmdSubmit') {
-                return '<span class="badge badge-lg badge-success badge-pill">GMD Submit</span>';
+                return '<span class="badge badge-lg badge-primary badge-pill">GMD Submit</span>';
             } else if (data == 'contracted') {
                 return '<span class="badge badge-lg badge-primary badge-pill">Contracted</span>';
             } else if (data == 'cancelled') {
@@ -658,11 +680,11 @@ function chnageStyle(field) {
             }
             break;
         case 'salePStatus':
-            if (field.value == 'dealWritten') {
+            if (field.value == 'cancelled') {
                 ele.addClass('btn-outline-danger');
                 ele.removeClass('btn-outline-success');
                 ele.removeClass('btn-outline-primary');
-            } else if (field.value == 'contracted') {
+            } else if (field.value == 'dealWritten' || field.value == 'contracted' || field.value == 'gmdSubmit') {
                 ele.addClass('btn-outline-primary');
                 ele.removeClass('btn-outline-danger');
                 ele.removeClass('btn-outline-success');

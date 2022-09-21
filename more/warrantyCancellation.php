@@ -2,7 +2,7 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
-if (hasAccess("warranty", "Add") === 'false' && hasAccess("warranty", "Edit") === 'false' && hasAccess("warranty", "Remove") === 'false') {
+if (hasAccess("warranty", "View") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
 if (hasAccess("warranty", "Edit") === 'false') {

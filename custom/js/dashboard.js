@@ -180,6 +180,8 @@ $(function () {
                 $('#todayCN').html(dataArray[15] ? Number(dataArray[15]) : "0");
                 $('#todayCU').html(dataArray[16] ? Number(dataArray[16]) : "0");
                 $('#todayCT').html(dataArray[17] ? Number(dataArray[17]) : "0");
+                
+                $('#warrantyC').html(dataArray[18] ? Number(dataArray[18]) : "0");
                 $('#thisMonth').click();
 
             }

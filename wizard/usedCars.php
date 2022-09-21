@@ -2,15 +2,21 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
-if (hasAccess("usedCars", "View") === 'false') {
+if (hasAccess("usedCars", "View") === 'false' && hasAccess("usedCars", "TitleView") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
 
-if (hasAccess("usedCars", "Edit") === 'false') {
+if (hasAccess("usedCars", "Edit") === 'false' || hasAccess("usedCars", "TitleEdit") === 'true') {
     echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
 } else {
     echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
 }
+if (hasAccess("usedCars", "TitleEdit") === 'false') {
+    echo '<input type="hidden" name="titleEditAllowed" id="titleEditAllowed" value="false" />';
+} else {
+    echo '<input type="hidden" name="titleEditAllowed" id="titleEditAllowed" value="true" />';
+}
+
 if ($_SESSION['userRole'] == $onlineManagerID || hasAccess("usedCars", "Edit") === 'false') {
     echo '<input type="hidden" name="isRoleAllowed" id="isRoleAllowed" value="false" />';
 } else if ($_SESSION['userRole'] != $onlineManagerID && hasAccess("usedCars", "Edit") !== 'false') {
@@ -18,7 +24,7 @@ if ($_SESSION['userRole'] == $onlineManagerID || hasAccess("usedCars", "Edit") =
 }
 
 $allowedForOffice = false;
-if ($_SESSION['userRole'] == $officeID) {
+if ($_SESSION['userRole'] == $officeID || hasAccess("usedCars", "TitleView") !== 'false') {
     echo '<input type="hidden" name="allowedForOffice" id="allowedForOffice" value="false" />';
 } else {
     echo '<input type="hidden" name="allowedForOffice" id="allowedForOffice" value="true" />';
@@ -201,10 +207,12 @@ if ($_SESSION['userRole'] == $officeID) {
                                             </label>
                                         <?php
                                         } else {
-                                            // title issue only
-                                            echo '<label class="btn text-responsive">
-                                            <input type="radio" name="mod" value="titleIssue" id="searchTitleIssue" data-title="Title Issues"> Title Issues <br> <span></span>
-                                        </label>';
+                                            if (hasAccess("usedCars", "TitleView") !== 'false') {
+                                                // title issue only
+                                                echo '<label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="titleIssue" id="searchTitleIssue" data-title="Title Issues"> Title Issues <br> <span></span>
+                                                </label>';
+                                            }
                                         }
                                         ?>
                                     </div>
@@ -230,7 +238,7 @@ if ($_SESSION['userRole'] == $officeID) {
                     </div>
 
                     <div class="portlet-body">
-                        <div class="inspectionTable">
+                        <div class="inspectionTable" id="inspectionTable">
                             <div class="form-row text-right">
                                 <div class="col-md-12 p-1 pr-2">
                                     <button class="btn btn-primary p-2" onclick="toggleFilterClass2()">
@@ -287,7 +295,7 @@ if ($_SESSION['userRole'] == $officeID) {
                                 </thead>
                             </table>
                         </div>
-                        <div class="FixSDKtable d-none">
+                        <div class="FixSDKtable d-none" id="FixSDKtable">
                             <div class="form-row text-right">
                                 <div class="col-md-12 p-1 pr-2">
                                     <button class="btn btn-primary p-2" onclick="toggleFilterClass2()">

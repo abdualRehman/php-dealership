@@ -105,38 +105,150 @@ if ($_GET['r'] == 'add') {
                                             </tr>
                                             <tr>
                                                 <td class="align-middle text-center">
-                                                    <h3 class="h5">MATRIX</h3>
+                                                    <h3 class="h5">Appointments - Delivery Coordinator</h3>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex justify-content-start">
                                                         <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="matrixView" name="matrixView">
-                                                            <label class="custom-control-label h5" for="matrixView">View</label>
+                                                            <input type="checkbox" class="custom-control-input" id="appointmentAdd" name="appointmentAdd">
+                                                            <label class="custom-control-label h5" for="appointmentAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="appointmentEdit" name="appointmentEdit">
+                                                            <label class="custom-control-label h5" for="appointmentEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="appointmentRemove" name="appointmentRemove">
+                                                            <label class="custom-control-label h5" for="appointmentRemove">REMOVE</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="appointmentView" name="appointmentView">
+                                                            <label class="custom-control-label h5" for="appointmentView">View</label>
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="align-middle text-center">
-                                                    <h3 class="h5">SWAPS</h3>
+                                                    <h3 class="h5">BDC - Leads</h3>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex justify-content-start">
                                                         <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="swapAdd" name="swapAdd">
-                                                            <label class="custom-control-label h5" for="swapAdd">ADD</label>
+                                                            <input type="checkbox" class="custom-control-input" id="bdcAdd" name="bdcAdd">
+                                                            <label class="custom-control-label h5" for="bdcAdd">Add</label>
                                                         </div>
                                                         <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="swapEdit" name="swapEdit">
-                                                            <label class="custom-control-label h5" for="swapEdit">EDIT</label>
+                                                            <input type="checkbox" class="custom-control-input" id="bdcEdit" name="bdcEdit">
+                                                            <label class="custom-control-label h5" for="bdcEdit">EDIT</label>
                                                         </div>
                                                         <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="swapRemove" name="swapRemove">
-                                                            <label class="custom-control-label h5" for="swapRemove">REMOVE</label>
+                                                            <input type="checkbox" class="custom-control-input" id="bdcRemove" name="bdcRemove">
+                                                            <label class="custom-control-label h5" for="bdcRemove">REMOVE</label>
                                                         </div>
                                                         <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="swapView" name="swapView">
-                                                            <label class="custom-control-label h5" for="swapView">VIEW</label>
+                                                            <input type="checkbox" class="custom-control-input" id="bdcView" name="bdcView">
+                                                            <label class="custom-control-label h5" for="bdcView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">BDC RULES</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="bdcruleAdd" name="bdcruleAdd">
+                                                            <label class="custom-control-label h5" for="bdcruleAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="bdcruleEdit" name="bdcruleEdit">
+                                                            <label class="custom-control-label h5" for="bdcruleEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="bdcruleRemove" name="bdcruleRemove">
+                                                            <label class="custom-control-label h5" for="bdcruleRemove">REMOVE</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="bdcruleView" name="bdcruleView">
+                                                            <label class="custom-control-label h5" for="bdcruleView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Bodyshop Contacts</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="bodyshopsAdd" name="bodyshopsAdd">
+                                                            <label class="custom-control-label h5" for="bodyshopsAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="bodyshopsEdit" name="bodyshopsEdit">
+                                                            <label class="custom-control-label h5" for="bodyshopsEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="bodyshopsRemove" name="bodyshopsRemove">
+                                                            <label class="custom-control-label h5" for="bodyshopsRemove">REMOVE</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="bodyshopsView" name="bodyshopsView">
+                                                            <label class="custom-control-label h5" for="bodyshopsView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">DEALER CASH INCENTIVE RULES</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="cashincruleAdd" name="cashincruleAdd">
+                                                            <label class="custom-control-label h5" for="cashincruleAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="cashincruleEdit" name="cashincruleEdit">
+                                                            <label class="custom-control-label h5" for="cashincruleEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="cashincruleRemove" name="cashincruleRemove">
+                                                            <label class="custom-control-label h5" for="cashincruleRemove">REMOVE</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="cashincruleView" name="cashincruleView">
+                                                            <label class="custom-control-label h5" for="cashincruleView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Dealership Contacts</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="dealershipAdd" name="dealershipAdd">
+                                                            <label class="custom-control-label h5" for="dealershipAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="dealershipEdit" name="dealershipEdit">
+                                                            <label class="custom-control-label h5" for="dealershipEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="dealershipRemove" name="dealershipRemove">
+                                                            <label class="custom-control-label h5" for="dealershipRemove">REMOVE</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="dealershipView" name="dealershipView">
+                                                            <label class="custom-control-label h5" for="dealershipView">View</label>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -150,6 +262,35 @@ if ($_GET['r'] == 'add') {
                                                         <div class="custom-control custom-control-lg custom-checkbox">
                                                             <input type="checkbox" class="custom-control-input" id="incentivesEdit" name="incentivesEdit">
                                                             <label class="custom-control-label h5" for="incentivesEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="incentivesView" name="incentivesView">
+                                                            <label class="custom-control-label h5" for="incentivesView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">INCENTIVE RULES</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="incrAdd" name="incrAdd">
+                                                            <label class="custom-control-label h5" for="incrAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="incrEdit" name="incrEdit">
+                                                            <label class="custom-control-label h5" for="incrEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="incrRemove" name="incrRemove">
+                                                            <label class="custom-control-label h5" for="incrRemove">REMOVE</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="incrView" name="incrView">
+                                                            <label class="custom-control-label h5" for="incrView">View</label>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -171,6 +312,237 @@ if ($_GET['r'] == 'add') {
                                                         <div class="custom-control custom-control-lg custom-checkbox">
                                                             <input type="checkbox" class="custom-control-input" id="invRemove" name="invRemove">
                                                             <label class="custom-control-label h5" for="invRemove">REMOVE</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="invView" name="invView">
+                                                            <label class="custom-control-label h5" for="invView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Inventory Specialist - Dashboard</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="invsplstEdit" name="invsplstEdit">
+                                                            <label class="custom-control-label h5" for="invsplstEdit">Edit</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="invsplstView" name="invsplstView">
+                                                            <label class="custom-control-label h5" for="invsplstView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">LEASE RULES</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="leaseruleAdd" name="leaseruleAdd">
+                                                            <label class="custom-control-label h5" for="leaseruleAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="leaseruleEdit" name="leaseruleEdit">
+                                                            <label class="custom-control-label h5" for="leaseruleEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="leaseruleRemove" name="leaseruleRemove">
+                                                            <label class="custom-control-label h5" for="leaseruleRemove">REMOVE</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="leaseruleView" name="leaseruleView">
+                                                            <label class="custom-control-label h5" for="leaseruleView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Lot Wizards</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <!-- <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="lotWizardsAdd" name="lotWizardsAdd">
+                                                            <label class="custom-control-label h5" for="lotWizardsAdd">Add</label>
+                                                        </div> -->
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="lotWizardsEdit" name="lotWizardsEdit">
+                                                            <label class="custom-control-label h5" for="lotWizardsEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="lotWizardsView" name="lotWizardsView">
+                                                            <label class="custom-control-label h5" for="lotWizardsView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">NEW CAR PRICE BY MANUFACTURE</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="manpriceAdd" name="manpriceAdd">
+                                                            <label class="custom-control-label h5" for="manpriceAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="manpriceEdit" name="manpriceEdit">
+                                                            <label class="custom-control-label h5" for="manpriceEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="manpriceRemove" name="manpriceRemove">
+                                                            <label class="custom-control-label h5" for="manpriceRemove">REMOVE</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="manpriceView" name="manpriceView">
+                                                            <label class="custom-control-label h5" for="manpriceView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">MATRIX</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="matrixView" name="matrixView">
+                                                            <label class="custom-control-label h5" for="matrixView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Matrix Files</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="matrixfileAdd" name="matrixfileAdd">
+                                                            <label class="custom-control-label h5" for="matrixfileAdd">Upload</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">MATRIX RULES</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="matrixruleAdd" name="matrixruleAdd">
+                                                            <label class="custom-control-label h5" for="matrixruleAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="matrixruleEdit" name="matrixruleEdit">
+                                                            <label class="custom-control-label h5" for="matrixruleEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="matrixruleRemove" name="matrixruleRemove">
+                                                            <label class="custom-control-label h5" for="matrixruleRemove">REMOVE</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="matrixruleView" name="matrixruleView">
+                                                            <label class="custom-control-label h5" for="matrixruleView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">RATE RULES</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="rateruleAdd" name="rateruleAdd">
+                                                            <label class="custom-control-label h5" for="rateruleAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="rateruleEdit" name="rateruleEdit">
+                                                            <label class="custom-control-label h5" for="rateruleEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="rateruleRemove" name="rateruleRemove">
+                                                            <label class="custom-control-label h5" for="rateruleRemove">REMOVE</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="rateruleView" name="rateruleView">
+                                                            <label class="custom-control-label h5" for="rateruleView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Retail Delivery Registration</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="rdrEdit" name="rdrEdit">
+                                                            <label class="custom-control-label h5" for="rdrEdit">Edit</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="rdrView" name="rdrView">
+                                                            <label class="custom-control-label h5" for="rdrView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">REGISTRATION PROBLEMS</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="regpAdd" name="regpAdd">
+                                                            <label class="custom-control-label h5" for="regpAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="regpEdit" name="regpEdit">
+                                                            <label class="custom-control-label h5" for="regpEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="regpRemove" name="regpRemove">
+                                                            <label class="custom-control-label h5" for="regpRemove">REMOVE</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="regpView" name="regpView">
+                                                            <label class="custom-control-label h5" for="regpView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">ROLES</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="roleAdd" name="roleAdd">
+                                                            <label class="custom-control-label h5" for="roleAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="roleEdit" name="roleEdit">
+                                                            <label class="custom-control-label h5" for="roleEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="roleRemove" name="roleRemove">
+                                                            <label class="custom-control-label h5" for="roleRemove">REMOVE</label>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -206,107 +578,6 @@ if ($_GET['r'] == 'add') {
                                             </tr>
                                             <tr>
                                                 <td class="align-middle text-center">
-                                                    <h3 class="h5">TO DO'S</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="todoEdit" name="todoEdit">
-                                                            <label class="custom-control-label h5" for="todoEdit">EDIT</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">REGISTRATION PROBLEMS</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="regpAdd" name="regpAdd">
-                                                            <label class="custom-control-label h5" for="regpAdd">Add</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="regpEdit" name="regpEdit">
-                                                            <label class="custom-control-label h5" for="regpEdit">EDIT</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="regpRemove" name="regpRemove">
-                                                            <label class="custom-control-label h5" for="regpRemove">REMOVE</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="regpView" name="regpView">
-                                                            <label class="custom-control-label h5" for="regpView">View</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">USERS</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="userAdd" name="userAdd">
-                                                            <label class="custom-control-label h5" for="userAdd">Add</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="userEdit" name="userEdit">
-                                                            <label class="custom-control-label h5" for="userEdit">EDIT</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="userRemove" name="userRemove">
-                                                            <label class="custom-control-label h5" for="userRemove">REMOVE</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">ROLES</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="roleAdd" name="roleAdd">
-                                                            <label class="custom-control-label h5" for="roleAdd">Add</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="roleEdit" name="roleEdit">
-                                                            <label class="custom-control-label h5" for="roleEdit">EDIT</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="roleRemove" name="roleRemove">
-                                                            <label class="custom-control-label h5" for="roleRemove">REMOVE</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">INCENTIVE RULES</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="incrAdd" name="incrAdd">
-                                                            <label class="custom-control-label h5" for="incrAdd">Add</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="incrEdit" name="incrEdit">
-                                                            <label class="custom-control-label h5" for="incrEdit">EDIT</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="incrRemove" name="incrRemove">
-                                                            <label class="custom-control-label h5" for="incrRemove">REMOVE</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
                                                     <h3 class="h5">SALES PERSONS'S TODO RULES</h3>
                                                 </td>
                                                 <td>
@@ -322,6 +593,35 @@ if ($_GET['r'] == 'add') {
                                                         <div class="custom-control custom-control-lg custom-checkbox">
                                                             <input type="checkbox" class="custom-control-input" id="sptrRemove" name="sptrRemove">
                                                             <label class="custom-control-label h5" for="sptrRemove">REMOVE</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="sptrView" name="sptrView">
+                                                            <label class="custom-control-label h5" for="sptrView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">SWAPS</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="swapAdd" name="swapAdd">
+                                                            <label class="custom-control-label h5" for="swapAdd">ADD</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="swapEdit" name="swapEdit">
+                                                            <label class="custom-control-label h5" for="swapEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="swapRemove" name="swapRemove">
+                                                            <label class="custom-control-label h5" for="swapRemove">REMOVE</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="swapView" name="swapView">
+                                                            <label class="custom-control-label h5" for="swapView">VIEW</label>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -344,299 +644,9 @@ if ($_GET['r'] == 'add') {
                                                             <input type="checkbox" class="custom-control-input" id="swplocRemove" name="swplocRemove">
                                                             <label class="custom-control-label h5" for="swplocRemove">REMOVE</label>
                                                         </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">NEW CAR PRICE BY MANUFACTURE</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
                                                         <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="manpriceAdd" name="manpriceAdd">
-                                                            <label class="custom-control-label h5" for="manpriceAdd">Add</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="manpriceEdit" name="manpriceEdit">
-                                                            <label class="custom-control-label h5" for="manpriceEdit">EDIT</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="manpriceRemove" name="manpriceRemove">
-                                                            <label class="custom-control-label h5" for="manpriceRemove">REMOVE</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">MATRIX RULES</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="matrixruleAdd" name="matrixruleAdd">
-                                                            <label class="custom-control-label h5" for="matrixruleAdd">Add</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="matrixruleEdit" name="matrixruleEdit">
-                                                            <label class="custom-control-label h5" for="matrixruleEdit">EDIT</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="matrixruleRemove" name="matrixruleRemove">
-                                                            <label class="custom-control-label h5" for="matrixruleRemove">REMOVE</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">BDC RULES</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="bdcruleAdd" name="bdcruleAdd">
-                                                            <label class="custom-control-label h5" for="bdcruleAdd">Add</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="bdcruleEdit" name="bdcruleEdit">
-                                                            <label class="custom-control-label h5" for="bdcruleEdit">EDIT</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="bdcruleRemove" name="bdcruleRemove">
-                                                            <label class="custom-control-label h5" for="bdcruleRemove">REMOVE</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">RATE RULES</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="rateruleAdd" name="rateruleAdd">
-                                                            <label class="custom-control-label h5" for="rateruleAdd">Add</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="rateruleEdit" name="rateruleEdit">
-                                                            <label class="custom-control-label h5" for="rateruleEdit">EDIT</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="rateruleRemove" name="rateruleRemove">
-                                                            <label class="custom-control-label h5" for="rateruleRemove">REMOVE</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">LEASE RULES</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="leaseruleAdd" name="leaseruleAdd">
-                                                            <label class="custom-control-label h5" for="leaseruleAdd">Add</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="leaseruleEdit" name="leaseruleEdit">
-                                                            <label class="custom-control-label h5" for="leaseruleEdit">EDIT</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="leaseruleRemove" name="leaseruleRemove">
-                                                            <label class="custom-control-label h5" for="leaseruleRemove">REMOVE</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">DEALER CASH INCENTIVE RULES</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="cashincruleAdd" name="cashincruleAdd">
-                                                            <label class="custom-control-label h5" for="cashincruleAdd">Add</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="cashincruleEdit" name="cashincruleEdit">
-                                                            <label class="custom-control-label h5" for="cashincruleEdit">EDIT</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="cashincruleRemove" name="cashincruleRemove">
-                                                            <label class="custom-control-label h5" for="cashincruleRemove">REMOVE</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">Lot Wazards</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <!-- <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="lotWizardsAdd" name="lotWizardsAdd">
-                                                            <label class="custom-control-label h5" for="lotWizardsAdd">Add</label>
-                                                        </div> -->
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="lotWizardsEdit" name="lotWizardsEdit">
-                                                            <label class="custom-control-label h5" for="lotWizardsEdit">EDIT</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="lotWizardsView" name="lotWizardsView">
-                                                            <label class="custom-control-label h5" for="lotWizardsView">View</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">Used Cars</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <!-- <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="usedCarsAdd" name="usedCarsAdd">
-                                                            <label class="custom-control-label h5" for="usedCarsAdd">Add</label>
-                                                        </div> -->
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="usedCarsEdit" name="usedCarsEdit">
-                                                            <label class="custom-control-label h5" for="usedCarsEdit">EDIT</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="usedCarsView" name="usedCarsView">
-                                                            <label class="custom-control-label h5" for="usedCarsView">View</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">Bodyshop Contacts</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="bodyshopsAdd" name="bodyshopsAdd">
-                                                            <label class="custom-control-label h5" for="bodyshopsAdd">Add</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="bodyshopsEdit" name="bodyshopsEdit">
-                                                            <label class="custom-control-label h5" for="bodyshopsEdit">EDIT</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="bodyshopsRemove" name="bodyshopsRemove">
-                                                            <label class="custom-control-label h5" for="bodyshopsRemove">REMOVE</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">Matrix Files</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="matrixfileAdd" name="matrixfileAdd">
-                                                            <label class="custom-control-label h5" for="matrixfileAdd">Upload</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">Inventory Specialist - Dashboard</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="invsplstEdit" name="invsplstEdit">
-                                                            <label class="custom-control-label h5" for="invsplstEdit">Edit</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="invsplstView" name="invsplstView">
-                                                            <label class="custom-control-label h5" for="invsplstView">View</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">Retail Delivery Registration</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="rdrEdit" name="rdrEdit">
-                                                            <label class="custom-control-label h5" for="rdrEdit">Edit</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="rdrView" name="rdrView">
-                                                            <label class="custom-control-label h5" for="rdrView">View</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">Transportation Damage</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="tansptDmgAdd" name="tansptDmgAdd">
-                                                            <label class="custom-control-label h5" for="tansptDmgAdd">Add</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="tansptDmgEdit" name="tansptDmgEdit">
-                                                            <label class="custom-control-label h5" for="tansptDmgEdit">EDIT</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="tansptDmgRemove" name="tansptDmgRemove">
-                                                            <label class="custom-control-label h5" for="tansptDmgRemove">REMOVE</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">Lot Wizards Bills</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="wizardsBillEdit" name="wizardsBillEdit">
-                                                            <label class="custom-control-label h5" for="wizardsBillEdit">Edit</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="wizardsBillView" name="wizardsBillView">
-                                                            <label class="custom-control-label h5" for="wizardsBillView">View</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">Delivery Coordinator Appointments</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="appointmentAdd" name="appointmentAdd">
-                                                            <label class="custom-control-label h5" for="appointmentAdd">Add</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="appointmentEdit" name="appointmentEdit">
-                                                            <label class="custom-control-label h5" for="appointmentEdit">EDIT</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="appointmentRemove" name="appointmentRemove">
-                                                            <label class="custom-control-label h5" for="appointmentRemove">REMOVE</label>
+                                                            <input type="checkbox" class="custom-control-input" id="swplocView" name="swplocView">
+                                                            <label class="custom-control-label h5" for="swplocView">View</label>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -660,46 +670,25 @@ if ($_GET['r'] == 'add') {
                                             </tr>
                                             <tr>
                                                 <td class="align-middle text-center">
-                                                    <h3 class="h5">BDC - Leads</h3>
+                                                    <h3 class="h5">Transportation Damage</h3>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex justify-content-start">
                                                         <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="bdcAdd" name="bdcAdd">
-                                                            <label class="custom-control-label h5" for="bdcAdd">Add</label>
+                                                            <input type="checkbox" class="custom-control-input" id="tansptDmgAdd" name="tansptDmgAdd">
+                                                            <label class="custom-control-label h5" for="tansptDmgAdd">Add</label>
                                                         </div>
                                                         <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="bdcEdit" name="bdcEdit">
-                                                            <label class="custom-control-label h5" for="bdcEdit">EDIT</label>
+                                                            <input type="checkbox" class="custom-control-input" id="tansptDmgEdit" name="tansptDmgEdit">
+                                                            <label class="custom-control-label h5" for="tansptDmgEdit">EDIT</label>
                                                         </div>
                                                         <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="bdcRemove" name="bdcRemove">
-                                                            <label class="custom-control-label h5" for="bdcRemove">REMOVE</label>
+                                                            <input type="checkbox" class="custom-control-input" id="tansptDmgRemove" name="tansptDmgRemove">
+                                                            <label class="custom-control-label h5" for="tansptDmgRemove">REMOVE</label>
                                                         </div>
                                                         <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="bdcView" name="bdcView">
-                                                            <label class="custom-control-label h5" for="bdcView">View</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">Warranty Cancellation</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="warrantyAdd" name="warrantyAdd">
-                                                            <label class="custom-control-label h5" for="warrantyAdd">Add</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="warrantyEdit" name="warrantyEdit">
-                                                            <label class="custom-control-label h5" for="warrantyEdit">EDIT</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="warrantyRemove" name="warrantyRemove">
-                                                            <label class="custom-control-label h5" for="warrantyRemove">REMOVE</label>
+                                                            <input type="checkbox" class="custom-control-input" id="tansptDmgView" name="tansptDmgView">
+                                                            <label class="custom-control-label h5" for="tansptDmgView">View</label>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -723,6 +712,144 @@ if ($_GET['r'] == 'add') {
                                             </tr>
                                             <tr>
                                                 <td class="align-middle text-center">
+                                                    <h3 class="h5">TO DO'S</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="todoEdit" name="todoEdit">
+                                                            <label class="custom-control-label h5" for="todoEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="todoView" name="todoView">
+                                                            <label class="custom-control-label h5" for="todoView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Used Cars</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <!-- <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="usedCarsAdd" name="usedCarsAdd">
+                                                            <label class="custom-control-label h5" for="usedCarsAdd">Add</label>
+                                                        </div> -->
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="usedCarsEdit" name="usedCarsEdit">
+                                                            <label class="custom-control-label h5" for="usedCarsEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="usedCarsView" name="usedCarsView">
+                                                            <label class="custom-control-label h5" for="usedCarsView">View</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="usedCarsTitleView" name="usedCarsTitleView">
+                                                            <label class="custom-control-label h5" for="usedCarsTitleView">Title - View</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="usedCarsTitleEdit" name="usedCarsTitleEdit">
+                                                            <label class="custom-control-label h5" for="usedCarsTitleEdit">Title - Edit</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">USERS</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="userAdd" name="userAdd">
+                                                            <label class="custom-control-label h5" for="userAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="userEdit" name="userEdit">
+                                                            <label class="custom-control-label h5" for="userEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="userRemove" name="userRemove">
+                                                            <label class="custom-control-label h5" for="userRemove">REMOVE</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="userView" name="userView">
+                                                            <label class="custom-control-label h5" for="userView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Warranty Cancellation</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="warrantyAdd" name="warrantyAdd">
+                                                            <label class="custom-control-label h5" for="warrantyAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="warrantyEdit" name="warrantyEdit">
+                                                            <label class="custom-control-label h5" for="warrantyEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="warrantyRemove" name="warrantyRemove">
+                                                            <label class="custom-control-label h5" for="warrantyRemove">REMOVE</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="warrantyView" name="warrantyView">
+                                                            <label class="custom-control-label h5" for="warrantyView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Website Links</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="weblinkAdd" name="weblinkAdd">
+                                                            <label class="custom-control-label h5" for="weblinkAdd">Add</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="weblinkEdit" name="weblinkEdit">
+                                                            <label class="custom-control-label h5" for="weblinkEdit">EDIT</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="weblinkRemove" name="weblinkRemove">
+                                                            <label class="custom-control-label h5" for="weblinkRemove">REMOVE</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="weblinkView" name="weblinkView">
+                                                            <label class="custom-control-label h5" for="weblinkView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
+                                                    <h3 class="h5">Lot Wizards Bills</h3>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="wizardsBillEdit" name="wizardsBillEdit">
+                                                            <label class="custom-control-label h5" for="wizardsBillEdit">Edit</label>
+                                                        </div>
+                                                        <div class="custom-control custom-control-lg custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="wizardsBillView" name="wizardsBillView">
+                                                            <label class="custom-control-label h5" for="wizardsBillView">View</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-middle text-center">
                                                     <h3 class="h5">Writedowns</h3>
                                                 </td>
                                                 <td>
@@ -734,27 +861,6 @@ if ($_GET['r'] == 'add') {
                                                         <div class="custom-control custom-control-lg custom-checkbox">
                                                             <input type="checkbox" class="custom-control-input" id="writedownView" name="writedownView">
                                                             <label class="custom-control-label h5" for="writedownView">View</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <h3 class="h5">Dealership Contacts</h3>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-start">
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="dealershipAdd" name="dealershipAdd">
-                                                            <label class="custom-control-label h5" for="dealershipAdd">Add</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="dealershipEdit" name="dealershipEdit">
-                                                            <label class="custom-control-label h5" for="dealershipEdit">EDIT</label>
-                                                        </div>
-                                                        <div class="custom-control custom-control-lg custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="dealershipRemove" name="dealershipRemove">
-                                                            <label class="custom-control-label h5" for="dealershipRemove">REMOVE</label>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -903,7 +1009,7 @@ if ($_GET['r'] == 'add') {
                                             }
 
                                             // $itemSql = "SELECT `role_mod_id`, `modules`, `functions`, `permission` FROM `role_mod` WHERE role_id = {$roleId} ORDER BY  role_mod_id";
-                                            $itemSql = "SELECT * FROM `role_mod` WHERE role_id = '$roleId' GROUP BY modules ORDER BY role_mod_id;";
+                                            $itemSql = "SELECT * FROM `role_mod` WHERE role_id = '$roleId' GROUP BY modules ORDER BY modules ASC";
                                             $resultItem = $connect->query($itemSql);
 
                                             while ($itemData = $resultItem->fetch_assoc()) {
@@ -964,7 +1070,7 @@ if ($_GET['r'] == 'add') {
                                                 } else if ($module === 'wizardsBill') {
                                                     $Name = "Wizards Bill";
                                                 } else if ($module === 'appointment') {
-                                                    $Name = "Delivery Coordinator Appointments";
+                                                    $Name = "Appointments - Delivery Coordinator";
                                                 } else if ($module === 'tansptBill') {
                                                     $Name = "Transportation Bills";
                                                 } else if ($module === 'bdc') {
@@ -977,6 +1083,8 @@ if ($_GET['r'] == 'add') {
                                                     $Name = "Writedowns";
                                                 } else if ($module === 'dealership') {
                                                     $Name = "Dealership Contacts";
+                                                } else if ($module === 'weblink') {
+                                                    $Name = "Website Links";
                                                 }
                                             ?>
                                                 <tr>
@@ -1005,10 +1113,12 @@ if ($_GET['r'] == 'add') {
                                                                     echo serPermissions($itemPData, 'View', 'swapView');
                                                                 } else if ($module === 'incentives') {
                                                                     echo serPermissions($itemPData, 'Edit', 'incentivesEdit');
+                                                                    echo serPermissions($itemPData, 'View', 'incentivesView');
                                                                 } else if ($module === 'inventory') {
                                                                     echo serPermissions($itemPData, 'Add', 'invAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'invEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'invRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'invView');
                                                                 } else if ($module === 'sale') {
                                                                     echo serPermissions($itemPData, 'Add', 'saleAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'saleEdit');
@@ -1017,6 +1127,7 @@ if ($_GET['r'] == 'add') {
                                                                     echo serPermissions($itemPData, 'Details', 'saleDetails');
                                                                 } else if ($module === 'todo') {
                                                                     echo serPermissions($itemPData, 'Edit', 'todoEdit');
+                                                                    echo serPermissions($itemPData, 'View', 'todoView');
                                                                 } else if ($module === 'regp') {
                                                                     echo serPermissions($itemPData, 'Add', 'regpAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'regpEdit');
@@ -1026,6 +1137,7 @@ if ($_GET['r'] == 'add') {
                                                                     echo serPermissions($itemPData, 'Add', 'userAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'userEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'userRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'userView');
                                                                 } else if ($module === 'role') {
                                                                     echo serPermissions($itemPData, 'Add', 'roleAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'roleEdit');
@@ -1034,43 +1146,53 @@ if ($_GET['r'] == 'add') {
                                                                     echo serPermissions($itemPData, 'Add', 'incrAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'incrEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'incrRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'incrView');
                                                                 } else if ($module === 'sptr') {
 
                                                                     echo serPermissions($itemPData, 'Add', 'sptrAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'sptrEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'sptrRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'sptrView');
                                                                 } else if ($module === 'swploc') {
                                                                     echo serPermissions($itemPData, 'Add', 'swplocAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'swplocEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'swplocRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'swplocView');
                                                                 } else if ($module === 'manprice') {
                                                                     echo serPermissions($itemPData, 'Add', 'manpriceAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'manpriceEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'manpriceRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'manpriceView');
                                                                 } else if ($module === 'bodyshops') {
                                                                     echo serPermissions($itemPData, 'Add', 'bodyshopsAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'bodyshopsEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'bodyshopsRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'bodyshopsView');
                                                                 } else if ($module === 'matrixrule') {
                                                                     echo serPermissions($itemPData, 'Add', 'matrixruleAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'matrixruleEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'matrixruleRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'matrixruleView');
                                                                 } else if ($module === 'bdcrule') {
                                                                     echo serPermissions($itemPData, 'Add', 'bdcruleAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'bdcruleEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'bdcruleRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'bdcruleView');
                                                                 } else if ($module === 'raterule') {
                                                                     echo serPermissions($itemPData, 'Add', 'rateruleAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'rateruleEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'rateruleRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'rateruleView');
                                                                 } else if ($module === 'leaserule') {
                                                                     echo serPermissions($itemPData, 'Add', 'leaseruleAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'leaseruleEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'leaseruleRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'leaseruleView');
                                                                 } else if ($module === 'cashincrule') {
                                                                     echo serPermissions($itemPData, 'Add', 'cashincruleAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'cashincruleEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'cashincruleRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'cashincruleView');
                                                                 } else if ($module === 'lotWizards') {
                                                                     // echo serPermissions($itemPData, 'Add', 'lotWizardsAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'lotWizardsEdit');
@@ -1079,6 +1201,8 @@ if ($_GET['r'] == 'add') {
                                                                     // echo serPermissions($itemPData, 'Add', 'usedCarsAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'usedCarsEdit');
                                                                     echo serPermissions($itemPData, 'View', 'usedCarsView');
+                                                                    echo serPermissions($itemPData, 'TitleView', 'usedCarsTitleView');
+                                                                    echo serPermissions($itemPData, 'TitleEdit', 'usedCarsTitleEdit');
                                                                 } else if ($module === 'matrixfile') {
                                                                     echo serPermissions($itemPData, 'Add', 'matrixfileAdd');
                                                                 } else if ($module === 'invsplst') {
@@ -1091,6 +1215,7 @@ if ($_GET['r'] == 'add') {
                                                                     echo serPermissions($itemPData, 'Add', 'tansptDmgAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'tansptDmgEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'tansptDmgRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'tansptDmgView');
                                                                 } else if ($module === 'wizardsBill') {
                                                                     echo serPermissions($itemPData, 'Edit', 'wizardsBillEdit');
                                                                     echo serPermissions($itemPData, 'View', 'wizardsBillView');
@@ -1098,6 +1223,7 @@ if ($_GET['r'] == 'add') {
                                                                     echo serPermissions($itemPData, 'Add', 'appointmentAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'appointmentEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'appointmentRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'appointmentView');
                                                                 } else if ($module === 'tansptBill') {
                                                                     echo serPermissions($itemPData, 'Edit', 'tansptBillEdit');
                                                                     echo serPermissions($itemPData, 'View', 'tansptBillView');
@@ -1120,6 +1246,12 @@ if ($_GET['r'] == 'add') {
                                                                     echo serPermissions($itemPData, 'Add', 'dealershipAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'dealershipEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'dealershipRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'dealershipView');
+                                                                } else if ($module === 'weblink') {
+                                                                    echo serPermissions($itemPData, 'Add', 'weblinkAdd');
+                                                                    echo serPermissions($itemPData, 'Edit', 'weblinkEdit');
+                                                                    echo serPermissions($itemPData, 'Remove', 'weblinkRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'weblinkView');
                                                                 }
                                                             }
 

@@ -1,125 +1,82 @@
-<?php
-include_once '../php_action/db/core.php';
-include_once '../includes/header.php';
-if (hasAccess("appointment", "View") === 'false') {
-    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
-}
-if (hasAccess("appointment", "Edit") === 'false') {
-    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
-} else {
-    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
-}
 
-$userRole = $_SESSION['userRole'];
-echo '<input type="hidden" name="loggedInUserRole" id="loggedInUserRole" value="' . $userRole . '" />';
-echo '<input type="hidden" name="currentUser" id="currentUser" value="' . $_SESSION['userName'] . '">';
-echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_SESSION['userId'] . '">';
-?>
+<style>
+    .custom-checkbox {
+        display: inline-grid;
+        margin: auto;
+        align-items: center;
+    }
 
+    #datatable-1 tbody tr td {
+        padding: 10px 6px;
+    }
 
+    .DTFC_RightBodyLiner {
+        width: 100% !important;
+        overflow-x: hidden;
+        overflow-y: auto !important;
+    }
 
-<head>
-    <link rel="stylesheet" href="../custom/css/customDatatable.css">
-    <link rel="stylesheet" href="../custom/dist/tui-calendar.css">
-    <!-- <link rel="stylesheet" href="../custom/css/default.css"> -->
-    <link rel="stylesheet" href="../custom/css/icons.css">
-    <style>
-        .tui-full-calendar-timegrid-timezone {
-            background-color: transparent !important;
+    #datatable-1 tbody tr td {
+        padding: 10px;
+    }
+
+    @media (min-width: 576px) {
+        .modal-dialog {
+            max-width: 600px;
+            margin: 1.75rem auto;
         }
 
-        .tui-full-calendar-vlayout-area.tui-full-calendar-vlayout-container div[data-panel-index="0"] {
-            min-height: 200px !important;
+        .modal-dialog table.detialsTable {
+            width: max-content;
+        }
+    }
+
+    @media (min-width: 1025px) {
+
+        .modal-lg,
+        .modal-xl {
+            max-width: 1000PX;
         }
 
-        body.theme-dark .tui-full-calendar-layout *:not(.tui-full-calendar-timegrid-hourmarker-line-today) {
-            color: #f5f5f5 !important;
-            border-color: #757575 !important;
+        .modal-dialog table.detialsTable {
+            width: inherit;
         }
+    }
 
-        body.theme-dark .tui-full-calendar-layout,
-        body.theme-dark .tui-full-calendar-month-more {
-            background-color: #424242 !important;
-        }
+    body.theme-light .disabled-div,
+    body.theme-light .disabled-div .btn-group-toggle>.btn:not(.active),
+    body.theme-light .disabled-div .bootstrap-select .bs-btn-default {
+        background-color: #eee !important;
+        pointer-events: none;
+    }
 
-        body.theme-light .tui-full-calendar-layout *:not(.tui-full-calendar-timegrid-hourmarker-line-today) {
-            color: #424242;
-            border-color: #eee !important;
-        }
+    body.theme-dark .disabled-div,
+    body.theme-dark .disabled-div .btn-group-toggle>.btn:not(.active),
+    body.theme-dark .disabled-div .bootstrap-select .bs-btn-default {
+        background-color: #757575 !important;
+        pointer-events: none;
+    }
 
-        body.theme-light .tui-full-calendar-time-schedule-content.tui-full-calendar-time-schedule-content-time {
-            color: #eee !important;
-        }
+    .font-size-initial {
+        font-weight: 900 !important;
+        font-size: large;
+    }
 
-
-        body.theme-light .tui-full-calendar-layout,
-        body.theme-light .tui-full-calendar-month-more {
-            background-color: #ffffff !important;
-        }
-
-        .dropdown-header {
-            padding: 0px !important;
-        }
-
-        @media (min-width: 1025px) {
-
-            .modal-lg,
-            .modal-xl {
-                max-width: 1000PX;
-            }
-
-            .modal-dialog table.detialsTable {
-                width: inherit;
-            }
-        }
-
-        body.theme-light .disabled-div {
-            background-color: #eee !important;
-            pointer-events: none;
-        }
-
-        body.theme-dark .disabled-div {
-            background-color: #757575 !important;
-            pointer-events: none;
-        }
-
-        .font-size-initial {
-            font-weight: 900 !important;
-            font-size: large;
-        }
-
-        .tui-full-calendar-weekday-schedule-bullet {
-            display: none;
-        }
-
-        .tui-full-calendar-weekday-schedule-title {
-            color: inherit !important;
-        }
-
-        body.theme-light .disabled-div,
-        body.theme-light .disabled-div .btn-group-toggle>.btn:not(.active),
-        body.theme-light .disabled-div .bootstrap-select .bs-btn-default {
-            background-color: #eee !important;
-            pointer-events: none;
-        }
-
-        body.theme-dark .disabled-div,
-        body.theme-dark .disabled-div .btn-group-toggle>.btn:not(.active),
-        body.theme-dark .disabled-div .bootstrap-select .bs-btn-default {
-            background-color: #757575 !important;
-            pointer-events: none;
-        }
-    </style>
-</head>
+    .clear-selection {
+        cursor: pointer;
+    }
+</style>
 
 <div class="content">
     <div class="container-fluid">
-
         <div class="row">
             <div class="col-12">
                 <div class="portlet">
                     <div class="portlet-header portlet-header-bordered">
-                        <h3 class="portlet-title">Appointment Calendar</h3>
+                        <h3 class="portlet-title">Delivery Coordinator</h3>
+                        <button class="btn btn-primary mr-2 p-2" onclick="toggleFilterClass()">
+                            <i class="fa fa-align-center ml-1 mr-2"></i> Filter
+                        </button>
                         <?php
                         if (hasAccess("appointment", "Add") !== 'false') {
                             echo '<button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
@@ -127,69 +84,30 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                         </button>';
                         }
                         ?>
+
                     </div>
                     <div class="portlet-body">
-                        <div>
-                            <div id="menu" class="d-flex flex-row justify-content-between align-items-center p-3">
-                                <div>
-                                    <span id="lnb-calendars" class="lnb-calendars">
-                                        <button class="btn btn-outline-primary" id="dropdownMenu-lnb-calendars" aria-expanded="false" data-toggle="dropdown">
-                                            <i class="calendar-icon fa fa-filter" style="margin-right: 4px;"></i>
-                                            <span>Filter</span>&nbsp;
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-left dropdown-menu-animated" id="calendarList" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 30px, 0px);">
-                                        </div>
-                                    </span>
-
-                                    <span class="dropdown">
-                                        <button class="btn btn-outline-primary dropdown-toggle" id="dropdownMenu-calendarType" data-toggle="dropdown" aria-expanded="false">
-                                            <i id="calendarTypeIcon" class="calendar-icon fa fa-list-alt" style="margin-right: 4px;"></i>
-                                            <span id="calendarTypeName">View</span>&nbsp;
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-left dropdown-menu-animated" role="menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 30px, 0px);">
-                                            <li role="presentation">
-                                                <a class="dropdown-item" role="menuitem" data-action="toggle-daily">
-                                                    <div class="dropdown-icon"><i class="calendar-icon fa fa-align-justify"></i></div>
-                                                    <span class="dropdown-content">Daily</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" role="menuitem" data-action="toggle-weekly">
-                                                    <div class="dropdown-icon"><i class="calendar-icon fa fa-list"></i></div>
-                                                    <span class="dropdown-content">Weekly</span>
-                                                </a>
-                                            </li>
-                                            <li role="presentation">
-                                                <a class="dropdown-item" role="menuitem" data-action="toggle-monthly">
-                                                    <div class="dropdown-icon"><i class="fa fa-table"></i>
-                                                    </div><span class="dropdown-content">Monthly</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </span>
-                                </div>
-                                <span id="menu-navi">
-                                    <button type="button" class="btn btn-outline-primary" data-action="move-today">Today</button>
-                                    <button type="button" class="btn btn-outline-primary btn-sm move-day" data-action="move-prev">
-                                        <!-- <i class="calendar-icon ic-arrow-line-left" data-action="move-prev"></i> -->
-                                        <i class="fa fa-arrow-left" data-action="move-prev"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-primary btn-sm move-day" data-action="move-next">
-                                        <!-- <i class="calendar-icon ic-arrow-line-right" data-action="move-next"></i> -->
-                                        <i class="fa fa-arrow-right" data-action="move-next"></i>
-
-                                    </button>
-                                </span>
-
-                                <span id="renderRange" class="render-range"></span>
-                            </div>
-                        </div>
-
-
-
-                        <div id="calendar"></div>
-
+                        <div class="remove-messages"></div>
+                        <table id="datatable-1" class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Confirmed</th>
+                                    <th>Complete</th>
+                                    <th>Customer Name</th>
+                                    <th>Appointment Date</th>
+                                    <th>Time</th>
+                                    <th>Coordinator</th>
+                                    <th>Stock No.</th>
+                                    <th>Vehicle</th>
+                                    <th>Sales Consultant</th>
+                                    <th>Notes</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -204,7 +122,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                 <h5 class="modal-title">Add Schedule</h5>
                 <button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
             </div>
-            <form id="addNewSchedule" autocomplete="off" method="post" action="../php_action/createSchedule.php">
+            <form id="addNewSchedule" autocomplete="off" method="post" action="<?php echo $siteurl ?>/php_action/createSchedule.php">
 
                 <div class="modal-body">
                     <div class="w-100 appointment_div p-4">
@@ -220,7 +138,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                     <label for="leadDate" class="col-sm-3 text-sm-center col-form-label">Stock No - Vin</label>
                                     <div class="form-group col-sm-9">
                                         <input type="hidden" class="form-control" name="stockno" id="stockno" />
-                                        <select class="form-control selectpicker w-auto required" id="sale_id" onchange="changeStockDetails(this)" name="sale_id" data-live-search="true" data-size="4">
+                                        <select class="form-control selectpicker w-auto" id="sale_id" onchange="changeStockDetails(this)" name="sale_id" data-live-search="true" data-size="4">
                                             <option value="" selected disabled>Select</option>
                                             <optgroup class="stockno"></optgroup>
                                         </select>
@@ -236,6 +154,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                     <label for="leadDate" class="col-form-label">submitted By</label>
                                     <input type="text" class="form-control text-center" name="submittedBy" id="submittedBy" value="<?php echo $_SESSION['userName']; ?>" readonly autocomplete="off" autofill="off" />
                                 </div>
+
                                 <div class="form-group manager_override_div" style="border-radius:5px;">
                                     <input type="hidden" name="has_appointment" id="has_appointment" value="null" />
                                     <div class="custom-control custom-control-lg custom-checkbox">
@@ -280,7 +199,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                 <div class="row align-items-baseline">
                                     <label for="coordinator" class="col-sm-3 col-form-label">Coordinator</label>
                                     <div class="form-group col-sm-9">
-                                        <select class="form-control selectpicker w-auto required" id="coordinator" name="coordinator" data-live-search="true" data-size="4">
+                                        <select class="form-control selectpicker w-auto" id="coordinator" name="coordinator" data-live-search="true" data-size="4">
                                             <option value="" selected disabled>Select</option>
                                             <optgroup class="coordinator" id="coordinatorList"></optgroup>
                                         </select>
@@ -364,6 +283,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                     No
                                 </label>
                             </div>
+                            <span class="badge-text-primary clear-selection" data-id="confirmed">Clear Selection</span>
                         </div>
                         <label for="complete" class="col-sm-2 text-sm-right col-form-label">Complete</label>
                         <div class="col-md-4">
@@ -377,6 +297,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                     No
                                 </label>
                             </div>
+                            <span class="badge-text-primary clear-selection pe-auto" data-id="complete">Clear Selection</span>
                         </div>
                     </div>
 
@@ -399,7 +320,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                 <h5 class="modal-title">Edit Schedule</h5>
                 <button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
             </div>
-            <form id="editScheduleForm" autocomplete="off" method="post" action="../php_action/editSchedule.php">
+            <form id="editScheduleForm" autocomplete="off" method="post" action="<?php echo $siteurl ?>/php_action/editSchedule.php">
                 <input type="hidden" name="scheduleId" id="scheduleId">
                 <input type="hidden" name="ecallenderId" id="ecallenderId">
                 <div class="modal-body">
@@ -407,6 +328,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                         <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div>
                     </div>
                     <div class="showResult d-none">
+
                         <div class="w-100 appointment_div p-4">
                             <div class="row">
                                 <div class="col-md-8">
@@ -437,6 +359,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                         <input type="text" class="form-control text-center" name="esubmittedBy" id="esubmittedBy" readonly autocomplete="off" autofill="off" />
                                         <input type="hidden" class="form-control text-center" name="esubmittedByRole" id="esubmittedByRole" readonly autocomplete="off" autofill="off" />
                                     </div>
+
                                     <div class="form-group manager_override_div" style="border-radius:5px;">
                                         <input type="hidden" name="ehas_appointment" id="ehas_appointment" value="null" />
                                         <div class="custom-control custom-control-lg custom-checkbox">
@@ -483,7 +406,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                         <div class="form-group col-sm-9">
                                             <select class="form-control selectpicker w-auto required" id="ecoordinator" name="ecoordinator" data-live-search="true" data-size="4">
                                                 <option value="" selected disabled>Select</option>
-                                                <optgroup class="coordinator" id="ecoordinatorList"></optgroup>
+                                                <optgroup class="ecoordinator" id="ecoordinatorList"></optgroup>
                                             </select>
                                         </div>
                                     </div>
@@ -565,6 +488,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                         No
                                     </label>
                                 </div>
+                                <span class="badge-text-primary clear-selection" data-id="econfirmed">Clear Selection</span>
                             </div>
                             <label for="ecomplete" class="col-sm-2 text-sm-right col-form-label">Complete</label>
                             <div class="col-md-4">
@@ -578,6 +502,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                         No
                                     </label>
                                 </div>
+                                <span class="badge-text-primary clear-selection" data-id="ecomplete">Clear Selection</span>
                             </div>
                         </div>
                     </div>
@@ -591,30 +516,3 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
     </div>
 </div>
 
-
-<?php require_once('../includes/footer.php') ?>
-<script src="https://uicdn.toast.com/tui.code-snippet/v1.5.2/tui-code-snippet.min.js"></script>
-<script src="https://uicdn.toast.com/tui.time-picker/v2.0.3/tui-time-picker.min.js"></script>
-<script src="https://uicdn.toast.com/tui.date-picker/v4.0.3/tui-date-picker.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chance/1.0.13/chance.min.js"></script>
-
-<script type="text/javascript" src="../custom/dist/tui-calendar.js"></script>
-<script type="text/javascript" src="../custom/dist/calendars.js"></script>
-<script type="text/javascript" src="../custom/dist/schedules.js"></script>
-
-
-<!-- working js -->
-<script type="text/javascript" src="../custom/js/appointments.js"></script>
-<!-- working js -->
-
-
-
-<script type="text/javascript" src="../custom/dist/default.js"></script>
-
-<script>
-    $('.tui-full-calendar-timegrid-hourmarker-time').bind("DOMSubtreeModified", function(e) {
-        // console.log(e)
-        // console.log(e.target.innerHTML)
-    });
-</script>

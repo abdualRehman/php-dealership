@@ -163,6 +163,8 @@ $(function () {
                                 showConfirmButton: !1,
                                 timer: 1500
                             })
+                            $('#addNew').modal('hide');
+                            form[0].reset();
                             manageRuleTable.ajax.reload(null, false);
                         } else {
                             e1.fire({
@@ -289,7 +291,7 @@ function loadTypeHead(id) {
     });
     $(".select2" + id).select2({
         dropdownAutoWidth: !0,
-        placeholder: "Exclude Modal No.",
+        placeholder: "Exclude Model No.",
         tags: !0,
         allowClear: true
     })
@@ -435,7 +437,7 @@ function addRow() {
 
     tr += `<td class="form-group">
     <select class="form-control selectpicker w-auto" id="model${count}" name="model[]" data-live-search="true" data-size="4">
-        <option value="0" selected disabled>Select Modal</option>
+        <option value="0" selected disabled>Select Model</option>
         <option value="All">All</option>
         <option value="ACCORD">ACCORD</option>
         <option value="ACCORD HYBRID">ACCORD HYBRID</option>
@@ -457,7 +459,7 @@ function addRow() {
         <input type="text" class="form-control typeahead typeahead${count}" id="year${count}" name="year[]" placeholder="Year">
     </td>
     <td class="form-group">
-        <input type="text" class="form-control typeahead typeahead${count}" id="modelno${count}" name="modelno[]" placeholder="Modal No.">
+        <input type="text" class="form-control typeahead typeahead${count}" id="modelno${count}" name="modelno[]" placeholder="Model No.">
     </td>
     <td class="form-group">
         <select class="form-control selectpicker w-auto" id="modelType${count}" name="modelType[]">

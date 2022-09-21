@@ -107,11 +107,15 @@ if ($_POST) {
                     $age = "";
                     if (isset($Row[9])) {
                         $age = mysqli_real_escape_string($connect, $Row[9]);
+                        $age = preg_replace('/[^A-Za-z0-9\-]/', '', $age); // Removes special chars.
+                        $age = str_replace(' ', '', $age);
                     }
 
                     $balance = "";
                     if (isset($Row[10])) {
                         $balance = mysqli_real_escape_string($connect, $Row[10]);
+                        // $balance = preg_replace('/[^A-Za-z0-9\-]/', '', $balance); // Removes special chars.
+                        // $balance = str_replace(' ', '', $balance);
                     }
                     $retail = "";
                     if (isset($Row[11])) {

@@ -2,7 +2,7 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
-if (hasAccess("leaserule", "Add") === 'false' && hasAccess("leaserule", "Edit") === 'false' && hasAccess("leaserule", "Remove") === 'false') {
+if (hasAccess("leaserule", "View") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
 if (hasAccess("leaserule", "Edit") !== 'false') {

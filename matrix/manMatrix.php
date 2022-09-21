@@ -240,9 +240,14 @@ if ($_GET['r'] == 'man') {
                                                         ?>/matrix/manMatrix.php?r=add" class="btn btn-primary mr-2 p-2">
                                                 <i class="fa fa-plus ml-1 mr-2"></i> Import New File
                                             </a> -->
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/manufaturePrice.php?r=man" class="btn btn-success mr-2 p-2">
+                                        <?php
+                                        if(hasAccess("manprice", "Add") !== 'false'){
+                                            echo '<a href="'.$GLOBALS['siteurl'].'/settings/manufaturePrice.php?r=man" class="btn btn-success mr-2 p-2">
                                             <i class="fa fa-plus ml-1"></i> See Manufacture Price
-                                        </a>
+                                        </a>';
+                                        }
+                                        ?>
+                                        
                                     </div>
                                 </div>
                             </div>

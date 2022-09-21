@@ -72,6 +72,38 @@ if ($result->num_rows > 0) {
         // updatePermission($id, 'writedown', 'View', "true");
 
 
+
+        updatePermission($id, 'incentives', 'View', "true");
+        updatePermission($id, 'inventory', 'View', "true");
+        updatePermission($id, 'todo', 'View', "true");
+        updatePermission($id, 'user', 'View', "true");
+        updatePermission($id, 'incr', 'View', "true");
+        updatePermission($id, 'sptr', 'View', "true");
+        updatePermission($id, 'swploc', 'View', "true");
+        updatePermission($id, 'manprice', 'View', "true");
+        updatePermission($id, 'matrixrule', 'View', "true");
+        updatePermission($id, 'bdcrule', 'View', "true");
+        updatePermission($id, 'raterule', 'View', "true");
+        updatePermission($id, 'leaserule', 'View', "true");
+        updatePermission($id, 'cashincrule', 'View', "true");
+        updatePermission($id, 'usedCars', 'TitleView', "true");
+        updatePermission($id, 'usedCars', 'TitleEdit', "true");
+        
+        updatePermission($id, 'bodyshops', 'View', "true");
+        updatePermission($id, 'tansptDmg', 'View', "true");
+        updatePermission($id, 'appointment', 'View', "true");
+        updatePermission($id, 'warranty', 'View', "true");
+        updatePermission($id, 'dealership', 'View', "true");
+
+        updatePermission($id, 'weblink', 'Add', "true");
+        updatePermission($id, 'weblink', 'Edit', "true");
+        updatePermission($id, 'weblink', 'Remove', "true");
+        updatePermission($id, 'weblink', 'View', "true");
+
+        
+
+
+
         echo $id . ' - ' . $name . '<br />';
         // }
     }

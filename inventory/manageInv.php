@@ -4,7 +4,7 @@ include_once '../includes/header.php';
 
 if ($_GET['r'] == 'man') {
 
-    if (hasAccess("inventory", "Edit") === 'false' && hasAccess("inventory", "Remove") === 'false') {
+    if (hasAccess("inventory", "View") === 'false') {
         echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
     }
 
@@ -36,6 +36,12 @@ if ($_GET['r'] == 'man') {
                     <div class="portlet">
                         <div class="portlet-header portlet-header-bordered">
                             <h3 class="portlet-title">Manage Inventory</h3>
+                            <?php
+                            if (hasAccess("inventory", "Add") !== 'false') {
+                                echo '<a class="btn btn-outline-primary mr-2" href="' . $GLOBALS['siteurl'] . '/inventory/addInventory.php?r=add">Add Inventory</a>';
+                                echo '<a class="btn btn-outline-primary mr-2" href="' . $GLOBALS['siteurl'] . '/inventory/addInventory.php?r=imp">Import CSV</a>';
+                            }
+                            ?>
                             <button class="btn btn-primary mr-2 p-2" onclick="toggleFilterClass()">
                                 <i class="fa fa-align-center ml-1 mr-2"></i> Filter
                             </button>

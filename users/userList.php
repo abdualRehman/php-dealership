@@ -2,9 +2,9 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
-// if (hasAccess("user", "Edit") === 'false' && hasAccess("user", "Remove") === 'false') {
-//     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
-// }
+if (hasAccess("user", "View") === 'false') {
+    echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
+}
 if (hasAccess("user", "Edit") === 'false' && hasAccess("user", "Remove") === 'false') {
     echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
 } else {

@@ -98,7 +98,7 @@ $(function () {
                     if ($(this).data('texts') !== "") {
                         var valueArray = $(this).data("texts").split(',');
                         return valueArray.forEach(element => {
-                            // console.log("element", element);
+                            element = String(element).toLowerCase();
                             models.push(element)
                         })
                     }
@@ -108,7 +108,8 @@ $(function () {
                 if (models.length === 0) {
                     return true;
                 }
-                if (models.indexOf(searchData[1]) !== -1) {
+                let search = String(searchData[1]).toLowerCase();
+                if (models.indexOf(search) !== -1) {
                     return true;
                 }
                 if (settings.nTable !== tableNode) {
@@ -183,11 +184,11 @@ function showDetails(id = null) {
                 $('#title').html(`${response.year} ${response.model} ${response.trim} <br /> ${response.model_code}`);
 
 
-                $('#net').html("$" + Number(response.net).toLocaleString("en-US"));
-                $('#hb').html("$" + Number(response.hb).toLocaleString("en-US"));
-                $('#invoice').html("$" + Number(response.invoice).toLocaleString("en-US"));
-                $('#msrp').html("$" + Number(response['m.s.r.p']).toLocaleString("en-US"));
-                $('#bdc').html("$" + Number(response.bdc).toLocaleString("en-US"));
+                $('#net').html("$" + Number(response.net).toFixed(2).toLocaleString("en-US"));
+                $('#hb').html("$" + Number(response.hb).toFixed(2).toLocaleString("en-US"));
+                $('#invoice').html("$" + Number(response.invoice).toFixed(2).toLocaleString("en-US"));
+                $('#msrp').html("$" + Number(response['m.s.r.p']).toFixed(2).toLocaleString("en-US"));
+                $('#bdc').html("$" + Number(response.bdc).toFixed(2).toLocaleString("en-US"));
 
 
                 var f_status = false;

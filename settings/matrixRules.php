@@ -2,7 +2,7 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
-if (hasAccess("matrixrule", "Add") === 'false' && hasAccess("matrixrule", "Edit") === 'false' && hasAccess("matrixrule", "Remove") === 'false') {
+if (hasAccess("matrixrule", "View") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
 

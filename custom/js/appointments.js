@@ -121,8 +121,11 @@ cal.on({
     'clickSchedule': function (e) {
         if ($('#isEditAllowed').val() == 'true') {
             let id = e.schedule.raw.creator.appointmentId
-            editShedule(id);
-            $("#editScheduleModel").modal();
+            console.log(id);
+            if(id){
+                editShedule(id);
+                $("#editScheduleModel").modal();
+            }
         }
     },
     'beforeCreateSchedule': function (event) {
@@ -606,6 +609,8 @@ function disabledManagerDiv() {
         $('.manager_override_div').removeClass('disabled-div');
         $(".manager_override_div").find("*").prop("readonly", false);
     }
+    $('#esubmittedBy , #submittedBy , #eoverrideByName , #overrideByName').addClass('disabled-div');
+    $("#esubmittedBy , #submittedBy , #eoverrideByName , #overrideByName").find("*").prop("readonly", true);
 
 }
 function fetchSchedules() {
@@ -617,12 +622,10 @@ function fetchSchedules() {
             var dataArray = response.data;
             ScheduleList = [];
             dataArray.forEach(element => {
-                console.log(element);
                 let userRole = element[2] != 'Admin' ? element[2] : 1;
                 var calendar = CalendarList.find(calender => calender.id == userRole);
                 var start = moment(element[4] + ':00', 'YYYY-MM-DD HH:mm:ss').toDate();
                 var end = moment(element[5] + ':00', 'YYYY-MM-DD HH:mm:ss').toDate();
-
                 var schedule = {
                     id: element[0],
                     calendarId: calendar.id,
@@ -645,7 +648,7 @@ function fetchSchedules() {
                         "hasRecurrenceRule": false,
                         "location": null,
                         creator: {
-                            appointmentId: element[0],
+                            appointmentId: element[17] ? element[0] : null,
                         }
                     },
                     customStyle: `background-color: ${calendar.bgColor}; color: ${calendar.color};`

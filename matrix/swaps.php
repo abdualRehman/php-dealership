@@ -161,9 +161,9 @@ if (hasAccess("swap", "Edit") === 'false') {
                         <input type="hidden" name="swapId" id="swapId">
 
                         <div class="form-row">
-                            <div class="col-md-4">
-                                <div class="row align-items-center">
-                                    <div class="col-md-8">
+                            <div class="col-md-6">
+                                <div class="row align-items-center d-flex flex-row flex-nowrap">
+                                    <div class="col-sm-10">
                                         <label for="efromDealer" class="col-form-label text-md-center">From Dealer:</label>
                                         <div class="form-group">
                                             <select class="selectpicker required" name="efromDealer" id="efromDealer" data-live-search="true" data-size="4">
@@ -172,7 +172,7 @@ if (hasAccess("swap", "Edit") === 'false') {
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-sm-2 p-0 m-0">
                                         <label for="clearBtn" class="col-form-label text-md-center">&nbsp;</label>
                                         <div class="form-group" id="clearBtn">
                                             <button type="button" class="badge badge-outline-danger badge-square badge-lg cursor-pointer" onclick="resetDealerFrom()">X</button>
@@ -187,7 +187,7 @@ if (hasAccess("swap", "Edit") === 'false') {
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label class="col-form-label" for="esalesConsultant">Sales Consultant:</label>
                                 <div class="form-group">
                                     <select class="selectpicker" name="esalesPerson" id="esalesPerson" data-live-search="true" data-size="4">
@@ -197,7 +197,7 @@ if (hasAccess("swap", "Edit") === 'false') {
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label for="estatus" class="col-form-label text-md-center">Status:</label>
                                 <select class="form-control selectpicker w-auto" name="estatus" id="estatus">
                                     <option value="pending" selected>Pending</option>
@@ -575,9 +575,9 @@ if (hasAccess("swap", "Edit") === 'false') {
                 <!-- <form id="addNewSwap" autocomplete="off" method="post" action="#"> -->
                 <div class="modal-body">
                     <div class="form-row">
-                        <div class="col-md-4">
-                            <div class="row align-items-center">
-                                <div class="col-md-8">
+                        <div class="col-md-6">
+                            <div class="row align-items-center d-flex flex-row flex-nowrap">
+                                <div class="col-sm-10">
                                     <label for="fromDealer" class="col-form-label text-md-center">From Dealer:</label>
                                     <div class="form-group">
                                         <select class="selectpicker required" name="fromDealer" id="fromDealer" data-live-search="true" data-size="4">
@@ -586,7 +586,7 @@ if (hasAccess("swap", "Edit") === 'false') {
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-sm-2 p-0 m-0">
                                     <label for="clearBtn" class="col-form-label text-md-center">&nbsp;</label>
                                     <div class="form-group" id="clearBtn">
                                         <button type="button" class="badge badge-outline-danger badge-square badge-lg cursor-pointer" onclick="resetDealerFrom()">X</button>
@@ -601,7 +601,7 @@ if (hasAccess("swap", "Edit") === 'false') {
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label class="col-form-label" for="salesConsultant">Sales Consultant:</label>
                             <div class="form-group">
                                 <select class="selectpicker" name="salesPerson" id="salesPerson" data-live-search="true" data-size="4">
@@ -611,7 +611,7 @@ if (hasAccess("swap", "Edit") === 'false') {
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="status" class="col-form-label text-md-center">Status:</label>
                             <select class="form-control selectpicker w-auto" name="status" id="status">
                                 <option value="pending" selected>Pending</option>

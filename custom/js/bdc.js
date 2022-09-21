@@ -81,7 +81,7 @@ $(function () {
         searchPanes: {
             cascadePanes: !0,
             viewTotal: !0,
-            columns: [1, 2, 7, 9, 10],
+            columns: [2, 7, 8, 9, 10],
         },
         "pageLength": 25,
         buttons: [
@@ -112,7 +112,7 @@ $(function () {
                 searchPanes: {
                     show: true
                 },
-                targets: [1, 2, 7, 9, 10],
+                targets: [2, 7, 8, 9, 10],
             },
             {
                 targets: [0],
@@ -120,7 +120,12 @@ $(function () {
             },
             {
                 targets: [8],
+                render:function (data, type, row) {
+                    return data;
+                },
                 createdCell: function (td, cellData, rowData, row, col) {
+                    console.log(cellData);
+                    console.log(rowData);
                     if (cellData == 'Show') {
                         $(td).html(`<span class="badge badge-lg" style="background-color:#${rowData[14]};text-shadow: 2px 2px 3px black;color: #ebe9e9;">${cellData}</span>`);
                     } else {

@@ -4,9 +4,13 @@ require_once 'db/core.php';
 
 $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
+// $sql = "SELECT inventory.age , inventory.stockno , inventory.vin , inventory.model, inventory.year, inventory.make , inventory.color , 
+// inventory.mileage, inventory.lot , inventory.balance, inventory.retail, inventory.certified, 
+// inventory.stocktype , inventory.wholesale , inventory.id as invId , used_cars.* FROM inventory LEFT JOIN used_cars ON inventory.id = used_cars.inv_id WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.status = 1 AND inventory.location = '$location'";
+
 $sql = "SELECT inventory.age , inventory.stockno , inventory.vin , inventory.model, inventory.year, inventory.make , inventory.color , 
 inventory.mileage, inventory.lot , inventory.balance, inventory.retail, inventory.certified, 
-inventory.stocktype , inventory.wholesale , inventory.id as invId , used_cars.* FROM inventory LEFT JOIN used_cars ON inventory.id = used_cars.inv_id WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.status = 1 AND inventory.location = '$location'";
+inventory.stocktype , inventory.wholesale , inventory.id as invId , inventory.status as invStatus , used_cars.* FROM inventory LEFT JOIN used_cars ON inventory.id = used_cars.inv_id WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.location = '$location'";
 $result = $connect->query($sql);
 
 $output = array('data' => array());
@@ -101,16 +105,16 @@ if ($result->num_rows > 0) {
 
 
 
-
+        $invStatus = $row['invStatus'];
         // if (($date_in != '' && $date_in != null) && $retail_status != 'wholesale') {
         //     $addToSheet += 1;
         // }
-        if ($date_in !== '' && $date_in === null) {
+        if ($date_in !== '' && $date_in === null && $invStatus == 1) {
             $addToSheet += 1;
             $_addToSheet = "Add To Sheet";
         }
 
-        if (($date_in === '' || $date_in === 'undefined') && $date_in !== null) {
+        if (($date_in === '' || $date_in === 'undefined') && $date_in !== null && $invStatus == 1) {
             $missingDate += 1;
             $_missingDate = "Missing Date";
         }
@@ -119,22 +123,22 @@ if ($result->num_rows > 0) {
         //     $titleIssue += 1;
         //     $_titleIssue = "Title Issue";
         // }
-        if (($title == 'false' || $title == null) && ($date_in !== null)) {
+        if (($title == 'false' || $title == null) && ($date_in !== null) && $invStatus == 1) {
             $titleIssue += 1;
             $_titleIssue = "Title Issue";
         }
 
-        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'false') {
+        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'false' && $invStatus == 1) {
             $readyToShip += 1;
             $_readyToship = "Ready To Ship";
         }
 
-        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && !$date_sent && !$date_sold) {
+        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && !$date_sent && !$date_sold && $invStatus == 1) {
             $keysPulled += 1;
             $_keyPulled = "Keys Pulled";
         }
 
-        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && $date_sent && !$date_sold) {
+        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && $date_sent && !$date_sold && $invStatus == 1) {
             $atAuction += 1;
             $_atAuction = "At Auction";
         }
@@ -148,7 +152,7 @@ if ($result->num_rows > 0) {
         //     $retail += 1;
         //     $_retail = "Retail";
         // }
-        if ($retail_status != 'wholesale' && $balance !== '' && ($carshopId !== '' && $carshopId !== null)) {
+        if ($retail_status != 'wholesale' && $balance !== '' && ($carshopId !== '' && $carshopId !== null) && $invStatus == 1) {
             $retail += 1;
             $_retail = "Retail";
         }
@@ -182,7 +186,7 @@ if ($result->num_rows > 0) {
         $cdkAge = (int)$cdkAge;
 
         $fixed_status = $row['fixed_status']; // fixed_status
-        
+
         if ($id != null && $carshopId != null && $row['date_in'] != '' && !is_null($row['date_in']) && $age != $cdkAge && $fixed_status != "true") {
             $fixAge += 1;
         }
@@ -267,7 +271,8 @@ if ($result->num_rows > 0) {
             array($_addToSheet, $_missingDate, $_titleIssue, $_readyToship, $_keyPulled, $_atAuction, $_soldAtAuction, $_retail, $_sold),
             $button,
             $row['id'],
-            $row['uci_ro']
+            $row['uci_ro'],
+            $invStatus,
 
         );
     } // /while 

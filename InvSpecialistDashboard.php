@@ -196,3 +196,8 @@ if (hasAccess("invsplst", "Edit") === 'false') {
 
 <?php include('includes/footer.php') ?>
 <script type="text/javascript" src="./custom/js/InvSpecialistDashboard.js"></script>
+<script type="text/javascript" src="./custom/js/dashboard.js"></script>
+<script>
+    $('.nav-link').removeClass('active');
+    $('#dashboard').addClass('active');
+</script>

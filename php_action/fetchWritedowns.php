@@ -104,13 +104,15 @@ if ($result->num_rows > 0) {
                     $retailP += $profit;
                 }
 
-                $mmr_balanceV += $mmr_balance;
+                // $mmr_balanceV += $mmr_balance;
                 $mmr_retailV += $mmr_retail;
             }
             if ($row['retail_status'] == 'wholesale' && $endOfAge >= 75) {
 
                 $wholesaleC += 1;
                 $wholesaleV += $writedown;
+                
+                $mmr_balanceV += $mmr_balance;
             }
 
 

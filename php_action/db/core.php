@@ -5,24 +5,26 @@ session_start();
 require_once 'db_connect.php';
 
 $siteurl = "http://localhost/carshop";
+// $siteurl = "http://onedealersystem.com";
 // $siteurl ="https://www.laughingalbattani5c25df.binfarooqtextile.com";
 
 // date_default_timezone_set('Asia/Karachi');
 
 
 
-$branchAdmin = '';
-$salesConsultantID = '';
-$salesManagerID = '';
-$generalManagerID = '';
-$onlineManagerID = '';
-$inventorySpecialistID = '';
-$officeID = '';
-$deliveryCoordinatorID = '';
-$bdcManagerID = '';
-$ccsID = '';
-$bdcSalesID = '';
-$financeManagerID = '';
+$branchAdmin = isset($_SESSION['branchAdmin']) ? $_SESSION['branchAdmin'] : '';
+$salesConsultantID = isset($_SESSION['salesConsultantID']) ? $_SESSION['salesConsultantID'] : '';
+$salesManagerID = isset($_SESSION['salesManagerID']) ? $_SESSION['salesManagerID'] : '';
+$generalManagerID = isset($_SESSION['generalManagerID']) ? $_SESSION['generalManagerID'] : '';;
+$onlineManagerID = isset($_SESSION['onlineManagerID']) ? $_SESSION['onlineManagerID'] : '';
+$inventorySpecialistID = isset($_SESSION['inventorySpecialistID']) ? $_SESSION['inventorySpecialistID'] : '';
+$officeID = isset($_SESSION['officeID']) ? $_SESSION['officeID'] : '';
+$deliveryCoordinatorID = isset($_SESSION['deliveryCoordinatorID']) ? $_SESSION['deliveryCoordinatorID'] : '';
+$bdcManagerID = isset($_SESSION['bdcManagerID']) ? $_SESSION['bdcManagerID'] : '';
+$ccsID = isset($_SESSION['ccsID']) ? $_SESSION['ccsID'] : '';
+$bdcSalesID = isset($_SESSION['bdcSalesID']) ? $_SESSION['bdcSalesID'] : '';
+$financeManagerID = isset($_SESSION['financeManagerID']) ? $_SESSION['financeManagerID'] : '';
+
 // $branchAdmin = '';
 // $bdcManagerID = 60; // sets in the database role 
 // $bdcSalesID = '61';
@@ -39,7 +41,6 @@ $financeManagerID = '';
 function loadDefaultRoles()
 {
 	global $connect;
-	global $branchAdmin, $salesConsultantID, $salesManagerID, $generalManagerID, $onlineManagerID, $inventorySpecialistID, $officeID, $deliveryCoordinatorID, $bdcManagerID, $ccsID, $bdcSalesID, $financeManagerID;
 
 	$location = $_SESSION['userLoc'];
 
@@ -50,51 +51,51 @@ function loadDefaultRoles()
 			$name = $row['role_name'];
 			switch ($name) {
 				case "BDC Manager":
-					$bdcManagerID = $row['role_id'];
+					$_SESSION['bdcManagerID'] = $row['role_id'];
 					echo "<script>localStorage.setItem('bdcManagerID','" . $row['role_id'] . "');</script>";
 					break;
 				case "BDC Sales":
-					$bdcSalesID = $row['role_id'];
+					$_SESSION['bdcSalesID'] = $row['role_id'];
 					echo "<script>localStorage.setItem('bdcSalesID','" . $row['role_id'] . "');</script>";
 					break;
 				case "Client Care Specialist":
-					$ccsID = $row['role_id'];
+					$_SESSION['ccsID'] = $row['role_id'];
 					echo "<script>localStorage.setItem('ccsID','" . $row['role_id'] . "');</script>";
 					break;
 				case "Delivery Coordinator":
-					$deliveryCoordinatorID = $row['role_id'];
+					$_SESSION['deliveryCoordinatorID'] = $row['role_id'];
 					echo "<script>localStorage.setItem('deliveryCoordinatorID','" . $row['role_id'] . "');</script>";
 					break;
 				case "Finance Manager":
-					$financeManagerID = $row['role_id'];
+					$_SESSION['financeManagerID'] = $row['role_id'];
 					echo "<script>localStorage.setItem('financeManagerID','" . $row['role_id'] . "');</script>";
 					break;
 				case "General Manager":
-					$generalManagerID = $row['role_id'];
+					$_SESSION['generalManagerID'] = $row['role_id'];
 					echo "<script>localStorage.setItem('generalManagerID','" . $row['role_id'] . "');</script>";
 					break;
 				case "Inventory Specialist":
-					$inventorySpecialistID = $row['role_id'];
+					$_SESSION['inventorySpecialistID'] = $row['role_id'];
 					echo "<script>localStorage.setItem('inventorySpecialistID','" . $row['role_id'] . "');</script>";
 					break;
 				case "Office":
-					$officeID = $row['role_id'];
+					$_SESSION['officeID'] = $row['role_id'];
 					echo "<script>localStorage.setItem('officeID','" . $row['role_id'] . "');</script>";
 					break;
 				case "Online Manager":
-					$onlineManagerID = $row['role_id'];
+					$_SESSION['onlineManagerID'] = $row['role_id'];
 					echo "<script>localStorage.setItem('onlineManagerID','" . $row['role_id'] . "');</script>";
 					break;
 				case "Sales Consultant":
-					$salesConsultantID = $row['role_id'];
+					$_SESSION['salesConsultantID'] = $row['role_id'];
 					echo "<script>localStorage.setItem('salesConsultantID','" . $row['role_id'] . "');</script>";
 					break;
 				case "Sales Manager":
-					$salesManagerID = $row['role_id'];
+					$_SESSION['salesManagerID'] = $row['role_id'];
 					echo "<script>localStorage.setItem('salesManagerID','" . $row['role_id'] . "');</script>";
 					break;
 				case "Branch Admin":
-					$branchAdmin = $row['role_id'];
+					$_SESSION['branchAdmin'] = $row['role_id'];
 					echo "<script>localStorage.setItem('branchAdmin','" . $row['role_id'] . "');</script>";
 					break;
 				default:

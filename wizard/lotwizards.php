@@ -222,7 +222,7 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                     </div>
 
                     <div class="portlet-body">
-                        <div class="inspectionTable">
+                        <div class="inspectionTable" id="inspectionTable">
                             <div class="form-row text-right">
                                 <div class="col-md-12 p-1 pr-2">
                                     <button class="btn btn-primary p-2" onclick="toggleFilterClass2()">
@@ -288,7 +288,7 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                 </thead>
                             </table>
                         </div>
-                        <div class="DealerTable d-none">
+                        <div class="DealerTable d-none" id="DealerTable">
                             <div class="form-row text-right">
                                 <div class="col-md-12 p-1 pr-2">
                                     <button class="btn btn-primary p-2" onclick="toggleFilterClass2()">
@@ -334,7 +334,7 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                     </div>
                     <div class="showResult d-none">
                         <input type="hidden" name="vehicleId" id="vehicleId">
-                        <div class="row">
+                        <div class="row flex-xs-column-reverse">
                             <div class="col-md-8">
                                 <div class="row align-items-baseline">
                                     <label for="stockno" class="col-sm-3 offset-sm-1 col-form-label">Stock no. Vin</label>

@@ -14,13 +14,13 @@ $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 if ($_SESSION['userRole'] != $deliveryCoordinatorID) {
     $sql = "SELECT a.id , b.fname, b.lname , b.sale_id , c.stockno , c.stocktype , c.year , c.make , c.model  , a.stock_id, 
         a.appointment_date, a.appointment_time, a.coordinator, a.delivery, a.additional_services, a.notes, a.submitted_by, a.manager_override, 
-        a.confirmed, a.complete, a.schedule_start, a.schedule_end, a.calender_id, a.status , b.sale_status 
+        a.confirmed, a.complete, a.schedule_start, a.schedule_end, a.calender_id, a.status , b.sale_status , b.sales_consultant 
         FROM `appointments` as a LEFT JOIN sales as b ON a.sale_id = b.sale_id LEFT JOIN inventory as c ON a.stock_id = c.id WHERE a.status = 1 AND a.location = '$location' AND b.status = 1";
 } else {
     $uid = $_SESSION['userId'];
     $sql = "SELECT a.id , b.fname, b.lname , b.sale_id , c.stockno , c.stocktype , c.year , c.make , c.model  , a.stock_id, 
         a.appointment_date, a.appointment_time, a.coordinator, a.delivery, a.additional_services, a.notes, a.submitted_by, a.manager_override, 
-        a.confirmed, a.complete, a.schedule_start, a.schedule_end, a.calender_id, a.status , b.sale_status 
+        a.confirmed, a.complete, a.schedule_start, a.schedule_end, a.calender_id, a.status , b.sale_status , b.sales_consultant
         FROM `appointments` as a LEFT JOIN sales as b ON a.sale_id = b.sale_id LEFT JOIN inventory as c ON a.stock_id = c.id WHERE a.status = 1 AND a.location = '$location' AND a.coordinator = '$uid' AND b.status = 1";
 }
 
@@ -40,9 +40,12 @@ if ($result->num_rows > 0) {
             $sale_id = $row['sale_id'];
             $schedule_start = $row['schedule_start'];
             $schedule_end = $row['schedule_end'];
-            $submitted_by = $row['submitted_by'];
-            $salesConsultant = $row['manager_override'] == '' ? $row['submitted_by'] : $row['manager_override'];
+            $submitted_by = $row['manager_override'] == '' ? $row['submitted_by'] : $row['manager_override'];
+            // $salesConsultant = $row['manager_override'] == '' ? $row['submitted_by'] : $row['manager_override'];
+            $salesConsultant = $row['sales_consultant'];
             $calender_id = $row['calender_id'];
+
+            $additional_services = $row['additional_services'];
 
 
             $confirmed = $row['confirmed'];
@@ -83,15 +86,21 @@ if ($result->num_rows > 0) {
                 $coordinator = "Blank";
             }
 
+            $allowEdit = false;
 
-            $button = '
-            <div class="show d-flex" >' .
+            $button = '';
+            if (
+                ($_SESSION['userRole'] == $salesConsultantID && $_SESSION['userId'] == $row['sales_consultant'] && $confirmed != 'ok') || $_SESSION['userRole'] == 'Admin' ||
+                $_SESSION['userRole'] == $salesManagerID || $_SESSION['userRole'] == $generalManagerID || $_SESSION['userRole'] == $deliveryCoordinatorID
+            ) {
+                $allowEdit = true;
+                $button .= '
+                        <div class="show d-flex" >' .
                     ((hasAccess("appointment", "Remove") !== 'false') ? '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeSchedule(' . $id . ')" >
-                <i class="fa fa-trash"></i>
-            </button>'  : '') .
-                '</div>';
-
-
+                            <i class="fa fa-trash"></i>
+                        </button>'  : '') .
+                    '</div>';
+            }
 
 
             $output['data'][] = array(
@@ -112,7 +121,9 @@ if ($result->num_rows > 0) {
                 $vehicle,
                 $salesConsultant,
                 $notes,
-                $button
+                $button,
+                $allowEdit,
+                $additional_services
 
             );
         } // /if

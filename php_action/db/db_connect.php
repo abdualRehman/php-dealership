@@ -6,6 +6,12 @@ $password = "";
 $dbname = "carshop";
 
 
+// $localhost = "127.0.0.1";
+// $username = "u674299917_onedealeruser";
+// $password = "L#[k5?x7y";
+// $dbname = "u674299917_onedealersys";
+
+
 
 // $localhost = "server60";
 // $username = "binfarooq_laughing_albattani";

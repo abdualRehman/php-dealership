@@ -2,7 +2,7 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
-if (hasAccess("bodyshops", "Add") === 'false' && hasAccess("bodyshops", "Edit") === 'false' && hasAccess("bodyshops", "Remove") === 'false') {
+if (hasAccess("bodyshops", "View") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
 if (hasAccess("bodyshops", "Edit") === 'false') {

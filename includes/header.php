@@ -80,6 +80,14 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
+        @media (max-width: 576px) {
+            .responsive-content {
+                font-size: 10px;
+                margin-top: 2px;
+                margin-bottom: 2px;
+            }
+        }
     </style>
 
 
@@ -89,6 +97,7 @@
 
     <link href="https://cdn.datatables.net/rowgroup/1.0.2/css/rowGroup.dataTables.min.css" rel="stylesheet" type="text/css" />
 
+    <link href="<?php echo $GLOBALS['siteurl']; ?>/custom/css/responsive.css" rel="stylesheet">
     <title>Dashboard</title>
 </head>
 
@@ -134,7 +143,7 @@
                     if (
                         hasAccess("matrix", "View") !== 'false' ||
                         hasAccess("swap", "Add") !== 'false' || hasAccess("swap", "Edit") !== 'false' || hasAccess("swap", "Remove") !== 'false' ||
-                        hasAccess("incentives", "Edit") !== 'false'
+                        hasAccess("incentives", "View") !== 'false'
                     ) {
                     ?>
 
@@ -167,7 +176,7 @@
                                     </div>
                                 <?php
                                 }
-                                if (hasAccess("incentives", "Edit") !== 'false') {
+                                if (hasAccess("incentives", "View") !== 'false') {
                                 ?>
                                     <div class="menu-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/incentives.php" class="menu-item-link">
@@ -182,10 +191,7 @@
                         </div>
                     <?php
                     }
-                    if (
-                        hasAccess("inventory", "Add") !== 'false' ||
-                        hasAccess("inventory", "Edit") !== 'false' || hasAccess("inventory", "Remove") !== 'false'
-                    ) {
+                    if (hasAccess("inventory", "View") !== 'false') {
                     ?>
                         <div class="menu-item"><button class="menu-item-link menu-item-toggle">
                                 <div class="menu-item-icon">
@@ -207,7 +213,7 @@
                                     </div>
                                 <?php
                                 }
-                                if (hasAccess("inventory", "Edit") !== 'false' || hasAccess("inventory", "Remove") !== 'false') {
+                                if (hasAccess("inventory", "View") !== 'false') {
                                 ?>
                                     <div class="menu-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/inventory/manageInv.php?r=man" class="menu-item-link">
@@ -237,7 +243,7 @@
                     if (
                         hasAccess("sale", "Add") !== 'false'  ||
                         hasAccess("sale", "View") !== 'false' ||
-                        hasAccess("todo", "Edit") !== 'false' ||
+                        hasAccess("todo", "View") !== 'false' ||
                         hasAccess("regp", "View") !== 'false'
 
                     ) {
@@ -273,7 +279,7 @@
                                     </div>
                                 <?php
                                 }
-                                if (hasAccess("todo", "Edit") !== 'false') {
+                                if (hasAccess("todo", "View") !== 'false') {
                                 ?>
                                     <div class="menu-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldTodo.php" class="menu-item-link">
@@ -309,8 +315,7 @@
 
                     <?php
                     if (
-                        hasAccess("user", "Add") !== 'false'  ||
-                        hasAccess("user", "Edit") !== 'false' || hasAccess("user", "Remove") !== 'false' ||
+                        hasAccess("user", "View") !== 'false' ||
                         hasAccess("role", "Add") !== 'false' || hasAccess("role", "Edit") !== 'false' || hasAccess("role", "Remove") !== 'false'
                     ) {
                     ?>
@@ -334,16 +339,16 @@
                                     </div>
                                 <?php
                                 }
-                                // if (hasAccess("user", "Edit") !== 'false' || hasAccess("user", "Remove") !== 'false') {
+                                if (hasAccess("user", "View") !== 'false') {
                                 ?>
-                                <div class="menu-item">
-                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/users/userList.php" class="menu-item-link">
-                                        <i class="menu-item-bullet"></i>
-                                        <span class="menu-item-text">User List</span>
-                                    </a>
-                                </div>
+                                    <div class="menu-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/users/userList.php" class="menu-item-link">
+                                            <i class="menu-item-bullet"></i>
+                                            <span class="menu-item-text">User List</span>
+                                        </a>
+                                    </div>
                                 <?php
-                                // }
+                                }
                                 if (hasAccess("role", "Add") !== 'false' || hasAccess("role", "Edit") !== 'false' || hasAccess("role", "Remove") !== 'false') {
                                 ?>
                                     <div class="menu-item">
@@ -361,9 +366,9 @@
                     <?php
                     }
                     if (
-                        hasAccess("swploc", "Add") !== 'false' || hasAccess("swploc", "Edit") !== 'false' || hasAccess("swploc", "Remove") !== 'false' ||
-                        hasAccess("bodyshops", "Add") !== 'false' || hasAccess("bodyshops", "Edit") !== 'false' || hasAccess("bodyshops", "Remove") !== 'false' ||
-                        hasAccess("dealership", "Add") !== 'false' || hasAccess("dealership", "Edit") !== 'false' || hasAccess("dealership", "Remove") !== 'false'
+                        hasAccess("swploc", "View") !== 'false' ||
+                        hasAccess("bodyshops", "View") !== 'false' ||
+                        hasAccess("dealership", "View") !== 'false'
                     ) {
                     ?>
                         <div class="menu-item">
@@ -377,7 +382,7 @@
                             <div class="menu-submenu">
                                 <?php
 
-                                if (hasAccess("bodyshops", "Add") !== 'false' || hasAccess("bodyshops", "Edit") !== 'false' || hasAccess("bodyshops", "Remove") !== 'false') {
+                                if (hasAccess("bodyshops", "View") !== 'false') {
                                 ?>
                                     <div class="menu-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/bodyshops.php" class="menu-item-link">
@@ -387,7 +392,7 @@
                                     </div>
                                 <?php
                                 }
-                                if (hasAccess("dealership", "Add") !== 'false' || hasAccess("dealership", "Edit") !== 'false' || hasAccess("dealership", "Remove") !== 'false') {
+                                if (hasAccess("dealership", "View") !== 'false') {
                                 ?>
                                     <div class="menu-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/dealershipContacts.php" class="menu-item-link">
@@ -398,7 +403,7 @@
 
                                 <?php
                                 }
-                                if (hasAccess("swploc", "Add") !== 'false' || hasAccess("swploc", "Edit") !== 'false' || hasAccess("swploc", "Remove") !== 'false') {
+                                if (hasAccess("swploc", "View") !== 'false') {
                                 ?>
                                     <div class="menu-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/locations.php?r=man" class="menu-item-link">
@@ -429,15 +434,15 @@
                     <?php
                     }
                     if (
-                        hasAccess("incr", "Add") !== 'false' || hasAccess("incr", "Edit") !== 'false' || hasAccess("incr", "Remove") !== 'false' ||
-                        hasAccess("sptr", "Add") !== 'false' || hasAccess("sptr", "Edit") !== 'false' || hasAccess("sptr", "Remove") !== 'false' ||
-                        hasAccess("manprice", "Add") !== 'false' || hasAccess("manprice", "Edit") !== 'false' || hasAccess("manprice", "Remove") !== 'false' ||
+                        hasAccess("incr", "View") !== 'false' ||
+                        hasAccess("sptr", "View") !== 'false' ||
+                        hasAccess("manprice", "View") !== 'false' ||
                         hasAccess("matrixfile", "Add") !== 'false' ||
-                        hasAccess("matrixrule", "Add") !== 'false' || hasAccess("matrixrule", "Edit") !== 'false' || hasAccess("matrixrule", "Remove") !== 'false' ||
-                        hasAccess("bdcrule", "Add") !== 'false' || hasAccess("bdcrule", "Edit") !== 'false' || hasAccess("bdcrule", "Remove") !== 'false' ||
-                        hasAccess("raterule", "Add") !== 'false' || hasAccess("raterule", "Edit") !== 'false' || hasAccess("raterule", "Remove") !== 'false' ||
-                        hasAccess("leaserule", "Add") !== 'false' || hasAccess("leaserule", "Edit") !== 'false' || hasAccess("leaserule", "Remove") !== 'false' ||
-                        hasAccess("cashincrule", "Add") !== 'false' || hasAccess("cashincrule", "Edit") !== 'false' || hasAccess("cashincrule", "Remove") !== 'false' ||
+                        hasAccess("matrixrule", "View") !== 'false' ||
+                        hasAccess("bdcrule", "View") !== 'false' ||
+                        hasAccess("raterule", "View") !== 'false' ||
+                        hasAccess("leaserule", "View") !== 'false' ||
+                        hasAccess("cashincrule", "View") !== 'false' ||
                         hasAccess("rdr", "Edit") !== 'false' || hasAccess("writedown", "View") !== 'false'
                     ) {
                     ?>
@@ -454,7 +459,7 @@
 
                                 <?php
 
-                                if (hasAccess("incr", "Add") !== 'false' || hasAccess("incr", "Edit") !== 'false' || hasAccess("incr", "Remove") !== 'false') {
+                                if (hasAccess("incr", "View") !== 'false') {
                                 ?>
                                     <div class="menu-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/incentiveRules.php" class="menu-item-link">
@@ -464,7 +469,7 @@
                                     </div>
                                 <?php
                                 }
-                                if (hasAccess("sptr", "Add") !== 'false' || hasAccess("sptr", "Edit") !== 'false' || hasAccess("sptr", "Remove") !== 'false') {
+                                if (hasAccess("sptr", "View") !== 'false') {
                                 ?>
                                     <div class="menu-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/salesPesonsRules.php" class="menu-item-link">
@@ -474,7 +479,7 @@
                                     </div>
                                 <?php
                                 }
-                                if (hasAccess("manprice", "Add") !== 'false' || hasAccess("manprice", "Edit") !== 'false' || hasAccess("manprice", "Remove") !== 'false') {
+                                if (hasAccess("manprice", "View") !== 'false') {
                                 ?>
                                     <div class="menu-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/manufaturePrice.php?r=man" class="menu-item-link">
@@ -495,7 +500,7 @@
 
                                 <?php
                                 }
-                                if (hasAccess("matrixrule", "Add") !== 'false' || hasAccess("matrixrule", "Edit") !== 'false' || hasAccess("matrixrule", "Remove") !== 'false') {
+                                if (hasAccess("matrixrule", "View") !== 'false') {
                                 ?>
                                     <div class="menu-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/matrixRules.php" class="menu-item-link">
@@ -505,7 +510,7 @@
                                     </div>
                                 <?php
                                 }
-                                if (hasAccess("bdcrule", "Add") !== 'false' || hasAccess("bdcrule", "Edit") !== 'false' || hasAccess("bdcrule", "Remove") !== 'false') {
+                                if (hasAccess("bdcrule", "View") !== 'false') {
                                 ?>
                                     <div class="menu-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/bdcRules.php" class="menu-item-link">
@@ -515,7 +520,7 @@
                                     </div>
                                 <?php
                                 }
-                                if (hasAccess("raterule", "Add") !== 'false' || hasAccess("raterule", "Edit") !== 'false' || hasAccess("raterule", "Remove") !== 'false') {
+                                if (hasAccess("raterule", "View") !== 'false') {
                                 ?>
                                     <div class="menu-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/rateRules.php" class="menu-item-link">
@@ -525,7 +530,7 @@
                                     </div>
                                 <?php
                                 }
-                                if (hasAccess("leaserule", "Add") !== 'false' || hasAccess("leaserule", "Edit") !== 'false' || hasAccess("leaserule", "Remove") !== 'false') {
+                                if (hasAccess("leaserule", "View") !== 'false') {
                                 ?>
                                     <div class="menu-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/leaseRules.php" class="menu-item-link">
@@ -535,7 +540,7 @@
                                     </div>
                                 <?php
                                 }
-                                if (hasAccess("cashincrule", "Add") !== 'false' || hasAccess("cashincrule", "Edit") !== 'false' || hasAccess("cashincrule", "Remove") !== 'false') {
+                                if (hasAccess("cashincrule", "View") !== 'false') {
                                 ?>
                                     <div class="menu-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/cashIncentiveRules.php" class="menu-item-link">
@@ -662,15 +667,15 @@
                                                 <h4 class="dropdown-header dropdown-header-lg">Appointments</h4>
                                                 <div class="grid-nav grid-nav-action">
                                                     <div class="grid-nav-row">
-                                                        <a href="<?php echo  $GLOBALS['siteurl']; ?>/more/appointments.php" class="grid-nav-item">
-                                                            <div class="grid-nav-icon">
-                                                                <i class="far fa-calendar-alt"></i>
-                                                            </div>
-                                                            <span class="grid-nav-content">Appointment Calendar</span>
-                                                        </a>
                                                         <?php
-                                                        if (hasAccess("appointment", "Add") !== 'false' || hasAccess("appointment", "Edit") !== 'false') {
+                                                        if (hasAccess("appointment", "View") !== 'false') {
                                                         ?>
+                                                            <a href="<?php echo  $GLOBALS['siteurl']; ?>/more/appointments.php" class="grid-nav-item">
+                                                                <div class="grid-nav-icon">
+                                                                    <i class="far fa-calendar-alt"></i>
+                                                                </div>
+                                                                <span class="grid-nav-content">Appointment Calendar</span>
+                                                            </a>
                                                             <a href="<?php echo  $GLOBALS['siteurl']; ?>/more/deliveryCoordinators.php" class="grid-nav-item">
                                                                 <div class="grid-nav-icon">
                                                                     <i class="far fa-clipboard"></i>
@@ -694,7 +699,7 @@
                                                     </a>
                                                 <?php
                                                 }
-                                                if (hasAccess("tansptDmg", "Add") !== 'false' || hasAccess("tansptDmg", "Edit") !== 'false' || hasAccess("tansptDmg", "Remove") !== 'false') {
+                                                if (hasAccess("tansptDmg", "View") !== 'false') {
                                                 ?>
                                                     <a href="<?php echo $GLOBALS['siteurl']; ?>/more/transportation.php" class="dropdown-item">
                                                         <i class="dropdown-bullet"></i> <span class="dropdown-content">Transportation Damage</span>
@@ -715,7 +720,7 @@
                                                     </a>
                                                 <?php
                                                 }
-                                                if (hasAccess("warranty", "Add") !== 'false' || hasAccess("warranty", "Edit") !== 'false' || hasAccess("warranty", "Remove") !== 'false') {
+                                                if (hasAccess("warranty", "View") !== 'false') {
                                                 ?>
                                                     <a href="<?php echo $GLOBALS['siteurl']; ?>/more/warrantyCancellation.php" class="dropdown-item">
                                                         <i class="dropdown-bullet"></i> <span class="dropdown-content">Warranty Cancellation</span>
@@ -842,38 +847,64 @@
 
                                 ?>
                             </ul>
-                            <div class="dropdown">
-                                <button class="btn btn-label-primary btn-icon" data-toggle="dropdown" onclick="loadWebLinks()">
-                                    <i class="fa fa-globe"></i>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-wide overflow-hidden py-0">
-                                    <div class="portlet border-0 portlet-scroll">
-                                        <div class="portlet-header bg-primary rounded-0">
-                                            <div class="portlet-icon text-white"><i class="fa fa-globe"></i></div>
-                                            <h3 class="portlet-title text-white">Websites Links</h3>
-                                            <button class="btn portlet-icon text-white" style="cursor:pointer" data-toggle="modal" data-target="#addWebsiteModal"><i class="fa fa-plus"></i></button>
-                                        </div>
-                                        <div class="portlet-body p-0 rounded-0" data-toggle="simplebar">
-                                            <div class="rich-list rich-list-action" id="webLinksList">
-                                                <div class="rich-list-item">
-                                                    <div class="rich-list-prepend">
-                                                        <div class="avatar avatar-label-info">
-                                                            <div class="avatar-display">
-                                                                <i class="fa fa-solid fa-paperclip"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="rich-list-content">
-                                                        <h4 class="rich-list-title">Website Name</h4>
-                                                        <span class="rich-list-subtitle text-overflow-ellipsis">https://github.com/abdualRehman?tab=repositories</span>
-                                                    </div>
-                                                    <div class="rich-list-append"><i class="caret mx-2"></i></div>
+                            <?php
+                            if (hasAccess("weblink", "View") !== 'false') {
+                            ?>
+                                <div class="dropdown">
+                                    <button class="btn btn-label-primary btn-icon" data-toggle="dropdown" onclick="loadWebLinks()">
+                                        <i class="fa fa-globe"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-wide overflow-hidden py-0">
+                                        <div class="portlet border-0 portlet-scroll">
+                                            <div class="portlet-header bg-primary rounded-0">
+                                                <div class="portlet-icon text-white"><i class="fa fa-globe"></i></div>
+                                                <h3 class="portlet-title text-white">Websites Links</h3>
+                                                <?php
+                                                if (hasAccess("weblink", "Add") !== 'false') {
+                                                    echo '<button class="btn portlet-icon text-white" style="cursor:pointer" data-toggle="modal" data-target="#addWebsiteModal"><i class="fa fa-plus"></i></button>';
+                                                }
+                                                ?>
+                                            </div>
+                                            <div class="portlet-body p-0 rounded-0" data-toggle="simplebar">
+                                                <div class="rich-list rich-list-action webLinksList" id="webLinksList">
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            <?php
+                            }
+                            ?>
+                            <!-- <div class="dropdown ml-2">
+                                <button class="btn btn-label-primary btn-icon mr-1" data-toggle="dropdown">
+                                    <i class="far fa-bell"></i>
+                                    <div class="btn-marker"><i class="marker marker-dot text-success"></i></div>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-wide overflow-hidden py-0">
+                                    <div class="portlet border-0 portlet-scroll">
+                                        <div class="portlet-header bg-primary rounded-0">
+                                            <div class="portlet-icon text-white"><i class="far fa-bell"></i></div>
+                                            <h3 class="portlet-title text-white">Notification</h3>
+                                            <div class="portlet-addon"><span class="badge badge-warning badge-square badge-lg">9+</span></div>
+                                        </div>
+                                        <div class="portlet-body p-0 rounded-0" data-toggle="simplebar">
+                                            <div class="rich-list rich-list-action">
+                                                <a href="#" class="rich-list-item">
+                                                    <div class="rich-list-prepend">
+                                                        <div class="avatar avatar-label-warning">
+                                                            <div class="avatar-display"><i class="fa fa-paper-plane"></i></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="rich-list-content">
+                                                        <h4 class="rich-list-title">New feedback received</h4><span class="rich-list-subtitle">6 hrs ago</span>
+                                                    </div>
+                                                    <div class="rich-list-append"><i class="caret mx-2"></i></div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
                             <div class="dropdown ml-2"><button class="btn btn-flat-primary widget13" data-toggle="dropdown">
                                     <div class="widget13-text">Hi <strong> <?php echo $_SESSION['userName']; ?> </strong></div>
                                     <div class="avatar avatar-info widget13-avatar">
@@ -1044,51 +1075,82 @@
                         </div>
                     </div>
                 </div>
+                <!-- d-flex flex-wrap flex-0 align-items-center -->
                 <div class="header-holder header-holder-mobile">
                     <div class="header-container container-fluid">
-                        <div class="header-wrap header-wrap-block justify-content-start w-100">
-                            <!-- <div class="breadcrumb">
-                                <a href="index.php" class="breadcrumb-item">
-                                    <div class="breadcrumb-icon"><i data-feather="home"></i></div><span class="breadcrumb-text">Dashboard</span>
-                                </a>
-                            </div> -->
-                            <!-- <div class="breadcrumb">
-                                <a href="index.php" class="breadcrumb-item">
-                                    <div class="breadcrumb-icon"><i data-feather="home"></i></div><span class="breadcrumb-text">Dashboard</span>
-                                </a>
-                            </div> -->
+                        <div class="row" style="width:-webkit-fill-available;">
+                            <div class="col-9">
+                                <a href="<?php echo $GLOBALS['siteurl']; ?>/dashboard.php" id="dashboard" class="btn btn-flat-primary responsive-content breadcrumb-text">Dashboard</a>
+                                <?php
+                                if (hasAccess("lotWizards", "View") !== 'false') {
+                                ?>
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/wizard/lotwizards.php" id="lotWizars" class="btn btn-flat-primary responsive-content breadcrumb-text">Lot Wizards</a>
+                                <?php
+                                }
+                                if (hasAccess("sale", "View") !== 'false') {
+                                ?>
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man" class="btn btn-flat-primary responsive-content breadcrumb-text">Sold Logs</a>
+                                <?php
+                                }
+                                if (hasAccess("matrix", "View") !== 'false') {
+                                ?>
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/manMatrix.php?r=man" class="btn btn-flat-primary responsive-content breadcrumb-text">Matrix</a>
+                                <?php
+                                }
+                                if (hasAccess("writedown", "View") !== 'false') {
+                                ?>
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/writedown.php" class="btn btn-flat-primary responsive-content breadcrumb-text">Writedown</a>
+                                <?php
+                                }
+                                if (hasAccess("bdc", "View") !== 'false') {
+                                ?>
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/bdc.php" class="btn btn-flat-primary responsive-content breadcrumb-text">BDC</a>
+                                <?php
+                                }
+                                ?>
+                            </div>
 
-                            <?php
-                            if (hasAccess("lotWizards", "View") !== 'false') {
-                            ?>
-                                <div class="breadcrumb mr-1">
-                                    <div class="breadcrumb-item">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/wizard/lotwizards.php" id="lotWizars" class="btn btn-flat-primary breadcrumb-text">Lot Wizards</a>
-                                    </div>
+                            <div class="col-3">
+                                <div class="d-flex align-items-center justify-content-end">
+                                    <?php
+                                    if (hasAccess("todayavail", "View") !== 'false') {
+                                    ?>
+                                        <button class="btn btn-label-primary btn-icon mr-2" data-toggle="sidemenu" data-target="#sidemenu-todo" onclick="loadSchedules()">
+                                            <i class="far fa-calendar-alt"></i>
+                                        </button>
+                                    <?php
+                                    }
+                                    ?>
+                                    <?php
+                                    if (hasAccess("weblink", "View") !== 'false') {
+                                    ?>
+                                        <div class="dropdown">
+                                            <button class="btn btn-label-primary btn-icon" data-toggle="dropdown" onclick="loadWebLinks()">
+                                                <i class="fa fa-globe"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-wide overflow-hidden py-0">
+                                                <div class="portlet border-0 portlet-scroll">
+                                                    <div class="portlet-header bg-primary rounded-0">
+                                                        <div class="portlet-icon text-white"><i class="fa fa-globe"></i></div>
+                                                        <h3 class="portlet-title text-white">Websites Links</h3>
+                                                        <?php
+                                                        if (hasAccess("weblink", "Add") !== 'false') {
+                                                            echo '<button class="btn portlet-icon text-white" style="cursor:pointer" data-toggle="modal" data-target="#addWebsiteModal"><i class="fa fa-plus"></i></button>';
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                    <div class="portlet-body p-0 rounded-0" data-toggle="simplebar">
+                                                        <div class="rich-list rich-list-action webLinksList" id="webLinksList">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php
+                                    }
+                                    ?>
                                 </div>
-                            <?php
-                            }
-                            if (hasAccess("sale", "View") !== 'false') {
-                            ?>
-                                <div class="breadcrumb mr-1">
-                                    <div class="breadcrumb-item">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man" class="btn btn-flat-primary breadcrumb-text">Sold Logs</a>
-                                    </div>
-                                </div>
-                            <?php
-                            }
-
-                            if (hasAccess("matrix", "View") !== 'false') {
-                            ?>
-                                <div class="breadcrumb mr-1">
-                                    <div class="breadcrumb-item">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/manMatrix.php?r=man" class="btn btn-flat-primary breadcrumb-text">Matrix</a>
-                                    </div>
-                                </div>
-                            <?php
-                            }
-                            ?>
-
+                            </div>
                         </div>
                     </div>
                 </div>

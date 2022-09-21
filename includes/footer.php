@@ -326,7 +326,7 @@
     </div>
 </div>
 <div class="modal fade" id="addWebsiteModal">
-    <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-dialog modal modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header modal-header-bordered">
                 <h5 class="modal-title">Website Link</h5><button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>

@@ -4,7 +4,7 @@ include_once '../includes/header.php';
 
 
 if ($_GET['r'] == 'man') {
-    if ( hasAccess("manprice", "Add") === 'false' && hasAccess("manprice", "Edit") === 'false' && hasAccess("manprice", "Remove") === 'false') {
+    if ( hasAccess("manprice", "View") === 'false') {
         echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
     }
     echo "<div class='div-request d-none'>man</div>";

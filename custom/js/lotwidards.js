@@ -229,6 +229,7 @@ $(function () {
             },
         ],
         language: {
+            "infoFiltered": "",
             searchPanes: {
                 count: "{total} found",
                 countFiltered: "{shown} / {total}"
@@ -387,6 +388,7 @@ $(function () {
 
             var activebtnvalue = $("#mods .btn.active input[name='mod']").val();
             // console.log(activebtnvalue);
+            var invStatus  = rowData[27];
 
             if (activebtnvalue == 'notTouched') {
                 // console.log(rowData);
@@ -416,7 +418,7 @@ $(function () {
                 //     return true;
                 // }
 
-                if ((recon == "" || recon == null) && repairArr.length == 0) {
+                if ((recon == "" || recon == null) && repairArr.length == 0 && invStatus == 1) {
                     return true;
                 }
             }
@@ -424,7 +426,7 @@ $(function () {
 
                 var balance = rowData[17];
                 var recon = rowData[1];
-                if (recon == 'hold' && balance) {
+                if (recon == 'hold' && balance && invStatus == 1) {
                     return true;
                 }
             }
@@ -432,14 +434,14 @@ $(function () {
 
                 var balance = rowData[17];
                 var recon = rowData[1];
-                if (recon == 'send' && balance) {
+                if (recon == 'send' && balance && invStatus == 1) {
                     return true;
                 }
             }
             if (activebtnvalue == 'LotNotes') {
 
                 var notes = rowData[3];
-                if (notes) {
+                if (notes && invStatus == 1) {
                     return true;
                 }
             }
@@ -453,11 +455,11 @@ $(function () {
                     // if (arr.length > 0 && arr.indexOf('Done') == -1 && (balance != '' && balance < 0)) {
                     //     return true;
                     // }
-                    if (arr.length > 0 && arr.indexOf('Done') == -1 && (balance && balance != 0)) {
+                    if (arr.length > 0 && arr.indexOf('Done') == -1 && (balance && balance != 0) && invStatus == 1) {
                         return true;
                     }
                 } else {
-                    if (arr.length > 0 && arr.indexOf('Done') != -1 && (balance && balance != 0)) {
+                    if (arr.length > 0 && arr.indexOf('Done') != -1 && (balance && balance != 0) && invStatus == 1) {
                         return true;
                     }
                 }
@@ -469,11 +471,11 @@ $(function () {
                 var arr = wheels ? (wheels.trim()).split('__') : [];
                 var filterValue = $('#statusFilterBtns input:radio:checked').val();
                 if (filterValue == 'pending') {
-                    if (arr.length > 0 && arr.indexOf('Done') == -1 && (balance && balance != 0)) {
+                    if (arr.length > 0 && arr.indexOf('Done') == -1 && (balance && balance != 0) && invStatus == 1) {
                         return true;
                     }
                 } else {
-                    if (arr.length > 0 && arr.indexOf('Done') != -1 && (balance && balance != 0)) {
+                    if (arr.length > 0 && arr.indexOf('Done') != -1 && (balance && balance != 0) && invStatus == 1) {
                         return true;
                     }
                 }
@@ -483,7 +485,7 @@ $(function () {
                 var repairs = rowData[22];
                 var repairSent = rowData[23];
                 var arr = repairs ? (repairs.trim()).split('__') : [];
-                if (arr.length > 0 && (repairSent == "" || repairSent == null)) {
+                if (arr.length > 0 && (repairSent == "" || repairSent == null) && invStatus == 1) {
                     return true;
                 }
             }
@@ -493,7 +495,7 @@ $(function () {
                 var repairSent = rowData[23];
                 var repairReturned = rowData[24];
                 var arr = repairs ? (repairs.trim()).split('__') : [];
-                if (arr.length > 0 && (repairSent != "" && repairSent != null) && (repairReturned == "" || repairReturned == null)) {
+                if (arr.length > 0 && (repairSent != "" && repairSent != null) && (repairReturned == "" || repairReturned == null) && invStatus == 1) {
                     return true;
                 }
             }
@@ -502,13 +504,13 @@ $(function () {
                 var recon = rowData[1];
                 var repairSent = rowData[23];
                 var repairReturned = rowData[24];
-                if (repairReturned && repairSent && (recon == "" || recon == null)) {
+                if (repairReturned && repairSent && (recon == "" || recon == null) && invStatus == 1) {
                     return true;
                 }
             }
             if (activebtnvalue == 'retailReady') {
                 var recon = rowData[1];
-                if (recon == 'sent') {
+                if (recon == 'sent' && invStatus == 1) {
                     return true;
                 }
             }
@@ -529,14 +531,14 @@ $(function () {
 
     $('#mods input:radio').on('change', function () {
 
-        $('#datatable-1').block({
+        $('#DealerTable').block({
             message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
-            timeout: 1e3
+            // timeout: 1e3
         })
-        $('#datatable-2').block({
+        $('#inspectionTable').block({
             message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
-            timeout: 1e3
-        })
+            // timeout: 1e3
+        });       
 
 
         var title = $(this).data('title');
@@ -610,7 +612,8 @@ $(function () {
                 // manageInvTable.order([8, "desc"]).draw();
                 $("#datatable-1").dataTable().fnFilter("");
                 manageInvTable.searchPanes.rebuildPane();
-
+                $('#inspectionTable').unblock()
+                $('#DealerTable').unblock()
             }, 500);
 
         } else if (currentElement == 'CarsToDealers') {

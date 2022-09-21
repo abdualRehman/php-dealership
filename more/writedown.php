@@ -117,11 +117,11 @@ echo '<input type="hidden" name="loggedInUserRole" id="loggedInUserRole" value="
                         <h3 class="portlet-title font-size-initial">Retail</h3>
                     </div>
                     <div class="portlet-body text-center">
-                        <h4 class="h4 text-primary text-center counterDiv" id="retailV" ></h4>
+                        <h4 class="h4 text-primary text-center counterDiv" id="retailV"></h4>
                         <hr>
                         <div class="row text-center">
                             <p class="col-md-12 h6 text-center">Count</p>
-                            <span class="col-md-12 h4 text-primary counterDiv" id="retailC" ></span>
+                            <span class="col-md-12 h4 text-primary counterDiv" id="retailC"></span>
                         </div>
                     </div>
                 </div>
@@ -147,7 +147,7 @@ echo '<input type="hidden" name="loggedInUserRole" id="loggedInUserRole" value="
                         <h3 class="portlet-title font-size-initial">Wholesale</h3>
                     </div>
                     <div class="portlet-body text-center">
-                        <h4 class="h4 text-primary text-center counterDiv" id="wholesaleV" ></h4>
+                        <h4 class="h4 text-primary text-center counterDiv" id="wholesaleV"></h4>
                         <hr>
                         <div class="row text-center">
                             <p class="col-md-12 h6 text-center">Count</p>
@@ -161,12 +161,12 @@ echo '<input type="hidden" name="loggedInUserRole" id="loggedInUserRole" value="
                     <div class="portlet-body text-center">
                         <div class="row text-center">
                             <h3 class="col-md-12 font-size-initial">MMR vs COST (Retail)</h3>
-                            <span class="col-md-12 h4 text-primary counterDiv" id="mmr_retailV" >0</span>
+                            <span class="col-md-12 h4 text-primary counterDiv" id="mmr_retailV">0</span>
                         </div>
                         <hr>
                         <div class="row text-center">
                             <p class="col-md-12 h5 text-center">MMR vs COST (Wholesale)</p>
-                            <span class="col-md-12 h4 text-primary counterDiv" id="mmr_balanceV" >0</span>
+                            <span class="col-md-12 h4 text-primary counterDiv" id="mmr_balanceV">0</span>
                         </div>
                     </div>
                 </div>
@@ -184,7 +184,7 @@ echo '<input type="hidden" name="loggedInUserRole" id="loggedInUserRole" value="
 
                     </div>
                     <div class="portlet-body">
-                        <table id="datatable-1" class="table table-bordered table-striped table-hover">
+                        <table id="datatable-1" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -202,6 +202,7 @@ echo '<input type="hidden" name="loggedInUserRole" id="loggedInUserRole" value="
                                     <th>MMR</th>
                                     <th>MMR vs COST</th>
                                     <th>MMR vs RETAIL</th>
+                                    <th>Inv</th>
                                     <th>Retail Status</th>
                                 </tr>
                             </thead>
@@ -245,21 +246,45 @@ echo '<input type="hidden" name="loggedInUserRole" id="loggedInUserRole" value="
                                 <div class="row align-items-baseline">
                                     <label for="writedown" class="col-sm-2 col-form-label">Write Down</label>
                                     <div class="form-group col-sm-4">
-                                        <input type="text" class="form-control" name="writedown" id="writedown" disabled />
+                                        <div class="form-group input-group">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-dollar-sign"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control" name="writedown" id="writedown" disabled />
+                                        </div>
                                     </div>
                                     <label for="mmr" class="col-sm-2 text-md-center col-form-label">MMR</label>
                                     <div class="form-group col-sm-4">
-                                        <input type="text" class="form-control" name="mmr" id="mmr" autocomplete="off" autofill="off" />
+                                        <div class="form-group input-group">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-dollar-sign"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control" name="mmr" id="mmr" autocomplete="off" autofill="off" />
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row align-items-baseline">
                                     <label for="mmr_retail" class="col-sm-2 col-form-label">MMR vs RETAIL</label>
                                     <div class="form-group col-sm-4">
-                                        <input type="text" class="form-control" name="mmr_retail" id="mmr_retail" disabled />
+                                        <div class="form-group input-group">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-dollar-sign"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control" name="mmr_retail" id="mmr_retail" disabled />
+                                        </div>
                                     </div>
                                     <label for="mmr_balance" class="col-sm-2 text-md-center col-form-label">MMR vs Balance</label>
                                     <div class="form-group col-sm-4">
-                                        <input type="text" class="form-control" name="mmr_balance" id="mmr_balance" autocomplete="off" autofill="off" disabled />
+                                        <div class="form-group input-group">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-dollar-sign"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control" name="mmr_balance" id="mmr_balance" autocomplete="off" autofill="off" disabled />
+                                        </div>
                                     </div>
                                 </div>
                             </div>

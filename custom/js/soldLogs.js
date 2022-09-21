@@ -842,10 +842,12 @@ function disabledManagerDiv() {
         $(".manager_override_div").find("*").prop("readonly", false);
     }
 
+    $('#esubmittedBy , #eoverrideByName , #estocknoDisplay').addClass('disabled-div');
+    $("#esubmittedBy , #eoverrideByName , #estocknoDisplay").find("*").prop("readonly", true);
 }
 
 function loadDeliveryCoordinator() {
-    var id = Number(localStorage.getItem('deliveryCoordinatorID'));;
+    var id = Number(localStorage.getItem('deliveryCoordinatorID'));
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",
@@ -1631,11 +1633,11 @@ function chnageStyle(field) {
             }
             break;
         case 'salePStatus':
-            if (field.value == 'dealWritten') {
+            if (field.value == 'cancelled') {
                 ele.addClass('btn-outline-danger');
                 ele.removeClass('btn-outline-success');
                 ele.removeClass('btn-outline-primary');
-            } else if (field.value == 'contracted') {
+            } else if (field.value == 'dealWritten' || field.value == 'contracted' || field.value == 'gmdSubmit') {
                 ele.addClass('btn-outline-primary');
                 ele.removeClass('btn-outline-danger');
                 ele.removeClass('btn-outline-success');

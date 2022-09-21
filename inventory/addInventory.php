@@ -2,9 +2,10 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
-if (hasAccess("inventory", "Add") === 'false' ) {
+if (hasAccess("inventory", "Add") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
+$tab = isset($_GET['r']) ? $_GET['r'] : 'add';
 ?>
 
 
@@ -17,14 +18,21 @@ if (hasAccess("inventory", "Add") === 'false' ) {
                         <h3 class="portlet-title">Add Inventory</h3>
                         <div class="portlet-addon">
                             <div class="nav nav-tabs portlet-nav" id="portlet1-tab">
-                                <a class="nav-item nav-link active" id="portlet1-add-tab" data-toggle="tab" href="#portlet1-add">Add Inventory</a>
-                                <a class="nav-item nav-link" id="portlet2-import-tab" data-toggle="tab" href="#portlet2-import">Import CSV</a>
+                                <a class="nav-item nav-link <?php echo $tab == 'add' ? 'active' : ''; ?>" id="portlet1-add-tab" data-toggle="tab" href="#portlet1-add">Add Inventory</a>
+                                <a class="nav-item nav-link <?php echo $tab == 'imp' ? 'active' : ''; ?>" id="portlet2-import-tab" data-toggle="tab" href="#portlet2-import">Import CSV</a>
+                                <?php
+                                if (hasAccess("inventory", "Edit") !== 'false' || hasAccess("inventory", "Remove") !== 'false') {
+                                    echo '<a class="nav-item nav-link" href="' . $GLOBALS['siteurl'] . '/inventory/manageInv.php?r=man">Manage</a>';
+                                }
+                                ?>
+
                             </div>
                         </div>
+
                     </div>
                     <div class="portlet-body">
                         <div class="tab-content">
-                            <div class="tab-pane fade show active" id="portlet1-add">
+                            <div class="tab-pane fade <?php echo $tab == 'add' ? 'show active' : ''; ?>" id="portlet1-add">
 
                                 <form id="addInvForm" autocomplete="off" method="post" action="../php_action/createInv.php">
                                     <div class="form-row">
@@ -138,7 +146,7 @@ if (hasAccess("inventory", "Add") === 'false' ) {
                                 </form>
 
                             </div>
-                            <div class="tab-pane fade" id="portlet2-import">
+                            <div class="tab-pane fade <?php echo $tab == 'imp' ? 'show active' : ''; ?>" id="portlet2-import">
 
                                 <div class="form-row p-3">
                                     <div class="col-md-3">

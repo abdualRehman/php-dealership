@@ -32,7 +32,7 @@ $(function () {
             viewTotal: !0,
             columns: [1, 2, 7, 9, 10],
         },
-        "pageLength": 25,
+        "pageLength": 50,
         buttons: [
             {
                 extend: 'copyHtml5',
@@ -88,6 +88,12 @@ $(function () {
             startRender: function (rows, group) {
                 var collapsed = !!collapsedGroups[group];
 
+                rows.nodes().each(function (r) {
+                    r.style.display = 'none';
+                    if (collapsed) {
+                        r.style.display = '';
+                    }
+                });
                 var filteredData = $('#datatable-1').DataTable()
                     .rows()
                     .data()
@@ -101,7 +107,14 @@ $(function () {
                     .toggleClass('collapsed', collapsed); // collapsed
             }
         },
-
+        initComplete: function () {
+            // Start with closed groups
+            $('#datatable-1 tbody tr.dtrg-start').each(function () {
+                var name = $(this).data('name');
+                collapsedGroups[name] = !!collapsedGroups[name];
+            });
+            manageWritedownTable.draw(false);
+        },
 
         "drawCallback": function (settings, start, end, max, total, pre) {
             var json = this.fnSettings().json;
@@ -140,8 +153,16 @@ $(function () {
                 });
             }
         },
-        "order": [[15, "desc"], [7, "desc"]]
+        "order": [[16, "asc"], [7, "desc"]]
     });
+
+     // Collapse Groups
+     $('#datatable-1 tbody').on('click', 'tr.dtrg-start', function () {
+        var name = $(this).data('name');
+        collapsedGroups[name] = !collapsedGroups[name];
+        manageWritedownTable.draw(false);
+    });
+
 
     // writeStatusHTML();
     // $('#thisMonth').click();
@@ -262,10 +283,10 @@ function editWritedown(writedownId = null) {
                 $('#selectedDetails').addClass('text-center');
 
 
-                $('#writedown').val(response.writedown);
-                $('#mmr_balance').val(response.mmr_balance);
-                $('#mmr_retail').val(response.mmr_retail);
-                $('#mmr').val(response.mmr);
+                $('#writedown').val(Number(response.writedown).toFixed(2));
+                $('#mmr_balance').val(Number(response.mmr_balance).toFixed(2));
+                $('#mmr_retail').val(Number(response.mmr_retail).toFixed(2));
+                $('#mmr').val(Number(response.mmr).toFixed(2));
 
                 setTimeout(() => {
                     autosize.update($(".autosize"));

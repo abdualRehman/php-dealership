@@ -5,11 +5,13 @@ require_once 'db/core.php';
 $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
 
-$sql = "SELECT * FROM `web_links` WHERE status = 1 AND location = '$location'";
+$sql = "SELECT * FROM `web_links` WHERE status = 1 AND location = '$location' ORDER BY `name` ASC";
 $result = $connect->query($sql);
 $output = array('data' => array());
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
+        $editPermission = (hasAccess("weblink", "Edit") !== 'false') ? "true": "false";
+        $removePermission = (hasAccess("weblink", "Remove") !== 'false') ? "true": "false";
         $role = $_SESSION['userRole'];
         $id = $row['id'];
         $name = $row['name'];
@@ -19,7 +21,8 @@ if ($result->num_rows > 0) {
             $id,
             $name,
             $link,
-            $role,
+            $editPermission,
+            $removePermission,
         );
     } // /while 
 

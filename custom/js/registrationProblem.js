@@ -204,7 +204,14 @@ $(function () {
 
     function requireSelectBox(params) {
         var id = params.id;
-        if (params.value == 0) {
+        let managerId = '';
+        if (id == 'salesConsultant') {
+            managerId = 'financeManager'
+        } else if (id == 'esalesConsultant') {
+            managerId = 'efinanceManager';
+        }
+        let finance = $('#' + managerId).val();
+        if (params.value == 0 && (finance == null || finance == 0)) {
             params.classList.add('is-invalid');
             params.classList.remove('is-valid');
             $('#' + id).selectpicker('refresh');
@@ -490,7 +497,7 @@ function loadSaleConsultant() {
 }
 
 function loadFinanceManager() {
-    var finance_manager_id = Number(localStorage.getItem('financeManagerID')); 
+    var finance_manager_id = Number(localStorage.getItem('financeManagerID'));
     $.ajax({
         url: '../php_action/fetchUsersWithRoleForSearch.php',
         type: "POST",

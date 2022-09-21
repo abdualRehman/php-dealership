@@ -151,11 +151,13 @@ $(function () {
             changePillCSS(row, data, 17, 8);
             changePillCSS(row, data, 15, 9);
             changePillCSS(row, data, 16, 10);
-            $(row).attr({
-                "data-toggle": "modal",
-                "data-target": "#editDetails",
-                "onclick": "editDetails(" + data[19] + ")"
-            });
+            if ($('#isEditAllowed').val() == "true") {
+                $(row).attr({
+                    "data-toggle": "modal",
+                    "data-target": "#editDetails",
+                    "onclick": "editDetails(" + data[19] + ")"
+                });
+            }
         },
 
         columnDefs: [
@@ -282,6 +284,9 @@ $(function () {
             // return true;
             event.preventDefault();
 
+            $('#editSoldTodoForm').block({
+                message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+            });
             $('[disabled]').removeAttr('disabled');
             // var form = $('#editSoldTodoForm');
             var form = $('#editSoldTodoForm');
@@ -310,6 +315,7 @@ $(function () {
                         manageSoldLogsTable.ajax.reload();
                         manageSoldLogsTable.ajax.reload(null, false);
                         manageSoldLogsTable.searchPanes.rebuildPane();
+                        $('#editSoldTodoForm').unblock();
                         $('#editDetails').modal('hide');
                     } else {
                         e1.fire({
@@ -324,6 +330,7 @@ $(function () {
 
                 }
             });
+
 
 
             return false;
@@ -428,7 +435,7 @@ function loadSaleManager() {
 
 function changePillCSS(row, data, compareIndex, valueIndex) {
     if (data[compareIndex] == "") {
-        return ($(row).find('td:eq(' + valueIndex + ')').html(`<span class="badge badge-lg badge-danger">${data[valueIndex]}</span>`))
+        return ($(row).find('td:eq(' + valueIndex + ')').html(`<span class="badge badge-lg ${data[valueIndex] == 'No' ? 'badge-primary' : 'badge-danger'} ">${data[valueIndex]}</span>`))
     } else {
         return ($(row).find('td:eq(' + valueIndex + ')').html(`<span class="badge badge-lg badge-success">${data[valueIndex]}</span>`))
     }

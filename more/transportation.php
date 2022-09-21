@@ -2,7 +2,7 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
-if (hasAccess("tansptDmg", "Add") === 'false' && hasAccess("tansptDmg", "Edit") === 'false' && hasAccess("tansptDmg", "Remove") === 'false') {
+if (hasAccess("tansptDmg", "View") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
 if (hasAccess("tansptDmg", "Edit") !== 'false') {

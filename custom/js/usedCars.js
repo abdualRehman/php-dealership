@@ -126,7 +126,7 @@ $(function () {
 
         columnDefs: [
             {
-                targets: [0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 29 , 30],
+                targets: [0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
                 visible: false,
             },
             { width: 400, targets: [15] },
@@ -170,7 +170,7 @@ $(function () {
             {
                 targets: [11], // title,
                 createdCell: function (td, cellData, rowData, row, col) {
-                    if ($('#isRoleAllowed').val() == 'true') {
+                    if ($('#isRoleAllowed').val() == 'true' || $('#titleEditAllowed').val() == 'true') {
                         $(td).html(`<div class="custom-control custom-control-lg custom-checkbox">
                                 <input type="checkbox" name="titleCheckbox" data-attribute="title" onchange="handletitleCheckbox(this)" data-id="${rowData[0]}" class="custom-control-input titleCheckbox" id="${rowData[0]}Title" ${((rowData[11] == 'false') ? '' : 'checked="checked"')} >
                                 <label class="custom-control-label" for="${rowData[0]}Title"></label> 
@@ -326,6 +326,7 @@ $(function () {
         ],
 
         language: {
+            "infoFiltered": "",
             searchPanes: {
                 count: "{total} found",
                 countFiltered: "{shown} / {total}"
@@ -341,6 +342,11 @@ $(function () {
                 // -------------  For Display All Number of Filtered Rows -----------------
                 // retails status
                 if (rowGroupSrc == 23) {
+
+                    rows.nodes().each(function (r) {
+                        r.style.display = collapsed ? 'none' : '';
+                    });
+
                     var filteredData = $('#datatable-1').DataTable()
                         .rows({ search: 'applied' })
                         .data()
@@ -358,6 +364,13 @@ $(function () {
                         .toggleClass('collapsed', collapsed);
                 }
                 else if (rowGroupSrc == 22) {
+                    
+                    rows.nodes().each(function (r) {
+                        r.style.display = 'none';
+                        if (collapsed) {
+                            r.style.display = '';
+                        }
+                    });
 
                     var totalProfit = 0;
                     var filteredData = $('#datatable-1').DataTable()
@@ -382,6 +395,16 @@ $(function () {
 
             }
         },
+
+        initComplete: function () {
+            // Start with closed groups
+            $('#datatable-1 tbody tr.dtrg-start').each(function () {
+                var name = $(this).data('name');
+                collapsedGroups[name] = !collapsedGroups[name];
+            });
+            manageInvTable.draw(false);
+        },
+
         "drawCallback": function (settings, start, end, max, total, pre) {
             var json = this.fnSettings().json;
             if (json) {
@@ -484,6 +507,12 @@ $(function () {
         "order": [[1, "desc"]],
     });
 
+    // Collapse Groups
+    $('#datatable-1 tbody').on('click', 'tr.dtrg-start', function () {
+        var name = $(this).data('name');
+        collapsedGroups[name] = !collapsedGroups[name];
+        manageInvTable.draw(false);
+    });
 
 
     // --------------------- checkboxes query --------------------------------------
@@ -515,14 +544,15 @@ $(function () {
             var retail_status = rowData[23];
             var carshopId = rowData[32];
 
+            var invStatus = rowData[34];
 
-            if (activebtnvalue == 'addToSheet') {
+            if (activebtnvalue == 'addToSheet' && invStatus == 1) {
                 if (date_in != '' && date_in === null) {
                     return true;
                 }
             }
             if (activebtnvalue == 'missingDate') {
-                if ((EmptyField(date_in) == false && date_in !== null)) {
+                if ((EmptyField(date_in) == false && date_in !== null) && invStatus == 1) {
                     return true;
                 }
             }
@@ -535,7 +565,7 @@ $(function () {
                 //         return true;
                 //     }
                 // }
-                if ((title == 'false' || title == null) && (date_in !== null)) {
+                if ((title == 'false' || title == null) && (date_in !== null) && invStatus == 1) {
                     if (filter != '' && filter == titlePriority) {
                         return true;
                     } else if (filter == '') {
@@ -544,18 +574,18 @@ $(function () {
                 }
             }
             if (activebtnvalue == 'readyToShip') {
-                if (title == 'true' && retail_status == 'wholesale' && key == 'false') {
+                if (title == 'true' && retail_status == 'wholesale' && key == 'false' && invStatus == 1) {
                     return true;
                 }
             }
             if (activebtnvalue == 'keysPulled') {
-                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && !date_sent && !date_sold) {
+                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && !date_sent && !date_sold && invStatus == 1) {
                     return true;
                 }
             }
             if (activebtnvalue == 'atAuction') {
 
-                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && date_sent && !date_sold) {
+                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && date_sent && !date_sold && invStatus == 1) {
                     return true;
                 }
             }
@@ -569,7 +599,7 @@ $(function () {
                 // if (wholesale == 'No' && balance !== '' && date_in !== null) {
                 //     return true;
                 // }
-                if (retail_status != 'wholesale' && balance !== '' && (carshopId !== '' && carshopId !== null)) {
+                if (retail_status != 'wholesale' && balance !== '' && (carshopId !== '' && carshopId !== null) && invStatus == 1) {
                     return true;
                 }
             }
@@ -611,9 +641,9 @@ $(function () {
 
 
     $('#mods input:radio').on('change', function () {
-        $('#datatable-1').block({
+        $('#inspectionTable').block({
             message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
-            timeout: 1e3
+            // timeout: 1e3
         });
         // searhStatusArray = [];
         var currentElement = $(this).val();
@@ -622,42 +652,42 @@ $(function () {
             $('.FixSDKtable').addClass('d-none');
             switch (currentElement) {
                 case 'missingDate':
-                    setColumVisibility([0, 1, 4, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28 , 30]);
+                    setColumVisibility([0, 1, 4, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 30]);
                     manageInvTable.rowGroup().disable().draw();
                     break;
                 case 'titleIssue':
-                    setColumVisibility([0, 3, 4, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28 , 30]);
+                    setColumVisibility([0, 3, 4, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30]);
                     manageInvTable.rowGroup().disable().draw();
                     break;
                 case 'readyToShip':
-                    setColumVisibility([0, 3, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28 , 30]);
+                    setColumVisibility([0, 3, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 30]);
                     rowGroupSrc = 23;
                     manageInvTable.rowGroup().enable().draw();
                     manageInvTable.dataSrc(rowGroupSrc);
                     break;
                 case 'keysPulled':
                 case 'atAuction':
-                    setColumVisibility([0, 3, 12, 13, 14, 15, 17, 18, 19, 21, 24, 25, 26, 27, 28 , 30]);
+                    setColumVisibility([0, 3, 12, 13, 14, 15, 17, 18, 19, 21, 24, 25, 26, 27, 28, 30]);
                     rowGroupSrc = 23;
                     manageInvTable.rowGroup().enable().draw();
                     manageInvTable.dataSrc(rowGroupSrc);
                     break;
                 case 'soldAtAuction':
-                    setColumVisibility([0, 3, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 26, 27, 28 , 30]);
+                    setColumVisibility([0, 3, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 26, 27, 28, 30]);
                     rowGroupSrc = 22; // sold date 
                     manageInvTable.rowGroup().enable().draw();
                     manageInvTable.dataSrc(rowGroupSrc);
                     break;
                 case 'addToSheet':
-                    setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 29 , 30]);
+                    setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]);
                     manageInvTable.rowGroup().disable().draw();
                     break;
                 case 'retail':
-                    setColumVisibility([0, 3, 4, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28 , 30]);
+                    setColumVisibility([0, 3, 4, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 30]);
                     manageInvTable.rowGroup().disable().draw();
                     break;
                 default:
-                    setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28 , 30]);
+                    setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 30]);
                     manageInvTable.rowGroup().disable().draw();
                     break;
             }
@@ -672,10 +702,10 @@ $(function () {
                 manageInvTable.draw();
                 manageInvTable.searchPanes.rebuildPane();
                 manageInvTable.ajax.reload(null, false);
-                if(currentElement == 'soldAtAuction'){
-                    manageInvTable.order([22, 'asc'] ,[1, 'desc']).draw();
+                if (currentElement == 'soldAtAuction') {
+                    manageInvTable.order([22, 'asc'], [1, 'desc']).draw();
                 }
-
+                $('#inspectionTable').unblock();
                 setPlaceholder();
             }, 500);
         } else if (currentElement == 'fixAge') {
@@ -697,10 +727,10 @@ $(function () {
             },
             "soldPrice": {
                 number: !0,
-                required:function (params) {
-                    if($('#dateSold').val() != ''){
+                required: function (params) {
+                    if ($('#dateSold').val() != '') {
                         return true;
-                    }else{
+                    } else {
                         return false;
                     }
                 }
@@ -1035,7 +1065,7 @@ function fetchFixCDKAge() {
                                 </div>`);
                         } else {
                             $(td).html(rowData[4]);
-                        }   
+                        }
                     }
                 },
                 {

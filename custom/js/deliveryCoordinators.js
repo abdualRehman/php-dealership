@@ -31,9 +31,8 @@ toastr.options = {
 
 $(function () {
 
-    $('.nav-link').removeClass('active');
-    $('#more').addClass('active');
 
+    var siteURL = localStorage.getItem('siteURL');
     var deliveryCoordinatorID = Number(localStorage.getItem('deliveryCoordinatorID'));
 
 
@@ -75,7 +74,7 @@ $(function () {
 
     manageAppointmentsTable = $("#datatable-1").DataTable({
         responsive: !0,
-        'ajax': '../php_action/fetchSchedules.php',
+        'ajax': `${siteURL}/php_action/fetchSchedules.php`,
         dom: `<'row'<'col-12'P>>
         <'row' 
         <'col-sm-4 text-left text-sm-left pl-3'<'#statusFilterDiv'>>
@@ -113,6 +112,7 @@ $(function () {
             },
         ],
         columnDefs: [
+            { width: 400, targets: [10] },
             {
                 targets: [0],
                 data: 0,
@@ -206,12 +206,57 @@ $(function () {
             }
         },
         createdRow: function (row, data, dataIndex) {
-            if ($('#isEditAllowed').val() == "true") {
+            if (data[17] && $('#isEditAllowed').val() == "true") {
                 $(row).children().not(':last-child').attr({
                     "data-toggle": "modal",
                     "data-target": "#editScheduleModel",
                     "onclick": "editShedule(" + data[0] + ")"
                 });
+            }
+        },
+        "drawCallback": function (settings, start, end, max, total, pre) {
+            var json = this.fnSettings().json;
+            if (json) {
+
+                var obj = json.data;
+                var lmconfirmed = 0, lmcomplete = 0, tmconfirmed = 0, tmcomplete = 0;
+
+                const startOfMonth = moment().startOf('month').format('MM-DD-YYYY');
+                const endOfMonth = moment().endOf('month').format('MM-DD-YYYY');
+
+                const todayDate = moment(new Date()).format("MM-DD-YYYY");
+                const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('MM-DD-YYYY')
+                const lastDayOfPrevMonth = moment(todayDate).subtract(1, 'month').endOf('month').format('MM-DD-YYYY')
+
+
+                var bool1 = moment(date).isBetween
+                    (startDayOfPrevMonth, lastDayOfPrevMonth, null, '[]');
+                if (bool1) {
+                    return true;
+                }
+
+                for (const [key, value] of Object.entries(obj)) {
+                    // console.log(value[0]);
+                    var date = value[4];
+                    let confirm = value[6];
+                    let complete = value[7];
+                    let additional_services = value[18];
+                    var bool1 = moment(date).isBetween
+                        (startDayOfPrevMonth, lastDayOfPrevMonth, null, '[]');
+                    if (bool1) {
+                        if (confirm == 'ok' && complete == 'ok' && additional_services != '' ) {
+                            lmconfirmed += 1;
+                        }
+                    }
+                    var bool1 = moment(date).isBetween(startOfMonth, endOfMonth, null, '[]');
+                    if (bool1) {
+                        if (confirm == 'ok' && complete == 'ok' && additional_services != '' ) {
+                            tmconfirmed += 1;
+                        }
+                    }
+                }
+                $(`#lmconfirmed`).html(lmconfirmed);
+                $(`#tmconfirmed`).html(tmconfirmed);
             }
         },
         "order": [[0, "desc"]]
@@ -504,7 +549,10 @@ $(function () {
 
 })
 
-
+function setNavLink(id = 'more') {
+    $('.nav-link').removeClass('active');
+    $('#' + id).addClass('active');
+}
 
 function writeStatusHTML() {
     var element = document.getElementById('statusFilterDiv');
@@ -549,7 +597,7 @@ function removeSchedule(scheduleId = null) {
             if (t.isConfirmed == true) {
 
                 $.ajax({
-                    url: '../php_action/removeScheduleAppointment.php',
+                    url: `${siteURL}/php_action/removeScheduleAppointment.php`,
                     type: 'post',
                     data: { id: scheduleId },
                     dataType: 'json',
@@ -600,6 +648,8 @@ function disabledManagerDiv() {
         $(".manager_override_div").find("*").prop("readonly", false);
     }
 
+    $('#esubmittedBy , #submittedBy , #eoverrideByName , #overrideByName').addClass('disabled-div');
+    $("#esubmittedBy , #submittedBy , #eoverrideByName , #overrideByName").find("*").prop("readonly", true);
 }
 function loadSoldLogs() {
     var selectBoxes = document.getElementsByClassName('stockno');
@@ -609,7 +659,7 @@ function loadSoldLogs() {
     $('.selectpicker').selectpicker('refresh');
 
     $.ajax({
-        url: '../php_action/fetchSoldLogsForAppointmenst.php',
+        url: `${siteURL}/php_action/fetchSoldLogsForAppointmenst.php`,
         type: "GET",
         dataType: 'json',
         success: function (response) {
@@ -627,7 +677,7 @@ function loadSoldLogs() {
 function loadDeliveryCoordinator() {
     var id = Number(localStorage.getItem('deliveryCoordinatorID'));
     $.ajax({
-        url: '../php_action/fetchUsersWithRoleForSearch.php',
+        url: `${siteURL}/php_action/fetchUsersWithRoleForSearch.php`,
         type: "POST",
         data: { id: id },
         dataType: 'json',
@@ -684,6 +734,11 @@ $('.handleDateTime').on('change', function () {
 
 
 
+$('.clear-selection').click(function () {
+    let id = $(this).data('id');
+    $(`#${id} :radio`).prop('checked', false);
+    $(`#${id} .active`).removeClass('active');
+})
 
 
 
@@ -691,7 +746,7 @@ function editShedule(id = null) {
 
     if (id) {
         $.ajax({
-            url: '../php_action/fetchSelectedAppointment.php',
+            url: `${siteURL}/php_action/fetchSelectedAppointment.php`,
             type: 'post',
             data: { id: id },
             dataType: 'json',

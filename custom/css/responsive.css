@@ -1,0 +1,63 @@
+.flex-xs-column-reverse {
+    flex-direction: row !important;
+}
+
+/* // Medium devices (tablets, 768px and up) */
+@media (max-width: 768px) {
+    .flex-xs-column-reverse {
+        flex-direction: row !important;
+    }
+
+    .responsive-content {
+        font-size: 10px;
+        margin-top: 2px;
+        margin-bottom: 2px;
+    }
+    .eshowResult * , .font-sm-mobile *, #statusFilterDiv *{
+        font-size: xx-small!important;
+    }
+    .modal-dialog {
+        max-width: 95% !important;
+        margin: 1.75rem auto;
+    }
+
+}
+
+
+/* // Small devices (landscape phones, 576px and up) */
+@media (max-width: 576px) {
+    .flex-xs-column-reverse {
+        flex-direction: column-reverse !important;
+    }
+
+    .modal-dialog {
+        max-width: 80% !important;
+        margin: 1.75rem auto;
+    }
+
+    .responsive-content {
+        font-size: 10px;
+        margin-top: 2px;
+        margin-bottom: 2px;
+    }
+
+    .input-group-mobile input,
+    .input-group-mobile .dropdown.bootstrap-select,
+    .input-group-button-mobile,
+    #saleDetailsDiv {
+        margin: 5px !important;
+        border-radius: 5px !important;
+    }
+
+    .text-responsive,
+    .text-responsive button {
+        font-size: xx-small;
+    }
+
+    .eshowResult *{
+        font-size: xx-small!important;
+    }
+    .font-sm-mobile *, #statusFilterDiv *{
+        font-size: xx-small!important;
+    }
+}

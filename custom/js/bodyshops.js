@@ -160,43 +160,42 @@ $(function () {
         submitHandler: function (form, e) {
             // return true;
             e.preventDefault();
-            var c = confirm('Do you really want to save this?');
-            if (c) {
-                var form = $('#addNewForm');
-                $.ajax({
-                    type: "POST",
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response);
+
+            var form = $('#addNewForm');
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
 
 
-                        if (response.success == true) {
-                            e1.fire({
-                                position: "center",
-                                icon: "success",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 1500
-                            })
-                            manageDataTable.ajax.reload(null, false);
-                            form[0].reset();
-                        } else {
-                            e1.fire({
-                                // position: "center",
-                                icon: "error",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 2500
-                            })
-
-                        }
-
+                    if (response.success == true) {
+                        e1.fire({
+                            position: "center",
+                            icon: "success",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 1500
+                        })
+                        manageDataTable.ajax.reload(null, false);
+                        form[0].reset();
+                    } else {
+                        e1.fire({
+                            // position: "center",
+                            icon: "error",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500
+                        })
 
                     }
-                });
-            }
+
+
+                }
+            });
+
             return false;
 
         }
@@ -218,43 +217,42 @@ $(function () {
         submitHandler: function (form, e) {
             // return true
             e.preventDefault();
-            var c = confirm('Do you really want to save this?');
-            if (c) {
-                var form = $('#editForm');
-                $.ajax({
-                    type: "POST",
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response);
 
-                        if (response.success == true) {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "success",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 1500
-                            })
-                            // form[0].reset();
-                            manageDataTable.ajax.reload(null, false);
+            var form = $('#editForm');
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
 
-                        } else {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "error",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 2500
-                            })
+                    if (response.success == true) {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 1500
+                        })
+                        // form[0].reset();
+                        manageDataTable.ajax.reload(null, false);
 
-                        }
-
+                    } else {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500
+                        })
 
                     }
-                });
-            }
+
+
+                }
+            });
+
             return false;
 
         }
@@ -317,9 +315,11 @@ function padLeadingZeros(num, size) {
     while (s.length < size) s = "0" + s;
     return s;
 }
-$('.zipCode').on('change', function () {
+$('.zipCode').on('blur', function () {
     let newV = padLeadingZeros($(this).val(), 5);
-    $(this).val(newV);
+    if (newV != "00000") {
+        $(this).val(newV);
+    }
 })
 
 

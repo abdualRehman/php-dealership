@@ -172,7 +172,7 @@ if ($_GET['r'] == 'man') {
                                 </div>
 
                                 <div class="col-md-6 d-flex justify-content-center align-items-center p-0 mb-2">
-                                    <div class="row d-flex justify-content-center flex-row p-0 m-0">
+                                    <div class="row d-flex justify-content-center flex-row p-0 m-0 font-sm-mobile">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -501,10 +501,10 @@ if ($_GET['r'] == 'man') {
                         </div>
                         <div class="eshowResult d-none">
                             <div class="form-row">
-                                <div class="col-md-3">
-                                    <div class="row">
-                                        <label for="inputEmail4" class="col-sm-2 col-form-label text-md-center">Date:</label>
-                                        <div class="col-sm-10 <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
+                                <div class="col-md-8">
+                                    <div class="row flex-xs-column-reverse">
+                                        <label for="inputEmail4" class="col-md-2 col-form-label text-md-center">Date:</label>
+                                        <div class="col-md-3 <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
                                             <div class="form-group input-group">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text"><i class="fa fa-calendar"></i>
@@ -513,25 +513,20 @@ if ($_GET['r'] == 'man') {
                                                 <input type="text" class="form-control" name="saleDate" onchange="changeRules()" placeholder="Select date" id="saleDate">
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-5">
-                                    <div class="row">
-                                        <label for="inputPassword4" class="col-sm-1 offset-sm-1 col-form-label text-md-right">Status</label>
-                                        <div class="col-sm-8 <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
-                                            <div class="form-group col-sm-6 text-center">
+                                        <label for="inputPassword4" class="col-md-1 col-form-label text-md-right">Status</label>
+                                        <div class="col-md-6 <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
+                                            <div class="form-group text-center">
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                    <label class="btn btn-flat-primary d-flex align-items-center">
+                                                    <label class="btn btn-flat-primary d-flex align-items-center responsive-content">
                                                         <input type="radio" name="status" value="pending" id="pending">
                                                         <i class="fa fa-clock pr-1"></i> Pending
                                                     </label>
-                                                    <label class="btn btn-flat-success d-flex align-items-center">
+                                                    <label class="btn btn-flat-success d-flex align-items-center responsive-content">
                                                         <input type="radio" name="status" value="delivered" id="delivered">
                                                         <i class="fa fa-check pr-1"></i> Delivered
                                                     </label>
 
-                                                    <label class="btn btn-flat-danger d-flex align-items-center">
+                                                    <label class="btn btn-flat-danger d-flex align-items-center responsive-content">
                                                         <input type="radio" name="status" value="cancelled" id="cancelled">
                                                         <i class="fa fa-times pr-1"></i> Cancelled
                                                     </label>
@@ -562,7 +557,7 @@ if ($_GET['r'] == 'man') {
                                 </div>
                             </div>
                             <hr>
-                            <div class="form-row">
+                            <div class="form-row flex-xs-column-reverse">
                                 <div class="col-md-6">
                                     <div class="row <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
                                         <label class="col-md-3 col-form-label" for="stockId">Stock No.</label>
@@ -632,15 +627,31 @@ if ($_GET['r'] == 'man') {
 
                                 </div>
                                 <div class="col-md-6" id="detailsSection">
-                                    <div class="form-group row <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
-                                        <label class="col-md-2 offset-md-1 col-form-label text-md-right" for="submittedBy">Submitted By</label>
-                                        <div class="col-md-8 d-flex justify-content-around">
-                                            <input type="text" class="form-control text-center" id="submittedBy" placeholder="Submitte By" readonly>
-                                        </div>
-                                    </div>
                                     <?php
                                     if (hasAccess("sale", "Details") !== 'false') {
                                     ?>
+                                        <div class="form-group row <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
+                                            <label class="col-md-2 offset-md-1 col-form-label text-md-right" for="submittedBy">Submitted By</label>
+                                            <div class="col-md-8 d-flex justify-content-around">
+                                                <input type="text" class="form-control text-center" id="submittedBy" placeholder="Submitte By" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
+                                            <div class="col-md-10 offset-md-1 saleDetailsDiv" id="saleDetailsDiv">
+                                                <textarea class="form-control autosize" style="border: none;" name="selectedDetails" id="selectedDetails" readonly placeholder="Type Something..."></textarea>
+                                                <div class="form-group row" id="grossDiv">
+                                                    <label class="col-md-2 offset-md-3 col-form-label text-md-right" for="profit">Gross</label>
+                                                    <div class="col-md-4">
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text">$</div>
+                                                            </div>
+                                                            <input type="text" class="form-control" name="profit" id="profit" value="0">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="form-group row <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
                                             <label class="col-md-2 offset-md-1 col-form-label text-md-right" for="iscertified">Certified</label>
                                             <div class="col-md-8 d-flex justify-content-around">
@@ -660,23 +671,6 @@ if ($_GET['r'] == 'man') {
                                             </div>
                                         </div>
 
-                                        <div class="form-group row <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
-                                            <div class="col-md-10 offset-sm-1 saleDetailsDiv" id="saleDetailsDiv">
-                                                <textarea class="form-control autosize" style="border: none;" name="selectedDetails" id="selectedDetails" readonly placeholder="Type Something..."></textarea>
-                                                <div class="form-group row" id="grossDiv">
-                                                    <label class="col-md-2 offset-md-3 col-form-label text-md-right" for="profit">Gross</label>
-                                                    <div class="col-md-4">
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <div class="input-group-text">$</div>
-                                                            </div>
-                                                            <input type="text" class="form-control" name="profit" id="profit" value="0">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
                                     <?php
                                     } else {
                                         echo '<div>
@@ -686,7 +680,7 @@ if ($_GET['r'] == 'man') {
                                     }
                                     ?>
                                     <div class="form-row">
-                                        <div class="col-md-10 offset-sm-1">
+                                        <div class="col-md-10 offset-md-1">
                                             <div class="form-group <?php echo ($salesConsultantID == $_SESSION['userRole'] || 'Admin' == $_SESSION['userRole']) ?: "makeDisable"; ?>">
                                                 <label class="col-form-label" for="consultantNote">Consultant Notes</label>
                                                 <textarea class="form-control autosize" name="consultantNote" id="consultantNote" placeholder="Consultant Notes..."></textarea>
@@ -705,7 +699,7 @@ if ($_GET['r'] == 'man') {
                             <h5 class="my-3">Customer account</h5>
                             <div class="form-row <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
                                 <div class=<?php echo hasAccess("sale", "Details") !== 'false' ? "col-md-10" : "col-md-12" ?>>
-                                    <div class="form-group input-group d-flex flex-md-row flex-sm-column">
+                                    <div class="form-group input-group d-flex flex-md-row flex-sm-column input-group-mobile">
                                         <input type="text" name="fname" id="fname" class="form-control w-auto " placeholder="First name">
                                         <input type="text" name="mname" id="mname" class="form-control w-auto " placeholder="Middle name">
                                         <input type="text" name="lname" id="lname" class="form-control w-auto " placeholder="Last name">
@@ -769,7 +763,7 @@ if ($_GET['r'] == 'man') {
                                 <?php
                                 if (hasAccess("sale", "Details") !== 'false') {
                                 ?>
-                                    <a href="javascript:;" class="form-group col-md-2 text-center w-100 btn btn-outline-info" onclick="toggleInfo('customerDetailBody')">
+                                    <a href="javascript:;" class="form-group col-md-2 text-center w-100 btn btn-outline-info input-group-button-mobile" onclick="toggleInfo('customerDetailBody')">
                                         More Information <i class="fa fa-angle-down"></i>
                                     </a>
                                 <?php
@@ -831,7 +825,7 @@ if ($_GET['r'] == 'man') {
                                 <h5 class="my-3">Co-Buyer</h5>
                                 <div class="form-row <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
                                     <div class="col-md-10">
-                                        <div class="form-group input-group d-flex flex-md-row flex-sm-column">
+                                        <div class="form-group input-group d-flex flex-md-row flex-sm-column input-group-mobile">
                                             <input type="text" name="cbfname" id="cbfname" class="form-control w-auto " placeholder="First name">
                                             <input type="text" name="cbmname" id="cbmname" class="form-control w-auto " placeholder="Middle name">
                                             <input type="text" name="cblname" id="cblname" class="form-control w-auto " placeholder="Last name">
@@ -893,7 +887,7 @@ if ($_GET['r'] == 'man') {
                                         </div>
                                     </div>
 
-                                    <a href="javascript:;" class="form-group col-md-2 text-center w-100 btn btn-outline-info" onclick="toggleInfo('coBuyer')">
+                                    <a href="javascript:;" class="form-group col-md-2 text-center w-100 btn btn-outline-info input-group-button-mobile" onclick="toggleInfo('coBuyer')">
                                         Add Co-Buyer <i class="fa fa-angle-down"></i>
                                     </a>
 
@@ -948,7 +942,7 @@ if ($_GET['r'] == 'man') {
 
 
 
-                            <h5 class="my-4 pl-2 <?php echo ($salesConsultantID != $_SESSION['userRole']) ? "d-flex" : "d-none"; ?> justify-content-between align-items-center border rounded">Incentives
+                            <h5 class="my-4 pl-2 <?php echo ($salesConsultantID != $_SESSION['userRole']) ? "d-flex" : "d-none"; ?> justify-content-between align-items-center border rounded text-responsive">Incentives
                                 <a href="javascript:;" class="col-md-2 text-center w-100 btn btn-info ml-2 align-item-streach" onclick="toggleInfo('loadIncentives')">
                                     Load Incentives <i class="fa fa-angle-down"></i>
                                 </a>
@@ -1061,7 +1055,7 @@ if ($_GET['r'] == 'man') {
 
                             </div>
 
-                            <h5 class="my-4 pl-2 d-flex justify-content-between align-items-center border rounded">Sales Person Todos <a href="javascript:;" class="col-md-2 text-center w-100 btn btn-info ml-2 align-item-streach" onclick="toggleInfo('loadSalesPersonTodo')">
+                            <h5 class="my-4 pl-2 d-flex justify-content-between align-items-center border rounded text-responsive">Sales Person Todos <a href="javascript:;" class="col-md-2 text-center w-100 btn btn-info ml-2 align-item-streach" onclick="toggleInfo('loadSalesPersonTodo')">
                                     Sales Person Todo's <i class="fa fa-angle-down"></i>
                                 </a>
                             </h5>

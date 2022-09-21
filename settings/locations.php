@@ -4,7 +4,7 @@ include_once '../includes/header.php';
 
 
 if ($_GET['r'] == 'man') {
-    if (hasAccess("swploc", "Add") === 'false' && hasAccess("swploc", "Edit") === 'false' && hasAccess("swploc", "Remove") === 'false') {
+    if (hasAccess("swploc", "View") === 'false') {
         echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
     }
     echo "<div class='div-request d-none'>man</div>";

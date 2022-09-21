@@ -19,7 +19,6 @@ echo '<input type="hidden" name="loggedInUserRole" id="loggedInUserRole" value="
 $managerID = "";
 if ($_SESSION['userRole'] == $bdcManagerID) {
     $managerID = $_SESSION['userId'];
-    echo $managerID;
 }
 
 ?>

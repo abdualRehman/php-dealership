@@ -204,9 +204,11 @@ function padLeadingZeros(num, size) {
     while (s.length < size) s = "0" + s;
     return s;
 }
-$('.zipCode').on('change', function () {
+$('.zipCode').on('blur', function () {
     let newV = padLeadingZeros($(this).val(), 5);
-    $(this).val(newV);
+    if(newV != "00000"){
+        $(this).val(newV);
+    }
 })
 
 

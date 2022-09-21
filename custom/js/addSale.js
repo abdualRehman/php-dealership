@@ -656,7 +656,7 @@ function chnageStyle(field) {
                 ele.addClass('btn-outline-danger');
                 ele.removeClass('btn-outline-success');
                 ele.removeClass('btn-outline-primary');
-            } else if (field.value == 'contracted') {
+            } else if (field.value == 'dealWritten' || field.value == 'contracted' || field.value == 'gmdSubmit') {
                 ele.addClass('btn-outline-primary');
                 ele.removeClass('btn-outline-danger');
                 ele.removeClass('btn-outline-success');

@@ -11,13 +11,13 @@ $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 if ($userRole != $salesConsultantID) {
     $sql = "SELECT sales.date ,  inventory.stockno , sales.fname , sales.lname , users.username, sales.sale_status , sales.deal_notes , 
     inventory.year, inventory.make , inventory.model , sales.gross , sales.sale_id , inventory.lot , sales.certified, inventory.balance , 
-    inventory.status , inventory.age , inventory.stocktype , sales.stock_id , sales.consultant_notes , sales.thankyou_cards , sales.reconcileDate
+    inventory.status , inventory.age , inventory.stocktype , sales.stock_id , sales.consultant_notes , sales.thankyou_cards , sales.reconcileDate , sales.sales_consultant
     FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant WHERE sales.status = 1 AND sales.location = '$location'";
 } else {
     $uid = $_SESSION['userId'];
     $sql = "SELECT sales.date ,  inventory.stockno , sales.fname , sales.lname , users.username, sales.sale_status , sales.deal_notes , 
     inventory.year, inventory.make , inventory.model , sales.gross , sales.sale_id , inventory.lot , sales.certified, inventory.balance , 
-    inventory.status , inventory.age , inventory.stocktype , sales.stock_id , sales.consultant_notes , sales.thankyou_cards , sales.reconcileDate
+    inventory.status , inventory.age , inventory.stocktype , sales.stock_id , sales.consultant_notes , sales.thankyou_cards , sales.reconcileDate , sales.sales_consultant
     FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant WHERE sales.status = 1 AND sales.sales_consultant = '$uid' AND sales.location = '$location'";
 }
 
@@ -57,6 +57,13 @@ if ($result->num_rows > 0) {
 
 
 
+        $confirmed = '';
+        $sql3 = "SELECT * FROM `appointments` WHERE status = 1 AND location = '$location' AND sale_id = '$id'";
+        $result3 = $connect->query($sql3);
+        if ($result3->num_rows > 0) {
+            $row3 = $result3->fetch_array();
+            $confirmed = $row3['confirmed'];
+        }
 
         $invStatus = $row[15];
         $age = $row[16];
@@ -71,7 +78,7 @@ if ($result->num_rows > 0) {
 
         // $date = $row[0];
         // $date = date("M-d-Y", strtotime($date));  // formating date
-        $date =  ($row[21] != '') ? date("M-d-Y", strtotime($row[21])): date("M-d-Y", strtotime($row[0]));  // get Reconcile Date is exist otherwise get date
+        $date =  ($row[21] != '') ? date("M-d-Y", strtotime($row[21])) : date("M-d-Y", strtotime($row[0]));  // get Reconcile Date is exist otherwise get date
         $vehicle = $row[17] . ' ' . $row[7] . ' ' . $row[8] . ' ' . $row[9]; // vehicle details
 
         $gross = round(($row[10]), 2);
@@ -79,18 +86,25 @@ if ($result->num_rows > 0) {
 
 
         $button = '
-        <div class="show d-inline-flex w-100 justify-content-end" >
-        ' .
-            ( $row['sale_status'] != 'cancelled' && hasAccess("appointment", "Add") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#addNewSchedule" onclick="addNewSchedule(' . $id . ')" >
-                <i class="far fa-calendar-alt"></i>
-            </button>' : "") .
-            // (hasAccess("sale", "Edit") !== 'false' ? '<a href="' . $GLOBALS['siteurl'] . '/sales/soldLogs.php?r=edit&i=' . $id . '" class="btn btn-label-primary btn-icon mr-1" >
-            //     <i class="fa fa-edit"></i>
-            // </a>' : "") .
-            (hasAccess("sale", "Remove") !== 'false' ? '<button class="btn btn-label-primary btn-icon" onclick="removeSale(' . $id . ')" >
-                <i class="fa fa-trash"></i>
-            </button>' : "")
-            . '</div>';
+        <div class="show d-inline-flex w-100 justify-content-end" >';
+
+        if (
+            ($_SESSION['userRole'] == $salesConsultantID && $confirmed != 'ok') || $_SESSION['userRole'] == 'Admin' ||
+            $_SESSION['userRole'] == $salesManagerID || $_SESSION['userRole'] == $generalManagerID
+        ) {
+            if ($row['sale_status'] != 'cancelled' && hasAccess("appointment", "Add") !== 'false') {
+                $button .= '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#editScheduleModel" onclick="addNewSchedule(' . $id . ')" >
+                            <i class="far fa-calendar-alt"></i>
+                        </button>';
+            }
+        }
+
+        if (hasAccess("sale", "Remove") !== 'false') {
+            $button .= '<button class="btn btn-label-primary btn-icon" onclick="removeSale(' . $id . ')" >
+                    <i class="fa fa-trash"></i>
+                </button>';
+        }
+        $button .= '</div>';
 
         $output['data'][] = array(
 

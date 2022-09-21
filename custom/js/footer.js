@@ -380,27 +380,32 @@ function loadWebLinks() {
     }
 }
 function writeWebLinks(linksArray) {
-    var div = document.getElementById('webLinksList');
-    div.innerHTML = "";
+    // var div = document.getElementById('webLinksList');
+    var elements = document.getElementsByClassName('webLinksList');
 
-    linksArray.forEach(element => {
-        // Array.
-        div.innerHTML += `
-        <div class="rich-list-item">
-            <div class="rich-list-prepend">
-                <div class="avatar avatar-label-info">
-                    <div class="avatar-display">
-                        <i class="fa fa-solid fa-paperclip"></i>
+    elements.forEach(div => {
+        div.innerHTML = "";
+        linksArray.forEach(element => {
+            // Array.
+            div.innerHTML += `
+            <div class="rich-list-item">
+                <div class="rich-list-prepend">
+                    <div class="avatar avatar-label-info">
+                        <div class="avatar-display">
+                            <i class="fa fa-solid fa-paperclip"></i>
+                        </div>
                     </div>
                 </div>
+                <div class="rich-list-content">
+                <h4 class="rich-list-title"><a href="${element[2]}" target="_blank" >${element[1]}</a></h4>
+                    <span class="rich-list-subtitle text-overflow-ellipsis">${element[2]}</span>
+                </div>
+                ${(element[3] == 'true' ? '<a class="rich-list-append" data-toggle="modal" data-target="#addWebsiteModal" onclick="editWebLink(' + element[0] + ')" ><i class="fa fa-edit"></i></a>' : '')}
+                ${(element[4] == 'true' ? '<a class="rich-list-append" onclick="removeWebLink(' + element[0] + ')" ><i class="fa fa-trash"></i></a>' : '')}
             </div>
-            <div class="rich-list-content">
-            <h4 class="rich-list-title"><a href="${element[2]}" target="_blank" >${element[1]}</a></h4>
-                <span class="rich-list-subtitle text-overflow-ellipsis">${element[2]}</span>
-            </div>
-            ${(element[3] == 'Admin' ? '<a class="rich-list-append" data-toggle="modal" data-target="#addWebsiteModal" onclick="editWebLink(' + element[0] + ')" ><i class="fa fa-edit"></i></a> <a class="rich-list-append" onclick="removeWebLink(' + element[0] + ')" ><i class="fa fa-trash"></i></a>' : '')}
-        </div>
-        `;
+            `;
+        });
+
     });
 }
 

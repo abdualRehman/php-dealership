@@ -107,6 +107,8 @@ $(function () {
                             showConfirmButton: !1,
                             timer: 1500
                         })
+                        form[0].reset();
+                        $('#addNew').modal('hide');
                         manageDataTable.ajax.reload(null, false);
                     } else {
                         e1.fire({
@@ -184,7 +186,7 @@ $(function () {
                             showConfirmButton: !1,
                             timer: 1500
                         })
-                        // form[0].reset();
+                        $('#modal8').modal('hide');
                         manageDataTable.ajax.reload(null, false);
 
                     } else {

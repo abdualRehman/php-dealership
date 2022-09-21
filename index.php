@@ -86,6 +86,7 @@ if ($_POST) {
     <title>Login</title>
     <script>
         var siteURL = 'http://localhost/carshop';
+        // var siteURL = 'http://onedealersystem.com';
         // var siteURL = 'https://www.laughingalbattani5c25df.binfarooqtextile.com';
         localStorage.setItem('siteURL', siteURL);
     </script>

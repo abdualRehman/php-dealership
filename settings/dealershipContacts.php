@@ -2,7 +2,7 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
-if (hasAccess("dealership", "Add") === 'false' && hasAccess("dealership", "Edit") === 'false' && hasAccess("dealership", "Remove") === 'false') {
+if (hasAccess("dealership", "View") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
 if (hasAccess("dealership", "Edit") === 'false') {

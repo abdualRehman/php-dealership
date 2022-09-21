@@ -2,7 +2,7 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
-if (hasAccess("cashincrule", "Add") === 'false' && hasAccess("cashincrule", "Edit") === 'false' && hasAccess("cashincrule", "Remove") === 'false') {
+if (hasAccess("cashincrule", "View") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
 if (hasAccess("cashincrule", "Edit") === 'false') {

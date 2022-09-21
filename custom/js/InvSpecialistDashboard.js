@@ -67,6 +67,7 @@ $(function () {
             var json = this.fnSettings().json;
             if (json) {
                 let allCount = 0, notDone = 0, roclosed = 0, totalDoneCount = 0, percentage = 0;
+                let totalRetail = 0;
                 $('#datatable-1').DataTable()
                     .rows()
                     .data()
@@ -86,9 +87,15 @@ $(function () {
                             totalDoneCount += 1;
                         }
 
+                        if (retail_status != 'wholesale' && retail_status != null) {
+                            totalRetail += 1;
+                        }
+
+
                         return true;
                     });
-                percentage = (totalDoneCount / allCount) * 100;
+                // percentage = (totalDoneCount / allCount) * 100;
+                percentage = (totalDoneCount / totalRetail) * 100;
                 // percentage = Math.round(percentage);
                 percentage = percentage.toFixed(2)
 

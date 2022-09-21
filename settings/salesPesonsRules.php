@@ -2,7 +2,7 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
-if (hasAccess("sptr", "Add") === 'false' && hasAccess("sptr", "Edit") === 'false' && hasAccess("sptr", "Remove") === 'false') {
+if (hasAccess("sptr", "View") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
 if (hasAccess("sptr", "Edit") === 'false') {

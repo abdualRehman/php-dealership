@@ -41,10 +41,12 @@ function createRole(String $RoleName = null, $loc_id = null)
             addPermissions($role_id, 'swap', 'View', $PermissionAllowed);
             // INCENTIVES
             addPermissions($role_id, 'incentives', 'Edit', $PermissionAllowed);
+            addPermissions($role_id, 'incentives', 'View', $PermissionAllowed);
             // INVENTORY
             addPermissions($role_id, 'inventory', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'inventory', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'inventory', 'Remove', $PermissionAllowed);
+            addPermissions($role_id, 'inventory', 'View', $PermissionAllowed);
             // sale
             addPermissions($role_id, 'sale', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'sale', 'Edit', $PermissionAllowed);
@@ -53,6 +55,7 @@ function createRole(String $RoleName = null, $loc_id = null)
             addPermissions($role_id, 'sale', 'Details', $PermissionAllowed);
             // todo
             addPermissions($role_id, 'todo', 'Edit', $PermissionAllowed);
+            addPermissions($role_id, 'todo', 'View', $PermissionAllowed);
             // regp
             addPermissions($role_id, 'regp', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'regp', 'Edit', $PermissionAllowed);
@@ -62,6 +65,7 @@ function createRole(String $RoleName = null, $loc_id = null)
             addPermissions($role_id, 'user', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'user', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'user', 'Remove', $PermissionAllowed);
+            addPermissions($role_id, 'user', 'View', $PermissionAllowed);
             // role
             addPermissions($role_id, 'role', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'role', 'Edit', $PermissionAllowed);
@@ -70,38 +74,47 @@ function createRole(String $RoleName = null, $loc_id = null)
             addPermissions($role_id, 'incr', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'incr', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'incr', 'Remove', $PermissionAllowed);
+            addPermissions($role_id, 'incr', 'View', $PermissionAllowed);
             // sptr
             addPermissions($role_id, 'sptr', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'sptr', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'sptr', 'Remove', $PermissionAllowed);
+            addPermissions($role_id, 'sptr', 'View', $PermissionAllowed);
             // swploc
             addPermissions($role_id, 'swploc', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'swploc', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'swploc', 'Remove', $PermissionAllowed);
+            addPermissions($role_id, 'swploc', 'View', $PermissionAllowed);
             // manprice
             addPermissions($role_id, 'manprice', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'manprice', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'manprice', 'Remove', $PermissionAllowed);
+            addPermissions($role_id, 'manprice', 'View', $PermissionAllowed);
             // matrixrule
             addPermissions($role_id, 'matrixrule', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'matrixrule', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'matrixrule', 'Remove', $PermissionAllowed);
+            addPermissions($role_id, 'matrixrule', 'View', $PermissionAllowed);
             // bdcrule
             addPermissions($role_id, 'bdcrule', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'bdcrule', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'bdcrule', 'Remove', $PermissionAllowed);
+            addPermissions($role_id, 'bdcrule', 'View', $PermissionAllowed);
             // raterule
             addPermissions($role_id, 'raterule', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'raterule', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'raterule', 'Remove', $PermissionAllowed);
+            addPermissions($role_id, 'raterule', 'View', $PermissionAllowed);
             // leaseruleAdd
             addPermissions($role_id, 'leaserule', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'leaserule', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'leaserule', 'Remove', $PermissionAllowed);
+            addPermissions($role_id, 'leaserule', 'View', $PermissionAllowed);
             // leaseruleAdd
             addPermissions($role_id, 'cashincrule', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'cashincrule', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'cashincrule', 'Remove', $PermissionAllowed);
+            addPermissions($role_id, 'cashincrule', 'View', $PermissionAllowed);
             // lotWizards
             // addPermissions($role_id, 'lotWizards', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'lotWizards', 'Edit', $PermissionAllowed);
@@ -110,10 +123,13 @@ function createRole(String $RoleName = null, $loc_id = null)
             // addPermissions($role_id, 'usedCars', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'usedCars', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'usedCars', 'View', $PermissionAllowed);
+            addPermissions($role_id, 'usedCars', 'TitleView', $PermissionAllowed);
+            addPermissions($role_id, 'usedCars', 'TitleEdit', $PermissionAllowed);
             // bodyshops contact
             addPermissions($role_id, 'bodyshops', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'bodyshops', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'bodyshops', 'Remove', $PermissionAllowed);
+            addPermissions($role_id, 'bodyshops', 'View', $PermissionAllowed);
             // Matrix Files Upload
             addPermissions($role_id, 'matrixfile', 'Add', $PermissionAllowed);
             // Inv Specialist - Dashboard
@@ -126,6 +142,7 @@ function createRole(String $RoleName = null, $loc_id = null)
             addPermissions($role_id, 'tansptDmg', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'tansptDmg', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'tansptDmg', 'Remove', $PermissionAllowed);
+            addPermissions($role_id, 'tansptDmg', 'View', $PermissionAllowed);
             // lot wizards bills
             addPermissions($role_id, 'wizardsBill', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'wizardsBill', 'View', $PermissionAllowed);
@@ -133,6 +150,7 @@ function createRole(String $RoleName = null, $loc_id = null)
             addPermissions($role_id, 'appointment', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'appointment', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'appointment', 'Remove', $PermissionAllowed);
+            addPermissions($role_id, 'appointment', 'View', $PermissionAllowed);
             // lot transportation bills
             addPermissions($role_id, 'tansptBill', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'tansptBill', 'View', $PermissionAllowed);
@@ -145,6 +163,7 @@ function createRole(String $RoleName = null, $loc_id = null)
             addPermissions($role_id, 'warranty', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'warranty', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'warranty', 'Remove', $PermissionAllowed);
+            addPermissions($role_id, 'warranty', 'View', $PermissionAllowed);
             // today availibility
             addPermissions($role_id, 'todayavail', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'todayavail', 'View', $PermissionAllowed);
@@ -155,6 +174,13 @@ function createRole(String $RoleName = null, $loc_id = null)
             addPermissions($role_id, 'dealership', 'Add', $PermissionAllowed);
             addPermissions($role_id, 'dealership', 'Edit', $PermissionAllowed);
             addPermissions($role_id, 'dealership', 'Remove', $PermissionAllowed);
+            addPermissions($role_id, 'dealership', 'View', $PermissionAllowed);
+            
+            // Website Links
+            addPermissions($role_id, 'weblink', 'Add', $PermissionAllowed);
+            addPermissions($role_id, 'weblink', 'Edit', $PermissionAllowed);
+            addPermissions($role_id, 'weblink', 'Remove', $PermissionAllowed);
+            addPermissions($role_id, 'weblink', 'View', $PermissionAllowed);
 
 
 
