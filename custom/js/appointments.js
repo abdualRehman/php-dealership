@@ -104,16 +104,16 @@ var cal = new tui.Calendar('#calendar', {
     // scheduleView: ['time', 'allday'],
     scheduleView: ['time'],
     timezones: [
-        {
-            timezoneName: 'Asia/Karachi',
-            tooltip: 'Seoul',
-            displayLabel: 'GMT+09:00 / PK'
-        },
         // {
-        //   timezoneName: 'America/New_York',
-        //   tooltip: 'New York',
-        //   displayLabel: 'GMT-05:00'
+        //     timezoneName: 'Asia/Karachi',
+        //     tooltip: 'Seoul',
+        //     displayLabel: 'GMT+09:00 / PK'
         // },
+        {
+          timezoneName: 'America/New_York',
+          tooltip: 'New York',
+          displayLabel: 'GMT-05:00 / USA'
+        },
     ]
 });
 
@@ -122,7 +122,7 @@ cal.on({
         if ($('#isEditAllowed').val() == 'true') {
             let id = e.schedule.raw.creator.appointmentId
             console.log(id);
-            if(id){
+            if (id) {
                 editShedule(id);
                 $("#editScheduleModel").modal();
             }
@@ -291,17 +291,16 @@ $(function () {
             coordinator: {
                 required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
             },
-            overrideBy: {
-                required: function (params) {
-                    var has_appointment = $('#has_appointment').val();
-                    if (has_appointment && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
-                        return true;
-                    } else {
-                        $(params).removeClass('is-invalid');
-                        return false;
-                    }
-                },
-            },
+            // overrideBy: {
+            //     required: function (params) {
+            //         if ($('#loggedInUserRole').val() != deliveryCoordinatorID) {
+            //             return true;
+            //         } else {
+            //             $(params).removeClass('is-invalid');
+            //             return false;
+            //         }
+            //     },
+            // },
             'delivery': {
                 required: function (params) {
                     var opt = $('input:radio[name="additionalServices"]:checked').val();
@@ -397,17 +396,16 @@ $(function () {
             ecoordinator: {
                 required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
             },
-            eoverrideBy: {
-                required: function (params) {
-                    var has_appointment = $('#ehas_appointment').val();
-                    if (has_appointment && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
-                        return true;
-                    } else {
-                        $(params).removeClass('is-invalid');
-                        return false;
-                    }
-                },
-            },
+            // eoverrideBy: {
+            //     required: function (params) {
+            //         if ($('#loggedInUserRole').val() != deliveryCoordinatorID) {
+            //             return true;
+            //         } else {
+            //             $(params).removeClass('is-invalid');
+            //             return false;
+            //         }
+            //     },
+            // },
             'edelivery': {
                 required: function (params) {
                     var opt = $('input:radio[name="eadditionalServices"]:checked').val();
@@ -487,6 +485,25 @@ $(function () {
 
     });
 
+    $('.clear-selection-btn-group').on('click', function () {
+        var targetElement = $(this).attr('data-targetElement');
+        let elementId = $(this).attr("id");
+        var prev = $(this).children('label.active').find(':radio:checked').val();
+        setTimeout(() => {
+            let current = $('#' + elementId + ' .active :radio:checked').val();
+            if (prev == current) {
+                $('#' + elementId + ' :radio').prop('checked', false);
+                $('#' + elementId + ' .active').removeClass('active');
+            }
+            if (current != 'ok'){
+                $('#'+targetElement).addClass('disabled-div');
+                $('#' + targetElement + ' :radio').prop('checked', false);
+                $('#' + targetElement + ' .active').removeClass('active');
+            }else{
+                $('#'+targetElement).removeClass('disabled-div');
+            }
+        }, 100);
+    })
 
 
 
@@ -609,8 +626,8 @@ function disabledManagerDiv() {
         $('.manager_override_div').removeClass('disabled-div');
         $(".manager_override_div").find("*").prop("readonly", false);
     }
-    $('#esubmittedBy , #submittedBy , #eoverrideByName , #overrideByName').addClass('disabled-div');
-    $("#esubmittedBy , #submittedBy , #eoverrideByName , #overrideByName").find("*").prop("readonly", true);
+    $('#esubmittedBy , #submittedBy , #eoverrideByName , #overrideByName , #customerName , #ecustomerName').addClass('disabled-div');
+    $("#esubmittedBy , #submittedBy , #eoverrideByName , #overrideByName , #customerName , #ecustomerName").find("*").prop("readonly", true);
 
 }
 function fetchSchedules() {
@@ -685,10 +702,11 @@ function editShedule(id = null) {
 
                 $('#esale_id').val(response.sale_id);
                 echangeStockDetails({ value: response.sale_id }, false);
-                $('#ehas_appointment').val("");
+                $('#ehas_appointment').val(response.already_have);
 
                 $('#esubmittedBy').val(response.submitted_by);
                 $('#esubmittedByRole').val(response.submitted_by_role);
+                $('#esubmittedById').val(response.submitted_by_id);
 
                 $('#eoverrideBy').prop('checked', response.manager_override != "" ? true : false);
                 $('#eoverrideByName').val(response.manager_overrideName);
@@ -721,6 +739,12 @@ function editShedule(id = null) {
                 $('#econfirmed :radio[name="econfirmed"]').prop('checked', false);
                 $('#econfirmed .active').removeClass('active');
                 (response.confirmed) ? $('#con' + response.confirmed).prop('checked', true).click() : null;
+                
+                if (response.confirmed != "ok") {
+                    $('#ecomplete').addClass('disabled-div');
+                } else {
+                    $('#ecomplete').removeClass('disabled-div');
+                }
 
                 $('#ecomplete :radio[name="ecomplete"]').prop('checked', false);
                 $('#ecomplete .active').removeClass('active');

@@ -79,7 +79,8 @@ if ($result->num_rows > 0) {
         // $TodayDate = "2022-08-01";
         // $timezone = $row['date'];
         // $timezone = $row['reconcileDate'];
-        $timezone = strtotime($row['reconcileDate']);
+        $soldDate = $row['reconcileDate'] != '' ? $row['reconcileDate'] : $row['date'];
+        $timezone = strtotime($soldDate);
         $timezone = date("Y-m-d", $timezone);
 
 
@@ -116,7 +117,7 @@ if ($result->num_rows > 0) {
 
         $sales_consultant = $row['sales_consultant'];
         $consultant_id = $row['consultant_id'];
-        
+
         $reconcileDate = $row['reconcileDate'];
         // $reconcileDate = ($reconcileDate != '') ? strtotime($reconcileDate) : "";
         $reconcileDate = ($reconcileDate != '') ? strtotime($reconcileDate) : strtotime($row['date']);

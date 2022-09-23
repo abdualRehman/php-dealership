@@ -213,7 +213,7 @@ function loadSchedules() {
                                 $(td).html('<i class="marker marker-dot marker-lg text-success"></i> Available');
                                 $(td).addClass('text-success font-initial');
                             } else {
-                                $(td).html("Not Available");
+                                $(td).html("");
                             }
 
                         } else {

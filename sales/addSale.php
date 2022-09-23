@@ -205,7 +205,7 @@ if (hasAccess("sale", "Add") === 'false') {
                                             </div>
                                             <div class="custom-control custom-control-lg custom-radio">
                                                 <input type="radio" id="yesOther" value="yesOther" name="iscertified" class="custom-control-input">
-                                                <label class="custom-control-label" for="yesOther">Yes</label>
+                                                <label class="custom-control-label" for="yesOther">Yes/Other</label>
                                             </div>
                                             <div class="custom-control custom-control-lg custom-radio">
                                                 <input type="radio" id="no" value="off" name="iscertified" class="custom-control-input">

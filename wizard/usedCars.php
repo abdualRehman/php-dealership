@@ -24,7 +24,7 @@ if ($_SESSION['userRole'] == $onlineManagerID || hasAccess("usedCars", "Edit") =
 }
 
 $allowedForOffice = false;
-if ($_SESSION['userRole'] == $officeID || hasAccess("usedCars", "TitleView") !== 'false') {
+if ($_SESSION['userRole'] == $officeID || ( hasAccess("usedCars", "TitleView") !== 'false' && hasAccess("usedCars", "Edit") === 'false' )) {
     echo '<input type="hidden" name="allowedForOffice" id="allowedForOffice" value="false" />';
 } else {
     echo '<input type="hidden" name="allowedForOffice" id="allowedForOffice" value="true" />';
@@ -207,7 +207,7 @@ if ($_SESSION['userRole'] == $officeID || hasAccess("usedCars", "TitleView") !==
                                             </label>
                                         <?php
                                         } else {
-                                            if (hasAccess("usedCars", "TitleView") !== 'false') {
+                                            if (hasAccess("usedCars", "TitleView") !== 'false' && hasAccess("usedCars", "Edit") === 'false' ) {
                                                 // title issue only
                                                 echo '<label class="btn text-responsive">
                                                     <input type="radio" name="mod" value="titleIssue" id="searchTitleIssue" data-title="Title Issues"> Title Issues <br> <span></span>
@@ -415,7 +415,6 @@ if ($_SESSION['userRole'] != $onlineManagerID && $_SESSION['userRole'] != $offic
                                                     Intercompany
                                                 </label>
                                             </div>
-                                            <span class="badge-text-primary pl-2 clear-selection" id="clear-selection" data-id="purchaseFrom">Clear Selection</span>
                                         </div>
                                         <div class="form-group offset-sm-4 col-sm-4">
                                             <div class="custom-control custom-control-lg custom-checkbox" style="font-size: initial;">
@@ -483,6 +482,10 @@ if ($_SESSION['userRole'] != $onlineManagerID && $_SESSION['userRole'] != $offic
                                     <label for="titleNotes" class="col-form-label">Title Notes</label>
                                     <div class="form-group">
                                         <textarea class="form-control autosize" name="titleNotes" id="titleNotes" placeholder="Title Notes..."></textarea>
+                                    </div>
+                                    <label for="wholesaleNotes" class="col-form-label">Wholesale Notes</label>
+                                    <div class="form-group">
+                                        <textarea class="form-control autosize" name="wholesaleNotes" id="wholesaleNotes" placeholder="Wholesale Notes..."></textarea>
                                     </div>
                                 </div>
                             </div>

@@ -131,17 +131,18 @@ $(function () {
         "deferRender": true,
         "pageLength": 50,
         // autoWidth: false,
+
+        dom: `<'row'<'col-12'P>>
+            <'row' <'col-sm-4 text-left text-sm-left pl-3'B>
+                <'col-sm-4 text-left text-center pl-3'<'#statusFilterDiv.d-none'>>
+                <'col-sm-4 text-right text-sm-right mt-2 mt-sm-0'f>>\n
+            <'row'<'col-12'tr>>\n      
+            <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
         searchPanes: {
             cascadePanes: !0,
-            viewTotal: !0,
-            columns: [8, 9, 4]
+            columns: [11, 12, 13, 20],
         },
-        dom: `<'row'<'col-12'P>>
-        <'row' <'col-sm-4 text-left text-sm-left pl-3'B>
-            <'col-sm-4 text-left text-center pl-3'<'#statusFilterDiv.d-none'>>
-            <'col-sm-4 text-right text-sm-right mt-2 mt-sm-0'f>>\n
-        <'row'<'col-12'tr>>\n      
-        <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
+
         buttons: [
             {
                 extend: 'copyHtml5',
@@ -222,10 +223,22 @@ $(function () {
                 },
             },
             {
+                targets: [2, 3, 4, 5, 6, 7],
+                createdCell: function (td, cellData, rowData, row, col) {
+                    if ($('#isEditAllowed').val() == "true") {
+                        $(td).attr({
+                            "data-toggle": "modal",
+                            "data-target": "#modal8",
+                            "onclick": "editInspection(" + rowData[25] + ")"
+                        });
+                    }
+                }
+            },
+            {
                 searchPanes: {
                     show: true
                 },
-                targets: [9, 8, 4]
+                targets: [11, 12, 13, 20]
             },
         ],
         language: {
@@ -280,6 +293,16 @@ $(function () {
                     .append('<td colspan="17">' + group + ' (' + filteredData.length + ')</td>')
                     .attr('data-name', group)
                     .toggleClass('collapsed', collapsed);
+            }
+        },
+        createdRow: function (row, data, dataIndex) {
+            console.log($(row).children());
+            if ($('#isEditAllowed').val() == "true") {
+                $(row).children().not(':nth-child(1)').attr({
+                    "data-toggle": "modal",
+                    "data-target": "#modal8",
+                    "onclick": "editInspection(" + data[25] + ")"
+                });
             }
         },
         "drawCallback": function (settings, start, end, max, total, pre) {
@@ -354,17 +377,12 @@ $(function () {
                 setSearchTypehead(searhStatusArray);
                 searhStatusArray = [];
 
-
             }
         },
-        createdRow: function (row, data, dataIndex) {
-            if ($('#isEditAllowed').val() == "true") {
-                $(row).children().not(':first-child').attr({
-                    "data-toggle": "modal",
-                    "data-target": "#modal8",
-                    "onclick": "editInspection(" + data[25] + ")"
-                });
-            }
+        "initComplete": function (settings, json) {
+            setTimeout(() => {
+                $('#DataTables_Table_3').find('.dtsp-nameColumn.sorting_1:last').click()
+            }, 500);
         },
         "order": [[21, "asc"], [8, "desc"]], // wholesale , age
         // "order": [[4, "asc"], [5, "desc"]],
@@ -388,7 +406,7 @@ $(function () {
 
             var activebtnvalue = $("#mods .btn.active input[name='mod']").val();
             // console.log(activebtnvalue);
-            var invStatus  = rowData[27];
+            var invStatus = rowData[27];
 
             if (activebtnvalue == 'notTouched') {
                 // console.log(rowData);
@@ -538,7 +556,7 @@ $(function () {
         $('#inspectionTable').block({
             message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
             // timeout: 1e3
-        });       
+        });
 
 
         var title = $(this).data('title');
@@ -620,10 +638,11 @@ $(function () {
             fetchCarsToDealers();
             $('.inspectionTable').addClass('d-none');
             $('.DealerTable').removeClass('d-none');
+            $('#DealerTable').unblock()
         }
 
     });
-
+    // manageInvTable.draw();
 
 
     // $select.on('change', function () {

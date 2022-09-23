@@ -43,7 +43,7 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                             <div class="widget10 widget10-vertical-md">
                                 <div class="widget10-item">
                                     <div class="widget10-content">
-                                        <h2 class="widget10-title" id="regC"></h2>
+                                        <h2 class="widget10-title responsive-content-title" id="regC"></h2>
                                         <span class="widget10-subtitle">
                                             <?php
                                             echo (hasAccess("regp", "View") !== 'false') ? '<a href="' . $GLOBALS['siteurl'] . '/sales/registrationProblem.php" class="link-primary">Registration Problems</a>' : 'Registration Problems';
@@ -54,7 +54,7 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                                 </div>
                                 <div class="widget10-item">
                                     <div class="widget10-content">
-                                        <h2 class="widget10-title" id="titleC"></h2>
+                                        <h2 class="widget10-title responsive-content-title" id="titleC"></h2>
                                         <span class="widget10-subtitle">
                                             <?php
                                             echo (hasAccess("usedCars", "View") !== 'false' || hasAccess("usedCars", "TitleView") !== 'false') ? '<a href="' . $GLOBALS['siteurl'] . '/wizard/usedCars.php?filter=titleIssue" class="link-primary">Used Cars No Title</a>' : 'Used Cars No Title';
@@ -64,7 +64,7 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                                 </div>
                                 <div class="widget10-item">
                                     <div class="widget10-content">
-                                        <h2 class="widget10-title" id="warrantyC"></h2>
+                                        <h2 class="widget10-title responsive-content-title" id="warrantyC"></h2>
                                         <span class="widget10-subtitle">
                                             <?php
                                             echo (hasAccess("warranty", "View") !== 'false') ? '<a href="' . $GLOBALS['siteurl'] . '/more/warrantyCancellation.php" class="link-primary">Warranty Cancellations</a>' : 'Warranty Cancellations';
@@ -96,21 +96,21 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                                 <div class="widget10 widget10-vertical-md">
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="avgN"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="avgN"></h2>
                                             <span class="widget10-subtitle">New</span>
                                         </div>
 
                                     </div>
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="avgU"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="avgU"></h2>
                                             <span class="widget10-subtitle">Used</span>
                                         </div>
 
                                     </div>
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="avgT"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="avgT"></h2>
                                             <span class="widget10-subtitle">All</span>
                                         </div>
                                     </div>
@@ -131,21 +131,21 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                                 <div class="widget10 widget10-vertical-md">
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="todayN"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="todayN"></h2>
                                             <span class="widget10-subtitle">New</span>
                                         </div>
 
                                     </div>
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="todayU"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="todayU"></h2>
                                             <span class="widget10-subtitle">Used</span>
                                         </div>
 
                                     </div>
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="todayT"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="todayT"></h2>
                                             <span class="widget10-subtitle">All</span>
                                         </div>
                                     </div>
@@ -165,19 +165,19 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                                 <div class="widget10 widget10-vertical-md">
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="penN"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="penN"></h2>
                                             <span class="widget10-subtitle">New</span>
                                         </div>
                                     </div>
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="penU"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="penU"></h2>
                                             <span class="widget10-subtitle">Used</span>
                                         </div>
                                     </div>
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="penT"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="penT"></h2>
                                             <span class="widget10-subtitle">All</span>
                                         </div>
                                     </div>
@@ -190,7 +190,7 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                             <div class="widget10 widget10-vertical-md">
                                 <div class="widget10-item">
                                     <div class="widget10-content">
-                                        <h2 class="widget10-title" id="regC"></h2>
+                                        <h2 class="widget10-title responsive-content-title" id="regC"></h2>
                                         <span class="widget10-subtitle">
                                             <?php
                                             echo (hasAccess("regp", "View") !== 'false') ? '<a href="' . $GLOBALS['siteurl'] . '/sales/registrationProblem.php" class="link-primary">Registration Problems</a>' : 'Registration Problems';
@@ -200,7 +200,7 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                                 </div>
                                 <div class="widget10-item">
                                     <div class="widget10-content">
-                                        <h2 class="widget10-title" id="todoC"></h2>
+                                        <h2 class="widget10-title responsive-content-title" id="todoC"></h2>
                                         <span class="widget10-subtitle">
                                             <?php
                                             echo (hasAccess("todo", "View") !== 'false') ? '<a href="' . $GLOBALS['siteurl'] . '/sales/soldTodo.php" class="link-primary">Sales Consultants To Do’s</a>' : 'Sales Consultants To Do’s';
@@ -210,7 +210,7 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                                 </div>
                                 <div class="widget10-item">
                                     <div class="widget10-content">
-                                        <h2 class="widget10-title" id="titleC"></h2>
+                                        <h2 class="widget10-title responsive-content-title" id="titleC"></h2>
                                         <span class="widget10-subtitle">
                                             <?php
                                             echo (hasAccess("usedCars", "View") !== 'false' || hasAccess("usedCars", "TitleView") !== 'false') ? '<a href="' . $GLOBALS['siteurl'] . '/wizard/usedCars.php?filter=titleIssue" class="link-primary">Used Cars No Title</a>' : 'Used Cars No Title';
@@ -240,21 +240,21 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                                 <div class="widget10 widget10-vertical-md">
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="currentMonthN"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="currentMonthN"></h2>
                                             <span class="widget10-subtitle">New</span>
                                         </div>
 
                                     </div>
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="currentMonthU"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="currentMonthU"></h2>
                                             <span class="widget10-subtitle">Used</span>
                                         </div>
 
                                     </div>
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="currentMonthT"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="currentMonthT"></h2>
                                             <span class="widget10-subtitle">All</span>
                                         </div>
                                     </div>
@@ -275,21 +275,21 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                                 <div class="widget10 widget10-vertical-md">
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="todayCN"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="todayCN"></h2>
                                             <span class="widget10-subtitle">New</span>
                                         </div>
 
                                     </div>
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="todayCU"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="todayCU"></h2>
                                             <span class="widget10-subtitle">Used</span>
                                         </div>
 
                                     </div>
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="todayCT"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="todayCT"></h2>
                                             <span class="widget10-subtitle">All</span>
                                         </div>
                                     </div>
@@ -310,19 +310,19 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                                 <div class="widget10 widget10-vertical-md">
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="penN"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="penN"></h2>
                                             <span class="widget10-subtitle">New</span>
                                         </div>
                                     </div>
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="penU"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="penU"></h2>
                                             <span class="widget10-subtitle">Used</span>
                                         </div>
                                     </div>
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="penT"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="penT"></h2>
                                             <span class="widget10-subtitle">All</span>
                                         </div>
                                     </div>
@@ -354,13 +354,13 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                                 <div class="widget10 widget10-vertical-md">
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="regC"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="regC"></h2>
                                             <span class="widget10-subtitle">&nbsp;</span>
                                         </div>
                                     </div>
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="todoC"></h2>
+                                            <h2 class="widget10-title responsive-content-title" id="todoC"></h2>
                                             <span class="widget10-subtitle">&nbsp;</span>
                                         </div>
                                     </div>

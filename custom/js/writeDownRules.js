@@ -186,6 +186,7 @@ $(function () {
                             showConfirmButton: !1,
                             timer: 1500
                         })
+                        form[0].reset();
                         $('#modal8').modal('hide');
                         manageDataTable.ajax.reload(null, false);
 

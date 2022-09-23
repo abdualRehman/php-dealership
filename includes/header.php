@@ -875,36 +875,26 @@
                             <?php
                             }
                             ?>
-                            <!-- <div class="dropdown ml-2">
+                            <div class="dropdown ml-2" id="notificationDropdown">
                                 <button class="btn btn-label-primary btn-icon mr-1" data-toggle="dropdown">
                                     <i class="far fa-bell"></i>
-                                    <div class="btn-marker"><i class="marker marker-dot text-success"></i></div>
+                                    <div class="btn-marker d-none">
+                                        <span class="badge badge-secondary btn-counter">0</span>
+                                    </div>
                                 </button>
-                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-wide overflow-hidden py-0">
+                                <div class="dropdown-menu dropdown-menu-right notification-menu dropdown-menu-wide overflow-hidden py-0">
                                     <div class="portlet border-0 portlet-scroll">
                                         <div class="portlet-header bg-primary rounded-0">
-                                            <div class="portlet-icon text-white"><i class="far fa-bell"></i></div>
-                                            <h3 class="portlet-title text-white">Notification</h3>
-                                            <div class="portlet-addon"><span class="badge badge-warning badge-square badge-lg">9+</span></div>
+                                            <div class="portlet-icon text-white "><i class="far fa-bell"></i></div>
+                                            <h3 class="portlet-title text-white">Notifications</h3>
                                         </div>
-                                        <div class="portlet-body p-0 rounded-0" data-toggle="simplebar">
+                                        <div class="portlet-body p-0 rounded-0 notification-list" data-toggle="simplebar">
                                             <div class="rich-list rich-list-action">
-                                                <a href="#" class="rich-list-item">
-                                                    <div class="rich-list-prepend">
-                                                        <div class="avatar avatar-label-warning">
-                                                            <div class="avatar-display"><i class="fa fa-paper-plane"></i></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="rich-list-content">
-                                                        <h4 class="rich-list-title">New feedback received</h4><span class="rich-list-subtitle">6 hrs ago</span>
-                                                    </div>
-                                                    <div class="rich-list-append"><i class="caret mx-2"></i></div>
-                                                </a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
                             <div class="dropdown ml-2"><button class="btn btn-flat-primary widget13" data-toggle="dropdown">
                                     <div class="widget13-text">Hi <strong> <?php echo $_SESSION['userName']; ?> </strong></div>
                                     <div class="avatar avatar-info widget13-avatar">
@@ -1107,7 +1097,61 @@
                                     <a href="<?php echo $GLOBALS['siteurl']; ?>/more/bdc.php" class="btn btn-flat-primary responsive-content breadcrumb-text">BDC</a>
                                 <?php
                                 }
+                                if (hasAccess("sale", "Add") !== 'false') {
                                 ?>
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/addSale.php" class="btn btn-flat-primary responsive-content breadcrumb-text">Add Sale</a>
+                                <?php
+                                }
+                                ?>
+                                <div class="dropdown">
+                                    <a href="#" class="btn btn-flat-primary responsive-content breadcrumb-text" id="more" data-toggle="dropdown">More</a>
+                                    <div class="dropdown-menu dropdown-menu-left dropdown-menu-wide dropdown-menu-animated overflow-hidden">
+                                        <div class="dropdown-row">
+                                            <div class="dropdown-col border-left">
+                                                <h4 class="dropdown-header dropdown-header-lg">Tools</h4>
+
+                                                <?php
+                                                if (hasAccess("rdr", "View") !== 'false') {
+                                                ?>
+                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/rdr.php" class="dropdown-item">
+                                                        <i class="dropdown-bullet"></i> <span class="dropdown-content">RDR (RETAIL DELIVERY REGISTRATION)</span>
+                                                    </a>
+                                                <?php
+                                                }
+                                                if (hasAccess("tansptDmg", "View") !== 'false') {
+                                                ?>
+                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/transportation.php" class="dropdown-item">
+                                                        <i class="dropdown-bullet"></i> <span class="dropdown-content">Transportation Damage</span>
+                                                    </a>
+                                                <?php
+                                                }
+                                                if (hasAccess("wizardsBill", "View") !== 'false') {
+                                                ?>
+                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/lotwizardsBill.php" class="dropdown-item">
+                                                        <i class="dropdown-bullet"></i> <span class="dropdown-content">Lot Wizards Bills</span>
+                                                    </a>
+                                                <?php
+                                                }
+                                                if (hasAccess("tansptBill", "View") !== 'false') {
+                                                ?>
+                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/transportationBills.php" class="dropdown-item">
+                                                        <i class="dropdown-bullet"></i> <span class="dropdown-content">Transportation Bills</span>
+                                                    </a>
+                                                <?php
+                                                }
+                                                if (hasAccess("warranty", "View") !== 'false') {
+                                                ?>
+                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/warrantyCancellation.php" class="dropdown-item">
+                                                        <i class="dropdown-bullet"></i> <span class="dropdown-content">Warranty Cancellation</span>
+                                                    </a>
+                                                <?php
+                                                }
+
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="col-3">

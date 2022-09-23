@@ -76,11 +76,13 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
         body.theme-light .disabled-div {
             background-color: #eee !important;
             pointer-events: none;
+            border-radius: 5px;
         }
 
         body.theme-dark .disabled-div {
             background-color: #757575 !important;
             pointer-events: none;
+            border-radius: 5px;
         }
 
         .font-size-initial {
@@ -213,7 +215,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                 <div class="row align-items-baseline">
                                     <label for="leadDate" class="col-sm-3 text-sm-center col-form-label">Customer Name</label>
                                     <div class="form-group col-sm-9">
-                                        <input type="text" class="form-control" name="customerName" id="customerName" autocomplete="off" autofill="off" disabled />
+                                        <input type="text" class="form-control" name="customerName" id="customerName" autocomplete="off" autofill="off" readonly />
                                     </div>
                                 </div>
                                 <div class="row align-items-baseline">
@@ -354,7 +356,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
 
                         <label for="confirmed" class="col-sm-2 text-sm-right col-form-label">Confirmed</label>
                         <div class="col-md-4">
-                            <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="confirmed">
+                            <div class="btn-group btn-group-toggle clear-selection-btn-group w-100" data-targetElement="complete" data-toggle="buttons" id="confirmed">
                                 <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                     <input type="radio" name="confirmed" value="ok" id="ok">
                                     Yes
@@ -367,7 +369,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                         </div>
                         <label for="complete" class="col-sm-2 text-sm-right col-form-label">Complete</label>
                         <div class="col-md-4">
-                            <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="complete">
+                            <div class="btn-group btn-group-toggle clear-selection-btn-group w-100" data-toggle="buttons" id="complete">
                                 <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                     <input type="radio" name="complete" value="ok" id="ok">
                                     Yes
@@ -413,7 +415,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                     <div class="row align-items-baseline">
                                         <label for="ecustomerName" class="col-sm-3 text-sm-center col-form-label">Customer Name</label>
                                         <div class="form-group col-sm-9">
-                                            <input type="text" class="form-control" name="ecustomerName" id="ecustomerName" autocomplete="off" autofill="off" disabled />
+                                            <input type="text" class="form-control" name="ecustomerName" id="ecustomerName" autocomplete="off" autofill="off" readonly />
                                         </div>
                                     </div>
                                     <div class="row align-items-baseline">
@@ -436,6 +438,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                                         <label for="esubmittedBy" class="col-form-label">submitted By</label>
                                         <input type="text" class="form-control text-center" name="esubmittedBy" id="esubmittedBy" readonly autocomplete="off" autofill="off" />
                                         <input type="hidden" class="form-control text-center" name="esubmittedByRole" id="esubmittedByRole" readonly autocomplete="off" autofill="off" />
+                                        <input type="hidden" class="form-control text-center" name="esubmittedById" id="esubmittedById" readonly autocomplete="off" autofill="off" />
                                     </div>
                                     <div class="form-group manager_override_div" style="border-radius:5px;">
                                         <input type="hidden" name="ehas_appointment" id="ehas_appointment" value="null" />
@@ -555,7 +558,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
 
                             <label for="econfirmed" class="col-sm-2 text-sm-right col-form-label">Confirmed</label>
                             <div class="col-md-4">
-                                <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="econfirmed">
+                                <div class="btn-group btn-group-toggle clear-selection-btn-group w-100" data-targetElement="ecomplete"  data-toggle="buttons" id="econfirmed">
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                         <input type="radio" name="econfirmed" value="ok" id="conok">
                                         Yes
@@ -568,7 +571,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                             </div>
                             <label for="ecomplete" class="col-sm-2 text-sm-right col-form-label">Complete</label>
                             <div class="col-md-4">
-                                <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="ecomplete">
+                                <div class="btn-group btn-group-toggle clear-selection-btn-group w-100" data-toggle="buttons" id="ecomplete">
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                         <input type="radio" name="ecomplete" value="ok" id="comok">
                                         Yes

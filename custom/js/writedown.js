@@ -86,7 +86,7 @@ $(function () {
         rowGroup: {
             dataSrc: 16,
             startRender: function (rows, group) {
-                var collapsed = !!collapsedGroups[group];
+                var collapsed = !collapsedGroups[group];
 
                 rows.nodes().each(function (r) {
                     r.style.display = 'none';

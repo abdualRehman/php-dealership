@@ -13,7 +13,8 @@ if ($stockAr) {
         // code to be executed;
         $stkno = mysqli_real_escape_string($connect, $stock);
 
-        $sql = "UPDATE inventory SET status = 2 WHERE stockno = '$stkno'";
+        // $sql = "UPDATE inventory SET status = 2 WHERE stockno = '$stkno'";
+        $sql = "UPDATE inventory SET status = 2 AND balance = '0' AND lot = '' WHERE stockno = '$stkno'";
 
         // $checkSql = "SELECT `sales`.* FROM `sales` INNER JOIN inventory ON sales.stock_id = inventory.id WHERE inventory.stockno = '$stkno' AND sales.status = 1";
         // $result = $connect->query($checkSql);

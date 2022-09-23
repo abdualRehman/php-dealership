@@ -59,6 +59,16 @@ $(function () {
         },
         buttons: [
             {
+                text: '&nbsp Expand/Collapse All',
+                action: function () {
+                    $('#datatable-1 tbody tr.dtrg-group.dtrg-start').each(function () {
+                        var name = $(this).data('name');
+                        collapsedGroups[name] = !collapsedGroups[name];
+                        manageSoldLogsTable.draw(false);
+                    });
+                }
+            },
+            {
                 extend: 'copyHtml5',
                 title: 'Sold Todo',
                 exportOptions: {

@@ -517,17 +517,16 @@ $(function () {
                 ecoordinator: {
                     required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
                 },
-                eoverrideBy: {
-                    required: function (params) {
-                        var has_appointment = $('#ehas_appointment').val();
-                        if (has_appointment && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
-                            return true;
-                        } else {
-                            $(params).removeClass('is-invalid');
-                            return false;
-                        }
-                    },
-                },
+                // eoverrideBy: {
+                //     required: function (params) {
+                //         if ($('#loggedInUserRole').val() != deliveryCoordinatorID) {
+                //             return true;
+                //         } else {
+                //             $(params).removeClass('is-invalid');
+                //             return false;
+                //         }
+                //     },
+                // },
                 'edelivery': {
                     required: function (params) {
                         var opt = $('input:radio[name="eadditionalServices"]:checked').val();
@@ -726,6 +725,26 @@ $(function () {
 
     });
 
+    $('.clear-selection-btn-group').on('click', function () {
+        var targetElement = $(this).attr('data-targetElement');
+        let elementId = $(this).attr("id");
+        var prev = $(this).children('label.active').find(':radio:checked').val();
+        setTimeout(() => {
+            let current = $('#' + elementId + ' .active :radio:checked').val();
+            if (prev == current) {
+                $('#' + elementId + ' :radio').prop('checked', false);
+                $('#' + elementId + ' .active').removeClass('active');
+            }
+            if (current != 'ok') {
+                $('#' + targetElement).addClass('disabled-div');
+                $('#' + targetElement + ' :radio').prop('checked', false);
+                $('#' + targetElement + ' .active').removeClass('active');
+            } else {
+                $('#' + targetElement).removeClass('disabled-div');
+            }
+        }, 100);
+    })
+
 
 
 });
@@ -762,9 +781,10 @@ function addNewSchedule(id = null) {
                 $('#evechicle').val(response.stocktype + ' ' + response.year + ' ' + response.make);
                 $('#estockno').val(response.stock_id)
                 $('#estocknoDisplay').val(response.stockno)
-                $('#ehas_appointment').val("");
+                $('#ehas_appointment').val(response.already_have);
                 $('#esubmittedBy').val(response.submitted_by);
                 $('#esubmittedByRole').val(response.submitted_by_role);
+                $('#esubmittedById').val(response.submitted_by_id);
                 $('#eoverrideBy').prop('checked', (response.manager_override != "" && response.manager_override != null) ? true : false);
                 $('#eoverrideByName').val(response.manager_overrideName);
                 $('#eoverrideById').val(response.eoverrideById);
@@ -787,6 +807,12 @@ function addNewSchedule(id = null) {
                 $('#ecomplete :radio[name="ecomplete"]').prop('checked', false);
                 $('#ecomplete .active').removeClass('active');
                 (response.complete) ? $('#com' + response.complete).prop('checked', true).click() : null;
+
+                if (response.confirmed != "ok") {
+                    $('#ecomplete').addClass('disabled-div');
+                } else {
+                    $('#ecomplete').removeClass('disabled-div');
+                }
 
                 $('#ecoordinator').val(response.coordinator);
                 var checkSelectValue = $('#ecoordinator').val();
@@ -842,8 +868,8 @@ function disabledManagerDiv() {
         $(".manager_override_div").find("*").prop("readonly", false);
     }
 
-    $('#esubmittedBy , #eoverrideByName , #estocknoDisplay').addClass('disabled-div');
-    $("#esubmittedBy , #eoverrideByName , #estocknoDisplay").find("*").prop("readonly", true);
+    $('#esubmittedBy , #eoverrideByName , #estocknoDisplay , #ecustomerName').addClass('disabled-div');
+    $("#esubmittedBy , #eoverrideByName , #estocknoDisplay , #ecustomerName").find("*").prop("readonly", true);
 }
 
 function loadDeliveryCoordinator() {
@@ -1200,7 +1226,7 @@ function editSale(id = null) {
                 }
 
                 // show/calclulate gross if stockTypes is used gross is shows otherwise hide 
-                if (response.stocktype == 'USED' && $('#isConsultant').val() == "false") {
+                if ($('#isConsultant').val() == "false") {
                     $('#grossDiv').removeClass('v-none');
                 } else {
                     $('#grossDiv').addClass('v-none');

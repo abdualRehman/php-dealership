@@ -129,7 +129,7 @@ $(function () {
                 targets: [0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
                 visible: false,
             },
-            { width: 400, targets: [15] },
+            { width: 400, targets: [15 , 23] },
             {
                 targets: [1], // age
                 createdCell: function (td, cellData, rowData, row, col) {
@@ -475,9 +475,16 @@ $(function () {
                         "data-target": "#modal8",
                         "onclick": "editUsedCar(" + data[0] + ")"
                     });
-                } else if (activebtnvalue == 'keysPulled' || activebtnvalue == 'atAuction') {
+                } else if (activebtnvalue == 'keysPulled') {
 
                     $(row).children().not(':nth-child(3)').not(':nth-child(13)').not(':nth-child(10)').not(':nth-child(14)').not(':last-child').attr({
+                        "data-toggle": "modal",
+                        "data-target": "#modal8",
+                        "onclick": "editUsedCar(" + data[0] + ")"
+                    });
+                } else if (activebtnvalue == 'atAuction') {
+
+                    $(row).children().not(':nth-child(9)').not(':nth-child(10)').not(':nth-child(14)').not(':last-child').attr({
                         "data-toggle": "modal",
                         "data-target": "#modal8",
                         "onclick": "editUsedCar(" + data[0] + ")"
@@ -489,8 +496,14 @@ $(function () {
                         "data-target": "#modal8",
                         "onclick": "editUsedCar(" + data[0] + ")"
                     });
-                } else if (activebtnvalue == 'addToSheet') {
+                } else if (activebtnvalue == 'sold') {
                     $(row).children().not(':last-child').attr({
+                        "data-toggle": "modal",
+                        "data-target": "#modal8",
+                        "onclick": "editUsedCar(" + data[0] + ")"
+                    });
+                } else if (activebtnvalue == 'retail') {
+                    $(row).children().not(':nth-child(9)').not(':last-child').attr({
                         "data-toggle": "modal",
                         "data-target": "#modal8",
                         "onclick": "editUsedCar(" + data[0] + ")"
@@ -628,8 +641,18 @@ $(function () {
         var id = $(this).data('id');
         $('#' + id).val('');
         $('#' + id).selectpicker('refresh');
-    })
+    });
 
+    $('#purchaseFrom label').on('click', function () {
+        let prev = $('#purchaseFrom .active :radio:checked').val();
+        let current = $(this).children(':radio[name=purchaseFrom]').val();
+        if (prev == current) {
+            setTimeout(() => {
+                $('#purchaseFrom :radio').prop('checked', false);
+                $('#purchaseFrom .active').removeClass('active');
+            }, 100);
+        }
+    })
 
     $('#retailStatus input:radio').on('change', function () {
         if ($(this).val() != 'wholesale') {
@@ -666,8 +689,13 @@ $(function () {
                     manageInvTable.dataSrc(rowGroupSrc);
                     break;
                 case 'keysPulled':
-                case 'atAuction':
                     setColumVisibility([0, 3, 12, 13, 14, 15, 17, 18, 19, 21, 24, 25, 26, 27, 28, 30]);
+                    rowGroupSrc = 23;
+                    manageInvTable.rowGroup().enable().draw();
+                    manageInvTable.dataSrc(rowGroupSrc);
+                    break;
+                case 'atAuction':
+                    setColumVisibility([0, 3 , 4, 10 , 11, 12, 13, 14, 15, 17, 18, 19 , 20, 21, 24, 25, 26, 27, 28, 30]);
                     rowGroupSrc = 23;
                     manageInvTable.rowGroup().enable().draw();
                     manageInvTable.dataSrc(rowGroupSrc);
@@ -703,7 +731,7 @@ $(function () {
                 manageInvTable.searchPanes.rebuildPane();
                 manageInvTable.ajax.reload(null, false);
                 if (currentElement == 'soldAtAuction') {
-                    manageInvTable.order([22, 'asc'], [1, 'desc']).draw();
+                    manageInvTable.order([22, 'desc'], [1, 'desc']).draw();
                 }
                 $('#inspectionTable').unblock();
                 setPlaceholder();
@@ -1217,6 +1245,7 @@ function editUsedCar(id) {
 
 
                 $('#titleNotes').val(response.title_notes ? response.title_notes : "");
+                $('#wholesaleNotes').val(response.wholesale_notes ? response.wholesale_notes : "");
                 $('#onlineDescription').val(response.online_description ? response.online_description : "");
                 $('#roNotes').val(response.ro_online_notes ? response.ro_online_notes : "");
 

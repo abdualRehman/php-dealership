@@ -422,6 +422,9 @@
 
         function checkAndDisplayNewResults() {
             let statusBarDiv = $('#statusBar').hasClass('d-none');
+            // var audio = new Audio('notification.mp3');
+            var song = siteLink + '/includes/notification.mp3';
+            var audio = new Audio(song);
             if (siteLink && !statusBarDiv && maxCounter < 20) {
                 $.ajax({
                     url: siteLink + '/php_action/getTodayData.php',
@@ -432,6 +435,48 @@
                         if (obj) {
                             $('#todaySoldStatus').html(`Sold Today: ${obj[0]} NEW, ${obj[1]} USED, ${obj[2]} Total`);
                         }
+
+                        // -------------------------------------------------------------------------------
+                        // load notificaiton
+                        let array = response.notifications;
+                        var elements = document.getElementsByClassName('notification-list');
+                        elements.forEach(element => {
+                            element.innerHTML = '';
+                            let delivered = array.some(item => item[6] == 0);
+                            if (delivered == true) {
+                                var playPromise = audio.play();
+                            }
+                            let markerCount = 0;
+                            let marker = array.some(item => item[5] == 0);
+                            if (marker == true) {
+                                $('#notificationDropdown .btn-marker').removeClass('d-none');
+                            } else {
+                                $('#notificationDropdown .btn-marker').addClass('d-none');
+                            }
+                            array.forEach(notification => {
+                                if (notification[5] == 0) {
+                                    markerCount += 1;
+                                }
+                                element.innerHTML += `<div class="rich-list rich-list-action">
+                                                <a href="${siteLink}/more/deliveryCoordinators.php?filter=${notification[4]}&id=${notification[0]}" class="rich-list-item">
+                                                    <div class="rich-list-prepend">
+                                                        <div class="avatar avatar-label-info">
+                                                            <div class="avatar-display"><i class="fa fa-paper-plane"></i></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="rich-list-content">
+                                                        <h4 class="rich-list-title">${notification[3]}</h4>
+                                                        <span class="rich-list-subtitle">${moment(notification[1]).fromNow()}</span>
+                                                    </div>
+                                                    <button class="btn btn-icon text-white rich-list-append" data-action="${notification[5]}" onclick="handle_notification( ${notification[0]} , this )" >
+                                                        ${notification[5] == '0' ? '<i class="fa fa-solid fa-envelope"></i>' : '<i class="fa fa-solid fa-envelope-open"></i>'}
+                                                    </button>
+                                                </a>
+                                            </div>`;
+                            });
+                            $('#notificationDropdown .btn-marker .btn-counter').html(markerCount);
+                        });
+
                         maxCounter++;
                     },
                     error: function(jqXHR, textStatus, errorthrown) {
@@ -446,6 +491,35 @@
         setTimeout(() => {
             checkAndDisplayNewResults();
         }, 3000);
+    }
+
+    function handle_notification(id, element = null) {
+        if (element != null) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+
+        let status = element != null ? $(element).data('action') : "";
+        let siteLink = localStorage.getItem('siteURL')
+        $.ajax({
+            url: siteLink + '/php_action/marknotification.php',
+            type: "POST",
+            data: {
+                id,
+                id
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (element != null) {
+                    if (status == 0) {
+                        $(element).html('<i class="fa fa-solid fa-envelope-open"></i>');
+                    } else {
+                        $(element).html('<i class="fa fa-solid fa-envelope"></i>');
+                    }
+                    $(element).data('action', (1 - Number(status)));
+                }
+            }
+        });
     }
 </script>
 

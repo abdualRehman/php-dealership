@@ -127,11 +127,8 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
         height: auto !important;
     }
 
-    .slick-slide img {
-        height: 80px;
-        width: 100%;
-        object-fit: cover;
-        /* min-width: fit-content!important; */
+    .slick-lightbox-slick-item-inner {
+        min-width: 60%!important;
     }
 
     /* datatable 2 hide 3rd column  */
@@ -170,7 +167,7 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                 <div class="row p-2">
                                     <div class="col-md-12">
                                         <label class="btn text-responsive active">
-                                            <input type="radio" name="mod" value="notTouched" data-title="Not Touched"> Not Touched <br> <span></span>
+                                            <input type="radio" name="mod" value="notTouched" id="notTouched" data-title="Not Touched"> Not Touched <br> <span></span>
                                         </label>
                                         <label class="btn text-responsive">
                                             <input type="radio" name="mod" value="holdForRecon" data-title="Hold For Recon"> Hold For Recon <br> <span></span>

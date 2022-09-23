@@ -32,6 +32,7 @@ if ($_POST) {
     $keys = (isset($_POST['keys'])) ? "true" : "false";
     
     $titleNotes = (isset($_POST['titleNotes'])) ? mysqli_real_escape_string($connect, $_POST['titleNotes']) : "";
+    $wholesaleNotes = (isset($_POST['wholesaleNotes'])) ? mysqli_real_escape_string($connect, $_POST['wholesaleNotes']) : "";
     $onlineDescription = (isset($_POST['onlineDescription'])) ? mysqli_real_escape_string($connect, $_POST['onlineDescription']) : "";
     $roNotes = (isset($_POST['roNotes'])) ? mysqli_real_escape_string($connect, $_POST['roNotes']) : "";
     
@@ -89,7 +90,7 @@ if ($_POST) {
         `uci_ro`='$uciRo',`uci_approved`='$uciApproved',
         `uci_close`='$uciClosed',`oci_ok`='$oci',
         `title_priority`='$titlePriority',`sales_consultant`='$salesConsultant',
-        `customer`='$customer',`title_notes`='$titleNotes',
+        `customer`='$customer',`title_notes`='$titleNotes', `wholesale_notes`='$wholesaleNotes',
         `key`='$keys',`date_sent`='$dateSent',
         `date_sold`='$dateSold' , `sold_price`='$soldPrice',`online_description`='$onlineDescription',
         `ro_online_notes`='$roNotes',`submitted_by`='$submittedBy' WHERE inv_id = '$vehicleId'";
@@ -110,14 +111,14 @@ if ($_POST) {
             `oci_ok`, `title_priority`, `sales_consultant`, 
             `customer`, `title_notes`, `key`, 
             `date_sent`, `date_sold`, `sold_price` ,`online_description`, 
-            `ro_online_notes`, `submitted_by`, `status`) VALUES (
+            `ro_online_notes`, `submitted_by`, `wholesale_notes`, `status`) VALUES (
                 '$vehicleId', '$retailStatus' , '$invDate',
                 '$certified' , '$title' , '$purchaseFrom',
                 '$uci' , '$uciRo', '$uciApproved' , '$uciClosed',
                 '$oci' , '$titlePriority' , '$salesConsultant',
                 '$customer' , '$titleNotes' , '$keys',
                 '$dateSent' , '$dateSold' , '$soldPrice' , '$onlineDescription',
-                '$roNotes' , '$submittedBy' , 1
+                '$roNotes' , '$submittedBy', '$wholesaleNotes' , 1
             )";
 
         if ($connect->query($sql) === true) {

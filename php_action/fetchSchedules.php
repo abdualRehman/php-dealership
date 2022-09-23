@@ -14,13 +14,13 @@ $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 if ($_SESSION['userRole'] != $deliveryCoordinatorID) {
     $sql = "SELECT a.id , b.fname, b.lname , b.sale_id , c.stockno , c.stocktype , c.year , c.make , c.model  , a.stock_id, 
         a.appointment_date, a.appointment_time, a.coordinator, a.delivery, a.additional_services, a.notes, a.submitted_by, a.manager_override, 
-        a.confirmed, a.complete, a.schedule_start, a.schedule_end, a.calender_id, a.status , b.sale_status , b.sales_consultant 
+        a.confirmed, a.complete, a.schedule_start, a.schedule_end, a.calender_id, a.status , b.sale_status , b.sales_consultant , a.already_have
         FROM `appointments` as a LEFT JOIN sales as b ON a.sale_id = b.sale_id LEFT JOIN inventory as c ON a.stock_id = c.id WHERE a.status = 1 AND a.location = '$location' AND b.status = 1";
 } else {
     $uid = $_SESSION['userId'];
     $sql = "SELECT a.id , b.fname, b.lname , b.sale_id , c.stockno , c.stocktype , c.year , c.make , c.model  , a.stock_id, 
         a.appointment_date, a.appointment_time, a.coordinator, a.delivery, a.additional_services, a.notes, a.submitted_by, a.manager_override, 
-        a.confirmed, a.complete, a.schedule_start, a.schedule_end, a.calender_id, a.status , b.sale_status , b.sales_consultant
+        a.confirmed, a.complete, a.schedule_start, a.schedule_end, a.calender_id, a.status , b.sale_status , b.sales_consultant , a.already_have
         FROM `appointments` as a LEFT JOIN sales as b ON a.sale_id = b.sale_id LEFT JOIN inventory as c ON a.stock_id = c.id WHERE a.status = 1 AND a.location = '$location' AND a.coordinator = '$uid' AND b.status = 1";
 }
 
@@ -46,6 +46,8 @@ if ($result->num_rows > 0) {
             $calender_id = $row['calender_id'];
 
             $additional_services = $row['additional_services'];
+            
+            $already_have = $row['already_have'];
 
 
             $confirmed = $row['confirmed'];
@@ -123,7 +125,9 @@ if ($result->num_rows > 0) {
                 $notes,
                 $button,
                 $allowEdit,
-                $additional_services
+                $additional_services,
+                $already_have,
+                $row['manager_override'],
 
             );
         } // /if

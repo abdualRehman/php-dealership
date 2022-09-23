@@ -41,6 +41,13 @@ if ($_POST) {
     $complete = (isset($_POST['ecomplete'])) ? mysqli_real_escape_string($connect, $_POST['ecomplete']) : "";
 
 
+    $customerName = (isset($_POST['ecustomerName'])) ? mysqli_real_escape_string($connect, $_POST['ecustomerName']) : "";
+    
+    
+    $has_appointment = (isset($_POST['ehas_appointment'])) ? mysqli_real_escape_string($connect, $_POST['ehas_appointment']) : "null";
+    $has_appointment = ($has_appointment != "null" && $has_appointment != '') ? "true" : "false";
+
+
 
     $scheduleTime = mysqli_real_escape_string($connect, $_POST['escheduleTime']);
 
@@ -74,10 +81,36 @@ if ($_POST) {
                 `appointment_time`='$scheduleTime',`coordinator`='$coordinator',`delivery`='$delivery',
                 `additional_services`='$additionalServices',`notes`='$scheduleNotes',`manager_override`='$overrideBy',
                 `confirmed`='$confirmed',`complete`='$complete',`schedule_start`='$scheduleStart',
-                `schedule_end`='$scheduleEnd',`calender_id`='$calenderId' 
+                `schedule_end`='$scheduleEnd',`calender_id`='$calenderId' , `already_have` = '$has_appointment'
                 WHERE id = '$scheduleId'";
 
             if ($connect->query($insentiveSql) === true) {
+
+    
+
+                $from = $submittedBy;
+                $to = $coordinator;
+                $delivery = preg_split('/(?=[A-Z])/', $delivery);
+                $delivery = implode(' ', $delivery);
+                $message = 'Appointment Updated: With "' . $customerName . '" On "' . ucwords($delivery) . '" at: "' . $scheduleStart . '"';
+                $appointment_id = $scheduleId;
+                sendNotifiation($from, $to, $message, $appointment_id);
+
+
+
+                $consultant = isset($_POST['esubmittedById']) ? mysqli_real_escape_string($connect, $_POST['esubmittedById']) : "";
+                $from = $coordinator;
+                $to = $consultant;
+
+                $confirmedStatus = $confirmed == 'ok' ? 'Confirmed' : 'Not Confirmed';
+                $completeStatus = $complete == 'ok' ? 'Completed' : 'Denied';
+                $statusMsg = $confirmed == 'ok' ? $completeStatus : $confirmedStatus;
+                $message = 'Appointment Updated: '.$statusMsg.' By '. $_SESSION['userName'];
+                $appointment_id = $scheduleId;
+                sendNotifiation($from, $to, $message, $appointment_id);
+
+
+
                 $valid['success'] = true;
                 $valid['messages'] = "Successfully Updated";
             } else {
@@ -91,13 +124,23 @@ if ($_POST) {
             $insentiveSql = "INSERT INTO `appointments` ( 
                 `sale_id`, `stock_id`, `appointment_date`, `appointment_time`, 
                 `coordinator`, `delivery`, `additional_services`, `notes`, `submitted_by`, `manager_override`, 
-                `confirmed`, `complete`, `schedule_start`, `schedule_end`, `calender_id`, `status` , `location`
+                `confirmed`, `complete`, `schedule_start`, `schedule_end`, `calender_id`, `status` , `location` , `already_have`
                 ) VALUES (
                     '$sale_id' , '$stockno' , '$scheduleDate' , '$scheduleTime',
                     '$coordinator' , '$delivery' , '$additionalServices' , '$scheduleNotes' , '$submittedBy' , '$overrideBy',
-                    '$confirmed' , '$complete' , '$scheduleStart' , '$scheduleEnd' , '$calenderId' , 1 , '$location'
+                    '$confirmed' , '$complete' , '$scheduleStart' , '$scheduleEnd' , '$calenderId' , 1 , '$location' , '$has_appointment'
                 )";
             if ($connect->query($insentiveSql) === true) {
+
+
+                $from = $submittedBy;
+                $to = $coordinator;
+                $delivery = preg_split('/(?=[A-Z])/', $delivery);
+                $delivery = implode(' ', $delivery);
+                $message = 'Appointment Created: With "' . $customerName . '" On "' . ucwords($delivery) . '" at: "' . $scheduleStart . '"';
+                $appointment_id = $connect->insert_id;
+                sendNotifiation($from, $to, $message, $appointment_id);
+
                 $valid['success'] = true;
                 $valid['messages'] = "Successfully Added";
             } else {

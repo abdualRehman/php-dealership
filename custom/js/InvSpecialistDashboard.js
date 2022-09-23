@@ -73,14 +73,12 @@ $(function () {
                     .data()
                     .filter(function (data, index) {
                         var retail_status = data[10];
-                        if (data[8] != 'Done') {
-                            allCount += 1;
-                        }
-                        if (retail_status != 'wholesale' && retail_status != null && data[8] == 'Done' && data[9] != 'closed') {
+                        allCount += 1;
+                        if (retail_status != 'wholesale' && retail_status != null && data[8] != 'Done' && data[9] != 'closed') {
                             notDone += 1;
                         }
 
-                        if (retail_status != 'wholesale' && retail_status != null && data[8] == 'Done' && data[9] == 'closed') {
+                        if (retail_status != 'wholesale' && retail_status != null && data[8] != 'Done' && data[9] == 'closed') {
                             roclosed += 1;
                         }
                         if (retail_status != 'wholesale' && retail_status != null && data[8] == 'Done' && data[9] != 'closed') {
@@ -157,21 +155,17 @@ $(function () {
             }
 
             if (searchStatus[0] === 'all') {
-                if (notes_2 != 'Done') {
-                    return true;
-                } else {
-                    return false;
-                }
+                return true;
             }
             if (searchStatus[0] === 'notDone') {
-                if (retail_status != 'wholesale' && retail_status != null && notes_2 == 'Done' && uci != 'closed') {
+                if (retail_status != 'wholesale' && retail_status != null && notes_2 != 'Done' && uci != 'closed') {
                     return true;
                 } else {
                     return false;
                 }
             }
             if (searchStatus[0] === 'roclosed') {
-                if (retail_status != 'wholesale' && retail_status != null && notes_2 == 'Done' && uci == 'closed') {
+                if (retail_status != 'wholesale' && retail_status != null && notes_2 != 'Done' && uci == 'closed') {
                     return true;
                 }
             }

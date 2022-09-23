@@ -72,7 +72,17 @@ if ($_POST) {
     } // /else not empty email // password
 } // /if $_POST
 
+if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
+    $url = "https://";
+else
+    $url = "http://";
+$url .= $_SERVER['HTTP_HOST'];
 
+if ($url == 'http://localhost') {
+    $url .= "/carshop";
+}
+// echo $url;
+$_SESSION['siteurl'] = $url;
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -85,7 +95,14 @@ if ($_POST) {
     <link href="assets/build/styles/ltr-vendor.css" rel="stylesheet">
     <title>Login</title>
     <script>
-        var siteURL = 'http://localhost/carshop';
+        let domain = (new URL(window.location));
+        domain = domain.origin;
+        if(domain == 'http://localhost'){
+            domain += '/carshop';
+        }
+        console.log(domain);
+        var siteURL = domain;
+        // var siteURL = 'http://localhost/carshop';
         // var siteURL = 'http://onedealersystem.com';
         // var siteURL = 'https://www.laughingalbattani5c25df.binfarooqtextile.com';
         localStorage.setItem('siteURL', siteURL);

@@ -112,7 +112,8 @@ $(function () {
             },
         ],
         columnDefs: [
-            { width: 400, targets: [10] },
+            { width: 400, targets: [11] },
+            { visible: false, targets: [10] },
             {
                 targets: [0],
                 data: 0,
@@ -181,10 +182,23 @@ $(function () {
             },
             {
                 targets: [10],
-                data: 15,
+                data: 19,
+                // createdCell: function (td, cellData, rowData, row, col) {
+                //     if ($('#isEditAllowed').val() == 'true') {
+                //         $(td).html(`<div class="show d-flex" >
+                //             <input type="text" class="form-control sold_price" name="input_field" value="${rowData[26] ? rowData[26] : 0}" id="${rowData[0]}sold_price" data-attribute="sold_price" data-id="${rowData[0]}" autocomplete="off"  />
+                //         </div>`);
+                //     } else {
+                //         $(td).html(rowData[26]);
+                //     }
+                // }
             },
             {
                 targets: [11],
+                data: 15,
+            },
+            {
+                targets: [12],
                 data: 16,
             },
             {
@@ -244,13 +258,13 @@ $(function () {
                     var bool1 = moment(date).isBetween
                         (startDayOfPrevMonth, lastDayOfPrevMonth, null, '[]');
                     if (bool1) {
-                        if (confirm == 'ok' && complete == 'ok' && additional_services != '' ) {
+                        if (confirm == 'ok' && complete == 'ok' && additional_services != '') {
                             lmconfirmed += 1;
                         }
                     }
                     var bool1 = moment(date).isBetween(startOfMonth, endOfMonth, null, '[]');
                     if (bool1) {
-                        if (confirm == 'ok' && complete == 'ok' && additional_services != '' ) {
+                        if (confirm == 'ok' && complete == 'ok' && additional_services != '') {
                             tmconfirmed += 1;
                         }
                     }
@@ -263,7 +277,22 @@ $(function () {
     })
 
     writeStatusHTML();
-    $('#thisMonth').click();
+
+    let filterById = null;
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const filter = urlParams.get('filter');
+    const id = urlParams.get('id');
+    if (filter != null) {
+        filterById = filter;
+        console.log(id);
+        handle_notification(id);
+    } else {
+        $('#thisMonth').click();
+    }
+
+
+
     loadSoldLogs();
     loadDeliveryCoordinator();
     disabledManagerDiv();
@@ -273,42 +302,58 @@ $(function () {
         function (settings, searchData, index, rowData, counter) {
             var tableNode = manageAppointmentsTable.table().node();
 
-            var dateType = $('input:radio[name="searchStatus"]:checked').map(function () {
-                if (this.value !== "") {
-                    return this.value;
-                }
-            }).get();
+            if (filterById == null) {
 
-            if (dateType.length === 0) {
-                return true;
-            }
+                var dateType = $('input:radio[name="searchStatus"]:checked').map(function () {
+                    if (this.value !== "") {
+                        return this.value;
+                    }
+                }).get();
 
-            if (dateType == 'all') {
-                return true;
-            }
-            else if (dateType == 'lastMonth') {
-
-                const todayDate = moment(new Date()).format("MM-DD-YYYY");
-                var date = searchData[4];
-                const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('MM-DD-YYYY')
-
-                const lastDayOfPrevMonth = moment(todayDate).subtract(1, 'month').endOf('month').format('MM-DD-YYYY')
-
-
-                var bool1 = moment(date).isBetween
-                    (startDayOfPrevMonth, lastDayOfPrevMonth, null, '[]');
-                if (bool1) {
+                if (dateType.length === 0) {
                     return true;
                 }
 
-            } else if (dateType == 'thisMonth') {
-                const startOfMonth = moment().startOf('month').format('MM-DD-YYYY');
-                const endOfMonth = moment().endOf('month').format('MM-DD-YYYY');
+                if (dateType == 'all') {
+                    return true;
+                }
+                else if (dateType == 'lastMonth') {
 
-                var date = searchData[4];
-                var bool1 = moment(date).isBetween
-                    (startOfMonth, endOfMonth, null, '[]');
-                if (bool1) {
+                    const todayDate = moment(new Date()).format("MM-DD-YYYY");
+                    var date = searchData[4];
+                    const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('MM-DD-YYYY')
+
+                    const lastDayOfPrevMonth = moment(todayDate).subtract(1, 'month').endOf('month').format('MM-DD-YYYY')
+
+
+                    var bool1 = moment(date).isBetween
+                        (startDayOfPrevMonth, lastDayOfPrevMonth, null, '[]');
+                    if (bool1) {
+                        return true;
+                    }
+
+                } else if (dateType == 'thisMonth') {
+                    const startOfMonth = moment().startOf('month').format('MM-DD-YYYY');
+                    const endOfMonth = moment().endOf('month').format('MM-DD-YYYY');
+
+                    var date = searchData[4];
+                    var bool1 = moment(date).isBetween
+                        (startOfMonth, endOfMonth, null, '[]');
+                    if (bool1) {
+                        return true;
+                    }
+                } else if (dateType == 'approvals') {
+                    var appointed = rowData[19];
+                    var manager_override_id = rowData[20];
+                    if (appointed == 'true' && !manager_override_id) {
+                        return true;
+                    }
+                }
+
+
+            } else {
+                let rowId = searchData[0];
+                if (rowId == filter) {
                     return true;
                 }
             }
@@ -324,6 +369,7 @@ $(function () {
 
 
     $('input[name="searchStatus"]:radio').on('change', function () {
+        filterById = null;
         $('#datatable-1').block({
             message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
             timeout: 1e3
@@ -331,6 +377,27 @@ $(function () {
         manageAppointmentsTable.draw();  // working
         manageAppointmentsTable.searchPanes.rebuildPane();
     });
+
+
+    $('.clear-selection-btn-group').on('click', function () {
+        var targetElement = $(this).attr('data-targetElement');
+        let elementId = $(this).attr("id");
+        var prev = $(this).children('label.active').find(':radio:checked').val();
+        setTimeout(() => {
+            let current = $('#' + elementId + ' .active :radio:checked').val();
+            if (prev == current) {
+                $('#' + elementId + ' :radio').prop('checked', false);
+                $('#' + elementId + ' .active').removeClass('active');
+            }
+            if (current != 'ok'){
+                $('#'+targetElement).addClass('disabled-div');
+                $('#' + targetElement + ' :radio').prop('checked', false);
+                $('#' + targetElement + ' .active').removeClass('active');
+            }else{
+                $('#'+targetElement).removeClass('disabled-div');
+            }
+        }, 100);
+    })
 
 
 
@@ -352,17 +419,16 @@ $(function () {
             coordinator: {
                 required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
             },
-            overrideBy: {
-                required: function (params) {
-                    var has_appointment = $('#has_appointment').val();
-                    if (has_appointment && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
-                        return true;
-                    } else {
-                        $(params).removeClass('is-invalid');
-                        return false;
-                    }
-                },
-            },
+            // overrideBy: {
+            //     required: function (params) {
+            //         if ($('#loggedInUserRole').val() != deliveryCoordinatorID) {
+            //             return true;
+            //         } else {
+            //             $(params).removeClass('is-invalid');
+            //             return false;
+            //         }
+            //     },
+            // },
             'delivery': {
                 required: function (params) {
                     var opt = $('input:radio[name="additionalServices"]:checked').val();
@@ -459,17 +525,16 @@ $(function () {
             ecoordinator: {
                 required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
             },
-            eoverrideBy: {
-                required: function (params) {
-                    var has_appointment = $('#ehas_appointment').val();
-                    if (has_appointment && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
-                        return true;
-                    } else {
-                        $(params).removeClass('is-invalid');
-                        return false;
-                    }
-                },
-            },
+            // eoverrideBy: {
+            //     required: function (params) {
+            //         if ($('#loggedInUserRole').val() != deliveryCoordinatorID) {
+            //             return true;
+            //         } else {
+            //             $(params).removeClass('is-invalid');
+            //             return false;
+            //         }
+            //     },
+            // },
             'edelivery': {
                 required: function (params) {
                     var opt = $('input:radio[name="eadditionalServices"]:checked').val();
@@ -570,6 +635,9 @@ function writeStatusHTML() {
                     <label class="btn btn-flat-primary">
                         <input type="radio" name="searchStatus" value="lastMonth"> Last Month <span class="badge badge-lg p-1" id="lastMonthCount" ></span>
                     </label>
+                    <label class="btn btn-flat-primary">
+                        <input type="radio" name="searchStatus" value="approvals"> Manager Approvals <span class="badge badge-lg p-1" id="approvalsCount" ></span>
+                    </label>
                 </div>
             </div>
         </div>
@@ -648,8 +716,8 @@ function disabledManagerDiv() {
         $(".manager_override_div").find("*").prop("readonly", false);
     }
 
-    $('#esubmittedBy , #submittedBy , #eoverrideByName , #overrideByName').addClass('disabled-div');
-    $("#esubmittedBy , #submittedBy , #eoverrideByName , #overrideByName").find("*").prop("readonly", true);
+    $('#esubmittedBy , #submittedBy , #eoverrideByName , #overrideByName , #customerName , #ecustomerName').addClass('disabled-div');
+    $("#esubmittedBy , #submittedBy , #eoverrideByName , #overrideByName , #customerName , #ecustomerName").find("*").prop("readonly", true);
 }
 function loadSoldLogs() {
     var selectBoxes = document.getElementsByClassName('stockno');
@@ -751,7 +819,7 @@ function editShedule(id = null) {
             data: { id: id },
             dataType: 'json',
             success: function (response) {
-                // console.log(response);
+                console.log(response);
                 $('.spinner-grow').addClass('d-none');
                 // modal result
                 $('.showResult').removeClass('d-none');
@@ -765,10 +833,11 @@ function editShedule(id = null) {
 
                 $('#esale_id').val(response.sale_id);
                 echangeStockDetails({ value: response.sale_id }, false);
-                $('#ehas_appointment').val("");
+                $('#ehas_appointment').val(response.already_have);
 
                 $('#esubmittedBy').val(response.submitted_by);
                 $('#esubmittedByRole').val(response.submitted_by_role);
+                $('#esubmittedById').val(response.submitted_by_id);
 
                 $('#eoverrideBy').prop('checked', response.manager_override != "" ? true : false);
                 $('#eoverrideByName').val(response.manager_overrideName);
@@ -805,6 +874,11 @@ function editShedule(id = null) {
                 $('#ecomplete .active').removeClass('active');
                 (response.complete) ? $('#com' + response.complete).prop('checked', true).click() : null;
 
+                if(response.confirmed != "ok"){
+                    $('#ecomplete').addClass('disabled-div');
+                }else{
+                    $('#ecomplete').removeClass('disabled-div');
+                }
 
 
 

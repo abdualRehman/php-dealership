@@ -4,7 +4,8 @@ session_start();
 
 require_once 'db_connect.php';
 
-$siteurl = "http://localhost/carshop";
+$siteurl = $_SESSION['siteurl'];
+// $siteurl = "http://localhost/carshop";
 // $siteurl = "http://onedealersystem.com";
 // $siteurl ="https://www.laughingalbattani5c25df.binfarooqtextile.com";
 
@@ -134,6 +135,15 @@ function hasAccess($module, $function)
 	// 	$row = $result->fetch_array();
 	// 	return $row[0];
 	// }
+}
+
+function sendNotifiation($from , $to , $message , $appointment_id)
+{
+	global $connect;
+	$insentiveSql = "INSERT INTO `notifications`(`from_user`, `to_user`, `message`, `link`, `is_read`, `is_delivered`, `status`) 
+	VALUES ('$from' , '$to' , '$message' , $appointment_id , 0, 0, 1 )";
+	$connect->query($insentiveSql);
+
 }
 
 // echo hasAccess("swap", "Add");
