@@ -119,7 +119,7 @@
     <div class="holder">
         <div class="aside">
             <div class="aside-header">
-                <h3 class="aside-title">Logo</h3>
+                <h3 class="aside-title">One Dealers</h3>
                 <div class="aside-addon"><button class="btn btn-label-primary btn-icon btn-lg" data-toggle="aside">
                         <i class="fa fa-times aside-icon-minimize"></i>
                         <!-- <i class="fa fa-thumbtack aside-icon-maximize"></i> -->
@@ -744,8 +744,17 @@
                             </div>
                             <div class="input-group-icon input-group-lg widget15-compact" id="statusBar">
                                 <h3 class="portlet-title">
-                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary" id="todaySoldStatus">
-                                    </a>
+                                    <?php
+
+                                    if (hasAccess("sale", "View") !== 'false') {
+                                    ?>
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary" id="todaySoldStatus">
+                                        </a>
+                                    <?php
+                                    } else {
+                                        echo '<span id="todaySoldStatus" ></span>';
+                                    }
+                                    ?>
                                 </h3>
                             </div>
                         </div>
@@ -887,6 +896,7 @@
                                         <div class="portlet-header bg-primary rounded-0">
                                             <div class="portlet-icon text-white "><i class="far fa-bell"></i></div>
                                             <h3 class="portlet-title text-white">Notifications</h3>
+                                            <button class="btn btn-icon btn-sm btn-danger" onclick="remove_notification()"><i class="fa fa-trash"></i></button>
                                         </div>
                                         <div class="portlet-body p-0 rounded-0 notification-list" data-toggle="simplebar">
                                             <div class="rich-list rich-list-action">
@@ -998,7 +1008,7 @@
                     <div class="header-container container-fluid">
                         <div class="header-wrap"><button class="btn btn-flat-primary btn-icon" data-toggle="aside"><i class="fa fa-bars"></i></button></div>
                         <div class="header-wrap header-wrap-block justify-content-start px-3">
-                            <h4 class="header-brand">Logo</h4>
+                            <h4 class="header-brand">One Dealers</h4>
                         </div>
                         <div class="header-wrap">
                             <!-- <button class="btn btn-flat-primary btn-icon" data-toggle="sidemenu" data-target="#sidemenu-todo"><i class="far fa-calendar-alt"></i></button> -->
@@ -1106,7 +1116,34 @@
                                 <div class="dropdown">
                                     <a href="#" class="btn btn-flat-primary responsive-content breadcrumb-text" id="more" data-toggle="dropdown">More</a>
                                     <div class="dropdown-menu dropdown-menu-left dropdown-menu-wide dropdown-menu-animated overflow-hidden">
-                                        <div class="dropdown-row">
+                                        <div class="dropdown-row flex-column">
+
+                                            <div class="dropdown-col">
+                                                <h4 class="dropdown-header dropdown-header-lg">Appointments</h4>
+                                                <div class="grid-nav grid-nav-action">
+                                                    <div class="grid-nav-row">
+                                                        <?php
+                                                        if (hasAccess("appointment", "View") !== 'false') {
+                                                        ?>
+                                                            <a href="<?php echo  $GLOBALS['siteurl']; ?>/more/appointments.php" class="grid-nav-item">
+                                                                <div class="grid-nav-icon">
+                                                                    <i class="far fa-calendar-alt"></i>
+                                                                </div>
+                                                                <span class="grid-nav-content">Appointment Calendar</span>
+                                                            </a>
+                                                            <a href="<?php echo  $GLOBALS['siteurl']; ?>/more/deliveryCoordinators.php" class="grid-nav-item">
+                                                                <div class="grid-nav-icon">
+                                                                    <i class="far fa-clipboard"></i>
+                                                                </div>
+                                                                <span class="grid-nav-content">Delivery Coordinator</span>
+                                                            </a>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div class="dropdown-col border-left">
                                                 <h4 class="dropdown-header dropdown-header-lg">Tools</h4>
 
@@ -1193,6 +1230,27 @@
                                     <?php
                                     }
                                     ?>
+                                    <div class="dropdown ml-2" id="notificationDropdown">
+                                        <button class="btn btn-label-primary btn-icon mr-1" data-toggle="dropdown">
+                                            <i class="far fa-bell"></i>
+                                            <div class="btn-marker d-none">
+                                                <span class="badge badge-secondary btn-counter">0</span>
+                                            </div>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right notification-menu dropdown-menu-wide overflow-hidden py-0">
+                                            <div class="portlet border-0 portlet-scroll">
+                                                <div class="portlet-header bg-primary rounded-0">
+                                                    <div class="portlet-icon text-white "><i class="far fa-bell"></i></div>
+                                                    <h3 class="portlet-title text-white">Notifications</h3>
+                                                    <button class="btn btn-icon btn-sm btn-danger" onclick="remove_notification()"><i class="fa fa-trash"></i></button>
+                                                </div>
+                                                <div class="portlet-body p-0 rounded-0 notification-list" data-toggle="simplebar">
+                                                    <div class="rich-list rich-list-action">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -106,6 +106,7 @@
                                     <th>Approvals</th>
                                     <th>Notes</th>
                                     <th>Action</th>
+                                    <th>Additional Services</th>
                                 </tr>
                             </thead>
                         </table>

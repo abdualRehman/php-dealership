@@ -238,7 +238,7 @@ if (hasAccess("sptr", "Edit") === 'false') {
                                         </select>
                                     </td>
                                     <td class="form-group">
-                                        <select class="form-control select21" id="editExModelno" name="editExModelno[]" multiple="multiple" title="Exclude Model No.">
+                                        <select class="form-control tags select21" id="editExModelno" name="editExModelno[]" multiple="multiple" title="Exclude Model No.">
                                             <optgroup label="Press Enter to add">
                                         </select>
                                     </td>
@@ -470,7 +470,7 @@ if (hasAccess("sptr", "Edit") === 'false') {
                                     </select>
                                 </td>
                                 <td class="form-group">
-                                    <select class="form-control select21" id="exModelno1" name="exModelno1[]" multiple="multiple" title="Exclude Model No.">
+                                    <select class="form-control tags select21" id="exModelno1" name="exModelno1[]" multiple="multiple" title="Exclude Model No.">
                                         <optgroup label="Press Enter to add">
                                     </select>
                                 </td>

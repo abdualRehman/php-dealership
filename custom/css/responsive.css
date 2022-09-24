@@ -37,9 +37,15 @@
     .nav-link {
         font-size: smaller !important;
     }
+
     .widget10-item {
         padding: 0.7rem !important;
         overflow-wrap: anywhere;
+    }
+
+    .notification-menu,
+    .notification-menu .dropdown-col {
+        min-width: 30rem !important;
     }
 }
 
@@ -58,6 +64,11 @@
 
     .nav-link {
         font-size: smaller !important;
+    }
+
+    .notification-menu,
+    .notification-menu .dropdown-col {
+        min-width: 25rem !important;
     }
 }
 

@@ -521,6 +521,32 @@
             }
         });
     }
+
+    function remove_notification() {
+        event.stopPropagation();
+        event.preventDefault();
+        let siteLink = localStorage.getItem('siteURL')
+        $.ajax({
+            url: siteLink + '/php_action/removeNotification.php',
+            type: "POST",
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                e1.fire({
+                    position: "center",
+                    icon: "success",
+                    title: response.messages,
+                    showConfirmButton: !1,
+                    timer: 1500
+                });
+                var elements = document.getElementsByClassName('notification-list');
+                elements.forEach(element => {
+                    element.innerHTML = '';
+                });
+
+            }
+        });
+    }
 </script>
 
 

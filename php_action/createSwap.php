@@ -9,9 +9,9 @@ if ($_POST) {
 
     $submitted_by = $_SESSION['userId'];
 
-    $sales_consultant = mysqli_real_escape_string($connect, $_POST['salesPerson']);
+    $sales_consultant = isset($_POST['salesPerson']) ? mysqli_real_escape_string($connect, $_POST['salesPerson']) : '0';
 
-    $fromDealer = mysqli_real_escape_string($connect, $_POST['fromDealer']);
+    $fromDealer =  isset($_POST['fromDealer']) ? mysqli_real_escape_string($connect, $_POST['fromDealer']) : '';
     $status = mysqli_real_escape_string($connect, $_POST['status']);
 
     $stockIn = mysqli_real_escape_string($connect, $_POST['stockIn']);  //stockIn

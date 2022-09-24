@@ -134,7 +134,7 @@ $(function () {
 
     function requireSelectBox(params) {
         var id = params.id;
-        if (params.value == 0) {
+        if (params.value == 0 || params.value == null) {
             params.classList.add('is-invalid');
             params.classList.remove('is-valid');
             $('#' + id).selectpicker('refresh');
@@ -170,9 +170,9 @@ $(function () {
             // "vehicleOut": {
             //     required: !0
             // },
-            "salesPerson": {
-                required: requireSelectBox,
-            },
+            // "salesPerson": {
+            //     required: requireSelectBox,
+            // },
             "invIn": {
                 number: !0,
             },
@@ -279,9 +279,9 @@ $(function () {
             // "evehicleOut": {
             //     required: !0
             // },
-            "esalesPerson": {
-                required: requireSelectBox,
-            },
+            // "esalesPerson": {
+            //     required: requireSelectBox,
+            // },
             "einvIn": {
                 number: !0,
             },

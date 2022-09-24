@@ -156,7 +156,7 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                     <div class="col-md-4">
                         <div class="portlet text-center">
                             <div class="portlet-header portlet-header-bordered">
-                                <h3 class="portlet-title"> 
+                                <h3 class="portlet-title">
                                     <?php
                                     echo (hasAccess("sale", "View") !== 'false') ? '<a href="' . $GLOBALS['siteurl'] . '/sales/soldLogs.php?r=man&filter=pending" class="link-primary">Pending</a>' : 'Pending';
                                     ?>
@@ -267,7 +267,7 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                             <div class="portlet-header portlet-header-bordered">
                                 <h3 class="portlet-title">
                                     <?php
-                                    echo (hasAccess("sale", "View") !== 'false') ? '<a href="' . $GLOBALS['siteurl'] . '/soldLogs.php?r=man&filter=today" class="link-primary">Today Total</a>' : 'Today Total';
+                                    echo (hasAccess("sale", "View") !== 'false') ? '<a href="' . $GLOBALS['siteurl'] . '/sales/soldLogs.php?r=man&filter=today" class="link-primary">Today Total</a>' : 'Today Total';
                                     ?>
                                 </h3>
                             </div>
@@ -300,7 +300,7 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                     <div class="col-md-3">
                         <div class="portlet text-center">
                             <div class="portlet-header portlet-header-bordered">
-                                <h3 class="portlet-title"> 
+                                <h3 class="portlet-title">
                                     <?php
                                     echo (hasAccess("sale", "View") !== 'false') ? '<a href="' . $GLOBALS['siteurl'] . '/sales/soldLogs.php?r=man&filter=pending" class="link-primary">Pending</a>' : 'Pending';
                                     ?>
@@ -374,36 +374,42 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
 
             ?>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="portlet">
-                        <div class="portlet-header portlet-header-bordered">
-                            <h3 class="portlet-title">Monthly Chart</h3>
-                            <!-- <div class="d-flex flex-row " > -->
-                            <div class="show d-flex mr-2">
-                                <input type="text" class="form-control" name="date_range" data-attribute="date_range" data-id="1" autocomplete="off" />
+            <?php
+            if ($_SESSION['userRole'] != $_SESSION['officeID'] && $_SESSION['userRole'] != $_SESSION['financeManagerID']) {
+            ?>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="portlet">
+                            <div class="portlet-header portlet-header-bordered">
+                                <h3 class="portlet-title">Monthly Chart</h3>
+                                <!-- <div class="d-flex flex-row " > -->
+                                <div class="show d-flex mr-2">
+                                    <input type="text" class="form-control" name="date_range" data-attribute="date_range" data-id="1" autocomplete="off" />
+                                </div>
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons" id="searchStatus">
+                                    <label class="btn btn-flat-primary">
+                                        <input type="radio" name="searchStatus" value="lastMonth"> Last Month <span class="badge badge-lg p-1" id="lastMonthCount"></span>
+                                    </label>
+                                    <label class="btn btn-flat-primary">
+                                        <input type="radio" name="searchStatus" value="thisMonth" id="thisMonth"> This Month <span class="badge badge-lg p-1" id="thisMonthCount"></span>
+                                    </label>
+                                </div>
+                                <!-- </div> -->
                             </div>
-                            <div class="btn-group btn-group-toggle" data-toggle="buttons" id="searchStatus">
-                                <label class="btn btn-flat-primary">
-                                    <input type="radio" name="searchStatus" value="lastMonth"> Last Month <span class="badge badge-lg p-1" id="lastMonthCount"></span>
-                                </label>
-                                <label class="btn btn-flat-primary">
-                                    <input type="radio" name="searchStatus" value="thisMonth" id="thisMonth"> This Month <span class="badge badge-lg p-1" id="thisMonthCount"></span>
-                                </label>
+                            <div class="portlet-body">
+                                <div id="chart"></div>
                             </div>
-                            <!-- </div> -->
-                        </div>
-                        <div class="portlet-body">
-                            <div id="chart"></div>
                         </div>
                     </div>
                 </div>
-            </div>
+            <?php
+            } else {
+                echo '<div class="d-none" id="chart"></div>';
+            }
+            ?>
 
         </div>
     </div>
-
-
 
 
 

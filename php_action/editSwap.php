@@ -10,8 +10,8 @@ if ($_POST) {
     $id = $_POST['swapId'];
 
 
-    $sales_consultant = mysqli_real_escape_string($connect, $_POST['esalesPerson']);
-    $fromDealer = mysqli_real_escape_string($connect, $_POST['efromDealer']);
+    $sales_consultant = isset($_POST['esalesPerson']) ? mysqli_real_escape_string($connect, $_POST['esalesPerson']) : '0';
+    $fromDealer =  isset($_POST['efromDealer']) ?  mysqli_real_escape_string($connect, $_POST['efromDealer']) : '';
     $status = mysqli_real_escape_string($connect, $_POST['estatus']);
 
     $stockIn = mysqli_real_escape_string($connect, $_POST['estockIn']);  //stockIn

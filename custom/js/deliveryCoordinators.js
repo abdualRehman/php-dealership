@@ -85,7 +85,7 @@ $(function () {
         searchPanes: {
             cascadePanes: !0,
             viewTotal: !0,
-            columns: [6, 9, 7],
+            columns: [6, 9, 7, 13],
         },
         "pageLength": 25,
         buttons: [
@@ -113,7 +113,19 @@ $(function () {
         ],
         columnDefs: [
             { width: 400, targets: [11] },
-            { visible: false, targets: [10] },
+            { visible: false, targets: [10, 13] },
+            {
+                targets: [13],
+                data: 18,
+                render: function (data, type, row) {
+                    if (data == '') {
+                        data = "";
+                    } else {
+                        data = "Additional Services";
+                    }
+                    return data;
+                }
+            },
             {
                 targets: [0],
                 data: 0,
@@ -205,7 +217,7 @@ $(function () {
                 searchPanes: {
                     show: true
                 },
-                targets: [6, 9, 7],
+                targets: [6, 9, 7, 13],
             },
             {
                 targets: [0],
@@ -389,12 +401,12 @@ $(function () {
                 $('#' + elementId + ' :radio').prop('checked', false);
                 $('#' + elementId + ' .active').removeClass('active');
             }
-            if (current != 'ok'){
-                $('#'+targetElement).addClass('disabled-div');
+            if (current != 'ok') {
+                $('#' + targetElement).addClass('disabled-div');
                 $('#' + targetElement + ' :radio').prop('checked', false);
                 $('#' + targetElement + ' .active').removeClass('active');
-            }else{
-                $('#'+targetElement).removeClass('disabled-div');
+            } else {
+                $('#' + targetElement).removeClass('disabled-div');
             }
         }, 100);
     })
@@ -874,9 +886,9 @@ function editShedule(id = null) {
                 $('#ecomplete .active').removeClass('active');
                 (response.complete) ? $('#com' + response.complete).prop('checked', true).click() : null;
 
-                if(response.confirmed != "ok"){
+                if (response.confirmed != "ok") {
                     $('#ecomplete').addClass('disabled-div');
-                }else{
+                } else {
                     $('#ecomplete').removeClass('disabled-div');
                 }
 

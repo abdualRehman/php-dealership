@@ -358,7 +358,9 @@ $(function () {
                             title: response.messages,
                             showConfirmButton: !1,
                             timer: 1500
-                        })
+                        });
+                        form[0].reset();
+                        $('#addNew').modal('hide');
                         manageLeadTable.ajax.reload(null, false);
                     } else {
                         e1.fire({
@@ -433,6 +435,7 @@ $(function () {
                             timer: 1500
                         })
                         // form[0].reset();
+                        $('#modal8').modal('hide');
                         manageLeadTable.ajax.reload(null, false);
 
                     } else {

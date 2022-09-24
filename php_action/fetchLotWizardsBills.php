@@ -6,7 +6,7 @@ $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
 $sql = "SELECT inspections.id , inventory.stockno , inventory.vin , inventory.stocktype ,  inventory.year , inventory.make , inventory.model , inventory.age , 
 inspections.repairs , inspections.shops , inspections.repair_sent , inspections.repair_returned , inspections.repair_paid_date , inspections.repair_paid
-FROM `inspections` LEFT JOIN inventory ON (inspections.inv_id = inventory.id AND inventory.location = '$location') WHERE inspections.status = 1 AND inspections.repair_returned != ''";
+FROM `inspections` LEFT JOIN inventory ON (inspections.inv_id = inventory.id AND inventory.location = '$location') WHERE inspections.status = 1 AND inventory.location = '$location' AND inspections.repair_returned != ''";
 $result = $connect->query($sql);
 
 $output = array('data' => array());
