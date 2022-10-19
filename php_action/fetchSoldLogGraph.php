@@ -149,7 +149,8 @@ if ($result->num_rows > 0) {
 
 
 
-        $gross = floatval(preg_replace("/[^0-9.]/", '', $row['gross']));
+        // $gross = floatval(preg_replace("/[^0-9.]/", '', $row['gross']));
+        $gross = floatval(preg_replace("/[^\d\-.]+/", '', $row['gross']));
 
         if ($timezone == $TodayDate) {
             if ($row['stocktype'] == 'NEW') {

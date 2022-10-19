@@ -90,7 +90,6 @@ $_SESSION['siteurl'] = $url;
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&amp;family=Roboto+Mono&amp;display=swap" rel="stylesheet">
     <link href="assets/build/styles/ltr-core.css" rel="stylesheet">
     <link href="assets/build/styles/ltr-vendor.css" rel="stylesheet">
     <title>Login</title>
@@ -173,6 +172,6 @@ $_SESSION['siteurl'] = $url;
     <script type="text/javascript" src="assets/app/pages/login.js"></script>
     <script type="text/javascript" src="assets/build/scripts/vendor.js"></script>
 </body>
-<!-- Mirrored from dashboard1.panely-html.blueupcode.com/ltr/pages/login/login-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 12 Feb 2022 08:09:04 GMT -->
+
 
 </html>

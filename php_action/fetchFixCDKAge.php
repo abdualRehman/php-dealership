@@ -54,7 +54,8 @@ if ($result->num_rows > 0) {
             // date_default_timezone_set('Asia/Karachi');
             $date = strtotime(date('Y-m-d'));
             $date_in = reformatDate($row['date_in']);
-            $date_in = date('Y-m-d', strtotime('-1 day', strtotime($date_in)));
+            // $date_in = date('Y-m-d', strtotime('-1 day', strtotime($date_in)));
+            $date_in = date('Y-m-d', strtotime('-0 day', strtotime($date_in)));
             $date_in = strtotime($date_in);
             $cdkAge = ceil(abs($date_in - $date) / 86400);
         }

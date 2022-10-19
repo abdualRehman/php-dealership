@@ -120,7 +120,7 @@ $(function () {
             },
             {
                 targets: [8],
-                render:function (data, type, row) {
+                render: function (data, type, row) {
                     return data;
                 },
                 createdCell: function (td, cellData, rowData, row, col) {
@@ -225,7 +225,7 @@ $(function () {
                         }
 
 
-                        if (Status == 'Show') {
+                        if (Status == 'Show' || Status == '') {
                             assignKey(counterObj, 'unSoldLead');
                             assignKey(counterObj, 'totalLead');
                             if (Verified == 'Show Verified') {
@@ -269,12 +269,13 @@ $(function () {
                 });
             }
         },
-        "order": [[8, "desc"]]
+        "order": [[7, "asc"] , [8 , "desc"]]
     })
 
     writeStatusHTML();
     $('#thisMonth').click();
     loadSaleConsultant();
+    loadClientCareSpecialist();
     disabledManagerDiv();
     applyDateRageFilter();
 
@@ -360,6 +361,12 @@ $(function () {
                             timer: 1500
                         });
                         form[0].reset();
+                        $('.statusRadioButtons :radio').prop('checked', false);
+                        $('.statusRadioButtons .active').removeClass('active');
+                        $('.selectpicker').each(function () {
+                            $(this).find('option:first').prop('selected', 'selected');
+                            $(".selectpicker").selectpicker("refresh");
+                        });
                         $('#addNew').modal('hide');
                         manageLeadTable.ajax.reload(null, false);
                     } else {
@@ -462,10 +469,31 @@ $(function () {
 })
 
 
-$('.clear-selection').click(function () {
-    var id = $(this).data('id');
-    $(`#${id} :radio`).prop('checked', false);
-    $(`#${id} .active`).removeClass('active');
+// $('.clear-selection').click(function () {
+//     var id = $(this).data('id');
+//     $(`#${id} :radio`).prop('checked', false);
+//     $(`#${id} .active`).removeClass('active');
+// });
+
+$('#leadStatus label').on('click', function () {
+    let prev = $('#leadStatus .active :radio:checked').val();
+    let current = $(this).children(':radio[name=leadStatus]').val();
+    if (prev == current) {
+        setTimeout(() => {
+            $('#leadStatus :radio').prop('checked', false);
+            $('#leadStatus .active').removeClass('active');
+        }, 100);
+    }
+})
+$('#eleadStatus label').on('click', function () {
+    let prev = $('#eleadStatus .active :radio:checked').val();
+    let current = $(this).children(':radio[name=eleadStatus]').val();
+    if (prev == current) {
+        setTimeout(() => {
+            $('#eleadStatus :radio').prop('checked', false);
+            $('#eleadStatus .active').removeClass('active');
+        }, 100);
+    }
 })
 
 
@@ -597,6 +625,7 @@ function editLead(leadId = null) {
 
                 $('#eentityId').val(response.entity);
                 $('#esubmittedBy').val(response.ccs);
+                $('#esubmittedById').val(response.submitted_by);
                 $('#efname').val(response.fname);
                 $('#elname').val(response.lname);
                 $('#esalesConsultant').val(response.sales_consultant);
@@ -694,6 +723,30 @@ function loadSaleConsultant() {
         }
     });
 }
+
+function loadClientCareSpecialist() {
+
+    var ccs_id = Number(localStorage.getItem('ccsID'));
+    $.ajax({
+        url: '../php_action/fetchUsersWithRoleForSearch.php',
+        type: "POST",
+        dataType: 'json',
+        data: { id: ccs_id },
+        success: function (response) {
+            var ccsArray = response.data;
+            var selectBoxes = document.getElementsByClassName('clientCareSpecialist');
+            selectBoxes.forEach(element => {
+                for (var i = 0; i < ccsArray.length; i++) {
+                    var item = ccsArray[i];
+                    element.innerHTML += `<option value="${item[0]}" title="${item[1]}">${item[1]} || ${item[2]} </option>`;
+                }
+
+            });
+            $('.selectpicker').selectpicker('refresh');
+        }
+    });
+}
+
 
 function toggleFilterClass() {
     $('.dtsp-panes').toggle();

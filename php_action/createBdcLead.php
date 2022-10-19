@@ -7,7 +7,8 @@ $valid = array('success' => false, 'messages' => array(), 'errorMessages' => arr
 if ($_POST) {
 
 
-    $submittedBy = $_SESSION['userId'];
+    // $submittedBy = $_SESSION['userId'];
+    $submittedBy = (isset($_POST['submittedById'])) ? mysqli_real_escape_string($connect, $_POST['submittedById']) : "";
     $leadDate = (isset($_POST['leadDate'])) ? mysqli_real_escape_string($connect, $_POST['leadDate']) : "";
     $entityId = (isset($_POST['entityId'])) ? mysqli_real_escape_string($connect, $_POST['entityId']) : "";
     $fname = (isset($_POST['fname'])) ? mysqli_real_escape_string($connect, $_POST['fname']) : "";

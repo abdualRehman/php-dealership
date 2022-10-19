@@ -150,6 +150,7 @@ $(function () {
                         })
                         $('#addNew').modal('hide');
                         form[0].reset();
+                        resetForm();
                         manageRuleTable.ajax.reload(null, false);
                     } else {
                         e1.fire({
@@ -245,7 +246,17 @@ $(function () {
 
 
 
-})
+});
+
+function resetForm() {
+    $('.typeahead').val('');
+    $('.typeahead').trigger('change');
+    $('.selectpicker').each(function () {
+        $(this).find('option:first').prop('selected', 'selected');
+        $(".selectpicker").selectpicker("refresh");
+    });
+    $(".tags").empty();
+}
 
 
 
@@ -493,7 +504,7 @@ function addRow() {
         </select>
     </td>
     <td class="form-group">
-        <select class="form-control select2${count}" id="exModelno${count}" name="exModelno${count}[]" multiple="multiple" title="Exclude Model No.">
+        <select class="form-control tags select2${count}" id="exModelno${count}" name="exModelno${count}[]" multiple="multiple" title="Exclude Model No.">
             <optgroup label="Press Enter to add">
         </select>
     </td>

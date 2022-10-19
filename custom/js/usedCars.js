@@ -129,7 +129,7 @@ $(function () {
                 targets: [0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
                 visible: false,
             },
-            { width: 400, targets: [15 , 23] },
+            { width: 400, targets: [15, 23] },
             {
                 targets: [1], // age
                 createdCell: function (td, cellData, rowData, row, col) {
@@ -364,7 +364,7 @@ $(function () {
                         .toggleClass('collapsed', collapsed);
                 }
                 else if (rowGroupSrc == 22) {
-                    
+
                     rows.nodes().each(function (r) {
                         r.style.display = 'none';
                         if (collapsed) {
@@ -397,6 +397,7 @@ $(function () {
         },
 
         initComplete: function () {
+            loadSearchData();
             // Start with closed groups
             $('#datatable-1 tbody tr.dtrg-start').each(function () {
                 var name = $(this).data('name');
@@ -444,11 +445,6 @@ $(function () {
                 } else if (activebtnvalue == 'soldAtAuction') {
                     setInputChange();
                 }
-                // a.clear();
-                // a.local = searhStatusArray;
-                // a.initialize(true);
-                // setSearchTypehead(searhStatusArray);
-                searhStatusArray = [];
             }
         },
 
@@ -533,15 +529,6 @@ $(function () {
     $.fn.dataTable.ext.search.push(
         function (settings, searchData, index, rowData, counter) {
             var tableNode = manageInvTable.table().node();
-
-
-            if (rowData[2] != 'undefined' && rowData[2] && rowData[2] != 'undefined') {
-                searhStatusArray.push({
-                    stockDetails: rowData[2],
-                    stockAvailibility: rowData[30],
-                })
-            }
-
 
             var activebtnvalue = $("#mods .btn.active input[name='mod']").val();
 
@@ -630,7 +617,6 @@ $(function () {
         }
     );
 
-    setSearchTypehead(searhStatusArray);
 
     $('#clear-selection').click(function () {
         $('#purchaseFrom :radio').prop('checked', false);
@@ -668,7 +654,6 @@ $(function () {
             message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
             // timeout: 1e3
         });
-        // searhStatusArray = [];
         var currentElement = $(this).val();
         if (currentElement != 'fixAge') {
             $('.inspectionTable').removeClass('d-none');
@@ -695,7 +680,7 @@ $(function () {
                     manageInvTable.dataSrc(rowGroupSrc);
                     break;
                 case 'atAuction':
-                    setColumVisibility([0, 3 , 4, 10 , 11, 12, 13, 14, 15, 17, 18, 19 , 20, 21, 24, 25, 26, 27, 28, 30]);
+                    setColumVisibility([0, 3, 4, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28, 30]);
                     rowGroupSrc = 23;
                     manageInvTable.rowGroup().enable().draw();
                     manageInvTable.dataSrc(rowGroupSrc);
@@ -798,6 +783,9 @@ $(function () {
                         manageInvTable.ajax.reload(null, false);
                         // form[0].reset();
                         $('#modal8').modal('hide');
+                        setTimeout(() => {
+                            loadSearchData();
+                        }, 1000);
 
                     } else {
                         e1.fire({
@@ -838,6 +826,26 @@ $(function () {
     }
 
 });
+
+function loadSearchData() {
+    searhStatusArray = [];
+    $('#datatable-1').DataTable()
+        .rows()
+        .data()
+        .each(function (rowData, index) {
+            if (rowData[2] != 'undefined' && rowData[2] && rowData[2] != 'undefined') {
+                if (rowData[2] == 'O73449XXA ||  2GNFLFEK4F6144107') console.log(rowData[2], rowData[30]);
+                searhStatusArray.push({
+                    stockDetails: rowData[2],
+                    stockAvailibility: rowData[30],
+                })
+                return true;
+            }
+            return false;
+        });
+
+    setSearchTypehead(searhStatusArray);
+}
 
 function setSearchTypehead(searhStatusArray) {
     $('#searchcars').typeahead('destroy');
@@ -1199,7 +1207,8 @@ function editUsedCar(id) {
                 let age = response.age;
                 // get day difference
                 if (response.date_in != '' && response.date_in != null) {
-                    var given = moment(response.date_in, "MM-DD-YYYY").subtract(1, 'days');
+                    // var given = moment(response.date_in, "MM-DD-YYYY").subtract(1, 'days');
+                    var given = moment(response.date_in, "MM-DD-YYYY");
                     var current = moment().startOf('day');
                     age = moment.duration(current.diff(given)).asDays();
                 }
@@ -1390,6 +1399,9 @@ function updateFieldsUsedCars(obj, notify = true) {
                             Swal.close()
                         }, 900);
                     }
+                    setTimeout(() => {
+                        loadSearchData();
+                    }, 1000);
                 } // /response messages
             }
 

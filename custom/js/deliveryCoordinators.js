@@ -270,13 +270,15 @@ $(function () {
                     var bool1 = moment(date).isBetween
                         (startDayOfPrevMonth, lastDayOfPrevMonth, null, '[]');
                     if (bool1) {
+                        // if (confirm == 'ok' && complete == 'ok' && additional_services != '') {
                         if (confirm == 'ok' && complete == 'ok' && additional_services != '') {
                             lmconfirmed += 1;
                         }
                     }
                     var bool1 = moment(date).isBetween(startOfMonth, endOfMonth, null, '[]');
                     if (bool1) {
-                        if (confirm == 'ok' && complete == 'ok' && additional_services != '') {
+                        // if (confirm == 'ok' && complete == 'ok' && additional_services != '') {
+                        if (confirm == 'ok' && complete == 'ok') {
                             tmconfirmed += 1;
                         }
                     }

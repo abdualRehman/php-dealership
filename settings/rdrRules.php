@@ -128,6 +128,7 @@ if (hasAccess("rdr", "Edit") === 'false') {
                                         <select class="form-control selectpicker w-auto" id="ecertified" name="ecertified">
                                             <option value="Yes" selected>Yes</option>
                                             <option value="No">No</option>
+                                            <option value="yesOther">Yes/Other</option>
                                         </select>
                                     </td>
                                     <td class="form-group text-center">
@@ -196,6 +197,7 @@ if (hasAccess("rdr", "Edit") === 'false') {
                                     <select class="form-control selectpicker w-auto" id="certified" name="certified">
                                         <option value="Yes" selected>Yes</option>
                                         <option value="No">No</option>
+                                        <option value="yesOther">Yes/Other</option>
                                     </select>
                                 </td>
                                 <td class="form-group text-center">

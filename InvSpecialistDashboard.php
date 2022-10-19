@@ -119,17 +119,7 @@ if (hasAccess("invsplst", "Edit") === 'false') {
                                     <div class="col-md-12">
                                         <label for="notes_1" class="col-form-label text-center">Notes 1</label>
                                         <div class="form-group">
-                                            <select class="selectpicker" name="notes_1" id="notes_1">
-                                                <option value="" selected disabled hidden>Please select</option>
-                                                <option value="Missing Section">Missing Section</option>
-                                                <option value="Locked">Locked</option>
-                                                <option value="Sold">Sold</option>
-                                                <option value="Packages">Packages</option>
-                                                <option value="Wholesale">Wholesale</option>
-                                            </select>
-                                            <div class="p-1 pb-0">
-                                                <span class="badge-text-primary clear-selection" id="clear-selection" data-id="notes_1">Clear Selection</span>
-                                            </div>
+                                            <input type="text" class="form-control" name="notes_1" id="notes_1" autocomplete="off" autofill="off" />
                                         </div>
                                     </div>
                                     <div class="col-md-12">

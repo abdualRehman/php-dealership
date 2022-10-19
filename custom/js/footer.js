@@ -209,12 +209,13 @@ function loadSchedules() {
                                 beforeTime = moment(start, format),
                                 afterTime = moment(end, format);
 
-                            if (time.isBetween(beforeTime, afterTime)) {
-                                $(td).html('<i class="marker marker-dot marker-lg text-success"></i> Available');
-                                $(td).addClass('text-success font-initial');
-                            } else {
-                                $(td).html("");
-                            }
+                            $(td).html("");
+                            // if (time.isBetween(beforeTime, afterTime)) {
+                            //     $(td).html('<i class="marker marker-dot marker-lg text-success"></i> Available');
+                            //     $(td).addClass('text-success font-initial');
+                            // } else {
+                            //     $(td).html("");
+                            // }
 
                         } else {
                             //status

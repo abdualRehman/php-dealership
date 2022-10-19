@@ -156,6 +156,16 @@
                             </button>
                             <div class="menu-submenu">
                                 <?php
+                                if (hasAccess("incentives", "View") !== 'false') {
+                                ?>
+                                    <div class="menu-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/incentives.php" class="menu-item-link">
+                                            <i class="menu-item-bullet"></i>
+                                            <span class="menu-item-text">Incentive</span>
+                                        </a>
+                                    </div>
+                                <?php
+                                }
                                 if (hasAccess("matrix", "View") !== 'false') {
                                 ?>
                                     <div class="menu-item">
@@ -172,16 +182,6 @@
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/swaps.php" class="menu-item-link">
                                             <i class="menu-item-bullet"></i>
                                             <span class="menu-item-text">Swaps</span>
-                                        </a>
-                                    </div>
-                                <?php
-                                }
-                                if (hasAccess("incentives", "View") !== 'false') {
-                                ?>
-                                    <div class="menu-item">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/incentives.php" class="menu-item-link">
-                                            <i class="menu-item-bullet"></i>
-                                            <span class="menu-item-text">incentive</span>
                                         </a>
                                     </div>
                                 <?php
@@ -268,7 +268,16 @@
                                     </div>
                                 <?php
                                 }
-                                // if (hasAccess("sale", "Edit") !== 'false' || hasAccess("sale", "Remove") !== 'false' || $salesConsultantID == $_SESSION['userRole']) {
+                                if (hasAccess("regp", "View") !== 'false') {
+                                ?>
+                                    <div class="menu-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/registrationProblem.php" class="menu-item-link">
+                                            <i class="menu-item-bullet"></i>
+                                            <span class="menu-item-text">Registration Problem</span>
+                                        </a>
+                                    </div>
+                                <?php
+                                }
                                 if (hasAccess("sale", "View") !== 'false') {
                                 ?>
                                     <div class="menu-item">
@@ -285,17 +294,6 @@
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldTodo.php" class="menu-item-link">
                                             <i class="menu-item-bullet"></i>
                                             <span class="menu-item-text">To Do's</span>
-                                        </a>
-                                    </div>
-                                <?php
-                                }
-                                // if (hasAccess("regp", "Add") !== 'false'  || hasAccess("regp", "Edit") !== 'false' || hasAccess("regp", "Remove") !== 'false') {
-                                if (hasAccess("regp", "View") !== 'false') {
-                                ?>
-                                    <div class="menu-item">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/registrationProblem.php" class="menu-item-link">
-                                            <i class="menu-item-bullet"></i>
-                                            <span class="menu-item-text">Registration Problem</span>
                                         </a>
                                     </div>
                                 <?php
@@ -339,22 +337,22 @@
                                     </div>
                                 <?php
                                 }
-                                if (hasAccess("user", "View") !== 'false') {
-                                ?>
-                                    <div class="menu-item">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/users/userList.php" class="menu-item-link">
-                                            <i class="menu-item-bullet"></i>
-                                            <span class="menu-item-text">User List</span>
-                                        </a>
-                                    </div>
-                                <?php
-                                }
                                 if (hasAccess("role", "Add") !== 'false' || hasAccess("role", "Edit") !== 'false' || hasAccess("role", "Remove") !== 'false') {
                                 ?>
                                     <div class="menu-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/users/roleList.php?r=man" class="menu-item-link">
                                             <i class="menu-item-bullet"></i>
                                             <span class="menu-item-text">Role List</span>
+                                        </a>
+                                    </div>
+                                <?php
+                                }
+                                if (hasAccess("user", "View") !== 'false') {
+                                ?>
+                                    <div class="menu-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/users/userList.php" class="menu-item-link">
+                                            <i class="menu-item-bullet"></i>
+                                            <span class="menu-item-text">User List</span>
                                         </a>
                                     </div>
                                 <?php
@@ -400,7 +398,16 @@
                                             <span class="menu-item-text"> Dealership Contacts</span>
                                         </a>
                                     </div>
-
+                                <?php
+                                }
+                                if ($_SESSION['userRole'] === 'Admin') {
+                                ?>
+                                    <div class="menu-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/userLocations.php" class="menu-item-link">
+                                            <i class="menu-item-bullet"></i>
+                                            <span class="menu-item-text">Locations</span>
+                                        </a>
+                                    </div>
                                 <?php
                                 }
                                 if (hasAccess("swploc", "View") !== 'false') {
@@ -409,18 +416,6 @@
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/locations.php?r=man" class="menu-item-link">
                                             <i class="menu-item-bullet"></i>
                                             <span class="menu-item-text">Swap Locations</span>
-                                        </a>
-                                    </div>
-                                <?php
-                                }
-                                if ($_SESSION['userRole'] === 'Admin') {
-
-
-                                ?>
-                                    <div class="menu-item">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/userLocations.php" class="menu-item-link">
-                                            <i class="menu-item-bullet"></i>
-                                            <span class="menu-item-text">Locations</span>
                                         </a>
                                     </div>
                                 <?php
@@ -456,9 +451,27 @@
                                 <div class="menu-item-addon"><i class="menu-item-caret caret"></i></div>
                             </button>
                             <div class="menu-submenu">
-
                                 <?php
-
+                                if (hasAccess("bdcrule", "View") !== 'false') {
+                                ?>
+                                    <div class="menu-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/bdcRules.php" class="menu-item-link">
+                                            <i class="menu-item-bullet"></i>
+                                            <span class="menu-item-text">BDC Price Rule</span>
+                                        </a>
+                                    </div>
+                                <?php
+                                }
+                                if (hasAccess("cashincrule", "View") !== 'false') {
+                                ?>
+                                    <div class="menu-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/cashIncentiveRules.php" class="menu-item-link">
+                                            <i class="menu-item-bullet"></i>
+                                            <span class="menu-item-text">Dealer Cash Incentive Rule</span>
+                                        </a>
+                                    </div>
+                                <?php
+                                }
                                 if (hasAccess("incr", "View") !== 'false') {
                                 ?>
                                     <div class="menu-item">
@@ -469,22 +482,22 @@
                                     </div>
                                 <?php
                                 }
-                                if (hasAccess("sptr", "View") !== 'false') {
-                                ?>
-                                    <div class="menu-item">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/salesPesonsRules.php" class="menu-item-link">
-                                            <i class="menu-item-bullet"></i>
-                                            <span class="menu-item-text">Sales Person's Todo Rules</span>
-                                        </a>
-                                    </div>
-                                <?php
-                                }
                                 if (hasAccess("manprice", "View") !== 'false') {
                                 ?>
                                     <div class="menu-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/manufaturePrice.php?r=man" class="menu-item-link">
                                             <i class="menu-item-bullet"></i>
                                             <span class="menu-item-text">Import Manufacture Price</span>
+                                        </a>
+                                    </div>
+                                <?php
+                                }
+                                if (hasAccess("leaserule", "View") !== 'false') {
+                                ?>
+                                    <div class="menu-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/leaseRules.php" class="menu-item-link">
+                                            <i class="menu-item-bullet"></i>
+                                            <span class="menu-item-text">Lease Rule</span>
                                         </a>
                                     </div>
                                 <?php
@@ -510,16 +523,6 @@
                                     </div>
                                 <?php
                                 }
-                                if (hasAccess("bdcrule", "View") !== 'false') {
-                                ?>
-                                    <div class="menu-item">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/bdcRules.php" class="menu-item-link">
-                                            <i class="menu-item-bullet"></i>
-                                            <span class="menu-item-text">BDC Price Rule</span>
-                                        </a>
-                                    </div>
-                                <?php
-                                }
                                 if (hasAccess("raterule", "View") !== 'false') {
                                 ?>
                                     <div class="menu-item">
@@ -530,32 +533,22 @@
                                     </div>
                                 <?php
                                 }
-                                if (hasAccess("leaserule", "View") !== 'false') {
-                                ?>
-                                    <div class="menu-item">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/leaseRules.php" class="menu-item-link">
-                                            <i class="menu-item-bullet"></i>
-                                            <span class="menu-item-text">Lease Rule</span>
-                                        </a>
-                                    </div>
-                                <?php
-                                }
-                                if (hasAccess("cashincrule", "View") !== 'false') {
-                                ?>
-                                    <div class="menu-item">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/cashIncentiveRules.php" class="menu-item-link">
-                                            <i class="menu-item-bullet"></i>
-                                            <span class="menu-item-text">Dealer Cash Incentive Rule</span>
-                                        </a>
-                                    </div>
-                                <?php
-                                }
                                 if (hasAccess("rdr", "Edit") !== 'false') {
                                 ?>
                                     <div class="menu-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/rdrRules.php" class="menu-item-link">
                                             <i class="menu-item-bullet"></i>
                                             <span class="menu-item-text">RDR Rule</span>
+                                        </a>
+                                    </div>
+                                <?php
+                                }
+                                if (hasAccess("sptr", "View") !== 'false') {
+                                ?>
+                                    <div class="menu-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/settings/salesPesonsRules.php" class="menu-item-link">
+                                            <i class="menu-item-bullet"></i>
+                                            <span class="menu-item-text">Sales Person's Todo Rules</span>
                                         </a>
                                     </div>
                                 <?php
@@ -690,8 +683,14 @@
                                             </div>
                                             <div class="dropdown-col border-left">
                                                 <h4 class="dropdown-header dropdown-header-lg">Tools</h4>
-
                                                 <?php
+                                                if (hasAccess("wizardsBill", "View") !== 'false') {
+                                                ?>
+                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/lotwizardsBill.php" class="dropdown-item">
+                                                        <i class="dropdown-bullet"></i> <span class="dropdown-content">Lot Wizards Bills</span>
+                                                    </a>
+                                                <?php
+                                                }
                                                 if (hasAccess("rdr", "View") !== 'false') {
                                                 ?>
                                                     <a href="<?php echo $GLOBALS['siteurl']; ?>/more/rdr.php" class="dropdown-item">
@@ -703,13 +702,6 @@
                                                 ?>
                                                     <a href="<?php echo $GLOBALS['siteurl']; ?>/more/transportation.php" class="dropdown-item">
                                                         <i class="dropdown-bullet"></i> <span class="dropdown-content">Transportation Damage</span>
-                                                    </a>
-                                                <?php
-                                                }
-                                                if (hasAccess("wizardsBill", "View") !== 'false') {
-                                                ?>
-                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/lotwizardsBill.php" class="dropdown-item">
-                                                        <i class="dropdown-bullet"></i> <span class="dropdown-content">Lot Wizards Bills</span>
                                                     </a>
                                                 <?php
                                                 }
@@ -1087,6 +1079,11 @@
                                     <a href="<?php echo $GLOBALS['siteurl']; ?>/wizard/lotwizards.php" id="lotWizars" class="btn btn-flat-primary responsive-content breadcrumb-text">Lot Wizards</a>
                                 <?php
                                 }
+                                if (hasAccess("usedCars", "View") !== 'false') {
+                                ?>
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/wizard/usedCars.php" id="usedCars" class="btn btn-flat-primary responsive-content breadcrumb-text">Used Cars</a>
+                                <?php
+                                }
                                 if (hasAccess("sale", "View") !== 'false') {
                                 ?>
                                     <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man" class="btn btn-flat-primary responsive-content breadcrumb-text">Sold Logs</a>
@@ -1146,8 +1143,14 @@
 
                                             <div class="dropdown-col border-left">
                                                 <h4 class="dropdown-header dropdown-header-lg">Tools</h4>
-
                                                 <?php
+                                                if (hasAccess("wizardsBill", "View") !== 'false') {
+                                                ?>
+                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/lotwizardsBill.php" class="dropdown-item">
+                                                        <i class="dropdown-bullet"></i> <span class="dropdown-content">Lot Wizards Bills</span>
+                                                    </a>
+                                                <?php
+                                                }
                                                 if (hasAccess("rdr", "View") !== 'false') {
                                                 ?>
                                                     <a href="<?php echo $GLOBALS['siteurl']; ?>/more/rdr.php" class="dropdown-item">
@@ -1159,13 +1162,6 @@
                                                 ?>
                                                     <a href="<?php echo $GLOBALS['siteurl']; ?>/more/transportation.php" class="dropdown-item">
                                                         <i class="dropdown-bullet"></i> <span class="dropdown-content">Transportation Damage</span>
-                                                    </a>
-                                                <?php
-                                                }
-                                                if (hasAccess("wizardsBill", "View") !== 'false') {
-                                                ?>
-                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/lotwizardsBill.php" class="dropdown-item">
-                                                        <i class="dropdown-bullet"></i> <span class="dropdown-content">Lot Wizards Bills</span>
                                                     </a>
                                                 <?php
                                                 }

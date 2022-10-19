@@ -93,7 +93,8 @@ $(function () {
                         return true;
                     });
                 // percentage = (totalDoneCount / allCount) * 100;
-                percentage = (totalDoneCount / totalRetail) * 100;
+                // percentage = (totalDoneCount / totalRetail) * 100;
+                percentage = ((notDone + roclosed) / totalRetail) * 100;
                 // percentage = Math.round(percentage);
                 percentage = percentage.toFixed(2)
 
@@ -297,7 +298,8 @@ function editUsedCar(id) {
                 let age = response.age;
                 // get day difference
                 if (response.date_in != '' && response.date_in != null) {
-                    var given = moment(response.date_in, "MM-DD-YYYY").subtract(1, 'days');
+                    // var given = moment(response.date_in, "MM-DD-YYYY").subtract(1, 'days');
+                    var given = moment(response.date_in, "MM-DD-YYYY");
                     var current = moment().startOf('day');
                     age = moment.duration(current.diff(given)).asDays();
                 }

@@ -60,7 +60,8 @@ if ($result->num_rows > 0) {
         if ($row['date_in'] != '' && !is_null($row['date_in'])) {
             $date = strtotime(date('Y-m-d'));
             $date_in = reformatDate($row['date_in']);
-            $date_in = date('Y-m-d', strtotime('-1 day', strtotime($date_in)));
+            // $date_in = date('Y-m-d', strtotime('-1 day', strtotime($date_in)));
+            $date_in = date('Y-m-d', strtotime('-0 day', strtotime($date_in)));
             $date_in = strtotime($date_in);
             $age = ceil(abs($date - $date_in) / 86400);
         }

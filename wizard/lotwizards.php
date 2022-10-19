@@ -128,7 +128,7 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
     }
 
     .slick-lightbox-slick-item-inner {
-        min-width: 60%!important;
+        min-width: 60% !important;
     }
 
     /* datatable 2 hide 3rd column  */
@@ -152,6 +152,15 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
         outline: none;
         border: 1px solid #800000;
         box-shadow: 0 0 5px 1px #800000;
+    }
+
+    #recon-btn-group .btn-flat-primary:hover {
+        background-color: #616161;
+        border-color: #616161;
+    }
+    #recon-btn-group .btn-flat-primary.active:hover {
+        background-color: #0c83e2;
+        border-color: #0c83e2;
     }
 </style>
 

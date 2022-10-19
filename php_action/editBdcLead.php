@@ -8,6 +8,7 @@ if ($_POST) {
 
     $leadId = $_POST['leadId'];
 
+    $submittedBy = (isset($_POST['esubmittedById'])) ? mysqli_real_escape_string($connect, $_POST['esubmittedById']) : "";
 
     $leadDate = (isset($_POST['eleadDate'])) ? mysqli_real_escape_string($connect, $_POST['eleadDate']) : "";
     $entityId = (isset($_POST['eentityId'])) ? mysqli_real_escape_string($connect, $_POST['eentityId']) : "";
@@ -27,7 +28,7 @@ if ($_POST) {
 
 
     $sql = "UPDATE `bdc_lead` SET 
-    `date`='$leadDate',`lname`='$lname',`fname`='$fname',
+    `date`='$leadDate', `ccs`='$submittedBy',`lname`='$lname',`fname`='$fname',
     `entity`='$entityId',`vehicle`='$vehicle',`sales_consultant`='$salesConsultant',
     `lead_status`='$leadStatus',`lead_type`='$leadType',`source`='$source',`notes`='$leadNotes',
     `verified`='$varifiedStatus',`verified_by`='$approvedBy' WHERE id = '$leadId'";

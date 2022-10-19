@@ -101,7 +101,9 @@ $(function () {
                         console.log("fun called");
                     },
                     click: (event, chartContext, config) => {
-                        document.location = 'sales/soldLogs.php?r=man';
+                        if(config.config.series[config.seriesIndex]?.name){
+                            document.location = 'sales/soldLogs.php?r=man';
+                        }
                         // console.log(config.config.series[config.seriesIndex])
                         // console.log(config.config.series[config.seriesIndex].name)
                         // console.log(config.config.series[config.seriesIndex].data[config.dataPointIndex])

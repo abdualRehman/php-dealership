@@ -296,7 +296,6 @@ $(function () {
             }
         },
         createdRow: function (row, data, dataIndex) {
-            console.log($(row).children());
             if ($('#isEditAllowed').val() == "true") {
                 $(row).children().not(':nth-child(1)').attr({
                     "data-toggle": "modal",
@@ -371,16 +370,12 @@ $(function () {
                 $('#completeCount').html(totalComplete);
 
 
-                // a.clear();
-                // a.local = searhStatusArray;
-                // a.initialize(true);
-                setSearchTypehead(searhStatusArray);
-                searhStatusArray = [];
 
             }
         },
         "initComplete": function (settings, json) {
             setTimeout(() => {
+                loadSearchData();
                 $('#DataTables_Table_3').find('.dtsp-nameColumn.sorting_1:last').click()
             }, 500);
         },
@@ -395,14 +390,6 @@ $(function () {
     $.fn.dataTable.ext.search.push(
         function (settings, searchData, index, rowData, counter) {
             var tableNode = manageInvTable.table().node();
-
-            if (rowData[9] && rowData[9] != 'undefined') {
-                searhStatusArray.push({
-                    stockDetails: rowData[9],
-                    stockAvailibility: rowData[26],
-                })
-            }
-
 
             var activebtnvalue = $("#mods .btn.active input[name='mod']").val();
             // console.log(activebtnvalue);
@@ -568,7 +555,6 @@ $(function () {
             $('.inspectionTable').removeClass('d-none');
             $('.DealerTable').addClass('d-none');
 
-            searhStatusArray = [];
 
             switch (currentElement) {
                 case "notTouched":
@@ -724,6 +710,9 @@ $(function () {
                         manageInvTable.ajax.reload(null, false);
                         $('#updateInspectionForm').unblock();
                         $('#modal8').modal('hide');
+                        setTimeout(() => {
+                            loadSearchData();
+                        }, 1000);
                     } else {
                         e1.fire({
                             // position: "center",
@@ -843,6 +832,24 @@ $(function () {
 
 });
 
+function loadSearchData() {
+    searhStatusArray = [];
+    $('#datatable-1').DataTable()
+        .rows()
+        .data()
+        .each(function (rowData, index) {
+            if (rowData[9] && rowData[9] != 'undefined') {
+                searhStatusArray.push({
+                    stockDetails: rowData[9],
+                    stockAvailibility: rowData[26],
+                })
+                return true;
+            }
+            return false;
+        });
+
+    setSearchTypehead(searhStatusArray);
+}
 
 function loadbodyshops() {
     $.ajax({
@@ -960,7 +967,7 @@ function searchStockBtn(params) {
     if (tab) {
         setTimeout(() => {
             $("#datatable-1").dataTable().fnFilter(search);
-            manageInvTable.order([8, 'desc']).draw();
+            manageInvTable.order([21, "asc"], [8, 'desc']).draw();
             manageInvTable.ajax.reload(null, false);
         }, 1000);
     }

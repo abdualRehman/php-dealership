@@ -283,7 +283,19 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <input type="text" class="form-control text-center" name="esubmittedBy" id="esubmittedBy" value="<?php echo $_SESSION['userName']; ?>" readonly placeholder="Client Care Specialist" autocomplete="off" autofill="off" />
+                                    <!-- <input type="text" class="form-control text-center" name="esubmittedBy" id="esubmittedBy" value="<?php // echo $_SESSION['userName']; ?>" readonly placeholder="Client Care Specialist" autocomplete="off" autofill="off" /> -->
+                                    <?php
+                                    if ($_SESSION['userRole'] == 'Admin' || $_SESSION['userRole'] == $branchAdmin || $_SESSION['userRole'] == $bdcManagerID) {
+                                        echo '<input type="hidden" class="form-control text-center" name="esubmittedBy" id="esubmittedBy" value="' . $_SESSION['userName'] . '" readonly autocomplete="off" autofill="off" />';
+                                        echo '<select class="form-control selectpicker w-auto" id="esubmittedById" name="esubmittedById" data-live-search="true" data-size="4">
+                                                <option value="" selected disabled>Select CCS</option>
+                                                <optgroup class="clientCareSpecialist"></optgroup>
+                                            </select>';
+                                    } else {
+                                        echo '<input type="hidden" class="form-control text-center" name="esubmittedById" id="esubmittedById" value="' . $_SESSION['userId'] . '" readonly autocomplete="off" autofill="off" />';
+                                        echo '<input type="text" class="form-control text-center" name="esubmittedBy" id="esubmittedBy" value="' . $_SESSION['userName'] . '" readonly placeholder="Client Care Specialist" autocomplete="off" autofill="off" />';
+                                    }
+                                    ?>
                                 </div>
                             </div>
                         </div>
@@ -341,7 +353,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                                 <div class="row align-items-baseline">
                                     <label for="eleadStatus" class="col-sm-4 col-form-label">Sold / Show</label>
                                     <div class="form-group col-sm-8 text-center">
-                                        <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="eleadStatus">
+                                        <div class="btn-group btn-group-toggle w-100 statusRadioButtons" data-toggle="buttons" id="eleadStatus">
                                             <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                                 <input type="radio" name="eleadStatus" value="sold" id="esold" />
                                                 Sold
@@ -351,7 +363,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                                                 Show
                                             </label>
                                         </div>
-                                        <span class="badge-text-primary pl-2 clear-selection" data-id="eleadStatus">Clear Selection</span>
+                                        <!-- <span class="badge-text-primary pl-2 clear-selection" data-id="eleadStatus">Clear Selection</span> -->
                                     </div>
                                 </div>
                             </div>
@@ -463,7 +475,17 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <input type="text" class="form-control text-center" name="submittedBy" id="submittedBy" value="<?php echo $_SESSION['userName']; ?>" readonly placeholder="Client Care Specialist" autocomplete="off" autofill="off" />
+                                <?php
+                                if ($_SESSION['userRole'] == 'Admin' || $_SESSION['userRole'] == $branchAdmin || $_SESSION['userRole'] == $bdcManagerID) {
+                                    echo '<select class="form-control selectpicker w-auto" id="submittedById" name="submittedById" data-live-search="true" data-size="4">
+                                                <option value="" selected disabled>Select CCS</option>
+                                                <optgroup class="clientCareSpecialist"></optgroup>
+                                            </select>';
+                                } else {
+                                    echo '<input type="hidden" class="form-control text-center" name="submittedById" id="submittedById" value="' . $_SESSION['userId'] . '" readonly autocomplete="off" autofill="off" />';
+                                    echo '<input type="text" class="form-control text-center" name="submittedBy" id="submittedBy" value="' . $_SESSION['userName'] . '" readonly placeholder="Client Care Specialist" autocomplete="off" autofill="off" />';
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -506,7 +528,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                             </div>
                         </div>
                         <div class="col-md-4 form-group">
-                            <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="leadType">
+                            <div class="btn-group btn-group-toggle w-100 statusRadioButtons" data-toggle="buttons" id="leadType">
                                 <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                     <input type="radio" name="leadType" value="new" id="new">
                                     New
@@ -521,7 +543,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                             <div class="row align-items-baseline">
                                 <label for="leadStatus" class="col-sm-4 col-form-label">Sold / Show</label>
                                 <div class="form-group col-sm-8 text-center">
-                                    <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="leadStatus">
+                                    <div class="btn-group btn-group-toggle w-100 statusRadioButtons" data-toggle="buttons" id="leadStatus">
                                         <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                             <input type="radio" name="leadStatus" value="sold" id="leadStatusSold" />
                                             Sold
@@ -531,7 +553,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                                             Show
                                         </label>
                                     </div>
-                                    <span class="badge-text-primary pl-2 clear-selection" data-id="leadStatus">Clear Selection</span>
+                                    <!-- <span class="badge-text-primary pl-2 clear-selection" data-id="leadStatus">Clear Selection</span> -->
                                 </div>
                             </div>
                         </div>
@@ -539,7 +561,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                     <div class="row align-items-baseline">
                         <label for="source" class="col-sm-1 text-sm-right col-form-label">Source</label>
                         <div class="form-group col-sm-11">
-                            <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="source">
+                            <div class="btn-group btn-group-toggle w-100 statusRadioButtons" data-toggle="buttons" id="source">
                                 <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                     <input type="radio" name="source" value="internet" id="internet">
                                     Internet
