@@ -133,7 +133,7 @@ if (hasAccess("user", "Add") === 'false') {
                                         </div>
 
                                     </div>
-                                    <div class="row">
+                                    <!-- <div class="row">
                                         <div class="col-md-6">
                                             <label for="password" class="col-form-label">Password</label>
                                             <div class="form-group"><input type="password" class="form-control" name="password" id="password" autocomplete="off" placeholder="Please provide your password">
@@ -145,7 +145,7 @@ if (hasAccess("user", "Add") === 'false') {
                                                 <input type="password" class="form-control" name="conpassword" id="conpassword" autocomplete="off" placeholder="Please reenter your password">
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="row mt-5 mb-5" style="overflow:auto;">

@@ -433,7 +433,7 @@
                     success: function(response) {
                         var obj = response.data;
                         if (obj) {
-                            $('#todaySoldStatus').html(`Sold Today: ${obj[0]} NEW, ${obj[1]} USED, ${obj[2]} Total`);
+                            $('.todaySoldStatus').html(`Sold Today: ${obj[0]} NEW, ${obj[1]} USED, ${obj[2]} Total`);
                         }
 
                         // -------------------------------------------------------------------------------

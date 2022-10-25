@@ -6,6 +6,13 @@ if (hasAccess("sale", "Add") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
 
+$userRole = $_SESSION['userRole'];
+if ($userRole != 'Admin' && $userRole != $branchAdmin && $userRole != $generalManagerID && $userRole != $salesManagerID) {
+    echo '<input type="hidden" name="vgb" id="vgb" value="false">';
+} else {
+    echo '<input type="hidden" name="vgb" id="vgb" value="true">';
+}
+
 ?>
 <style>
     .customerDetailBody,
@@ -134,7 +141,7 @@ if (hasAccess("sale", "Add") === 'false') {
                                         <div class="col-md-9">
                                             <div class="form-group">
                                                 <input type="hidden" name="selectedStockType" id="selectedStockType" />
-                                                <select class="selectpicker required" data-focus-on="true" tabIndex="1" onchange="changeStockDetails(this)" name="stockId" id="stockId"  data-live-search="true" data-size="4" autofocus='autofocus' >
+                                                <select class="selectpicker required" data-focus-on="true" tabIndex="1" onchange="changeStockDetails(this)" name="stockId" id="stockId" data-live-search="true" data-size="4" autofocus='autofocus'>
                                                     <option value="0" selected disabled>Stock No:</option>
 
                                                 </select>
@@ -216,6 +223,11 @@ if (hasAccess("sale", "Add") === 'false') {
 
                                     <div class="form-group row">
                                         <div class="col-md-10 offset-sm-1 saleDetailsDiv" id="saleDetailsDiv">
+                                            <button type="button" class="btn btn-link p-0 d-none" id="codp_warn" style="width: fit-content;position: absolute;top: 10%;right: 15%;" data-toggle="popover" data-trigger="focus" title="Cars To Dealer – Pending" data-content="This Stock is also visible on Cars To Dealer – Pending">
+                                                <div class="widget19-icon text-danger bg-transparent">
+                                                    <i data-feather="alert-circle"></i>
+                                                </div>
+                                            </button>
                                             <textarea class="form-control autosize" style="border: none;" name="selectedDetails" id="selectedDetails" readonly placeholder="Type Something..."></textarea>
                                             <div class="form-group row" id="grossDiv">
                                                 <label class="col-md-2 offset-md-3 col-form-label text-md-right" for="profit">Gross</label>
@@ -228,6 +240,11 @@ if (hasAccess("sale", "Add") === 'false') {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <button type="button" class="btn btn-link p-0 d-none" id="lwbn_warn" style="width: fit-content;position: absolute;bottom: 10%;right: 15%;" data-toggle="popover" data-trigger="focus" title="Lot Wizards Bills - NOT PAID" data-content="This Stock is also visible on Lot Wizards Bills - NOT PAID">
+                                                <div class="widget19-icon text-danger bg-transparent">
+                                                    <i data-feather="dollar-sign"></i>
+                                                </div>
+                                            </button>
                                         </div>
                                     </div>
                                     <!-- <div class="form-group row">

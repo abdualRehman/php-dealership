@@ -32,8 +32,7 @@ if ($_POST) {
     VALUES (
         '$leadDate' , '$submittedBy',  '$lname' , '$fname' , 
         '$entityId' , '$vehicle' , '$salesConsultant' , '$leadStatus',
-        '$leadType' , '$source' , '$leadNotes' , '$varifiedStatus' , '$approvedBy' , 1 , '$location'
-    )";
+        '$leadType' , '$source' , '$leadNotes' , '$varifiedStatus' , '$approvedBy' , 1 , '$location' )";
 
     if ($connect->query($sql) === true) {
         $valid['success'] = true;

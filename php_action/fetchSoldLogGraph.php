@@ -152,7 +152,10 @@ if ($result->num_rows > 0) {
         // $gross = floatval(preg_replace("/[^0-9.]/", '', $row['gross']));
         $gross = floatval(preg_replace("/[^\d\-.]+/", '', $row['gross']));
 
-        if ($timezone == $TodayDate) {
+        // $timezoneSoldDate = strtotime($row['date']);
+        $timezoneSoldDate = date("Y-m-d", strtotime($row['date']));  // timezone of sold date only
+
+        if ($timezoneSoldDate == $TodayDate) {
             if ($row['stocktype'] == 'NEW') {
                 $todayN += $gross;
                 $todayT += $gross;

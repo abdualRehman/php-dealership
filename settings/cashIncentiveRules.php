@@ -146,7 +146,7 @@ if (hasAccess("cashincrule", "Edit") === 'false') {
                                     </td>
                                     <td class="form-group">
                                         <!-- <input type="text" class="form-control" id="editExModelno" name="editExModelno" placeholder="Exclude Model No."> -->
-                                        <select class="form-control select21" id="editExModelno" name="editExModelno[]" multiple="multiple" title="Exclude Model No.">
+                                        <select class="form-control select21 tags" id="editExModelno" name="editExModelno[]" multiple="multiple" title="Exclude Model No.">
                                             <optgroup label="Press Enter to add">
 
                                         </select>
@@ -252,7 +252,7 @@ if (hasAccess("cashincrule", "Edit") === 'false') {
                                 </td>
                                 <td class="form-group">
                                     <!-- <input type="text" class="form-control select2 select21" id="exModelno1" name="exModelno[]" placeholder="Exclude Model No."> -->
-                                    <select class="form-control select21" id="exModelno1" name="exModelno1[]" multiple="multiple" title="Exclude Model No.">
+                                    <select class="form-control select21 tags" id="exModelno1" name="exModelno1[]" multiple="multiple" title="Exclude Model No.">
                                         <optgroup label="Press Enter to add">
                                     </select>
                                 </td>

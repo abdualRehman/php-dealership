@@ -31,10 +31,15 @@ if ($_POST) {
         $wholesale = mysqli_real_escape_string($connect, $_POST['wholesale']);
     }
 
+
+
+    $inv_id = "";
     // $checkSql = "SELECT id, stockno FROM inventory WHERE stockno LIKE ('$stockno'_%')";
     $checkSql = "SELECT * FROM `inventory` WHERE `stockno` = '$stockno' AND location = '$location'";
     $result = $connect->query($checkSql);
     if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $inv_id = $row['id'];
         // update Inv data if this stock number already exist with deleted id with sale 
         $updatekSql = "UPDATE `inventory` SET `year`='$year', `make`='$make',
         `model`='$model',`modelno`='$modelno',`color`='$color',`lot`='$lot',`vin`='$vin',`mileage`='$mileage',`age`='$age',
@@ -43,6 +48,7 @@ if ($_POST) {
         if ($connect->query($updatekSql) === true) {
             $valid['success'] = true;
             $valid['messages'] = "Successfully Added";
+            $valid['id'] = $inv_id;
         } else {
             $valid['success'] = false;
             $valid['messages'] = $connect->error;
@@ -70,8 +76,10 @@ if ($_POST) {
             '$location' )";
 
         if ($connect->query($sql) === true) {
+            $inv_id = $connect->insert_id;
             $valid['success'] = true;
             $valid['messages'] = "Successfully Added";
+            $valid['id'] = $inv_id;
         } else {
             $valid['success'] = false;
             $valid['messages'] = $connect->error;

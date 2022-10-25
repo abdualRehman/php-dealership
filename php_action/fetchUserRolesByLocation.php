@@ -4,7 +4,7 @@ require_once 'db/core.php';
 
 $location = $_POST['location'];
 
-$sql = "SELECT * FROM `role` WHERE location_id = '$location' AND role_status != 2";
+$sql = "SELECT * FROM `role` WHERE location_id = '$location' AND role_status != 2 ORDER BY role_name asc";
 $result = $connect->query($sql);
 $output = array('data' => array());
 

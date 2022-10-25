@@ -150,9 +150,16 @@ $(function () {
                             showConfirmButton: !1,
                             timer: 2500,
                         })
-
-                        // form[0].reset();
+                        form[0].reset();
+                        $("#showDetails").modal('hide');
                         loadStock();
+                        let { id } = response;
+                        setTimeout(() => {
+                            $('#stockId').val(id);
+                            $('#stockId').selectpicker('refresh');
+                            $('#stockId').selectpicker('toggle');
+                            changeStockDetails({ value: id });
+                        }, 1000);
 
                     } else {
                         e1.fire({
@@ -425,13 +432,27 @@ function changeStockDetails(ele) {
 
     $('#selectedStockType').val(obj[14]); // setting up stockType for sales person Todo
 
-    var detailsDiv = `${obj[14]} ${obj[2]} ${obj[3]} ${obj[4]} \n Vin: ${obj[8]} \n Mileage: ${obj[9]} \n Age: ${obj[10]} \n Lot: ${obj[7]} \n Balance: ${obj[11]}`;
+    var detailsDiv = `${obj[14]} ${obj[2]} ${obj[3]} ${obj[4]} \n Vin: ${obj[8]} \n Mileage: ${obj[9]} \n Age: ${obj[10]} \n Lot: ${obj[7]}  ${($('#vgb').val() == "true") ? `\n Balance: ${obj[11]}` : ``} `;
     $('#selectedDetails').html(detailsDiv);
     $('#selectedDetails').addClass('text-center');
 
 
+    if(obj[32] == 'true'){
+        $('#codp_warn').removeClass('d-none');
+    }else{
+        $('#codp_warn').addClass('d-none');
+    }
+    if(obj[33] == 'true'){
+        $('#lwbn_warn').removeClass('d-none');
+    }else{
+        $('#lwbn_warn').addClass('d-none');
+    }
 
-    $('#grossDiv').removeClass('v-none');  // show gross field on both stock type new / used
+
+    if ($('#vgb').val() == "true") {
+        $('#grossDiv').removeClass('v-none'); // show gross field on both stock type new / used
+    }
+
 
     // for checking this stock is already in sale or not if it is in sale then and status is not cancelled then make it red
     if ((obj[16].length > 0) && obj[16].every(element => element != 'cancelled')) {
@@ -511,7 +532,7 @@ function changeSalesPersonTodo() {
         let state = $('#state').val();
         console.log(todoArray);
         var saleDate = $('#saleDate').val();
-        if (state && todoArray.length > 0) {
+        if (state && todoArray && todoArray.length > 0) {
 
             var spTodoRulesObj = todoArray.find(data => data[4] === state);
 

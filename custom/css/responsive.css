@@ -154,3 +154,25 @@
         font-size: xx-small !important;
     }
 }
+
+/* custom header on tablet mode */
+@media (max-width:1400px) {
+    #tablet-menu {
+        display: block
+    }
+    body.aside-desktop-minimized .aside-hover:hover {
+        display: none !important;
+    }
+}
+
+@media (max-width:1024px) {
+    #tablet-menu {
+        display: none
+    }
+
+    body.aside-desktop-minimized .aside-hover:hover {
+        display: block !important;
+    }
+}
+
+/* custom header on tablet mode */

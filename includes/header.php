@@ -11,26 +11,27 @@
     <link href="<?php echo $GLOBALS['siteurl']; ?>/assets/build/styles/ltr-vendor.css" rel="stylesheet">
 
     <style>
-        .aside.aside-hover {
-            height: 100%;
-        }
-
         body.aside-active.aside-desktop-minimized .sticky-wrapper.is-sticky .header-container.container-fluid {
             padding-left: 1rem !important;
         }
 
-        .aside.aside-hover:hover {
+        body.aside-desktop-minimized .aside.aside-hover:hover {
             height: 100% !important;
         }
 
-        .aside.aside-hover .aside-body,
-        .aside.aside-hover .aside-addon {
+        body.aside-desktop-minimized .aside.aside-hover .aside-body,
+        body.aside-desktop-minimized .aside.aside-hover .aside-addon {
             display: none !important;
         }
 
-        .aside.aside-hover:hover .aside-body,
-        .aside.aside-hover:hover .aside-addon {
+        body.aside-desktop-minimized .aside.aside-hover:hover .aside-body,
+        body.aside-desktop-minimized .aside.aside-hover:hover .aside-addon {
             display: block !important;
+        }
+
+        body.aside-desktop-minimized .aside.aside-hover:not(:hover) .aside-body,
+        body.aside-desktop-minimized .aside.aside-hover:not(:hover) .aside-addon {
+            display: none !important;
         }
 
         .menu-section .menu-section-icon {
@@ -48,7 +49,7 @@
             }
 
             body.aside-active.aside-desktop-minimized .sticky-header {
-                left: 0rem;
+                left: 0rem !important;
             }
         }
 
@@ -122,23 +123,12 @@
                 <h3 class="aside-title">One Dealers</h3>
                 <div class="aside-addon"><button class="btn btn-label-primary btn-icon btn-lg" data-toggle="aside">
                         <i class="fa fa-times aside-icon-minimize"></i>
-                        <!-- <i class="fa fa-thumbtack aside-icon-maximize"></i> -->
                         <i class="fa fa-bars aside-icon-maximize"></i>
                     </button>
                 </div>
             </div>
             <div class="aside-body" data-simplebar="data-simplebar">
                 <div class="menu">
-                    <!-- <div class="menu-item"><a href="<?php // echo $GLOBALS['siteurl']; 
-                                                            ?>/index.php" data-menu-path="/ltr/index.php" class="menu-item-link">
-                            <div class="menu-item-icon"><i class="fa fa-desktop"></i></div><span class="menu-item-text">Dashboard</span>
-                            <div class="menu-item-addon"><span class="badge badge-success">New</span></div>
-                        </a>
-                    </div> -->
-                    <!-- <div class="menu-section">
-                        <div class="menu-section-icon"><i class="fa fa-ellipsis-h"></i></div>
-                        <h2 class="menu-section-text">Inventory</h2>
-                    </div> -->
                     <?php
                     if (
                         hasAccess("matrix", "View") !== 'false' ||
@@ -231,13 +221,6 @@
                     <?php
                     }
                     ?>
-
-
-                    <!-- <div class="menu-section">
-                        <div class="menu-section-icon"><i class="fa fa-ellipsis-h"></i></div>
-                        <h2 class="menu-section-text">Sales</h2>
-                    </div> -->
-
                     <?php
 
                     if (
@@ -305,12 +288,6 @@
                     <?php
                     }
                     ?>
-
-                    <!-- <div class="menu-section">
-                        <div class="menu-section-icon"><i class="fa fa-ellipsis-h"></i></div>
-                        <h2 class="menu-section-text">Users</h2>
-                    </div> -->
-
                     <?php
                     if (
                         hasAccess("user", "View") !== 'false' ||
@@ -566,18 +543,6 @@
                                 ?>
                             </div>
                         </div>
-                        <!-- <div class="menu-item">
-                        <button class="menu-item-link menu-item-toggle">
-                            <div class="menu-item-icon">
-                                <i class="fa fa-solid fa-wrench"></i>
-                            </div>
-                            <span class="menu-item-text">Matrix Rules</span>
-                            <div class="menu-item-addon"><i class="menu-item-caret caret"></i></div>
-                        </button>
-                        <div class="menu-submenu">
-                        </div>
-                    </div> -->
-
                     <?php
                     }
                     ?>
@@ -593,6 +558,9 @@
                     <div class="header-container container-fluid">
                         <div class="header-wrap">
                             <ul class="nav nav-pills">
+                                <li class="nav-item" id="tablet-menu">
+                                    <button class="btn btn-flat-primary btn-icon" data-toggle="aside"><i class="fa fa-bars"></i></button>
+                                </li>
                                 <li class="nav-item">
                                     <a href="<?php echo $GLOBALS['siteurl']; ?>/dashboard.php" id="dashboard" class="nav-link active">Dashboard</a>
                                 </li>
@@ -626,105 +594,102 @@
                                     </li>
                                 <?php
                                 }
+                                if (
+                                    hasAccess("appointment", "View") !== 'false' ||
+                                    hasAccess("wizardsBill", "View") !== 'false' ||
+                                    hasAccess("rdr", "View") !== 'false' ||
+                                    hasAccess("tansptDmg", "View") !== 'false' ||
+                                    hasAccess("tansptBill", "View") !== 'false' ||
+                                    hasAccess("warranty", "View") !== 'false'
+                                ) {
                                 ?>
-                                <!-- <li class="nav-item dropdown"><a href="#" class="nav-link active" data-toggle="dropdown">Apps</a>
-                                    <div class="dropdown-menu dropdown-menu-left dropdown-menu-animated"><a href="#" class="dropdown-item">
-                                            <div class="dropdown-icon"><i class="fa fa-boxes"></i></div><span class="dropdown-content">Inventory Manager</span>
-                                            <div class="dropdown-addon"><span class="badge badge-warning badge-pill">20</span></div>
-                                        </a>
-                                        <div class="dropdown-submenu"><a href="#" class="dropdown-item">
-                                                <div class="dropdown-icon"><i class="fa fa-project-diagram"></i></div>
-                                                <span class="dropdown-content">Project manager</span>
-                                                <div class="dropdown-addon"><i class="caret"></i></div>
-                                            </a>
-                                            <div class="dropdown-submenu-menu dropdown-submenu-left"><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Create project</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Delete project</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Ongoing project</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Completed project</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Urgent project</span></a></div>
-                                        </div>
-                                        <div class="dropdown-submenu"><a href="#" class="dropdown-item">
-                                                <div class="dropdown-icon"><i class="fa fa-tasks"></i></div><span class="dropdown-content">Task manager</span>
-                                                <div class="dropdown-addon"><i class="caret"></i></div>
-                                            </a>
-                                            <div class="dropdown-submenu-menu dropdown-submenu-left"><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Show task</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Assign task</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Assign member</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Completed task</span> </a><a href="#" class="dropdown-item"><i class="dropdown-bullet"></i> <span class="dropdown-content">Urgent task</span></a></div>
-                                        </div><a href="#" class="dropdown-item">
-                                            <div class="dropdown-icon"><i class="fa fa-dollar-sign"></i></div><span class="dropdown-content">Invoice</span>
-                                        </a>
-                                        <div class="dropdown-divider"></div><a href="#" class="dropdown-item">
-                                            <div class="dropdown-icon"><i class="fa fa-user-cog"></i></div><span class="dropdown-content">My Account</span>
-                                        </a>
-                                    </div>
-                                </li> -->
-                                <li class="nav-item dropdown">
-                                    <a href="#" class="nav-link" id="more" data-toggle="dropdown">More</a>
-                                    <div class="dropdown-menu dropdown-menu-left dropdown-menu-wide dropdown-menu-animated overflow-hidden">
-                                        <div class="dropdown-row">
-                                            <div class="dropdown-col">
-                                                <h4 class="dropdown-header dropdown-header-lg">Appointments</h4>
-                                                <div class="grid-nav grid-nav-action">
-                                                    <div class="grid-nav-row">
+                                    <li class="nav-item dropdown">
+                                        <a href="#" class="nav-link" id="more" data-toggle="dropdown">More</a>
+                                        <div class="dropdown-menu dropdown-menu-left dropdown-menu-wide dropdown-menu-animated overflow-hidden">
+                                            <div class="dropdown-row">
+                                                <?php
+                                                if (hasAccess("appointment", "View") !== 'false') {
+                                                ?>
+                                                    <div class="dropdown-col">
+                                                        <h4 class="dropdown-header dropdown-header-lg">Appointments</h4>
+                                                        <div class="grid-nav grid-nav-action">
+                                                            <div class="grid-nav-row">
+                                                                <a href="<?php echo  $GLOBALS['siteurl']; ?>/more/appointments.php" class="grid-nav-item">
+                                                                    <div class="grid-nav-icon">
+                                                                        <i class="far fa-calendar-alt"></i>
+                                                                    </div>
+                                                                    <span class="grid-nav-content">Appointment Calendar</span>
+                                                                </a>
+                                                                <a href="<?php echo  $GLOBALS['siteurl']; ?>/more/deliveryCoordinators.php" class="grid-nav-item">
+                                                                    <div class="grid-nav-icon">
+                                                                        <i class="far fa-clipboard"></i>
+                                                                    </div>
+                                                                    <span class="grid-nav-content">Delivery Coordinator</span>
+                                                                </a>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <?php
+                                                }
+                                                if (
+                                                    hasAccess("wizardsBill", "View") !== 'false' ||
+                                                    hasAccess("rdr", "View") !== 'false' ||
+                                                    hasAccess("tansptDmg", "View") !== 'false' ||
+                                                    hasAccess("tansptBill", "View") !== 'false' ||
+                                                    hasAccess("warranty", "View") !== 'false'
+                                                ) {
+                                                ?>
+                                                    <div class="dropdown-col border-left">
+                                                        <h4 class="dropdown-header dropdown-header-lg">Tools</h4>
                                                         <?php
-                                                        if (hasAccess("appointment", "View") !== 'false') {
+                                                        if (hasAccess("wizardsBill", "View") !== 'false') {
                                                         ?>
-                                                            <a href="<?php echo  $GLOBALS['siteurl']; ?>/more/appointments.php" class="grid-nav-item">
-                                                                <div class="grid-nav-icon">
-                                                                    <i class="far fa-calendar-alt"></i>
-                                                                </div>
-                                                                <span class="grid-nav-content">Appointment Calendar</span>
-                                                            </a>
-                                                            <a href="<?php echo  $GLOBALS['siteurl']; ?>/more/deliveryCoordinators.php" class="grid-nav-item">
-                                                                <div class="grid-nav-icon">
-                                                                    <i class="far fa-clipboard"></i>
-                                                                </div>
-                                                                <span class="grid-nav-content">Delivery Coordinator</span>
+                                                            <a href="<?php echo $GLOBALS['siteurl']; ?>/more/lotwizardsBill.php" class="dropdown-item">
+                                                                <i class="dropdown-bullet"></i> <span class="dropdown-content">Lot Wizards Bills</span>
                                                             </a>
                                                         <?php
                                                         }
+                                                        if (hasAccess("rdr", "View") !== 'false') {
+                                                        ?>
+                                                            <a href="<?php echo $GLOBALS['siteurl']; ?>/more/rdr.php" class="dropdown-item">
+                                                                <i class="dropdown-bullet"></i> <span class="dropdown-content">RDR (RETAIL DELIVERY REGISTRATION)</span>
+                                                            </a>
+                                                        <?php
+                                                        }
+                                                        if (hasAccess("tansptDmg", "View") !== 'false') {
+                                                        ?>
+                                                            <a href="<?php echo $GLOBALS['siteurl']; ?>/more/transportation.php" class="dropdown-item">
+                                                                <i class="dropdown-bullet"></i> <span class="dropdown-content">Transportation Damage</span>
+                                                            </a>
+                                                        <?php
+                                                        }
+                                                        if (hasAccess("tansptBill", "View") !== 'false') {
+                                                        ?>
+                                                            <a href="<?php echo $GLOBALS['siteurl']; ?>/more/transportationBills.php" class="dropdown-item">
+                                                                <i class="dropdown-bullet"></i> <span class="dropdown-content">Transportation Bills</span>
+                                                            </a>
+                                                        <?php
+                                                        }
+                                                        if (hasAccess("warranty", "View") !== 'false') {
+                                                        ?>
+                                                            <a href="<?php echo $GLOBALS['siteurl']; ?>/more/warrantyCancellation.php" class="dropdown-item">
+                                                                <i class="dropdown-bullet"></i> <span class="dropdown-content">Warranty Cancellation</span>
+                                                            </a>
+                                                        <?php
+                                                        }
+
                                                         ?>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="dropdown-col border-left">
-                                                <h4 class="dropdown-header dropdown-header-lg">Tools</h4>
-                                                <?php
-                                                if (hasAccess("wizardsBill", "View") !== 'false') {
-                                                ?>
-                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/lotwizardsBill.php" class="dropdown-item">
-                                                        <i class="dropdown-bullet"></i> <span class="dropdown-content">Lot Wizards Bills</span>
-                                                    </a>
                                                 <?php
                                                 }
-                                                if (hasAccess("rdr", "View") !== 'false') {
-                                                ?>
-                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/rdr.php" class="dropdown-item">
-                                                        <i class="dropdown-bullet"></i> <span class="dropdown-content">RDR (RETAIL DELIVERY REGISTRATION)</span>
-                                                    </a>
-                                                <?php
-                                                }
-                                                if (hasAccess("tansptDmg", "View") !== 'false') {
-                                                ?>
-                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/transportation.php" class="dropdown-item">
-                                                        <i class="dropdown-bullet"></i> <span class="dropdown-content">Transportation Damage</span>
-                                                    </a>
-                                                <?php
-                                                }
-                                                if (hasAccess("tansptBill", "View") !== 'false') {
-                                                ?>
-                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/transportationBills.php" class="dropdown-item">
-                                                        <i class="dropdown-bullet"></i> <span class="dropdown-content">Transportation Bills</span>
-                                                    </a>
-                                                <?php
-                                                }
-                                                if (hasAccess("warranty", "View") !== 'false') {
-                                                ?>
-                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/warrantyCancellation.php" class="dropdown-item">
-                                                        <i class="dropdown-bullet"></i> <span class="dropdown-content">Warranty Cancellation</span>
-                                                    </a>
-                                                <?php
-                                                }
-
                                                 ?>
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
+                                    </li>
+                                <?php
+                                }
+                                ?>
                             </ul>
                         </div>
                         <div class="header-wrap header-wrap-block">
@@ -737,74 +702,17 @@
                             <div class="input-group-icon input-group-lg widget15-compact" id="statusBar">
                                 <h3 class="portlet-title">
                                     <?php
-
                                     if (hasAccess("sale", "View") !== 'false') {
                                     ?>
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary" id="todaySoldStatus">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary todaySoldStatus" id="todaySoldStatus">
                                         </a>
                                     <?php
-                                    } else {
-                                        echo '<span id="todaySoldStatus" ></span>';
                                     }
                                     ?>
                                 </h3>
                             </div>
                         </div>
                         <div class="header-wrap">
-                            <!-- <div class="dropdown ml-2">
-                                <button class="btn btn-label-primary btn-icon" data-toggle="dropdown"><i class="far fa-comments"></i>
-                                    <div class="btn-marker"><i class="marker marker-dot text-success"></i></div>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-wide dropdown-menu-animated overflow-hidden py-0">
-                                    <div class="portlet portlet-scroll border-0">
-                                        <div class="portlet-header portlet-header-bordered rounded-0">
-                                            <div class="rich-list-item w-100 p-0">
-                                                <div class="rich-list-prepend">
-                                                    <div class="avatar avatar-circle">
-                                                    </div>
-                                                </div>
-                                                <div class="rich-list-content">
-                                                    <h3 class="rich-list-title">Garrett Winters</h3><span class="rich-list-subtitle">UX Designer</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="portlet-body" data-toggle="simplebar">
-                                            <div class="chat">
-                                                <div class="chat-item chat-item-left">
-                                                    <div class="chat-content">
-                                                        <p class="chat-bubble chat-bubble-primary">Lorem ipsum dolor sit
-                                                            amet, consectetur adipisicing elit. Unde, eius.</p>
-                                                        <p class="chat-bubble chat-bubble-primary">Lorem ipsum dolor sit
-                                                            amet, consectetur adipisicing elit. Unde, eius.</p><span class="chat-time">3 min ago</span>
-                                                    </div>
-                                                </div>
-                                                <div class="chat-item chat-item-right">
-                                                    <div class="chat-content">
-                                                        <p class="chat-bubble">Lorem ipsum dolor sit amet, consectetur
-                                                            adipisicing elit. Unde, eius.</p><span class="chat-time">2
-                                                            min ago</span>
-                                                    </div>
-                                                </div>
-                                                <div class="chat-item chat-item-left">
-                                                    <div class="chat-content">
-                                                        <p class="chat-bubble chat-bubble-primary">Lorem ipsum dolor sit
-                                                            amet, consectetur adipisicing elit. Unde, eius.</p><span class="chat-time">1 min ago</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="portlet-footer portlet-footer-bordered rounded-0">
-                                            <div class="input-group"><input type="text" class="form-control" placeholder="Type...">
-                                                <div class="input-group-append"><button class="btn btn-primary btn-icon"><i class="fa fa-paper-plane"></i></button></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
-                            <!-- <button class="btn btn-label-primary btn-icon ml-2" data-toggle="sidemenu" data-target="#sidemenu-settings">
-                                <i class="far fa-list-alt"></i>
-                            </button> -->
-
                             <ul class="nav nav-pills">
                                 <?php
                                 if (hasAccess("matrix", "View") !== 'false') {
@@ -825,7 +733,6 @@
                                     </li>
                                 <?php
                                 }
-                                // if (hasAccess("sale", "Edit") !== 'false' || hasAccess("sale", "Remove") !== 'false' || $salesConsultantID == $_SESSION['userRole']) {
                                 if (hasAccess("sale", "View") !== 'false') {
                                 ?>
                                     <li class="nav-item">
@@ -835,20 +742,16 @@
                                     </li>
                                 <?php
                                 }
-                                if (hasAccess("todayavail", "View") !== 'false') {
-                                ?>
-                                    <li class="nav-item">
-                                        <button class="btn btn-label-primary btn-icon mr-2" data-toggle="sidemenu" data-target="#sidemenu-todo" onclick="loadSchedules()">
-                                            <i class="far fa-calendar-alt"></i>
-                                        </button>
-                                    </li>
-
-                                <?php
-                                }
-
                                 ?>
                             </ul>
                             <?php
+                            if (hasAccess("todayavail", "View") !== 'false') {
+                            ?>
+                                <button class="btn btn-label-primary btn-icon mr-2" data-toggle="sidemenu" data-target="#sidemenu-todo" onclick="loadSchedules()">
+                                    <i class="far fa-calendar-alt"></i>
+                                </button>
+                            <?php
+                            }
                             if (hasAccess("weblink", "View") !== 'false') {
                             ?>
                                 <div class="dropdown">
@@ -901,7 +804,6 @@
                                     <div class="widget13-text">Hi <strong> <?php echo $_SESSION['userName']; ?> </strong></div>
                                     <div class="avatar avatar-info widget13-avatar">
                                         <div class="avatar-display" style="width: inherit;height: inherit;">
-                                            <!-- <i class="fa fa-user-alt"></i> -->
                                             <?php
                                             if ($_SESSION['userProfile'] != "") {
                                                 echo '<img src="' . $GLOBALS['siteurl'] . '/assets/profiles/' . $_SESSION['userProfile'] . '" alt="Avatar image">';
@@ -927,15 +829,11 @@
                                                             }
                                                             ?>
                                                         </div>
-                                                        <!-- <div class="avatar-display">
-                                                            <i class="fa fa-user-alt"></i>
-                                                        </div> -->
                                                     </div>
                                                 </div>
                                                 <div class="rich-list-content">
                                                     <h3 class="rich-list-title text-white"> <?php echo $_SESSION['userName']; ?> </h3><span class="rich-list-subtitle text-white"> <?php echo $_SESSION['userRoleName']; ?> </span>
                                                 </div>
-                                                <!-- <div class="rich-list-append"><span class="badge badge-warning badge-square badge-lg">9+</span></div> -->
                                                 <div class="rich-list-append">
                                                     <a href="<?php echo $GLOBALS['siteurl']; ?>/logout.php" class="btn btn-danger">Sign out</a>
                                                 </div>
@@ -950,65 +848,37 @@
                                                         </div>
                                                         <span class="grid-nav-content">Profile Setting</span>
                                                     </a>
-                                                    <!-- <a href="#" class="grid-nav-item">
-                                                        <div class="grid-nav-icon"><i class="far fa-comments"></i></div>
-                                                        <span class="grid-nav-content">Messages</span>
-                                                    </a><a href="#" class="grid-nav-item">
-                                                        <div class="grid-nav-icon"><i class="far fa-clone"></i></div>
-                                                        <span class="grid-nav-content">Activities</span>
-                                                    </a> -->
                                                 </div>
-                                                <!-- <div class="grid-nav-row"><a href="#" class="grid-nav-item">
-                                                        <div class="grid-nav-icon"><i class="far fa-calendar-check"></i>
-                                                        </div><span class="grid-nav-content">Tasks</span>
-                                                    </a><a href="#" class="grid-nav-item">
-                                                        <div class="grid-nav-icon"><i class="far fa-sticky-note"></i>
-                                                        </div><span class="grid-nav-content">Notes</span>
-                                                    </a><a href="#" class="grid-nav-item">
-                                                        <div class="grid-nav-icon"><i class="far fa-bell"></i></div>
-                                                        <span class="grid-nav-content">Notification</span>
-                                                    </a></div> -->
                                             </div>
                                         </div>
-                                        <!-- <div class="portlet-footer portlet-footer-bordered rounded-0">
-                                            <a href="<?php // echo $GLOBALS['siteurl']; 
-                                                        ?>/logout.php" class="btn btn-label-danger">Sign out</a>
-                                        </div> -->
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- <div class="header-holder header-holder-desktop">
-                    <div class="header-container container-fluid">
-                        <h4 class="header-title">Dashboard</h4><i class="header-divider"></i>
-                        <div class="header-wrap header-wrap-block justify-content-start">
-                            <div class="breadcrumb"><a href="index.php" class="breadcrumb-item">
-                                    <div class="breadcrumb-icon"><i data-feather="home"></i></div><span class="breadcrumb-text">Dashboard</span>
-                                </a></div>
-                        </div>
-                        <div class="header-wrap">
-                            <div class="btn-group btn-group-toggle" data-toggle="buttons"><label class="btn btn-flat-primary active"><input type="radio" name="timeOption" id="timeOption1" checked="checked"> Today</label> <label class="btn btn-flat-primary"><input type="radio" name="timeOption" id="timeOption2">
-                                    Week</label> <label class="btn btn-flat-primary"><input type="radio" name="timeOption" id="timeOption3"> Month</label></div>
-                            <button class="btn btn-label-info btn-icon ml-2" id="fullscreen-trigger" data-toggle="tooltip" title="Toggle fullscreen" data-placement="left"><i class="fa fa-expand fullscreen-icon-expand"></i> <i class="fa fa-compress fullscreen-icon-compress"></i></button>
-                        </div>
-                    </div>
-                </div> -->
-
                 <div class="header-holder header-holder-mobile sticky-header" id="sticky-header-mobile">
                     <div class="header-container container-fluid">
                         <div class="header-wrap"><button class="btn btn-flat-primary btn-icon" data-toggle="aside"><i class="fa fa-bars"></i></button></div>
-                        <div class="header-wrap header-wrap-block justify-content-start px-3">
-                            <h4 class="header-brand">One Dealers</h4>
+                        <div class="header-wrap header-wrap-block justify-content-start p-2 text-center d-contents text-overflow-ellipsis">
+                            <!-- <h4 class="header-brand">One Dealers</h4> -->
+                            <h5 class="portlet-title">
+                                <?php
+                                if (hasAccess("sale", "View") !== 'false') {
+                                ?>
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary todaySoldStatus">
+                                    </a>
+                                <?php
+                                }
+                                ?>
+                            </h5>
                         </div>
                         <div class="header-wrap">
-                            <!-- <button class="btn btn-flat-primary btn-icon" data-toggle="sidemenu" data-target="#sidemenu-todo"><i class="far fa-calendar-alt"></i></button> -->
                             <div class="dropdown ml-2"><button class="btn btn-flat-primary widget13" data-toggle="dropdown">
-                                    <div class="widget13-text">Hi <strong> <?php echo $_SESSION['userName']; ?> </strong></div>
+                                    <!-- <div class="widget13-text">Hi <strong> <?php //echo $_SESSION['userName']; 
+                                                                                ?> </strong></div> -->
                                     <div class="avatar avatar-info widget13-avatar">
                                         <div class="avatar-display" style="width: inherit;height: inherit;">
-                                            <!-- <i class="fa fa-user-alt"></i> -->
                                             <?php
                                             if ($_SESSION['userProfile'] != "") {
                                                 echo '<img src="' . $GLOBALS['siteurl'] . '/assets/profiles/' . $_SESSION['userProfile'] . '" alt="Avatar image">';
@@ -1036,9 +906,6 @@
                                                             }
                                                             ?>
                                                         </div>
-                                                        <!-- <div class="avatar-display">
-                                                            <i class="fa fa-user-alt"></i>
-                                                        </div> -->
                                                     </div>
                                                 </div>
                                                 <div class="rich-list-content">
@@ -1067,7 +934,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- d-flex flex-wrap flex-0 align-items-center -->
                 <div class="header-holder header-holder-mobile">
                     <div class="header-container container-fluid">
                         <div class="row" style="width:-webkit-fill-available;">
@@ -1109,82 +975,103 @@
                                     <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/addSale.php" class="btn btn-flat-primary responsive-content breadcrumb-text">Add Sale</a>
                                 <?php
                                 }
+                                if (
+                                    hasAccess("appointment", "View") !== 'false' ||
+                                    hasAccess("wizardsBill", "View") !== 'false' ||
+                                    hasAccess("rdr", "View") !== 'false' ||
+                                    hasAccess("tansptDmg", "View") !== 'false' ||
+                                    hasAccess("tansptBill", "View") !== 'false' ||
+                                    hasAccess("warranty", "View") !== 'false'
+                                ) {
                                 ?>
-                                <div class="dropdown">
-                                    <a href="#" class="btn btn-flat-primary responsive-content breadcrumb-text" id="more" data-toggle="dropdown">More</a>
-                                    <div class="dropdown-menu dropdown-menu-left dropdown-menu-wide dropdown-menu-animated overflow-hidden">
-                                        <div class="dropdown-row flex-column">
+                                    <div class="dropdown">
+                                        <a href="#" class="btn btn-flat-primary responsive-content breadcrumb-text" id="more" data-toggle="dropdown">More</a>
+                                        <div class="dropdown-menu dropdown-menu-left dropdown-menu-wide dropdown-menu-animated overflow-hidden">
+                                            <div class="dropdown-row flex-column">
+                                                <?php
+                                                if (hasAccess("appointment", "View") !== 'false') {
+                                                ?>
+                                                    <div class="dropdown-col">
+                                                        <h4 class="dropdown-header dropdown-header-lg">Appointments</h4>
+                                                        <div class="grid-nav grid-nav-action">
+                                                            <div class="grid-nav-row">
+                                                                <a href="<?php echo  $GLOBALS['siteurl']; ?>/more/appointments.php" class="grid-nav-item">
+                                                                    <div class="grid-nav-icon">
+                                                                        <i class="far fa-calendar-alt"></i>
+                                                                    </div>
+                                                                    <span class="grid-nav-content">Appointment Calendar</span>
+                                                                </a>
+                                                                <a href="<?php echo  $GLOBALS['siteurl']; ?>/more/deliveryCoordinators.php" class="grid-nav-item">
+                                                                    <div class="grid-nav-icon">
+                                                                        <i class="far fa-clipboard"></i>
+                                                                    </div>
+                                                                    <span class="grid-nav-content">Delivery Coordinator</span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <?php
+                                                }
+                                                if (
+                                                    hasAccess("wizardsBill", "View") !== 'false' ||
+                                                    hasAccess("rdr", "View") !== 'false' ||
+                                                    hasAccess("tansptDmg", "View") !== 'false' ||
+                                                    hasAccess("tansptBill", "View") !== 'false' ||
+                                                    hasAccess("warranty", "View") !== 'false'
+                                                ) {
 
-                                            <div class="dropdown-col">
-                                                <h4 class="dropdown-header dropdown-header-lg">Appointments</h4>
-                                                <div class="grid-nav grid-nav-action">
-                                                    <div class="grid-nav-row">
+                                                ?>
+
+                                                    <div class="dropdown-col border-left">
+                                                        <h4 class="dropdown-header dropdown-header-lg">Tools</h4>
                                                         <?php
-                                                        if (hasAccess("appointment", "View") !== 'false') {
+                                                        if (hasAccess("wizardsBill", "View") !== 'false') {
                                                         ?>
-                                                            <a href="<?php echo  $GLOBALS['siteurl']; ?>/more/appointments.php" class="grid-nav-item">
-                                                                <div class="grid-nav-icon">
-                                                                    <i class="far fa-calendar-alt"></i>
-                                                                </div>
-                                                                <span class="grid-nav-content">Appointment Calendar</span>
-                                                            </a>
-                                                            <a href="<?php echo  $GLOBALS['siteurl']; ?>/more/deliveryCoordinators.php" class="grid-nav-item">
-                                                                <div class="grid-nav-icon">
-                                                                    <i class="far fa-clipboard"></i>
-                                                                </div>
-                                                                <span class="grid-nav-content">Delivery Coordinator</span>
+                                                            <a href="<?php echo $GLOBALS['siteurl']; ?>/more/lotwizardsBill.php" class="dropdown-item">
+                                                                <i class="dropdown-bullet"></i> <span class="dropdown-content">Lot Wizards Bills</span>
                                                             </a>
                                                         <?php
                                                         }
+                                                        if (hasAccess("rdr", "View") !== 'false') {
+                                                        ?>
+                                                            <a href="<?php echo $GLOBALS['siteurl']; ?>/more/rdr.php" class="dropdown-item">
+                                                                <i class="dropdown-bullet"></i> <span class="dropdown-content">RDR (RETAIL DELIVERY REGISTRATION)</span>
+                                                            </a>
+                                                        <?php
+                                                        }
+                                                        if (hasAccess("tansptDmg", "View") !== 'false') {
+                                                        ?>
+                                                            <a href="<?php echo $GLOBALS['siteurl']; ?>/more/transportation.php" class="dropdown-item">
+                                                                <i class="dropdown-bullet"></i> <span class="dropdown-content">Transportation Damage</span>
+                                                            </a>
+                                                        <?php
+                                                        }
+                                                        if (hasAccess("tansptBill", "View") !== 'false') {
+                                                        ?>
+                                                            <a href="<?php echo $GLOBALS['siteurl']; ?>/more/transportationBills.php" class="dropdown-item">
+                                                                <i class="dropdown-bullet"></i> <span class="dropdown-content">Transportation Bills</span>
+                                                            </a>
+                                                        <?php
+                                                        }
+                                                        if (hasAccess("warranty", "View") !== 'false') {
+                                                        ?>
+                                                            <a href="<?php echo $GLOBALS['siteurl']; ?>/more/warrantyCancellation.php" class="dropdown-item">
+                                                                <i class="dropdown-bullet"></i> <span class="dropdown-content">Warranty Cancellation</span>
+                                                            </a>
+                                                        <?php
+                                                        }
+
                                                         ?>
                                                     </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="dropdown-col border-left">
-                                                <h4 class="dropdown-header dropdown-header-lg">Tools</h4>
-                                                <?php
-                                                if (hasAccess("wizardsBill", "View") !== 'false') {
-                                                ?>
-                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/lotwizardsBill.php" class="dropdown-item">
-                                                        <i class="dropdown-bullet"></i> <span class="dropdown-content">Lot Wizards Bills</span>
-                                                    </a>
                                                 <?php
                                                 }
-                                                if (hasAccess("rdr", "View") !== 'false') {
-                                                ?>
-                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/rdr.php" class="dropdown-item">
-                                                        <i class="dropdown-bullet"></i> <span class="dropdown-content">RDR (RETAIL DELIVERY REGISTRATION)</span>
-                                                    </a>
-                                                <?php
-                                                }
-                                                if (hasAccess("tansptDmg", "View") !== 'false') {
-                                                ?>
-                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/transportation.php" class="dropdown-item">
-                                                        <i class="dropdown-bullet"></i> <span class="dropdown-content">Transportation Damage</span>
-                                                    </a>
-                                                <?php
-                                                }
-                                                if (hasAccess("tansptBill", "View") !== 'false') {
-                                                ?>
-                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/transportationBills.php" class="dropdown-item">
-                                                        <i class="dropdown-bullet"></i> <span class="dropdown-content">Transportation Bills</span>
-                                                    </a>
-                                                <?php
-                                                }
-                                                if (hasAccess("warranty", "View") !== 'false') {
-                                                ?>
-                                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/more/warrantyCancellation.php" class="dropdown-item">
-                                                        <i class="dropdown-bullet"></i> <span class="dropdown-content">Warranty Cancellation</span>
-                                                    </a>
-                                                <?php
-                                                }
-
                                                 ?>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                <?php
+                                }
+                                ?>
                             </div>
 
                             <div class="col-3">

@@ -3,6 +3,7 @@ include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
 if ($_GET['r'] == 'man') {
+    $userRole = $_SESSION['userRole'];
     if (hasAccess("sale", "View") === 'false') {
         echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
     }
@@ -13,6 +14,25 @@ if ($_GET['r'] == 'man') {
     } else {
         echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
     }
+
+    if ($userRole != 'Admin' && $userRole != $branchAdmin && $userRole != $generalManagerID && $userRole != $salesManagerID) {
+        echo '<input type="hidden" name="vgb" id="vgb" value="false">';
+    } else {
+        echo '<input type="hidden" name="vgb" id="vgb" value="true">';
+    }
+
+    if ($salesConsultantID != $_SESSION['userRole']) {
+        echo '<input type="hidden" name="isConsultant" id="isConsultant" value="false" />';
+    } else {
+        echo '<input type="hidden" name="isConsultant" id="isConsultant" value="true" />';
+    }
+
+    $_editTodo = (hasAccess("todo", "Edit") !== 'false') ?: "disabled";
+    $_editIncentives = (hasAccess("incentives", "Edit") !== 'false') ?: "disabled";
+
+    echo '<input type="hidden" name="loggedInUserRole" id="loggedInUserRole" value="' . $userRole . '" />';
+    echo '<input type="hidden" name="currentUser" id="currentUser" value="' . $_SESSION['userName'] . '">';
+    echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_SESSION['userId'] . '">';
 }
 
 ?>
@@ -145,21 +165,6 @@ if ($_GET['r'] == 'man') {
 <?php
 
 if ($_GET['r'] == 'man') {
-
-    if ($salesConsultantID != $_SESSION['userRole']) {
-        echo '<input type="hidden" name="isConsultant" id="isConsultant" value="false" />';
-    } else {
-        echo '<input type="hidden" name="isConsultant" id="isConsultant" value="true" />';
-    }
-
-    $userRole = $_SESSION['userRole'];
-    $_editTodo = (hasAccess("todo", "Edit") !== 'false') ?: "disabled";
-    $_editIncentives = (hasAccess("incentives", "Edit") !== 'false') ?: "disabled";
-
-    echo '<input type="hidden" name="loggedInUserRole" id="loggedInUserRole" value="' . $userRole . '" />';
-    echo '<input type="hidden" name="currentUser" id="currentUser" value="' . $_SESSION['userName'] . '">';
-    echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_SESSION['userId'] . '">';
-
 ?>
 
     <div class="content">
@@ -230,6 +235,11 @@ if ($_GET['r'] == 'man') {
                         </div>
                         <div class="portlet-body">
                             <div class="soldLogs">
+                                <!-- <button type="button" class="btn btn-link p-0 d-none" id="codp_warn" style="width: fit-content;position: absolute;top: 10%;right: 15%;" data-toggle="popover" data-trigger="focus" title="Cars To Dealer – Pending" data-content="This Stock is also visible on Cars To Dealer – Pending">
+                                    <div class="widget19-icon text-danger bg-transparent">
+                                        <i data-feather="alert-circle"></i>
+                                    </div>
+                                </button> -->
                                 <table id="datatable-1" class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
@@ -630,58 +640,58 @@ if ($_GET['r'] == 'man') {
 
                                 </div>
                                 <div class="col-md-6" id="detailsSection">
-                                    <?php
-                                    if (hasAccess("sale", "Details") !== 'false') {
-                                    ?>
-                                        <div class="form-group row <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
-                                            <label class="col-md-2 offset-md-1 col-form-label text-md-right" for="submittedBy">Submitted By</label>
-                                            <div class="col-md-8 d-flex justify-content-around">
-                                                <input type="text" class="form-control text-center" id="submittedBy" placeholder="Submitte By" readonly>
-                                            </div>
+
+                                    <div class="form-group row <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
+                                        <label class="col-md-2 offset-md-1 col-form-label text-md-right" for="submittedBy">Submitted By</label>
+                                        <div class="col-md-8 d-flex justify-content-around">
+                                            <input type="text" class="form-control text-center" id="submittedBy" placeholder="Submitte By" readonly>
                                         </div>
-                                        <div class="form-group row <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
-                                            <div class="col-md-10 offset-md-1 saleDetailsDiv" id="saleDetailsDiv">
-                                                <textarea class="form-control autosize" style="border: none;" name="selectedDetails" id="selectedDetails" readonly placeholder="Type Something..."></textarea>
-                                                <div class="form-group row" id="grossDiv">
-                                                    <label class="col-md-2 offset-md-3 col-form-label text-md-right" for="profit">Gross</label>
-                                                    <div class="col-md-4">
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <div class="input-group-text">$</div>
-                                                            </div>
-                                                            <input type="text" class="form-control" name="profit" id="profit" value="0">
+                                    </div>
+                                    <div class="form-group row <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
+                                        <div class="col-md-10 offset-md-1 saleDetailsDiv" id="saleDetailsDiv">
+                                            <button type="button" class="btn btn-link p-0 d-none" id="codp_warn" style="width: fit-content;position: absolute;top: 10%;right: 15%;" data-toggle="popover" data-trigger="focus" title="Cars To Dealer – Pending" data-content="This Stock is also visible on Cars To Dealer – Pending">
+                                                <div class="widget19-icon text-danger bg-transparent">
+                                                    <i data-feather="alert-circle"></i>
+                                                </div>
+                                            </button>
+                                            <textarea class="form-control autosize" style="border: none;" name="selectedDetails" id="selectedDetails" readonly placeholder="Type Something..."></textarea>
+                                            <div class="form-group row" id="grossDiv">
+                                                <label class="col-md-2 offset-md-3 col-form-label text-md-right" for="profit">Gross</label>
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">$</div>
                                                         </div>
+                                                        <input type="text" class="form-control" name="profit" id="profit" value="0">
                                                     </div>
                                                 </div>
                                             </div>
+                                            <button type="button" class="btn btn-link p-0 d-none" id="lwbn_warn" style="width: fit-content;position: absolute;bottom: 10%;right: 15%;" data-toggle="popover" data-trigger="focus" title="Lot Wizards Bills - NOT PAID" data-content="This Stock is also visible on Lot Wizards Bills - NOT PAID">
+                                                <div class="widget19-icon text-danger bg-transparent">
+                                                    <i data-feather="dollar-sign"></i>
+                                                </div>
+                                            </button>
                                         </div>
-                                        <div class="form-group row <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
-                                            <label class="col-md-2 offset-md-1 col-form-label text-md-right" for="iscertified">Certified</label>
-                                            <div class="col-md-8 d-flex justify-content-around">
-                                                <!-- <input type="text" class="form-control" id="iscertified" placeholder="yes" readonly> -->
-                                                <div class="custom-control custom-control-lg custom-radio">
-                                                    <input type="radio" id="yes" value="on" name="iscertified" class="custom-control-input">
-                                                    <label class="custom-control-label" for="yes">Yes</label>
-                                                </div>
-                                                <div class="custom-control custom-control-lg custom-radio">
-                                                    <input type="radio" id="yesOther" value="yesOther" name="iscertified" class="custom-control-input">
-                                                    <label class="custom-control-label" for="yesOther">Yes/Other</label>
-                                                </div>
-                                                <div class="custom-control custom-control-lg custom-radio">
-                                                    <input type="radio" id="no" value="off" name="iscertified" class="custom-control-input">
-                                                    <label class="custom-control-label" for="no">No</label>
-                                                </div>
+                                    </div>
+                                    <div class="form-group row <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
+                                        <label class="col-md-2 offset-md-1 col-form-label text-md-right" for="iscertified">Certified</label>
+                                        <div class="col-md-8 d-flex justify-content-around">
+                                            <!-- <input type="text" class="form-control" id="iscertified" placeholder="yes" readonly> -->
+                                            <div class="custom-control custom-control-lg custom-radio">
+                                                <input type="radio" id="yes" value="on" name="iscertified" class="custom-control-input">
+                                                <label class="custom-control-label" for="yes">Yes</label>
+                                            </div>
+                                            <div class="custom-control custom-control-lg custom-radio">
+                                                <input type="radio" id="yesOther" value="yesOther" name="iscertified" class="custom-control-input">
+                                                <label class="custom-control-label" for="yesOther">Yes/Other</label>
+                                            </div>
+                                            <div class="custom-control custom-control-lg custom-radio">
+                                                <input type="radio" id="no" value="off" name="iscertified" class="custom-control-input">
+                                                <label class="custom-control-label" for="no">No</label>
                                             </div>
                                         </div>
+                                    </div>
 
-                                    <?php
-                                    } else {
-                                        echo '<div>
-                                                    <input type="hidden" class="form-control" name="iscertified" id="iscertified" />
-                                                    <input type="hidden" class="form-control" name="profit" id="profit" />
-                                                </div>';
-                                    }
-                                    ?>
                                     <div class="form-row">
                                         <div class="col-md-10 offset-md-1">
                                             <div class="form-group <?php echo ($salesConsultantID == $_SESSION['userRole'] || 'Admin' == $_SESSION['userRole']) ?: "makeDisable"; ?>">
@@ -824,96 +834,97 @@ if ($_GET['r'] == 'man') {
 
                             </div>
 
-                            <div class=<?php echo hasAccess("sale", "Details") !== 'false' ? "d-block" : "d-none" ?>>
-                                <h5 class="my-3">Co-Buyer</h5>
-                                <div class="form-row <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
-                                    <div class="col-md-10">
-                                        <div class="form-group input-group d-flex flex-md-row flex-sm-column input-group-mobile">
-                                            <input type="text" name="cbfname" id="cbfname" class="form-control w-auto " placeholder="First name">
-                                            <input type="text" name="cbmname" id="cbmname" class="form-control w-auto " placeholder="Middle name">
-                                            <input type="text" name="cblname" id="cblname" class="form-control w-auto " placeholder="Last name">
-                                            <select class="form-control selectpicker w-auto" onchange="changeSalesPersonTodo()" name="cbstate" id="cbstate" data-live-search="true" data-size="4">
-                                                <option value="0" selected disabled>State</option>
-                                                <option value="MA">MA</option>
-                                                <option value="RI">RI</option>
-                                                <option value="CT">CT</option>
-                                                <option value="NH">NH</option>
-                                                <option value="AL">AL</option>
-                                                <option value="AK">AK</option>
-                                                <option value="AZ">AZ</option>
-                                                <option value="AR">AR</option>
-                                                <option value="CA">CA</option>
-                                                <option value="CO">CO</option>
-                                                <option value="DC">DC</option>
-                                                <option value="DE">DE</option>
-                                                <option value="FL">FL</option>
-                                                <option value="GA">GA</option>
-                                                <option value="HI">HI</option>
-                                                <option value="ID">ID</option>
-                                                <option value="IL">IL</option>
-                                                <option value="IN">IN</option>
-                                                <option value="IA">IA</option>
-                                                <option value="KS">KS</option>
-                                                <option value="KY">KY</option>
-                                                <option value="LA">LA</option>
-                                                <option value="ME">ME</option>
-                                                <option value="MD">MD</option>
-                                                <option value="MI">MI</option>
-                                                <option value="MN">MN</option>
-                                                <option value="MS">MS</option>
-                                                <option value="MO">MO</option>
-                                                <option value="MT">MT</option>
-                                                <option value="NE">NE</option>
-                                                <option value="NV">NV</option>
-                                                <option value="NJ">NJ</option>
-                                                <option value="NM">NM</option>
-                                                <option value="NY">NY</option>
-                                                <option value="NC">NC</option>
-                                                <option value="ND">ND</option>
-                                                <option value="OH">OH</option>
-                                                <option value="OK">OK</option>
-                                                <option value="OR">OR</option>
-                                                <option value="PA">PA</option>
-                                                <option value="SC">SC</option>
-                                                <option value="SD">SD</option>
-                                                <option value="TN">TN</option>
-                                                <option value="TX">TX</option>
-                                                <option value="UT">UT</option>
-                                                <option value="VT">VT</option>
-                                                <option value="VA">VA</option>
-                                                <option value="WA">WA</option>
-                                                <option value="WV">WV</option>
-                                                <option value="WI">WI</option>
-                                                <option value="WY">WY</option>
-                                                <option value="N/A">N/A</option>
-                                            </select>
-                                        </div>
+
+                            <h5 class="my-3">Co-Buyer</h5>
+                            <div class="form-row <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
+                                <div class="col-md-10">
+                                    <div class="form-group input-group d-flex flex-md-row flex-sm-column input-group-mobile">
+                                        <input type="text" name="cbfname" id="cbfname" class="form-control w-auto " placeholder="First name">
+                                        <input type="text" name="cbmname" id="cbmname" class="form-control w-auto " placeholder="Middle name">
+                                        <input type="text" name="cblname" id="cblname" class="form-control w-auto " placeholder="Last name">
+                                        <select class="form-control selectpicker w-auto" onchange="changeSalesPersonTodo()" name="cbstate" id="cbstate" data-live-search="true" data-size="4">
+                                            <option value="0" selected disabled>State</option>
+                                            <option value="MA">MA</option>
+                                            <option value="RI">RI</option>
+                                            <option value="CT">CT</option>
+                                            <option value="NH">NH</option>
+                                            <option value="AL">AL</option>
+                                            <option value="AK">AK</option>
+                                            <option value="AZ">AZ</option>
+                                            <option value="AR">AR</option>
+                                            <option value="CA">CA</option>
+                                            <option value="CO">CO</option>
+                                            <option value="DC">DC</option>
+                                            <option value="DE">DE</option>
+                                            <option value="FL">FL</option>
+                                            <option value="GA">GA</option>
+                                            <option value="HI">HI</option>
+                                            <option value="ID">ID</option>
+                                            <option value="IL">IL</option>
+                                            <option value="IN">IN</option>
+                                            <option value="IA">IA</option>
+                                            <option value="KS">KS</option>
+                                            <option value="KY">KY</option>
+                                            <option value="LA">LA</option>
+                                            <option value="ME">ME</option>
+                                            <option value="MD">MD</option>
+                                            <option value="MI">MI</option>
+                                            <option value="MN">MN</option>
+                                            <option value="MS">MS</option>
+                                            <option value="MO">MO</option>
+                                            <option value="MT">MT</option>
+                                            <option value="NE">NE</option>
+                                            <option value="NV">NV</option>
+                                            <option value="NJ">NJ</option>
+                                            <option value="NM">NM</option>
+                                            <option value="NY">NY</option>
+                                            <option value="NC">NC</option>
+                                            <option value="ND">ND</option>
+                                            <option value="OH">OH</option>
+                                            <option value="OK">OK</option>
+                                            <option value="OR">OR</option>
+                                            <option value="PA">PA</option>
+                                            <option value="SC">SC</option>
+                                            <option value="SD">SD</option>
+                                            <option value="TN">TN</option>
+                                            <option value="TX">TX</option>
+                                            <option value="UT">UT</option>
+                                            <option value="VT">VT</option>
+                                            <option value="VA">VA</option>
+                                            <option value="WA">WA</option>
+                                            <option value="WV">WV</option>
+                                            <option value="WI">WI</option>
+                                            <option value="WY">WY</option>
+                                            <option value="N/A">N/A</option>
+                                        </select>
                                     </div>
-
-                                    <a href="javascript:;" class="form-group col-md-2 text-center w-100 btn btn-outline-info input-group-button-mobile" onclick="toggleInfo('coBuyer')">
-                                        Add Co-Buyer <i class="fa fa-angle-down"></i>
-                                    </a>
-
                                 </div>
-                                <div class="mt-2 coBuyer border rounded hidden <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>" id="pbody" style="background-color: rgba(0,188,212,.1);">
-                                    <div class="form-row p-3">
-                                        <label for="cbAddress1" class="col-md-1 col-form-label text-center">Address 1*</label>
-                                        <div class="form-group col-md-5">
-                                            <div class="input-group-icon">
-                                                <input type="text" class="form-control" name="cbAddress1" id="cbAddress1" placeholder="Your address here">
-                                                <div class="input-group-append"><i class="fa fa-map-marker-alt"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <label for="cbAddress2" class="col-md-1 col-form-label text-center">Address 2</label>
-                                        <div class="form-group col-md-5">
-                                            <div class="input-group-icon">
-                                                <input type="text" class="form-control" name="cbAddress2" id="cbAddress2" placeholder="Your address here">
-                                                <div class="input-group-append"><i class="fa fa-map-marker-alt"></i>
-                                                </div>
+
+                                <a href="javascript:;" class="form-group col-md-2 text-center w-100 btn btn-outline-info input-group-button-mobile" onclick="toggleInfo('coBuyer')">
+                                    Add Co-Buyer <i class="fa fa-angle-down"></i>
+                                </a>
+
+                            </div>
+                            <div class="mt-2 coBuyer border rounded hidden <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>" id="pbody" style="background-color: rgba(0,188,212,.1);">
+                                <div class="form-row p-3">
+                                    <label for="cbAddress1" class="col-md-1 col-form-label text-center">Address 1*</label>
+                                    <div class="form-group col-md-5">
+                                        <div class="input-group-icon">
+                                            <input type="text" class="form-control" name="cbAddress1" id="cbAddress1" placeholder="Your address here">
+                                            <div class="input-group-append"><i class="fa fa-map-marker-alt"></i>
                                             </div>
                                         </div>
                                     </div>
+                                    <label for="cbAddress2" class="col-md-1 col-form-label text-center">Address 2</label>
+                                    <div class="form-group col-md-5">
+                                        <div class="input-group-icon">
+                                            <input type="text" class="form-control" name="cbAddress2" id="cbAddress2" placeholder="Your address here">
+                                            <div class="input-group-append"><i class="fa fa-map-marker-alt"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class=<?php echo hasAccess("sale", "Details") !== 'false' ? "d-block" : "d-none" ?>>
                                     <div class="form-row pb-0 p-3">
 
                                         <div class="col-md-4 form-group">
@@ -938,7 +949,6 @@ if ($_GET['r'] == 'man') {
                                         <div class="col-md-4 form-group">
                                             <input type="text" class="form-control" id="cbEmail" name="cbEmail" placeholder="Email*">
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -953,7 +963,7 @@ if ($_GET['r'] == 'man') {
 
                             <div class="mt-3 loadIncentives border rounded hidden" id="pbody" style="background-color: rgba(0,188,212,.1);">
                                 <div class="form-row p-3">
-                                    <label for="college" class="col-md-1 col-form-label">College
+                                    <label for="college" class="col-md-1 col-form-label text-md-center">College
                                         <span class="badge-label-primary" id="college_v"></span>
                                     </label>
                                     <div class="col-md-2">
@@ -967,7 +977,7 @@ if ($_GET['r'] == 'man') {
                                             </optgroup>
                                         </select>
                                     </div>
-                                    <label for="military" class="col-md-1 col-form-label">Military
+                                    <label for="military" class="col-md-1 col-form-label text-md-center">Military
                                         <span class="badge-label-primary" id="military_v"></span>
                                     </label>
                                     <div class="col-md-2">
@@ -981,7 +991,7 @@ if ($_GET['r'] == 'man') {
                                             </optgroup>
                                         </select>
                                     </div>
-                                    <label for="loyalty" class="col-md-1 col-form-label">Loyalty
+                                    <label for="loyalty" class="col-md-1 col-form-label text-md-center">Loyalty
                                         <span class="badge-label-primary" id="loyalty_v"></span>
                                     </label>
                                     <div class="col-md-2">
@@ -995,7 +1005,7 @@ if ($_GET['r'] == 'man') {
                                             </optgroup>
                                         </select>
                                     </div>
-                                    <label for="conquest" class="col-md-1 col-form-label">Conquest
+                                    <label for="conquest" class="col-md-1 col-form-label text-md-center">Conquest
                                         <span class="badge-label-primary" id="conquest_v"></span>
                                     </label>
                                     <div class="col-md-2">
@@ -1011,7 +1021,7 @@ if ($_GET['r'] == 'man') {
                                     </div>
                                 </div>
                                 <div class="form-row pb-0 p-3">
-                                    <label for="leaseLoyalty" class="col-md-1 col-form-label">Lease Loyalty
+                                    <label for="leaseLoyalty" class="col-md-1 col-form-label text-md-center">Lease Loyalty
                                         <span class="badge-label-primary" id="leaseLoyalty_v"></span>
                                     </label>
                                     <div class="col-md-3">
@@ -1025,7 +1035,7 @@ if ($_GET['r'] == 'man') {
                                             </optgroup>
                                         </select>
                                     </div>
-                                    <label for="misc1" class="col-md-1 col-form-label">Misc 1
+                                    <label for="misc1" class="col-md-1 col-form-label text-md-center">Misc 1
                                         <span class="badge-label-primary" id="misc1_v"></span>
                                     </label>
                                     <div class="col-md-3">
@@ -1039,7 +1049,7 @@ if ($_GET['r'] == 'man') {
                                             </optgroup>
                                         </select>
                                     </div>
-                                    <label for="misc2" class="col-md-1 col-form-label">Misc 2
+                                    <label for="misc2" class="col-md-1 col-form-label text-md-center">Misc 2
                                         <span class="badge-label-primary" id="misc2_v"></span>
                                     </label>
                                     <div class="col-md-3">
@@ -1067,7 +1077,7 @@ if ($_GET['r'] == 'man') {
 
                                 <div class="form-row p-3">
 
-                                    <label for="vincheck" class="col-md-1 col-form-label">Vin Check</label>
+                                    <label for="vincheck" class="col-md-1 col-form-label text-md-center">Vin Check</label>
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <select onchange="chnageStyle(this)" name="vincheck" id="vincheck" class="selectpicker" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
@@ -1080,7 +1090,7 @@ if ($_GET['r'] == 'man') {
                                             </select>
                                         </div>
                                     </div>
-                                    <label for="insurance" class="col-md-1 col-form-label">Insurance</label>
+                                    <label for="insurance" class="col-md-1 col-form-label text-md-center">Insurance</label>
                                     <div class="col-md-2">
                                         <select class="selectpicker" onchange="chnageStyle(this)" id="insurance" name="insurance" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
                                             <option value="need">Need</option>
@@ -1088,7 +1098,7 @@ if ($_GET['r'] == 'man') {
                                             <option value="n/a">N/A</option>
                                         </select>
                                     </div>
-                                    <label for="tradeTitle" class="col-md-1 col-form-label">Trade Title</label>
+                                    <label for="tradeTitle" class="col-md-1 col-form-label text-md-center">Trade Title</label>
                                     <div class="col-md-2">
                                         <select class="selectpicker" onchange="chnageStyle(this)" id="tradeTitle" name="tradeTitle" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
                                             <option value="need">Need</option>
@@ -1097,7 +1107,7 @@ if ($_GET['r'] == 'man') {
                                             <option value="inHouse">In House</option>
                                         </select>
                                     </div>
-                                    <label for="registration" class="col-md-1 col-form-label">Registration</label>
+                                    <label for="registration" class="col-md-1 col-form-label text-md-center">Registration</label>
                                     <div class="col-md-2">
                                         <select class="selectpicker" onchange="chnageStyle(this)" id="registration" name="registration" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
                                             <option value="pending">Pending</option>
@@ -1110,7 +1120,7 @@ if ($_GET['r'] == 'man') {
                                 </div>
                                 <div class="form-row pb-0 p-3">
 
-                                    <label for="inspection" class="col-md-1 col-form-label">Inspection</label>
+                                    <label for="inspection" class="col-md-1 col-form-label text-md-center">Inspection</label>
                                     <div class="col-md-3">
                                         <select class="selectpicker" onchange="chnageStyle(this)" id="inspection" name="inspection" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
                                             <option value="need">Need</option>
@@ -1119,7 +1129,7 @@ if ($_GET['r'] == 'man') {
                                             <option value="n/a">N/A</option>
                                         </select>
                                     </div>
-                                    <label for="salePStatus" class="col-md-1 col-form-label">Salesperson Status</label>
+                                    <label for="salePStatus" class="col-md-1 col-form-label text-md-center">Salesperson Status</label>
                                     <div class="col-md-3">
                                         <select class="selectpicker" onchange="chnageStyle(this)" id="salePStatus" name="salePStatus" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
 
@@ -1131,7 +1141,7 @@ if ($_GET['r'] == 'man') {
 
                                         </select>
                                     </div>
-                                    <label for="paid" class="col-md-1 col-form-label">Paid</label>
+                                    <label for="paid" class="col-md-1 col-form-label text-md-center">Paid</label>
                                     <div class="col-md-3">
                                         <select class="selectpicker" onchange="chnageStyle(this)" id="paid" name="paid" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
                                             <option value="no">No</option>

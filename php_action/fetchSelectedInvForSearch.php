@@ -124,6 +124,18 @@ if ($result->num_rows > 0) {
         }
 
 
+        $cars_to_dealers_pending = "false";
+        $lot_wizards_bills_notpaid = "false";
+        $statusSql2 = "SELECT 
+        (SELECT COUNT(inv_id) FROM `car_to_dealers` WHERE car_to_dealers.status = 1 AND inv_id = '$stock_id' AND work_needed != '' AND date_returned = '' AND location = '$location') as carstodealers , 
+        (SELECT COUNT(inv_id) FROM `inspections` WHERE inspections.status = 1 AND inspections.repair_returned != '' AND inspections.repair_paid = '' AND inspections.inv_id = '$stock_id') as lotwizardsBills";
+        $rslt2 = $connect->query($statusSql2);
+        if ($rslt2->num_rows > 0) {
+            $rowStatus = $rslt2->fetch_assoc();
+            $cars_to_dealers_pending = $rowStatus['carstodealers'] > 0 ? "true" : "false";
+            $lot_wizards_bills_notpaid = $rowStatus['lotwizardsBills'] > 0 ? "true" : "false";
+        }
+
 
         $output['data'] = array(
             $row['id'],  // id //0
@@ -158,6 +170,8 @@ if ($result->num_rows > 0) {
             $lease_loyalty,
             $lease_loyalty_e,
             $row['status'],
+            $cars_to_dealers_pending,
+            $lot_wizards_bills_notpaid,
             'spTodoArray' => $salespersonTodoArray,
 
         );

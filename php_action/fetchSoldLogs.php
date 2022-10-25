@@ -77,8 +77,9 @@ if ($result->num_rows > 0) {
 
 
         // $date = $row[0];
-        // $date = date("M-d-Y", strtotime($date));  // formating date
+        $sold_date = date("M-d-Y", strtotime($row[0]));  // sold date
         $date =  ($row[21] != '') ? date("M-d-Y", strtotime($row[21])) : date("M-d-Y", strtotime($row[0]));  // get Reconcile Date is exist otherwise get date
+        // $reconcile_date = ($row[21] != '') ? date("M-d-Y", strtotime($row[21])) : '';  // Reconcile date
         $vehicle = $row[17] . ' ' . $row[7] . ' ' . $row[8] . ' ' . $row[9]; // vehicle details
 
         $gross = round(($row[10]), 2);
@@ -106,6 +107,21 @@ if ($result->num_rows > 0) {
         }
         $button .= '</div>';
 
+
+        $codp_warn = "false";
+        $lwbn_warn = "false";
+        $statusSql2 = "SELECT 
+        (SELECT COUNT(inv_id) FROM `car_to_dealers` WHERE car_to_dealers.status = 1 AND inv_id = '$stock_id' AND work_needed != '' AND date_returned = '') as carstodealers , 
+        (SELECT COUNT(inv_id) FROM `inspections` WHERE inspections.status = 1 AND inspections.repair_returned != '' AND inspections.repair_paid = '' AND inspections.inv_id = '$stock_id') as lotwizardsBills";
+        $rslt2 = $connect->query($statusSql2);
+        if ($rslt2->num_rows > 0) {
+            $rowStatus = $rslt2->fetch_assoc();
+            $codp_warn = $rowStatus['carstodealers'] > 0 ? "true" : "false";
+            $lwbn_warn = $rowStatus['lotwizardsBills'] > 0 ? "true" : "false";
+        }
+
+
+
         $output['data'][] = array(
 
             $date,
@@ -128,6 +144,9 @@ if ($result->num_rows > 0) {
             $countRow,
             $id,
             $row[20],
+            $sold_date,
+            $codp_warn,
+            $lwbn_warn
         );
     } // /while 
 

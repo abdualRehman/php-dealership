@@ -11,8 +11,8 @@ if ($_POST) {
     $email = $_POST['email'];
     $role = $_POST['role'];
     $color = $_POST['color'];
-    $password = $_POST['password'];
-    $conpassword = $_POST['conpassword'];
+    // $password = $_POST['password'];
+    // $conpassword = $_POST['conpassword'];
 
 
     $location = $_POST['location'];
@@ -39,40 +39,39 @@ if ($_POST) {
 
 
 
-    if ($password == $conpassword) {
-        $password = md5($password);
+    $password = randomPassword();
+    $password = md5($password);
 
-        $checkSql = "SELECT users.* FROM users WHERE users.email = '$email' AND users.status = 1";
-        $checkResult = $connect->query($checkSql);
+    $checkSql = "SELECT users.* FROM users WHERE users.email = '$email' AND users.status = 1";
+    $checkResult = $connect->query($checkSql);
 
-        if ($checkResult->num_rows <= 0) {
-            
-            $sql = "INSERT INTO `users`( `username`, `email`, `password`, `role`, `status`, `permissions`, `location`, `extention`, `mobile` , `color`) 
+    if ($checkResult->num_rows <= 0) {
+
+        $sql = "INSERT INTO `users`( `username`, `email`, `password`, `role`, `status`, `permissions`, `location`, `extention`, `mobile` , `color`) 
                 VALUES ('$username' , '$email' , '$password' , '$role' , 1 , '0' , '$location' , '$extention' , '$mobile' , '$color' )";
-    
-            if ($connect->query($sql) === true) {
-                $uid = $connect->insert_id;
-    
-                $sql1 = "INSERT INTO `schedule`(`user_id`, `mon_start`, `mon_end`, `tue_start`, `tue_end`, `wed_start`, `wed_end`, `thu_start`, `thu_end`, `fri_start`, `fri_end`, `sat_start`, `sat_end`, `sun_start`, `sun_end`) 
+
+        if ($connect->query($sql) === true) {
+            $uid = $connect->insert_id;
+
+            $sql1 = "INSERT INTO `schedule`(`user_id`, `mon_start`, `mon_end`, `tue_start`, `tue_end`, `wed_start`, `wed_end`, `thu_start`, `thu_end`, `fri_start`, `fri_end`, `sat_start`, `sat_end`, `sun_start`, `sun_end`) 
                 VALUES ('$uid' , '$monStart' , '$monEnd' , '$tueStart' , '$tueEnd' , '$wedStart' , '$wedEnd' , '$thuStart' , '$thuEnd' , '$friStart' , '$friEnd' , '$satStart' , '$satEnd' , '$sunStart' , '$sunEnd')";
-    
-                if ($connect->query($sql1) === true) {
-    
-                    $valid['success'] = true;
-                    $valid['messages'] = "Successfully Added";
-                }
-            } else {
-                $valid['success'] = false;
-                $valid['messages'] = $connect->error;
-                $valid['messages'] = mysqli_error($connect);
+
+            if ($connect->query($sql1) === true) {
+
+                $valid['success'] = true;
+                $valid['messages'] = "Successfully Added";
             }
-
-        }else{
+        } else {
             $valid['success'] = false;
-            $valid['messages'] = "Email Already Exist";
+            $valid['messages'] = $connect->error;
+            $valid['messages'] = mysqli_error($connect);
         }
-
+    } else {
+        $valid['success'] = false;
+        $valid['messages'] = "Email Already Exist";
     }
+
+
 
 
 
@@ -81,3 +80,15 @@ if ($_POST) {
     echo json_encode($valid);
 } // /if $_POST
 // echo json_encode($valid);
+
+function randomPassword()
+{
+    $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+    $pass = array(); //remember to declare $pass as an array
+    $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+    for ($i = 0; $i < 8; $i++) {
+        $n = rand(0, $alphaLength);
+        $pass[] = $alphabet[$n];
+    }
+    return implode($pass); //turn the array into a string
+}

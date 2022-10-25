@@ -25,6 +25,7 @@ if ($result->num_rows > 0) {
     $output = $row;
     $submittedBy = $row['submitted_by'];
     $financeManager = $row['finance_manager'];
+    $stock_id = $row['stock_id'];
 
     if (isset($submittedBy)) {
         $sql1 = "SELECT * FROM `users` WHERE id = '$submittedBy'";
@@ -42,6 +43,23 @@ if ($result->num_rows > 0) {
     } else {
         $output['financeManager'] = "";
     }
+
+
+    $codp_warn = "false";
+    $lwbn_warn = "false";
+    $statusSql2 = "SELECT 
+    (SELECT COUNT(inv_id) FROM `car_to_dealers` WHERE car_to_dealers.status = 1 AND inv_id = '$stock_id' AND work_needed != '' AND date_returned = '') as carstodealers , 
+    (SELECT COUNT(inv_id) FROM `inspections` WHERE inspections.status = 1 AND inspections.repair_returned != '' AND inspections.repair_paid = '' AND inspections.inv_id = '$stock_id') as lotwizardsBills";
+    $rslt2 = $connect->query($statusSql2);
+    if ($rslt2->num_rows > 0) {
+        $rowStatus = $rslt2->fetch_assoc();
+        $codp_warn = $rowStatus['carstodealers'] > 0 ? "true" : "false";
+        $lwbn_warn = $rowStatus['lotwizardsBills'] > 0 ? "true" : "false";
+    }
+
+    $output['codp_warn'] = $codp_warn;
+    $output['lwbn_warn'] = $lwbn_warn;
+
 
 } // if num_rows
 

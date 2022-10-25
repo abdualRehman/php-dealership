@@ -33,15 +33,15 @@ $(function () {
                 required: !0,
                 email: !0
             },
-            password: {
-                required: !0,
-                minlength: 6
-            },
-            conpassword: {
-                required: !0,
-                minlength: 6,
-                equalTo: "#password"
-            },
+            // password: {
+            //     required: !0,
+            //     minlength: 6
+            // },
+            // conpassword: {
+            //     required: !0,
+            //     minlength: 6,
+            //     equalTo: "#password"
+            // },
             role: {
                 valueNotEquals: "0"
             },
@@ -108,6 +108,11 @@ $(function () {
                             '<div class="alert-content">' + response.messages + '</div>' +
                             '<button type="button" class="btn btn-text-danger btn-icon alert-dismiss" data-dismiss="alert"><i class="fa fa-times"></i></button>' +
                             '</div>');
+                        $('.selectpicker').each(function () {
+                            $(this).find('option:first').prop('selected', 'selected');
+                            $(".selectpicker").selectpicker("refresh");
+                        });
+                        $("#color").removeAttr("style");
                         form[0].reset();
                         $(".alert-label-success").delay(500).show(10, function () {
                             $(this).delay(3000).hide(10, function () {

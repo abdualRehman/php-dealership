@@ -108,8 +108,24 @@ $(function () {
             columnDefs: [
                 { width: 200, targets: 11 },
                 {
-                    targets: ($('#isConsultant').val() == "true") ? [3, 6, 9, 12, 16, 17, 18] : [13, 14, 16, 17, 18],
+                    targets: [16, 17, 18],
                     visible: false,
+                },
+                {
+                    targets: [3],
+                    visible: ($('#isConsultant').val() == "true") ? false : true,
+                },
+                {
+                    targets: [9],
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        if (rowData[22] == 'true') {
+                            $(td).html(cellData + ' <span class="badge badge-danger badge-lg badge-pill">!</span>');
+                        }
+                    }
+                },
+                {
+                    targets: [9, 12],
+                    visible: ($('#vgb').val() == "true") ? true : false,
                 },
                 {
                     searchPanes: {
@@ -142,6 +158,9 @@ $(function () {
                 {
                     targets: [4, 5],
                     createdCell: function (td, cellData, rowData, row, col) {
+                        if (col == 4 && rowData[21] == 'true') {
+                            $(td).html(cellData + ' <span class="badge badge-danger badge-lg badge-pill">$</span>');
+                        }
                         if (rowData[17] > 0) {
                             if (col == 4) {
                                 $(td).addClass('dublicate_left');
@@ -215,7 +234,8 @@ $(function () {
 
                     for (const [key, value] of Object.entries(obj)) {
                         // console.log(value[0]);
-                        var rowDate = value[0];
+                        var rowDate = value[0]; // sold + reconcile date
+                        var rowSoldDateOnly = value[20]; // sold only
 
                         let sale_status = value[10];
                         let thankyou = value[19];
@@ -224,11 +244,11 @@ $(function () {
                             notDoneCount += 1;
                         }
 
-                        if (today === rowDate) {
+                        if (today === rowSoldDateOnly) {
                             todayCount += 1;
                         }
 
-                        if (yesterday === rowDate) {
+                        if (yesterday === rowSoldDateOnly) {
                             yesterdayCount += 1;
                         }
 
@@ -308,7 +328,7 @@ $(function () {
             $('#currentMonth').click();
             $('#searchStatusAll').click();
         } else {
-            $('#modAll').click();
+            $('#currentMonth').click();
             $('#searchStatusAll').click();
         }
 
@@ -336,14 +356,14 @@ $(function () {
                 } else if (dateType == 'today') {
                     var date2 = new Date();
                     var today = moment(date2).format("MMM-DD-YYYY");
-                    if (today === searchData[0]) {
+                    if (today === rowData[20]) {  // here rowData[20] is sold date only
                         return true;
                     }
 
                 } else if (dateType == 'yesterday') {
                     var date2 = moment(new Date(), "MMM-DD-YYYY").subtract(1, 'days');
                     var yesterday = moment(date2).format("MMM-DD-YYYY")
-                    if (yesterday === searchData[0]) {
+                    if (yesterday === rowData[20]) {
                         return true;
                     }
                 } else if (dateType == 'currentMonth') {
@@ -460,44 +480,6 @@ $(function () {
             manageSoldLogsTable.searchPanes.rebuildPane();
         });
 
-
-
-        // $("#updateNotesForm").validate({
-        //     submitHandler: function (form, event) {
-        //         // return true;
-        //         event.preventDefault();
-        //         // $('[disabled]').removeAttr('disabled');
-        //         var form = $('#updateNotesForm');
-        //         $.ajax({
-        //             type: "POST",
-        //             url: form.attr('action'),
-        //             data: form.serialize(),
-        //             dataType: 'json',
-        //             success: function (response) {
-        //                 // console.log(response);
-        //                 if (response.success == true) {
-        //                     e1.fire({
-        //                         position: "top-end",
-        //                         icon: "success",
-        //                         title: response.messages,
-        //                         showConfirmButton: !1,
-        //                         timer: 2500,
-        //                     });
-        //                     manageSoldLogsTable.ajax.reload(null, false);
-        //                 } else {
-        //                     e1.fire({
-        //                         position: "top-end",
-        //                         icon: "error",
-        //                         title: response.messages,
-        //                         showConfirmButton: !1,
-        //                         timer: 2500
-        //                     })
-        //                 }
-        //             }
-        //         });
-        //         return false;
-        //     }
-        // });
 
         $("#editScheduleForm").validate({
             ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
@@ -1226,7 +1208,7 @@ function editSale(id = null) {
                 }
 
                 // show/calclulate gross if stockTypes is used gross is shows otherwise hide 
-                if ($('#isConsultant').val() == "false") {
+                if ($('#vgb').val() == "true") {
                     $('#grossDiv').removeClass('v-none');
                 } else {
                     $('#grossDiv').addClass('v-none');
@@ -1274,10 +1256,21 @@ function editSale(id = null) {
                 $('#profit').val(response.gross);
 
                 // var detailsDiv = `${response.stocktype} ${response.year} ${response.make} ${response.model} \n Vin: ${response.vin} \n Mileage: ${response.mileage} \n Age: ${response.age} \n Lot: ${response.lot} \n Balance: ${response.balance}`;
-                var detailsDiv = `${response.stocktype} ${response.year} ${response.make} ${response.model} \n Vin: ${response.vin} \n Mileage: ${response.mileage} \n Age: ${response.age} \n Lot: ${response.lot} ${($('#isConsultant').val() == "true") ? `` : `\n Balance: ${response.balance} \n ${response.stocktype == "USED" ? `Gross:` + Number(response.gross) : ''}`} `;
+                var detailsDiv = `${response.stocktype} ${response.year} ${response.make} ${response.model} \n Vin: ${response.vin} \n Mileage: ${response.mileage} \n Age: ${response.age} \n Lot: ${response.lot} ${($('#vgb').val() == "true") ? `\n Balance: ${response.balance}` : ``}`;
 
                 $('#selectedDetails').html(detailsDiv);
                 $('#selectedDetails').addClass('text-center');
+
+                if (response.codp_warn == 'true') {
+                    $('#codp_warn').removeClass('d-none');
+                } else {
+                    $('#codp_warn').addClass('d-none');
+                }
+                if (response.lwbn_warn == 'true') {
+                    $('#lwbn_warn').removeClass('d-none');
+                } else {
+                    $('#lwbn_warn').addClass('d-none');
+                }
 
 
                 $('#college').val(response.college);
@@ -1311,7 +1304,7 @@ function editSale(id = null) {
                     // if Inventory item was deleted then search from deleted inv data
                     fetchSelectedInvForSearch(response.stock_id);
                 } else {
-                    // changeRules();
+                    changeRules();
                 }
 
 
@@ -1473,12 +1466,23 @@ function changeStockDetails(ele, fromEdit = false) {
 
     $('#selectedStockType').val(obj[14]); // setting up stockType for sales person Todo
 
-    var detailsDiv = `${obj[14]} ${obj[2]} ${obj[3]} ${obj[4]} \n Vin: ${obj[8]} \n Mileage: ${obj[31] == 1 ? obj[9] : ""} \n Age: ${obj[31] == 1 ? obj[10] : ""} \n Lot: ${obj[31] == 1 ? obj[7] : ""}  ${($('#isConsultant').val() == "true") ? `` : `\n Balance: ${obj[31] == 1 ? obj[11] : ""} ${obj[31] == 2 ? "\n  Stock is Deleted" : ""}`}`;
+    var detailsDiv = `${obj[14]} ${obj[2]} ${obj[3]} ${obj[4]} \n Vin: ${obj[8]} \n Mileage: ${obj[31] == 1 ? obj[9] : ""} \n Age: ${obj[31] == 1 ? obj[10] : ""} \n Lot: ${obj[31] == 1 ? obj[7] : ""}  ${($('#vgb').val() == "true") ? `\n Balance: ${obj[31] == 1 ? obj[11] : ""} ${obj[31] == 2 ? "\n  Stock is Deleted" : ""}` : ``}`;
     $('#selectedDetails').html(detailsDiv);
     $('#selectedDetails').addClass('text-center');
 
+    if (obj[32] == 'true') {
+        $('#codp_warn').removeClass('d-none');
+    } else {
+        $('#codp_warn').addClass('d-none');
+    }
+    if (obj[33] == 'true') {
+        $('#lwbn_warn').removeClass('d-none');
+    } else {
+        $('#lwbn_warn').addClass('d-none');
+    }
 
-    if ($('#isConsultant').val() == "false") {
+
+    if ($('#vgb').val() == "true") {
         $('#grossDiv').removeClass('v-none'); // show gross field on both stock type new / used
     }
 

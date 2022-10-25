@@ -259,6 +259,9 @@ $(function () {
                             showConfirmButton: !1,
                             timer: 1500
                         })
+                        form[0].reset();
+                        resetForm();
+                        $('#addNew').modal('hide');
                         manageDataTable.ajax.reload(null, false);
                     } else {
                         e1.fire({
@@ -350,6 +353,7 @@ $(function () {
                             timer: 1500
                         })
                         // form[0].reset();
+                        $('#modal8').modal('hide');
                         manageDataTable.ajax.reload(null, false);
 
                     } else {
@@ -376,6 +380,16 @@ $(function () {
 
 
 })
+
+function resetForm() {
+    $('.typeahead').val('');
+    $('.typeahead').trigger('change');
+    $('.selectpicker').each(function () {
+        $(this).find('option:first').prop('selected', 'selected');
+        $(".selectpicker").selectpicker("refresh");
+    });
+    $(".tags").empty();
+}
 
 
 
