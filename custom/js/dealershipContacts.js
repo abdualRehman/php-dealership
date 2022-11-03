@@ -79,7 +79,7 @@ $(function () {
             }
         },
 
-        "order": [[2, "asc"]]
+        "order": [[1, "asc"],[2, "asc"]]
     });
 
 
@@ -240,7 +240,7 @@ function editContact(dealershipId = null) {
                 $('#estate').val(response.state);
                 $('#ezip').val(response.zip);
                 $('#etelephone').val(response.telephone);
-                $('#efax').val(response.efax);
+                $('#efax').val(response.fax);
 
                 $('#egeneralManager').val(response.gmanager);
                 $('#egeneralManagerContact').val(response.gmanager_contact);

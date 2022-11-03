@@ -122,7 +122,7 @@ $(function () {
                 // valueNotEquals: "0",
                 required: function (params) {
                     var id = params.id;
-                    if (params.value == 0) {
+                    if (params.value == 0 || params.value == '') {
                         params.classList.add('is-invalid');
                         params.classList.remove('is-valid');
                         $('#' + id).selectpicker('refresh');
@@ -137,7 +137,7 @@ $(function () {
             },
         },
         submitHandler: function (form, e) {
-            // return false
+            // return true;
             e.preventDefault();
             var form = $('#addNewRule');
             $.ajax({
@@ -475,8 +475,8 @@ function addRow() {
         </select>
     </td>
     <td class="form-group">
-        <select class="form-control selectpicker w-auto" name="state[]" id="state${count}" data-live-search="true" data-size="4">
-            <option value="0" selected disabled>State</option>
+        <select class="form-control selectpicker w-auto" multiple data-selected-text-format="count > 4" name="state${count}[]" id="state${count}" title="State" data-live-search="true" data-size="8">
+            <option value="0" disabled>State</option>
             <option value="MA">MA</option>
             <option value="RI">RI</option>
             <option value="CT">CT</option>

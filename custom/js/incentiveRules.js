@@ -256,6 +256,16 @@ function resetForm() {
         $(".selectpicker").selectpicker("refresh");
     });
     $(".tags").empty();
+
+    $('#permissionsDiv input:checkbox').each(function () {
+        var inputName = this.name;
+        $('.' + inputName + ' input:text').each(function () {
+            this.disabled = true;
+            $(this).val('');
+            $(this).rules("remove", "required");
+            $(this).removeClass("is-invalid");
+        });
+    })
 }
 
 

@@ -5,10 +5,11 @@ include_once '../includes/header.php';
 if (hasAccess("incentives", "View") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
+$isEditAllowed = false;
 if (hasAccess("incentives", "Edit") === 'false') {
-    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="false" />';
+    $isEditAllowed = false;
 } else {
-    echo '<input type="hidden" name="isEditAllowed" id="isEditAllowed" value="true" />';
+    $isEditAllowed = true;
 }
 ?>
 
@@ -285,7 +286,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
 
                                 <div>
                                     <p>Max-Upload <strong id="maxLimit">10</strong> </p>
-                                    <input type="file" class="form-control-file" id="images" name="images[]" multiple accept="image/*" />
+                                    <input type="file" class="form-control-file" id="images" name="images[]" <?php echo ($isEditAllowed == true ?: 'disabled'); ?> multiple accept="image/*" />
                                 </div>
                                 <div class="carousel slick-2" id="slickSlider" style="overflow: hidden">
 
@@ -300,7 +301,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                     <label for="vincheck" class="col-md-2 col-form-label text-center">College</label>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" id="college" name="college" data-size="5">
+                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" <?php echo ($isEditAllowed == true ?: 'disabled'); ?> id="college" name="college" data-size="5">
                                                 <optgroup>
                                                     <option>No</option>
                                                     <option>Yes</option>
@@ -317,7 +318,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control datePicker" name="collegeDate" placeholder="Select date" id="collegeDate">
+                                            <input type="text" class="form-control datePicker" name="collegeDate" <?php echo ($isEditAllowed == true ?: 'readonly'); ?> placeholder="Select date" id="collegeDate">
                                         </div>
                                     </div>
                                 </div>
@@ -325,7 +326,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                     <label for="vincheck" class="col-md-2 col-form-label text-center">Military</label>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" id="military" name="military" data-size="5">
+                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" <?php echo ($isEditAllowed == true ?: 'disabled'); ?> id="military" name="military" data-size="5">
                                                 <optgroup>
                                                     <option>No</option>
                                                     <option>Yes</option>
@@ -342,7 +343,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control datePicker" name="militaryDate" placeholder="Select date" id="militaryDate">
+                                            <input type="text" class="form-control datePicker" name="militaryDate" placeholder="Select date" <?php echo ($isEditAllowed == true ?: 'readonly'); ?> id="militaryDate">
                                         </div>
                                     </div>
                                 </div>
@@ -350,7 +351,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                     <label for="vincheck" class="col-md-2 col-form-label text-center">Loyalty</label>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" id="loyalty" name="loyalty" data-size="5">
+                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" <?php echo ($isEditAllowed == true ?: 'disabled'); ?> id="loyalty" name="loyalty" data-size="5">
                                                 <optgroup>
                                                     <option>No</option>
                                                     <option>Yes</option>
@@ -367,7 +368,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control datePicker" name="loyaltyDate" placeholder="Select date" id="loyaltyDate">
+                                            <input type="text" class="form-control datePicker" name="loyaltyDate" placeholder="Select date" <?php echo ($isEditAllowed == true ?: 'readonly'); ?> id="loyaltyDate">
                                         </div>
                                     </div>
                                 </div>
@@ -375,7 +376,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                     <label for="vincheck" class="col-md-2 col-form-label text-center">Conquest</label>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" id="conquest" name="conquest" data-size="5">
+                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" <?php echo ($isEditAllowed == true ?: 'disabled'); ?> id="conquest" name="conquest" data-size="5">
                                                 <optgroup>
                                                     <option>No</option>
                                                     <option>Yes</option>
@@ -392,7 +393,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control datePicker" name="conquestDate" placeholder="Select date" id="conquestDate">
+                                            <input type="text" class="form-control datePicker" name="conquestDate" placeholder="Select date" <?php echo ($isEditAllowed == true ?: 'readonly'); ?> id="conquestDate">
                                         </div>
                                     </div>
                                 </div>
@@ -402,7 +403,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                     <label for="vincheck" class="col-md-2 col-form-label text-center">Lease Loyalty</label>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" id="leaseLoyalty" name="leaseLoyalty" data-size="5">
+                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" <?php echo ($isEditAllowed == true ?: 'disabled'); ?> id="leaseLoyalty" name="leaseLoyalty" data-size="5">
                                                 <optgroup>
                                                     <option>No</option>
                                                     <option>Yes</option>
@@ -418,7 +419,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control datePicker" name="leaseLoyaltyDate" placeholder="Select date" id="leaseLoyaltyDate">
+                                            <input type="text" class="form-control datePicker" name="leaseLoyaltyDate" placeholder="Select date" <?php echo ($isEditAllowed == true ?: 'readonly'); ?> id="leaseLoyaltyDate">
                                         </div>
                                     </div>
                                 </div>
@@ -426,7 +427,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                     <label for="vincheck" class="col-md-2 col-form-label text-center">Misc 1</label>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" id="misc1" name="misc1" data-size="5">
+                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" <?php echo ($isEditAllowed == true ?: 'disabled'); ?> id="misc1" name="misc1" data-size="5">
                                                 <optgroup>
                                                     <option>No</option>
                                                     <option>Yes</option>
@@ -442,7 +443,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control datePicker" name="misc1Date" placeholder="Select date" id="misc1Date">
+                                            <input type="text" class="form-control datePicker" name="misc1Date" placeholder="Select date" <?php echo ($isEditAllowed == true ?: 'readonly'); ?> id="misc1Date">
                                         </div>
                                     </div>
                                 </div>
@@ -450,7 +451,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                     <label for="vincheck" class="col-md-2 col-form-label text-center">Misc 2</label>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" id="misc2" name="misc2" data-size="5">
+                                            <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" <?php echo ($isEditAllowed == true ?: 'disabled'); ?> id="misc2" name="misc2" data-size="5">
                                                 <optgroup>
                                                     <option>No</option>
                                                     <option>Yes</option>
@@ -466,7 +467,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control datePicker" name="misc2Date" placeholder="Select date" id="misc2Date">
+                                            <input type="text" class="form-control datePicker" name="misc2Date" placeholder="Select date" <?php echo ($isEditAllowed == true ?: 'readonly'); ?> id="misc2Date">
                                         </div>
                                     </div>
                                 </div>
@@ -475,10 +476,16 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer modal-footer-bordered">
-                    <button type="submit" class="btn btn-primary mr-2" id="updateBtn">Save Changes</button>
-                    <button class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
-                </div>
+                <?php
+                if ($isEditAllowed == true) {
+                ?>
+                    <div class="modal-footer modal-footer-bordered">
+                        <button type="submit" class="btn btn-primary mr-2" id="updateBtn">Save Changes</button>
+                        <button class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                <?php
+                }
+                ?>
             </form>
 
         </div>

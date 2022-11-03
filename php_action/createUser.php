@@ -1,6 +1,7 @@
 <?php
 
 require_once './db/core.php';
+require_once './sendEmail.php';
 
 $valid['success'] = array('success' => false, 'messages' => array(), 'id' => '');
 // print_r($valid);
@@ -39,8 +40,8 @@ if ($_POST) {
 
 
 
-    $password = randomPassword();
-    $password = md5($password);
+    $_password = randomPassword();
+    $password = md5($_password);
 
     $checkSql = "SELECT users.* FROM users WHERE users.email = '$email' AND users.status = 1";
     $checkResult = $connect->query($checkSql);
@@ -53,13 +54,19 @@ if ($_POST) {
         if ($connect->query($sql) === true) {
             $uid = $connect->insert_id;
 
+            $mailed_user = sendEmail($email, $username, 'register', $_password);
+
             $sql1 = "INSERT INTO `schedule`(`user_id`, `mon_start`, `mon_end`, `tue_start`, `tue_end`, `wed_start`, `wed_end`, `thu_start`, `thu_end`, `fri_start`, `fri_end`, `sat_start`, `sat_end`, `sun_start`, `sun_end`) 
                 VALUES ('$uid' , '$monStart' , '$monEnd' , '$tueStart' , '$tueEnd' , '$wedStart' , '$wedEnd' , '$thuStart' , '$thuEnd' , '$friStart' , '$friEnd' , '$satStart' , '$satEnd' , '$sunStart' , '$sunEnd')";
 
             if ($connect->query($sql1) === true) {
-
-                $valid['success'] = true;
-                $valid['messages'] = "Successfully Added";
+                if ($mailed_user == 'true') {
+                    $valid['success'] = true;
+                    $valid['messages'] = "Successfully Added";
+                } else {
+                    $valid['success'] = true;
+                    $valid['messages'] = "Successfully Added, Mail Failed to Send";
+                }
             }
         } else {
             $valid['success'] = false;

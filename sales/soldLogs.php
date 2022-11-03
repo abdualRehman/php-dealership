@@ -694,11 +694,11 @@ if ($_GET['r'] == 'man') {
 
                                     <div class="form-row">
                                         <div class="col-md-10 offset-md-1">
-                                            <div class="form-group <?php echo ($salesConsultantID == $_SESSION['userRole'] || 'Admin' == $_SESSION['userRole']) ?: "makeDisable"; ?>">
+                                            <div class="form-group <?php echo ($salesConsultantID == $_SESSION['userRole'] || 'Admin' == $_SESSION['userRole'] || $branchAdmin == $_SESSION['userRole']) ?: "makeDisable"; ?>">
                                                 <label class="col-form-label" for="consultantNote">Consultant Notes</label>
                                                 <textarea class="form-control autosize" name="consultantNote" id="consultantNote" placeholder="Consultant Notes..."></textarea>
                                             </div>
-                                            <div class="custom-control custom-control-lg custom-checkbox mb-3 mt-3 <?php echo ($salesManagerID == $_SESSION['userRole'] || $generalManagerID == $_SESSION['userRole'] || 'Admin' == $_SESSION['userRole']) ?: "makeDisable"; ?>">
+                                            <div class="custom-control custom-control-lg custom-checkbox mb-3 mt-3 <?php echo ($salesManagerID == $_SESSION['userRole'] || $generalManagerID == $_SESSION['userRole'] || 'Admin' == $_SESSION['userRole'] || $branchAdmin == $_SESSION['userRole']) ?: "makeDisable"; ?>">
                                                 <input type="checkbox" name="thankyouCard" class="custom-control-input" id="thankyouCard">
                                                 <label class="custom-control-label" for="thankyouCard">Thank you card</label>
                                             </div>
@@ -837,7 +837,7 @@ if ($_GET['r'] == 'man') {
 
                             <h5 class="my-3">Co-Buyer</h5>
                             <div class="form-row <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>">
-                                <div class="col-md-10">
+                                <div class="<?php echo hasAccess("sale", "Details") !== 'false' ? "col-md-10" : "col-md-12" ?>">
                                     <div class="form-group input-group d-flex flex-md-row flex-sm-column input-group-mobile">
                                         <input type="text" name="cbfname" id="cbfname" class="form-control w-auto " placeholder="First name">
                                         <input type="text" name="cbmname" id="cbmname" class="form-control w-auto " placeholder="Middle name">
@@ -900,31 +900,31 @@ if ($_GET['r'] == 'man') {
                                     </div>
                                 </div>
 
-                                <a href="javascript:;" class="form-group col-md-2 text-center w-100 btn btn-outline-info input-group-button-mobile" onclick="toggleInfo('coBuyer')">
+                                <a href="javascript:;" class="form-group col-md-2 text-center w-100 btn btn-outline-info input-group-button-mobile <?php echo hasAccess("sale", "Details") !== 'false' ? "d-block" : "d-none" ?>" onclick="toggleInfo('coBuyer')">
                                     Add Co-Buyer <i class="fa fa-angle-down"></i>
                                 </a>
 
                             </div>
                             <div class="mt-2 coBuyer border rounded hidden <?php echo ($salesConsultantID != $_SESSION['userRole']) ?: "makeDisable"; ?>" id="pbody" style="background-color: rgba(0,188,212,.1);">
-                                <div class="form-row p-3">
-                                    <label for="cbAddress1" class="col-md-1 col-form-label text-center">Address 1*</label>
-                                    <div class="form-group col-md-5">
-                                        <div class="input-group-icon">
-                                            <input type="text" class="form-control" name="cbAddress1" id="cbAddress1" placeholder="Your address here">
-                                            <div class="input-group-append"><i class="fa fa-map-marker-alt"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <label for="cbAddress2" class="col-md-1 col-form-label text-center">Address 2</label>
-                                    <div class="form-group col-md-5">
-                                        <div class="input-group-icon">
-                                            <input type="text" class="form-control" name="cbAddress2" id="cbAddress2" placeholder="Your address here">
-                                            <div class="input-group-append"><i class="fa fa-map-marker-alt"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class=<?php echo hasAccess("sale", "Details") !== 'false' ? "d-block" : "d-none" ?>>
+                                    <div class="form-row p-3">
+                                        <label for="cbAddress1" class="col-md-1 col-form-label text-center">Address 1*</label>
+                                        <div class="form-group col-md-5">
+                                            <div class="input-group-icon">
+                                                <input type="text" class="form-control" name="cbAddress1" id="cbAddress1" placeholder="Your address here">
+                                                <div class="input-group-append"><i class="fa fa-map-marker-alt"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <label for="cbAddress2" class="col-md-1 col-form-label text-center">Address 2</label>
+                                        <div class="form-group col-md-5">
+                                            <div class="input-group-icon">
+                                                <input type="text" class="form-control" name="cbAddress2" id="cbAddress2" placeholder="Your address here">
+                                                <div class="input-group-append"><i class="fa fa-map-marker-alt"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="form-row pb-0 p-3">
 
                                         <div class="col-md-4 form-group">
@@ -1080,7 +1080,8 @@ if ($_GET['r'] == 'man') {
                                     <label for="vincheck" class="col-md-1 col-form-label text-md-center">Vin Check</label>
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                            <select onchange="chnageStyle(this)" name="vincheck" id="vincheck" class="selectpicker" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                            <select onchange="chnageStyle(this)" title="&#160;" name="vincheck" id="vincheck" class="selectpicker" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                                <option value="" title="&#160;" data-hidden="true" selected> </option>
                                                 <option value="checkTitle">Check Title</option>
                                                 <option value="need">Need</option>
                                                 <option value="notNeed">Doesn't Need</option>
@@ -1092,7 +1093,8 @@ if ($_GET['r'] == 'man') {
                                     </div>
                                     <label for="insurance" class="col-md-1 col-form-label text-md-center">Insurance</label>
                                     <div class="col-md-2">
-                                        <select class="selectpicker" onchange="chnageStyle(this)" id="insurance" name="insurance" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                        <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="insurance" name="insurance" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                            <option value="" title="&#160;" data-hidden="true" selected> </option>
                                             <option value="need">Need</option>
                                             <option value="inHouse">In House</option>
                                             <option value="n/a">N/A</option>
@@ -1100,7 +1102,8 @@ if ($_GET['r'] == 'man') {
                                     </div>
                                     <label for="tradeTitle" class="col-md-1 col-form-label text-md-center">Trade Title</label>
                                     <div class="col-md-2">
-                                        <select class="selectpicker" onchange="chnageStyle(this)" id="tradeTitle" name="tradeTitle" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                        <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="tradeTitle" name="tradeTitle" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                            <option value="" title="&#160;" data-hidden="true" selected> </option>
                                             <option value="need">Need</option>
                                             <option value="payoff">Payoff</option>
                                             <option value="noTrade">No Trade</option>
@@ -1109,7 +1112,8 @@ if ($_GET['r'] == 'man') {
                                     </div>
                                     <label for="registration" class="col-md-1 col-form-label text-md-center">Registration</label>
                                     <div class="col-md-2">
-                                        <select class="selectpicker" onchange="chnageStyle(this)" id="registration" name="registration" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                        <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="registration" name="registration" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                            <option value="" title="&#160;" data-hidden="true" selected> </option>
                                             <option value="pending">Pending</option>
                                             <option value="done">Done</option>
                                             <option value="customerHas">Customer Has</option>
@@ -1122,7 +1126,8 @@ if ($_GET['r'] == 'man') {
 
                                     <label for="inspection" class="col-md-1 col-form-label text-md-center">Inspection</label>
                                     <div class="col-md-3">
-                                        <select class="selectpicker" onchange="chnageStyle(this)" id="inspection" name="inspection" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                        <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="inspection" name="inspection" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                            <option value="" title="&#160;" data-hidden="true" selected> </option>
                                             <option value="need">Need</option>
                                             <option value="notNeed">Doesn't Need</option>
                                             <option value="done">Done</option>
@@ -1131,7 +1136,8 @@ if ($_GET['r'] == 'man') {
                                     </div>
                                     <label for="salePStatus" class="col-md-1 col-form-label text-md-center">Salesperson Status</label>
                                     <div class="col-md-3">
-                                        <select class="selectpicker" onchange="chnageStyle(this)" id="salePStatus" name="salePStatus" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                        <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="salePStatus" name="salePStatus" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                            <option value="" title="&#160;" data-hidden="true" selected> </option>
 
                                             <option value="dealWritten">Deal Written</option>
                                             <option value="gmdSubmit">GMD Submit</option>
@@ -1143,7 +1149,8 @@ if ($_GET['r'] == 'man') {
                                     </div>
                                     <label for="paid" class="col-md-1 col-form-label text-md-center">Paid</label>
                                     <div class="col-md-3">
-                                        <select class="selectpicker" onchange="chnageStyle(this)" id="paid" name="paid" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                        <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="paid" name="paid" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                            <option value="" title="&#160;" data-hidden="true" selected> </option>
                                             <option value="no">No</option>
                                             <option value="yes">Yes</option>
                                         </select>

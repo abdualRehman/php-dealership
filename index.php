@@ -96,7 +96,7 @@ $_SESSION['siteurl'] = $url;
     <script>
         let domain = (new URL(window.location));
         domain = domain.origin;
-        if(domain == 'http://localhost'){
+        if (domain == 'http://localhost') {
             domain += '/carshop';
         }
         console.log(domain);
@@ -148,7 +148,8 @@ $_SESSION['siteurl'] = $url;
                                         <div class="d-flex align-items-center justify-content-between mb-3">
                                             <div class="form-group mb-0">
                                                 <div class="custom-control custom-control-lg custom-switch"><input type="checkbox" class="custom-control-input" id="remember" name="remember"> <label class="custom-control-label" for="remember">Remember me</label></div>
-                                            </div><a href="#">Forgot password?</a>
+                                            </div>
+                                            <a href="#" id="forgot-password">Forgot password?</a>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between">
                                             <button type="submit" class="btn btn-label-primary btn-lg btn-widest">Login</button>
@@ -171,6 +172,53 @@ $_SESSION['siteurl'] = $url;
     <script type="text/javascript" src="assets/build/scripts/core.js"></script>
     <script type="text/javascript" src="assets/app/pages/login.js"></script>
     <script type="text/javascript" src="assets/build/scripts/vendor.js"></script>
+
+    <script>
+        $('#forgot-password').on('click', function() {
+            event.preventDefault();
+
+            Swal.fire({
+                title: 'Please Submit your Email Address',
+                input: 'email',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Send Varification Link?',
+                showLoaderOnConfirm: true,
+                preConfirm: (email) => {
+                    return $.ajax({
+                        url: 'php_action/forgotPassword.php',
+                        type: "POST",
+                        dataType: 'json',
+                        data: {
+                            email: email
+                        },
+                        success: function(response) {
+                            return JSON.stringify(response);
+                        },
+                        error: function(error) {
+                            console.log(error);
+                            Swal.showValidationMessage(
+                                `Request failed: ${error.statusText}`
+                            )
+                        }
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: `${result.value.success == 'true' ? 'Success' : 'Failed'}`,
+                        title: `${result.value.messages}`,
+                    })
+                }
+            })
+        })
+    </script>
+
+
+
 </body>
 
 

@@ -17,7 +17,9 @@ if ($userRole != $salesConsultantID) {
     // FROM `sales` LEFT JOIN inventory ON (sales.stock_id = inventory.id ) WHERE sales.status = 1 AND sales.location = '$location' AND sales.sale_status !='cancelled' ORDER BY inventory.stockno DESC";
     $sql = "SELECT sales.* , inventory.stockno , inventory.year, inventory.make , inventory.model , inventory.vin, inventory.stocktype, 
     ( SELECT COUNT(appointments.stock_id) FROM appointments WHERE appointments.sale_id = sales.sale_id 
-    AND sales.sale_status !='cancelled'  AND appointments.status = 1 ) as has_appointment 
+    AND sales.sale_status !='cancelled'  AND appointments.status = 1 ) as has_appointment ,
+    ( SELECT COUNT(appointments.stock_id) FROM appointments WHERE appointments.stock_id = sales.stock_id
+    AND sales.sale_status !='cancelled'  AND appointments.status = 1 AND sales.status = 1 ) as allready_created 
     FROM `sales` LEFT JOIN inventory ON (sales.stock_id = inventory.id ) WHERE sales.status = 1 AND sales.location = '$location' AND sales.sale_status !='cancelled' ORDER BY inventory.stockno DESC";
 } else {
     $uid = $_SESSION['userId'];
@@ -27,7 +29,9 @@ if ($userRole != $salesConsultantID) {
     // FROM `sales` LEFT JOIN inventory ON (sales.stock_id = inventory.id ) WHERE sales.status = 1 AND sales.location = '$location' AND sales.sale_status !='cancelled' AND sales.sales_consultant = '$uid' ORDER BY inventory.stockno DESC";
     $sql = "SELECT sales.* , inventory.stockno , inventory.year, inventory.make , inventory.model , inventory.vin, inventory.stocktype, 
     ( SELECT COUNT(appointments.stock_id) FROM appointments WHERE appointments.sale_id = sales.sale_id 
-    AND sales.sale_status !='cancelled'  AND appointments.status = 1 ) as has_appointment 
+    AND sales.sale_status !='cancelled'  AND appointments.status = 1 ) as has_appointment , 
+    ( SELECT COUNT(appointments.stock_id) FROM appointments WHERE appointments.stock_id = sales.stock_id
+    AND sales.sale_status !='cancelled'  AND appointments.status = 1 AND sales.status = 1 ) as allready_created 
     FROM `sales` LEFT JOIN inventory ON (sales.stock_id = inventory.id ) WHERE sales.status = 1 AND sales.location = '$location' AND sales.sale_status !='cancelled' AND sales.sales_consultant = '$uid' ORDER BY inventory.stockno DESC";
 }
 
@@ -51,6 +55,7 @@ if ($result->num_rows > 0) {
         $model = $row['model'];
         $stocktype = $row['stocktype'];
         $has_appointment = $row['has_appointment'];
+        $allready_created = $row['allready_created'];
 
 
         $output['data'][] = array(
@@ -65,6 +70,7 @@ if ($result->num_rows > 0) {
             $make,
             $model,
             $has_appointment == 0 ? null : $has_appointment,
+            $allready_created == 0 ? null : $allready_created,
         );
     } // /while 
 

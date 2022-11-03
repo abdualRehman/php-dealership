@@ -415,7 +415,7 @@
 <script>
     let statusBarDiv = $('#statusBar').hasClass('d-none');
     if (statusBarDiv == false) {
-        let siteLink = localStorage.getItem('siteURL')
+        var siteLink = localStorage.getItem('siteURL')
         var timer = null,
             delay = 5000,
             maxCounter = 1;
@@ -433,7 +433,8 @@
                     success: function(response) {
                         var obj = response.data;
                         if (obj) {
-                            $('.todaySoldStatus').html(`Sold Today: ${obj[0]} NEW, ${obj[1]} USED, ${obj[2]} Total`);
+                            $('#todaySoldStatus').html(`Sold Today: ${obj[0]} NEW, ${obj[1]} USED, ${obj[2]} Total`);
+                            $('#etodaySoldStatus').html(`Sold Today: ${obj[0]} NEW, ${obj[1]} USED, ${obj[2]} Total`);
                         }
 
                         // -------------------------------------------------------------------------------

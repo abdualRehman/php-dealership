@@ -113,7 +113,7 @@ if (hasAccess("dealership", "Edit") === 'false') {
                                 <select class="form-control selectpicker w-auto" name="state" id="state" data-live-search="true" data-size="4">
                                     <option value="0" selected disabled>State</option>
                                     <option value="MA">MA</option>
-                                    <option value="RI" selected>RI</option>
+                                    <option value="RI">RI</option>
                                     <option value="CT">CT</option>
                                     <option value="NH">NH</option>
                                     <option value="AL">AL</option>
@@ -188,10 +188,38 @@ if (hasAccess("dealership", "Edit") === 'false') {
                             </div>
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <label for="generalManager" class="col-form-label">General Manager</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="generalManager" id="generalManager" autocomplete="off" autofill="off" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="generalManagerContact" class="col-form-label">General Manager Contact</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="generalManagerContact" id="generalManagerContact" autocomplete="off" autofill="off" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <label for="usedcarManager" class="col-form-label">Used Car Manager</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="usedcarManager" id="usedcarManager" autocomplete="off" autofill="off" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="usedcarManagerContact" class="col-form-label">Used Car Manager Contact</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="usedcarManagerContact" id="usedcarManagerContact" autocomplete="off" autofill="off" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer modal-footer-bordered">
-                    <button class="btn btn-primary mr-2">Submit</button>
-                    <button class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
                 </div>
             </form>
         </div>
@@ -354,8 +382,8 @@ if (hasAccess("dealership", "Edit") === 'false') {
                     </div>
                 </div>
                 <div class="modal-footer modal-footer-bordered">
-                    <button class="btn btn-primary mr-2">Update Changes</button>
-                    <button class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary mr-2">Update Changes</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
                 </div>
             </form>
 

@@ -126,46 +126,46 @@ if ($result->num_rows > 0) {
         // if ($recon == "" || $recon == null || $notes == null || $notes == "" || !$doneEleWheel || !$doneEle || count($arr) == 0) {
         //     $notTouched += 1;
         // }
-        if (($recon == "" || $recon == null) && count($repairArr) == 0 && $invStatus == 1) {
+        if (($recon == "" || $recon == null) && count($repairArr) == 0 && $invStatus != 2) {
             $notTouched += 1;
             $_notTouched = 'Not Touched';
         }
-        if ($recon == 'hold' && $balance && $invStatus == 1) {
+        if ($recon == 'hold' && $balance && $invStatus != 2) {
             $holdForRecon += 1;
             $_holdRecon = 'Hold Recon';
         }
-        if ($recon == 'send' && $balance && $invStatus == 1) {
+        if ($recon == 'send' && $balance && $invStatus != 2) {
             $sendToRecon += 1;
             $_sendRecon = 'Send Recon';
         }
-        if ($notes && $invStatus == 1) {
+        if ($notes && $invStatus != 2) {
             $LotNotes += 1;
             $_lotNotes = 'Lot Notes';
         }
-        if (count($windshield1) > 0 && !$doneEle && ($balance && $balance != '0') && $invStatus == 1) {
+        if (count($windshield1) > 0 && !$doneEle && ($balance && $balance != '0') && $invStatus != 2) {
             $windshield += 1;
             $_windshield = 'Windshield';
         }
-        if (count($wheels1) > 0 &&  !$doneEleWheel && ($balance && $balance != '0') && $invStatus == 1) {
+        if (count($wheels1) > 0 &&  !$doneEleWheel && ($balance && $balance != '0') && $invStatus != 2) {
             $wheels += 1;
             $_wheels = "Wheels";
         }
         // To go = repairs selected….repair sent bank
-        if (count($arr) > 0 && ($repairSent == "" || $repairSent == null) && $invStatus == 1) {
+        if (count($arr) > 0 && ($repairSent == "" || $repairSent == null) && $invStatus != 2) {
             $toGo += 1;
             $_toGo = "To Go";
         }
         // At bodyshop- repairs, bodyshop & repair sent selected…….repair returned blank
-        if (count($arr) > 0 && ($repairSent != "" && $repairSent != null) && ($repairReturned == "" || $repairReturned == null) && $invStatus == 1) {
+        if (count($arr) > 0 && ($repairSent != "" && $repairSent != null) && ($repairReturned == "" || $repairReturned == null) && $invStatus != 2) {
             $atBodyshop += 1;
             $_atBodyshop = "At Bodyshop";
         }
         // Back from bodyshop- repair returned selected and recon is blank
-        if ($repairReturned && $repairSent && ($recon == "" || $recon == null) && $invStatus == 1) {
+        if ($repairReturned && $repairSent && ($recon == "" || $recon == null) && $invStatus != 2) {
             $backFromBodyshop += 1;
             $_backBodyshop = "Back Bodyshop";
         }
-        if ($recon == 'sent' && $invStatus == 1) {
+        if ($recon == 'sent' && $invStatus != 2) {
             $retailReady += 1;
             $_retailReady = "Retail Ready";
         }

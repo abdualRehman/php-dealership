@@ -68,7 +68,7 @@ $(function () {
                 targets: [0, 1, 2, 3],
             },
             {
-                
+
                 targets: [11],
                 visible: false,
             },
@@ -145,48 +145,47 @@ $(function () {
         submitHandler: function (form, e) {
             // return true;
             e.preventDefault();
+            var form = $('#addNewRule');
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
 
-            var c = confirm('Do You Really want to save this?')
-            if (c) {
-                var form = $('#addNewRule');
-                $.ajax({
-                    type: "POST",
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response);
-
-                        if ((response.errorMessages) && response.errorMessages.length > 0) {
-                            response.errorMessages.forEach(message => {
-                                toastr.error(message, 'Error while Adding');
-                            });
-                        }
-                        if (response.success == true) {
-                            e1.fire({
-                                position: "center",
-                                icon: "success",
-                                title: response.messages.length > 0 ? response.messages[0] : "Successfully Added",
-                                showConfirmButton: !1,
-                                timer: 1500
-                            })
-                            manageDataTable.ajax.reload(null, false);
-                        } else {
-                            e1.fire({
-                                // position: "center",
-                                icon: "error",
-                                title: response.messages.length > 0 ? response.messages[0] : "Error while Adding",
-                                showConfirmButton: !1,
-                                timer: 2500
-                            })
-
-                            // form[0].reset();
-                        }
-
-
+                    if ((response.errorMessages) && response.errorMessages.length > 0) {
+                        response.errorMessages.forEach(message => {
+                            toastr.error(message, 'Error while Adding');
+                        });
                     }
-                });
-            }
+                    if (response.success == true) {
+                        e1.fire({
+                            position: "center",
+                            icon: "success",
+                            title: response.messages.length > 0 ? response.messages[0] : "Successfully Added",
+                            showConfirmButton: !1,
+                            timer: 1500
+                        })
+                        manageDataTable.ajax.reload(null, false);
+                        form[0].reset();
+                        $('#addNew').modal('hide');
+                    } else {
+                        e1.fire({
+                            // position: "center",
+                            icon: "error",
+                            title: response.messages.length > 0 ? response.messages[0] : "Error while Adding",
+                            showConfirmButton: !1,
+                            timer: 2500
+                        })
+
+                        // form[0].reset();
+                    }
+
+
+                }
+            });
+
             return false;
 
         }
@@ -262,43 +261,42 @@ $(function () {
         submitHandler: function (form, e) {
             // return true
             e.preventDefault();
-            var c = confirm('Do you really want to save this?');
-            if (c) {
-                var form = $('#editRuleForm');
-                $.ajax({
-                    type: "POST",
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response);
+            var form = $('#editRuleForm');
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
 
-                        if (response.success == true) {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "success",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 1500
-                            })
-                            // form[0].reset();
-                            manageDataTable.ajax.reload(null, false);
+                    if (response.success == true) {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 1500
+                        })
+                        // form[0].reset();
+                        manageDataTable.ajax.reload(null, false);
+                        $('#modal8').modal('hide');
 
-                        } else {
-                            e1.fire({
-                                position: "top-end",
-                                icon: "error",
-                                title: response.messages,
-                                showConfirmButton: !1,
-                                timer: 2500
-                            })
-
-                        }
-
+                    } else {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500
+                        })
 
                     }
-                });
-            }
+
+
+                }
+            });
+
             return false;
 
         }

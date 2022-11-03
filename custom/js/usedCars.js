@@ -245,6 +245,9 @@ $(function () {
             },
             {
                 targets: [22], // date sent,
+                render: function (data, type, row) {
+                    return row[21];
+                },
                 createdCell: function (td, cellData, rowData, row, col) {
                     if ($('#isRoleAllowed').val() == 'true') {
                         $(td).html(`<div class="show d-flex" >
@@ -546,13 +549,13 @@ $(function () {
 
             var invStatus = rowData[34];
 
-            if (activebtnvalue == 'addToSheet' && invStatus == 1) {
+            if (activebtnvalue == 'addToSheet' && invStatus != 2) {
                 if (date_in != '' && date_in === null) {
                     return true;
                 }
             }
             if (activebtnvalue == 'missingDate') {
-                if ((EmptyField(date_in) == false && date_in !== null) && invStatus == 1) {
+                if ((EmptyField(date_in) == false && date_in !== null) && invStatus != 2) {
                     return true;
                 }
             }
@@ -565,7 +568,7 @@ $(function () {
                 //         return true;
                 //     }
                 // }
-                if ((title == 'false' || title == null) && (date_in !== null) && invStatus == 1) {
+                if ((title == 'false' || title == null) && (date_in !== null) && invStatus != 2) {
                     if (filter != '' && filter == titlePriority) {
                         return true;
                     } else if (filter == '') {
@@ -574,18 +577,18 @@ $(function () {
                 }
             }
             if (activebtnvalue == 'readyToShip') {
-                if (title == 'true' && retail_status == 'wholesale' && key == 'false' && invStatus == 1) {
+                if (title == 'true' && retail_status == 'wholesale' && key == 'false' && invStatus != 2) {
                     return true;
                 }
             }
             if (activebtnvalue == 'keysPulled') {
-                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && !date_sent && !date_sold && invStatus == 1) {
+                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && !date_sent && !date_sold && invStatus != 2) {
                     return true;
                 }
             }
             if (activebtnvalue == 'atAuction') {
 
-                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && date_sent && !date_sold && invStatus == 1) {
+                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && date_sent && !date_sold && invStatus != 2) {
                     return true;
                 }
             }
@@ -599,7 +602,7 @@ $(function () {
                 // if (wholesale == 'No' && balance !== '' && date_in !== null) {
                 //     return true;
                 // }
-                if (retail_status != 'wholesale' && balance !== '' && (carshopId !== '' && carshopId !== null) && invStatus == 1) {
+                if (retail_status != 'wholesale' && balance !== '' && (carshopId !== '' && carshopId !== null) && invStatus != 2) {
                     return true;
                 }
             }

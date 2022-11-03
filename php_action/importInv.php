@@ -166,7 +166,7 @@ if ($_POST) {
                             // update Inv data if this stock number already exist with deleted id with sale 
                             $updatekSql = "UPDATE `inventory` SET `year`='$year', `make`='$make',
                                 `model`='$model',`modelno`='$modelno',`color`='$color',`lot`='$lot',`vin`='$vin',`mileage`='$mileage',`age`='$age',
-                                `balance`='$balance',`retail`='$retail',`certified`='$certified',`stocktype`='$stockType',`wholesale`='$wholesale' , `status`=1 WHERE stockno = '$stockno' AND location = '$location'";
+                                `balance`='$balance',`retail`='$retail',`certified`='$certified',`stocktype`='$stockType',`wholesale`='$wholesale' , `status`= '1' WHERE stockno = '$stockno' AND location = '$location'";
 
                             if ($connect->query($updatekSql) === true) {
                                 $valid['success'] = true;
@@ -195,7 +195,7 @@ if ($_POST) {
                                 '$certified',
                                 '$stockType',
                                 '$wholesale',
-                                1 ,
+                                '1' ,
                                 '$location' )";
 
                             if ($connect->query($sql) === true) {

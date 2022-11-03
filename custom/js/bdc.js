@@ -119,13 +119,22 @@ $(function () {
                 visible: false,
             },
             {
+                targets: [10],
+                render: function (data, type, row) {
+                    return data;
+                },
+                createdCell: function (td, cellData, rowData, row, col) {
+                    $(td).html(cellData);
+                }
+            },
+            {
                 targets: [8],
                 render: function (data, type, row) {
                     return data;
                 },
                 createdCell: function (td, cellData, rowData, row, col) {
-                    console.log(cellData);
-                    console.log(rowData);
+                    // console.log(cellData);
+                    // console.log(rowData);
                     if (cellData == 'Show') {
                         $(td).html(`<span class="badge badge-lg" style="background-color:#${rowData[14]};text-shadow: 2px 2px 3px black;color: #ebe9e9;">${cellData}</span>`);
                     } else {
@@ -136,7 +145,7 @@ $(function () {
             {
                 targets: [12],
                 createdCell: function (td, cellData, rowData, row, col) {
-                    console.log(rowData);
+                    // console.log(rowData);
                     if (cellData == 'Show Verified') {
                         if (rowData[14] != '') {
                             $(td).html(`<span class="badge badge-lg badge-pill" style="background-color:#${rowData[14]};text-shadow: 2px 2px 3px black;color: #ebe9e9;">${cellData}</span>`);
@@ -269,11 +278,12 @@ $(function () {
                 });
             }
         },
-        "order": [[7, "asc"] , [8 , "desc"]]
+        "order": [[8, "desc"], [3, "asc"]]
     })
 
     writeStatusHTML();
-    $('#thisMonth').click();
+    // $('#thisMonth').click();
+    $('#searchStatusAll').click();
     loadSaleConsultant();
     loadClientCareSpecialist();
     disabledManagerDiv();
@@ -281,14 +291,15 @@ $(function () {
 
 
     $('input[name="searchStatus"]:radio').on('change', function () {
+        $('input[name="datefilter"]').val('');
+        applyDateRageFilter();
         $('#datatable-1').block({
             message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
             timeout: 1e3
         });
-        $('input[name="datefilter"]').val('');
-        applyDateRageFilter();
         manageLeadTable.draw();  // working
         manageLeadTable.searchPanes.rebuildPane();
+        $.fn.dataTable.ext.search.pop();
     });
 
 
@@ -302,9 +313,11 @@ $(function () {
         });
         manageLeadTable.draw();  // working
         manageLeadTable.searchPanes.rebuildPane();
+        $.fn.dataTable.ext.search.pop();
     });
 
     $('input[name="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+        $('input[name="datefilter"]').val('');
         $(this).val('');
         applyDateRageFilter();
         $('#datatable-1').block({
@@ -313,6 +326,7 @@ $(function () {
         });
         manageLeadTable.draw();  // working
         manageLeadTable.searchPanes.rebuildPane();
+        $.fn.dataTable.ext.search.pop();
     });
 
 
@@ -523,8 +537,6 @@ function writeStatusHTML() {
 
 function applyDateRageFilter(startFiterDate = "", endFilterDate = "") {
 
-    $.fn.dataTable.ext.search.pop();
-    manageLeadTable.search('').draw();
     $.fn.dataTable.ext.search.push(
         function (settings, searchData, index, rowData, counter) {
             var tableNode = manageLeadTable.table().node();
@@ -548,7 +560,8 @@ function applyDateRageFilter(startFiterDate = "", endFilterDate = "") {
                 }
 
             }
-            else if (dateType == 'lastMonth') {
+
+            if (dateType == 'lastMonth') {
                 const todayDate = moment(new Date()).format("MM-DD-YYYY");
                 var date = searchData[1];
                 const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('MM-DD-YYYY')
@@ -568,7 +581,8 @@ function applyDateRageFilter(startFiterDate = "", endFilterDate = "") {
                     }
                 }
 
-            } else if (dateType == 'thisMonth') {
+            }
+            if (dateType == 'thisMonth') {
                 const startOfMonth = moment().startOf('month').format('MM-DD-YYYY');
                 const endOfMonth = moment().endOf('month').format('MM-DD-YYYY');
 

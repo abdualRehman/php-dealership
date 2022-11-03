@@ -264,42 +264,41 @@ $(function () {
                 // return true;
                 event.preventDefault();
 
-                var c = confirm('Do you really want to save this?');
-                if (c == true) {
-                    var form = $('#editForm');
-                    $.ajax({
-                        type: "POST",
-                        url: form.attr('action'),
-                        data: form.serialize(),
-                        dataType: 'json',
-                        success: function (response) {
-                            console.log(response);
+                var form = $('#editForm');
+                $.ajax({
+                    type: "POST",
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response);
 
-                            if (response.success == true) {
+                        if (response.success == true) {
 
-                                e1.fire({
-                                    position: "top-end",
-                                    icon: "success",
-                                    title: response.messages,
-                                    showConfirmButton: !1,
-                                    timer: 2500,
-                                })
+                            e1.fire({
+                                position: "top-end",
+                                icon: "success",
+                                title: response.messages,
+                                showConfirmButton: !1,
+                                timer: 2500,
+                            })
 
-                                form[0].reset();
-                                manageDataTable.ajax.reload(null, false);
+                            form[0].reset();
+                            manageDataTable.ajax.reload(null, false);
+                            $('#editDetails').modal('hide');
 
-                            } else {
-                                e1.fire({
-                                    position: "top-end",
-                                    icon: "error",
-                                    title: response.messages,
-                                    showConfirmButton: !1,
-                                    timer: 2500
-                                })
-                            }
+                        } else {
+                            e1.fire({
+                                position: "top-end",
+                                icon: "error",
+                                title: response.messages,
+                                showConfirmButton: !1,
+                                timer: 2500
+                            })
                         }
-                    });
-                }
+                    }
+                });
+
                 return false;
 
             }
@@ -366,43 +365,41 @@ $(function () {
                 submitHandler: function (form, event) {
                     event.preventDefault();
 
-                    var c = confirm('Do you really want to save this?');
-                    if (c == true) {
-                        var form = $('#addForm');
-                        $.ajax({
-                            type: "POST",
-                            url: form.attr('action'),
-                            data: form.serialize(),
-                            dataType: 'json',
-                            success: function (response) {
-                                console.log(response);
+                    var form = $('#addForm');
+                    $.ajax({
+                        type: "POST",
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        dataType: 'json',
+                        success: function (response) {
+                            console.log(response);
 
-                                if (response.success == true) {
+                            if (response.success == true) {
 
-                                    e1.fire({
-                                        position: "top-end",
-                                        icon: "success",
-                                        title: response.messages,
-                                        showConfirmButton: !1,
-                                        timer: 2500,
-                                    })
+                                e1.fire({
+                                    position: "top-end",
+                                    icon: "success",
+                                    title: response.messages,
+                                    showConfirmButton: !1,
+                                    timer: 2500,
+                                })
 
-                                    form[0].reset();
+                                form[0].reset();
 
-                                } else {
-                                    e1.fire({
-                                        position: "top-end",
-                                        icon: "error",
-                                        title: response.messages,
-                                        showConfirmButton: !1,
-                                        timer: 2500
-                                    })
-                                }
-
-
+                            } else {
+                                e1.fire({
+                                    position: "top-end",
+                                    icon: "error",
+                                    title: response.messages,
+                                    showConfirmButton: !1,
+                                    timer: 2500
+                                })
                             }
-                        });
-                    }
+
+
+                        }
+                    });
+
                     return false;
 
                 }

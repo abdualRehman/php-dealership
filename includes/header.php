@@ -866,7 +866,7 @@
                                 <?php
                                 if (hasAccess("sale", "View") !== 'false') {
                                 ?>
-                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary todaySoldStatus">
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary todaySoldStatus" id="etodaySoldStatus" >
                                     </a>
                                 <?php
                                 }

@@ -18,7 +18,9 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
     $_SESSION['userRole'] === $_SESSION['ccsID']
 ) {
     if (hasAccess("bdc", "View") === 'true') {
-        echo ("<script>location.href = '" . $siteurl . "/more/bdc.php';</script>");
+        // echo ("<script>location.href = '" . $siteurl . "/more/bdc.php';</script>");
+        echo "<script type='text/javascript'>window.location.href='{$siteurl}/more/bdc.php'</script>";
+        exit;
     } else {
         include('includes/footer.php');
     }
@@ -78,7 +80,7 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                 </div>
 
             <?php
-            } else if ($_SESSION['userRole'] ==  $_SESSION['salesManagerID'] || $_SESSION['userRole'] == 'Admin' || $_SESSION['userRole'] == $_SESSION['generalManagerID']) {
+            } else if ($_SESSION['userRole'] ==  $_SESSION['salesManagerID'] || $_SESSION['userRole'] == 'Admin' || $_SESSION['userRole'] == 'branchAdmin' || $_SESSION['userRole'] == $_SESSION['generalManagerID']) {
             ?>
 
 

@@ -28,8 +28,8 @@ if ($rulesResults->num_rows > 0) {
         FROM sales LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN rdr ON sales.sale_id = rdr.sale_id 
         WHERE sales.status = 1 AND sales.sale_status != 'cancelled' 
         AND inventory.year = " . ($year == "true" ? "inventory.year"  : "'$year'") . " 
-        AND inventory.make = " . ($make == "true" ? "inventory.make"  : "'$make'") . " 
-        AND inventory.model = " . ($model == "true" ? "inventory.model"  : "'$model'") . "
+        AND inventory.model " . ($model == "true" ? " = inventory.model"  : "LIKE '$model%' ") . "
+        AND inventory.make  " . ($make == "true" ? " = inventory.make"  : " LIKE '$make%' ") . " 
         AND inventory.stocktype = " . ($model_type == "true" ? "inventory.stocktype"  : "'$model_type'") . "
         AND sales.certified ='$certifiedv' AND sales.location = '$location' ";
 

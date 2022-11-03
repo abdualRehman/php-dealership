@@ -1,5 +1,5 @@
 "use strict";
-var manageAppointmentsTable;
+var manageAppointmentsTable, apptexistStatusValue = false;
 var deliveryCoordinatorArray = [];
 var o, vehicleArray = ["All"];
 var e1 = Swal.mixin({
@@ -85,7 +85,7 @@ $(function () {
         searchPanes: {
             cascadePanes: !0,
             viewTotal: !0,
-            columns: [6, 9, 7, 13],
+            columns: [6, 10, 7, 15],
         },
         "pageLength": 25,
         buttons: [
@@ -112,20 +112,8 @@ $(function () {
             },
         ],
         columnDefs: [
-            { width: 400, targets: [11] },
-            { visible: false, targets: [10, 13] },
-            {
-                targets: [13],
-                data: 18,
-                render: function (data, type, row) {
-                    if (data == '') {
-                        data = "";
-                    } else {
-                        data = "Additional Services";
-                    }
-                    return data;
-                }
-            },
+            { width: 400, targets: [13] },
+            { visible: false, targets: [0, 12, 15] },
             {
                 targets: [0],
                 data: 0,
@@ -190,38 +178,45 @@ $(function () {
             },
             {
                 targets: [9],
-                data: 14,
+                data: 22,
             },
             {
                 targets: [10],
-                data: 19,
-                // createdCell: function (td, cellData, rowData, row, col) {
-                //     if ($('#isEditAllowed').val() == 'true') {
-                //         $(td).html(`<div class="show d-flex" >
-                //             <input type="text" class="form-control sold_price" name="input_field" value="${rowData[26] ? rowData[26] : 0}" id="${rowData[0]}sold_price" data-attribute="sold_price" data-id="${rowData[0]}" autocomplete="off"  />
-                //         </div>`);
-                //     } else {
-                //         $(td).html(rowData[26]);
-                //     }
-                // }
+                data: 14,
             },
             {
                 targets: [11],
-                data: 15,
+                data: 23,
             },
             {
                 targets: [12],
+                data: 19,
+            },
+            {
+                targets: [13],
+                data: 15,
+            },
+            {
+                targets: [14],
                 data: 16,
+            },
+            {
+                targets: [15],
+                data: 18,
+                render: function (data, type, row) {
+                    if (data == '') {
+                        data = "";
+                    } else {
+                        data = "Additional Services";
+                    }
+                    return data;
+                }
             },
             {
                 searchPanes: {
                     show: true
                 },
-                targets: [6, 9, 7, 13],
-            },
-            {
-                targets: [0],
-                visible: false,
+                targets: [6, 10, 7, 15],
             },
         ],
 
@@ -359,7 +354,8 @@ $(function () {
                 } else if (dateType == 'approvals') {
                     var appointed = rowData[19];
                     var manager_override_id = rowData[20];
-                    if (appointed == 'true' && !manager_override_id) {
+                    var delivery = rowData[23];
+                    if (appointed == 'true' && !manager_override_id && delivery != '') {
                         return true;
                     }
                 }
@@ -435,7 +431,9 @@ $(function () {
             },
             // overrideBy: {
             //     required: function (params) {
-            //         if ($('#loggedInUserRole').val() != deliveryCoordinatorID) {
+            //         // if ($('#loggedInUserRole').val() != deliveryCoordinatorID) {
+            //         if (apptexistStatusValue == true) {
+            //             $(params).addClass('is-invalid');
             //             return true;
             //         } else {
             //             $(params).removeClass('is-invalid');
@@ -541,7 +539,9 @@ $(function () {
             },
             // eoverrideBy: {
             //     required: function (params) {
-            //         if ($('#loggedInUserRole').val() != deliveryCoordinatorID) {
+            //         // if ($('#loggedInUserRole').val() != deliveryCoordinatorID) {
+            //         if (apptexistStatusValue == true) {
+            //             $(params).addClass('is-invalid');
             //             return true;
             //         } else {
             //             $(params).removeClass('is-invalid');
@@ -707,8 +707,9 @@ function disabledManagerDiv() {
     var delivery_coordinator_id = Number(localStorage.getItem('deliveryCoordinatorID'));
     var sales_manager_id = Number(localStorage.getItem('salesManagerID'));
     var general_manager_id = Number(localStorage.getItem('generalManagerID'));
+    var branchAdmin_id = Number(localStorage.getItem('branchAdmin'));
 
-    if (currentUser != delivery_coordinator_id && currentUser != 'Admin') {
+    if (currentUser != delivery_coordinator_id && currentUser != 'Admin' && currentUser != branchAdmin_id) {
         $('.delivery_coordinator').addClass('disabled-div');
         $(".delivery_coordinator").find("*").prop("readonly", true);
     } else {
@@ -722,7 +723,7 @@ function disabledManagerDiv() {
         $('.delivery_coordinator').removeClass('disabled-div');
         $(".delivery_coordinator").find("*").prop("readonly", false);
     }
-    if (currentUser != 'Admin' && currentUser != sales_manager_id && currentUser != general_manager_id) {
+    if (currentUser != 'Admin' && currentUser != branchAdmin_id && currentUser != sales_manager_id && currentUser != general_manager_id) {
         $('.manager_override_div').addClass('disabled-div');
         $(".manager_override_div").find("*").prop("readonly", true);
     } else {
@@ -842,6 +843,16 @@ function editShedule(id = null) {
 
                 $('#editScheduleForm')[0].reset();
 
+
+                $('#edelivery :radio[name="edelivery"]').prop('checked', false);
+                $('#edelivery .active').removeClass('active');
+                (response.delivery) ? $('#e' + response.delivery).prop('checked', true).click() : null;
+
+                $('#eadditionalServices :radio[name="eadditionalServices"]').prop('checked', false);
+                $('#eadditionalServices .active').removeClass('active');
+                (response.additional_services) ? $('#e' + response.additional_services).prop('checked', true).click() : null;
+
+
                 $('#scheduleId').val(response.id);
                 $('#ecallenderId').val(response.calender_id);
 
@@ -868,14 +879,6 @@ function editShedule(id = null) {
 
 
 
-
-                $('#edelivery :radio[name="edelivery"]').prop('checked', false);
-                $('#edelivery .active').removeClass('active');
-                (response.delivery) ? $('#e' + response.delivery).prop('checked', true).click() : null;
-
-                $('#eadditionalServices :radio[name="eadditionalServices"]').prop('checked', false);
-                $('#eadditionalServices .active').removeClass('active');
-                (response.additional_services) ? $('#e' + response.additional_services).prop('checked', true).click() : null;
 
 
                 $('#escheduleNotes').val(response.notes);
@@ -905,7 +908,7 @@ function editShedule(id = null) {
                     $('#ecoordinator').val(response.coordinator);
                 }
                 $('.selectpicker').selectpicker('refresh');
-
+                apptexistStatusValue = false;
 
 
             }, // /success
@@ -928,7 +931,9 @@ function changeStockDetails(ele) {
         var apptStatus = obj[10];
         var sales_manager_id = Number(localStorage.getItem('salesManagerID'));
         var general_manager_id = Number(localStorage.getItem('generalManagerID'));
-        if (apptStatus != null && currentUser != sales_manager_id && currentUser != general_manager_id && currentUser != 'Admin') {
+        var branchAdmin_id = Number(localStorage.getItem('branchAdmin'));
+
+        if (apptStatus != null && currentUser != sales_manager_id && currentUser != general_manager_id && currentUser != 'Admin' && currentUser != branchAdmin_id) {
             toastr.error('Error! - Appointment Allready Exist');
 
             $('#sale_id').val('');
@@ -936,14 +941,46 @@ function changeStockDetails(ele) {
             return false;
         }
 
+        changeExistStatus();
 
         $('#customerName').val(obj[2] + ' ' + obj[3]);
         $('#vechicle').val(obj[6] + ' ' + obj[7] + ' ' + obj[9]);
-        $('#has_appointment').val(obj[10])
+        // $('#has_appointment').val(obj[10])
+        $('#has_appointment').val(obj[11])
         $('#stockno').val(obj[1])
     }
 
 }
+
+
+function changeExistStatus(editStatus = false) {
+    let eleValue = $(`#${editStatus ? 'e' : ''}sale_id`).val();
+    let obj = stockArray.find(data => data[0] === eleValue);
+    let deliveryStatus = $(`input[name="${editStatus ? 'e' : ''}delivery"]:checked`).val();
+    if (obj && deliveryStatus) {
+        var apptexistStatus = obj[11];
+        if (apptexistStatus != null && deliveryStatus != '') {
+            apptexistStatusValue = true;
+        } else {
+            apptexistStatusValue = false;
+        }
+    } else {
+        apptexistStatusValue = false;
+    }
+    if (apptexistStatusValue == true) {
+        toastr.error(`Error! - Stock No: ${obj[4]} has already been scheduled for a delivery`);
+        // $('.manager_override_div').removeClass('disabled-div');
+        // $(".manager_override_div").find("*").prop("readonly", false);
+    } else {
+        $('.manager_override_div').addClass('disabled-div');
+        $(".manager_override_div").find("*").prop("readonly", true);
+    }
+    $(`#${editStatus ? 'e' : ''}overrideBy`).prop('checked', false);
+    $(`#${editStatus ? 'e' : ''}overrideByName`).val("");
+    $(`#${editStatus ? 'e' : ''}overrideById`).val("");
+}
+
+
 function echangeStockDetails(ele, checkAppt = true) {
 
     let obj = stockArray.find(data => data[0] === ele.value);
@@ -957,20 +994,34 @@ function echangeStockDetails(ele, checkAppt = true) {
             var apptStatus = obj[10];
             var sales_manager_id = Number(localStorage.getItem('salesManagerID'));
             var general_manager_id = Number(localStorage.getItem('generalManagerID'));
-            if (apptStatus != null && currentUser != sales_manager_id && currentUser != general_manager_id && currentUser != 'Admin') {
+            var branchAdmin_id = Number(localStorage.getItem('branchAdmin'));
+
+            if (apptStatus != null && currentUser != sales_manager_id && currentUser != general_manager_id && currentUser != 'Admin' && currentUser != branchAdmin_id) {
                 toastr.error('Error! - Appointment Allready Exist');
                 $('#esale_id').val('');
                 $('.selectpicker').selectpicker('refresh');
                 return false;
             }
+            changeExistStatus();
         }
         $('#ecustomerName').val(obj[2] + ' ' + obj[3]);
         $('#evechicle').val(obj[6] + ' ' + obj[7] + ' ' + obj[9]);
-        $('#ehas_appointment').val(obj[10])
+        // $('#ehas_appointment').val(obj[10])
+        $('#ehas_appointment').val(obj[11])
         $('#estockno').val(obj[1])
     }
 
 }
+
+
+
+$('input[name=delivery] , input[name=edelivery]').change(function () {
+    if ($(this).prop('name') == 'delivery') {
+        changeExistStatus();
+    } else {
+        changeExistStatus(true);
+    }
+})
 
 $('#overrideBy').change(function () {
     if ($(this).prop('checked')) {

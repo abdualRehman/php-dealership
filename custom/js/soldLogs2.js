@@ -961,7 +961,9 @@ function disabledManagerDiv() {
     var delivery_coordinator_id = Number(localStorage.getItem('deliveryCoordinatorID'));
     var sales_manager_id = Number(localStorage.getItem('salesManagerID'));
     var general_manager_id = Number(localStorage.getItem('generalManagerID'));
-    if (currentUser != delivery_coordinator_id && currentUser != 'Admin') {
+    var branchAdmin_id = Number(localStorage.getItem('branchAdmin'));
+
+    if (currentUser != delivery_coordinator_id && currentUser != 'Admin' && currentUser != branchAdmin_id) {
         $('.delivery_coordinator').addClass('disabled-div');
         $(".delivery_coordinator").find("*").prop("readonly", true);
     } else {
@@ -975,7 +977,7 @@ function disabledManagerDiv() {
         $('.delivery_coordinator').removeClass('disabled-div');
         $(".delivery_coordinator").find("*").prop("readonly", false);
     }
-    if (currentUser != 'Admin' && currentUser != sales_manager_id && currentUser != general_manager_id) {
+    if (currentUser != 'Admin' && currentUser != branchAdmin_id && currentUser != sales_manager_id && currentUser != general_manager_id) {
         $('.manager_override_div').addClass('disabled-div');
         $(".manager_override_div").find("*").prop("readonly", true);
     } else {

@@ -2,7 +2,7 @@
 
 require_once './db/core.php';
 
-$valid = array('success' => false, 'messages' => array() , 'errorMessages' => array() , 'id' => '');
+$valid = array('success' => false, 'messages' => array(), 'errorMessages' => array(), 'id' => '');
 
 if ($_POST) {
 
@@ -51,48 +51,56 @@ if ($_POST) {
     for ($x = 0; $x < count($_POST['model']); $x++) {
         $i = $x + 1;
         $model = mysqli_real_escape_string($connect, $_POST['model'][$x]);
-        $state = mysqli_real_escape_string($connect, $_POST['state'][$x]);
+        // $state = mysqli_real_escape_string($connect, $_POST['state'][$x]);
+        // $state = $_POST['state'.$i];
+        $stateArray = (isset($_POST['state' . $i])) ? $_POST['state' . $i] : "";
+        // $state = (isset($_POST['state' . $i] )) ? implode(",", $_POST['state' . $i] ) : "";
+        // $state = ($state ===  "") ? "" :   "_" . $state . "_";
+
         $year = mysqli_real_escape_string($connect, $_POST['year'][$x]);
         $modelno = mysqli_real_escape_string($connect, $_POST['modelno'][$x]);
         $modelType = mysqli_real_escape_string($connect, $_POST['modelType'][$x]);
 
-        $exModelno = (isset($_POST['exModelno' . $i] )) ? implode("_", $_POST['exModelno' . $i] ) : "";
+        $exModelno = (isset($_POST['exModelno' . $i])) ? implode("_", $_POST['exModelno' . $i]) : "";
         $exModelno = ($exModelno ===  "") ? "" :   "_" . $exModelno . "_";
-       
+
         $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
 
-        $checkSql = "SELECT * FROM `salesperson_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND type='$modelType' AND `state`='$state' AND status = 1 AND location = '$location'";
-        $result = $connect->query($checkSql);
-        if ($result->num_rows > 0) {
-            
-            $valid['errorMessages'][] = $model .' - '. $year . ' - ' . $modelno. ' - ' . $state . ' - ' . $modelType . ", Already Exist";
-        
-        } else {
+        foreach ($stateArray as $state) {
 
-            $sql = "INSERT INTO `salesperson_rules`(`model`, `year`, `modelno` , `ex_modelno` , `type`, `state` , `vin_check`, `insurance`, `trade_title`, `registration`, `inspection`, `salesperson_status`, `paid`, `status` , `location`) 
-            VALUES (
-                '$model',
-                '$year',
-                '$modelno',
-                '$exModelno',
-                '$modelType',
-                '$state',
-                '$vinCheck',
-                '$insurance',
-                '$tradeTitle',
-                '$registration',
-                '$inspection',
-                '$salespersonStatus',
-                '$paid', 1 , '$location' )";
-
-            if ($connect->query($sql) === true) {
-                $valid['success'] = true;
-                $valid['messages'][] = "Successfully Added";
+            $checkSql = "SELECT * FROM `salesperson_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND type='$modelType' AND `state`='$state' AND status = 1 AND location = '$location'";
+            $result = $connect->query($checkSql);
+            if ($result->num_rows > 0) {
+    
+                $valid['errorMessages'][] = $model .' - '. $year . ' - ' . $modelno. ' - ' . $state . ' - ' . $modelType . ", Already Exist";
+    
             } else {
-                $valid['success'] = false;
-                $valid['messages'][] = $connect->error;
-                // $valid['messages'] = mysqli_error($connect);
+    
+                $sql = "INSERT INTO `salesperson_rules`(`model`, `year`, `modelno` , `ex_modelno` , `type`, `state` , `vin_check`, `insurance`, `trade_title`, `registration`, `inspection`, `salesperson_status`, `paid`, `status` , `location`) 
+                VALUES (
+                    '$model',
+                    '$year',
+                    '$modelno',
+                    '$exModelno',
+                    '$modelType',
+                    '$state',
+                    '$vinCheck',
+                    '$insurance',
+                    '$tradeTitle',
+                    '$registration',
+                    '$inspection',
+                    '$salespersonStatus',
+                    '$paid', 1 , '$location' )";
+    
+                if ($connect->query($sql) === true) {
+                    $valid['success'] = true;
+                    $valid['messages'][] = "Successfully Added";
+                } else {
+                    $valid['success'] = false;
+                    $valid['messages'][] = $connect->error;
+                    // $valid['messages'] = mysqli_error($connect);
+                }
             }
         }
     }

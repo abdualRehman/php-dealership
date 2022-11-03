@@ -102,7 +102,9 @@
                                     <th>Coordinator</th>
                                     <th>Stock No.</th>
                                     <th>Vehicle</th>
+                                    <th>Vin</th>
                                     <th>Sales Consultant</th>
+                                    <th>Delivery</th>
                                     <th>Approvals</th>
                                     <th>Notes</th>
                                     <th>Action</th>

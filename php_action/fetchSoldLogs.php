@@ -90,7 +90,7 @@ if ($result->num_rows > 0) {
         <div class="show d-inline-flex w-100 justify-content-end" >';
 
         if (
-            ($_SESSION['userRole'] == $salesConsultantID && $confirmed != 'ok') || $_SESSION['userRole'] == 'Admin' ||
+            ($_SESSION['userRole'] == $salesConsultantID && $confirmed != 'ok') || $_SESSION['userRole'] == 'Admin' || $_SESSION['userRole'] == $branchAdmin ||
             $_SESSION['userRole'] == $salesManagerID || $_SESSION['userRole'] == $generalManagerID
         ) {
             if ($row['sale_status'] != 'cancelled' && hasAccess("appointment", "Add") !== 'false') {

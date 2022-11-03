@@ -22,6 +22,9 @@ if (hasAccess("sptr", "Edit") === 'false') {
         margin: auto;
         align-items: center;
     }
+    .bootstrap-select .dropdown-item>span.check-mark {
+        position: initial!important;
+    }
 
     /* #datatable-1 tbody tr td {
         padding: 10px 6px;
@@ -52,7 +55,7 @@ if (hasAccess("sptr", "Edit") === 'false') {
 
         .modal-lg,
         .modal-xl {
-            max-width: 1000PX;
+            max-width: 1200PX;
         }
 
         .modal-dialog table.detialsTable {
@@ -181,7 +184,7 @@ if (hasAccess("sptr", "Edit") === 'false') {
                                         </select>
                                     </td>
                                     <td class="form-group">
-                                        <select class="form-control selectpicker w-auto" name="editState" id="editState" data-live-search="true" data-size="4">
+                                        <select class="form-control selectpicker w-auto" name="editState" id="editState" data-live-search="true" data-size="8">
                                             <option value="0" selected disabled>State</option>
                                             <option value="MA">MA</option>
                                             <option value="RI">RI</option>
@@ -375,8 +378,8 @@ if (hasAccess("sptr", "Edit") === 'false') {
                                 <th style="width:15%;text-align:center">Year</th>
                                 <th style="width:15%;text-align:center">Model No.</th>
                                 <th style="width:10%;text-align:center">Model Type</th>
-                                <th style="width:10%;text-align:center">State</th>
-                                <th style="width:20%;text-align:center">Exclude Model No</th>
+                                <th style="width:15%;text-align:center">State</th>
+                                <th style="width:15%;text-align:center">Exclude Model No</th>
                                 <th style="width:10%;text-align:center"></th>
                             </tr>
                         </thead>
@@ -413,8 +416,8 @@ if (hasAccess("sptr", "Edit") === 'false') {
                                     </select>
                                 </td>
                                 <td class="form-group">
-                                    <select class="form-control selectpicker w-auto" name="state[]" id="state1" data-live-search="true" data-size="4">
-                                        <option value="0" selected disabled>State</option>
+                                    <select class="form-control selectpicker w-auto" multiple data-selected-text-format="count > 4" title="State" name="state1[]" id="state1" data-live-search="true" data-size="8">
+                                        <option value="0" disabled>State</option>
                                         <option value="MA">MA</option>
                                         <option value="RI">RI</option>
                                         <option value="CT">CT</option>

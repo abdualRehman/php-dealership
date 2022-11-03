@@ -381,7 +381,7 @@ if (hasAccess("incr", "Edit") === 'false') {
 
                     <br><br>
 
-                    <div class="form-row">
+                    <div class="form-row" id="permissionsDiv" >
                         <div class="col-md-6">
                             <div class="form-group row">
                                 <div class="col-sm-3 text-md-left mb-2 align-self-center">

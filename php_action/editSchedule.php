@@ -64,7 +64,7 @@ if ($_POST) {
     if (!is_null($scheduleId) && $scheduleId != '') {
 
         if (
-            ($confirmed == 'ok') && ($_SESSION['userRole'] == $deliveryCoordinatorID || $_SESSION['userRole'] == 'Admin' || $_SESSION['userRole'] == $generalManagerID || $_SESSION['userRole'] == $salesManagerID)
+            ($confirmed == 'ok') && ($_SESSION['userRole'] == $deliveryCoordinatorID || $_SESSION['userRole'] == 'Admin' || $_SESSION['userRole'] == $branchAdmin || $_SESSION['userRole'] == $generalManagerID || $_SESSION['userRole'] == $salesManagerID)
         ) {
 
             $checkSql = "SELECT * FROM `appointments` WHERE coordinator = '$coordinator' AND id != '$scheduleId' AND status = 1 AND location = '$location' AND confirmed = 'ok' AND cast(schedule_start as datetime )<= '$scheduleStart' and cast(schedule_end as datetime) >= '$scheduleStart'";

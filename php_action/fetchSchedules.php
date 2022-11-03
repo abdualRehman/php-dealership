@@ -14,13 +14,13 @@ $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 if ($_SESSION['userRole'] != $deliveryCoordinatorID) {
     $sql = "SELECT a.id , b.fname, b.lname , b.sale_id , c.stockno , c.stocktype , c.year , c.make , c.model  , a.stock_id, 
         a.appointment_date, a.appointment_time, a.coordinator, a.delivery, a.additional_services, a.notes, a.submitted_by, a.manager_override, 
-        a.confirmed, a.complete, a.schedule_start, a.schedule_end, a.calender_id, a.status , b.sale_status , b.sales_consultant , a.already_have
+        a.confirmed, a.complete, a.schedule_start, a.schedule_end, a.calender_id, a.status , b.sale_status , b.sales_consultant , a.already_have , c.vin
         FROM `appointments` as a LEFT JOIN sales as b ON a.sale_id = b.sale_id LEFT JOIN inventory as c ON a.stock_id = c.id WHERE a.status = 1 AND a.location = '$location' AND b.status = 1";
 } else {
     $uid = $_SESSION['userId'];
     $sql = "SELECT a.id , b.fname, b.lname , b.sale_id , c.stockno , c.stocktype , c.year , c.make , c.model  , a.stock_id, 
         a.appointment_date, a.appointment_time, a.coordinator, a.delivery, a.additional_services, a.notes, a.submitted_by, a.manager_override, 
-        a.confirmed, a.complete, a.schedule_start, a.schedule_end, a.calender_id, a.status , b.sale_status , b.sales_consultant , a.already_have
+        a.confirmed, a.complete, a.schedule_start, a.schedule_end, a.calender_id, a.status , b.sale_status , b.sales_consultant , a.already_have , c.vin
         FROM `appointments` as a LEFT JOIN sales as b ON a.sale_id = b.sale_id LEFT JOIN inventory as c ON a.stock_id = c.id WHERE a.status = 1 AND a.location = '$location' AND a.coordinator = '$uid' AND b.status = 1";
 }
 
@@ -46,7 +46,7 @@ if ($result->num_rows > 0) {
             $calender_id = $row['calender_id'];
 
             $additional_services = $row['additional_services'];
-            
+
             $already_have = $row['already_have'];
 
 
@@ -59,6 +59,11 @@ if ($result->num_rows > 0) {
             $stockno = $row['stockno'];
             $vehicle = $row['stocktype'] . ' ' . $row['year'] . ' ' . $row['make'] . ' ' . $row['model'];
             $notes = $row['notes'];
+
+            $vin = $row['vin'];
+            $delivery = preg_replace('/(?<=\\w)(?=[A-Z])/', " ", $row['delivery']);
+            $delivery = ucfirst($delivery);
+
 
             if (isset($submitted_by)) {
                 $sql1 = "SELECT * FROM `users` WHERE id = '$submitted_by'";
@@ -90,10 +95,13 @@ if ($result->num_rows > 0) {
 
             $allowEdit = false;
 
+            $editManagerApproval = false;
+
             $button = '';
             if (
                 ($_SESSION['userRole'] == $salesConsultantID && $_SESSION['userId'] == $row['sales_consultant'] && $confirmed != 'ok') || $_SESSION['userRole'] == 'Admin' ||
-                $_SESSION['userRole'] == $salesManagerID || $_SESSION['userRole'] == $generalManagerID || $_SESSION['userRole'] == $deliveryCoordinatorID
+                $_SESSION['userRole'] == $branchAdmin || $_SESSION['userRole'] == $salesManagerID || $_SESSION['userRole'] == $generalManagerID ||
+                $_SESSION['userRole'] == $deliveryCoordinatorID
             ) {
                 $allowEdit = true;
                 $button .= '
@@ -104,32 +112,42 @@ if ($result->num_rows > 0) {
                     '</div>';
             }
 
+            if ($_SESSION['userRole'] == 'Admin' || $_SESSION['userRole'] == $salesManagerID || $_SESSION['userRole'] == $generalManagerID || $_SESSION['userRole'] == $branchAdmin) {
+                $editManagerApproval = true;
+            }
 
-            $output['data'][] = array(
-                $id,
-                $sale_id,
-                $calender_id,
-                $submitted_by,
-                $schedule_start,
-                $schedule_end,
+            // duplicate will not send to delivery coordinator until it is approved by Manager
+            if ($_SESSION['userRole'] == $deliveryCoordinatorID && $already_have == true && !$row['manager_override'] && $delivery != '') {
+                continue;
+            } else {
+                $output['data'][] = array(
+                    $id,
+                    $sale_id,
+                    $calender_id,
+                    $submitted_by,
+                    $schedule_start,
+                    $schedule_end,
 
-                $confirmed,
-                $complete,
-                $customerName,
-                $appointment_date,
-                $appointment_time,
-                $coordinator,
-                $stockno,
-                $vehicle,
-                $salesConsultant,
-                $notes,
-                $button,
-                $allowEdit,
-                $additional_services,
-                $already_have,
-                $row['manager_override'],
-
-            );
+                    $confirmed,
+                    $complete,
+                    $customerName,
+                    $appointment_date,
+                    $appointment_time,
+                    $coordinator,
+                    $stockno,
+                    $vehicle,
+                    $salesConsultant,
+                    $notes,
+                    $button,
+                    $allowEdit,
+                    $additional_services,
+                    $already_have,
+                    $row['manager_override'],
+                    $editManagerApproval,
+                    $vin,
+                    $delivery,
+                );
+            }
         } // /if
     } // /while 
 

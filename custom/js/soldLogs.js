@@ -119,7 +119,7 @@ $(function () {
                     targets: [9],
                     createdCell: function (td, cellData, rowData, row, col) {
                         if (rowData[22] == 'true') {
-                            $(td).html(cellData + ' <span class="badge badge-danger badge-lg badge-pill">!</span>');
+                            $(td).html(cellData + ' <span class="badge badge-danger badge-lg badge-pill">$</span>');
                         }
                     }
                 },
@@ -159,7 +159,7 @@ $(function () {
                     targets: [4, 5],
                     createdCell: function (td, cellData, rowData, row, col) {
                         if (col == 4 && rowData[21] == 'true') {
-                            $(td).html(cellData + ' <span class="badge badge-danger badge-lg badge-pill">$</span>');
+                            $(td).html(cellData + ' <span class="badge badge-danger badge-lg badge-pill">!</span>');
                         }
                         if (rowData[17] > 0) {
                             if (col == 4) {
@@ -828,7 +828,9 @@ function disabledManagerDiv() {
     var delivery_coordinator_id = Number(localStorage.getItem('deliveryCoordinatorID'));
     var sales_manager_id = Number(localStorage.getItem('salesManagerID'));
     var general_manager_id = Number(localStorage.getItem('generalManagerID'));
-    if (currentUser != delivery_coordinator_id && currentUser != 'Admin') {
+    var branchAdmin_id = Number(localStorage.getItem('branchAdmin'));
+
+    if (currentUser != delivery_coordinator_id && currentUser != 'Admin' && currentUser != branchAdmin_id) {
         $('.delivery_coordinator').addClass('disabled-div');
         $(".delivery_coordinator").find("*").prop("readonly", true);
     } else {
@@ -842,7 +844,7 @@ function disabledManagerDiv() {
         $('.delivery_coordinator').removeClass('disabled-div');
         $(".delivery_coordinator").find("*").prop("readonly", false);
     }
-    if (currentUser != 'Admin' && currentUser != sales_manager_id && currentUser != general_manager_id) {
+    if (currentUser != 'Admin' && currentUser != branchAdmin_id && currentUser != sales_manager_id && currentUser != general_manager_id) {
         $('.manager_override_div').addClass('disabled-div');
         $(".manager_override_div").find("*").prop("readonly", true);
     } else {

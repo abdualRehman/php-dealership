@@ -514,7 +514,8 @@ if ($_GET['r'] == 'man') {
                                         <input type="hidden" name="soldTodoId" id="soldTodoId">
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <select onchange="chnageStyle(this)" name="vincheck" id="vincheck" class="selectpicker" data-style="btn-outline-danger">
+                                                <select onchange="chnageStyle(this)" title="&#160;" name="vincheck" id="vincheck" class="selectpicker" data-style="btn-outline-danger">
+                                                    <option value="" title="&#160;" data-hidden="true" selected> </option>
                                                     <option value="checkTitle">Check Title</option>
                                                     <option value="need">Need</option>
                                                     <option value="notNeed">Doesn't Need</option>
@@ -526,7 +527,8 @@ if ($_GET['r'] == 'man') {
                                         </div>
                                         <label for="insurance" class="col-md-1 col-form-label">Insurance</label>
                                         <div class="col-md-2">
-                                            <select class="selectpicker" onchange="chnageStyle(this)" id="insurance" name="insurance" data-style="btn-outline-danger">
+                                            <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="insurance" name="insurance" data-style="btn-outline-danger">
+                                                <option value="" title="&#160;" data-hidden="true" selected> </option>
                                                 <option value="need">Need</option>
                                                 <option value="inHouse">In House</option>
                                                 <option value="n/a">N/A</option>
@@ -534,7 +536,8 @@ if ($_GET['r'] == 'man') {
                                         </div>
                                         <label for="tradeTitle" class="col-md-1 col-form-label">Trade Title</label>
                                         <div class="col-md-2">
-                                            <select class="selectpicker" onchange="chnageStyle(this)" id="tradeTitle" name="tradeTitle" data-style="btn-outline-danger">
+                                            <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="tradeTitle" name="tradeTitle" data-style="btn-outline-danger">
+                                                <option value="" title="&#160;" data-hidden="true" selected> </option>
                                                 <option value="need">Need</option>
                                                 <option value="payoff">Payoff</option>
                                                 <option value="noTrade">No Trade</option>
@@ -543,7 +546,8 @@ if ($_GET['r'] == 'man') {
                                         </div>
                                         <label for="registration" class="col-md-1 col-form-label">Registration</label>
                                         <div class="col-md-2">
-                                            <select class="selectpicker" onchange="chnageStyle(this)" id="registration" name="registration" data-style="btn-outline-danger">
+                                            <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="registration" name="registration" data-style="btn-outline-danger">
+                                                <option value="" title="&#160;" data-hidden="true" selected> </option>
                                                 <option value="pending">Pending</option>
                                                 <option value="done">Done</option>
                                                 <option value="customerHas">Customer Has</option>
@@ -556,7 +560,8 @@ if ($_GET['r'] == 'man') {
 
                                         <label for="inspection" class="col-md-1 col-form-label">Inspection</label>
                                         <div class="col-md-3">
-                                            <select class="selectpicker" onchange="chnageStyle(this)" id="inspection" name="inspection" data-style="btn-outline-danger">
+                                            <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="inspection" name="inspection" data-style="btn-outline-danger">
+                                                <option value="" title="&#160;" data-hidden="true" selected> </option>
                                                 <option value="need">Need</option>
                                                 <option value="notNeed">Doesn't Need</option>
                                                 <option value="done">Done</option>
@@ -565,7 +570,8 @@ if ($_GET['r'] == 'man') {
                                         </div>
                                         <label for="salePStatus" class="col-md-1 col-form-label">Salesperson Status</label>
                                         <div class="col-md-3">
-                                            <select class="selectpicker" onchange="chnageStyle(this)" id="salePStatus" name="salePStatus" data-style="btn-outline-danger">
+                                            <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="salePStatus" name="salePStatus" data-style="btn-outline-danger">
+                                                <option value="" title="&#160;" data-hidden="true" selected> </option>
 
                                                 <option value="dealWritten">Deal Written</option>
                                                 <option value="gmdSubmit">GMD Submit</option>
@@ -577,7 +583,8 @@ if ($_GET['r'] == 'man') {
                                         </div>
                                         <label for="paid" class="col-md-1 col-form-label">Paid</label>
                                         <div class="col-md-3">
-                                            <select class="selectpicker" onchange="chnageStyle(this)" id="paid" name="paid" data-style="btn-outline-danger">
+                                            <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="paid" name="paid" data-style="btn-outline-danger">
+                                                <option value="" title="&#160;" data-hidden="true" selected> </option>
                                                 <option value="no">No</option>
                                                 <option value="yes">Yes</option>
                                             </select>
@@ -1378,7 +1385,8 @@ if ($_GET['r'] == 'man') {
                                             <label for="vincheck" class="col-md-1 col-form-label">Vin Check</label>
                                             <div class="col-md-2">
                                                 <div class="form-group">
-                                                    <select onchange="chnageStyle(this)" name="vincheck" id="vincheck" class="selectpicker" data-style="btn-outline-danger">
+                                                    <select onchange="chnageStyle(this)" title="&#160;" name="vincheck" id="vincheck" class="selectpicker" data-style="btn-outline-danger">
+                                                        <option value="" title="&#160;" data-hidden="true" selected> </option>
                                                         <option value="checkTitle">Check Title</option>
                                                         <option value="need">Need</option>
                                                         <option value="notNeed">Doesn't Need</option>
@@ -1390,7 +1398,8 @@ if ($_GET['r'] == 'man') {
                                             </div>
                                             <label for="insurance" class="col-md-1 col-form-label">Insurance</label>
                                             <div class="col-md-2">
-                                                <select class="selectpicker" onchange="chnageStyle(this)" id="insurance" name="insurance" data-style="btn-outline-danger">
+                                                <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="insurance" name="insurance" data-style="btn-outline-danger">
+                                                    <option value="" title="&#160;" data-hidden="true" selected> </option>
                                                     <option value="need">Need</option>
                                                     <option value="inHouse">In House</option>
                                                     <option value="n/a">N/A</option>
@@ -1398,7 +1407,8 @@ if ($_GET['r'] == 'man') {
                                             </div>
                                             <label for="tradeTitle" class="col-md-1 col-form-label">Trade Title</label>
                                             <div class="col-md-2">
-                                                <select class="selectpicker" onchange="chnageStyle(this)" id="tradeTitle" name="tradeTitle" data-style="btn-outline-danger">
+                                                <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="tradeTitle" name="tradeTitle" data-style="btn-outline-danger">
+                                                    <option value="" title="&#160;" data-hidden="true" selected> </option>
                                                     <option value="need">Need</option>
                                                     <option value="payoff">Payoff</option>
                                                     <option value="noTrade">No Trade</option>
@@ -1407,7 +1417,8 @@ if ($_GET['r'] == 'man') {
                                             </div>
                                             <label for="registration" class="col-md-1 col-form-label">Registration</label>
                                             <div class="col-md-2">
-                                                <select class="selectpicker" onchange="chnageStyle(this)" id="registration" name="registration" data-style="btn-outline-danger">
+                                                <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="registration" name="registration" data-style="btn-outline-danger">
+                                                    <option value="" title="&#160;" data-hidden="true" selected> </option>
                                                     <option value="pending">Pending</option>
                                                     <option value="done">Done</option>
                                                     <option value="customerHas">Customer Has</option>
@@ -1420,7 +1431,8 @@ if ($_GET['r'] == 'man') {
 
                                             <label for="inspection" class="col-md-1 col-form-label">Inspection</label>
                                             <div class="col-md-3">
-                                                <select class="selectpicker" onchange="chnageStyle(this)" id="inspection" name="inspection" data-style="btn-outline-danger">
+                                                <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="inspection" name="inspection" data-style="btn-outline-danger">
+                                                    <option value="" title="&#160;" data-hidden="true" selected> </option>
                                                     <option value="need">Need</option>
                                                     <option value="notNeed">Doesn't Need</option>
                                                     <option value="done">Done</option>
@@ -1429,7 +1441,8 @@ if ($_GET['r'] == 'man') {
                                             </div>
                                             <label for="salePStatus" class="col-md-1 col-form-label">Salesperson Status</label>
                                             <div class="col-md-3">
-                                                <select class="selectpicker" onchange="chnageStyle(this)" id="salePStatus" name="salePStatus" data-style="btn-outline-danger">
+                                                <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="salePStatus" name="salePStatus" data-style="btn-outline-danger">
+                                                    <option value="" title="&#160;" data-hidden="true" selected> </option>
 
                                                     <option value="dealWritten">Deal Written</option>
                                                     <option value="gmdSubmit">GMD Submit</option>
@@ -1441,7 +1454,8 @@ if ($_GET['r'] == 'man') {
                                             </div>
                                             <label for="paid" class="col-md-1 col-form-label">Paid</label>
                                             <div class="col-md-3">
-                                                <select class="selectpicker" onchange="chnageStyle(this)" id="paid" name="paid" data-style="btn-outline-danger">
+                                                <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="paid" name="paid" data-style="btn-outline-danger">
+                                                    <option value="" title="&#160;" data-hidden="true" selected> </option>
                                                     <option value="no">No</option>
                                                     <option value="yes">Yes</option>
                                                 </select>

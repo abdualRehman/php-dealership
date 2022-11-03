@@ -604,8 +604,9 @@ function disabledManagerDiv() {
     var delivery_coordinator_id = Number(localStorage.getItem('deliveryCoordinatorID'));;
     var sales_manager_id = Number(localStorage.getItem('salesManagerID'));
     var general_manager_id = Number(localStorage.getItem('generalManagerID'));
+    var branchAdmin_id = Number(localStorage.getItem('branchAdmin'));
 
-    if (currentUser != delivery_coordinator_id && currentUser != 'Admin') {
+    if (currentUser != delivery_coordinator_id && currentUser != 'Admin' && currentUser != branchAdmin_id) {
         $('.delivery_coordinator').addClass('disabled-div');
         $(".delivery_coordinator").find("*").prop("readonly", true);
     } else {
@@ -619,7 +620,7 @@ function disabledManagerDiv() {
         $('.delivery_coordinator').removeClass('disabled-div');
         $(".delivery_coordinator").find("*").prop("readonly", false);
     }
-    if (currentUser != 'Admin' && currentUser != sales_manager_id && currentUser != general_manager_id) {
+    if (currentUser != 'Admin' && currentUser != branchAdmin_id && currentUser != sales_manager_id && currentUser != general_manager_id) {
         $('.manager_override_div').addClass('disabled-div');
         $(".manager_override_div").find("*").prop("readonly", true);
     } else {
@@ -781,7 +782,8 @@ function changeStockDetails(ele) {
         var apptStatus = obj[10];
         var sales_manager_id = Number(localStorage.getItem('salesManagerID'));;
         var general_manager_id = Number(localStorage.getItem('generalManagerID'));
-        if (apptStatus != null && currentUser != sales_manager_id && currentUser != general_manager_id && currentUser != 'Admin') {
+        var branchAdmin_id = Number(localStorage.getItem('branchAdmin'));
+        if (apptStatus != null && currentUser != sales_manager_id && currentUser != general_manager_id && currentUser != 'Admin' && currentUser != branchAdmin_id) {
             toastr.error('Error! - Appointment Allready Exist');
 
             $('#sale_id').val('');
@@ -807,7 +809,8 @@ function echangeStockDetails(ele, checkAppt = true) {
             var apptStatus = obj[10];
             var sales_manager_id = Number(localStorage.getItem('salesManagerID'));;
             var general_manager_id = Number(localStorage.getItem('generalManagerID'));
-            if (apptStatus != null && currentUser != sales_manager_id && currentUser != general_manager_id && currentUser != 'Admin') {
+            var branchAdmin_id = Number(localStorage.getItem('branchAdmin'));
+            if (apptStatus != null && currentUser != sales_manager_id && currentUser != general_manager_id && currentUser != 'Admin' && currentUser != branchAdmin_id) {
                 toastr.error('Error! - Appointment Allready Exist');
                 $('#esale_id').val('');
                 $('.selectpicker').selectpicker('refresh');

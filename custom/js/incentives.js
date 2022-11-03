@@ -95,15 +95,6 @@ $(function () {
 
         'ajax': '../php_action/fetchIncentives.php',
 
-        // working.... with both
-        // dom: "Pfrtip",
-        // dom: `\n     
-        //      <'row'<'col-12'P>>\n      
-        //     <'row'<'col-sm-6 text-center text-sm-left pt-0 pb-0 'B>
-        //         <'col-sm-6 text-center text-sm-right mt-2 mt-sm-0'f>>\n
-        //     <'row'<'col-12'tr>>\n      
-        //     <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
-
         dom: `\n     
         <'row'<'col-12'P>>\n
         <'row'<'col-sm-12 text-sm-left col-md-3 mb-2'<'#statusFilterDiv'>> <'col-sm-12 col-md-6 text-center'B> <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
@@ -151,13 +142,11 @@ $(function () {
             changePillCSS(row, data, 17, 8);
             changePillCSS(row, data, 15, 9);
             changePillCSS(row, data, 16, 10);
-            if ($('#isEditAllowed').val() == "true") {
-                $(row).attr({
-                    "data-toggle": "modal",
-                    "data-target": "#editDetails",
-                    "onclick": "editDetails(" + data[19] + ")"
-                });
-            }
+            $(row).attr({
+                "data-toggle": "modal",
+                "data-target": "#editDetails",
+                "onclick": "editDetails(" + data[19] + ")"
+            });
         },
 
         columnDefs: [

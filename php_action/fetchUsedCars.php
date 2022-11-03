@@ -109,12 +109,12 @@ if ($result->num_rows > 0) {
         // if (($date_in != '' && $date_in != null) && $retail_status != 'wholesale') {
         //     $addToSheet += 1;
         // }
-        if ($date_in !== '' && $date_in === null && $invStatus == 1) {
+        if ($date_in !== '' && $date_in === null && $invStatus != 2) {
             $addToSheet += 1;
             $_addToSheet = "Add To Sheet";
         }
 
-        if (($date_in === '' || $date_in === 'undefined') && $date_in !== null && $invStatus == 1) {
+        if (($date_in === '' || $date_in === 'undefined') && $date_in !== null && $invStatus != 2) {
             $missingDate += 1;
             $_missingDate = "Missing Date";
         }
@@ -123,22 +123,22 @@ if ($result->num_rows > 0) {
         //     $titleIssue += 1;
         //     $_titleIssue = "Title Issue";
         // }
-        if (($title == 'false' || $title == null) && ($date_in !== null) && $invStatus == 1) {
+        if (($title == 'false' || $title == null) && ($date_in !== null) && $invStatus != 2) {
             $titleIssue += 1;
             $_titleIssue = "Title Issue";
         }
 
-        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'false' && $invStatus == 1) {
+        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'false' && $invStatus != 2) {
             $readyToShip += 1;
             $_readyToship = "Ready To Ship";
         }
 
-        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && !$date_sent && !$date_sold && $invStatus == 1) {
+        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && !$date_sent && !$date_sold && $invStatus != 2) {
             $keysPulled += 1;
             $_keyPulled = "Keys Pulled";
         }
 
-        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && $date_sent && !$date_sold && $invStatus == 1) {
+        if ($title == 'true' && $retail_status == 'wholesale' && $key == 'true' && $date_sent && !$date_sold && $invStatus != 2) {
             $atAuction += 1;
             $_atAuction = "At Auction";
         }
@@ -152,7 +152,7 @@ if ($result->num_rows > 0) {
         //     $retail += 1;
         //     $_retail = "Retail";
         // }
-        if ($retail_status != 'wholesale' && $balance !== '' && ($carshopId !== '' && $carshopId !== null) && $invStatus == 1) {
+        if ($retail_status != 'wholesale' && $balance !== '' && ($carshopId !== '' && $carshopId !== null) && $invStatus != 2) {
             $retail += 1;
             $_retail = "Retail";
         }
@@ -188,7 +188,7 @@ if ($result->num_rows > 0) {
 
         $fixed_status = $row['fixed_status']; // fixed_status
 
-        if ($id != null && $carshopId != null && $row['date_in'] != '' && !is_null($row['date_in']) && $age != $cdkAge && $fixed_status != "true") {
+        if ($id != null && $carshopId != null && $row['date_in'] != '' && !is_null($row['date_in']) && $age != $cdkAge && $fixed_status != "true" && $invStatus == 1) {
             $fixAge += 1;
         }
 

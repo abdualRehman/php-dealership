@@ -94,7 +94,8 @@ $(function () {
                     });
                 // percentage = (totalDoneCount / allCount) * 100;
                 // percentage = (totalDoneCount / totalRetail) * 100;
-                percentage = ((notDone + roclosed) / totalRetail) * 100;
+                // percentage = ((notDone + roclosed) / totalRetail) * 100;
+                percentage = ((totalRetail - totalDoneCount) / totalRetail) * 100;
                 // percentage = Math.round(percentage);
                 percentage = percentage.toFixed(2)
 

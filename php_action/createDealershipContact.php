@@ -14,11 +14,17 @@ if ($_POST) {
     $zip = (isset($_POST['zip'])) ? mysqli_real_escape_string($connect, $_POST['zip']) : "";
     $telephone = (isset($_POST['telephone'])) ? mysqli_real_escape_string($connect, $_POST['telephone']) : "";
     $fax = (isset($_POST['fax'])) ? mysqli_real_escape_string($connect, $_POST['fax']) : "";
+
+    $generalManager = (isset($_POST['generalManager'])) ? mysqli_real_escape_string($connect, $_POST['generalManager']) : "";
+    $generalManagerContact = (isset($_POST['generalManagerContact'])) ? mysqli_real_escape_string($connect, $_POST['generalManagerContact']) : "";
+    $usedcarManager = (isset($_POST['usedcarManager'])) ? mysqli_real_escape_string($connect, $_POST['usedcarManager']) : "";
+    $usedcarManagerContact = (isset($_POST['usedcarManagerContact'])) ? mysqli_real_escape_string($connect, $_POST['usedcarManagerContact']) : "";
+
     $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
 
-    $sql = "INSERT INTO `dealerships`(`brand`, `dealership`, `address`, `city`, `state`, `zip`, `telephone`, `fax` , `status` , `location`) 
-    VALUES ( '$brand' , '$dealership' , '$address' , '$city' , '$state' , '$zip' , '$telephone' , '$fax' ,1 , '$location' )";
+    $sql = "INSERT INTO `dealerships`(`brand`, `dealership`, `address`, `city`, `state`, `zip`, `telephone`, `fax`, `gmanager` , `gmanager_contact` , `usedcmanager` , `usedcmanager_contact` , `status` , `location`) 
+    VALUES ( '$brand' , '$dealership' , '$address' , '$city' , '$state' , '$zip' , '$telephone' , '$fax' , '$generalManager' , '$generalManagerContact' , '$usedcarManager' , '$usedcarManagerContact' , 1 , '$location' )";
 
     if ($connect->query($sql) === true) {
         $valid['success'] = true;

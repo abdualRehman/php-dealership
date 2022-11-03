@@ -10,7 +10,7 @@ $invId = $_POST['invId'];
 if ($invId) {
 
 	// $sql = "UPDATE inventory SET status = 2 WHERE id = '$invId'";
-	$sql = "UPDATE inventory SET status = 2 AND balance = '0' AND lot = '' WHERE id = '$invId'";
+	$sql = "UPDATE inventory SET status = '2' , balance = '0', lot = '' WHERE id = '$invId'";
 
 	// $checkSql = "SELECT * FROM `sales` WHERE stock_id = '$invId' AND status = 1";
 	// $result = $connect->query($checkSql);
