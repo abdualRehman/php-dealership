@@ -1,8 +1,9 @@
 <?php
 
 require_once './db/core.php';
+require_once './sendSMS.php';
 
-$valid['success'] = array('success' => false, 'messages' => array(), 'id' => '');
+$valid['success'] = array('success' => false, 'messages' => array(), 'id' => '', 'sms_status' => array());
 // print_r($valid);
 function reformatDate($date, $from_format = 'm-d-Y H:i', $to_format = 'Y-m-d H:i')
 {
@@ -40,7 +41,7 @@ if ($_POST) {
 
     $has_appointment = (isset($_POST['has_appointment'])) ? mysqli_real_escape_string($connect, $_POST['has_appointment']) : "null";
     $has_appointment = ($has_appointment != "null" && $has_appointment != '') ? "true" : "false";
-    
+
 
 
     $scheduleTime = mysqli_real_escape_string($connect, $_POST['scheduleTime']);
@@ -84,7 +85,13 @@ if ($_POST) {
             $message = 'Appointment Created: With "' . $customerName . '" On "' . ucwords($delivery) . '" at: "' . $scheduleStart . '"';
             $appointment_id = $connect->insert_id;
             sendNotifiation($from, $to, $message, $appointment_id);
-
+            
+            // $sms_user = sendSMS('number', 'message');
+            // if($sms_user == 'true'){
+            //     $valid['sms_status'] = "SMS Send";
+            // }else{
+            //     $valid['sms_status'] = "SMS Failed";
+            // }
 
             // sendNotifiation()
             $valid['success'] = true;

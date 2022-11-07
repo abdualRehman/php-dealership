@@ -37,6 +37,13 @@ if ($result->num_rows > 0) {
     } else {
         $output['manager_overrideName'] = "";
     }
+
+    // duplicate will not send to delivery coordinator until it is approved by Manager
+    if ($_SESSION['userRole'] == $deliveryCoordinatorID && $row['already_have'] == "true" && !$row['manager_override'] && $row['delivery'] != ''){
+        $output['allowDeliveryCoordinator'] = true;
+    }else{
+        $output['allowDeliveryCoordinator'] = false;
+    }
 }
 
 $connect->close();

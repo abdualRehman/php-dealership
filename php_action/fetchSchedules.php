@@ -116,38 +116,33 @@ if ($result->num_rows > 0) {
                 $editManagerApproval = true;
             }
 
-            // duplicate will not send to delivery coordinator until it is approved by Manager
-            if ($_SESSION['userRole'] == $deliveryCoordinatorID && $already_have == true && !$row['manager_override'] && $delivery != '') {
-                continue;
-            } else {
-                $output['data'][] = array(
-                    $id,
-                    $sale_id,
-                    $calender_id,
-                    $submitted_by,
-                    $schedule_start,
-                    $schedule_end,
+            $output['data'][] = array(
+                $id,
+                $sale_id,
+                $calender_id,
+                $submitted_by,
+                $schedule_start,
+                $schedule_end,
 
-                    $confirmed,
-                    $complete,
-                    $customerName,
-                    $appointment_date,
-                    $appointment_time,
-                    $coordinator,
-                    $stockno,
-                    $vehicle,
-                    $salesConsultant,
-                    $notes,
-                    $button,
-                    $allowEdit,
-                    $additional_services,
-                    $already_have,
-                    $row['manager_override'],
-                    $editManagerApproval,
-                    $vin,
-                    $delivery,
-                );
-            }
+                $confirmed,
+                $complete,
+                $customerName,
+                $appointment_date,
+                $appointment_time,
+                $coordinator,
+                $stockno,
+                $vehicle,
+                $salesConsultant,
+                $notes,
+                $button,
+                $allowEdit,
+                $additional_services,
+                $already_have,
+                $row['manager_override'],
+                $editManagerApproval,
+                $vin,
+                $delivery,
+            );
         } // /if
     } // /while 
 

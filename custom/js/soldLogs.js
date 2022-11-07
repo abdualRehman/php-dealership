@@ -1,5 +1,5 @@
 "use strict";
-var manageSoldLogsTable, rowGroupSrc = 10; // status
+var manageSoldLogsTable, rowGroupSrc = 10, apptexistStatusValue = false; // status
 var stockArray = [], deliveryCoordinatorArray = [], manageNotDoneTable;
 var collapsedGroups = {};
 
@@ -745,7 +745,7 @@ function addNewSchedule(id = null) {
             data: { id: id },
             dataType: 'json',
             success: function (response) {
-
+                console.log(response);
                 $('.spinner-grow').addClass('d-none');
                 // modal result
                 $('.showResult').removeClass('d-none');
@@ -753,6 +753,11 @@ function addNewSchedule(id = null) {
                 $('.modal-footer').removeClass('d-none');
 
                 $('#editScheduleForm')[0].reset();
+
+                // setting up delivery status first
+                $('#allready_created').val(null);
+                apptexistStatusValue = false;
+
 
                 $('#scheduleId').val(response.id);
                 $('#ecallenderId').val(response.calender_id);
@@ -771,17 +776,22 @@ function addNewSchedule(id = null) {
                 $('#eoverrideByName').val(response.manager_overrideName);
                 $('#eoverrideById').val(response.eoverrideById);
 
+
                 const number = response.appointment_time ? moment(response.appointment_time, ["HH:mm"]).format("h:mma") : "";
                 $('#escheduleTime').val(number);
                 var date = response.appointment_date ? moment(response.appointment_date, 'YYYY-MM-DD').format('MM-DD-YYYY') : "";
                 $('#escheduleDate').val(date);
                 $('#escheduleDate').datepicker('update', date);
+
                 $('#edelivery :radio[name="edelivery"]').prop('checked', false);
                 $('#edelivery .active').removeClass('active');
                 (response.delivery) ? $('#e' + response.delivery).prop('checked', true).click() : null;
                 $('#eadditionalServices :radio[name="eadditionalServices"]').prop('checked', false);
                 $('#eadditionalServices .active').removeClass('active');
                 (response.additional_services) ? $('#e' + response.additional_services).prop('checked', true).click() : null;
+
+                $('#allready_created').val(response.allready_created);
+
                 $('#escheduleNotes').val(response.notes);
                 $('#econfirmed :radio[name="econfirmed"]').prop('checked', false);
                 $('#econfirmed .active').removeClass('active');
@@ -794,6 +804,14 @@ function addNewSchedule(id = null) {
                     $('#ecomplete').addClass('disabled-div');
                 } else {
                     $('#ecomplete').removeClass('disabled-div');
+                }
+
+
+                if (response.allowDeliveryCoordinator == true) {
+                    $('.delivery_coordinator').addClass('disabled-div');
+                    $(".delivery_coordinator").find("*").prop("readonly", true);
+                } else {
+                    disabledManagerDiv();
                 }
 
                 $('#ecoordinator').val(response.coordinator);
@@ -822,7 +840,33 @@ $('#eoverrideBy').change(function () {
         $('#eoverrideByName').val("");
         $('#eoverrideById').val("");
     }
+});
+
+$('input[name=edelivery]').change(function () {
+    changeExistStatus();
 })
+
+
+function changeExistStatus() {
+    let alrhValue = $(`#allready_created`).val();
+    let estocknoDisplay = $(`#estocknoDisplay`).val();
+    if (alrhValue) {
+        let deliveryStatus = $(`input[name="edelivery"]:checked`).val();
+        if (alrhValue && deliveryStatus) {
+            if (alrhValue != null && deliveryStatus != '') {
+                apptexistStatusValue = true;
+            } else {
+                apptexistStatusValue = false;
+            }
+        } else {
+            apptexistStatusValue = false;
+        }
+    }
+    if (apptexistStatusValue == true) {
+        toastr.error(`Error! - Stock No: ${estocknoDisplay} has already been scheduled for a delivery`);
+    }
+}
+
 function disabledManagerDiv() {
     let currentUser = $('#loggedInUserRole').val();
     var delivery_coordinator_id = Number(localStorage.getItem('deliveryCoordinatorID'));

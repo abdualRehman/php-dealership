@@ -897,8 +897,13 @@ function editShedule(id = null) {
                     $('#ecomplete').removeClass('disabled-div');
                 }
 
-
-
+                if (response.allowDeliveryCoordinator == true) {
+                    $('.delivery_coordinator').addClass('disabled-div');
+                    $(".delivery_coordinator").find("*").prop("readonly", true);
+                }else {
+                    disabledManagerDiv();
+                }
+                
 
                 $('#ecoordinator').val(response.coordinator);
                 var checkSelectValue = $('#ecoordinator').val();
@@ -969,11 +974,6 @@ function changeExistStatus(editStatus = false) {
     }
     if (apptexistStatusValue == true) {
         toastr.error(`Error! - Stock No: ${obj[4]} has already been scheduled for a delivery`);
-        // $('.manager_override_div').removeClass('disabled-div');
-        // $(".manager_override_div").find("*").prop("readonly", false);
-    } else {
-        $('.manager_override_div').addClass('disabled-div');
-        $(".manager_override_div").find("*").prop("readonly", true);
     }
     $(`#${editStatus ? 'e' : ''}overrideBy`).prop('checked', false);
     $(`#${editStatus ? 'e' : ''}overrideByName`).val("");

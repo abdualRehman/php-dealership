@@ -1,22 +1,16 @@
 <?php 	
 
-$localhost = "127.0.0.1";
-$username = "root";
-$password = "";
-$dbname = "carshop";
-
-
-// $localhost = "127.0.0.1";
-// $username = "u674299917_onedealeruser";
-// $password = "L#[k5?x7y";
-// $dbname = "u674299917_onedealersys";
+// // Required if your environment does not handle autoloading
+require_once realpath(__DIR__ . '/../../vendor/autoload.php');
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../../');
+$dotenv->load(); // safeLoad for avoid exceptions
 
 
 
-// $localhost = "server60";
-// $username = "binfarooq_laughing_albattani";
-// $password = "ZD5dc}KVTxtD";
-// $dbname = "binfarooq_laughing_albattani";
+$localhost = $_ENV['localhost'];
+$username = $_ENV['username'];
+$password = $_ENV['password'];
+$dbname = $_ENV['dbname'];
 
 
 // db connection

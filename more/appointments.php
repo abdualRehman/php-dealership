@@ -125,7 +125,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                         <?php
                         if (hasAccess("appointment", "Add") !== 'false') {
                             echo '<button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
-                            <i class="fa fa-plus ml-1 mr-2"></i> Add New Schedules
+                            <i class="fa fa-plus ml-1 mr-2"></i> Add Appointment
                         </button>';
                         }
                         ?>
@@ -203,7 +203,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header modal-header-bordered">
-                <h5 class="modal-title">Add Schedule</h5>
+                <h5 class="modal-title">Add Appointment</h5>
                 <button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
             </div>
             <form id="addNewSchedule" autocomplete="off" method="post" action="../php_action/createSchedule.php">
@@ -398,7 +398,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header modal-header-bordered">
-                <h5 class="modal-title">Edit Schedule</h5>
+                <h5 class="modal-title">Edit Appointment</h5>
                 <button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
             </div>
             <form id="editScheduleForm" autocomplete="off" method="post" action="../php_action/editSchedule.php">

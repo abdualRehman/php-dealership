@@ -698,6 +698,14 @@ function editShedule(id = null) {
 
                 $('#editScheduleForm')[0].reset();
 
+                $('#edelivery :radio[name="edelivery"]').prop('checked', false);
+                $('#edelivery .active').removeClass('active');
+                (response.delivery) ? $('#e' + response.delivery).prop('checked', true).click() : null;
+
+                $('#eadditionalServices :radio[name="eadditionalServices"]').prop('checked', false);
+                $('#eadditionalServices .active').removeClass('active');
+                (response.additional_services) ? $('#e' + response.additional_services).prop('checked', true).click() : null;
+
                 $('#scheduleId').val(response.id);
                 $('#ecallenderId').val(response.calender_id);
 
@@ -726,20 +734,16 @@ function editShedule(id = null) {
 
 
 
-                $('#edelivery :radio[name="edelivery"]').prop('checked', false);
-                $('#edelivery .active').removeClass('active');
-                (response.delivery) ? $('#e' + response.delivery).prop('checked', true).click() : null;
-
-                $('#eadditionalServices :radio[name="eadditionalServices"]').prop('checked', false);
-                $('#eadditionalServices .active').removeClass('active');
-                (response.additional_services) ? $('#e' + response.additional_services).prop('checked', true).click() : null;
-
 
                 $('#escheduleNotes').val(response.notes);
 
                 $('#econfirmed :radio[name="econfirmed"]').prop('checked', false);
                 $('#econfirmed .active').removeClass('active');
                 (response.confirmed) ? $('#con' + response.confirmed).prop('checked', true).click() : null;
+
+                $('#ecomplete :radio[name="ecomplete"]').prop('checked', false);
+                $('#ecomplete .active').removeClass('active');
+                (response.complete) ? $('#com' + response.complete).prop('checked', true).click() : null;
                 
                 if (response.confirmed != "ok") {
                     $('#ecomplete').addClass('disabled-div');
@@ -747,9 +751,13 @@ function editShedule(id = null) {
                     $('#ecomplete').removeClass('disabled-div');
                 }
 
-                $('#ecomplete :radio[name="ecomplete"]').prop('checked', false);
-                $('#ecomplete .active').removeClass('active');
-                (response.complete) ? $('#com' + response.complete).prop('checked', true).click() : null;
+
+                if (response.allowDeliveryCoordinator == true) {
+                    $('.delivery_coordinator').addClass('disabled-div');
+                    $(".delivery_coordinator").find("*").prop("readonly", true);
+                }else {
+                    disabledManagerDiv();
+                }
 
                 $('#ecoordinator').val(response.coordinator);
                 var checkSelectValue = $('#ecoordinator').val();
@@ -790,6 +798,8 @@ function changeStockDetails(ele) {
             $('.selectpicker').selectpicker('refresh');
             return false;
         }
+        changeExistStatus();
+        
         $('#customerName').val(obj[2] + ' ' + obj[3]);
         $('#vechicle').val(obj[6] + ' ' + obj[7] + ' ' + obj[9]);
         $('#has_appointment').val(obj[10])
@@ -797,6 +807,30 @@ function changeStockDetails(ele) {
     }
 
 }
+
+
+function changeExistStatus(editStatus = false) {
+    let eleValue = $(`#${editStatus ? 'e' : ''}sale_id`).val();
+    let obj = stockArray.find(data => data[0] === eleValue);
+    let deliveryStatus = $(`input[name="${editStatus ? 'e' : ''}delivery"]:checked`).val();
+    if (obj && deliveryStatus) {
+        var apptexistStatus = obj[11];
+        if (apptexistStatus != null && deliveryStatus != '') {
+            apptexistStatusValue = true;
+        } else {
+            apptexistStatusValue = false;
+        }
+    } else {
+        apptexistStatusValue = false;
+    }
+    if (apptexistStatusValue == true) {
+        toastr.error(`Error! - Stock No: ${obj[4]} has already been scheduled for a delivery`);
+    }
+    $(`#${editStatus ? 'e' : ''}overrideBy`).prop('checked', false);
+    $(`#${editStatus ? 'e' : ''}overrideByName`).val("");
+    $(`#${editStatus ? 'e' : ''}overrideById`).val("");
+}
+
 function echangeStockDetails(ele, checkAppt = true) {
     let obj = stockArray.find(data => data[0] === ele.value);
     $('#ecustomerName').val("");
@@ -816,15 +850,24 @@ function echangeStockDetails(ele, checkAppt = true) {
                 $('.selectpicker').selectpicker('refresh');
                 return false;
             }
+            changeExistStatus();
         }
 
         $('#ecustomerName').val(obj[2] + ' ' + obj[3]);
         $('#evechicle').val(obj[6] + ' ' + obj[7] + ' ' + obj[9]);
-        $('#ehas_appointment').val(obj[10])
+        // $('#ehas_appointment').val(obj[10])
+        $('#ehas_appointment').val(obj[11])
         $('#estockno').val(obj[1])
     }
 
 }
+$('input[name=delivery] , input[name=edelivery]').change(function () {
+    if ($(this).prop('name') == 'delivery') {
+        changeExistStatus();
+    } else {
+        changeExistStatus(true);
+    }
+})
 
 $('#overrideBy').change(function () {
     if ($(this).prop('checked')) {

@@ -719,7 +719,7 @@ $(function () {
                 manageInvTable.searchPanes.rebuildPane();
                 manageInvTable.ajax.reload(null, false);
                 if (currentElement == 'soldAtAuction') {
-                    manageInvTable.order([22, 'desc'], [1, 'desc']).draw();
+                    manageInvTable.order([28, 'desc'], [1, 'desc']).draw();
                 }
                 $('#inspectionTable').unblock();
                 setPlaceholder();

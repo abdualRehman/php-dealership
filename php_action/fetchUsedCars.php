@@ -231,7 +231,7 @@ if ($result->num_rows > 0) {
         }
 
 
-        $balance = (isset($row[9]) && $row[9] != '') ? (float)str_replace(array(',', '$'), '', $row[9]) : 0;
+        $balance = (isset($row[9]) && $row[9] != '' && $row['invStatus'] == 1) ? (float)str_replace(array(',', '$'), '', $row[9]) : 0;
         $sold_price = (isset($row['sold_price']) && $row['sold_price'] != '')  ? $row['sold_price'] : 0;
         $profit = (int)$sold_price - (int)$balance;
         $profit = round($profit, 2);
@@ -240,7 +240,7 @@ if ($result->num_rows > 0) {
 
         $output['data'][] = array(
             $id,
-            $cdkAge == 0 ? "" : $cdkAge, //age
+            $cdkAge, //age
             $stockDetails,
             $date_in,
             $key,

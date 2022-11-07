@@ -1236,6 +1236,7 @@ if ($_GET['r'] == 'add') {
                                                                     echo serPermissions($itemPData, 'Add', 'warrantyAdd');
                                                                     echo serPermissions($itemPData, 'Edit', 'warrantyEdit');
                                                                     echo serPermissions($itemPData, 'Remove', 'warrantyRemove');
+                                                                    echo serPermissions($itemPData, 'View', 'warrantyView');
                                                                 } else if ($module === 'todayavail') {
                                                                     echo serPermissions($itemPData, 'Edit', 'todayavailEdit');
                                                                     echo serPermissions($itemPData, 'View', 'todayavailView');

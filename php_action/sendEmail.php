@@ -1,6 +1,11 @@
 <?php
 // error_reporting(E_ERROR | E_PARSE);
-include('../smtp/PHPMailerAutoload.php');
+// require __DIR__."/../vendor/autoload.php";
+include(__DIR__."/../smtp/PHPMailerAutoload.php");
+require_once realpath(__DIR__ . '/../vendor/autoload.php');
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../');
+$dotenv->load(); // safeLoad for avoid exceptions
 
 if (!isset($_SESSION)) session_start();
 
@@ -18,11 +23,11 @@ function smtp_mailer($to, $subject, $msg)
     $mail->Port = "465";
     $mail->IsHTML(true);
     $mail->CharSet = 'UTF-8';
-    $mail->Username = "roger@1dealersystem.com";
+    $mail->Username = $_ENV['from_email'];
     // $mail->Username = "support@1dealersystem.com";
     // $mail->Password = 'ioxWTr4zJc';
-    $mail->Password = '123456';
-    $mail->SetFrom("roger@1dealersystem.com");
+    $mail->Password = $_ENV['from_password'];
+    $mail->SetFrom($_ENV['from_email']);
     // $mail->SetFrom("support@1dealersystem.com");
     $mail->Subject = $subject;
     $mail->Body = $msg;

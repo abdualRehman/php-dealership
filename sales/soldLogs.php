@@ -324,6 +324,7 @@ if ($_GET['r'] == 'man') {
                                             <label for="esale_id" class="col-sm-3 text-sm-center col-form-label">Stock No - Vin</label>
                                             <div class="form-group col-sm-9">
                                                 <input type="hidden" class="form-control" name="esale_id" id="esale_id" autocomplete="off" autofill="off" />
+                                                <input type="hidden" class="form-control" name="allready_created" id="allready_created" />
                                                 <input type="hidden" class="form-control" name="estockno" id="estockno" />
                                                 <input type="text" class="form-control" name="estocknoDisplay" id="estocknoDisplay" readonly />
                                                 <!-- <select class="form-control selectpicker w-auto required" id="esale_id" onchange="echangeStockDetails(this)" name="esale_id" data-live-search="true" data-size="4">
