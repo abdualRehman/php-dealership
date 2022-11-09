@@ -1,7 +1,8 @@
 <?php
 require_once './db/core.php';
+require_once './sendSMS.php';
 
-$valid = array('success' => false, 'messages' => array(), 'errorMessages' => array(), 'id' => '', 'settingError' => array());
+$valid = array('success' => false, 'messages' => array(), 'errorMessages' => array(), 'id' => '', 'settingError' => array(), 'sms_status' => array());
 
 function reformatDate($date, $from_format = 'm-d-Y H:i', $to_format = 'Y-m-d H:i')
 {
@@ -34,6 +35,28 @@ if ($_POST) {
     VALUES ('$contractDate' , '$problemDate' , '$customerName' , '$salesConsultant' , '$financeManager' , '$stockId' , '$vehicle' , '$problem' , '$notes' , 1 , '$location')";
 
     if ($connect->query($sql) === true) {
+
+        $problem_id = $connect->insert_id;
+
+        $link = $siteurl . '/sales/registrationProblem.php?filter=' . $problem_id;
+        $message = "New Registration Problem  for {$customerName} – {$problem},  
+            <a href='{$link}'> here </a>";
+        $sms_user = send_sms($salesConsultant, $message);
+        if ($sms_user == 'true') {
+            $valid['sms_status'] = "SMS Send";
+        } else {
+            $valid['sms_status'] = "SMS Failed";
+        }
+        if ($financeManager != '') {
+            $sms_user = send_sms($financeManager, $message);
+            if ($sms_user == 'true') {
+                $valid['sms_status'] = "SMS Send";
+            } else {
+                $valid['sms_status'] = "SMS Failed";
+            }
+        }
+
+
         $valid['success'] = true;
         $valid['messages'][] = "Successfully Added";
     } else {

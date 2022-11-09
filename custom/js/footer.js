@@ -26,6 +26,9 @@ $(function () {
     $("#editAvailibilityForm").validate({
         ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
         rules: {
+            offNotes:{
+                required: () => $('#availability').val() == 'See Notes' ? true: false,
+            },
             smonEnd: {
                 required: () => $('#smonStart').val() ? true : false,
             },
@@ -68,6 +71,7 @@ $(function () {
                             timer: 1500
                         })
                         manageAvailTable.ajax.reload(null, false);
+                        $('#editSchedule').modal('hide');
                     } else {
                         e1.fire({
                             position: "center",
@@ -507,11 +511,17 @@ function editSchedule(id = null) {
 
                 $('#editAvailibilityForm')[0].reset();
 
-
+                var date = moment(response.today_date, 'MM-DD-YYYY');
+                var now = moment(moment().format('MM-DD-YYYY'));
+                if (now > date) {
+                    $('#availability').val("");
+                    $('#offNotes').val("");
+                } else {
+                    $('#availability').val(response.today_availability);
+                    $('#offNotes').val(response.off_notes);
+                }
+                
                 $('#shceduleId').val(response.id);
-                $('#availability').val(response.today_availability);
-                $('#offNotes').val(response.off_notes);
-
 
                 $('#smonStart').val(response.mon_start);
                 $('#smonEnd').val(response.mon_end);

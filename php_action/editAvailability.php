@@ -1,7 +1,9 @@
 <?php
 
 require_once './db/core.php';
-$valid['success'] = array('success' => false, 'messages' => array(), 'id' => '', 'settingError' => array());
+require_once './sendSMS.php';
+
+$valid['success'] = array('success' => false, 'messages' => array(), 'id' => '', 'settingError' => array(), 'sms_status' => array());
 
 if ($_POST) {
 
@@ -38,6 +40,36 @@ if ($_POST) {
     `sat_start`='$satStart',`sat_end`='$satEnd',`sun_start`='$sunStart',`sun_end`='$sunEnd' WHERE id = '$shceduleId'";
 
     if ($connect->query($sql) === true) {
+
+
+        $sql1 = "SELECT schedule.*, users.username as consultant_name , users.role as consultant_role FROM `schedule` LEFT JOIN users ON schedule.user_id = users.id WHERE schedule.id = '$shceduleId'";
+
+        $result1 = $connect->query($sql1);
+        $row1 = $result1->fetch_assoc();
+        $consultant_name = $row1['consultant_name'];
+        $consultant_id = $row1['user_id'];
+        $consultant_role = $row1['consultant_role'];
+        $sms_user = "false";
+        $username = $_SESSION['userName'];
+
+        if ($consultant_role == $salesConsultantID) {
+
+            if ($availability != 'OFF' && $availability != '' && $availability != 'Vacation') {
+                if($availability == 'See Notes'){
+                    $message = "You Have been marked Off BDC by {$username}…Reason - {$offNotes}";
+                }else{
+                    $message = "You have been marked {$availability} by {$username}";
+                }
+                $sms_user = send_sms($consultant_id, $message);
+                if ($sms_user == 'true') {
+                    $valid['sms_status'] = "SMS Send";
+                } else {
+                    $valid['sms_status'] = "SMS Failed";
+                }
+
+            }
+        }
+
         $valid['success'] = true;
         $valid['messages'] = "Successfully Updated";
     } else {

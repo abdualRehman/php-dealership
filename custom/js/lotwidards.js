@@ -576,7 +576,7 @@ $(function () {
                         manageInvTable.order([4, "asc"], [8, "desc"]).draw(); // bodyshop , age
                     } else if (currentElement == 'atBodyshop' || currentElement == 'backFromBodyshop') {
                         setColumVisibility([1, 2, 3, 4, 9, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 6, 7]);
-                        manageInvTable.order([4, "asc"], [5, "asc"]).draw(); // bodyshop , daysout
+                        manageInvTable.order([4, "asc"], [5, "desc"]).draw(); // bodyshop , daysout
                     } else {
                         setColumVisibility([1, 2, 3, 4, 5, 10, 22, 23, 24, 6, 7]);
                         manageInvTable.order([4, "asc"], [8, "desc"]).draw(); // bodyshop , age

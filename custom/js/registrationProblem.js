@@ -155,25 +155,42 @@ $(function () {
     loadTypeHeadCustomerName();
     loadSaleConsultant();
     loadFinanceManager();
-    $('#searchStatusNotFixed').click();
+
+    let filterById = null;
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const filter = urlParams.get('filter');
+
+    if (filter != null) {
+        filterById = filter;
+    } else {
+        $('#searchStatusNotFixed').click();
+    }
 
 
     $.fn.dataTable.ext.search.push(
         function (settings, searchData, index, rowData, counter) {
             var tableNode = manageDataTable.table().node();
+            if (filterById == null) {
+                var searchStatus = $('input:radio[name="searchStatus"]:checked').map(function () {
+                    if (this.value !== "") {
+                        return this.value;
+                    }
+                }).get();
 
-            var searchStatus = $('input:radio[name="searchStatus"]:checked').map(function () {
-                if (this.value !== "") {
-                    return this.value;
+                if (searchStatus.length === 0) {
+                    return true;
                 }
-            }).get();
 
-            if (searchStatus.length === 0) {
-                return true;
-            }
-
-            if (searchStatus.indexOf(searchData[9]) !== -1) {
-                return true;
+                if (searchStatus.indexOf(searchData[9]) !== -1) {
+                    return true;
+                }
+            }else{
+                let rowId = searchData[11];
+                if (rowId == filter) {
+                    return true;
+                }
+                return false;
             }
             if (settings.nTable !== tableNode) {
                 return true;
@@ -184,6 +201,7 @@ $(function () {
 
 
     $('input:radio').on('change', function () {
+        filterById = null;
         $('#datatable-1').block({
             message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
             timeout: 1e3

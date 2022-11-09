@@ -32,14 +32,8 @@ function send_sms($uid, $message)
     $row1 = $result1->fetch_assoc();
     $number = $row1['mobile'];
     if ($number != '' && validating($number) != 'false') {
-        $comNumber = '+1' . validating($number);
-        
-        echo $comNumber;
-
-        // if(sendSMS1($comNumber, $message)){
-        //     echo $comNumber;
-        // }
-        // return sendSMS1($comNumber, $message);
+        $number = '+1' . validating($number);
+        return sendSMS1($number, $message);
     } else {
         return "Not Valid";
     }
@@ -60,25 +54,28 @@ function send_sms($uid, $message)
 
 function sendSMS1($to, $messageBody)
 {
-    $sid = $_ENV['sid'];
-    $token = $_ENV['token'];
-    $client = new Client($sid, $token);
-    $message = $client->messages->create(
-        // '+14014197449', // client number
-        // '+923036208276', // my number,
-        $to,
-        [
-            'from' => '+12405129760',
-            'body' => $messageBody,
-        ]
-    );
-    if (!$message->sid) {
-        return "false";
-        throw new Exception("Message Faild to sent!");
-    } else {
-        return "true";
-    }
+    return "true";
+    // $sid = $_ENV['sid'];
+    // $token = $_ENV['token'];
+    // $client = new Client($sid, $token);
+    // $message = $client->messages->create(
+    //     // '+14014197449', // client number
+    //     // '+923036208276', // my number,
+    //     $to,
+    //     [
+    //         'from' => '+12405129760',
+    //         'body' => $messageBody,
+    //     ]
+    // );
+    // if (!$message->sid) {
+    //     return "false";
+    //     throw new Exception("Message Faild to sent!");
+    // } else {
+    //     return "true";
+    // }
 }
+
+// sendSMS1('+14014197449' , 'Trigger exception in a "try" block Demo Message');
 
 
 //trigger exception in a "try" block

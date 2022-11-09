@@ -711,13 +711,14 @@ $(function () {
         var targetElement = $(this).attr('data-targetElement');
         let elementId = $(this).attr("id");
         var prev = $(this).children('label.active').find(':radio:checked').val();
+        var current_e = $('#' + elementId + ' .active :radio:checked').val();
         setTimeout(() => {
             let current = $('#' + elementId + ' .active :radio:checked').val();
             if (prev == current) {
                 $('#' + elementId + ' :radio').prop('checked', false);
                 $('#' + elementId + ' .active').removeClass('active');
             }
-            if (current != 'ok') {
+            if (current != 'ok' || current_e == 'ok') {
                 $('#' + targetElement).addClass('disabled-div');
                 $('#' + targetElement + ' :radio').prop('checked', false);
                 $('#' + targetElement + ' .active').removeClass('active');

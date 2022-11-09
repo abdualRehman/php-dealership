@@ -467,7 +467,7 @@
                                                     </div>
                                                     <div class="rich-list-content">
                                                         <h4 class="rich-list-title">${notification[3]}</h4>
-                                                        <span class="rich-list-subtitle">${moment(notification[1]).fromNow()}</span>
+                                                        <span class="rich-list-subtitle">${moment(notification[1] + "+07:00", "YYYY-MM-DD HH:mm:ssZ").fromNow()}</span>
                                                     </div>
                                                     <button class="btn btn-icon text-white rich-list-append" data-action="${notification[5]}" onclick="handle_notification( ${notification[0]} , this )" >
                                                         ${notification[5] == '0' ? '<i class="fa fa-solid fa-envelope"></i>' : '<i class="fa fa-solid fa-envelope-open"></i>'}
@@ -495,32 +495,34 @@
     }
 
     function handle_notification(id, element = null) {
-        if (element != null) {
-            event.stopPropagation();
-            event.preventDefault();
-        }
-
-        let status = element != null ? $(element).data('action') : "";
-        let siteLink = localStorage.getItem('siteURL')
-        $.ajax({
-            url: siteLink + '/php_action/marknotification.php',
-            type: "POST",
-            data: {
-                id,
-                id
-            },
-            dataType: 'json',
-            success: function(response) {
-                if (element != null) {
-                    if (status == 0) {
-                        $(element).html('<i class="fa fa-solid fa-envelope-open"></i>');
-                    } else {
-                        $(element).html('<i class="fa fa-solid fa-envelope"></i>');
-                    }
-                    $(element).data('action', (1 - Number(status)));
-                }
+        if(id){
+            if (element != null) {
+                event.stopPropagation();
+                event.preventDefault();
             }
-        });
+    
+            let status = element != null ? $(element).data('action') : "";
+            let siteLink = localStorage.getItem('siteURL')
+            $.ajax({
+                url: siteLink + '/php_action/marknotification.php',
+                type: "POST",
+                data: {
+                    id,
+                    id
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (element != null) {
+                        if (status == 0) {
+                            $(element).html('<i class="fa fa-solid fa-envelope-open"></i>');
+                        } else {
+                            $(element).html('<i class="fa fa-solid fa-envelope"></i>');
+                        }
+                        $(element).data('action', (1 - Number(status)));
+                    }
+                }
+            });
+        }
     }
 
     function remove_notification() {

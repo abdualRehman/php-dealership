@@ -48,23 +48,28 @@ if ($_POST) {
 
 
     $scheduleStart = $scheduleDate . ' ' . $scheduleTime;
+    $scheduleStart = date('Y-m-d H:i:s', strtotime($scheduleStart));
     // $scheduleEnd = strtotime((string)$scheduleStart . ':00 +30 minute');
-    $scheduleEnd = strtotime((string)$scheduleStart . ':00 +59 minute');
+    $scheduleEnd = strtotime($scheduleStart . ' +59 minute');
     $scheduleEnd =  date('Y-m-d H:i:s', $scheduleEnd);
+
+    $scheduleStart_formated = date('m-d-Y H:i:s', strtotime($scheduleStart));
 
     $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
-    // $already_appointed = false;
-    // // check if coordinator has any confirm appointment in time range
-    // if ($_SESSION['userRole'] == $deliveryCoordinatorID || $_SESSION['userRole'] == 'Admin' || $_SESSION['userRole'] == $generalManagerID || $_SESSION['userRole'] == $salesManagerID) {
-    //     $checkSql = "SELECT * FROM `appointments` WHERE coordinator = '$coordinator' AND status = 1 AND confirmed = 'ok' AND cast(schedule_start as datetime )<= '$scheduleStart' and cast(schedule_end as datetime) >= '$scheduleStart'";
-    //     $result2 = $connect->query($checkSql);
-    //     if ($result2->num_rows > 0) {
-    //         $already_appointed = true;
-    //         $valid['success'] = false;
-    //         $valid['messages'] = "You already have an appointment at that time";
-    //     }
-    // }
+    $salesConsultantName = $_SESSION['userName'];
+
+    $already_appointed = false;
+    // check if coordinator has any confirm appointment in time range
+    if ($_SESSION['userRole'] == $deliveryCoordinatorID || $_SESSION['userRole'] == 'Admin' || $_SESSION['userRole'] == $generalManagerID || $_SESSION['userRole'] == $salesManagerID) {
+        $checkSql = "SELECT * FROM `appointments` WHERE coordinator = '$coordinator' AND status = 1 AND confirmed = 'ok' AND cast(schedule_start as datetime )<= '$scheduleStart' and cast(schedule_end as datetime) >= '$scheduleStart'";
+        $result2 = $connect->query($checkSql);
+        if ($result2->num_rows > 0) {
+            $already_appointed = true;
+            $valid['success'] = false;
+            $valid['messages'] = "You already have an appointment at that time";
+        }
+    }
 
     if ($_SESSION['userRole'] != $deliveryCoordinatorID) {
         $insentiveSql = "INSERT INTO `appointments` ( 
@@ -82,16 +87,20 @@ if ($_POST) {
             $to = $coordinator;
             $delivery = preg_split('/(?=[A-Z])/', $delivery);
             $delivery = implode(' ', $delivery);
-            $message = 'Appointment Created: With "' . $customerName . '" On "' . ucwords($delivery) . '" at: "' . $scheduleStart . '"';
+            $message = 'Appointment Created: With "' . $customerName . '" On "' . ucwords($delivery) . '" at: "' . $scheduleStart_formated . '"';
             $appointment_id = $connect->insert_id;
             sendNotifiation($from, $to, $message, $appointment_id);
+
             
-            // $sms_user = sendSMS('number', 'message');
-            // if($sms_user == 'true'){
-            //     $valid['sms_status'] = "SMS Send";
-            // }else{
-            //     $valid['sms_status'] = "SMS Failed";
-            // }
+            $link = $siteurl . '/more/deliveryCoordinators.php?filter='.$appointment_id;
+            $message = "An appointment on {$scheduleStart_formated} has been added by {$salesConsultantName}
+                    Click to confirm <a href='{$link}'> here </a>";
+            $sms_user = send_sms($coordinator, $message);
+            if ($sms_user == 'true') {
+                $valid['sms_status'] = "SMS Send";
+            } else {
+                $valid['sms_status'] = "SMS Failed";
+            }
 
             // sendNotifiation()
             $valid['success'] = true;

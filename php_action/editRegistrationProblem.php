@@ -1,8 +1,9 @@
 <?php
 
 require_once './db/core.php';
+require_once './sendSMS.php';
 
-$valid['success'] = array('success' => false, 'messages' => array(), 'id' => '', 'settingError' => array());
+$valid['success'] = array('success' => false, 'messages' => array(), 'id' => '', 'settingError' => array(), 'sms_status' => array());
 
 function reformatDate($date, $from_format = 'm-d-Y H:i', $to_format = 'Y-m-d H:i')
 {
@@ -43,6 +44,24 @@ if ($_POST) {
     `notes`='$notes' WHERE id = '$id'";
 
     if ($connect->query($sql) === true) {
+
+        $link = $siteurl . '/sales/registrationProblem.php?filter=' . $id;
+        $message = "Updated Registration Problem  for {$customerName} – {$problem},  
+            <a href='{$link}'> here </a>";
+        $sms_user = send_sms($salesConsultant, $message);
+        if ($sms_user == 'true') {
+            $valid['sms_status'] = "SMS Send";
+        } else {
+            $valid['sms_status'] = "SMS Failed";
+        }
+        if ($financeManager != '') {
+            $sms_user = send_sms($financeManager, $message);
+            if ($sms_user == 'true') {
+                $valid['sms_status'] = "SMS Send";
+            } else {
+                $valid['sms_status'] = "SMS Failed";
+            }
+        }
 
         $valid['success'] = true;
         $valid['messages'] = "Successfully Updated";

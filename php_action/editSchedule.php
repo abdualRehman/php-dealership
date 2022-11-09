@@ -1,8 +1,9 @@
 <?php
 
 require_once './db/core.php';
+require_once './sendSMS.php';
 
-$valid['success'] = array('success' => false, 'messages' => array(), 'id' => '');
+$valid['success'] = array('success' => false, 'messages' => array(), 'id' => '', 'sms_status' => array());
 // print_r($valid);
 function reformatDate($date, $from_format = 'm-d-Y H:i', $to_format = 'Y-m-d H:i')
 {
@@ -42,8 +43,8 @@ if ($_POST) {
 
 
     $customerName = (isset($_POST['ecustomerName'])) ? mysqli_real_escape_string($connect, $_POST['ecustomerName']) : "";
-    
-    
+
+
     $has_appointment = (isset($_POST['ehas_appointment'])) ? mysqli_real_escape_string($connect, $_POST['ehas_appointment']) : "null";
     $has_appointment = ($has_appointment != "null" && $has_appointment != '') ? "true" : "false";
 
@@ -53,12 +54,16 @@ if ($_POST) {
 
 
     $scheduleStart = $scheduleDate . ' ' . $scheduleTime;
+    $scheduleStart = date('Y-m-d H:i:s', strtotime($scheduleStart));
     // $scheduleEnd = strtotime((string)$scheduleStart . ':00 +30 minute');
-    $scheduleEnd = strtotime((string)$scheduleStart . ':00 +59 minute');
+    $scheduleEnd = strtotime($scheduleStart . ' +59 minute');
     $scheduleEnd =  date('Y-m-d H:i:s', $scheduleEnd);
+
+    $scheduleStart_formated = date('m-d-Y H:i:s', strtotime($scheduleStart));
 
     $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
+    $salesConsultantName = $_SESSION['userName'];
 
     $already_appointed = false;
     if (!is_null($scheduleId) && $scheduleId != '') {
@@ -86,13 +91,12 @@ if ($_POST) {
 
             if ($connect->query($insentiveSql) === true) {
 
-    
-
                 $from = $submittedBy;
                 $to = $coordinator;
                 $delivery = preg_split('/(?=[A-Z])/', $delivery);
                 $delivery = implode(' ', $delivery);
-                $message = 'Appointment Updated: With "' . $customerName . '" On "' . ucwords($delivery) . '" at: "' . $scheduleStart . '"';
+                
+                $message = 'Appointment Updated: With "' . $customerName . '" On "' . ucwords($delivery) . '" at: "' . $scheduleStart_formated . '"';
                 $appointment_id = $scheduleId;
                 sendNotifiation($from, $to, $message, $appointment_id);
 
@@ -104,10 +108,71 @@ if ($_POST) {
 
                 $confirmedStatus = $confirmed == 'ok' ? 'Confirmed' : 'Not Confirmed';
                 $completeStatus = $complete == 'ok' ? 'Completed' : 'Denied';
-                $statusMsg = $confirmed == 'ok' ? $completeStatus : $confirmedStatus;
-                $message = 'Appointment Updated: '.$statusMsg.' By '. $_SESSION['userName'];
+                $statusMsg = ($confirmed == 'ok' && $complete != '') ? $completeStatus : $confirmedStatus;
+                $message = 'Appointment Updated: ' . $statusMsg . ' By ' . $_SESSION['userName'];
                 $appointment_id = $scheduleId;
                 sendNotifiation($from, $to, $message, $appointment_id);
+
+
+                $sql1 = "SELECT appointments.* , a.username as sales_consultant, sales.fname , sales.lname , b.username as delivery_coordinator FROM `appointments` LEFT JOIN users as a ON appointments.submitted_by = a.id LEFT JOIN users as b ON appointments.coordinator = b.id LEFT JOIN sales ON appointments.sale_id = sales.sale_id WHERE appointments.id = '$scheduleId'";
+
+                $result1 = $connect->query($sql1);
+                $row1 = $result1->fetch_assoc();
+                $sales_consultant = $row1['sales_consultant'];
+                $customerName = $row1['fname'] . ' ' . $row1['lname'];
+                $delivery_coordinator = $row1['delivery_coordinator'];
+                $coordinator_id = $row1['coordinator'];
+                $submitted_by = $row1['submitted_by'];
+
+
+                $sms_user = "false";
+
+                if ($_SESSION['userRole'] != $deliveryCoordinatorID) {
+
+                    $link = $siteurl . '/more/deliveryCoordinators.php?filter=' . $scheduleId;
+                    $message = "An appointment on {$scheduleStart_formated} has been added by {$sales_consultant}
+                    Click to confirm <a href='{$link}'> here </a>";
+                    $sms_user = send_sms($coordinator_id, $message);
+                    if ($sms_user == 'true') {
+                        $valid['sms_status'] = "SMS Send";
+                    } else {
+                        $valid['sms_status'] = "SMS Failed";
+                    }
+                }
+                if ($confirmed == 'ok') {
+
+                    $message = "Congratulations {$sales_consultant}.
+                    Your appointment for {$customerName} with  
+                    {$delivery_coordinator} was confirmed as of {$scheduleStart_formated}";
+                    $sms_user = send_sms($submitted_by, $message);
+
+                } else if ($confirmed == 'showVerified') {
+
+                    $message = "Sorry {$sales_consultant}. Appointment for {$customerName} with 
+                    {$delivery_coordinator} was DECLINED as {$scheduleStart_formated}. Please reschedule.";
+                    $sms_user = send_sms($submitted_by, $message);
+
+                }
+
+                if ($complete == 'ok') {
+
+                    $message = "The Appointment for {$customerName}
+                    has been completed by {$delivery_coordinator}";
+                    $sms_user = send_sms($submitted_by, $message);
+
+                } else if ($complete == 'showVerified') {
+
+                    $message = "The Appointment for {$customerName}
+                    was not completed by {$delivery_coordinator}";
+                    $sms_user = send_sms($submitted_by, $message);
+
+                }
+
+                if ($sms_user == 'true') {
+                    $valid['sms_status'] = "SMS Send";
+                } else {
+                    $valid['sms_status'] = "SMS Failed";
+                }
 
 
 
@@ -137,9 +202,21 @@ if ($_POST) {
                 $to = $coordinator;
                 $delivery = preg_split('/(?=[A-Z])/', $delivery);
                 $delivery = implode(' ', $delivery);
-                $message = 'Appointment Created: With "' . $customerName . '" On "' . ucwords($delivery) . '" at: "' . $scheduleStart . '"';
+                $message = 'Appointment Created: With "' . $customerName . '" On "' . ucwords($delivery) . '" at: "' . $scheduleStart_formated . '"';
                 $appointment_id = $connect->insert_id;
                 sendNotifiation($from, $to, $message, $appointment_id);
+
+                $link = $siteurl . '/more/deliveryCoordinators.php?filter='.$appointment_id;
+                $message = "An appointment on {$scheduleStart_formated} has been added by {$salesConsultantName}
+                        Click to confirm <a href='{$link}'> here </a>";
+                $sms_user = send_sms($coordinator, $message);
+                if ($sms_user == 'true') {
+                    $valid['sms_status'] = "SMS Send";
+                } else {
+                    $valid['sms_status'] = "SMS Failed";
+                }
+
+
 
                 $valid['success'] = true;
                 $valid['messages'] = "Successfully Added";

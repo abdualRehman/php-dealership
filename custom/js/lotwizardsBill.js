@@ -293,14 +293,30 @@ function setfun() {
         let id = $(this).data('id');
         let attribute = $(this).data('attribute');
         let value = "";
-        updateFieldsUsedCars({ id, attribute, value });
+
+        let repair_ele = $('input[data-id="' + id + '"][data-attribute="repair_paid"]');
+        var repair_ele_v = repair_ele.val();
+        var repair_ele_attr = "repair_paid";
+
+        updateFieldsUsedCars({ id: [id, id], attribute: [attribute, repair_ele_attr], value: [value, repair_ele_v] });
     });
     $('input[name="date_in_table"]').on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('MM-DD-YYYY'));
         let id = $(this).data('id');
         let attribute = $(this).data('attribute');
         let value = picker.startDate.format('MM-DD-YYYY');
-        updateFieldsUsedCars({ id, attribute, value });
+
+        let repair_ele = $('input[data-id="' + id + '"][data-attribute="repair_paid"]');
+        var repair_ele_v = repair_ele.val();
+        var repair_ele_attr = "repair_paid";
+        if (repair_ele_v == '') {
+            repair_ele.addClass('is-invalid');
+            return false;
+        } else {
+            repair_ele.removeClass('is-invalid');
+            updateFieldsUsedCars({ id: [id, id], attribute: [attribute, repair_ele_attr], value: [value, repair_ele_v] });
+        }
+
     });
 }
 
@@ -314,16 +330,27 @@ function setInputChange() {
                 let id = $(this).data('id');
                 let attribute = $(this).data('attribute');
                 let value = $(this).val();
-                updateFieldsUsedCars({ id, attribute, value });
+
+                let repair_date_ele = $('input[data-id="' + id + '"][data-attribute="repair_paid_date"]');
+                var repair_date_ele_v = repair_date_ele.val();
+                var repair_date_ele_attr = "repair_paid_date";
+
+                if (repair_date_ele_v != '' && value == '') {
+                    $(this).addClass('is-invalid');
+                    return false;
+                } else {
+                    $(this).removeClass('is-invalid');
+                    updateFieldsUsedCars({ id: [id, id], attribute: [attribute, repair_date_ele_attr], value: [value, repair_date_ele_v] });
+                }
             }
         });
     }
 }
 
 
-function updateFieldsUsedCars(obj) {
-    console.log(obj);
-    if (obj) {
+function updateFieldsUsedCars(data) {
+    console.log(data);
+    if (data) {
         // e1.fire({
         //     title: "Are you sure?",
         //     // text: "You won't be able to revert this!",
@@ -337,11 +364,17 @@ function updateFieldsUsedCars(obj) {
         $.ajax({
             url: '../php_action/updateFieldsLotwizards.php',
             type: 'post',
-            data: obj,
+            data: data,
             dataType: 'json',
             success: function (response) {
                 if (response.success == true) {
-                    Swal.fire("Added!", "Successfully Changed", "success")
+                    e1.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "Successfully Changed",
+                        showConfirmButton: !1,
+                        timer: 1500,
+                    })
                     manageBillsTable.ajax.reload(null, false);
                 } // /response messages
             }
