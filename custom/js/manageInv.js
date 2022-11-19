@@ -29,8 +29,9 @@ $(function () {
             // working.... with both
             dom: `\n     
              <'row'<'col-12'P>>\n      
-            <'row'<'col-sm-6 text-center text-sm-left p-1 pl-3'B>
-                <'col-sm-6 text-center text-sm-right p-1 pr-3'f>>\n
+            <'row'<'col-sm-4 text-center text-sm-left p-1 pl-3'B>
+                <'col-sm-4 text-center p-1 pl-3 align-self-center'<'#lastImportTimeDiv'>>
+                <'col-sm-4 text-center text-sm-right p-1 pr-3'f>>\n
             <'row'<'col-12'tr>>\n 
             <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n    `,
 
@@ -180,6 +181,15 @@ $(function () {
                 },
                 copyTitle: 'Copy to clipboard',
                 copyKeys: 'Press <i>ctrl</i> or <i>\u2318</i> + <i>C</i> to copy the table data<br>to your system clipboard.<br><br>To cancel, click this message or press escape.'
+            },
+            "drawCallback": function (settings, start, end, max, total, pre) {
+                var json = this.fnSettings().json;
+                if (json) {
+                    var lastImportTime = json.lastImportTime;
+                    lastImportTime = moment(lastImportTime).format('MM-DD-YYYY hh:mm:ss A')
+                    $('#lastImportTimeDiv').html(`<h4 class="portlet-title">${lastImportTime}</h4>`);
+
+                }
             },
             "order": [[1, "asc"]]
         })

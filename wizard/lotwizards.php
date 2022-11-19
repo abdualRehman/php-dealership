@@ -2,7 +2,14 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
-if (hasAccess("lotWizards", "View") === 'false') {
+$notForService = false;
+if ($_SESSION['userRole'] != $serviceID && hasAccess("lotWizards", "View") !== 'false') {
+    $notForService = true;
+    echo '<input type="hidden" name="notForService" id="notForService" value="true" />';
+} else if ($_SESSION['userRole'] == $serviceID && hasAccess("lotWizards", "View") !== 'false') {
+    $notForService = false;
+    echo '<input type="hidden" name="notForService" id="notForService" value="true" />';
+} else if (hasAccess("lotWizards", "View") === 'false') {
     echo "<script>location.href='" . $GLOBALS['siteurl'] . "/error.php';</script>";
 }
 
@@ -158,6 +165,7 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
         background-color: #616161;
         border-color: #616161;
     }
+
     #recon-btn-group .btn-flat-primary.active:hover {
         background-color: #0c83e2;
         border-color: #0c83e2;
@@ -173,56 +181,72 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                     <div class="portlet-header portlet-header-bordered">
                         <div class="text-center m-auto justify-content-center">
                             <div class="btn-group-toggle" id="mods" data-toggle="buttons">
-                                <div class="row p-2">
-                                    <div class="col-md-12">
-                                        <label class="btn text-responsive active">
-                                            <input type="radio" name="mod" value="notTouched" id="notTouched" data-title="Not Touched"> Not Touched <br> <span></span>
-                                        </label>
-                                        <label class="btn text-responsive">
-                                            <input type="radio" name="mod" value="holdForRecon" data-title="Hold For Recon"> Hold For Recon <br> <span></span>
-                                        </label>
-                                        <label class="btn text-responsive">
-                                            <input type="radio" name="mod" value="sendToRecon" data-title="Send To Recon"> Send To Recon <br> <span></span>
-                                        </label>
-                                        <label class="btn text-responsive">
-                                            <input type="radio" name="mod" value="LotNotes" data-title="Lot Notes"> Lot Notes <br> <span></span>
-                                        </label>
-                                        <label class="btn text-responsive">
-                                            <input type="radio" name="mod" value="CarsToDealers" data-title="Cars to Dealers"> Cars to Dealers <br> <span></span>
-                                        </label>
-                                        <label class="btn text-responsive">
-                                            <input type="radio" name="mod" value="windshield" data-title="Windshield"> Windshield <br> <span></span>
-                                        </label>
-                                        <label class="btn text-responsive">
-                                            <input type="radio" name="mod" value="wheels" data-title="Wheels"> Wheels <br> <span></span>
-                                        </label>
+                                <?php
+                                if ($notForService == true) {
+                                ?>
+                                    <div class="row p-2">
+                                        <div class="col-md-12">
+                                            <label class="btn text-responsive active">
+                                                <input type="radio" name="mod" value="notTouched" id="notTouched" data-title="Not Touched"> Not Touched <br> <span></span>
+                                            </label>
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="holdForRecon" data-title="Hold For Recon"> Hold For Recon <br> <span></span>
+                                            </label>
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="sendToRecon" data-title="Send To Recon"> Send To Recon <br> <span></span>
+                                            </label>
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="LotNotes" data-title="Lot Notes"> Lot Notes <br> <span></span>
+                                            </label>
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="CarsToDealers" data-title="Cars to Dealers"> Cars to Dealers <br> <span></span>
+                                            </label>
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="windshield" data-title="Windshield"> Windshield <br> <span></span>
+                                            </label>
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="wheels" data-title="Wheels"> Wheels <br> <span></span>
+                                            </label>
 
-                                    </div>
-                                </div>
-
-                                <div class="row p-2">
-                                    <div class="col-md-12">
-                                        <div id="year">
-                                            <!-- <div class="btn-group-toggle" data-toggle="buttons"> -->
-                                            <label class="btn text-responsive">
-                                                <input type="radio" name="mod" value="toGo" data-title="To Go"> To Go <br> <span></span>
-                                            </label>
-                                            <label class="btn text-responsive">
-                                                <input type="radio" name="mod" value="atBodyshop" data-title="At Bodyshop"> At Bodyshop <br> <span></span>
-                                            </label>
-                                            <label class="btn text-responsive">
-                                                <input type="radio" name="mod" value="backFromBodyshop" data-title="Back From Bodyshop"> Back From Bodyshop <br> <span></span>
-                                            </label>
-                                            <label class="btn text-responsive">
-                                                <input type="radio" name="mod" value="retailReady" data-title="Retail Ready"> Retail Ready <br> <span></span>
-                                            </label>
-                                            <label class="btn text-responsive">
-                                                <input type="radio" name="mod" value="Gone" data-title="Gone"> Gone <br> <span></span>
-                                            </label>
-                                            <!-- </div> -->
                                         </div>
                                     </div>
-                                </div>
+
+                                    <div class="row p-2">
+                                        <div class="col-md-12">
+                                            <div id="year">
+                                                <!-- <div class="btn-group-toggle" data-toggle="buttons"> -->
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="toGo" data-title="To Go"> To Go <br> <span></span>
+                                                </label>
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="atBodyshop" data-title="At Bodyshop"> At Bodyshop <br> <span></span>
+                                                </label>
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="backFromBodyshop" data-title="Back From Bodyshop"> Back From Bodyshop <br> <span></span>
+                                                </label>
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="retailReady" data-title="Retail Ready"> Retail Ready <br> <span></span>
+                                                </label>
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="Gone" data-title="Gone"> Gone <br> <span></span>
+                                                </label>
+                                                <!-- </div> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php
+                                } else {
+                                    echo '
+                                    <div class="row p-2">
+                                        <div class="col-md-12">
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="CarsToDealers" id="carsToDealersTabs" data-title="Cars to Dealers"> Cars to Dealers <br> <span></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    ';
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>

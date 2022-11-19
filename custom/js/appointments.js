@@ -110,9 +110,9 @@ var cal = new tui.Calendar('#calendar', {
         //     displayLabel: 'GMT+09:00 / PK'
         // },
         {
-          timezoneName: 'America/New_York',
-          tooltip: 'New York',
-          displayLabel: 'GMT-05:00 / USA'
+            timezoneName: 'America/New_York',
+            tooltip: 'New York',
+            displayLabel: 'GMT-05:00 / USA'
         },
     ]
 });
@@ -497,15 +497,28 @@ $(function () {
                 $('#' + elementId + ' .active').removeClass('active');
             }
             if (current != 'ok' || current_e == 'ok') {
-                $('#'+targetElement).addClass('disabled-div');
+                $('#' + targetElement).addClass('disabled-div');
                 $('#' + targetElement + ' :radio').prop('checked', false);
                 $('#' + targetElement + ' .active').removeClass('active');
-            }else{
-                $('#'+targetElement).removeClass('disabled-div');
+            } else {
+                $('#' + targetElement).removeClass('disabled-div');
             }
         }, 100);
     })
 
+
+    $('#additionalServices, #delivery , #eadditionalServices, #edelivery').on('click', function () {
+        const targetId = this.id;
+        const prev = $(`#${targetId} label.active :radio`).val();
+        var current = '';
+        setTimeout(() => {
+            current = $(this).find('label.active').children(' input:radio').val();
+            if (prev == current) {
+                $(`#${targetId} :radio`).prop('checked', false);
+                $(`#${targetId} .active`).removeClass('active');
+            }
+        }, 100);
+    });
 
 
 })
@@ -573,6 +586,7 @@ $('.handleDateTime').on('change', function () {
             let startTime = element[3][dayname][0];
             let endTime = element[3][dayname][1];
             let scheduledAppointments = element[4];
+            let available_today = element[5];
             if (startTime && endTime) {
                 time = moment(moment(time, ["h:mmA"]).format("HH:mm"), 'hh:mm');
                 startTime = moment(moment(startTime, ["h:mmA"]).format("HH:mm"), 'hh:mm');
@@ -586,7 +600,13 @@ $('.handleDateTime').on('change', function () {
                         let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm');
                         let schedule_end = moment(appointment.schedule_end, 'YYYY-MM-DD hh:mm');
                         if (dateTime.isBetween(schedule_start, schedule_end, null, '[]')) {
-                            allready_appointed = true;
+                            // check today availabilit
+                            var checkTodayDate = moment(moment().format('MM-DD-YYYY')).diff(moment(date).format('MM-DD-YYYY'));
+                            if (checkTodayDate == 0 && available_today == false) {
+                                allready_appointed = false;
+                            }else{
+                                allready_appointed = true;
+                            }
                         }
                     });
                     if (allready_appointed == false) {
@@ -643,6 +663,7 @@ function fetchSchedules() {
             dataArray.forEach(element => {
                 let userRole = element[2] != 'Admin' ? element[2] : 1;
                 var calendar = CalendarList.find(calender => calender.id == userRole);
+                let coordinator_color = element[24] != '' ? element[24] : calendar.bgColor;
                 var start = moment(element[4] + ':00', 'YYYY-MM-DD HH:mm:ss').toDate();
                 var end = moment(element[5] + ':00', 'YYYY-MM-DD HH:mm:ss').toDate();
                 var schedule = {
@@ -657,8 +678,8 @@ function fetchSchedules() {
                     category: 'time',
                     // category: 'allday',
                     color: calendar.color,
-                    bgColor: calendar.bgColor,
-                    dragBgColor: calendar.bgColor,
+                    bgColor: coordinator_color,
+                    dragBgColor: coordinator_color,
                     borderColor: calendar.borderColor,
                     state: 'Busy',
                     raw: {
@@ -670,7 +691,7 @@ function fetchSchedules() {
                             appointmentId: element[17] ? element[0] : null,
                         }
                     },
-                    customStyle: `background-color: ${calendar.bgColor}; color: ${calendar.color};`
+                    customStyle: `background-color: ${coordinator_color}; color: ${calendar.color};`
                 };
                 ScheduleList.push(schedule);
             });
@@ -714,7 +735,7 @@ function editShedule(id = null) {
                 echangeStockDetails({ value: response.sale_id }, false);
                 $('#ehas_appointment').val(response.already_have);
 
-                $('#esubmittedBy').val(response.submitted_by);
+                $('#esubmittedBy').val(response.submitted_by + ' - ' + response.submitted_by_time);
                 $('#esubmittedByRole').val(response.submitted_by_role);
                 $('#esubmittedById').val(response.submitted_by_id);
 
@@ -745,7 +766,7 @@ function editShedule(id = null) {
                 $('#ecomplete :radio[name="ecomplete"]').prop('checked', false);
                 $('#ecomplete .active').removeClass('active');
                 (response.complete) ? $('#com' + response.complete).prop('checked', true).click() : null;
-                
+
                 if (response.confirmed != "ok") {
                     $('#ecomplete').addClass('disabled-div');
                 } else {
@@ -756,7 +777,7 @@ function editShedule(id = null) {
                 if (response.allowDeliveryCoordinator == true) {
                     $('.delivery_coordinator').addClass('disabled-div');
                     $(".delivery_coordinator").find("*").prop("readonly", true);
-                }else {
+                } else {
                     disabledManagerDiv();
                 }
 
@@ -800,7 +821,7 @@ function changeStockDetails(ele) {
             return false;
         }
         changeExistStatus();
-        
+
         $('#customerName').val(obj[2] + ' ' + obj[3]);
         $('#vechicle').val(obj[6] + ' ' + obj[7] + ' ' + obj[9]);
         $('#has_appointment').val(obj[10])

@@ -15,6 +15,7 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $output = $row;
     $submittedBy = $row['submitted_by'];
+    $salesConsultant = $row['sales_consultant'];
 
     if (isset($submittedBy)) {
         $sql1 = "SELECT * FROM `users` WHERE id = '$submittedBy'";
@@ -23,6 +24,14 @@ if ($result->num_rows > 0) {
         $output['submitted_by'] = $row1['username'];
     } else {
         $output['submitted_by'] = "";
+    }
+    if (isset($salesConsultant)) {
+        $sql1 = "SELECT * FROM `users` WHERE id = '$salesConsultant'";
+        $result1 = $connect->query($sql1);
+        $row1 = $result1->fetch_assoc();
+        $output['salesConsultantName'] = $row1['username'];
+    } else {
+        $output['salesConsultantName'] = "";
     }
 
 } // if num_rows

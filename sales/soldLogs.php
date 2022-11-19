@@ -962,7 +962,7 @@ if ($_GET['r'] == 'man') {
                                 </a>
                             </h5>
 
-                            <div class="mt-3 loadIncentives border rounded hidden" id="pbody" style="background-color: rgba(0,188,212,.1);">
+                            <div class="mt-3 loadIncentives border rounded hidden" id="loadIncentivesDiv" style="background-color: rgba(0,188,212,.1);">
                                 <div class="form-row p-3">
                                     <label for="college" class="col-md-1 col-form-label text-md-center">College
                                         <span class="badge-label-primary" id="college_v"></span>
@@ -1081,7 +1081,7 @@ if ($_GET['r'] == 'man') {
                                     <label for="vincheck" class="col-md-1 col-form-label text-md-center">Vin Check</label>
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                            <select onchange="chnageStyle(this)" title="&#160;" name="vincheck" id="vincheck" class="selectpicker" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                            <select onchange="chnageStyle(this)" title="&#160;" name="vincheck" id="vincheck" class="selectpicker" data-style="btn-outline-success" <?php echo $_editTodo; ?>>
                                                 <option value="" title="&#160;" data-hidden="true" selected> </option>
                                                 <option value="checkTitle">Check Title</option>
                                                 <option value="need">Need</option>
@@ -1094,7 +1094,7 @@ if ($_GET['r'] == 'man') {
                                     </div>
                                     <label for="insurance" class="col-md-1 col-form-label text-md-center">Insurance</label>
                                     <div class="col-md-2">
-                                        <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="insurance" name="insurance" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                        <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="insurance" name="insurance" data-style="btn-outline-success" <?php echo $_editTodo; ?>>
                                             <option value="" title="&#160;" data-hidden="true" selected> </option>
                                             <option value="need">Need</option>
                                             <option value="inHouse">In House</option>
@@ -1103,7 +1103,7 @@ if ($_GET['r'] == 'man') {
                                     </div>
                                     <label for="tradeTitle" class="col-md-1 col-form-label text-md-center">Trade Title</label>
                                     <div class="col-md-2">
-                                        <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="tradeTitle" name="tradeTitle" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                        <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="tradeTitle" name="tradeTitle" data-style="btn-outline-success" <?php echo $_editTodo; ?>>
                                             <option value="" title="&#160;" data-hidden="true" selected> </option>
                                             <option value="need">Need</option>
                                             <option value="payoff">Payoff</option>
@@ -1113,7 +1113,7 @@ if ($_GET['r'] == 'man') {
                                     </div>
                                     <label for="registration" class="col-md-1 col-form-label text-md-center">Registration</label>
                                     <div class="col-md-2">
-                                        <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="registration" name="registration" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                        <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="registration" name="registration" data-style="btn-outline-success" <?php echo $_editTodo; ?>>
                                             <option value="" title="&#160;" data-hidden="true" selected> </option>
                                             <option value="pending">Pending</option>
                                             <option value="done">Done</option>
@@ -1127,7 +1127,7 @@ if ($_GET['r'] == 'man') {
 
                                     <label for="inspection" class="col-md-1 col-form-label text-md-center">Inspection</label>
                                     <div class="col-md-3">
-                                        <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="inspection" name="inspection" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                        <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="inspection" name="inspection" data-style="btn-outline-success" <?php echo $_editTodo; ?>>
                                             <option value="" title="&#160;" data-hidden="true" selected> </option>
                                             <option value="need">Need</option>
                                             <option value="notNeed">Doesn't Need</option>
@@ -1137,7 +1137,7 @@ if ($_GET['r'] == 'man') {
                                     </div>
                                     <label for="salePStatus" class="col-md-1 col-form-label text-md-center">Salesperson Status</label>
                                     <div class="col-md-3">
-                                        <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="salePStatus" name="salePStatus" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                        <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="salePStatus" name="salePStatus" data-style="btn-outline-success" <?php echo $_editTodo; ?>>
                                             <option value="" title="&#160;" data-hidden="true" selected> </option>
 
                                             <option value="dealWritten">Deal Written</option>
@@ -1150,7 +1150,7 @@ if ($_GET['r'] == 'man') {
                                     </div>
                                     <label for="paid" class="col-md-1 col-form-label text-md-center">Paid</label>
                                     <div class="col-md-3">
-                                        <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="paid" name="paid" data-style="btn-outline-danger" <?php echo $_editTodo; ?>>
+                                        <select class="selectpicker" onchange="chnageStyle(this)" title="&#160;" id="paid" name="paid" data-style="btn-outline-success" <?php echo $_editTodo; ?>>
                                             <option value="" title="&#160;" data-hidden="true" selected> </option>
                                             <option value="no">No</option>
                                             <option value="yes">Yes</option>

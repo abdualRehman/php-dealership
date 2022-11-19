@@ -541,6 +541,7 @@ function calculateHTB(currentElement, target, percentage) {
     var msrp = $('#' + currentElement).val();
     var prcntge = $('#' + percentage).val();
     var calcHbt = (msrp * prcntge) / 100;
+    calcHbt = Number(calcHbt).toFixed(2);
     $('#' + target).val(calcHbt);
     $('#' + target).click();
 }
@@ -572,7 +573,7 @@ function loadStock() {
     $.ajax({
         url: '../php_action/fetchInvForSearch.php',
         type: "POST",
-        data:{type: 'NEW'},
+        data: { type: 'NEW' },
         dataType: 'json',
         success: function (response) {
             stockArray = response.data;
@@ -711,7 +712,7 @@ function editDetails(id = null) {
                 $('#ehbtIn').val(response.hbt_in);
 
 
-                $('#einpercentage').val((response.hbt_in && response.msrp_in) ? ((response.hbt_in * 100) / response.msrp_in) : "1.5");
+                $('#einpercentage').val((response.hbt_in && response.msrp_in) ? ((response.hbt_in * 100) / response.msrp_in).toFixed(2) : "1.5");
 
 
                 $('#enetcostIn').val(response.net_cost_in);
@@ -740,7 +741,7 @@ function editDetails(id = null) {
                 $('#eaddsOutNotes').val(response.adds_out_notes);
                 $('#ehbtOut').val(response.hbt_out);
 
-                $('#eoutpercentage').val((response.hbt_out && response.msrp_out) ? ((response.hbt_out * 100) / response.msrp_out) : "1.5");
+                $('#eoutpercentage').val((response.hbt_out && response.msrp_out) ? ((response.hbt_out * 100) / response.msrp_out).toFixed(2) : "1.5");
 
                 $('#enetcostOut').val(response.net_cost_out);
 

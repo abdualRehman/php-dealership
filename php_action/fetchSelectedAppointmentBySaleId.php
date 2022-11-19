@@ -43,7 +43,7 @@ if ($result->num_rows > 0) {
     }
 
     $output['allready_created'] = null;
-    // if (!isset($row['already_have'])) {
+    if (!isset($row['id'])) {
         $sql1 = "SELECT COUNT(appointments.stock_id) as allready_created FROM appointments LEFT JOIN sales ON 
         (sales.stock_id = appointments.stock_id AND sales.status = 1 AND sales.sale_status !='cancelled' and sales.sale_id = '$id' ) 
         WHERE appointments.status = 1 AND appointments.stock_id = '$stock_id'";
@@ -55,8 +55,9 @@ if ($result->num_rows > 0) {
         } else {
             $output['already_have'] = "false";
         }
-        // 56062
-    // }
+    }else{
+        $output['already_have'] = $row['already_have'];
+    }
 
     // duplicate will not send to delivery coordinator until it is approved by Manager
     if ($_SESSION['userRole'] == $deliveryCoordinatorID && $row['already_have'] == "true" && !$row['manager_override'] && $row['delivery'] != '') {

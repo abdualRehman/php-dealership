@@ -1,7 +1,7 @@
 "use strict";
 var manageSoldLogsTable, rowGroupSrc = 10, apptexistStatusValue = false; // status
 var stockArray = [], deliveryCoordinatorArray = [], manageNotDoneTable;
-var collapsedGroups = {};
+var collapsedGroups = {}, collapsedGroupsThankyouCard = {};
 
 var e1 = Swal.mixin({
     customClass: {
@@ -728,6 +728,19 @@ $(function () {
         }, 100);
     })
 
+    $('#eadditionalServices, #edelivery').on('click', function () {
+        const targetId = this.id;
+        const prev = $(`#${targetId} label.active :radio`).val();
+        var current = '';
+        setTimeout(() => {
+            current = $(this).find('label.active').children(' input:radio').val();
+            if (prev == current) {
+                $(`#${targetId} :radio`).prop('checked', false);
+                $(`#${targetId} .active`).removeClass('active');
+            }
+        }, 100);
+    });
+
 
 
 });
@@ -770,7 +783,7 @@ function addNewSchedule(id = null) {
                 $('#estockno').val(response.stock_id)
                 $('#estocknoDisplay').val(response.stockno)
                 $('#ehas_appointment').val(response.already_have);
-                $('#esubmittedBy').val(response.submitted_by);
+                $('#esubmittedBy').val(response.submitted_by + ' - ' + (response.submitted_by_time ? response.submitted_by_time : ''));
                 $('#esubmittedByRole').val(response.submitted_by_role);
                 $('#esubmittedById').val(response.submitted_by_id);
                 $('#eoverrideBy').prop('checked', (response.manager_override != "" && response.manager_override != null) ? true : false);
@@ -933,6 +946,7 @@ $('.handleDateTime').on('change', function () {
             let startTime = element[3][dayname][0];
             let endTime = element[3][dayname][1];
             let scheduledAppointments = element[4];
+            let available_today = element[5];
             if (startTime && endTime) {
                 time = moment(moment(time, ["h:mmA"]).format("HH:mm"), 'hh:mm');
                 startTime = moment(moment(startTime, ["h:mmA"]).format("HH:mm"), 'hh:mm');
@@ -946,7 +960,13 @@ $('.handleDateTime').on('change', function () {
                         let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm');
                         let schedule_end = moment(appointment.schedule_end, 'YYYY-MM-DD hh:mm');
                         if (dateTime.isBetween(schedule_start, schedule_end, null, '[]')) {
-                            allready_appointed = true;
+                            // check today availabilit
+                            var checkTodayDate = moment(moment().format('MM-DD-YYYY')).diff(moment(date).format('MM-DD-YYYY'));
+                            if (checkTodayDate == 0 && available_today == false) {
+                                allready_appointed = false;
+                            } else {
+                                allready_appointed = true;
+                            }
                         }
                     });
                     if (allready_appointed == false) {
@@ -975,7 +995,6 @@ function fetchNotDoneSoldLogs() {
             "deferRender": true,
             "pageLength": 25,
             autoWidth: false,
-            "order": [[1, "desc"]],
             dom: `\n     
             <'row'<'col-12'P>>\n
            \n     
@@ -985,6 +1004,16 @@ function fetchNotDoneSoldLogs() {
            <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
 
             buttons: [
+                {
+                    text: '&nbsp Expand/Collapse All',
+                    action: function () {
+                        $('#datatable-2 tbody tr.dtrg-group.dtrg-start').each(function () {
+                            var name = $(this).data('name');
+                            collapsedGroupsThankyouCard[name] = !collapsedGroupsThankyouCard[name];
+                            manageNotDoneTable.draw(false);
+                        });
+                    }
+                },
                 {
                     extend: 'copyHtml5',
                     title: 'Not Done',
@@ -1008,8 +1037,6 @@ function fetchNotDoneSoldLogs() {
                 },
             ],
             searchPanes: {
-                cascadePanes: !0,
-                viewTotal: !0,
                 columns: [3, 4, 5]
             },
             columnDefs: [
@@ -1054,13 +1081,19 @@ function fetchNotDoneSoldLogs() {
             rowGroup: {
                 dataSrc: 4,
                 startRender: function (rows, group) {
-                    var collapsed = !!collapsedGroups[group];
+                    var collapsed = !!collapsedGroupsThankyouCard[group];
+
+                    rows.nodes().each(function (r) {
+                        r.style.display = 'none';
+                        if (collapsed) {
+                            r.style.display = '';
+                        }
+                    });
 
                     var filteredData = $('#datatable-2').DataTable()
                         .rows({ search: 'applied' })
                         .data()
                         .filter(function (data, index) {
-                            console.log(data);
                             return data[4] == group ? true : false;
                         });
                     // setting total numbers
@@ -1074,15 +1107,29 @@ function fetchNotDoneSoldLogs() {
             },
             createdRow: function (row, data, dataIndex) {
                 if ($('#isEditAllowed').val() == "true") {
-                    $(row).children().not(':last-child').attr({
+                    $(row).children().attr({
                         "data-toggle": "modal",
-                        "data-target": "#showDetails",
-                        "onclick": "showDetails(" + data[0] + ")"
+                        "data-target": "#editSaleModal",
+                        "onclick": "editSale(" + data[0] + ")"
                     });
                 }
             },
+            initComplete: function () {
+                // Start with closed groups
+                $('#datatable-2 tbody tr.dtrg-start').each(function () {
+                    var name = $(this).data('name');
+                    collapsedGroupsThankyouCard[name] = !collapsedGroupsThankyouCard[name];
+                });
+                manageNotDoneTable.draw(false);
+            },
             "order": [[4, "asc"]],
-        })
+        });
+        // Collapse Groups
+        $('#datatable-2 tbody').on('click', 'tr.dtrg-start', function () {
+            var name = $(this).data('name');
+            collapsedGroupsThankyouCard[name] = !collapsedGroupsThankyouCard[name];
+            manageNotDoneTable.draw(false);
+        });
     }
 }
 
@@ -1568,6 +1615,12 @@ function changeRules() {
         chnageIncentiveStatus(obj[25], obj[26], 'misc1');
         chnageIncentiveStatus(obj[27], obj[28], 'misc2');
         chnageIncentiveStatus(obj[29], obj[30], 'leaseLoyalty');
+
+        if (obj[17] != 'N/A' || obj[19] != 'N/A' || obj[21] != 'N/A' || obj[23] != 'N/A' || obj[25] != 'N/A' || obj[27] != 'N/A' || obj[29] != 'N/A') {
+            $('#loadIncentivesDiv').removeClass('hidden');
+        } else {
+            $('#loadIncentivesDiv').addClass('hidden');
+        }
 
         $('.selectpicker').selectpicker('refresh');
 

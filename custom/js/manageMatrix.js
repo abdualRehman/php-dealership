@@ -184,9 +184,9 @@ function showDetails(id = null) {
                 $('#title').html(`${response.year} ${response.model} ${response.trim} <br /> ${response.model_code}`);
 
 
-                $('#net').html("$" + Number(Number(response.net).toFixed(2)).toLocaleString("en-US"));
-                $('#hb').html("$" + Number(Number(response.hb).toFixed(2)).toLocaleString("en-US"));
-                $('#invoice').html("$" + Number(Number(response.invoice).toFixed(2)).toLocaleString("en-US"));
+                $('#net').html("$" + Number(Number(response.net).toFixed(2)).toFixed(2).toLocaleString("en-US"));
+                $('#hb').html("$" + Number(Number(response.hb).toFixed(2)).toFixed(2).toLocaleString("en-US"));
+                $('#invoice').html("$" + Number(Number(response.invoice).toFixed(2)).toFixed(2).toLocaleString("en-US"));
                 $('#msrp').html("$" + Number(Number(response['m.s.r.p']).toFixed(0)).toLocaleString("en-US"));
                 $('#bdc').html("$" + Number(Number(response.bdc).toFixed(0)).toLocaleString("en-US"));
 

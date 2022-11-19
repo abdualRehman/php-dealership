@@ -338,6 +338,8 @@ function editDetails(id = null) {
                     `)
                 }
 
+                $('#submittedBy').val(response.submittedByName);
+
                 var detailsDiv = `${response.stocktype} ${response.year} ${response.make} ${response.model} \n Vin: ${response.vin} \n Mileage: ${response.mileage} \n Age: ${response.age} \n Lot: ${response.lot} ${($('#isConsultant').val() == "true") ? `` : `\n Balance: ${response.balance} \n ${response.stocktype == "USED" ? `Gross:` + Number(response.gross) : ''}`} `;
 
 

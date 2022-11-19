@@ -373,27 +373,27 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                             <div class="form-group col-sm-11">
                                 <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="esource">
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="esource" value="autoAlert" id="autoAlert">
+                                        <input type="radio" name="esource" value="autoAlert" id="eautoAlert">
                                         Auto Alert
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="esource" value="carCode" id="carCode">
+                                        <input type="radio" name="esource" value="carCode" id="ecarCode">
                                         Car Code
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="esource" value="concierge" id="concierge">
+                                        <input type="radio" name="esource" value="concierge" id="econcierge">
                                         Concierge
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="esource" value="freshUp" id="freshUp">
+                                        <input type="radio" name="esource" value="freshUp" id="efreshUp">
                                         Fresh Up
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="esource" value="internet" id="internet">
+                                        <input type="radio" name="esource" value="internet" id="einternet">
                                         Internet
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="esource" value="phoneUp" id="phoneUp">
+                                        <input type="radio" name="esource" value="phoneUp" id="ephoneUp">
                                         Phone Up
                                     </label>
                                 </div>

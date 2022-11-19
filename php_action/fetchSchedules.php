@@ -59,6 +59,7 @@ if ($result->num_rows > 0) {
             $stockno = $row['stockno'];
             $vehicle = $row['stocktype'] . ' ' . $row['year'] . ' ' . $row['make'] . ' ' . $row['model'];
             $notes = $row['notes'];
+            $coordinator_color = "";
 
             $vin = $row['vin'];
             $delivery = preg_replace('/(?<=\\w)(?=[A-Z])/', " ", $row['delivery']);
@@ -89,8 +90,10 @@ if ($result->num_rows > 0) {
                 $result1 = $connect->query($sql1);
                 $row1 = $result1->fetch_assoc();
                 $coordinator = $row1['username'];
+                $coordinator_color = '#'.$row1['color'];
             } else {
                 $coordinator = "Blank";
+                $coordinator_color = "";
             }
 
             $allowEdit = false;
@@ -142,6 +145,7 @@ if ($result->num_rows > 0) {
                 $editManagerApproval,
                 $vin,
                 $delivery,
+                $coordinator_color,
             );
         } // /if
     } // /while 

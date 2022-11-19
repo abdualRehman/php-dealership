@@ -148,7 +148,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                     <div class="showResult">
                         <input type="hidden" name="sale_id" id="sale_id">
                         <div class="form-row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <div class="row">
                                     <label for="inputEmail4" class="col-sm-2 col-form-label text-md-center">Date:</label>
                                     <div class="col-sm-10">
@@ -162,7 +162,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <div class="row">
                                     <label for="inputPassword4" class="col-sm-1 offset-sm-1 col-form-label text-md-right">Status</label>
                                     <div class="col-sm-6 m-auto">
@@ -170,6 +170,14 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                             <div class="btn-group btn-group-toggle" id="statusDiv" data-toggle="buttons">
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="row">
+                                    <label for="submittedBy" class="col-sm-4 col-form-label text-md-center">Submitted By</label>
+                                    <div class="col-sm-8 m-auto">
+                                        <input type="text" class="form-control" name="submittedBy" placeholder="Submitted By" id="submittedBy" disabled>
                                     </div>
                                 </div>
                             </div>

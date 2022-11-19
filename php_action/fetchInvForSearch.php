@@ -30,7 +30,7 @@ if ($result->num_rows > 0) {
         $saleStatusArray = array();
 
         $stock_id = $row['id'];
-        $statusSql = "SELECT sales.sale_status FROM sales WHERE sales.stock_id = '$stock_id'";
+        $statusSql = "SELECT sales.sale_status FROM sales WHERE sales.stock_id = '$stock_id' AND sales.status != 2";
         $rslt = $connect->query($statusSql);
         if ($rslt->num_rows > 0) {
             while ($r = $rslt->fetch_assoc()) {

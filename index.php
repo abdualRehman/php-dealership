@@ -5,8 +5,11 @@ session_start();
 
 
 if (isset($_SESSION['userId'])) {
-
-    header('location: dashboard.php');
+    if (isset($_GET['redirect'])) {
+        header('location:' . $_GET['redirect']);
+    } else {
+        header('location: dashboard.php');
+    }
 }
 
 $errors = array();
@@ -26,14 +29,16 @@ if ($_POST) {
         }
     } else {
 
-        $sql = "SELECT * FROM users WHERE email = '$email'";
+        $sql = "SELECT * FROM users WHERE email = '$email' AND status = 1";
         $result = $connect->query($sql);
 
         if ($result->num_rows == 1) {
+            $fRow = $result->fetch_assoc();
+            
             $password = md5($password);
             // echo $password;
             // exists
-            $mainSql = "SELECT users.* , role.role_name , user_location.name as locName FROM users LEFT JOIN role ON users.role = role.role_id LEFT JOIN user_location ON users.location = user_location.id WHERE users.email = '$email' AND users.password = '$password' AND users.status = 1";
+            $mainSql = "SELECT users.* , role.role_name , user_location.name as locName FROM users LEFT JOIN role ON users.role = role.role_id LEFT JOIN user_location ON users.location = user_location.id WHERE users.email = '$email' AND users.password = '$password' AND users.status = 1 ".($fRow['role'] == 'Admin' ? "" : " AND user_location.status = 1")."";
             $mainResult = $connect->query($mainSql);
 
             if ($mainResult->num_rows == 1) {
@@ -62,7 +67,12 @@ if ($_POST) {
                     }
                 }
                 $_SESSION['permissionsArray'] = $output;
-                header('location: dashboard.php');
+
+                if (isset($_GET['redirect'])) {
+                    header('location:' . $_GET['redirect']);
+                } else {
+                    header('location: dashboard.php');
+                }
             } else {
                 $errors[] = "Incorrect email/password combination";
             } // /else
@@ -138,7 +148,7 @@ $_SESSION['siteurl'] = $url;
                                             </div>';
                                         }
                                     } ?>
-                                    <form id="login-form" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+                                    <form id="login-form" action="" method="post">
                                         <div class="form-group">
                                             <div class="float-label float-label-lg"><input class="form-control form-control-lg" type="email" id="email" name="email" placeholder="Please insert your email"> <label for="email">Email</label></div>
                                         </div>

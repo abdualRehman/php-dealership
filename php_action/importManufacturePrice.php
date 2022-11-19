@@ -43,10 +43,11 @@ if ($_POST) {
                     $c4 = strtolower(str_replace(".", "",  preg_replace('/\s*/', '', $Row[3])));
                     $c5 = strtolower(str_replace(".", "",  preg_replace('/\s*/', '', $Row[4])));
                     $c6 = strtolower(str_replace(".", "",  preg_replace('/\s*/', '', $Row[5])));
+                    $c7 = strtolower(str_replace(".", "",  preg_replace('/\s*/', '', $Row[6])));
 
 
                     if (
-                        $c1 != 'year' || $c2 != 'model' || $c3 != 'modelcode' || $c4 != 'msrp' || $c5 != 'dlrinv' || $c6 != 'modeldescription'
+                        $c1 != 'year' || $c2 != 'model' || $c3 != 'modelcode' || $c4 != 'msrp' || $c5 != 'dlrinv' || $c6 != 'modeldescription' || $c7 != 'trim'
                     ) {
                         // echo "File is not in correct format";
                         $valid['success'] = false;
@@ -66,12 +67,13 @@ if ($_POST) {
                     $msrp = (isset($Row[3])) ?  mysqli_real_escape_string($connect, $Row[3]) : "";
                     $dlrinv = (isset($Row[4])) ?  mysqli_real_escape_string($connect, $Row[4]) : "";
                     $modeldescription = (isset($Row[5])) ?  mysqli_real_escape_string($connect, $Row[5]) : "";
+                    $trim = (isset($Row[6])) ?  mysqli_real_escape_string($connect, $Row[6]) : "";
 
 
                     if (
                         !empty($year) || !empty($model) ||
                         !empty($modelcode) || !empty($msrp) ||
-                        !empty($dlrinv) || !empty($modeldescription)
+                        !empty($dlrinv) || !empty($modeldescription) || !empty($trim)
                     ) {
 
                         $year = trim($year);
@@ -90,7 +92,7 @@ if ($_POST) {
                             '$msrp',
                             '$dlrinv',
                             '$modeldescription',
-                            '$modeldescription',
+                            '$trim',
                             1,
                             '$location'
                         )";

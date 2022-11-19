@@ -14,7 +14,7 @@ $(function () {
         'ajax': '../php_action/fetchUserLocations.php',
         "pageLength": 25,
         dom: `
-        <'row'<'col-sm-12 text-sm-left col-md-4 mb-2'B><'col-sm-12 col-md-4 text-center'> <'col-sm-12 col-md-4 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
+        <'row'<'col-sm-12 text-sm-left col-md-4 mb-2'<'#statusFilterDiv'> ><'col-sm-12 col-md-4 text-center'B> <'col-sm-12 col-md-4 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
        <'row'<'col-12'tr>>\n      
        <'row align-items-baseline'
        <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
@@ -56,9 +56,15 @@ $(function () {
                 "onclick": `editLoc(${JSON.stringify(data[0])} , ${JSON.stringify(data[1])})`
             });
         },
+        "drawCallback": function (settings, start, end, max, total, pre) {
+            $('.editCheckbox').on('change', function () {
+                changeLocationStatus($(this));
+            });
+        },
         "order": [[1, "asc"]]
     });
-
+    writeStatusHTML();
+    $('#searchStatusActive').click();
     $("#addNewForm").validate({
         rules: {
             "locName": {
@@ -158,10 +164,94 @@ $(function () {
 
         }
 
-    })
+    });
+
+
+
+    $.fn.dataTable.ext.search.push(
+        function (settings, searchData, index, rowData, counter) {
+            var tableNode = manageDataTable.table().node();
+            var searchStatus = $('input:radio[name="searchStatus"]:checked').map(function () {
+                if (this.value !== "") {
+                    return this.value;
+                }
+            }).get();
+            if (searchStatus.length === 0) {
+                return true;
+            }
+
+            if (searchStatus.indexOf(rowData[3]) !== -1) {
+                return true;
+            }
+
+            if (settings.nTable !== tableNode) {
+                return true;
+            }
+            return false;
+        }
+    );
+
+
+    $('input:radio').on('change', function () {
+        $('#datatable-1').block({
+            message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+            timeout: 1e3
+        });
+        manageDataTable.draw();  // working
+    });
+
+
 
 })
 
+function changeLocationStatus(obj = null) {
+    var probId = obj[0].id;
+    if (probId) {
+        e1.fire({
+            title: "Are you sure?",
+            text: "Do you really want to change status?",
+            icon: "warning",
+            showCancelButton: !0,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Change it!"
+        }).then(function (t) {
+            if (t.isConfirmed == true) {
+                $.ajax({
+                    url: '../php_action/changeLocationStatus.php',
+                    type: 'post',
+                    data: { id: probId },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success == true) {
+                            Swal.fire("Changed!", "Status has been changes.", "success")
+                            manageDataTable.ajax.reload(null, false);
+                        } // /response messages
+                    }
+                }); // /ajax function to remove the brand
+
+            } else {
+                // $(obj[0]).change();
+            }
+        });
+    }
+}
+
+function writeStatusHTML() {
+    var element = document.getElementById('statusFilterDiv');
+    if (element) {
+        // checked="checked"
+        element.innerHTML = `
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-flat-primary">
+                <input type="radio" name="searchStatus" id="searchStatusActive" value="1" >Active<span class="badge badge-lg p-1" id="ativeCount" ></span>
+            </label>
+            <label class="btn btn-flat-primary">
+                <input type="radio" name="searchStatus" id="searchStatusNotActive" value="0">Not Active <span class="badge badge-lg p-1" id="notAtiveCount" ></span>
+            </label> 
+        </div>`;
+    }
+}
 
 function editLoc(locId = null, locName = "") {
     if (locId) {

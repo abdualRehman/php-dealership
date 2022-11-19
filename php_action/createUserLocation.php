@@ -5,7 +5,7 @@ $valid = array('success' => false, 'messages' => array());
 
 $defaultRoleNmaes = array(
     'Branch Admin' ,'BDC Manager', 'BDC Sales', 'Client Care Specialist', 'Delivery Coordinator',
-    'Finance Manager', 'General Manager', 'Inventory Specialist', 'Office', 'Online Manager', 'Sales Consultant', 'Sales Manager'
+    'Finance Manager', 'General Manager', 'Inventory Specialist', 'Office', 'Online Manager', 'Sales Consultant', 'Sales Manager' , 'Service'
 );
 if ($_POST) {
 

@@ -25,7 +25,7 @@ $(function () {
     })
 
     var ccsID = Number(localStorage.getItem('ccsID'));
-    
+
     manageUserTable = $("#datatable-1").DataTable({
         responsive: !0,
         "pageLength": 25,
@@ -65,8 +65,16 @@ $(function () {
                 targets: $('#isEditAllowed').val() == "false" ? [5] : [],
                 visible: false,
             },
-        ]
-    })
+        ],
+        "drawCallback": function (settings, start, end, max, total, pre) {
+            $('.editCheckbox').on('change', function () {
+                changeUserStatus($(this));
+            });
+        },
+    });
+
+    writeStatusHTML();
+    $('#searchStatusActive').click();
 
 
     $.validator.addMethod("valueNotEquals", function (value, element, arg) {
@@ -236,7 +244,91 @@ $(function () {
     })
 
 
+    $.fn.dataTable.ext.search.push(
+        function (settings, searchData, index, rowData, counter) {
+            var tableNode = manageUserTable.table().node();
+            var searchStatus = $('input:radio[name="searchStatus"]:checked').map(function () {
+                if (this.value !== "") {
+                    return this.value;
+                }
+            }).get();
+            if (searchStatus.length === 0) {
+                return true;
+            }
+
+            if (searchStatus.indexOf(rowData[6]) !== -1) {
+                return true;
+            }
+
+            if (settings.nTable !== tableNode) {
+                return true;
+            }
+            return false;
+        }
+    );
+
+
+    $('input:radio').on('change', function () {
+        $('#datatable-1').block({
+            message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+            timeout: 1e3
+        });
+        manageUserTable.draw();  // working
+    });
+
 });
+
+
+
+function changeUserStatus(obj = null) {
+    var probId = obj[0].id;
+    if (probId) {
+        e1.fire({
+            title: "Are you sure?",
+            text: "Do you really want to change status?",
+            icon: "warning",
+            showCancelButton: !0,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Change it!"
+        }).then(function (t) {
+            if (t.isConfirmed == true) {
+                $.ajax({
+                    url: '../php_action/changeUserStatus.php',
+                    type: 'post',
+                    data: { id: probId },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success == true) {
+                            Swal.fire("Changed!", "Status has been changes.", "success")
+                            manageUserTable.ajax.reload(null, false);
+                        } // /response messages
+                    }
+                }); // /ajax function to remove the brand
+
+            } else {
+                // $(obj[0]).change();
+            }
+        });
+    }
+}
+
+function writeStatusHTML() {
+    var element = document.getElementById('statusFilterDiv');
+    if (element) {
+        // checked="checked"
+        element.innerHTML = `
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-flat-primary">
+                <input type="radio" name="searchStatus" id="searchStatusActive" value="1" >Active<span class="badge badge-lg p-1" id="ativeCount" ></span>
+            </label>
+            <label class="btn btn-flat-primary">
+                <input type="radio" name="searchStatus" id="searchStatusNotActive" value="0">Not Active <span class="badge badge-lg p-1" id="notAtiveCount" ></span>
+            </label> 
+        </div>`;
+    }
+}
+
 
 function editUser(userId = null) {
     if (userId) {
@@ -267,7 +359,7 @@ function editUser(userId = null) {
                 $('#mobile').val(response.mobile);
                 $('#color').val(response.color);
                 $('#color').wheelColorPicker('color', '#' + response.color);
-                
+
                 $('#editrole').val(response.role);
                 $('.selectpicker').selectpicker('refresh');
 

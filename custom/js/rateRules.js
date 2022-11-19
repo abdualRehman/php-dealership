@@ -169,6 +169,7 @@ $(function () {
                         })
                         manageDataTable.ajax.reload(null, false);
                         form[0].reset();
+                        resetForm();
                         $('#addNew').modal('hide');
                     } else {
                         e1.fire({
@@ -306,6 +307,16 @@ $(function () {
 
 
 })
+
+function resetForm() {
+    $('.typeahead').val('');
+    $('.typeahead').trigger('change');
+    $('.selectpicker').each(function () {
+        $(this).find('option:first').prop('selected', 'selected');
+        $(".selectpicker").selectpicker("refresh");
+    });
+    $(".tags").empty();
+}
 
 
 

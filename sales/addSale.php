@@ -507,7 +507,7 @@ if ($userRole != 'Admin' && $userRole != $branchAdmin && $userRole != $generalMa
                                 </a>
                             </h5>
 
-                            <div class="mt-3 loadIncentives border rounded hidden" id="pbody" style="background-color: rgba(0,188,212,.1);">
+                            <div class="mt-3 loadIncentives border rounded hidden" id="loadIncentivesDiv" style="background-color: rgba(0,188,212,.1);">
                                 <div class="form-row p-3">
                                     <label for="college" class="col-md-1 col-form-label text-md-center">College
                                         <span class="badge-label-primary" id="college_v"></span>
@@ -626,7 +626,7 @@ if ($userRole != 'Admin' && $userRole != $branchAdmin && $userRole != $generalMa
                                     <label for="vincheck" class="col-md-1 col-form-label text-md-center">Vin Check</label>
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                            <select onchange="chnageStyle(this)" name="vincheck" id="vincheck" title="&#160;" class="selectpicker" data-style="btn-outline-danger">
+                                            <select onchange="chnageStyle(this)" name="vincheck" id="vincheck" title="&#160;" class="selectpicker" data-style="btn-outline-success">
                                                 <option value="" title="&#160;" data-hidden="true" selected> </option>
                                                 <option value="checkTitle">Check Title</option>
                                                 <option value="need">Need</option>
@@ -639,7 +639,7 @@ if ($userRole != 'Admin' && $userRole != $branchAdmin && $userRole != $generalMa
                                     </div>
                                     <label for="insurance" class="col-md-1 col-form-label text-md-center">Insurance</label>
                                     <div class="col-md-2">
-                                        <select class="selectpicker" onchange="chnageStyle(this)" id="insurance" title="&#160;" name="insurance" data-style="btn-outline-danger">
+                                        <select class="selectpicker" onchange="chnageStyle(this)" id="insurance" title="&#160;" name="insurance" data-style="btn-outline-success">
                                             <option value="" title="&#160;" data-hidden="true" selected> </option>
                                             <option value="need">Need</option>
                                             <option value="inHouse">In House</option>
@@ -648,7 +648,7 @@ if ($userRole != 'Admin' && $userRole != $branchAdmin && $userRole != $generalMa
                                     </div>
                                     <label for="tradeTitle" class="col-md-1 col-form-label text-md-center">Trade Title</label>
                                     <div class="col-md-2">
-                                        <select class="selectpicker" onchange="chnageStyle(this)" id="tradeTitle" title="&#160;" name="tradeTitle" data-style="btn-outline-danger">
+                                        <select class="selectpicker" onchange="chnageStyle(this)" id="tradeTitle" title="&#160;" name="tradeTitle" data-style="btn-outline-success">
                                             <option value="" title="&#160;" data-hidden="true" selected> </option>
                                             <option value="need">Need</option>
                                             <option value="payoff">Payoff</option>
@@ -658,7 +658,7 @@ if ($userRole != 'Admin' && $userRole != $branchAdmin && $userRole != $generalMa
                                     </div>
                                     <label for="registration" class="col-md-1 col-form-label text-md-center">Registration</label>
                                     <div class="col-md-2">
-                                        <select class="selectpicker" onchange="chnageStyle(this)" id="registration" title="&#160;" name="registration" data-style="btn-outline-danger">
+                                        <select class="selectpicker" onchange="chnageStyle(this)" id="registration" title="&#160;" name="registration" data-style="btn-outline-success">
                                             <option value="" title="&#160;" data-hidden="true" selected> </option>
                                             <option value="pending">Pending</option>
                                             <option value="done">Done</option>
@@ -672,7 +672,7 @@ if ($userRole != 'Admin' && $userRole != $branchAdmin && $userRole != $generalMa
 
                                     <label for="inspection" class="col-md-1 col-form-label text-md-center">Inspection</label>
                                     <div class="col-md-3">
-                                        <select class="selectpicker" onchange="chnageStyle(this)" id="inspection" title="&#160;" name="inspection" data-style="btn-outline-danger">
+                                        <select class="selectpicker" onchange="chnageStyle(this)" id="inspection" title="&#160;" name="inspection" data-style="btn-outline-success">
                                             <option value="" title="&#160;" data-hidden="true" selected> </option>
                                             <option value="need">Need</option>
                                             <option value="notNeed">Doesn't Need</option>
@@ -682,7 +682,7 @@ if ($userRole != 'Admin' && $userRole != $branchAdmin && $userRole != $generalMa
                                     </div>
                                     <label for="salePStatus" class="col-md-1 col-form-label text-md-center">Salesperson Status</label>
                                     <div class="col-md-3">
-                                        <select class="selectpicker" onchange="chnageStyle(this)" id="salePStatus" title="&#160;" name="salePStatus" data-style="btn-outline-danger">
+                                        <select class="selectpicker" onchange="chnageStyle(this)" id="salePStatus" title="&#160;" name="salePStatus" data-style="btn-outline-success">
                                             <option value="" title="&#160;" data-hidden="true" selected> </option>
                                             <option value="dealWritten">Deal Written</option>
                                             <option value="gmdSubmit">GMD Submit</option>
@@ -694,7 +694,7 @@ if ($userRole != 'Admin' && $userRole != $branchAdmin && $userRole != $generalMa
                                     </div>
                                     <label for="paid" class="col-md-1 col-form-label text-md-center">Paid</label>
                                     <div class="col-md-3">
-                                        <select class="selectpicker" onchange="chnageStyle(this)" id="paid" title="&#160;" name="paid" data-style="btn-outline-danger">
+                                        <select class="selectpicker" onchange="chnageStyle(this)" id="paid" title="&#160;" name="paid" data-style="btn-outline-success">
                                             <option value="" title="&#160;" data-hidden="true" selected> </option>
                                             <option value="no">No</option>
                                             <option value="yes">Yes</option>

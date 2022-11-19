@@ -290,7 +290,7 @@ if ($_GET['r'] == 'man') {
                                                     <h4 class="alert-heading">Please Note!</h4>
                                                     <a href="./files/New_Car_Pricing_From_Manufacture.xlsx" download class="btn btn-success float-right">Download Format File</a>
                                                     <p>The following Excel File column sequence should match the image below.</p>
-                                                    <code>"Year" "Model" "Model Code" "MSRP" "Dlr Inv" ...</code>
+                                                    <code>"Year" "Model" "Model Code" "MSRP" "Dlr Inv" "Model Description" "Trim" ...</code>
                                                     <hr>
                                                 </div><button type="button" class="btn btn-text-danger btn-icon alert-dismiss" data-dismiss="alert"><i class="fa fa-times"></i></button>
                                             </div>

@@ -342,6 +342,24 @@
                             </div>
                         </div>
                         <div class="col-md-12">
+                            <label class="col-form-label" for="visible_role_by">Visible By</label>
+                            <div class="form-group">
+                                <!-- <input type="text" class="form-control" id="visible_role_by" name="visible_role_by" > -->
+                                <select class="form-control selectpicker w-auto" multiple="multiple" name="visible_role_by[]" id="visible_role_by" title="Select" data-size="6" data-actions-box="true">
+                                    <?php
+                                    $location = (isset($_SESSION['userLoc']) && $_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+                                    $websiteSql = "SELECT role_id, role_name FROM `role` WHERE location_id = '$location' AND role_status != '2'";
+                                    $websiteData = $connect->query($websiteSql);
+
+                                    while ($row = $websiteData->fetch_array()) {
+                                        echo "<option value='" . $row['role_id'] . "' id='changeRole" . $row['role_id'] . "'>" . $row['role_name'] . "</option>";
+                                    } // /while 
+
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
                             <label class="col-form-label" for="webLink">Link</label>
                             <textarea class="form-control autosize" name="webLink" id="webLink"></textarea>
                         </div>
@@ -467,7 +485,7 @@
                                                     </div>
                                                     <div class="rich-list-content">
                                                         <h4 class="rich-list-title">${notification[3]}</h4>
-                                                        <span class="rich-list-subtitle">${moment(notification[1] + "+07:00", "YYYY-MM-DD HH:mm:ssZ").fromNow()}</span>
+                                                        <span class="rich-list-subtitle">${moment(notification[1] + "+00:00", "YYYY-MM-DD HH:mm:ssZ").fromNow()}</span>
                                                     </div>
                                                     <button class="btn btn-icon text-white rich-list-append" data-action="${notification[5]}" onclick="handle_notification( ${notification[0]} , this )" >
                                                         ${notification[5] == '0' ? '<i class="fa fa-solid fa-envelope"></i>' : '<i class="fa fa-solid fa-envelope-open"></i>'}
@@ -495,12 +513,12 @@
     }
 
     function handle_notification(id, element = null) {
-        if(id){
+        if (id) {
             if (element != null) {
                 event.stopPropagation();
                 event.preventDefault();
             }
-    
+
             let status = element != null ? $(element).data('action') : "";
             let siteLink = localStorage.getItem('siteURL')
             $.ajax({

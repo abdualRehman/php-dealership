@@ -6,7 +6,7 @@ $id = $_POST['id'];
 
 // $sql = "SELECT `id`, `sale_id`, `stock_id`, `appointment_date`, `appointment_time`, `coordinator`, `delivery`, `additional_services`, `notes`, `submitted_by`, `manager_override`, `confirmed`, `complete`, `schedule_start`, `schedule_end`, `calender_id`, `status` FROM `appointments` WHERE id = '$id'";
 $sql = "SELECT appointments.id, `sale_id`, `stock_id`, `appointment_date`, `appointment_time`, `coordinator` , users.username as coordinator_name , users.email as coordinator_email , 
-`delivery`, `additional_services`, `notes`, `submitted_by`, `manager_override`, `confirmed`, `complete`, `schedule_start`, `schedule_end`, `calender_id` , `already_have`
+`delivery`, `additional_services`, `notes`, `submitted_by`, `manager_override`, `confirmed`, `complete`, `schedule_start`, `schedule_end`, `calender_id` , `already_have` , `submitted_by_time`
 FROM `appointments` LEFT JOIN users ON appointments.coordinator = users.id WHERE appointments.id = '$id'";
 $result = $connect->query($sql);
 $output = array();

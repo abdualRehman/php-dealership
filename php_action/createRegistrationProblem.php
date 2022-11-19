@@ -38,9 +38,9 @@ if ($_POST) {
 
         $problem_id = $connect->insert_id;
 
-        $link = $siteurl . '/sales/registrationProblem.php?filter=' . $problem_id;
+        $link = $siteurl . '/index.php?redirect=sales/registrationProblem.php?filter=' . $problem_id;
         $message = "New Registration Problem  for {$customerName} – {$problem},  
-            <a href='{$link}'> here </a>";
+            Click here: {$link}";
         $sms_user = send_sms($salesConsultant, $message);
         if ($sms_user == 'true') {
             $valid['sms_status'] = "SMS Send";

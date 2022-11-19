@@ -26,8 +26,8 @@ $(function () {
     $("#editAvailibilityForm").validate({
         ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
         rules: {
-            offNotes:{
-                required: () => $('#availability').val() == 'See Notes' ? true: false,
+            offNotes: {
+                required: () => $('#availability').val() == 'See Notes' ? true : false,
             },
             smonEnd: {
                 required: () => $('#smonStart').val() ? true : false,
@@ -394,16 +394,8 @@ function writeWebLinks(linksArray) {
             // Array.
             div.innerHTML += `
             <div class="rich-list-item">
-                <div class="rich-list-prepend">
-                    <div class="avatar avatar-label-info">
-                        <div class="avatar-display">
-                            <i class="fa fa-solid fa-paperclip"></i>
-                        </div>
-                    </div>
-                </div>
                 <div class="rich-list-content">
                 <h4 class="rich-list-title"><a href="${element[2]}" target="_blank" >${element[1]}</a></h4>
-                    <span class="rich-list-subtitle text-overflow-ellipsis">${element[2]}</span>
                 </div>
                 ${(element[3] == 'true' ? '<a class="rich-list-append" data-toggle="modal" data-target="#addWebsiteModal" onclick="editWebLink(' + element[0] + ')" ><i class="fa fa-edit"></i></a>' : '')}
                 ${(element[4] == 'true' ? '<a class="rich-list-append" onclick="removeWebLink(' + element[0] + ')" ><i class="fa fa-trash"></i></a>' : '')}
@@ -416,10 +408,18 @@ function writeWebLinks(linksArray) {
 
 function editWebLink(id = null) {
     var obj = linksArray.find((e) => e[0] == id);
+
+    
     if (obj.length > 0) {
+        var visibleBy = obj[5];
+        visibleBy = visibleBy.slice(1, -1);
+        visibleBy = visibleBy.split("_");
         $('#webLinkId').val(obj[0]);
         $('#webName').val(obj[1]);
         $('#webLink').val(obj[2]);
+        $('#visible_role_by').selectpicker('val', visibleBy);
+        $('#visible_role_by').selectpicker('refresh');
+
     } else {
         $('#webLinkId').val("");
         $('#webName').val("");
@@ -520,7 +520,7 @@ function editSchedule(id = null) {
                     $('#availability').val(response.today_availability);
                     $('#offNotes').val(response.off_notes);
                 }
-                
+
                 $('#shceduleId').val(response.id);
 
                 $('#smonStart').val(response.mon_start);

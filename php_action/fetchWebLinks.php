@@ -3,9 +3,9 @@
 require_once 'db/core.php';
 
 $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+$userRole = $_SESSION['userRole'];
 
-
-$sql = "SELECT * FROM `web_links` WHERE status = 1 AND location = '$location' ORDER BY `name` ASC";
+$sql = "SELECT * FROM `web_links` WHERE status = 1 AND location = '$location' ".($userRole != 'Admin'? " AND visible_role LIKE '%_" . $userRole . "_%' " : "" )." ORDER BY `name` ASC";
 $result = $connect->query($sql);
 $output = array('data' => array());
 if ($result->num_rows > 0) {
@@ -16,6 +16,7 @@ if ($result->num_rows > 0) {
         $id = $row['id'];
         $name = $row['name'];
         $link = $row['link'];
+        $visible_role = $row['visible_role'];
 
         $output['data'][] = array(
             $id,
@@ -23,6 +24,7 @@ if ($result->num_rows > 0) {
             $link,
             $editPermission,
             $removePermission,
+            $visible_role,
         );
     } // /while 
 

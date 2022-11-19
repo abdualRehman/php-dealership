@@ -89,6 +89,10 @@
                 margin-bottom: 2px;
             }
         }
+
+        .bootstrap-select.show-tick .dropdown-menu .selected .check-mark {
+            position: inherit !important;
+        }
     </style>
 
 
@@ -561,10 +565,14 @@
                                 <li class="nav-item" id="tablet-menu">
                                     <button class="btn btn-flat-primary btn-icon" data-toggle="aside"><i class="fa fa-bars"></i></button>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/dashboard.php" id="dashboard" class="nav-link active">Dashboard</a>
-                                </li>
                                 <?php
+                                if ($_SESSION['userRole'] != $serviceID) {
+                                ?>
+                                    <li class="nav-item">
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/dashboard.php" id="dashboard" class="nav-link active">Dashboard</a>
+                                    </li>
+                                <?php
+                                }
                                 if (hasAccess("lotWizards", "View") !== 'false') {
                                 ?>
                                     <li class="nav-item">
@@ -693,13 +701,13 @@
                             </ul>
                         </div>
                         <div class="header-wrap header-wrap-block">
-                            <div class="input-group-icon input-group-lg widget15-compact d-none" id="searchBar">
+                            <div class="input-group-icon input-group-lg widget15-compact d-none searchBar" id="searchBar">
                                 <div class="input-group-prepend">
                                     <i class="fa fa-search text-primary"></i>
                                 </div>
                                 <input type="text" class="form-control" name="searchcars" id="searchcars" placeholder="Type to search...">
                             </div>
-                            <div class="input-group-icon input-group-lg widget15-compact" id="statusBar">
+                            <div class="input-group-icon input-group-lg widget15-compact statusBar" id="statusBar">
                                 <h3 class="portlet-title">
                                     <?php
                                     if (hasAccess("sale", "View") !== 'false') {
@@ -861,12 +869,20 @@
                     <div class="header-container container-fluid">
                         <div class="header-wrap"><button class="btn btn-flat-primary btn-icon" data-toggle="aside"><i class="fa fa-bars"></i></button></div>
                         <div class="header-wrap header-wrap-block justify-content-start p-2 text-center d-contents text-overflow-ellipsis">
-                            <!-- <h4 class="header-brand">One Dealers</h4> -->
-                            <h5 class="portlet-title">
+
+                            <div class="d-flex align-items-center flex-wrap justify-content-center searchBar">
+                                <div class="input-group-icon input-group-lg widget15-compact searchBar d-none" style="position: absolute;z-index: 99990!important;max-width:60%!important" id="searchBar">
+                                    <div class="input-group-prepend">
+                                        <i class="fa fa-search text-primary"></i>
+                                    </div>
+                                    <input type="text" class="form-control" name="searchcars" id="searchcars2" placeholder="Type to search...">
+                                </div>
+                            </div>
+                            <h5 class="portlet-title statusBar">
                                 <?php
                                 if (hasAccess("sale", "View") !== 'false') {
                                 ?>
-                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary todaySoldStatus" id="etodaySoldStatus" >
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man&filter=today" class="link-primary todaySoldStatus" id="etodaySoldStatus">
                                     </a>
                                 <?php
                                 }
@@ -938,8 +954,12 @@
                     <div class="header-container container-fluid">
                         <div class="row" style="width:-webkit-fill-available;">
                             <div class="col-9">
-                                <a href="<?php echo $GLOBALS['siteurl']; ?>/dashboard.php" id="dashboard" class="btn btn-flat-primary responsive-content breadcrumb-text">Dashboard</a>
                                 <?php
+                                if ($_SESSION['userRole'] != $serviceID) {
+                                ?>
+                                    <a href="<?php echo $GLOBALS['siteurl']; ?>/dashboard.php" id="dashboard" class="btn btn-flat-primary responsive-content breadcrumb-text">Dashboard</a>
+                                <?php
+                                }
                                 if (hasAccess("lotWizards", "View") !== 'false') {
                                 ?>
                                     <a href="<?php echo $GLOBALS['siteurl']; ?>/wizard/lotwizards.php" id="lotWizars" class="btn btn-flat-primary responsive-content breadcrumb-text">Lot Wizards</a>

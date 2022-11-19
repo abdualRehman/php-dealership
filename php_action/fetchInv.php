@@ -79,6 +79,17 @@ if ($result->num_rows > 0) {
 
 } // if num_rows
 
+$timeSql = "SELECT time FROM `inventory` WHERE status = 1 AND location = '$location' ORDER BY time DESC LIMIT 1";
+
+$result3 = $connect->query($timeSql);
+$row3 = $result3->fetch_assoc();
+$lastImportTime = $row3['time'];
+
+$output['lastImportTime'] = $lastImportTime;
+
+
+
+
 $connect->close();
 
 echo json_encode($output);

@@ -46,7 +46,7 @@ if ($_POST) {
 
 
     $has_appointment = (isset($_POST['ehas_appointment'])) ? mysqli_real_escape_string($connect, $_POST['ehas_appointment']) : "null";
-    $has_appointment = ($has_appointment != "null" && $has_appointment != '') ? "true" : "false";
+    $has_appointment = ($has_appointment != "null" && $has_appointment != '') ? $has_appointment : "false";
 
 
 
@@ -129,9 +129,9 @@ if ($_POST) {
 
                 if ($_SESSION['userRole'] != $deliveryCoordinatorID) {
 
-                    $link = $siteurl . '/more/deliveryCoordinators.php?filter=' . $scheduleId;
-                    $message = "An appointment on {$scheduleStart_formated} has been added by {$sales_consultant}
-                    Click to confirm <a href='{$link}'> here </a>";
+                    $link = $siteurl . '/index.php?redirect=more/deliveryCoordinators.php?filter=' . $scheduleId;
+                    $message = "An appointment on {$scheduleStart_formated} has been updated by {$sales_consultant}
+                    Click to confirm: {$link}";
                     $sms_user = send_sms($coordinator_id, $message);
                     if ($sms_user == 'true') {
                         $valid['sms_status'] = "SMS Send";
@@ -206,9 +206,9 @@ if ($_POST) {
                 $appointment_id = $connect->insert_id;
                 sendNotifiation($from, $to, $message, $appointment_id);
 
-                $link = $siteurl . '/more/deliveryCoordinators.php?filter='.$appointment_id;
+                $link = $siteurl . '/index.php?redirect=more/deliveryCoordinators.php?filter='.$appointment_id;
                 $message = "An appointment on {$scheduleStart_formated} has been added by {$salesConsultantName}
-                        Click to confirm <a href='{$link}'> here </a>";
+                        Click to confirm: {$link}";
                 $sms_user = send_sms($coordinator, $message);
                 if ($sms_user == 'true') {
                     $valid['sms_status'] = "SMS Send";

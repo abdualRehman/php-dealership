@@ -16,8 +16,8 @@ $(function () {
     $('.nav-link').removeClass('active');
     $('#usedCars').addClass('active');
 
-    $('#statusBar').addClass('d-none');
-    $('#searchBar').removeClass('d-none');
+    $('.statusBar').addClass('d-none');
+    $('.searchBar').removeClass('d-none');
 
 
 
@@ -683,7 +683,7 @@ $(function () {
                     manageInvTable.dataSrc(rowGroupSrc);
                     break;
                 case 'atAuction':
-                    setColumVisibility([0, 3, 4, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28, 30]);
+                    setColumVisibility([0, 3, 4, 8, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28, 30]);
                     rowGroupSrc = 23;
                     manageInvTable.rowGroup().enable().draw();
                     manageInvTable.dataSrc(rowGroupSrc);
@@ -851,7 +851,7 @@ function loadSearchData() {
 }
 
 function setSearchTypehead(searhStatusArray) {
-    $('#searchcars').typeahead('destroy');
+    $('#searchcars , #searchcars2').typeahead('destroy');
 
     function substringMatcher(strs) {
         return function findMatches(q, cb) {
@@ -866,7 +866,7 @@ function setSearchTypehead(searhStatusArray) {
             cb(matches);
         };
     };
-    $('#searchcars').typeahead({
+    $('#searchcars , #searchcars2').typeahead({
         hint: true,
         highlight: true,
         minLength: 0,
@@ -885,10 +885,10 @@ function setSearchTypehead(searhStatusArray) {
             },
         })
         .on('typeahead:cursorchanged', function ($e, datum) {
-            $("#searchcars").typeahead('val', datum.stockDetails)
+            $("#searchcars , #searchcars2").typeahead('val', datum.stockDetails)
         })
         .on('typeahead:selected', function ($e, datum) {
-            $("#searchcars").typeahead('val', datum.stockDetails)
+            $("#searchcars , #searchcars2").typeahead('val', datum.stockDetails)
         })
 
     $('.form-control.tt-input').next().addClass('w-inherit');
@@ -1247,6 +1247,7 @@ function editUsedCar(id) {
                 $('#titlePriority').val(response.title_priority ? response.title_priority : "");
                 $('#salesConsultant').val(response.sales_consultant ? response.sales_consultant : "");
                 $('#customerName').val(response.customer ? response.customer : "");
+                $('#salesConsultantName').val(response.salesConsultantName ? response.salesConsultantName : "");
 
 
                 $("#dateSent").datepicker("setDate", response.date_sent ? response.date_sent : "");

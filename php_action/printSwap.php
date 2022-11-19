@@ -5,8 +5,10 @@ require_once 'db/core.php';
 $id = $_POST['id'];
 // $id = 4;
 
-$sql = "SELECT `from_dealer`, `swap_status`, `stock_in`, `vehicle_in`, `color_in`, `inv_received`, `transferred_in`, `vin_in`, `inv_in`, `hb_in`, `msrp_in`, `hdag_in`, `adds_in`, `adds_in_notes`, `hbt_in`, `net_cost_in`, `stock_out`, `vehicle_out`, `color_out`, `inv_sent`, `transferred_out`, `vin_out`, `inv_out`, `hb_out`, `msrp_out`, `hdag_out`, `adds_out`, `adds_out_notes`, `hbt_out`, `net_cost_out`, `notes`, `sales_consultant` , users.username , locations.dealership 
-FROM `swaps` LEFT JOIN locations ON locations.id = swaps.from_dealer LEFT JOIN users ON users.id = swaps.sales_consultant WHERE swaps.id = '$id'";
+// $sql = "SELECT `from_dealer`, `swap_status`, `stock_in`, `vehicle_in`, `color_in`, `inv_received`, `transferred_in`, `vin_in`, `inv_in`, `hb_in`, `msrp_in`, `hdag_in`, `adds_in`, `adds_in_notes`, `hbt_in`, `net_cost_in`, `stock_out`, `vehicle_out`, `color_out`, `inv_sent`, `transferred_out`, `vin_out`, `inv_out`, `hb_out`, `msrp_out`, `hdag_out`, `adds_out`, `adds_out_notes`, `hbt_out`, `net_cost_out`, `notes`, `sales_consultant` , users.username , locations.dealership 
+// FROM `swaps` LEFT JOIN locations ON locations.id = swaps.from_dealer LEFT JOIN users ON users.id = swaps.sales_consultant WHERE swaps.id = '$id'";
+$sql = "SELECT `from_dealer`, `swap_status`, `stock_in`, `vehicle_in`, `color_in`, `inv_received`, `transferred_in`, `vin_in`, `inv_in`, `hb_in`, `msrp_in`, `hdag_in`, `adds_in`, `adds_in_notes`, `hbt_in`, `net_cost_in`, `stock_out`, `vehicle_out`, `color_out`, `inv_sent`, `transferred_out`, `vin_out`, `inv_out`, `hb_out`, `msrp_out`, `hdag_out`, `adds_out`, `adds_out_notes`, `hbt_out`, `net_cost_out`, `notes`, `sales_consultant` , users.username , locations.dealership , inventory.stockno as stock_out_sotckno
+FROM `swaps` LEFT JOIN locations ON locations.id = swaps.from_dealer LEFT JOIN users ON users.id = swaps.sales_consultant LEFT JOIN inventory ON swaps.stock_out = inventory.id WHERE swaps.id = '$id'";
 
 $result = $connect->query($sql);
 $row = $result->fetch_array();
@@ -371,7 +373,7 @@ if ($row) {
                     </div>
                     <div class="d-flex align-items-center m-auto">
                         <label class="form-label" for="certified">Stock Out</label>
-                        <label class="form-control" id="certified"><?php echo $row['stock_out']; ?></label>
+                        <label class="form-control" id="certified"><?php echo $row['stock_out_sotckno']; ?></label>
                     </div>
                     <div class="d-flex align-items-center m-auto">
                         <label class="form-label" for="certified">Invoice Sent</label>

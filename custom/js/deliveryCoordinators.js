@@ -410,6 +410,18 @@ $(function () {
         }, 100);
     })
 
+    $('#additionalServices, #delivery , #eadditionalServices, #edelivery').on('click', function () {
+        const targetId = this.id;
+        const prev = $(`#${targetId} label.active :radio`).val();
+        var current = '';
+        setTimeout(() => {
+            current = $(this).find('label.active').children(' input:radio').val();
+            if (prev == current) {
+                $(`#${targetId} :radio`).prop('checked', false);
+                $(`#${targetId} .active`).removeClass('active');
+            }
+        }, 100);
+    });
 
 
     $("#addNewSchedule").validate({
@@ -790,6 +802,7 @@ $('.handleDateTime').on('change', function () {
             let startTime = element[3][dayname][0];
             let endTime = element[3][dayname][1];
             let scheduledAppointments = element[4];
+            let available_today = element[5];
             if (startTime && endTime) {
                 time = moment(moment(time, ["h:mmA"]).format("HH:mm"), 'hh:mm');
                 startTime = moment(moment(startTime, ["h:mmA"]).format("HH:mm"), 'hh:mm');
@@ -803,7 +816,13 @@ $('.handleDateTime').on('change', function () {
                         let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm');
                         let schedule_end = moment(appointment.schedule_end, 'YYYY-MM-DD hh:mm');
                         if (dateTime.isBetween(schedule_start, schedule_end, null, '[]')) {
-                            allready_appointed = true;
+                            // check today availabilit
+                            var checkTodayDate = moment(moment().format('MM-DD-YYYY')).diff(moment(date).format('MM-DD-YYYY'));
+                            if (checkTodayDate == 0 && available_today == false) {
+                                allready_appointed = false;
+                            } else {
+                                allready_appointed = true;
+                            }
                         }
                     });
                     if (allready_appointed == false) {
@@ -861,7 +880,7 @@ function editShedule(id = null) {
                 echangeStockDetails({ value: response.sale_id }, false);
                 $('#ehas_appointment').val(response.already_have);
 
-                $('#esubmittedBy').val(response.submitted_by);
+                $('#esubmittedBy').val(response.submitted_by + ' - ' + response.submitted_by_time);
                 $('#esubmittedByRole').val(response.submitted_by_role);
                 $('#esubmittedById').val(response.submitted_by_id);
 
@@ -901,10 +920,10 @@ function editShedule(id = null) {
                 if (response.allowDeliveryCoordinator == true) {
                     $('.delivery_coordinator').addClass('disabled-div');
                     $(".delivery_coordinator").find("*").prop("readonly", true);
-                }else {
+                } else {
                     disabledManagerDiv();
                 }
-                
+
 
                 $('#ecoordinator').val(response.coordinator);
                 var checkSelectValue = $('#ecoordinator').val();

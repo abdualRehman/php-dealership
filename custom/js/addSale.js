@@ -481,7 +481,7 @@ function changeRules() {
     if (eleV) {
         let obj = stockArray.find(data => data[0] === eleV);
 
-        console.log("obj", obj);
+        // console.log(obj);
 
         chnageIncentiveStatus(obj[17], obj[18], 'college');
         chnageIncentiveStatus(obj[19], obj[20], 'military');
@@ -490,6 +490,12 @@ function changeRules() {
         chnageIncentiveStatus(obj[25], obj[26], 'misc1');
         chnageIncentiveStatus(obj[27], obj[28], 'misc2');
         chnageIncentiveStatus(obj[29], obj[30], 'leaseLoyalty');
+
+        if (obj[17] != 'N/A' || obj[19] != 'N/A' || obj[21] != 'N/A' || obj[23] != 'N/A' || obj[25] != 'N/A' || obj[27] != 'N/A' || obj[29] != 'N/A') {
+            $('#loadIncentivesDiv').removeClass('hidden');
+        } else {
+            $('#loadIncentivesDiv').addClass('hidden');
+        }
 
         $('.selectpicker').selectpicker('refresh');
         changeSalesPersonTodo();

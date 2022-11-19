@@ -148,7 +148,7 @@ $(function () {
             }
         },
 
-        "order": [[0, "asc"]]
+        "order": [[4, "asc"],[5, "asc"],[0, "asc"]]
     })
 
     writeStatusHTML();
@@ -185,7 +185,7 @@ $(function () {
                 if (searchStatus.indexOf(searchData[9]) !== -1) {
                     return true;
                 }
-            }else{
+            } else {
                 let rowId = searchData[11];
                 if (rowId == filter) {
                     return true;
@@ -555,7 +555,7 @@ function editProblem(probId = null) {
 
                 $('#editProblemForm')[0].reset();
 
-
+                // console.log(response.consultantEdit);
                 $('#problemId').val(response.id);
 
                 var contract_date = moment(response.contract_date).format('MM-DD-YYYY HH:mm');
@@ -570,6 +570,7 @@ function editProblem(probId = null) {
                 $('#evehicle').val(response.vehicle);
                 $('#eproblem').val(response.problem);
                 $('#enotes').val(response.notes);
+                $('#enotes').prop('readonly', response.consultantEdit);
 
                 $('.selectpicker').selectpicker('refresh');
 

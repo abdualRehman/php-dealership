@@ -12,6 +12,13 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
     } else {
         include('includes/footer.php');
     }
+} else if ($_SESSION['userRole'] === $_SESSION['serviceID']) {
+    if (hasAccess("lotWizards", "View") === 'true') {
+        echo "<script type='text/javascript'>window.location.href='{$siteurl}/wizard/lotwizards.php'</script>";
+        exit;
+    } else {
+        include('includes/footer.php');
+    }
 } else if (
     $_SESSION['userRole'] === $_SESSION['bdcManagerID'] ||
     $_SESSION['userRole'] === $_SESSION['bdcSalesID'] ||
@@ -384,7 +391,13 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                         <div class="portlet">
                             <div class="portlet-header portlet-header-bordered">
                                 <h3 class="portlet-title">Monthly Chart</h3>
-                                <!-- <div class="d-flex flex-row " > -->
+                                <input type="hidden" name="uid_graph" id="uid_graph" value="<?php echo ($_SESSION['userRole'] != 'Admin') ? $_SESSION['userId'] : "null"; ?>" />
+                                <div class="form-group m-auto">
+                                    <div class="custom-control custom-control-lg custom-switch btn-lg">
+                                        <input type="checkbox" class="custom-control-input" id="changeView" name="changeView">
+                                        <label class="custom-control-label" for="changeView">&nbsp;</label>
+                                    </div>
+                                </div>
                                 <div class="show d-flex mr-2">
                                     <input type="text" class="form-control" name="date_range" data-attribute="date_range" data-id="1" autocomplete="off" />
                                 </div>
@@ -400,6 +413,20 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                             </div>
                             <div class="portlet-body">
                                 <div id="chart"></div>
+                                <div id="chartTableDiv" class="d-none">
+                                    <table id="chartTable" class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: center!important;" >Rank</th>
+                                                <th style="text-align: center!important;">Sales Consultant</th>
+                                                <th style="text-align: center!important;">Used</th>
+                                                <th style="text-align: center!important;">New</th>
+                                                <th style="text-align: center!important;">Total</th>
+                                                <th id="max_number_row"></th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -407,6 +434,7 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
             <?php
             } else {
                 echo '<div class="d-none" id="chart"></div>';
+                echo '<div class="d-none" id="chartTable"></div>';
             }
             ?>
 

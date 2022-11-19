@@ -15,8 +15,8 @@ var e1 = Swal.mixin({
 $(function () {
     $('.nav-link').removeClass('active');
     $('#lotWizars').addClass('active');
-    $('#statusBar').addClass('d-none');
-    $('#searchBar').removeClass('d-none');
+    $('.statusBar').addClass('d-none');
+    $('.searchBar').removeClass('d-none');
 
     $("#repairSent").datepicker({
         language: 'pt-BR',
@@ -630,6 +630,13 @@ $(function () {
     });
     // manageInvTable.draw();
 
+    let filter = $('#notForService').val();
+    if (filter == "true") {
+        $('#carsToDealersTabs').click();
+    }
+    else {
+        $('#notTouched').click();
+    }
 
     // $select.on('change', function () {
     //     $(this).trigger('blur');
@@ -876,7 +883,7 @@ function loadbodyshops() {
 
 
 function setSearchTypehead(searhStatusArray) {
-    $('#searchcars').typeahead('destroy');
+    $('#searchcars , #searchcars2').typeahead('destroy');
 
     function substringMatcher(strs) {
         return function findMatches(q, cb) {
@@ -891,7 +898,7 @@ function setSearchTypehead(searhStatusArray) {
             cb(matches);
         };
     };
-    $('#searchcars').typeahead({
+    $('#searchcars , #searchcars2').typeahead({
         hint: true,
         highlight: true,
         minLength: 0,
@@ -910,10 +917,10 @@ function setSearchTypehead(searhStatusArray) {
             },
         })
         .on('typeahead:cursorchanged', function ($e, datum) {
-            $("#searchcars").typeahead('val', datum.stockDetails)
+            $("#searchcars , #searchcars2").typeahead('val', datum.stockDetails)
         })
         .on('typeahead:selected', function ($e, datum) {
-            $("#searchcars").typeahead('val', datum.stockDetails)
+            $("#searchcars ,  #searchcars2").typeahead('val', datum.stockDetails)
         })
 
     $('.form-control.tt-input').next().addClass('w-inherit');

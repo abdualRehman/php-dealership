@@ -24,11 +24,8 @@ function smtp_mailer($to, $subject, $msg)
     $mail->IsHTML(true);
     $mail->CharSet = 'UTF-8';
     $mail->Username = $_ENV['from_email'];
-    // $mail->Username = "support@1dealersystem.com";
-    // $mail->Password = 'ioxWTr4zJc';
     $mail->Password = $_ENV['from_password'];
     $mail->SetFrom($_ENV['from_email']);
-    // $mail->SetFrom("support@1dealersystem.com");
     $mail->Subject = $subject;
     $mail->Body = $msg;
     $mail->AddAddress($to);
@@ -91,9 +88,7 @@ function sendEmail($email, $name, $type, $generatePassword = '')
                     <p>This Link is valid only for: <strong>24 hours</strong></p>
                     
                     
-                    <p> <b> Best, <br/>
-                    Roger Dalomba <br/>
-                    President <br/>
+                    <p> <b>Support, <br/>
                     1 Dealer System </b></p>
                 </body> 
             </html>';
@@ -128,9 +123,7 @@ function sendEmail($email, $name, $type, $generatePassword = '')
 
                     <p>Thanks</p>
                     
-                    <p> <b> Best, <br />
-                    Roger Dalomba <br />
-                    President <br />
+                    <p> <b>Support, <br />
                     1 Dealer System </b> </p>
                 </body> 
             </html>';

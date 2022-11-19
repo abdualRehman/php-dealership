@@ -25,6 +25,7 @@ $bdcManagerID = isset($_SESSION['bdcManagerID']) ? $_SESSION['bdcManagerID'] : '
 $ccsID = isset($_SESSION['ccsID']) ? $_SESSION['ccsID'] : '';
 $bdcSalesID = isset($_SESSION['bdcSalesID']) ? $_SESSION['bdcSalesID'] : '';
 $financeManagerID = isset($_SESSION['financeManagerID']) ? $_SESSION['financeManagerID'] : '';
+$serviceID = isset($_SESSION['serviceID']) ? $_SESSION['serviceID'] : '';
 
 // $branchAdmin = '';
 // $bdcManagerID = 60; // sets in the database role 
@@ -99,6 +100,10 @@ function loadDefaultRoles()
 					$_SESSION['branchAdmin'] = $row['role_id'];
 					echo "<script>localStorage.setItem('branchAdmin','" . $row['role_id'] . "');</script>";
 					break;
+				case "Service":
+					$_SESSION['serviceID'] = $row['role_id'];
+					echo "<script>localStorage.setItem('serviceID','" . $row['role_id'] . "');</script>";
+					break;
 				default:
 					break;
 			}
@@ -148,6 +153,6 @@ function sendNotifiation($from , $to , $message , $appointment_id)
 
 // echo hasAccess("swap", "Add");
 
-if (!$_SESSION['userId']) {
+if (!isset($_SESSION['userId'])) {
 	header('location: index.php');
 }
