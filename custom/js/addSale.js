@@ -11,7 +11,7 @@ $(function () {
     loadFinanceManager();
 
     autosize($(".autosize"));
-    var today = new Date();
+    var today = new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}));
     $("#saleDate").datetimepicker({
         todayHighlight: !0,
         autoclose: true,
@@ -19,7 +19,7 @@ $(function () {
         startDate: today,
         language: 'pt-BR',
         format: 'mm-dd-yyyy hh:ii',
-        defaultDate: new Date(),
+        defaultDate: new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'})),
 
         // to disable time picker
         minView: 2,
@@ -34,7 +34,7 @@ $(function () {
         language: 'pt-BR',
         format: 'mm-dd-yyyy',
     });
-    $('#saleDate').datetimepicker('update', new Date());
+    $('#saleDate').datetimepicker('update', new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'})));
 
 
     var e1 = Swal.mixin({

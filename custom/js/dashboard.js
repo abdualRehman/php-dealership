@@ -246,7 +246,7 @@ $(function () {
 
         if (dateType == 'lastMonth') {
 
-            const todayDate = moment(new Date()).format("YYYY-MM-DD");
+            const todayDate = moment(new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}))).format("YYYY-MM-DD");
             const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('YYYY-MM-DD')
             const lastDayOfPrevMonth = moment(todayDate).subtract(1, 'month').endOf('month').format('YYYY-MM-DD')
 
@@ -448,13 +448,13 @@ $(function () {
                 <div class="d-flex justify-items-center flex-column align-items-center m-3">
                     <img src="./assets/used-pending.png" class="m-2" style="max-width:50px;" alt="used-pending" />
                     <label class="form-label h6" for="used-delivered">
-                        User Pending
+                        Used Pending
                     </label>
                 </div>
                 <div class="d-flex justify-items-center flex-column align-items-center m-3">
                     <img src="./assets/used-delivered.png" class="m-2" style="max-width:50px;" alt="used-delivered" />
                     <label class="form-label h6" for="used-delivered">
-                        User Delivered
+                        Used Delivered
                     </label>
                 </div>
                 <div class="d-flex justify-items-center flex-column align-items-center m-3">

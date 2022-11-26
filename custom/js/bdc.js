@@ -282,8 +282,7 @@ $(function () {
     })
 
     writeStatusHTML();
-    // $('#thisMonth').click();
-    $('#searchStatusAll').click();
+    $('#thisMonth').click();
     loadSaleConsultant();
     loadClientCareSpecialist();
     disabledManagerDiv();
@@ -562,7 +561,7 @@ function applyDateRageFilter(startFiterDate = "", endFilterDate = "") {
             }
 
             if (dateType == 'lastMonth') {
-                const todayDate = moment(new Date()).format("MM-DD-YYYY");
+                const todayDate = moment(new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}))).format("MM-DD-YYYY");
                 var date = searchData[1];
                 const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('MM-DD-YYYY')
                 const lastDayOfPrevMonth = moment(todayDate).subtract(1, 'month').endOf('month').format('MM-DD-YYYY')

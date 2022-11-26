@@ -198,10 +198,10 @@ if ($_GET['r'] == 'man') {
                                                             <input type="radio" name="mod" data-texts=""> ALL
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="mod" data-texts="Accord,Accord Hybrid,ACCORD 4DR"> Accord
+                                                            <input type="radio" name="mod" data-texts="Accord,Accord Hybrid,ACCORD 4DR"> ACCORD
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="mod" data-texts="Civic,CIVIC HATCH,CIVIC SEDAN,Civic SI,CIVIC 5DR"> Civic
+                                                            <input type="radio" name="mod" data-texts="Civic,CIVIC HATCH,CIVIC SEDAN,Civic SI,CIVIC 5DR"> CIVIC
                                                         </label>
                                                         <label class="btn btn-outline-primary">
                                                             <input type="radio" name="mod" data-texts="CR-V,CR-V Hybrid,CRV,CLARITY PLUG-IN HYBRID"> CR-V
@@ -216,13 +216,13 @@ if ($_GET['r'] == 'man') {
                                                             <input type="radio" name="mod" data-texts="ODYSSEY"> ODYSSEY
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="mod" data-texts="Passport,Passport  Package,Passport Package"> Passport
+                                                            <input type="radio" name="mod" data-texts="Passport,Passport  Package,Passport Package"> PASSPORT
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="mod" data-texts="Pilot,PILOT"> Pilot
+                                                            <input type="radio" name="mod" data-texts="Pilot,PILOT"> PILOT
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="mod" data-texts="Ridgeline,Ridgeline Packages,RIDGELINE"> Ridgeline
+                                                            <input type="radio" name="mod" data-texts="Ridgeline,Ridgeline Packages,RIDGELINE"> RIDGELINE
                                                         </label>
                                                     </div>
                                                 </div>

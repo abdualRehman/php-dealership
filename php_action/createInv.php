@@ -21,6 +21,9 @@ if ($_POST) {
     $stockType = mysqli_real_escape_string($connect, $_POST['stockType']);
     $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
+    date_default_timezone_set("America/New_York");
+    $timestamp = date("Y-m-d H:i:s");
+
 
     $certified = "off";
     if (isset($_POST['certified'])) {
@@ -55,7 +58,7 @@ if ($_POST) {
             $valid['messages'] = mysqli_error($connect);
         }
     } else {
-        $sql = "INSERT INTO `inventory`(`stockno`, `year`, `make`, `model`, `modelno`, `color`, `lot`, `vin`, `mileage`, `age`, `balance`, `retail`, `certified`, `stocktype`, `wholesale`,  `status` , `location`) 
+        $sql = "INSERT INTO `inventory`(`stockno`, `year`, `make`, `model`, `modelno`, `color`, `lot`, `vin`, `mileage`, `age`, `balance`, `retail`, `certified`, `stocktype`, `wholesale`,  `status` , `location`, `time`) 
         VALUES (
             '$stockno',
             '$year',
@@ -73,7 +76,7 @@ if ($_POST) {
             '$stockType',
             '$wholesale',
             '1',
-            '$location' )";
+            '$location' , '$timestamp' )";
 
         if ($connect->query($sql) === true) {
             $inv_id = $connect->insert_id;

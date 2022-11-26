@@ -275,7 +275,7 @@ $(function () {
 
         if (dateType == 'lastMonth') {
 
-            const todayDate = moment(new Date()).format("YYYY-MM-DD");
+            const todayDate = moment(new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}))).format("YYYY-MM-DD");
             const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('YYYY-MM-DD')
             const lastDayOfPrevMonth = moment(todayDate).subtract(1, 'month').endOf('month').format('YYYY-MM-DD')
 

@@ -37,7 +37,7 @@ $(function () {
         format: 'mm-dd-yyyy',
         todayHighlight: true,
         autoclose: true,
-        endDate: new Date()
+        endDate: new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}))
 
     });
     $("#repairReturn").datepicker({
@@ -45,7 +45,7 @@ $(function () {
         format: 'mm-dd-yyyy',
         todayHighlight: true,
         autoclose: true,
-        endDate: new Date()
+        endDate: new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}))
 
     });
 
@@ -836,6 +836,18 @@ $(function () {
             $("#images").val(null);
         }
     });
+
+    window.onscroll = function () { myFunction() };
+    var header = document.getElementById("makeSticky");
+    // var sticky = header.offsetParent.offsetHeight - header.offsetTop - header.offsetHeight;
+    var sticky = header.offsetHeight;
+    function myFunction() {
+        if (window.pageYOffset > sticky) {
+            header.classList.add("stickyDiv");
+        } else {
+            header.classList.remove("stickyDiv");
+        }
+    }
 
 });
 

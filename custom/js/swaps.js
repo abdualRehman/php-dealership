@@ -81,7 +81,7 @@ $(function () {
 
     // --------------------- checkboxes query --------------------------------------
 
-    $('#modAll').click();
+    $('#pending').click();
     $.fn.dataTable.ext.search.push(
         function (settings, searchData, index, rowData, counter) {
             var tableNode = manageDataTable.table().node();

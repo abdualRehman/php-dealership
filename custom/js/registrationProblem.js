@@ -31,7 +31,7 @@ $(function () {
 
 
     autosize($(".autosize"));
-    var today = new Date();
+    var today = new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}));
     $(".setDate").datetimepicker({
         todayHighlight: !0,
         autoclose: true,
@@ -294,6 +294,8 @@ $(function () {
                             showConfirmButton: !1,
                             timer: 1500
                         })
+                        form[0].reset();
+                        resetForm();
                         manageDataTable.ajax.reload(null, false);
                     } else {
                         e1.fire({
@@ -393,6 +395,16 @@ $(function () {
 
 
 });
+
+function resetForm() {
+    $('.typeahead').val('');
+    $('.typeahead').trigger('change');
+    $('.selectpicker').each(function () {
+        $(this).find('option:first').prop('selected', 'selected');
+        $(".selectpicker").selectpicker("refresh");
+    });
+    $(".tags").empty();
+}
 
 // $('input:checkbox').on('change', function () {
 //     console.log("funcall");

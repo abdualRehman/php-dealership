@@ -16,8 +16,13 @@
     width: 4.4rem;
 }
 
+
 .dropdown-menu .portlet-scroll>.portlet-body {
     max-height: 30rem !important;
+}
+
+.dropdown-menu .portlet-scroll>.portlet-body #webLinksList {
+    max-height: fit-content !important;
 }
 
 .select2-results>.select2-results__options {
@@ -161,6 +166,7 @@
     #tablet-menu {
         display: block
     }
+
     body.aside-desktop-minimized .aside-hover:hover {
         display: none !important;
     }

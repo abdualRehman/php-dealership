@@ -37,7 +37,7 @@ $(function () {
         format: 'mm-dd-yyyy',
         todayHighlight: true,
         autoclose: true,
-        endDate: new Date()
+        endDate: new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}))
 
     });
     $("#repairReturn").datepicker({
@@ -45,7 +45,7 @@ $(function () {
         format: 'mm-dd-yyyy',
         todayHighlight: true,
         autoclose: true,
-        endDate: new Date()
+        endDate: new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}))
 
     });
 

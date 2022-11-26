@@ -723,7 +723,7 @@ $(function () {
                 }
                 $('#inspectionTable').unblock();
                 setPlaceholder();
-            }, 500);
+            }, 700);
         } else if (currentElement == 'fixAge') {
             fetchFixCDKAge();
             $('.inspectionTable').addClass('d-none');
@@ -826,6 +826,21 @@ $(function () {
     }
     else {
         $('#searchAddToSheet').click();
+    }
+
+    $(".disabled-div").find("*").prop("readonly", true);
+
+
+    window.onscroll = function () { myFunction() };
+    var header = document.getElementById("makeSticky");
+    // var sticky = header.offsetParent.offsetHeight - header.offsetTop - header.offsetHeight;
+    var sticky = header.offsetHeight;
+    function myFunction() {
+        if (window.pageYOffset > sticky) {
+            header.classList.add("stickyDiv");
+        } else {
+            header.classList.remove("stickyDiv");
+        }
     }
 
 });
@@ -1214,6 +1229,7 @@ function editUsedCar(id) {
                     var given = moment(response.date_in, "MM-DD-YYYY");
                     var current = moment().startOf('day');
                     age = moment.duration(current.diff(given)).asDays();
+                    age = Math.round(age);
                 }
 
 

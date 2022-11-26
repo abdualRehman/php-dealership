@@ -126,7 +126,7 @@ if ($result->num_rows > 0) {
         // if ($recon == "" || $recon == null || $notes == null || $notes == "" || !$doneEleWheel || !$doneEle || count($arr) == 0) {
         //     $notTouched += 1;
         // }
-        if (($recon == "" || $recon == null) && count($repairArr) == 0 && $invStatus != 2) {
+        if (($recon == "" || $recon == null) && count($repairArr) == 0 && $row[13] != 'on' && $row[12] != 'NEW' && $invStatus != 2) {
             $notTouched += 1;
             $_notTouched = 'Not Touched';
         }

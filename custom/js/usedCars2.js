@@ -807,6 +807,7 @@ function editUsedCar(id) {
                     var given = moment(response.date_in, "MM-DD-YYYY");
                     var current = moment().startOf('day');
                     age = moment.duration(current.diff(given)).asDays();
+                    age = Math.round(age);
                 }
 
 

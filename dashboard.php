@@ -391,7 +391,7 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                         <div class="portlet">
                             <div class="portlet-header portlet-header-bordered">
                                 <h3 class="portlet-title">Monthly Chart</h3>
-                                <input type="hidden" name="uid_graph" id="uid_graph" value="<?php echo ($_SESSION['userRole'] != 'Admin') ? $_SESSION['userId'] : "null"; ?>" />
+                                <input type="hidden" name="uid_graph" id="uid_graph" value="<?php echo ($_SESSION['userRole'] == $salesConsultantID ) ? $_SESSION['userId'] : "null"; ?>" />
                                 <div class="form-group m-auto">
                                     <div class="custom-control custom-control-lg custom-switch btn-lg">
                                         <input type="checkbox" class="custom-control-input" id="changeView" name="changeView">

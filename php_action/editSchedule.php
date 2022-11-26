@@ -65,6 +65,9 @@ if ($_POST) {
 
     $salesConsultantName = $_SESSION['userName'];
 
+    date_default_timezone_set("America/New_York");
+    $timestamp = date("Y-m-d H:i:s");
+
     $already_appointed = false;
     if (!is_null($scheduleId) && $scheduleId != '') {
 
@@ -189,11 +192,11 @@ if ($_POST) {
             $insentiveSql = "INSERT INTO `appointments` ( 
                 `sale_id`, `stock_id`, `appointment_date`, `appointment_time`, 
                 `coordinator`, `delivery`, `additional_services`, `notes`, `submitted_by`, `manager_override`, 
-                `confirmed`, `complete`, `schedule_start`, `schedule_end`, `calender_id`, `status` , `location` , `already_have`
+                `confirmed`, `complete`, `schedule_start`, `schedule_end`, `calender_id`, `status` , `location` , `already_have` , `submitted_by_time`
                 ) VALUES (
                     '$sale_id' , '$stockno' , '$scheduleDate' , '$scheduleTime',
                     '$coordinator' , '$delivery' , '$additionalServices' , '$scheduleNotes' , '$submittedBy' , '$overrideBy',
-                    '$confirmed' , '$complete' , '$scheduleStart' , '$scheduleEnd' , '$calenderId' , 1 , '$location' , '$has_appointment'
+                    '$confirmed' , '$complete' , '$scheduleStart' , '$scheduleEnd' , '$calenderId' , 1 , '$location' , '$has_appointment' , '$timestamp'
                 )";
             if ($connect->query($insentiveSql) === true) {
 

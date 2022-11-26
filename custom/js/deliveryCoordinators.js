@@ -245,7 +245,7 @@ $(function () {
                 const startOfMonth = moment().startOf('month').format('MM-DD-YYYY');
                 const endOfMonth = moment().endOf('month').format('MM-DD-YYYY');
 
-                const todayDate = moment(new Date()).format("MM-DD-YYYY");
+                const todayDate = moment(new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}))).format("MM-DD-YYYY");
                 const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('MM-DD-YYYY')
                 const lastDayOfPrevMonth = moment(todayDate).subtract(1, 'month').endOf('month').format('MM-DD-YYYY')
 
@@ -328,7 +328,7 @@ $(function () {
                 }
                 else if (dateType == 'lastMonth') {
 
-                    const todayDate = moment(new Date()).format("MM-DD-YYYY");
+                    const todayDate = moment(new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}))).format("MM-DD-YYYY");
                     var date = searchData[4];
                     const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('MM-DD-YYYY')
 

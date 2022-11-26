@@ -223,10 +223,12 @@ $(function () {
                     var obj = json.data;
                     var todayCount = 0, yesterdayCount = 0, AllCount = obj.length, currentMonthCount = 0, pendingCount = 0, deliveredCount = 0, cancelledCount = 0, notDoneCount = 0;
 
-                    var date = new Date();
+                    var date = new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}));
+                    console.log(date);
                     var today = moment(date).format("MMM-DD-YYYY");
+                    // console.log(date , today);
 
-                    var date2 = moment(new Date(), "MMM-DD-YYYY").subtract(1, 'days');
+                    var date2 = moment(new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'})), "MMM-DD-YYYY").subtract(1, 'days');
                     var yesterday = moment(date2).format("MMM-DD-YYYY")
 
                     const startOfMonth = moment().startOf('month').format('MMM-DD-YYYY');
@@ -354,14 +356,14 @@ $(function () {
                 if (dateType == 'all') {
                     return true;
                 } else if (dateType == 'today') {
-                    var date2 = new Date();
+                    var date2 = new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}));
                     var today = moment(date2).format("MMM-DD-YYYY");
                     if (today === rowData[20]) {  // here rowData[20] is sold date only
                         return true;
                     }
 
                 } else if (dateType == 'yesterday') {
-                    var date2 = moment(new Date(), "MMM-DD-YYYY").subtract(1, 'days');
+                    var date2 = moment(new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'})), "MMM-DD-YYYY").subtract(1, 'days');
                     var yesterday = moment(date2).format("MMM-DD-YYYY")
                     if (yesterday === rowData[20]) {
                         return true;

@@ -196,7 +196,7 @@ function showDetails(id = null) {
                 var c_status = false;
                 var r_status = false;
 
-                var now = moment(new Date()); //todays date
+                var now = moment(new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}))); //todays date
                 var end = moment(response['f_expire']); // another date 
                 var duration = moment.duration(end.diff(now));
                 var days = duration.asDays();

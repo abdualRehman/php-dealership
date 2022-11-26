@@ -18,7 +18,7 @@ if ($userRole != $salesConsultantID) {
     // WHERE sales.status = 1 ORDER BY sales.date ASC";
     $sql = "SELECT sales.date , sales.reconcileDate , sales.sales_consultant as consultant_id , users.username as sales_consultant , sales.sale_status, sales.sale_id, inventory.stocktype , sales.gross 
     FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant 
-    WHERE sales.status = 1 AND sales.location = '$location' AND inventory.stocktype !='OTHER' ORDER BY users.username ASC, sales.reconcileDate ASC";
+    WHERE sales.status = 1 AND sales.location = '$location' AND inventory.stocktype !='OTHER'  ORDER BY users.username ASC, sales.reconcileDate ASC";
 
     $sql2 = "SELECT 
         ( SELECT COUNT(registration_problems.id) FROM registration_problems WHERE registration_problems.status = 1 AND registration_problems.location = '$location' AND registration_problems.p_status = 1 ) as problem ,
@@ -82,7 +82,7 @@ if ($result->num_rows > 0) {
 
         $consultant_id = $row['consultant_id'];
         $TodayDate = date("Y-m-d");
-        // $TodayDate = "2022-08-01";
+        // $TodayDate = "2022-11-26";
         // $timezone = $row['date'];
         // $timezone = $row['reconcileDate'];
         $soldDate = $row['reconcileDate'] != '' ? $row['reconcileDate'] : $row['date'];
@@ -94,7 +94,7 @@ if ($result->num_rows > 0) {
         $last_date = date('Y-m-d', strtotime('last day of this month'));
 
         if (($userRole == $salesConsultantID)) {
-            if ($user_id == $consultant_id && ($timezone >= $first_date) && ($timezone <= $last_date)) {
+            if (($user_id == $consultant_id) && ($timezone >= $first_date) && ($timezone <= $last_date)) {
                 // $monthAllCount += 1;
                 if ($row['stocktype'] == 'NEW') {
                     $monthNewCount += 1;
@@ -148,7 +148,7 @@ if ($result->num_rows > 0) {
             if (!key_exists($consultant_id, $outputArray)) {
                 $outputArray[$consultant_id] = array(
                     'id' => $consultant_id,
-                    'name' => $sales_consultant,
+                    'name' => ($sales_consultant) ? $sales_consultant : "Unknown",
                     'data' => array(),
                 );
             }
@@ -194,7 +194,8 @@ if ($result->num_rows > 0) {
 
 
         if (($userRole == $salesConsultantID)) {
-            if($user_id == $consultant_id ){
+            if ($user_id == $consultant_id) {
+
                 if ($timezoneSoldDate == $TodayDate) {
                     if ($row['stocktype'] == 'NEW') {
                         $todayN += $gross;
@@ -209,6 +210,7 @@ if ($result->num_rows > 0) {
                         $todayTCount += 1;
                     }
                 }
+                // echo $TodayDate . ' - '. $row['stocktype'] . '<br />';
                 if ($row['sale_status'] == 'pending' && $row['stocktype'] == 'USED') {
                     $penu += 1;
                     $pent += 1;

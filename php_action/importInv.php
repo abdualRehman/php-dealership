@@ -11,6 +11,9 @@ $valid['success'] = array('success' => false, 'messages' => array(), 'erorStock'
 
 if ($_POST) {
 
+    date_default_timezone_set("America/New_York");
+    $timestamp = date("Y-m-d H:i:s");
+
     // $allowedFileType = ['application/vnd.ms-excel', 'text/xls', 'text/xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' , '.Csv'];
     $allowedFileType = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 
@@ -178,7 +181,7 @@ if ($_POST) {
                         } else {
 
 
-                            $sql = "INSERT INTO `inventory`(`stockno`, `year`, `make`, `model`, `modelno`, `color`, `lot`, `vin`, `mileage`, `age`, `balance`, `retail`, `certified`, `stocktype`, `wholesale`,  `status` , `location`) 
+                            $sql = "INSERT INTO `inventory`(`stockno`, `year`, `make`, `model`, `modelno`, `color`, `lot`, `vin`, `mileage`, `age`, `balance`, `retail`, `certified`, `stocktype`, `wholesale`,  `status` , `location` , `time`) 
                             VALUES (
                                 '$stockno',
                                 '$year',
@@ -196,7 +199,7 @@ if ($_POST) {
                                 '$stockType',
                                 '$wholesale',
                                 '1' ,
-                                '$location' )";
+                                '$location' , '$timestamp' )";
 
                             if ($connect->query($sql) === true) {
                                 $valid['success'] = true;
