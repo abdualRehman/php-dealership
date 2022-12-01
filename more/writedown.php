@@ -238,6 +238,29 @@ echo '<input type="hidden" name="loggedInUserRole" id="loggedInUserRole" value="
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="row align-items-baseline">
+                                    <label for="retail_status" class="col-sm-2 col-form-label">Retail Status</label>
+                                    <div class="form-group col-sm-10">
+                                        <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="retail_status">
+                                            <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                                <input type="radio" name="retail_status" value="retail" id="retail">
+                                                Retail
+                                            </label>
+                                            <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                                <input type="radio" name="retail_status" value="wholesale" id="wholesale">
+                                                Wholesale
+                                            </label>
+                                            <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                                <input type="radio" name="retail_status" value="sold" id="sold">
+                                                Sold
+                                            </label>
+                                            <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                                <input type="radio" name="retail_status" value="rintercompany" id="rintercompany">
+                                                Intercompany
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row align-items-baseline">
                                     <label for="stockno" class="col-sm-2 col-form-label">Stock no. Vin</label>
                                     <div class="form-group col-sm-10">
                                         <input type="text" class="form-control" name="stockno" id="stockno" readonly autocomplete="off" autofill="off" />

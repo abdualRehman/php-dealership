@@ -72,7 +72,7 @@ $(function () {
                 targets: [1, 2, 3],
             },
             {
-                targets: [0, 9],
+                targets: [0, 8],
                 visible: false,
             },
             {
@@ -123,7 +123,7 @@ $(function () {
 
         rowGroup: {
             enable: true,
-            dataSrc: 9,
+            dataSrc: 8,
             startRender: function (rows, group) {
                 var collapsed = !!collapsedGroups[group];
 
@@ -157,7 +157,7 @@ $(function () {
         //         "onclick": "editDetails(" + data[0] + ")"
         //     });
         // },
-        "order": [[9, "asc"], [1, "desc"]],
+        "order": [[8, "asc"], [1, "desc"]],
 
     });
 
@@ -170,7 +170,7 @@ $(function () {
     $.fn.dataTable.ext.search.push(
         function (settings, searchData, index) {
             var tableNode = manageBillsTable.table().node();
-            var repairPaid = searchData[8];
+            var repairPaid = searchData[7];
             var searchStatus = $('input:radio[name="searchStatus"]:checked').map(function () {
                 if (this.value !== "") {
                     return this.value;
@@ -331,17 +331,16 @@ function setInputChange() {
                 let attribute = $(this).data('attribute');
                 let value = $(this).val();
 
-                let repair_date_ele = $('input[data-id="' + id + '"][data-attribute="repair_paid_date"]');
-                var repair_date_ele_v = repair_date_ele.val();
-                var repair_date_ele_attr = "repair_paid_date";
-
-                if (repair_date_ele_v != '' && value == '') {
-                    $(this).addClass('is-invalid');
-                    return false;
-                } else {
-                    $(this).removeClass('is-invalid');
-                    updateFieldsUsedCars({ id: [id, id], attribute: [attribute, repair_date_ele_attr], value: [value, repair_date_ele_v] });
-                }
+                // let repair_date_ele = $('input[data-id="' + id + '"][data-attribute="repair_paid_date"]');
+                // var repair_date_ele_v = repair_date_ele.val();
+                // var repair_date_ele_attr = "repair_paid_date";
+                // if (repair_date_ele_v != '' && value == '') {
+                //     $(this).addClass('is-invalid');
+                //     return false;
+                // } else {
+                //     $(this).removeClass('is-invalid');
+                // }
+                updateFieldsUsedCars({ id: [id], attribute: [attribute], value: [value] });
             }
         });
     }

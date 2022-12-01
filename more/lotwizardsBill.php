@@ -115,7 +115,7 @@ if (hasAccess("wizardsBill", "Edit") === 'false') {
                                     <th>Repair Sent</th>
                                     <th>Repair Returned</th>
                                     <th>Repair Paid($)</th>
-                                    <th>Repair Paid(date)</th>
+                                    <!-- <th>Repair Paid(date)</th> -->
                                     <th>Bodyshop</th>
                                     <!-- <th>Action</th> -->
                                 </tr>

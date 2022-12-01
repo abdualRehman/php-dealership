@@ -37,7 +37,7 @@ $(function () {
         format: 'mm-dd-yyyy',
         todayHighlight: true,
         autoclose: true,
-        endDate: new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}))
+        endDate: new Date(new Date().toLocaleString('en', { timeZone: 'America/New_York' }))
 
     });
     $("#repairReturn").datepicker({
@@ -45,7 +45,7 @@ $(function () {
         format: 'mm-dd-yyyy',
         todayHighlight: true,
         autoclose: true,
-        endDate: new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}))
+        endDate: new Date(new Date().toLocaleString('en', { timeZone: 'America/New_York' }))
 
     });
 
@@ -400,6 +400,8 @@ $(function () {
                 var balance = rowData[17];
                 var recon = rowData[1];
                 var notes = rowData[3];
+                var stockType = rowData[20];
+                var wholesale = rowData[21];
 
                 var windshield = rowData[6];
                 var arr = windshield ? (windshield.trim()).split('__') : [];
@@ -423,7 +425,11 @@ $(function () {
                 //     return true;
                 // }
 
-                if ((recon == "" || recon == null) && repairArr.length == 0 && invStatus != 2) {
+                // working 1.2
+                // if ((recon == "" || recon == null) && repairArr.length == 0 && invStatus != 2) {
+                //     return true;
+                // }
+                if ((recon == "" || recon == null) && repairArr.length == 0 && stockType != 'NEW' && invStatus != 2) {
                     return true;
                 }
             }
@@ -1334,7 +1340,7 @@ function clearErrorsList() {
 
 $('#repairReturn').on('change', function () {
     $('#resend').prop('disabled', $(this).val() != '' ? false : true);
-    $('#resend').prop('checked', $(this).val() == '' ? false : null)
+    // $('#resend').prop('checked', $(this).val() == '' ? false : null)
 })
 
 
@@ -1346,7 +1352,7 @@ $('#resend').on('change', function () {
         // console.log(obj);
         var arr = obj.repairs ? (obj.repairs.trim()).split('__') : [];
         arr.pop(); arr.shift();
-        var detailsDiv = `History  Sent ${obj.repair_sent}     Returned ${obj.repair_returned} \nRepairs: ${arr.map(element => element).join(' , ')} \nBodyshop: ${obj.bodyshop_log} \nPaid: ${obj.repair_paid}`;
+        var detailsDiv = `History  Sent ${obj.repair_sent}     Returned ${obj.repair_returned} \nRepairs: ${arr.map(element => element).join(' , ')} \nBodyshop: ${obj.bodyshop_name} \nPaid: ${obj.repair_paid}`;
         $('#resendDetails').html(detailsDiv);
 
 
@@ -1378,6 +1384,10 @@ $('#resend').on('change', function () {
         setTimeout(() => {
             autosize.update($(".autosize"));
             $('.slick-2').slick('refresh');
+
+            // $('#resend').prop('disabled', false);
+            $('#resend').prop('checked', true);
+
         }, 500);
         $('.selectpicker').selectpicker('refresh');
     } else {
@@ -1533,16 +1543,27 @@ function editInspection(id) {
 
                 $('#resend').prop('checked', response.resend == "true" ? true : false);
 
-                if (response.resend == "true") {
+                $('#resendDetails').html("");
+                if (response.repair_sent_log != '' || response.repair_returned_log != '' || response.bodyshop_log != '' || response.repair_paid_log != '') {
                     $('#resendDetailsDiv').removeClass('d-none');
-                    var arr = response.repairs ? (response.repairs.trim()).split('__') : [];
+                    var arr = response.repairs_log ? (response.repairs_log.trim()).split('__') : [];
                     arr.pop(); arr.shift();
-                    var detailsDiv = `History  Sent ${response.repair_sent}     Returned ${response.repair_returned} \nRepairs: ${arr.map(element => element).join(' , ')} \nBodyshop: ${response.bodyshop_log} \nPaid: ${response.repair_paid}`;
+                    var detailsDiv = `History  Sent ${response.repair_sent_log}     Returned ${response.repair_returned_log} \nRepairs: ${arr.map(element => element).join(' , ')} \nBodyshop: ${response.bodyshop_log} \nPaid: ${response.repair_paid_log}`;
                     $('#resendDetails').html(detailsDiv);
                 } else {
                     $('#resendDetailsDiv').addClass('d-none');
-                    $('#resendDetails').html("");
                 }
+
+                // if (response.resend == "true") {
+                //     $('#resendDetailsDiv').removeClass('d-none');
+                //     var arr = response.repairs ? (response.repairs.trim()).split('__') : [];
+                //     arr.pop(); arr.shift();
+                //     var detailsDiv = `History  Sent ${response.repair_sent}     Returned ${response.repair_returned} \nRepairs: ${arr.map(element => element).join(' , ')} \nBodyshop: ${response.bodyshop_log} \nPaid: ${response.repair_paid}`;
+                //     $('#resendDetails').html(detailsDiv);
+                // } else {
+                //     $('#resendDetailsDiv').addClass('d-none');
+                //     $('#resendDetails').html("");
+                // }
 
 
 

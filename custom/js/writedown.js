@@ -121,7 +121,7 @@ $(function () {
             if (json) {
                 // var obj = json.data;
                 var counterObj = json.totalNumber;
-                console.log(counterObj);
+                // console.log(counterObj);
 
 
                 $('.counterDiv').each(function (index, element) {
@@ -156,8 +156,8 @@ $(function () {
         "order": [[16, "asc"], [7, "desc"]]
     });
 
-     // Collapse Groups
-     $('#datatable-1 tbody').on('click', 'tr.dtrg-start', function () {
+    // Collapse Groups
+    $('#datatable-1 tbody').on('click', 'tr.dtrg-start', function () {
         var name = $(this).data('name');
         collapsedGroups[name] = !collapsedGroups[name];
         manageWritedownTable.draw(false);
@@ -199,7 +199,10 @@ $(function () {
             var value = $('#mmr').val();
             var attribute = "mmr";
 
-            updateFieldsUsedCars({ id, attribute, value });
+            var retail_status_v = $('#retail_status input:checked').val();
+            var repair_ele_attr = "retail_status";
+
+            updateFieldsUsedCars({ id: [id, id], attribute: [attribute, repair_ele_attr], value: [value, retail_status_v] });
 
             $('#modal8').modal('hide');
 
@@ -220,7 +223,7 @@ function setInputChange() {
                 let id = $(this).data('id');
                 let attribute = $(this).data('attribute');
                 let value = $(this).val();
-                updateFieldsUsedCars({ id, attribute, value });
+                updateFieldsUsedCars({ id: [id], attribute: [attribute], value: [value] });
             }
         });
     }
@@ -275,6 +278,9 @@ function editWritedown(writedownId = null) {
 
                 $('#editWritedownForm')[0].reset();
 
+                $('#retail_status :radio[name="retail_status"]').prop('checked', false);
+                $('#retail_status .active').removeClass('active');
+                (response.retail_status) ? $('#' + response.retail_status).prop('checked', true).click() : null;
 
                 $('#writedownId').val(response.Inv_id);
                 $('#stockno').val(response.stockno + " || " + response.vin);

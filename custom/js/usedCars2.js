@@ -699,7 +699,7 @@ function setInputChange() {
                 let id = $(this).data('id');
                 let attribute = $(this).data('attribute');
                 let value = $(this).val();
-                updateFieldsUsedCars({ id, attribute, value });
+                updateFieldsUsedCars({ id:[id], attribute:[attribute], value:[value] });
             }
         });
     }
@@ -726,14 +726,14 @@ function setfun() {
         let id = $(this).data('id');
         let attribute = $(this).data('attribute');
         let value = "";
-        updateFieldsUsedCars({ id, attribute, value });
+        updateFieldsUsedCars({ id:[id], attribute:[attribute], value:[value] });
     });
     $('input[name="date_in_table"]').on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('MM-DD-YYYY'));
         let id = $(this).data('id');
         let attribute = $(this).data('attribute');
         let value = picker.startDate.format('MM-DD-YYYY');
-        updateFieldsUsedCars({ id, attribute, value });
+        updateFieldsUsedCars({ id:[id], attribute:[attribute], value:[value] });
     });
 }
 function handletitleCheckbox(e) {
@@ -743,7 +743,7 @@ function handletitleCheckbox(e) {
     if ($(e).is(':checked')) {
         value = "true";
     }
-    updateFieldsUsedCars({ id, attribute, value });
+    updateFieldsUsedCars({ id:[id], attribute:[attribute], value:[value] });
 }
 
 

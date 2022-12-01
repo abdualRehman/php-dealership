@@ -523,6 +523,8 @@ function editSchedule(id = null) {
 
                 $('#shceduleId').val(response.id);
 
+                $('#availabilityUserName').val(response.username);
+
                 $('#smonStart').val(response.mon_start);
                 $('#smonEnd').val(response.mon_end);
                 $('#stueStart').val(response.tue_start);

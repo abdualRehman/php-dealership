@@ -184,10 +184,14 @@
                                         <option value="See Notes">See Notes</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
                                 <label class="col-form-label" for="offNotes">Off BDC Notes</label>
                                 <textarea class="form-control autosize" name="offNotes" id="offNotes"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="col-form-label" for="availabilityUserName">User Name</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="availabilityUserName" id="availabilityUserName" disabled />
+                                </div>
                             </div>
                         </div>
                         <div class="row mt-5 mb-5" style="overflow:auto;">
