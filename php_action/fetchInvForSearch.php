@@ -12,7 +12,7 @@ $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
 $sql = "SELECT inventory.id, inventory.stockno, inventory.year, inventory.make, inventory.model, inventory.modelno, inventory.color, 
 inventory.lot, inventory.vin, inventory.mileage, inventory.age, inventory.balance, inventory.retail, inventory.certified, inventory.stocktype, 
-inventory.wholesale, inventory.status FROM inventory WHERE inventory.status = 1 AND inventory.location = '$location' AND inventory.stocktype = " . ($type == "true" ? "inventory.stocktype" : "'$type'") . " ORDER BY inventory.stockno DESC";
+inventory.wholesale, inventory.status FROM inventory WHERE inventory.status != 2 AND inventory.location = '$location' AND inventory.stocktype = " . ($type == "true" ? "inventory.stocktype" : "'$type'") . " ORDER BY inventory.stockno DESC";
 
 
 $result = $connect->query($sql);

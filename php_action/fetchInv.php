@@ -2,7 +2,7 @@
 
 require_once 'db/core.php';
 $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
-$sql = "SELECT `id`, `stockno`, `year`, `make`, `model`, `modelno`, `color`, `lot`, `vin`, `mileage`, `age`, `balance`, `retail`, `certified`, `stocktype`, `wholesale`, `status` FROM `inventory` WHERE status = 1 AND location = '$location'";
+$sql = "SELECT `id`, `stockno`, `year`, `make`, `model`, `modelno`, `color`, `lot`, `vin`, `mileage`, `age`, `balance`, `retail`, `certified`, `stocktype`, `wholesale`, `status` FROM `inventory` WHERE status != 2 AND location = '$location'";
 $result = $connect->query($sql);
 
 $output = array('data' => array());
@@ -31,7 +31,7 @@ if ($result->num_rows > 0) {
                         </div>
                         <span class="dropdown-content">Edit</span>
                     </a>' : "") .
-            ((hasAccess("inventory", "Remove") !== 'false') ? '<button class="dropdown-item" onclick="removeInv(' . $id . ')" >
+            ((hasAccess("inventory", "Remove") !== 'false' && $row['status'] == 1) ? '<button class="dropdown-item" onclick="removeInv(' . $id . ')" >
                         <div class="dropdown-icon">
                             <i class="fa fa-trash"></i>
                         </div>

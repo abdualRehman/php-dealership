@@ -26,6 +26,7 @@ function validating($phone)
 
 function send_sms($uid, $message)
 {
+    // return "False";
     global $connect;
     $sql1 = "SELECT * FROM `users` WHERE id = '$uid'";
     $result1 = $connect->query($sql1);

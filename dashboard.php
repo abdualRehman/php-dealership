@@ -391,12 +391,25 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                         <div class="portlet">
                             <div class="portlet-header portlet-header-bordered">
                                 <h3 class="portlet-title">Monthly Chart</h3>
-                                <input type="hidden" name="uid_graph" id="uid_graph" value="<?php echo ($_SESSION['userRole'] == $salesConsultantID ) ? $_SESSION['userId'] : "null"; ?>" />
+                                <input type="hidden" name="uid_graph" id="uid_graph" value="<?php echo ($_SESSION['userRole'] == $salesConsultantID) ? $_SESSION['userId'] : "null"; ?>" />
                                 <div class="form-group m-auto">
                                     <div class="custom-control custom-control-lg custom-switch btn-lg">
                                         <input type="checkbox" class="custom-control-input" id="changeView" name="changeView">
                                         <label class="custom-control-label" for="changeView">&nbsp;</label>
                                     </div>
+                                </div>
+                                <div class="d-flex" >
+                                    <div class="custom-control custom-control-lg custom-checkbox mr-3">
+                                        <input type="checkbox" class="custom-control-input" id="activeUserGraph" checked />
+                                        <label class="custom-control-label" for="activeUserGraph">
+                                            Active</label>
+                                    </div>
+                                    <div class="custom-control custom-control-lg custom-checkbox mr-3">
+                                        <input type="checkbox" class="custom-control-input" id="inActiveUserGraph">
+                                        <label class="custom-control-label" for="inActiveUserGraph">
+                                            In Active</label>
+                                    </div>
+
                                 </div>
                                 <div class="show d-flex mr-2">
                                     <input type="text" class="form-control" name="date_range" data-attribute="date_range" data-id="1" autocomplete="off" />
@@ -417,7 +430,7 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                                     <table id="chartTable" class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th style="text-align: center!important;" >Rank</th>
+                                                <th style="text-align: center!important;">Rank</th>
                                                 <th style="text-align: center!important;">Sales Consultant</th>
                                                 <th style="text-align: center!important;">Used</th>
                                                 <th style="text-align: center!important;">New</th>

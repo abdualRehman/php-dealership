@@ -74,7 +74,6 @@ $(function () {
     function comparision(name, date) {
         // if(name != 'Yes' && name != 'No'){
         if (name.startsWith("Yes/Approved by")) {
-            // console.log(name);
             if (date == "") {
                 return false;
             } else {
@@ -139,9 +138,9 @@ $(function () {
             changePillCSS(row, data, 12, 5);
             changePillCSS(row, data, 13, 6);
             changePillCSS(row, data, 14, 7);
-            changePillCSS(row, data, 17, 8);
-            changePillCSS(row, data, 15, 9);
-            changePillCSS(row, data, 16, 10);
+            changePillCSS(row, data, 15, 8);
+            changePillCSS(row, data, 16, 9);
+            changePillCSS(row, data, 17, 10);
             $(row).attr({
                 "data-toggle": "modal",
                 "data-target": "#editDetails",
@@ -227,6 +226,17 @@ $(function () {
                     ) {
                         return true;
                     }
+                    // if (
+                    //     comparision(data[4], data[11]) !== true ||
+                    //     comparision(data[5], data[12]) !== true ||
+                    //     comparision(data[6], data[13]) !== true ||
+                    //     comparision(data[7], data[14]) !== true ||
+                    //     comparision(data[8], data[15]) !== true ||
+                    //     comparision(data[9], data[16]) !== true ||
+                    //     comparision(data[10], data[17]) !== true
+                    // ) {
+                    //     return true;
+                    // }
                 }
                 return false;
             }
@@ -302,7 +312,6 @@ $(function () {
                         })
 
                         manageSoldLogsTable.ajax.reload();
-                        manageSoldLogsTable.ajax.reload(null, false);
                         manageSoldLogsTable.searchPanes.rebuildPane();
                         $('#editSoldTodoForm').unblock();
                         $('#editDetails').modal('hide');
@@ -489,6 +498,7 @@ function editDetails(id = null) {
 
                 $('#customerName').val(response.fname + ' ' + response.lname);
                 $('#stockNo').val(response.stockno);
+                $('#salesConsultant').val(response.sale_consultant);
                 $('#vehicle').val(`${response.stocktype} ${response.year} ${response.make} ${response.model}`);
                 $('#state').val(response.state);
                 $('#vin').val(response.vin);

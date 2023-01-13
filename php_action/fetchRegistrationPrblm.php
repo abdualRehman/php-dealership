@@ -57,13 +57,17 @@ if ($result->num_rows > 0) {
         // . (($row[10] == '1') ? 'checked="checked"' : '')
 
 
-        $contract_date = DateTime::createFromFormat('Y-m-d H:i', $row[1]);
-        $contract_date = $contract_date->format('M-d-Y');
+        $contract_date = "";
+        if ($row[1] != "") {
+            $contract_date = DateTime::createFromFormat('Y-m-d H:i', $row[1]);
+            $contract_date = $contract_date->format('m-d-Y');
+        }
 
-        $problem_date = DateTime::createFromFormat('Y-m-d H:i', $row[2]);
-        $problem_date = $problem_date->format('M-d-Y');
-
-        // echo $problem_date . '<br />';
+        $problem_date = "";
+        if ($row[2] != "") {
+            $problem_date = DateTime::createFromFormat('Y-m-d H:i', $row[2]);
+            $problem_date = $problem_date->format('m-d-Y');
+        }
 
         $button = '
             <div class="show d-flex" >' .
@@ -75,7 +79,7 @@ if ($result->num_rows > 0) {
             //     </button>' : "") .
             (hasAccess("regp", "Remove") !== 'false' ? '
              <div class="custom-control custom-control-lg custom-checkbox">
-            <input type="checkbox" name="' . $id . 'checkbox" class="custom-control-input editCheckbox" id="' . $id . '" ' . (($row[10] == '1') ?'': 'checked="checked"') . ' >
+            <input type="checkbox" name="' . $id . 'checkbox" class="custom-control-input editCheckbox" id="' . $id . '" ' . (($row[10] == '1') ? '' : 'checked="checked"') . ' >
             <label class="custom-control-label" for="' . $id . '"></label> 
         </div>' : "") .
 

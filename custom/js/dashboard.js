@@ -26,7 +26,7 @@ function x(n) {
     return n
 }
 $(function () {
-    var graphData = [] , tableData = [];
+    var graphData = [], tableData = [];
     var usedArray = [], usedTArray = [];
     var newArray = [], newTArray = [];
     var userArray = [], userTArray = [];
@@ -153,10 +153,10 @@ $(function () {
             type: "GET",
             dataType: 'json',
             success: function (response) {
-                dataArray = response.data;    
+                dataArray = response.data;
                 var graphArray = response.graph;
                 const uid = $('#uid_graph').val();
-                if(uid != "null"){
+                if (uid != "null") {
                     graphArray = graphArray.filter((e) => e.id == uid);
                 }
                 graphData = graphArray;
@@ -246,7 +246,7 @@ $(function () {
 
         if (dateType == 'lastMonth') {
 
-            const todayDate = moment(new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}))).format("YYYY-MM-DD");
+            const todayDate = moment(new Date(new Date().toLocaleString('en', { timeZone: 'America/New_York' }))).format("YYYY-MM-DD");
             const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('YYYY-MM-DD')
             const lastDayOfPrevMonth = moment(todayDate).subtract(1, 'month').endOf('month').format('YYYY-MM-DD')
 
@@ -269,68 +269,109 @@ $(function () {
         }
     });
 
+    // $('#activeUserGraph , #inActiveUserGraph').on('change', function () {
+    //     let ActiveUsers = $('#activeUserGraph').is(':checked');
+    //     let InactiveUsers = $('#inActiveUserGraph').is(':checked');
+    //     console.log(ActiveUsers, InactiveUsers);
+    //     // drawTable();
+    // });
 
-    $('input[name="changeView"]:checkbox').on('change', function () {
-        const checked = $(this).is(':checked');
-        if (checked) {
-            $('#chart').addClass('d-none');
-            $('#chartTableDiv').removeClass('d-none');
-        } else {
-            $('#chart').removeClass('d-none');
-            $('#chartTableDiv').addClass('d-none');
+
+    $('input[name="changeView"]:checkbox , #activeUserGraph , #inActiveUserGraph').on('change', function () {
+
+        $('#chart , #chartTable').block();
+        const completePromise = new Promise((resolve, reject) => {
+            const checked = $('input[name="changeView"]').is(':checked');
+            if (checked) {
+                $('#chart').addClass('d-none');
+                $('#chartTableDiv').removeClass('d-none');
+            } else {
+                $('#chart').removeClass('d-none');
+                $('#chartTableDiv').addClass('d-none');
+            }
+            $('input[name="date_range"]').val('');
+            $('input:radio[name="searchStatus"]').attr('checked', false);
+            $('#searchStatus .active').removeClass('active');
+            $('#thisMonth').click();
+            setTimeout(() => {
+                manageChartTableTable?.columns.adjust();
+            }, 500);
+            resolve(true);
+        });
+        if (completePromise) {
+            $('#chart , #chartTable').unblock();
         }
-        $('input[name="date_range"]').val('');
-        $('input:radio[name="searchStatus"]').attr('checked', false);
-        $('#searchStatus .active').removeClass('active');
-        $('#thisMonth').click();
-        setTimeout(() => {
-            manageChartTableTable.columns.adjust();
-        }, 500);
+
     });
 
+    function checkUserStatus(status) {
+        var activeUserGraph = $('#activeUserGraph').is(':checked');
+        var inActiveUserGraph = $('#inActiveUserGraph').is(':checked');
+        if (status == 1) {
+            if (activeUserGraph == true) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if (inActiveUserGraph == true) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    }
     function drawTable(start = null, end = null) {
+
         var maxNumber = 0;
         // usedTArray = []; newTArray = []; userTArray = [];
         userTArray = [];
         var rankIndex = 0;
-        tableData.forEach((element) => {
-            var nT = 0, nD = 0, nP = 0;
-            var uT = 0, uD = 0, uP = 0;
-            var totalq = 0;
-            (element.data).map((e) => {
-                if (start != null && end != null) {
-                    let compareDate = moment((e.time), "YYYY-MM-DD").format('DD/MM/YYYY');
-                    compareDate = moment(compareDate, "DD/MM/YYYY")
-                    let startDate = moment(start, "YYYY-MM-DD").format('DD/MM/YYYY');
-                    startDate = moment(startDate, "DD/MM/YYYY");
-                    let endDate = moment(end, "YYYY-MM-DD").format('DD/MM/YYYY');
-                    endDate = moment(endDate, "DD/MM/YYYY");
 
-                    const isBetween = compareDate.isBetween(startDate, endDate, 'days', '[]');
-                    if (isBetween) {
+        tableData.forEach((element) => {
+
+            if (checkUserStatus(element.status)) {
+
+                var nT = 0, nD = 0, nP = 0;
+                var uT = 0, uD = 0, uP = 0;
+                var totalq = 0;
+                (element.data).map((e) => {
+                    if (start != null && end != null) {
+                        let compareDate = moment((e.time), "YYYY-MM-DD").format('DD/MM/YYYY');
+                        compareDate = moment(compareDate, "DD/MM/YYYY")
+                        let startDate = moment(start, "YYYY-MM-DD").format('DD/MM/YYYY');
+                        startDate = moment(startDate, "DD/MM/YYYY");
+                        let endDate = moment(end, "YYYY-MM-DD").format('DD/MM/YYYY');
+                        endDate = moment(endDate, "DD/MM/YYYY");
+
+                        const isBetween = compareDate.isBetween(startDate, endDate, 'days', '[]');
+                        if (isBetween) {
+                            nT += e.new;
+                            uT += e.used;
+                            nD += e.newD;
+                            nP += e.newP;
+                            uD += e.usedD;
+                            uP += e.usedP;
+
+                        }
+                    } else {
                         nT += e.new;
                         uT += e.used;
                         nD += e.newD;
                         nP += e.newP;
                         uD += e.usedD;
                         uP += e.usedP;
-
                     }
-                } else {
-                    nT += e.new;
-                    uT += e.used;
-                    nD += e.newD;
-                    nP += e.newP;
-                    uD += e.usedD;
-                    uP += e.usedP;
-                }
 
-            });
-            totalq = (uT + nT);
-            if (totalq > 0) {
-                userTArray.push([rankIndex + 1, element.name, uT, nT, totalq, uD, uP, nD, nP]);
-                rankIndex++;
+                });
+                totalq = (uT + nT);
+                if (totalq > 0) {
+                    userTArray.push([rankIndex + 1, element.name, uT, nT, totalq, uD, uP, nD, nP]);
+                    rankIndex++;
+                }
             }
+
         });
         userTArray = userTArray.sort((a, b) => (b[5] + b[6] + b[7] + b[8]) - (a[5] + a[6] + a[7] + a[8]));
 
@@ -478,31 +519,33 @@ $(function () {
     function drawGraph(start = null, end = null) {
         usedArray = []; newArray = []; userArray = [];
         graphData.forEach(element => {
-            var nT = 0;
-            var uT = 0;
-            (element.data).map((e) => {
-                if (start != null && end != null) {
-                    let compareDate = moment((e.time), "YYYY-MM-DD").format('DD/MM/YYYY');
-                    compareDate = moment(compareDate, "DD/MM/YYYY")
-                    let startDate = moment(start, "YYYY-MM-DD").format('DD/MM/YYYY');
-                    startDate = moment(startDate, "DD/MM/YYYY");
-                    let endDate = moment(end, "YYYY-MM-DD").format('DD/MM/YYYY');
-                    endDate = moment(endDate, "DD/MM/YYYY");
+            if (checkUserStatus(element.status)) {
+                var nT = 0;
+                var uT = 0;
+                (element.data).map((e) => {
+                    if (start != null && end != null) {
+                        let compareDate = moment((e.time), "YYYY-MM-DD").format('DD/MM/YYYY');
+                        compareDate = moment(compareDate, "DD/MM/YYYY")
+                        let startDate = moment(start, "YYYY-MM-DD").format('DD/MM/YYYY');
+                        startDate = moment(startDate, "DD/MM/YYYY");
+                        let endDate = moment(end, "YYYY-MM-DD").format('DD/MM/YYYY');
+                        endDate = moment(endDate, "DD/MM/YYYY");
 
-                    const isBetween = compareDate.isBetween(startDate, endDate, 'days', '[]');
-                    if (isBetween) {
+                        const isBetween = compareDate.isBetween(startDate, endDate, 'days', '[]');
+                        if (isBetween) {
+                            nT += e.new;
+                            uT += e.used;
+                        }
+                    } else {
                         nT += e.new;
                         uT += e.used;
                     }
-                } else {
-                    nT += e.new;
-                    uT += e.used;
-                }
 
-            });
-            usedArray.push(uT);
-            newArray.push(nT);
-            userArray.push(element.name)
+                });
+                usedArray.push(uT);
+                newArray.push(nT);
+                userArray.push(element.name);
+            }
         });
 
         r.updateSeries([

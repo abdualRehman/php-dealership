@@ -9,8 +9,13 @@ $invId = $_POST['invId'];
 
 if ($invId) {
 
-	// $sql = "UPDATE inventory SET status = 2 WHERE id = '$invId'";
-	$sql = "UPDATE inventory SET status = '2' , balance = '0', lot = '' WHERE id = '$invId'";
+	// $sql = "UPDATE inventory SET status = '2' , balance = '0', lot = '' WHERE id = '$invId'";
+
+	$sql = "UPDATE inventory SET 
+	inventory.balance =  CASE WHEN status = '1' THEN '0' ELSE balance END ,
+	inventory.lot =  CASE WHEN status = '1' THEN '' ELSE lot END,
+	status = CASE WHEN status = '1' THEN 2 ELSE status END
+	WHERE id = '$invId'";
 
 	// $checkSql = "SELECT * FROM `sales` WHERE stock_id = '$invId' AND status = 1";
 	// $result = $connect->query($checkSql);

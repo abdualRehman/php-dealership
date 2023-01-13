@@ -1,5 +1,5 @@
 <?php
-
+ini_set('session.gc_maxlifetime', 36000);
 session_start();
 
 require_once 'db_connect.php';

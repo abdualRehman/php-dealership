@@ -62,6 +62,10 @@ if (hasAccess("warranty", "Edit") === 'false') {
             max-width: 1000px;
         }
     }
+    
+    .table.table-bordered.table-striped.table-hover.dataTable.no-footer.dtr-inline.fixedHeader-floating {
+        top: 5rem!important;
+    }
 </style>
 
 <?php
@@ -155,7 +159,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                             <label for="ewarranty" class="col-sm-2 col-form-label text-md-center">Warranty</label>
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <select class="form-control warranty" id="ewarranty" name="ewarranty[]" multiple="multiple" required="required">
+                                    <select class="form-control warranty tags" id="ewarranty" name="ewarranty[]" multiple="multiple" required="required">
                                         <option value="GAP">GAP</option>
                                         <option value="MILLENIUM">MILLENIUM</option>
                                         <option value="TIRE">TIRE</option>
@@ -259,7 +263,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                         <label for="warranty" class="col-sm-2 col-form-label text-md-center">Warranty</label>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <select class="form-control warranty" id="warranty" name="warranty[]" multiple="multiple" required="required">
+                                <select class="form-control warranty tags" id="warranty" name="warranty[]" multiple="multiple" required="required">
                                     <option value="GAP">GAP</option>
                                     <option value="MILLENIUM">MILLENIUM</option>
                                     <option value="TIRE">TIRE</option>

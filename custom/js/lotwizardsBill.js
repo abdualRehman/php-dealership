@@ -72,7 +72,7 @@ $(function () {
                 targets: [1, 2, 3],
             },
             {
-                targets: [0, 8],
+                targets: [0 , 8],
                 visible: false,
             },
             {
@@ -99,16 +99,16 @@ $(function () {
             },
             {
                 targets: 8,
-                data: 8,
-                createdCell: function (td, cellData, rowData, row, col) {
-                    if ($('#isEditAllowed').val() == "true") {
-                        $(td).html(`<div class="show d-flex" >
-                            <input type="text" class="form-control" name="date_in_table" value="${rowData[8]}" data-attribute="repair_paid_date" data-id="${rowData[0]}" autocomplete="off"  />
-                        </div>`);
-                    } else {
-                        $(td).html(rowData[8]);
-                    }
-                }
+                data: 9,  // bodyshop
+                // createdCell: function (td, cellData, rowData, row, col) {
+                //     if ($('#isEditAllowed').val() == "true") {
+                //         $(td).html(`<div class="show d-flex" >
+                //             <input type="text" class="form-control" name="date_in_table" value="${rowData[8]}" data-attribute="repair_paid_date" data-id="${rowData[0]}" autocomplete="off"  />
+                //         </div>`);
+                //     } else {
+                //         $(td).html(rowData[8]);
+                //     }
+                // }
             },
 
         ],
@@ -123,7 +123,7 @@ $(function () {
 
         rowGroup: {
             enable: true,
-            dataSrc: 8,
+            dataSrc: 9,
             startRender: function (rows, group) {
                 var collapsed = !!collapsedGroups[group];
 

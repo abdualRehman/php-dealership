@@ -31,6 +31,7 @@ function fetchSalesManagerName($manId)
     $result = $connect->query($userSql);
     $row = $result->fetch_array();
     return $row[0];
+    // return $manId;
 }
 
 if ($result->num_rows > 0) {
@@ -95,9 +96,9 @@ if ($result->num_rows > 0) {
             $military_date,
             $loyalty_date, 
             $conquest_date,
+            $lease_loyalty_date,
             $misc1_date, 
             $misc2_date, 
-            $lease_loyalty_date,
             $images,
             // $button // 19 index
             $id, // 19 index

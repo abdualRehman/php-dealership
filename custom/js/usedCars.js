@@ -45,580 +45,14 @@ $(function () {
 
     autosize($(".autosize"));
 
-    // var a = new Bloodhound({
-    //     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('stockDetails'),
-    //     queryTokenizer: Bloodhound.tokenizers.whitespace,
-    //     local: searhStatusArray
-    // });
 
-    // $('#searchcars').typeahead({
-    //     hint: true,
-    //     highlight: true,
-    //     minLength: 1,
-    // },
-    //     {
-    //         name: 'searhStatusArray',
-    //         display: 'stockDetails',
-    //         source: a,
-    // templates: {
-    //     suggestion: function (data) {
-    //         var stockAvailibilityArray = data.stockAvailibility;
-    //         const template = `<div><p><strong>${data.stockDetails}</strong></p><div class="row pl-2 pr-2">${stockAvailibilityArray.map(e => (e) ? `<div class="col-sm-4 p-1"> <span class="badge badge-label-primary"> ${e} </span> </div>` : ``).join('')}</div>`;
-    //         return template;
-    //     }
-    // }
-    //     });
+    // loadDataTable();
 
 
-    manageInvTable = $("#datatable-1").DataTable({
-
-        responsive: !0,
-        'ajax': '../php_action/fetchUsedCars.php',
-        "paging": true,
-        "scrollX": true,
-        "orderClasses": false,
-        "deferRender": true,
-        "pageLength": 25,
-        dom: `<'row'<'col-12'P>>
-        <'row' 
-        <'col-sm-4 text-left text-sm-left pl-3'<'#statusFilterDiv'>>
-            <'col-sm-4 text-sm-center pl-3'B>
-            <'col-sm-4 text-right text-sm-right mt-2 mt-sm-0'f>>\n
-        <'row'<'col-12'tr>>\n      
-        <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
-
-        buttons: [
-            {
-                extend: 'copyHtml5',
-                title: 'Used Cars',
-                exportOptions: {
-                    columns: [':visible'],
-                }
-            },
-            {
-                extend: 'excelHtml5',
-                title: 'Used Cars',
-                exportOptions: {
-                    columns: [':visible']
-                }
-            },
-            {
-                extend: 'print',
-                title: 'Used Cars',
-                exportOptions: {
-                    columns: [':visible']
-                },
-                customize: function (win) {
-                    $(win.document.body)
-                        .css('font-size', '10pt');
-                    $(win.document.body).find('table')
-                        .addClass('compact')
-                        .css('font-size', 'inherit');
-                }
-            },
-        ],
-
-        searchPanes: {
-            cascadePanes: !0,
-            viewTotal: !0,
-            columns: [21, 26, 27, 12, 28]
-        },
-
-        columnDefs: [
-            {
-                targets: [0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
-                visible: false,
-            },
-            { width: 400, targets: [15, 23] },
-            {
-                targets: [1], // age
-                createdCell: function (td, cellData, rowData, row, col) {
-                    var data = $(td).html();
-                    if (data > 4) {
-                        $(td).addClass('h5 font-weight-bolder text-danger');
-                    } else {
-                        $(td).addClass('font-weight-bold p');
-                    }
-                }
-            },
-            {
-                targets: [2], // stockno || vin
-                createdCell: function (td, cellData, rowData, row, col) {
-                    let retailStatus = rowData[23];
-                    let wholesale = rowData[20];
-                    if (retailStatus == 'retail' && wholesale == 'Yes') {
-                        $(td).addClass('font-weight-bolder text-danger');
-                    } else {
-                        $(td).addClass('font-weight-bold p');
-                    }
-                }
-            },
-            {
-                targets: [4], // keys,
-                createdCell: function (td, cellData, rowData, row, col) {
-
-                    if ($('#isRoleAllowed').val() == 'true') {
-                        $(td).html(` <div class="custom-control custom-control-lg custom-checkbox">
-                            <input type="checkbox" name="keyCheckbox" data-attribute="key" onchange="handletitleCheckbox(this)" data-id="${rowData[0]}" class="custom-control-input keyCheckbox" id="${rowData[0]}Key" ${((rowData[4] == 'false') ? '' : 'checked="checked"')} >
-                            <label class="custom-control-label" for="${rowData[0]}Key"></label> 
-                        </div>`);
-                    } else {
-                        $(td).html(rowData[4]);
-                    }
-                }
-            },
-            {
-                targets: [11], // title,
-                createdCell: function (td, cellData, rowData, row, col) {
-                    if ($('#isRoleAllowed').val() == 'true' || $('#titleEditAllowed').val() == 'true') {
-                        $(td).html(`<div class="custom-control custom-control-lg custom-checkbox">
-                                <input type="checkbox" name="titleCheckbox" data-attribute="title" onchange="handletitleCheckbox(this)" data-id="${rowData[0]}" class="custom-control-input titleCheckbox" id="${rowData[0]}Title" ${((rowData[11] == 'false') ? '' : 'checked="checked"')} >
-                                <label class="custom-control-label" for="${rowData[0]}Title"></label> 
-                            </div>`);
-                    } else {
-                        $(td).html(rowData[11]);
-                    }
-
-                }
-            },
-            {
-                targets: [12], // Title Priority,
-                createdCell: function (td, cellData, rowData, row, col) {
-                    // data-container=".containerDiv${rowData[0]}"
-                    let colorClass = '';
-                    switch (rowData[12]) {
-                        case 'New':
-                            colorClass = 'badge-info';
-                            break;
-                        case 'Low':
-                            colorClass = 'badge-primary';
-                            break;
-                        case 'Medium':
-                            colorClass = 'badge-warning';
-                            break;
-                        case 'High':
-                        case 'Problem':
-                            colorClass = 'badge-danger';
-                            break;
-                        case 'Done':
-                            colorClass = 'badge-success';
-                            break;
-                        default:
-                            colorClass = '';
-                            break;
-                    }
-                    $(td).html(`<span class="badge badge-lg ${colorClass}">${rowData[12]}</span>`);
-                }
-            },
-            {
-                targets: [20], // wholesale
-                createdCell: function (td, cellData, rowData, row, col) {
-                    var activebtnvalue = $(`#mods .btn.active input[name='mod']`).val();
-                    if (activebtnvalue == 'readyToShip') {
-                        var data = $(td).html();
-                        if (data == 'No') {
-                            $(td).addClass('h5 font-weight-bolder text-danger');
-                        } else {
-                            $(td).addClass('font-weight-bold p');
-                        }
-                    } else if (activebtnvalue == 'retail') {
-                        var data = $(td).html();
-                        if (data == 'Yes') {
-                            $(td).addClass('h5 font-weight-bolder text-danger');
-                        } else {
-                            $(td).addClass('font-weight-bold p');
-                        }
-                    } else {
-                        return data;
-                    }
-
-                }
-            },
-            {
-                targets: [21], // retail status
-                render: function (data, type, row) {
-                    return row[23];
-                },
-                createdCell: function (td, cellData, rowData, row, col) {
-                    $(td).html(rowData[23]);
-                }
-            },
-            {
-                targets: [22], // date sent,
-                render: function (data, type, row) {
-                    return row[21];
-                },
-                createdCell: function (td, cellData, rowData, row, col) {
-                    if ($('#isRoleAllowed').val() == 'true') {
-                        $(td).html(`<div class="show d-flex" >
-                            <input type="text" class="form-control" name="date_in_table" value="${rowData[21]}" data-attribute="date_sent" data-id="${rowData[0]}" autocomplete="off"  />
-                        </div>`);
-                    } else {
-                        $(td).html(rowData[21]);
-                    }
-                }
-            },
-            {
-                targets: [23], // wholesale notes
-                createdCell: function (td, cellData, rowData, row, col) {
-                    if ($('#isRoleAllowed').val() == 'true') {
-                        $(td).html(`<div class="show d-flex" >
-                            <input type="text" class="form-control wholesale_notes" name="input_field" value="${rowData[25] ? rowData[25] : ""}" id="${rowData[0]}wholesale_notes" data-attribute="wholesale_notes" data-id="${rowData[0]}" autocomplete="off"  />
-                        </div>`);
-                    } else {
-                        $(td).html(rowData[25]);
-                    }
-
-                }
-            },
-            {
-                targets: [24], // sold price
-                createdCell: function (td, cellData, rowData, row, col) {
-                    if ($('#isRoleAllowed').val() == 'true') {
-                        $(td).html(`<div class="show d-flex" >
-                            <input type="text" class="form-control sold_price" name="input_field" value="${rowData[26] ? rowData[26] : 0}" id="${rowData[0]}sold_price" data-attribute="sold_price" data-id="${rowData[0]}" autocomplete="off"  />
-                        </div>`);
-                    } else {
-                        $(td).html(rowData[26]);
-                    }
-
-                }
-            },
-            {
-                targets: [25], // profit
-                render: function (data, type, row) {
-                    return row[27];
-                },
-            },
-            {
-                targets: [26], // UCI
-                render: function (data, type, row) {
-                    return row[28];
-                },
-            },
-            {
-                targets: [27], // purchase from
-                render: function (data, type, row) {
-                    return row[29];
-                },
-            },
-            {
-                targets: [28], // sold date
-                render: function (data, type, row) {
-                    return row[22];
-                },
-            },
-            {
-                targets: [29], // action
-                render: function (data, type, row) {
-                    return row[31];
-                },
-            },
-            {
-                targets: [30], // Uci Ro
-                render: function (data, type, row) {
-                    return row[33];
-                },
-            },
-            {
-                searchPanes: {
-                    show: true
-                },
-                targets: [21, 26, 27, 12, 28]
-            },
-        ],
-
-        language: {
-            "infoFiltered": "",
-            searchPanes: {
-                count: "{total} found",
-                countFiltered: "{shown} / {total}"
-            }
-        },
-
-        rowGroup: {
-            dataSrc: rowGroupSrc,
-            enable: false,
-            startRender: function (rows, group) {
-                var collapsed = !!collapsedGroups[group];
-
-                // -------------  For Display All Number of Filtered Rows -----------------
-                // retails status
-                if (rowGroupSrc == 23) {
-
-                    rows.nodes().each(function (r) {
-                        r.style.display = collapsed ? 'none' : '';
-                    });
-
-                    var filteredData = $('#datatable-1').DataTable()
-                        .rows({ search: 'applied' })
-                        .data()
-                        .filter(function (data, index) {
-                            return data[rowGroupSrc] == group ? true : false;
-                        });
-                    if (group == null || group == "") {
-                        group = "Blank";
-                    } else {
-                        group = group.toUpperCase();
-                    }
-                    return $('<tr/>')
-                        .append('<td colspan="17">' + group + ' (' + filteredData.length + ')</td>')
-                        .attr('data-name', group)
-                        .toggleClass('collapsed', collapsed);
-                }
-                else if (rowGroupSrc == 22) {
-
-                    rows.nodes().each(function (r) {
-                        r.style.display = 'none';
-                        if (collapsed) {
-                            r.style.display = '';
-                        }
-                    });
-
-                    var totalProfit = 0;
-                    var filteredData = $('#datatable-1').DataTable()
-                        .rows({ search: 'applied' })
-                        .data()
-                        .filter(function (data, index) {
-                            if (data[rowGroupSrc] == group) {
-                                var profit = parseFloat((data[27]).replace(/\$|,/g, ''))
-                                totalProfit += profit;
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        });
-                    // console.log(filteredData);
-                    return $('<tr/>')
-                        .append('<td colspan="17">' + group + ' (' + formatToCurrency(totalProfit) + ')</td>')
-                        .attr('data-name', group)
-                        .toggleClass('collapsed', collapsed);
-                }
-
-
-            }
-        },
-
-        initComplete: function () {
-            loadSearchData();
-            // Start with closed groups
-            $('#datatable-1 tbody tr.dtrg-start').each(function () {
-                var name = $(this).data('name');
-                collapsedGroups[name] = !collapsedGroups[name];
-            });
-            manageInvTable.draw(false);
-        },
-
-        "drawCallback": function (settings, start, end, max, total, pre) {
-            var json = this.fnSettings().json;
-            if (json) {
-                var obj = json.totalNumber;
-                for (const [key, value] of Object.entries(obj)) {
-                    $(`input[name='mod'][value='${key}']`).next().next().html(value)
-                    switch (key) {
-                        case 'addToSheet':
-                        case 'missingDate':
-                        case 'titleIssue':
-                            if (value == '0') {
-                                $(`input[name='mod'][value='${key}']`).parent().addClass('btn-outline-success')
-                                $(`input[name='mod'][value='${key}']`).parent().removeClass('btn-outline-danger')
-                            } else {
-                                $(`input[name='mod'][value='${key}']`).parent().addClass('btn-outline-danger')
-                                $(`input[name='mod'][value='${key}']`).parent().removeClass('btn-outline-success')
-                            }
-                            break;
-                        case 'retail':
-                        case 'sold':
-                            $(`input[name='mod'][value='${key}']`).parent().addClass('btn-outline-success')
-                            break;
-                        case 'fixAge':
-                            $(`input[name='mod'][value='fixAge`).parent().addClass('btn-outline-info')
-                            break;
-                        default:
-                            $(`input[name='mod'][value='${key}']`).parent().addClass('btn-outline-primary')
-                            break;
-                    }
-                }
-                // $(`input[name='mod'][value='fixAge`).parent().addClass('btn-outline-info');
-
-                var activebtnvalue = $("#mods .btn.active input[name='mod']").val();
-                if (activebtnvalue == 'missingDate' || activebtnvalue == 'keysPulled' || activebtnvalue == 'atAuction') {
-                    setfun();
-                    setInputChange();
-                } else if (activebtnvalue == 'soldAtAuction') {
-                    setInputChange();
-                }
-            }
-        },
-
-        createdRow: function (row, data, dataIndex) {
-            if ($('#isEditAllowed').val() == "true") {
-                var activebtnvalue = $("#mods .btn.active input[name='mod']").val();
-                if (activebtnvalue == 'missingDate') {
-                    $(row).children().not(':nth-child(2)').not(':nth-child(9)').not(':last-child').attr({
-                        "data-toggle": "modal",
-                        "data-target": "#modal8",
-                        "onclick": "editUsedCar(" + data[0] + ")"
-                    });
-                } else if (activebtnvalue == 'titleIssue') {
-
-                    $(row).children().not(':nth-child(9)').not(':last-child').attr({
-                        "data-toggle": "modal",
-                        "data-target": "#modal8",
-                        "onclick": "editUsedCar(" + data[0] + ")"
-                    });
-                } else if (activebtnvalue == 'readyToShip') {
-
-                    $(row).children().not(':nth-child(3)').not(':nth-child(10)').not(':last-child').attr({
-                        "data-toggle": "modal",
-                        "data-target": "#modal8",
-                        "onclick": "editUsedCar(" + data[0] + ")"
-                    });
-                } else if (activebtnvalue == 'keysPulled') {
-
-                    $(row).children().not(':nth-child(3)').not(':nth-child(13)').not(':nth-child(10)').not(':nth-child(14)').not(':last-child').attr({
-                        "data-toggle": "modal",
-                        "data-target": "#modal8",
-                        "onclick": "editUsedCar(" + data[0] + ")"
-                    });
-                } else if (activebtnvalue == 'atAuction') {
-
-                    $(row).children().not(':nth-child(9)').not(':nth-child(10)').not(':nth-child(14)').not(':last-child').attr({
-                        "data-toggle": "modal",
-                        "data-target": "#modal8",
-                        "onclick": "editUsedCar(" + data[0] + ")"
-                    });
-                } else if (activebtnvalue == 'soldAtAuction') {
-
-                    $(row).children().not(':nth-child(3)').not(':nth-child(10)').not(':nth-child(12)').not(':last-child').attr({
-                        "data-toggle": "modal",
-                        "data-target": "#modal8",
-                        "onclick": "editUsedCar(" + data[0] + ")"
-                    });
-                } else if (activebtnvalue == 'sold') {
-                    $(row).children().not(':last-child').attr({
-                        "data-toggle": "modal",
-                        "data-target": "#modal8",
-                        "onclick": "editUsedCar(" + data[0] + ")"
-                    });
-                } else if (activebtnvalue == 'retail') {
-                    $(row).children().not(':nth-child(9)').not(':last-child').attr({
-                        "data-toggle": "modal",
-                        "data-target": "#modal8",
-                        "onclick": "editUsedCar(" + data[0] + ")"
-                    });
-                } else {
-                    $(row).children().attr({
-                        "data-toggle": "modal",
-                        "data-target": "#modal8",
-                        "onclick": "editUsedCar(" + data[0] + ")"
-                    });
-                }
-            }
-        },
-        "order": [[1, "desc"]],
-    });
-
-    // Collapse Groups
-    $('#datatable-1 tbody').on('click', 'tr.dtrg-start', function () {
-        var name = $(this).data('name');
-        collapsedGroups[name] = !collapsedGroups[name];
-        manageInvTable.draw(false);
-    });
 
 
     // --------------------- checkboxes query --------------------------------------
 
-    $.fn.dataTable.ext.search.push(
-        function (settings, searchData, index, rowData, counter) {
-            var tableNode = manageInvTable.table().node();
-
-            var activebtnvalue = $("#mods .btn.active input[name='mod']").val();
-
-            var balance = rowData[16];
-            var wholesale = rowData[20];
-            var date_in = rowData[24];
-            // var date_in = String(rowData[24]);
-            var title = rowData[11];
-            var titlePriority = rowData[12];
-            var key = rowData[4];
-            var date_sent = rowData[21];
-            var date_sold = rowData[22];
-            var retail_status = rowData[23];
-            var carshopId = rowData[32];
-
-            var invStatus = rowData[34];
-
-            if (activebtnvalue == 'addToSheet' && invStatus != 2) {
-                if (date_in != '' && date_in === null) {
-                    return true;
-                }
-            }
-            if (activebtnvalue == 'missingDate') {
-                if ((EmptyField(date_in) == false && date_in !== null) && invStatus != 2) {
-                    return true;
-                }
-            }
-            if (activebtnvalue == 'titleIssue') {
-                var filter = $('#statusPriority').val();
-                // if ((title == 'false' || title == null) && (date_in !== '' && date_in !== null)) {
-                //     if (filter != '' && filter == titlePriority) {
-                //         return true;
-                //     } else if (filter == '') {
-                //         return true;
-                //     }
-                // }
-                if ((title == 'false' || title == null) && (date_in !== null) && invStatus != 2) {
-                    if (filter != '' && filter == titlePriority) {
-                        return true;
-                    } else if (filter == '') {
-                        return true;
-                    }
-                }
-            }
-            if (activebtnvalue == 'readyToShip') {
-                if (title == 'true' && retail_status == 'wholesale' && key == 'false' && invStatus != 2) {
-                    return true;
-                }
-            }
-            if (activebtnvalue == 'keysPulled') {
-                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && !date_sent && !date_sold && invStatus != 2) {
-                    return true;
-                }
-            }
-            if (activebtnvalue == 'atAuction') {
-
-                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && date_sent && !date_sold && invStatus != 2) {
-                    return true;
-                }
-            }
-            if (activebtnvalue == 'soldAtAuction') {
-                if (title == 'true' && retail_status == 'wholesale' && key == 'true' && date_sent && date_sold) {
-                    return true;
-                }
-
-            }
-            if (activebtnvalue == 'retail') {
-                // if (wholesale == 'No' && balance !== '' && date_in !== null) {
-                //     return true;
-                // }
-                if (retail_status != 'wholesale' && balance !== '' && (carshopId !== '' && carshopId !== null) && invStatus != 2) {
-                    return true;
-                }
-            }
-            if (activebtnvalue == 'sold') {
-                if ((balance === "" || balance === null) && date_in !== null) {
-                    return true;
-                }
-            }
-
-            if (settings.nTable !== tableNode) {
-                return true;
-            }
-
-            return false;
-        }
-    );
 
 
     $('#clear-selection').click(function () {
@@ -661,52 +95,59 @@ $(function () {
         if (currentElement != 'fixAge') {
             $('.inspectionTable').removeClass('d-none');
             $('.FixSDKtable').addClass('d-none');
-            switch (currentElement) {
-                case 'missingDate':
-                    setColumVisibility([0, 1, 4, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 30]);
-                    manageInvTable.rowGroup().disable().draw();
-                    break;
-                case 'titleIssue':
-                    setColumVisibility([0, 3, 4, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30]);
-                    manageInvTable.rowGroup().disable().draw();
-                    break;
-                case 'readyToShip':
-                    setColumVisibility([0, 3, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 30]);
-                    rowGroupSrc = 23;
-                    manageInvTable.rowGroup().enable().draw();
-                    manageInvTable.dataSrc(rowGroupSrc);
-                    break;
-                case 'keysPulled':
-                    setColumVisibility([0, 3, 12, 13, 14, 15, 17, 18, 19, 21, 24, 25, 26, 27, 28, 30]);
-                    rowGroupSrc = 23;
-                    manageInvTable.rowGroup().enable().draw();
-                    manageInvTable.dataSrc(rowGroupSrc);
-                    break;
-                case 'atAuction':
-                    setColumVisibility([0, 3, 4, 8, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28, 30]);
-                    rowGroupSrc = 23;
-                    manageInvTable.rowGroup().enable().draw();
-                    manageInvTable.dataSrc(rowGroupSrc);
-                    break;
-                case 'soldAtAuction':
-                    setColumVisibility([0, 3, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 26, 27, 28, 30]);
-                    rowGroupSrc = 22; // sold date 
-                    manageInvTable.rowGroup().enable().draw();
-                    manageInvTable.dataSrc(rowGroupSrc);
-                    break;
-                case 'addToSheet':
-                    setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]);
-                    manageInvTable.rowGroup().disable().draw();
-                    break;
-                case 'retail':
-                    setColumVisibility([0, 3, 4, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 30]);
-                    manageInvTable.rowGroup().disable().draw();
-                    break;
-                default:
-                    setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 30]);
-                    manageInvTable.rowGroup().disable().draw();
-                    break;
-            }
+
+
+            $('#datatable-1').DataTable().destroy();
+            loadDataTable();
+
+
+            // switch (currentElement) {
+            //     case 'missingDate':
+            //         setColumVisibility([0, 1, 4, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 30]);
+            //         manageInvTable.rowGroup().disable().draw();
+            //         break;
+            //     case 'titleIssue':
+            //         setColumVisibility([0, 3, 4, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30]);
+            //         manageInvTable.rowGroup().disable().draw();
+            //         break;
+            //     case 'readyToShip':
+            //         setColumVisibility([0, 3, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 30]);
+            //         rowGroupSrc = 23;
+            //         manageInvTable.rowGroup().enable().draw();
+            //         manageInvTable.dataSrc(rowGroupSrc);
+            //         break;
+            //     case 'keysPulled':
+            //         setColumVisibility([0, 3, 12, 13, 14, 15, 17, 18, 19, 21, 24, 25, 26, 27, 28, 30]);
+            //         rowGroupSrc = 23;
+            //         manageInvTable.rowGroup().enable().draw();
+            //         manageInvTable.dataSrc(rowGroupSrc);
+            //         break;
+            //     case 'atAuction':
+            //         setColumVisibility([0, 3, 4, 8, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28, 30]);
+            //         rowGroupSrc = 23;
+            //         manageInvTable.rowGroup().enable().draw();
+            //         manageInvTable.dataSrc(rowGroupSrc);
+            //         break;
+            //     case 'soldAtAuction':
+            //         setColumVisibility([0, 3, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 26, 27, 28, 30]);
+            //         rowGroupSrc = 22; // sold date 
+            //         manageInvTable.rowGroup().enable().draw();
+            //         manageInvTable.dataSrc(rowGroupSrc);
+            //         break;
+            //     case 'addToSheet':
+            //         setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]);
+            //         manageInvTable.rowGroup().disable().draw();
+            //         break;
+            //     case 'retail':
+            //         setColumVisibility([0, 3, 4, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 30]);
+            //         manageInvTable.rowGroup().disable().draw();
+            //         break;
+            //     default:
+            //         setColumVisibility([0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 30]);
+            //         manageInvTable.rowGroup().disable().draw();
+            //         break;
+            // }
+
             if (currentElement == 'addToSheet') {
                 $('#statusFilterDiv').removeClass('d-none');
             } else {
@@ -714,15 +155,16 @@ $(function () {
             }
 
             setTimeout(() => {
-                $("#datatable-1").dataTable().fnFilter("");
-                manageInvTable.draw();
-                manageInvTable.searchPanes.rebuildPane();
-                manageInvTable.ajax.reload(null, false);
-                if (currentElement == 'soldAtAuction') {
-                    manageInvTable.order([28, 'desc'], [1, 'desc']).draw();
-                }
+                // $("#datatable-1").dataTable().fnFilter("");
+                // manageInvTable.draw();
+                // manageInvTable.searchPanes.rebuildPane();
+                // manageInvTable.ajax.reload(null, false);
+                // if (currentElement == 'soldAtAuction') {
+                //     manageInvTable.order([22, 'desc'], [1, 'desc']).draw();
+                // }
+
                 $('#inspectionTable').unblock();
-                setPlaceholder();
+                // setPlaceholder();
             }, 700);
         } else if (currentElement == 'fixAge') {
             fetchFixCDKAge();
@@ -731,6 +173,616 @@ $(function () {
         }
 
     });
+
+
+    function loadDataTable() {
+        if ($.fn.dataTable.isDataTable('#datatable-1')) {
+            manageInvTable.draw();  // working
+            // manageInvTable.searchPanes.rebuildPane();
+        } else {
+
+            let filterBy = $('input[name=mod]:checked').val();
+            filterBy = filterBy ? filterBy : 'notTouched';
+            let orderBy = [];
+            let hideColumns = [];
+            let rowGroupSrcStatus = false;
+            $('#retailFilter').val('');
+            $('#uciFilter').val('');
+            $('#titleFilter').val('');
+            // $('#soldFilter').val('');
+            // $('#purchaseFilter').val('');
+
+            switch (filterBy) {
+                case 'missingDate':
+                    rowGroupSrcStatus = false;
+                    hideColumns = [0, 1, 4, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 30];
+                    orderBy = [[1, "asc"]];
+                    break;
+                case 'titleIssue':
+                    rowGroupSrcStatus = false;
+                    hideColumns = [0, 3, 4, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30];
+                    orderBy = [[1, "asc"]];
+                    break;
+                case 'readyToShip':
+                    rowGroupSrc = 23;
+                    rowGroupSrcStatus = true;
+                    hideColumns = [0, 3, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 30];
+                    orderBy = [[1, "asc"]];
+                    break;
+                case 'keysPulled':
+                    rowGroupSrc = 23;
+                    rowGroupSrcStatus = true;
+                    hideColumns = [0, 3, 12, 13, 14, 15, 17, 18, 19, 21, 24, 25, 26, 27, 28, 30];
+                    orderBy = [[1, "asc"]];
+                    break;
+                case 'atAuction':
+                    rowGroupSrc = 23;
+                    rowGroupSrcStatus = true;
+                    hideColumns = [0, 3, 4, 8, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28, 30];
+                    orderBy = [[1, "asc"]];
+                    break;
+                case 'soldAtAuction':
+                    rowGroupSrc = 22; // sold date 
+                    rowGroupSrcStatus = true;
+                    hideColumns = [0, 3, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 26, 27, 28, 30];
+                    orderBy = [[22, 'desc'], [1, 'asc']];
+                    break;
+                case 'addToSheet':
+                    rowGroupSrcStatus = false;
+                    hideColumns = [0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
+                    orderBy = [[1, "asc"]];
+                    break;
+                case 'retail':
+                    hideColumns = [0, 3, 4, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 30];
+                    rowGroupSrcStatus = false;
+                    orderBy = [[1, "asc"]];
+                    break;
+                default:
+                    hideColumns = [0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 30];
+                    rowGroupSrcStatus = false;
+                    orderBy = [[1, "asc"]];
+                    break;
+            }
+
+            $('.filterTags').trigger('change');
+
+
+
+
+            manageInvTable = $("#datatable-1").DataTable({
+
+                responsive: !0,
+                serverSide: true,
+                processing: true,
+                deferRender: true,
+                pageLength: 25,
+                lengthMenu: [10, 25, 50, 100, 250],
+                ajax: {
+                    url: '../php_action/fetchUsedCars.php',
+                    type: "POST",
+                    data: function (data) {
+                        console.log(data);
+                        // Read values
+                        var filterBy = $('input[name=mod]:checked').val();
+                        filterBy = filterBy ? filterBy : 'addToSheet';
+                        var statusPriority = $('#statusPriority').val();
+                        statusPriority = statusPriority ? statusPriority : "";
+                        var orderBy = [];
+
+
+                        let retailF = $('#retailFilter').val();
+                        let uciF = $('#uciFilter').val();
+                        let titleF = $('#titleFilter').val();
+                        let purchaseF = $('#purchaseFilter').val();
+
+                        var soldF = [];
+                        if ($('#soldFilter').val() != '') {
+                            soldF = $('#soldFilter').datepicker('getDates');
+                            soldF = soldF.map((d) => moment(d).format('MM-DD-YYYY'))
+                        }
+
+
+                        // var purchaseF = [];
+                        // if ($('#purchaseFilter').val() != '') {
+                        //     purchaseF = $('#purchaseFilter').datepicker('getDates');
+                        //     purchaseF = purchaseF.map((d) => moment(d).format('YYYY-MM-DD'))
+                        // }
+
+
+
+
+                        // Append to Mode Filter
+                        data.filterBy = filterBy;
+                        data.orderBy = orderBy
+                        data.statusPriority = statusPriority;
+
+                        data.retailF = retailF;
+                        data.uciF = uciF;
+                        data.titleF = titleF;
+                        data.soldF = soldF;
+                        data.purchaseF = purchaseF;
+
+                    },
+                },
+
+
+                "paging": true,
+                "scrollX": true,
+                "orderClasses": false,
+                "deferRender": true,
+                "fixedHeader": true,
+                dom: `<'row'<'col-12'P>>
+                <'row' 
+                <'col-sm-4 text-left text-sm-left pl-3'<'#statusFilterDiv'>>
+                    <'col-sm-4 text-sm-center pl-3'B>
+                    <'col-sm-4 text-right text-sm-right mt-2 mt-sm-0'f>>\n
+                <'row'<'col-12'tr>>\n      
+                <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
+
+                buttons: [
+                    {
+                        extend: "colvis",
+                        text: "Visibility control",
+                        collectionLayout: "two-column",
+                        columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+                    },
+                    {
+                        extend: 'copyHtml5',
+                        title: 'Used Cars',
+                        exportOptions: {
+                            columns: [':visible'],
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        title: 'Used Cars',
+                        exportOptions: {
+                            columns: [':visible']
+                        },
+                        customize: function (xlsx) {
+                            $(xlsx.xl["styles.xml"]).find('numFmt[numFmtId="164"]').attr('formatCode', '[$$-en-AU]#,##0.00;[Red]-[$$-en-AU]#,##0.00');
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        title: 'Used Cars',
+                        exportOptions: {
+                            columns: [':visible']
+                        },
+                        customize: function (win) {
+                            $(win.document.body)
+                                .css('font-size', '10pt');
+                            $(win.document.body).find('table')
+                                .addClass('compact')
+                                .css('font-size', 'inherit');
+                        }
+                    },
+                ],
+
+                searchPanes: {
+                    cascadePanes: !0,
+                    viewTotal: !0,
+                    columns: [21, 26, 27, 12, 28]
+                },
+                columnDefs: [
+                    {
+                        // targets: [0, 3, 4, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+                        targets: hideColumns,
+                        visible: false,
+                    },
+                    { width: 400, targets: [15, 23] },
+                    { width: 200, targets: [2] },
+                    {
+                        targets: [1], // age
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            var data = $(td).html();
+                            if (data > 4) {
+                                $(td).addClass('h5 font-weight-bolder text-danger');
+                            } else {
+                                $(td).addClass('font-weight-bold p');
+                            }
+                        }
+                    },
+                    {
+                        targets: [2], // stockno || vin
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            let retailStatus = rowData[23];
+                            let wholesale = rowData[20];
+                            $(td).addClass('text-nowrap');
+                            if (retailStatus == 'retail' && wholesale == 'Yes') {
+                                $(td).addClass('font-weight-bolder text-danger');
+                            } else {
+                                $(td).addClass('font-weight-bold p');
+                            }
+                        }
+                    },
+                    {
+                        targets: [4], // keys,
+                        createdCell: function (td, cellData, rowData, row, col) {
+
+                            if ($('#isRoleAllowed').val() == 'true') {
+                                $(td).html(` <div class="custom-control custom-control-lg custom-checkbox">
+                                    <input type="checkbox" name="keyCheckbox" data-attribute="key" onchange="handletitleCheckbox(this)" data-id="${rowData[0]}" class="custom-control-input keyCheckbox" id="${rowData[0]}Key" ${((rowData[4] == 'false') ? '' : 'checked="checked"')} >
+                                    <label class="custom-control-label" for="${rowData[0]}Key"></label> 
+                                </div>`);
+                            } else {
+                                $(td).html(rowData[4]);
+                            }
+                        }
+                    },
+                    {
+                        targets: [11], // title,
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            if ($('#isRoleAllowed').val() == 'true' || $('#titleEditAllowed').val() == 'true') {
+                                $(td).html(`<div class="custom-control custom-control-lg custom-checkbox">
+                                        <input type="checkbox" name="titleCheckbox" data-attribute="title" onchange="handletitleCheckbox(this)" data-id="${rowData[0]}" class="custom-control-input titleCheckbox" id="${rowData[0]}Title" ${((rowData[11] == 'false') ? '' : 'checked="checked"')} >
+                                        <label class="custom-control-label" for="${rowData[0]}Title"></label> 
+                                    </div>`);
+                            } else {
+                                $(td).html(rowData[11]);
+                            }
+
+                        }
+                    },
+                    {
+                        targets: [12], // Title Priority,
+                        orderable: false,
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            // data-container=".containerDiv${rowData[0]}"
+                            let colorClass = '';
+                            switch (rowData[12]) {
+                                case 'New':
+                                    colorClass = 'badge-info';
+                                    break;
+                                case 'Low':
+                                    colorClass = 'badge-primary';
+                                    break;
+                                case 'Medium':
+                                    colorClass = 'badge-warning';
+                                    break;
+                                case 'High':
+                                case 'Problem':
+                                    colorClass = 'badge-danger';
+                                    break;
+                                case 'Done':
+                                    colorClass = 'badge-success';
+                                    break;
+                                default:
+                                    colorClass = '';
+                                    break;
+                            }
+                            $(td).html(`<span class="badge badge-lg ${colorClass}">${rowData[12]}</span>`);
+                        }
+                    },
+                    {
+                        targets: [16], // balance
+                        render: function (data, type, row) {
+                            return row[16];
+                        },
+                    },
+                    {
+                        targets: [20], // wholesale
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            var activebtnvalue = $(`#mods .btn.active input[name='mod']`).val();
+                            if (activebtnvalue == 'readyToShip') {
+                                var data = $(td).html();
+                                if (data == 'No') {
+                                    $(td).addClass('h5 font-weight-bolder text-danger');
+                                } else {
+                                    $(td).addClass('font-weight-bold p');
+                                }
+                            } else if (activebtnvalue == 'retail') {
+                                var data = $(td).html();
+                                if (data == 'Yes') {
+                                    $(td).addClass('h5 font-weight-bolder text-danger');
+                                } else {
+                                    $(td).addClass('font-weight-bold p');
+                                }
+                            } else {
+                                return data;
+                            }
+
+                        }
+                    },
+                    {
+                        targets: [21], // retail status
+                        render: function (data, type, row) {
+                            return row[23];
+                        },
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            $(td).html(rowData[23]);
+                        }
+                    },
+                    {
+                        targets: [22], // date sent,
+                        render: function (data, type, row) {
+                            return row[21];
+                        },
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            if ($('#isRoleAllowed').val() == 'true') {
+                                $(td).html(`<div class="show d-flex" >
+                                    <input type="text" class="form-control" name="date_in_table" value="${rowData[21]}" data-attribute="date_sent" data-id="${rowData[0]}" autocomplete="off"  />
+                                </div>`);
+                            } else {
+                                $(td).html(rowData[21]);
+                            }
+                        }
+                    },
+                    {
+                        targets: [23], // wholesale notes
+                        render: function (data, type, row) {
+                            return row[25];
+                        },
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            if ($('#isRoleAllowed').val() == 'true') {
+                                // $(td).html(`<div class="show d-flex" >
+                                //     <input type="text" class="form-control wholesale_notes" name="input_field" value="${rowData[25] ? rowData[25] : ""}" id="${rowData[0]}wholesale_notes" data-attribute="wholesale_notes" data-id="${rowData[0]}" autocomplete="off"  />
+                                // </div>`);
+                                $(td).html(`<div class="show d-flex" >
+                                <textarea class="form-control autosize wholesale_notes" name="input_field" id="${rowData[0]}wholesale_notes" data-attribute="wholesale_notes" data-id="${rowData[0]}">${rowData[25] ? rowData[25] : ""}</textarea>
+                                </div>`);
+
+                            } else {
+                                $(td).html(rowData[25]);
+                            }
+
+                        }
+                    },
+                    {
+                        targets: [24], // sold price
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            if ($('#isRoleAllowed').val() == 'true') {
+                                $(td).html(`<div class="show d-flex" >
+                                    <input type="text" class="form-control sold_price" name="input_field" value="${rowData[26] ? rowData[26] : 0}" id="${rowData[0]}sold_price" data-attribute="sold_price" data-id="${rowData[0]}" autocomplete="off"  />
+                                </div>`);
+                            } else {
+                                $(td).html(rowData[26]);
+                            }
+
+                        }
+                    },
+                    {
+                        targets: [25], // profit
+                        render: function (data, type, row) {
+                            return row[27];
+                        },
+                    },
+                    {
+                        targets: [26], // UCI
+                        render: function (data, type, row) {
+                            return row[28];
+                        },
+                    },
+                    {
+                        targets: [27], // purchase from
+                        render: function (data, type, row) {
+                            return row[29];
+                        },
+                    },
+                    {
+                        targets: [28], // sold date
+                        render: function (data, type, row) {
+                            return row[22];
+                        },
+                    },
+                    {
+                        targets: [29], // action
+                        render: function (data, type, row) {
+                            return row[31];
+                        },
+                    },
+                    {
+                        targets: [30], // Uci Ro
+                        render: function (data, type, row) {
+                            return row[33];
+                        },
+                    },
+                    {
+                        searchPanes: {
+                            show: true
+                        },
+                        targets: [21, 26, 27, 12, 28]
+                    },
+                ],
+
+                language: {
+                    "infoFiltered": "",
+                    searchPanes: {
+                        count: "{total} found",
+                        countFiltered: "{shown} / {total}"
+                    }
+                },
+
+                rowGroup: {
+                    dataSrc: rowGroupSrc,
+                    enable: rowGroupSrcStatus,
+                    startRender: function (rows, group) {
+                        var collapsed = !!collapsedGroups[group];
+
+                        // -------------  For Display All Number of Filtered Rows -----------------
+                        // retails status
+                        if (rowGroupSrc == 23) {
+
+                            rows.nodes().each(function (r) {
+                                r.style.display = collapsed ? 'none' : '';
+                            });
+
+                            var filteredData = $('#datatable-1').DataTable()
+                                .rows({ search: 'applied' })
+                                .data()
+                                .filter(function (data, index) {
+                                    return data[rowGroupSrc] == group ? true : false;
+                                });
+                            if (group == null || group == "") {
+                                group = "Blank";
+                            } else {
+                                group = group.toUpperCase();
+                            }
+                            return $('<tr/>')
+                                .append('<td colspan="17">' + group + ' (' + filteredData.length + ')</td>')
+                                .attr('data-name', group)
+                                .toggleClass('collapsed', collapsed);
+                        }
+                        else if (rowGroupSrc == 22) {
+
+                            rows.nodes().each(function (r) {
+                                r.style.display = 'none';
+                                if (collapsed) {
+                                    r.style.display = '';
+                                }
+                            });
+
+                            var totalProfit = 0;
+                            var filteredData = $('#datatable-1').DataTable()
+                                .rows({ search: 'applied' })
+                                .data()
+                                .filter(function (data, index) {
+                                    if (data[rowGroupSrc] == group) {
+                                        var profit = parseFloat((data[27]).replace(/\$|,/g, ''))
+                                        totalProfit += profit;
+                                        return true;
+                                    } else {
+                                        return false;
+                                    }
+                                });
+                            // console.log(filteredData);
+                            return $('<tr/>')
+                                .append('<td colspan="17">' + group + ' (' + formatToCurrency(totalProfit) + ')</td>')
+                                .attr('data-name', group)
+                                .toggleClass('collapsed', collapsed);
+                        }
+
+
+                    }
+                },
+
+                initComplete: function () {
+                    loadSearchData();
+                    // Start with closed groups
+                    $('#datatable-1 tbody tr.dtrg-start').each(function () {
+                        var name = $(this).data('name');
+                        collapsedGroups[name] = !!collapsedGroups[name];
+                    });
+                },
+
+                "drawCallback": function (settings, start, end, max, total, pre) {
+                    var json = this.fnSettings().json;
+                    if (json) {
+                        var obj = json.totalNumber;
+                        for (const [key, value] of Object.entries(obj)) {
+                            $(`input[name='mod'][value='${key}']`).next().next().html(value)
+                            switch (key) {
+                                case 'addToSheet':
+                                case 'missingDate':
+                                case 'titleIssue':
+                                    if (value == '0') {
+                                        $(`input[name='mod'][value='${key}']`).parent().addClass('btn-outline-success')
+                                        $(`input[name='mod'][value='${key}']`).parent().removeClass('btn-outline-danger')
+                                    } else {
+                                        $(`input[name='mod'][value='${key}']`).parent().addClass('btn-outline-danger')
+                                        $(`input[name='mod'][value='${key}']`).parent().removeClass('btn-outline-success')
+                                    }
+                                    break;
+                                case 'retail':
+                                case 'sold':
+                                    $(`input[name='mod'][value='${key}']`).parent().addClass('btn-outline-success')
+                                    break;
+                                case 'fixAge':
+                                    $(`input[name='mod'][value='fixAge`).parent().addClass('btn-outline-info')
+                                    break;
+                                default:
+                                    $(`input[name='mod'][value='${key}']`).parent().addClass('btn-outline-primary')
+                                    break;
+                            }
+                        }
+                        // $(`input[name='mod'][value='fixAge`).parent().addClass('btn-outline-info');
+
+                        var activebtnvalue = $("#mods .btn.active input[name='mod']").val();
+                        if (activebtnvalue == 'missingDate' || activebtnvalue == 'keysPulled' || activebtnvalue == 'atAuction') {
+                            setfun();
+                            setInputChange();
+                        } else if (activebtnvalue == 'soldAtAuction') {
+                            setInputChange();
+                        }
+
+                    }
+                    autosize.update($(".autosize"));
+                },
+
+                createdRow: function (row, data, dataIndex) {
+                    if ($('#isEditAllowed').val() == "true") {
+                        var activebtnvalue = $("#mods .btn.active input[name='mod']").val();
+                        if (activebtnvalue == 'missingDate') {
+                            $(row).children().not(':nth-child(2)').not(':nth-child(9)').not(':last-child').attr({
+                                "data-toggle": "modal",
+                                "data-target": "#modal8",
+                                "onclick": "editUsedCar(" + data[0] + ")"
+                            });
+                        } else if (activebtnvalue == 'titleIssue') {
+
+                            $(row).children().not(':nth-child(9)').not(':last-child').attr({
+                                "data-toggle": "modal",
+                                "data-target": "#modal8",
+                                "onclick": "editUsedCar(" + data[0] + ")"
+                            });
+                        } else if (activebtnvalue == 'readyToShip') {
+
+                            $(row).children().not(':nth-child(3)').not(':nth-child(10)').not(':last-child').attr({
+                                "data-toggle": "modal",
+                                "data-target": "#modal8",
+                                "onclick": "editUsedCar(" + data[0] + ")"
+                            });
+                        } else if (activebtnvalue == 'keysPulled') {
+
+                            $(row).children().not(':nth-child(3)').not(':nth-child(13)').not(':nth-child(10)').not(':nth-child(14)').not(':last-child').attr({
+                                "data-toggle": "modal",
+                                "data-target": "#modal8",
+                                "onclick": "editUsedCar(" + data[0] + ")"
+                            });
+                        } else if (activebtnvalue == 'atAuction') {
+
+                            $(row).children().not(':nth-child(9)').not(':nth-child(10)').not(':nth-child(14)').not(':last-child').attr({
+                                "data-toggle": "modal",
+                                "data-target": "#modal8",
+                                "onclick": "editUsedCar(" + data[0] + ")"
+                            });
+                        } else if (activebtnvalue == 'soldAtAuction') {
+
+                            $(row).children().not(':nth-child(3)').not(':nth-child(10)').not(':nth-child(12)').not(':last-child').attr({
+                                "data-toggle": "modal",
+                                "data-target": "#modal8",
+                                "onclick": "editUsedCar(" + data[0] + ")"
+                            });
+                        } else if (activebtnvalue == 'sold') {
+                            $(row).children().not(':last-child').attr({
+                                "data-toggle": "modal",
+                                "data-target": "#modal8",
+                                "onclick": "editUsedCar(" + data[0] + ")"
+                            });
+                        } else if (activebtnvalue == 'retail') {
+                            $(row).children().not(':nth-child(9)').not(':last-child').attr({
+                                "data-toggle": "modal",
+                                "data-target": "#modal8",
+                                "onclick": "editUsedCar(" + data[0] + ")"
+                            });
+                        } else {
+                            $(row).children().attr({
+                                "data-toggle": "modal",
+                                "data-target": "#modal8",
+                                "onclick": "editUsedCar(" + data[0] + ")"
+                            });
+                        }
+                    }
+                },
+                // "order": [[1, "desc"]],
+                "order": orderBy,
+            });
+            writeStatusHTML();
+        }
+    }
+
+
+
 
 
 
@@ -814,7 +866,6 @@ $(function () {
 
 
     loadSaleConsultant();
-    writeStatusHTML();
 
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -830,39 +881,55 @@ $(function () {
 
     $(".disabled-div").find("*").prop("readonly", true);
 
+    $('#filterDataTable').on('click', function () {
+        loadDataTable();
+    });
 
     window.onscroll = function () { myFunction() };
     var header = document.getElementById("makeSticky");
-    // var sticky = header.offsetParent.offsetHeight - header.offsetTop - header.offsetHeight;
-    var sticky = header.offsetHeight;
     function myFunction() {
-        if (window.pageYOffset > sticky) {
-            header.classList.add("stickyDiv");
-        } else {
-            header.classList.remove("stickyDiv");
+        var desktopH = document.getElementById("sticky-header-desktop");
+        var mobileH = document.getElementById("sticky-header-mobile");
+        var header2 = document.getElementById("makeSticky");
+        var datatableHeader = $('.table.fixedHeader-floating');
+        // console.log(desktopH.offsetHeight);   
+        manageInvTable?.fixedHeader.headerOffset(desktopH.offsetHeight + mobileH.offsetHeight + header2.offsetHeight - 3);
+        manageCDKAgeTable?.fixedHeader.headerOffset(desktopH.offsetHeight + mobileH.offsetHeight + header2.offsetHeight - 3);
+
+
+        if ($(window).width() < 580) {
+            manageInvTable?.fixedHeader.headerOffset(mobileH.offsetHeight - 3);
+            manageCDKAgeTable?.fixedHeader.headerOffset(mobileH.offsetHeight - 3);
         }
+
+        $('#secondMenu').css('height', header2.offsetHeight)
+        if (datatableHeader.length > 0) {
+            let topV = desktopH.offsetHeight + mobileH.offsetHeight + header2.offsetHeight - 3;
+            datatableHeader[0].style.top = `${topV}px`;
+        }
+        header.classList.add("stickyDiv");
+        header.classList.add("fh-fixedHeader");
+        // if (window.pageYOffset > sticky) {
+        //     header.classList.add("stickyDiv");
+        // } else {
+        //     header.classList.remove("stickyDiv");
+        // }
     }
+    header.classList.remove("stickyDiv");
+
+
+    $('#datatable-1 tbody').on('click', 'tr.dtrg-start', function () {
+        var name = $(this).data('name');
+        collapsedGroups[name] = !collapsedGroups[name];
+        manageInvTable.draw(false);
+    });
 
 });
 
-function loadSearchData() {
+async function loadSearchData() {
     searhStatusArray = [];
-    $('#datatable-1').DataTable()
-        .rows()
-        .data()
-        .each(function (rowData, index) {
-            if (rowData[2] != 'undefined' && rowData[2] && rowData[2] != 'undefined') {
-                if (rowData[2] == 'O73449XXA ||  2GNFLFEK4F6144107') console.log(rowData[2], rowData[30]);
-                searhStatusArray.push({
-                    stockDetails: rowData[2],
-                    stockAvailibility: rowData[30],
-                })
-                return true;
-            }
-            return false;
-        });
-
-    setSearchTypehead(searhStatusArray);
+    const data = await manageInvTable.ajax.json();
+    setSearchTypehead(data.searhStatusArray);
 }
 
 function setSearchTypehead(searhStatusArray) {
@@ -894,7 +961,7 @@ function setSearchTypehead(searhStatusArray) {
             templates: {
                 suggestion: function (data) {
                     var stockAvailibilityArray = data.stockAvailibility;
-                    const template = `<div><p><strong>${data.stockDetails}</strong></p><div class="row pl-2 pr-2">${stockAvailibilityArray.map(e => (e) ? `<div class="col-sm-4 p-1"> <button class="badge badge-label-primary cursor-pointer searchStockBtn" onclick="searchStockBtn(this)"  data-head="${e}" data-search="${data.stockDetails}" > ${e} </button> </div>` : ``).join('')}</div></div>`;
+                    const template = `<div><p><strong>${data.stockDetails}</strong></p><div class="row pl-2 pr-2">${stockAvailibilityArray.map(e => (e) ? `<div class="col-sm-4 p-1 mr-2"> <button class="badge badge-label-primary cursor-pointer searchStockBtn" onclick="searchStockBtn(this)"  data-head="${e}" data-search="${data.stockDetails}" > ${e} </button> </div>` : ``).join('')}</div></div>`;
                     return template;
                 }
             },
@@ -949,8 +1016,10 @@ function searchStockBtn(params) {
     if (tab) {
         setTimeout(() => {
             $("#datatable-1").dataTable().fnFilter(search);
-            manageInvTable.order([1, 'desc']).draw();
-            manageInvTable.ajax.reload(null, false);
+            // manageInvTable.order([1, 'desc']).draw();
+            // manageInvTable.ajax.reload(null, false);
+            $('#searchcars').blur();
+            $('#searchcars').val('');
         }, 1000);
     }
 
@@ -975,15 +1044,17 @@ function EmptyField(field) {
 }
 
 function setInputChange() {
-    var inputs = document.querySelectorAll("input[name=input_field]");
+    var inputs = document.querySelectorAll("input[name=input_field] , textarea[name=input_field]");
     for (var i = 0; i < inputs.length; i++) {
+        var inputTag = inputs[i].tagName;
         inputs[i].addEventListener("keyup", function (event) {
+            // if (event.keyCode === 13 && (inputTag == 'TEXTAREA' ? event.shiftKey : true)) {
             if (event.keyCode === 13) {
                 event.preventDefault();
                 let id = $(this).data('id');
                 let attribute = $(this).data('attribute');
                 let value = $(this).val();
-                updateFieldsUsedCars({ id:[id], attribute:[attribute], value:[value] });
+                updateFieldsUsedCars({ id: [id], attribute: [attribute], value: [value] });
             }
         });
     }
@@ -1010,14 +1081,14 @@ function setfun() {
         let id = $(this).data('id');
         let attribute = $(this).data('attribute');
         let value = "";
-        updateFieldsUsedCars({ id:[id], attribute:[attribute], value:[value] });
+        updateFieldsUsedCars({ id: [id], attribute: [attribute], value: [value] });
     });
     $('input[name="date_in_table"]').on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('MM-DD-YYYY'));
         let id = $(this).data('id');
         let attribute = $(this).data('attribute');
         let value = picker.startDate.format('MM-DD-YYYY');
-        updateFieldsUsedCars({ id:[id], attribute:[attribute], value:[value] });
+        updateFieldsUsedCars({ id: [id], attribute: [attribute], value: [value] });
     });
 }
 function handletitleCheckbox(e) {
@@ -1027,7 +1098,7 @@ function handletitleCheckbox(e) {
     if ($(e).is(':checked')) {
         value = "true";
     }
-    updateFieldsUsedCars({ id:[id], attribute:[attribute], value:[value] }, false);
+    updateFieldsUsedCars({ id: [id], attribute: [attribute], value: [value] }, false);
 }
 function handleFixedStatusCheckbox(e) {
     let value = "false";
@@ -1037,7 +1108,7 @@ function handleFixedStatusCheckbox(e) {
         value = "true";
     }
     console.log({ id, attribute, value });
-    updateFieldsUsedCars({ id:[id], attribute:[attribute], value:[value] });
+    updateFieldsUsedCars({ id: [id], attribute: [attribute], value: [value] });
     manageCDKAgeTable.ajax.reload(null, false);
 }
 
@@ -1061,7 +1132,7 @@ function fetchFixCDKAge() {
             "pageLength": 25,
             autoWidth: false,
             "order": [[1, "desc"]],
-
+            fixedHeader: true,
             dom: `\n     
             <'row'<'col-12'P>>\n
             \n     
@@ -1099,6 +1170,13 @@ function fetchFixCDKAge() {
                 },
             ],
             columnDefs: [
+                {
+                    width: 200,
+                    targets: [5],
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        $(td).addClass('text-nowrap');
+                    }
+                },
                 {
                     targets: [0],
                     visible: false,
@@ -1192,8 +1270,53 @@ function loadSaleConsultant() {
 }
 
 
-function toggleFilterClass2() {
+function toggleFilterClass() {
     $('.dtsp-panes').toggle();
+}
+function toggleFilterClass2() {
+    // $('.dtsp-panes').toggle();
+    $('.customFilters1').toggleClass('d-none');
+
+    $("#retailFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "Retail Status",
+        // tags: !0
+    });
+    $("#uciFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "UCI",
+        // tags: !0
+    });
+
+
+    // $("#purchaseFilter").datepicker({
+    //     language: 'en',
+    //     format: 'mm-dd-yyyy',
+    //     orientation: "bottom auto",
+    //     multidate: true,
+    //     selectCounter: true,
+    //     multidateSeparator: " - ",
+    // });
+    $("#purchaseFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "Purchase From",
+        // tags: !0
+    });
+
+    $("#soldFilter").datepicker({
+        language: 'en',
+        format: 'mm-dd-yyyy',
+        orientation: "bottom auto",
+        multidate: true,
+        selectCounter: true,
+        multidateSeparator: " - ",
+    });
+
+    $("#titleFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "Title Priority",
+        // tags: !0
+    });
 }
 
 function toggleInfo(id) {
@@ -1318,63 +1441,61 @@ function writeStatusHTML() {
     }
 }
 function addALL() {
-    var arrayObj = [];
-    $('#datatable-1').DataTable()
-        .rows({ search: 'applied' })
-        .data().each((e) => {
-            // console.log(e);
-            var obj = {};
+    // var arrayObj = [];
+    // $('#datatable-1').DataTable()
+    //     .rows({ search: 'applied' })
+    //     .data().each((e) => {
+    //         // console.log(e);
+    //         var obj = {};
 
-            var id = e[0];
-            var wholesale = e[20];
-            var retailStatus, uci, titlePriority = "";
+    //         var id = e[0];
+    //         var wholesale = e[20];
+    //         var retailStatus, uci, titlePriority = "";
 
-            if (wholesale == 'No') {
-                retailStatus = 'retail';
-                titlePriority = "New";
-                uci = "need";
-            } else if (wholesale == 'Yes') {
-                retailStatus = 'wholesale';
-                titlePriority = "New";
-                uci = "0";
-            }
-            obj = { id, retailStatus, titlePriority, uci };
-            arrayObj.push(obj)
+    //         if (wholesale == 'No') {
+    //             retailStatus = 'retail';
+    //             titlePriority = "New";
+    //             uci = "need";
+    //         } else if (wholesale == 'Yes') {
+    //             retailStatus = 'wholesale';
+    //             titlePriority = "New";
+    //             uci = "0";
+    //         }
+    //         obj = { id, retailStatus, titlePriority, uci };
+    //         arrayObj.push(obj)
+    //     });
 
+    // if (arrayObj.length) {
+    // e1.fire({
+    //     title: "Are you sure?",
+    //     text: "You won't be able to revert this!",
+    //     icon: "warning",
+    //     showCancelButton: !0,
+    //     confirmButtonColor: "#3085d6",
+    //     cancelButtonColor: "#d33",
+    //     confirmButtonText: "Yes, Add All!"
+    // }).then(function (t) {
+    //     if (t.isConfirmed == true) {
+    $.ajax({
+        url: '../php_action/allAddUsedCars.php',
+        type: 'post',
+        // data: { arrayObj: arrayObj },
+        dataType: 'json',
 
-        })
+        success: function (response) {
+            if (response.success == true) {
+                Swal.fire("Added!", "Your file has been Added.", "success");
+                setTimeout(() => {
+                    Swal.close()
+                }, 900);
+                manageInvTable.ajax.reload(null, false);
+            } // /response messages
+        }
 
-    if (arrayObj.length) {
-        // e1.fire({
-        //     title: "Are you sure?",
-        //     text: "You won't be able to revert this!",
-        //     icon: "warning",
-        //     showCancelButton: !0,
-        //     confirmButtonColor: "#3085d6",
-        //     cancelButtonColor: "#d33",
-        //     confirmButtonText: "Yes, Add All!"
-        // }).then(function (t) {
-        //     if (t.isConfirmed == true) {
-        $.ajax({
-            url: '../php_action/allAddUsedCars.php',
-            type: 'post',
-            data: { arrayObj: arrayObj },
-            dataType: 'json',
-
-            success: function (response) {
-                if (response.success == true) {
-                    Swal.fire("Added!", "Your file has been Added.", "success");
-                    setTimeout(() => {
-                        Swal.close()
-                    }, 900);
-                    manageInvTable.ajax.reload(null, false);
-                } // /response messages
-            }
-
-        }); // /ajax function to remove the brand
-        //     }
-        // });
-    }
+    }); // /ajax function to remove the brand
+    //     }
+    // });
+    // }
 
 
 
@@ -1439,7 +1560,7 @@ function filterDatatable() {
         timeout: 1e3
     });
     manageInvTable.draw();
-    manageInvTable.searchPanes.rebuildPane();
+    // manageInvTable.searchPanes.rebuildPane();
 }
 
 const formatToCurrency = amount => {

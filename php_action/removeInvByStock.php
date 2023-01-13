@@ -14,7 +14,15 @@ if ($stockAr) {
         $stkno = mysqli_real_escape_string($connect, $stock);
 
         // $sql = "UPDATE inventory SET status = 2 WHERE stockno = '$stkno'";
-        $sql = "UPDATE inventory SET status = 2 , balance = '0' , lot = '' WHERE stockno = '$stkno'";
+
+        // $sql = "UPDATE inventory SET status = 2 , balance = '0' , lot = '' WHERE stockno = '$stkno'";
+
+
+        $sql = "UPDATE inventory SET 
+        inventory.balance =  CASE WHEN status = '1' THEN '0' ELSE balance END ,
+        inventory.lot =  CASE WHEN status = '1' THEN '' ELSE lot END,
+        status = CASE WHEN status = '1' THEN 2 ELSE status END
+        WHERE stockno = '$stkno'";
 
         // $checkSql = "SELECT `sales`.* FROM `sales` INNER JOIN inventory ON sales.stock_id = inventory.id WHERE inventory.stockno = '$stkno' AND sales.status = 1";
         // $result = $connect->query($checkSql);

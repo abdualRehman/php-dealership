@@ -53,7 +53,8 @@ if ($result->num_rows > 0) {
 
 
         $mmr_balance = $mmr - $balance;
-        $mmr_retail = $retail - $mmr;
+        // $mmr_retail = $retail - $mmr;
+        $mmr_retail =  $mmr - $balance;
 
 
         // date_default_timezone_set('Asia/Karachi');

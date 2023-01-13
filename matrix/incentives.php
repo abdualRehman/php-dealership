@@ -196,7 +196,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
 
                     <div class="portlet-body">
 
-                        <table id="datatable-1" class="table table-bordered table-striped table-hover">
+                        <table id="datatable-1" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>Sold Date</th>
@@ -247,7 +247,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                         <div class="form-row flex-column-reverse flex-md-row">
                             <div class="col-md-8">
                                 <div class="row">
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label for="saleDate" class="col-form-label">Date</label>
                                         <div class="form-group input-group">
                                             <div class="input-group-append">
@@ -257,9 +257,13 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                             <input type="text" class="form-control" readonly name="saleDate" placeholder="Select date" id="saleDate">
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label for="customerName" class="col-form-label">Customer Name</label>
                                         <input type="text" class="form-control" id="customerName" readonly name="customerName" placeholder="Customer Name">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="salesConsultant" class="col-form-label">Sales Consultant</label>
+                                        <input type="text" class="form-control" id="salesConsultant" readonly name="salesConsultant" placeholder="Sales Consultant">
                                     </div>
 
                                 </div>

@@ -2,156 +2,463 @@
 
 require_once 'db/core.php';
 
+date_default_timezone_set("America/New_York");
+
 $userRole;
 if ($_SESSION['userRole']) {
     $userRole = $_SESSION['userRole'];
 }
 $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
-/* sales consultant id */
+$sqlQuery = '';
+
+
+## Custom Field value
+$searchByDatePeriod = $_POST['searchByDatePeriod'];
+$customStart = $_POST['customStart'];
+$customEnd = $_POST['customEnd'];
+$searchByCatgry = $_POST['searchByCatgry'];
+
+// ## Search 
+$searchQuery = " ";
+if ($searchByDatePeriod != '') {
+    if ($searchByDatePeriod == "currentMonth") {
+        // $startDate = date('m/01/Y');
+        // $endDate = date('m/t/Y');
+        $startDate = date('Y-m-01');
+        $endDate = date('Y-m-t');
+        // not working
+        // $searchQuery .= " and (CONVERT(date,date) >= '" . $startDate . "' AND CONVERT(date,date) <= '" . $endDate . "' ) ";
+        // $searchQuery .= " and (CONVERT(date,date) BETWEEN '" . $startDate . "' AND '" . $endDate . "' ) ";
+
+        // working
+        $searchQuery .= " and ( CAST( IF( (sales.reconcileDate != ''), sales.reconcileDate , sales.date ) as date) BETWEEN '" . $startDate . "' AND '" . $endDate . "' ) ";
+    } else if ($searchByDatePeriod == "yesterday") {
+        // $yesterday = date("m/d/Y", strtotime("yesterday"));
+        $yesterday = date("Y-m-d", strtotime("yesterday"));
+        $searchQuery .= " and (CONVERT(date,date) = '" . $yesterday . "')";
+
+        // $searchQuery .= " and ((IF((sales.reconcileDate != ''), sales.reconcileDate , sales.date )) = '" . $yesterday . "')";
+    } else if ($searchByDatePeriod == 'today') {
+        $today = date("Y-m-d");
+        $searchQuery .= " and (CONVERT(date,date) = '" . $today . "')";
+
+        // $searchQuery .= " and ((IF((sales.reconcileDate != ''), sales.reconcileDate , sales.date )) = '" . $today . "')";
+    } else if ($searchByDatePeriod == 'all') {
+        $searchQuery .= " and (date = date)";
+    }
+}
+
+
+if ($customStart != '' && $customEnd != '') {
+    // $searchQuery .= " and (date >= '" . $customStart . "' AND date <= '" . $customEnd . "' ) ";
+    // $searchQuery .= " and (CONVERT(date,date) BETWEEN '" . $customStart . "' AND '" . $customEnd . "' ) ";
+    $searchQuery .= " and ( CAST( IF( (sales.reconcileDate != ''), sales.reconcileDate , sales.date ) as date ) BETWEEN '" . $customStart . "' AND '" . $customEnd . "' ) ";
+} else {
+    $searchQuery .= " and (date = date)";
+}
+
+if ($searchByCatgry != '') {
+    $searchQuery .= " and (sale_status='" . $searchByCatgry . "') ";
+}
+
 if ($userRole != $salesConsultantID) {
-    $sql = "SELECT sales.date ,  inventory.stockno , sales.fname , sales.lname , users.username, sales.sale_status , sales.deal_notes , 
-    inventory.year, inventory.make , inventory.model , sales.gross , sales.sale_id , inventory.lot , sales.certified, inventory.balance , 
-    inventory.status , inventory.age , inventory.stocktype , sales.stock_id , sales.consultant_notes , sales.thankyou_cards , sales.reconcileDate , sales.sales_consultant
-    FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant WHERE sales.status = 1 AND sales.location = '$location'";
+
+    $sqlQuery = "SELECT CAST( IF((sales.reconcileDate != ''), sales.reconcileDate , sales.date ) AS date ) as date , sales.fname , sales.lname , users.username, inventory.stockno , 
+    CONCAT( inventory.stocktype ,' ', inventory.year ,' ', inventory.make ,' ', inventory.model ) as vehicle , 
+    inventory.age , 
+    sales.certified ,
+    inventory.lot , 
+    CAST(sales.gross AS INT) as gross, 
+    sales.sale_status , 
+    sales.deal_notes ,
+    inventory.balance , 
+    sales.consultant_notes , 
+    '' as sales_consultant_status, 
+    '' as button, 
+    inventory.stocktype, 
+    '' as countRow , 
+    sales.sale_id , 
+    sales.thankyou_cards , sales.date as sold_date , 
+    '' as codp_warn , 
+    '' as lwbn_warn , 
+    inventory.status as invStatus , sales.stock_id, sales.reconcileDate as reconcileDateOnly
+    FROM sales, inventory, users WHERE sales.stock_id = inventory.id AND users.id = sales.sales_consultant AND sales.status = 1 AND sales.location = '$location'";
 } else {
     $uid = $_SESSION['userId'];
-    $sql = "SELECT sales.date ,  inventory.stockno , sales.fname , sales.lname , users.username, sales.sale_status , sales.deal_notes , 
-    inventory.year, inventory.make , inventory.model , sales.gross , sales.sale_id , inventory.lot , sales.certified, inventory.balance , 
-    inventory.status , inventory.age , inventory.stocktype , sales.stock_id , sales.consultant_notes , sales.thankyou_cards , sales.reconcileDate , sales.sales_consultant
-    FROM `sales` LEFT JOIN inventory ON sales.stock_id = inventory.id LEFT JOIN users ON users.id = sales.sales_consultant WHERE sales.status = 1 AND sales.sales_consultant = '$uid' AND sales.location = '$location'";
+
+    $sqlQuery = "SELECT CAST( IF((sales.reconcileDate != ''), sales.reconcileDate , sales.date ) as date ) as date , sales.fname , sales.lname , users.username, inventory.stockno , 
+    CONCAT( inventory.stocktype ,' ', inventory.year ,' ', inventory.make ,' ', inventory.model ) as vehicle , 
+    inventory.age , sales.certified ,inventory.lot , CAST(sales.gross AS INT) as gross , sales.sale_status , sales.deal_notes ,inventory.balance , 
+    sales.consultant_notes , '' as sales_consultant_status, '' as button, inventory.stocktype, '' as countRow , sales.sale_id , 
+    sales.thankyou_cards , sales.date as sold_date , 
+    '' as codp_warn , 
+    '' as lwbn_warn , 
+    inventory.status as invStatus , sales.stock_id , sales.reconcileDate as reconcileDateOnly
+    FROM sales, inventory, users WHERE sales.stock_id = inventory.id AND users.id = sales.sales_consultant AND sales.status = 1 AND sales.sales_consultant = '$uid' AND sales.location = '$location'";
 }
 
-$result = $connect->query($sql);
 
-$output = array('data' => array());
 
-function asDollars($value)
-{
-    if ($value < 0) return "-" . asDollars(-$value);
-    return '$' . number_format($value, 2);
-}
 
+// echo $sqlQuery . '<br />';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$table = <<<EOT
+(
+    {$sqlQuery} {$searchQuery}
+) temp
+EOT;
+
+// echo $table;
+// echo "<hr />";
+
+
+$primaryKey = 'sale_id';
+
+$columns = array(
+    array(
+        'db' => 'date', 'dt' => 0,
+        'formatter' => function ($d, $row) {
+            $date =  ($d != '') ? date("M-d-Y", strtotime($d)) : '';
+            return $date;
+        }
+    ),
+    array('db' => 'fname',  'dt' => 1),
+    array('db' => 'lname',   'dt' => 2),
+    array('db' => 'username',   'dt' => 3),
+    array('db' => 'stockno', 'dt' => 4),
+    array('db' => 'vehicle',   'dt' => 5),
+    array('db' => 'age',   'dt' => 6),
+    array(
+        'db' => 'certified',   'dt' => 7,
+        'formatter' => function ($d, $row) {
+            return $d == 'on' ? 'Yes' : 'No';
+        }
+    ),
+    array(
+        'db' => 'lot',   'dt' => 8,
+        'formatter' => function ($d, $row) {
+            return $row[23] == 1 ? $d : '';
+        }
+    ),
+    array(
+        'db' => 'gross',   'dt' => 9,
+        'formatter' => function ($d, $row) {
+            return  (int)round(($d), 2);
+        }
+    ),
+    array('db' => 'sale_status',   'dt' => 10),
+    array('db' => 'deal_notes',   'dt' => 11),
+    array(
+        'db' => 'balance',   'dt' => 12,
+        'formatter' => function ($d, $row) {
+            return $row[23] == 1 ? $d : '';
+        }
+    ),
+    array('db' => 'consultant_notes',   'dt' => 13),
+    array(
+        'db' => 'sales_consultant_status',   'dt' => 14,
+        'formatter' => function ($d, $row) {
+            global $connect;
+            $id = $row[18];
+            $sales_consultant_status = '';
+            $sql2 = "SELECT salesperson_status FROM `sale_todo` WHERE sale_id = '$id'";
+            $result2 = $connect->query($sql2);
+            if ($result2->num_rows > 0) {
+                $row2 = $result2->fetch_array();
+                $sales_consultant_status = $row2[0];
+            }
+            return $sales_consultant_status;
+        }
+    ),
+    array(
+        'db' => 'button',   'dt' => 15,
+        'formatter' => function ($d, $row) {
+            global $connect, $location, $salesConsultantID, $branchAdmin, $salesManagerID, $generalManagerID;
+            $id = $row[18];
+            $confirmed = '';
+            $sql3 = "SELECT * FROM `appointments` WHERE status = 1 AND location = '$location' AND sale_id = '$id'";
+            $result3 = $connect->query($sql3);
+            if ($result3->num_rows > 0) {
+                $row3 = $result3->fetch_array();
+                $confirmed = $row3['confirmed'];
+            }
+            $button = '
+            <div class="show d-inline-flex w-100 justify-content-end" >';
+
+            if (
+                ($_SESSION['userRole'] == $salesConsultantID && $confirmed != 'ok') || $_SESSION['userRole'] == 'Admin' || $_SESSION['userRole'] == $branchAdmin ||
+                $_SESSION['userRole'] == $salesManagerID || $_SESSION['userRole'] == $generalManagerID
+            ) {
+                if ($row['sale_status'] != 'cancelled' && hasAccess("appointment", "Add") !== 'false') {
+                    $button .= '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#editScheduleModel" onclick="addNewSchedule(' . $id . ')" >
+                                <i class="far fa-calendar-alt"></i>
+                            </button>';
+                }
+            }
+
+            if (hasAccess("sale", "Remove") !== 'false') {
+                $button .= '<button class="btn btn-label-primary btn-icon" onclick="removeSale(' . $id . ')" >
+                        <i class="fa fa-trash"></i>
+                    </button>';
+            }
+            $button .= '</div>';
+
+            return $button;
+        }
+    ),
+    array('db' => 'stocktype',   'dt' => 16),
+    array(
+        'db' => 'countRow',   'dt' => 17,
+        'formatter' => function ($d, $row) {
+            global $connect;
+            $stock_id = $row[24];
+            $countRow = 0;
+            $sql2 = "SELECT stock_id, COUNT(stock_id) FROM sales WHERE sales.sale_status != 'cancelled' AND stock_id = '$stock_id' GROUP BY stock_id HAVING COUNT(stock_id) > 1";
+            $result2 = $connect->query($sql2);
+            if ($result2->num_rows > 0) {
+                $row2 = $result2->fetch_array();
+                $countRow = $row2[0];
+            }
+            return $countRow;
+        }
+    ),
+    array('db' => 'sale_id',   'dt' => 18),
+    array('db' => 'thankyou_cards',   'dt' => 19),
+    array('db' => 'sold_date',   'dt' => 20),
+    array(
+        'db' => 'codp_warn',   'dt' => 21,
+        'formatter' => function ($d, $row) {
+            global $connect;
+            $stock_id = $row[24];
+            $countRow = '';
+            $sql2 = "SELECT stock_id, COUNT(stock_id) FROM sales WHERE sales.sale_status != 'cancelled' AND stock_id = '$stock_id' GROUP BY stock_id HAVING COUNT(stock_id) > 1";
+            $result2 = $connect->query($sql2);
+            if ($result2->num_rows > 0) {
+                $row2 = $result2->fetch_array();
+                $countRow = $row2[0];
+            }
+            return $countRow;
+        }
+    ),
+    array(
+        'db' => 'lwbn_warn',   'dt' => 22,
+        'formatter' => function ($d, $row) {
+            global $connect;
+            $stock_id = $row[24];
+            $countRow = '';
+            $sql2 = "SELECT stock_id, COUNT(stock_id) FROM sales WHERE sales.sale_status != 'cancelled' AND stock_id = '$stock_id' GROUP BY stock_id HAVING COUNT(stock_id) > 1";
+            $result2 = $connect->query($sql2);
+            if ($result2->num_rows > 0) {
+                $row2 = $result2->fetch_array();
+                $countRow = $row2[0];
+            }
+            return $countRow;
+        }
+    ),
+    array('db' => 'invStatus',   'dt' => 23),
+    array('db' => 'stock_id',   'dt' => 24),
+    array('db' => 'reconcileDateOnly',   'dt' => 25)
+);
+
+
+// $sql_details = array(
+//     'user' => 'root',
+//     'pass' => '',
+//     'db'   => 'carshop',
+//     'host' => 'localhost'
+// );
+$sql_details = array(
+    'user' => $username,
+    'pass' => $password,
+    'db'   => $dbname,
+    'host' => $localhost
+);
+
+require('ssp.class.php');
+
+
+
+$tC = 0;
+$yC = 0;
+$cmC = 0;
+$allC = 0;
+$penC = 0;
+$delC = 0;
+$canC = 0;
+$ndC = 0;
+
+// echo $sqlQuery;
+
+$result = $connect->query($sqlQuery);
 if ($result->num_rows > 0) {
-
     while ($row = $result->fetch_array()) {
 
-        $stock_id = $row[18];
-        $id = $row[11];
-        $consultant_notes = $row[19];
-        $sales_consultant_status = "";
+        $soldDateOnly = $row[20];
+        $reconcileDateOnly = $row[25];
+        $sale_status = $row[10];
+        $thankyou = $row[19];
+        $dateFormat = date("Y-m-d", strtotime($soldDateOnly));
 
-        $countRow = 0;
-
-        $sql1 = "SELECT stock_id, COUNT(stock_id) FROM sales WHERE sales.sale_status != 'cancelled' AND stock_id = '$stock_id' GROUP BY stock_id HAVING COUNT(stock_id) > 1";
-        $result1 = $connect->query($sql1);
-        if ($result1->num_rows > 0) {
-            $row1 = $result1->fetch_array();
-            $countRow = $row1[1];
-        }
-        $sql2 = "SELECT salesperson_status FROM `sale_todo` WHERE sale_id = '$id'";
-        $result2 = $connect->query($sql2);
-        if ($result2->num_rows > 0) {
-            $row2 = $result2->fetch_array();
-            $sales_consultant_status = $row2[0];
-        }
+        $reconcileDate = ($reconcileDateOnly != '') ? $reconcileDateOnly : $soldDateOnly;
+        $rangeDateFormat = date("Y-m-d", strtotime($reconcileDate));
 
 
+        // current month count
+        $startDate = date('Y-m-01');
+        $endDate = date('Y-m-t');
+        $rowCategory = "";
 
-        $confirmed = '';
-        $sql3 = "SELECT * FROM `appointments` WHERE status = 1 AND location = '$location' AND sale_id = '$id'";
-        $result3 = $connect->query($sql3);
-        if ($result3->num_rows > 0) {
-            $row3 = $result3->fetch_array();
-            $confirmed = $row3['confirmed'];
+        if ($rangeDateFormat >= $startDate && $rangeDateFormat <= $endDate) {
+            $cmC += 1;
         }
 
-        $invStatus = $row[15];
-        $age = $row[16];
 
-        $certified = ($row[13] == 'on') ? 'Yes' : 'No';
-        $balance = ($invStatus == 1) ? $row[14] : "";
-        $lot = ($invStatus == 1) ? $row[12] : "";
-        // $balance = $row[14];
-        // $lot = $row[12];
+        // yesterday count
+        $yesterday = date("Y-m-d", strtotime("yesterday"));
+        if ($dateFormat == $yesterday) {
+            $yC += 1;
+        }
+        // today count
+        $today = date("Y-m-d");
+        if ($dateFormat == $today) {
+            $tC += 1;
+        }
 
+        // not done count
+        if ($sale_status == 'delivered' && $thankyou != 'on') {
+            $ndC += 1;
+        }
 
+        // all count
+        $allC += 1;
+        $searchQuery = " ";
+        if ($searchByDatePeriod != '') {
+            if ($searchByDatePeriod == "currentMonth") {
 
-        // $date = $row[0];
-        $sold_date = date("M-d-Y", strtotime($row[0]));  // sold date
-        $date =  ($row[21] != '') ? date("M-d-Y", strtotime($row[21])) : date("M-d-Y", strtotime($row[0]));  // get Reconcile Date is exist otherwise get date
-        // $reconcile_date = ($row[21] != '') ? date("M-d-Y", strtotime($row[21])) : '';  // Reconcile date
-        $vehicle = $row[17] . ' ' . $row[7] . ' ' . $row[8] . ' ' . $row[9]; // vehicle details
-
-        $gross = round(($row[10]), 2);
-        $gross = asDollars($gross);
-
-
-        $button = '
-        <div class="show d-inline-flex w-100 justify-content-end" >';
-
-        if (
-            ($_SESSION['userRole'] == $salesConsultantID && $confirmed != 'ok') || $_SESSION['userRole'] == 'Admin' || $_SESSION['userRole'] == $branchAdmin ||
-            $_SESSION['userRole'] == $salesManagerID || $_SESSION['userRole'] == $generalManagerID
-        ) {
-            if ($row['sale_status'] != 'cancelled' && hasAccess("appointment", "Add") !== 'false') {
-                $button .= '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#editScheduleModel" onclick="addNewSchedule(' . $id . ')" >
-                            <i class="far fa-calendar-alt"></i>
-                        </button>';
+                $startDate = date('Y-m-01');
+                $endDate = date('Y-m-t');
+                if ($rangeDateFormat >= $startDate && $rangeDateFormat <= $endDate) {
+                    if ($customStart != '' && $customEnd != '') {
+                        if ($rangeDateFormat >= $customStart && $rangeDateFormat <= $customEnd) {
+                            if ($sale_status == 'pending') {
+                                $penC += 1;
+                            } else if ($sale_status == 'delivered') {
+                                $delC += 1;
+                            } else if ($sale_status == 'cancelled') {
+                                $canC += 1;
+                            }
+                        }
+                    } else {
+                        if ($sale_status == 'pending') {
+                            $penC += 1;
+                        } else if ($sale_status == 'delivered') {
+                            $delC += 1;
+                        } else if ($sale_status == 'cancelled') {
+                            $canC += 1;
+                        }
+                    }
+                }
+            } else if ($searchByDatePeriod == "yesterday") {
+                $yesterday = date("Y-m-d", strtotime("yesterday"));
+                if ($dateFormat == $yesterday) {
+                    if ($customStart != '' && $customEnd != '') {
+                        if ($dateFormat >= $customStart && $dateFormat <= $customEnd) {
+                            if ($sale_status == 'pending') {
+                                $penC += 1;
+                            } else if ($sale_status == 'delivered') {
+                                $delC += 1;
+                            } else if ($sale_status == 'cancelled') {
+                                $canC += 1;
+                            }
+                        }
+                    } else {
+                        if ($sale_status == 'pending') {
+                            $penC += 1;
+                        } else if ($sale_status == 'delivered') {
+                            $delC += 1;
+                        } else if ($sale_status == 'cancelled') {
+                            $canC += 1;
+                        }
+                    }
+                }
+            } else if ($searchByDatePeriod == 'today') {
+                $today = date("Y-m-d");
+                if ($dateFormat == $today) {
+                    if ($customStart != '' && $customEnd != '') {
+                        if ($dateFormat >= $customStart && $dateFormat <= $customEnd) {
+                            if ($sale_status == 'pending') {
+                                $penC += 1;
+                            } else if ($sale_status == 'delivered') {
+                                $delC += 1;
+                            } else if ($sale_status == 'cancelled') {
+                                $canC += 1;
+                            }
+                        }
+                    } else {
+                        if ($sale_status == 'pending') {
+                            $penC += 1;
+                        } else if ($sale_status == 'delivered') {
+                            $delC += 1;
+                        } else if ($sale_status == 'cancelled') {
+                            $canC += 1;
+                        }
+                    }
+                }
+            } else if ($searchByDatePeriod == 'all') {
+                if ($customStart != '' && $customEnd != '') {
+                    if ($rangeDateFormat >= $customStart && $rangeDateFormat <= $customEnd) {
+                        if ($sale_status == 'pending') {
+                            $penC += 1;
+                        } else if ($sale_status == 'delivered') {
+                            $delC += 1;
+                        } else if ($sale_status == 'cancelled') {
+                            $canC += 1;
+                        }
+                    }
+                } else {
+                    if ($sale_status == 'pending') {
+                        $penC += 1;
+                    } else if ($sale_status == 'delivered') {
+                        $delC += 1;
+                    } else if ($sale_status == 'cancelled') {
+                        $canC += 1;
+                    }
+                }
             }
         }
-
-        if (hasAccess("sale", "Remove") !== 'false') {
-            $button .= '<button class="btn btn-label-primary btn-icon" onclick="removeSale(' . $id . ')" >
-                    <i class="fa fa-trash"></i>
-                </button>';
-        }
-        $button .= '</div>';
+    }
+}
+$dataObj = SSP::simple($_POST, $sql_details, $table, $primaryKey, $columns);
 
 
-        $codp_warn = "false";
-        $lwbn_warn = "false";
-        $statusSql2 = "SELECT 
-        (SELECT COUNT(inv_id) FROM `car_to_dealers` WHERE car_to_dealers.status = 1 AND inv_id = '$stock_id' AND work_needed != '' AND date_returned = '') as carstodealers , 
-        (SELECT COUNT(inv_id) FROM `inspections` WHERE inspections.status = 1 AND inspections.repair_returned != '' AND inspections.repair_paid = '' AND inspections.inv_id = '$stock_id') as lotwizardsBills";
-        $rslt2 = $connect->query($statusSql2);
-        if ($rslt2->num_rows > 0) {
-            $rowStatus = $rslt2->fetch_assoc();
-            $codp_warn = $rowStatus['carstodealers'] > 0 ? "true" : "false";
-            $lwbn_warn = $rowStatus['lotwizardsBills'] > 0 ? "true" : "false";
-        }
+$dataObj['totalCount']['tC'] = $tC;
+$dataObj['totalCount']['yC'] = $yC;
+$dataObj['totalCount']['cmC'] = $cmC;
+$dataObj['totalCount']['allC'] = $allC;
+$dataObj['totalCount']['penC'] = $penC;
+$dataObj['totalCount']['delC'] = $delC;
+$dataObj['totalCount']['canC'] = $canC;
+$dataObj['totalCount']['ndC'] = $ndC;
 
 
+echo json_encode($dataObj);
 
-        $output['data'][] = array(
-
-            $date,
-            $row[2],
-            $row[3],
-            $row[4],
-            $row[1],
-            $vehicle,
-            $age,
-            $certified,
-            $lot,
-            $gross,
-            $row[5],
-            $row[6],
-            $balance,
-            $consultant_notes,
-            $sales_consultant_status,
-            $button,
-            $row[17],
-            $countRow,
-            $id,
-            $row[20],
-            $sold_date,
-            $codp_warn,
-            $lwbn_warn
-        );
-    } // /while 
-
-} // if num_rows
-
-$connect->close();
-
-echo json_encode($output);
+// echo json_encode(
+//     SSP::simple($_POST, $sql_details, $table, $primaryKey, $columns)
+// );
+// echo json_encode(
+//     SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns)
+// );

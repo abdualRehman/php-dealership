@@ -26,6 +26,7 @@ $(function () {
     $(".warranty").select2({
         dropdownAutoWidth: !0,
         placeholder: "",
+        closeOnSelect: false,
         allowClear: true,
         tags: !0
     })
@@ -41,13 +42,13 @@ $(function () {
        <'row align-items-baseline'
        <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
        <'col-md-5'p>>\n`,
-
+        "fixedHeader": true,
         searchPanes: {
             cascadePanes: !0,
             viewTotal: !0,
             columns: [1, 2, 3, 4],
         },
-        "pageLength": 25,
+        "pageLength": 10,
         buttons: [
             {
                 extend: 'copyHtml5',
@@ -112,7 +113,7 @@ $(function () {
             }
         },
 
-        "order": [[0, "asc"]]
+        "order": [[1, "asc"]]
     })
 
     writeStatusHTML();
@@ -196,7 +197,9 @@ $(function () {
                                 title: response.messages,
                                 showConfirmButton: !1,
                                 timer: 1500
-                            })
+                            });
+                            form[0].reset();
+                            resetForm();
                             manageDataTable.ajax.reload(null, false);
                         } else {
                             e1.fire({
@@ -297,6 +300,15 @@ $(function () {
 
 });
 
+function resetForm() {
+    $('.typeahead').val('');
+    $('.typeahead').trigger('change');
+    $('.selectpicker').each(function () {
+        $(this).find('option:first').prop('selected', 'selected');
+        $(".selectpicker").selectpicker("refresh");
+    });
+    $(".tags").val('').trigger('change');
+}
 
 
 function writeStatusHTML() {

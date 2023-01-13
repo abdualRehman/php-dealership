@@ -176,7 +176,7 @@ if ($_SESSION['userRole'] == $officeID || (hasAccess("usedCars", "TitleView") !=
     .stickyDiv {
         position: fixed;
         top: calc(5em);
-        width: calc(100% - 40px);
+        width: calc(100% - 65px);
         z-index: 999;
         border-radius: 10px;
     }
@@ -191,9 +191,11 @@ if ($_SESSION['userRole'] == $officeID || (hasAccess("usedCars", "TitleView") !=
 
     @media (max-width: 576px) {
         .stickyDiv {
-            position: initial!important;
-            width: calc(100%);
-            border-radius: 0px;
+            position: relative !important;
+            top: auto !important;
+            width: auto !important;
+            z-index: 0;
+            border-radius: 0px !important;
         }
     }
 
@@ -228,78 +230,20 @@ if ($_SESSION['userRole'] == $officeID || (hasAccess("usedCars", "TitleView") !=
         background-color: #757575 !important;
         pointer-events: none;
     }
+
+    
+    .table.table-bordered.table-hover.dataTable.no-footer.dtr-inline.fixedHeader-floating {
+        top: 25% !important
+    }
+    @media (max-width: 576px) {
+        .table.table-bordered.table-hover.dataTable.no-footer.dtr-inline.fixedHeader-floating {
+            top: 7% !important
+        }
+    }
+
+
+
 </style>
-
-<div>
-    <div class="sticy-wrapper pt-0 sticky" id="secondMenu" style="position: static;top:0">
-        <div class="container-fluid fh-fixedHeader">
-            <div class="row">
-                <div class="col-12">
-                    <div class="div-sticky-class" id="makeSticky">
-                        <div class="text-center m-auto justify-content-center">
-                            <div class="btn-group-toggle" id="mods" data-toggle="buttons">
-                                <div class="row p-2">
-                                    <div class="col-md-12">
-                                        <?php
-                                        if ($allowedForOffice) {
-                                        ?>
-                                            <label class="btn text-responsive active">
-                                                <input type="radio" name="mod" value="addToSheet" id="searchAddToSheet" data-title="Add To Sheet"> Add To Sheet <br> <span></span>
-                                            </label>
-                                            <label class="btn text-responsive">
-                                                <input type="radio" name="mod" value="missingDate" data-title="Missing Date"> Missing Date <br> <span></span>
-                                            </label>
-                                            <label class="btn text-responsive">
-                                                <input type="radio" name="mod" value="titleIssue" id="searchTitleIssue" data-title="Title Issues"> Title Issues <br> <span></span>
-                                            </label>
-                                            <label class="btn text-responsive">
-                                                <input type="radio" name="mod" value="readyToShip" data-title="W/S Ready To Ship"> W/S Ready To Ship <br> <span></span>
-                                            </label>
-                                            <label class="btn text-responsive">
-                                                <input type="radio" name="mod" value="keysPulled" data-title="W/S Keys Pulled"> W/S Keys Pulled <br> <span></span>
-                                            </label>
-                                            <label class="btn text-responsive">
-                                                <input type="radio" name="mod" value="atAuction" data-title="At Auction"> At Auction <br> <span></span>
-                                            </label>
-                                            <label class="btn text-responsive">
-                                                <input type="radio" name="mod" value="soldAtAuction" data-title="Sold At Auction"> Sold At Auction <br> <span></span>
-                                            </label>
-                                        <?php
-                                        } else {
-                                            if (hasAccess("usedCars", "TitleView") !== 'false' && hasAccess("usedCars", "Edit") === 'false') {
-                                                // title issue only
-                                                echo '<label class="btn text-responsive">
-                                                    <input type="radio" name="mod" value="titleIssue" id="searchTitleIssue" data-title="Title Issues"> Title Issues <br> <span></span>
-                                                </label>';
-                                            }
-                                        }
-                                        ?>
-                                    </div>
-                                </div>
-
-                                <div class="row p-2 <?php echo ($allowedForOffice) ? "d-flex" : "d-none"; ?>">
-                                    <div class="col-md-12">
-                                        <div id="year">
-                                            <label class="btn text-responsive">
-                                                <input type="radio" name="mod" value="retail" data-title="Retail"> Retail <br> <span></span>
-                                            </label>
-                                            <label class="btn text-responsive">
-                                                <input type="radio" name="mod" value="sold" data-title="Sold"> Sold <br> <span></span>
-                                            </label>
-                                            <label class="btn text-responsive">
-                                                <input type="radio" name="mod" value="fixAge" data-title="Fix Age"> Fix CDK AGE <br> <span></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <div class="content">
@@ -307,6 +251,69 @@ if ($_SESSION['userRole'] == $officeID || (hasAccess("usedCars", "TitleView") !=
         <div class="row">
             <div class="col-12">
                 <div class="portlet">
+                    <div class="portlet-header portlet-header-bordered">
+                        <div class="div-sticky-class" id="makeSticky">
+                            <div class="text-center m-auto justify-content-center">
+                                <div class="btn-group-toggle" id="mods" data-toggle="buttons">
+                                    <div class="row p-2">
+                                        <div class="col-md-12">
+                                            <?php
+                                            if ($allowedForOffice) {
+                                            ?>
+                                                <label class="btn text-responsive active">
+                                                    <input type="radio" name="mod" value="addToSheet" id="searchAddToSheet" data-title="Add To Sheet"> Add To Sheet <br> <span></span>
+                                                </label>
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="missingDate" data-title="Missing Date"> Missing Date <br> <span></span>
+                                                </label>
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="titleIssue" id="searchTitleIssue" data-title="Title Issues"> Title Issues <br> <span></span>
+                                                </label>
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="readyToShip" data-title="W/S Ready To Ship"> W/S Ready To Ship <br> <span></span>
+                                                </label>
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="keysPulled" data-title="W/S Keys Pulled"> W/S Keys Pulled <br> <span></span>
+                                                </label>
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="atAuction" data-title="At Auction"> At Auction <br> <span></span>
+                                                </label>
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="soldAtAuction" data-title="Sold At Auction"> Sold At Auction <br> <span></span>
+                                                </label>
+                                            <?php
+                                            } else {
+                                                if (hasAccess("usedCars", "TitleView") !== 'false' && hasAccess("usedCars", "Edit") === 'false') {
+                                                    // title issue only
+                                                    echo '<label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="titleIssue" id="searchTitleIssue" data-title="Title Issues"> Title Issues <br> <span></span>
+                                                </label>';
+                                                }
+                                            }
+                                            ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="row p-2 <?php echo ($allowedForOffice) ? "d-flex" : "d-none"; ?>">
+                                        <div class="col-md-12">
+                                            <div id="year">
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="retail" data-title="Retail"> Retail <br> <span></span>
+                                                </label>
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="sold" data-title="Sold"> Sold <br> <span></span>
+                                                </label>
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="fixAge" data-title="Fix Age"> Fix CDK AGE <br> <span></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="portlet-body">
                         <div class="inspectionTable" id="inspectionTable">
                             <div class="form-row text-right">
@@ -316,67 +323,12 @@ if ($_SESSION['userRole'] == $officeID || (hasAccess("usedCars", "TitleView") !=
                                     </button>
                                 </div>
                             </div>
-                            <div class="form-row m-2 customFilters1 d-none">
-                                <div class="col-md-12 p-2 d-flex justify-content-between">
-                                    <div class="dtsp-title">Filters Active</div>
-                                    <button type="button" id="filterDataTable" class="btn btn-flat-primary btn-wider">Filter Data</button>
-                                </div>
-                                <div class="col-12 row">
-                                    <div class="col p-1">
-                                        <select class="form-control filterTags" id="retailFilter" multiple="multiple">
-                                            <optgroup label="Retail">
-                                                <option value="wholesale">Wholesale</option>
-                                                <option value="retail">Retail</option>
-                                                <option value="sold">Sold</option>
-                                                <option value="rintercompany">Intercompany</option>
-                                            </optgroup>
-                                        </select>
-                                    </div>
-                                    <div class="col p-1">
-                                        <select class="form-control filterTags" id="uciFilter" multiple="multiple">
-                                            <optgroup label="UCI">
-                                                <option value="need">Need</option>
-                                                <option value="opened">Opened</option>
-                                                <option value="closed">Closed</option>
-                                            </optgroup>
-                                        </select>
-                                    </div>
-                                    <div class="col p-1">
-                                        <!-- <input type="text" class="form-control" placeholder="Purchase From" id="purchaseFilter" /> -->
-                                        <select class="form-control filterTags" id="purchaseFilter" multiple="multiple">
-                                            <optgroup label="Purchase From">
-                                                <option value="customer">Customer</option>
-                                                <option value="auction">Auction</option>
-                                                <option value="honda">Honda</option>
-                                                <option value="pintercompany">Intercompany</option>
-                                            </optgroup>
-                                        </select>
-                                    </div>
-                                    <div class="col p-1">
-                                        <select class="form-control filterTags" id="titleFilter" multiple="multiple">
-                                            <optgroup label="Title Priority">
-                                                <option value="New">New</option>
-                                                <option value="Low">Low</option>
-                                                <option value="Medium">Medium</option>
-                                                <option value="High">High</option>
-                                                <option value="Problem">Problem</option>
-                                                <option value="Done">Done</option>
-                                            </optgroup>
-                                        </select>
-                                    </div>
-                                    <div class="col p-1">
-                                        <input type="text" class="form-control" placeholder="Sold Date" id="soldFilter" />
-                                        <!-- <select class="form-control filterTags" id="soldFilter" multiple="multiple">
-                                        </select> -->
-                                    </div>
-                                </div>
-                            </div>
                             <table id="datatable-1" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
                                         <th>Age</th>
-                                        <th style="min-width: 200px!important;" >Stock no || Vin</th>
+                                        <th>Stock no || Vin</th>
                                         <th>Inventory Date</th>
                                         <th>Keys</th>
                                         <th>Year</th>
@@ -433,7 +385,7 @@ if ($_SESSION['userRole'] == $officeID || (hasAccess("usedCars", "TitleView") !=
                         <div class="FixSDKtable d-none" id="FixSDKtable">
                             <div class="form-row text-right">
                                 <div class="col-md-12 p-1 pr-2">
-                                    <button class="btn btn-primary p-2" onclick="toggleFilterClass()">
+                                    <button class="btn btn-primary p-2" onclick="toggleFilterClass2()">
                                         <i class="fa fa-align-center ml-1 mr-2"></i> Filter
                                     </button>
                                 </div>
@@ -446,7 +398,7 @@ if ($_SESSION['userRole'] == $officeID || (hasAccess("usedCars", "TitleView") !=
                                         <th>AGE</th>
                                         <th>CDK AGE</th>
                                         <th>Action</th>
-                                        <th style="min-width: 200px;" >Stock no || Vin</th>
+                                        <th>Stock no || Vin</th>
                                         <th>Year</th>
                                         <th>Make</th>
                                         <th>Model</th>
@@ -510,7 +462,7 @@ if ($_SESSION['userRole'] != $onlineManagerID && $_SESSION['userRole'] != $offic
                                             </div>
                                         </div>
                                         <label for="retailStatus" class="col-sm-3 offset-sm-1 col-form-label">Retail Status</label>
-                                        <div class="form-group col-sm-8 overflow-auto <?php echo (hasAccess("usedCars", "TitleEdit") === 'true' && hasAccess("usedCars", "Edit") === 'false') ? 'disabled-div' : ''; ?> ">
+                                        <div class="form-group col-sm-8 <?php echo (hasAccess("usedCars", "TitleEdit") === 'true' && hasAccess("usedCars", "Edit") === 'false' ) ? 'disabled-div' : ''; ?> ">
                                             <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="retailStatus">
                                                 <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                                     <input type="radio" name="retailStatus" value="retail" id="retail">
@@ -531,7 +483,7 @@ if ($_SESSION['userRole'] != $onlineManagerID && $_SESSION['userRole'] != $offic
                                             </div>
                                         </div>
                                         <label for="purchaseFrom" class="col-sm-3 offset-sm-1 col-form-label">Purchase From</label>
-                                        <div class="form-group col-sm-8 overflow-auto <?php echo (hasAccess("usedCars", "TitleEdit") === 'true' && hasAccess("usedCars", "Edit") === 'false') ? 'disabled-div' : ''; ?>">
+                                        <div class="form-group col-sm-8 <?php echo (hasAccess("usedCars", "TitleEdit") === 'true' && hasAccess("usedCars", "Edit") === 'false' ) ? 'disabled-div' : ''; ?>">
                                             <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="purchaseFrom">
                                                 <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                                     <input type="radio" name="purchaseFrom" value="auction" id="auction">
@@ -551,7 +503,7 @@ if ($_SESSION['userRole'] != $onlineManagerID && $_SESSION['userRole'] != $offic
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="form-group offset-sm-4 col-sm-4 <?php echo (hasAccess("usedCars", "TitleEdit") === 'true' && hasAccess("usedCars", "Edit") === 'false') ? 'disabled-div' : ''; ?>">
+                                        <div class="form-group offset-sm-4 col-sm-4 <?php echo (hasAccess("usedCars", "TitleEdit") === 'true' && hasAccess("usedCars", "Edit") === 'false' ) ? 'disabled-div' : ''; ?>">
                                             <div class="custom-control custom-control-lg custom-checkbox" style="font-size: initial;">
                                                 <input type="checkbox" class="custom-control-input" name="certified" id="certified">
                                                 <label class="custom-control-label" for="certified">Certified</label>
@@ -624,7 +576,7 @@ if ($_SESSION['userRole'] != $onlineManagerID && $_SESSION['userRole'] != $offic
                                     </div>
                                 </div>
                             </div>
-                            <div class="row justify-content-center m-auto <?php echo (hasAccess("usedCars", "TitleEdit") === 'true' && hasAccess("usedCars", "Edit") === 'false') ? 'disabled-div' : ''; ?>">
+                            <div class="row justify-content-center m-auto <?php echo (hasAccess("usedCars", "TitleEdit") === 'true' && hasAccess("usedCars", "Edit") === 'false' ) ? 'disabled-div' : ''; ?>">
                                 <div class="col-sm-2 offset-sm-1">
                                     <div class="custom-control custom-control-lg custom-checkbox" style="font-size: initial;">
                                         <input type="checkbox" class="custom-control-input" name="keys" id="keys">
@@ -663,7 +615,7 @@ if ($_SESSION['userRole'] != $onlineManagerID && $_SESSION['userRole'] != $offic
                                     </div>
                                 </div>
                             </div>
-                            <div class="row justify-content-center m-auto <?php echo (hasAccess("usedCars", "TitleEdit") === 'true' && hasAccess("usedCars", "Edit") === 'false') ? 'disabled-div' : ''; ?>">
+                            <div class="row justify-content-center m-auto <?php echo (hasAccess("usedCars", "TitleEdit") === 'true' && hasAccess("usedCars", "Edit") === 'false' ) ? 'disabled-div' : ''; ?>">
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-4">
@@ -691,7 +643,7 @@ if ($_SESSION['userRole'] != $onlineManagerID && $_SESSION['userRole'] != $offic
                             </div>
                             <div class="d-none" id="serviceDiv">
                                 <hr>
-                                <div class="row justify-content-center m-auto <?php echo (hasAccess("usedCars", "TitleEdit") === 'true' && hasAccess("usedCars", "Edit") === 'false') ? 'disabled-div' : ''; ?>">
+                                <div class="row justify-content-center m-auto <?php echo (hasAccess("usedCars", "TitleEdit") === 'true' && hasAccess("usedCars", "Edit") === 'false' ) ? 'disabled-div' : ''; ?>">
                                     <div class="col-md-12">
                                         <div class="row align-items-end">
                                             <div class="col-md-3 p-2">
@@ -785,7 +737,7 @@ if ($_SESSION['userRole'] != $onlineManagerID && $_SESSION['userRole'] != $offic
                                             <input type="text" class="form-control" name="stockno" id="stockno" readonly autocomplete="off" autofill="off" />
                                         </div>
                                     </div>
-                                    <div class="row <?php echo (hasAccess("usedCars", "TitleEdit") === 'true' && hasAccess("usedCars", "Edit") === 'false') ? 'disabled-div' : ''; ?>">
+                                    <div class="row <?php echo (hasAccess("usedCars", "TitleEdit") === 'true' && hasAccess("usedCars", "Edit") === 'false' ) ? 'disabled-div' : ''; ?>">
                                         <div class="col-md-6">
                                             <label for="onlineDescription" class="col-form-label text-center">Online Description</label>
                                             <div class="form-group">

@@ -59,6 +59,36 @@ $(function () {
     autosize($(".autosize"));
 
 
+    // var a = new Bloodhound({
+    //     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('stockDetails'),
+    //     queryTokenizer: Bloodhound.tokenizers.whitespace,
+    //     local: searhStatusArray
+    // });
+
+    // $('#searchcars').typeahead({
+    //     hint: true,
+    //     highlight: true,
+    //     minLength: 1,
+    // },
+    //     {
+    //         name: 'searhStatusArray',
+    //         display: 'stockDetails',
+    //         source: a,
+    //         templates: {
+    //             suggestion: function (data) {
+    //                 var stockAvailibilityArray = data.stockAvailibility;
+    //                 const template = `<div><p><strong>${data.stockDetails}</strong></p><div class="row pl-2 pr-2">${stockAvailibilityArray.map(e => (e) ? `<div class="col-sm-4 p-1"> <span class="badge badge-label-primary"> ${e} </span> </div>` : ``).join('')}</div>`;
+    //                 return template;
+    //             }
+    //         }
+    //     }
+    // );
+
+
+
+
+
+
     $('.slick-2').each(function () {
         var slider = $(this);
         slider.slick({
@@ -90,10 +120,427 @@ $(function () {
         });
     })
 
-    loadDataTable();
-    // manageInvTable.order([21, "asc"], [8, "desc"]).draw(); // wholesale , age
-    loadbodyshops();
 
+    manageInvTable = $("#datatable-1").DataTable({
+
+        responsive: !0,
+        'ajax': '../php_action/fetchInspections_prev.php',
+        "paging": true,
+        "scrollX": true,
+        "orderClasses": false,
+        "deferRender": true,
+        "pageLength": 50,
+        // autoWidth: false,
+        "fixedHeader": true,
+        dom: `<'row'<'col-12'P>>
+            <'row' <'col-sm-4 text-left text-sm-left pl-3'B>
+                <'col-sm-4 text-left text-center pl-3'<'#statusFilterDiv.d-none'>>
+                <'col-sm-4 text-right text-sm-right mt-2 mt-sm-0'f>>\n
+            <'row'<'col-12'tr>>\n      
+            <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
+        searchPanes: {
+            cascadePanes: !0,
+            columns: [21, 12, 13, 20],
+        },
+
+        buttons: [
+            {
+                extend: 'copyHtml5',
+                title: 'Lot widzards',
+                exportOptions: {
+                    columns: [':visible:not(:first-child)'],
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                title: 'Lot widzards',
+                exportOptions: {
+                    columns: [':visible:not(:first-child)']
+                }
+            },
+            {
+                extend: 'print',
+                title: 'Lot widzards',
+                exportOptions: {
+                    columns: [':visible:not(:first-child)']
+                },
+                customize: function (win) {
+                    $(win.document.body)
+                        .css('font-size', '10pt');
+                    $(win.document.body).find('table')
+                        .addClass('compact')
+                        .css('font-size', 'inherit');
+                }
+            },
+        ],
+
+        columnDefs: [
+            { width: 400, targets: [3, 6, 7] },
+            {
+                targets: [0, 1, 2, 3, 4, 5, 10, 6, 7, 22, 23, 24],
+                visible: false,
+            },
+            {
+                targets: [8],
+                createdCell: function (td, cellData, rowData, row, col) {
+                    var data = $(td).html();
+                    if (data > 4) {
+                        $(td).addClass('h5 font-weight-bolder text-danger');
+                    } else {
+                        $(td).addClass('font-weight-bold p');
+                    }
+                }
+            },
+            {
+                targets: [23],
+                data: 22, // repairs 
+                render: function (data, type, row) {
+                    var repairArr = data ? data.replace(/__/g, " , ") : '';
+                    repairArr = repairArr.slice(3, -3);
+                    return repairArr;
+                },
+            },
+            {
+                targets: [24],
+                data: 3, // lot notes
+            },
+            {
+                targets: [6],
+                data: 6, // windshield
+                render: function (data, type, row) {
+                    var repairArr = data ? data.replace(/__/g, " , ") : '';
+                    repairArr = repairArr.slice(3, -3);
+                    return repairArr;
+                },
+            },
+            {
+                targets: [7],
+                data: 7, // wheels
+                render: function (data, type, row) {
+                    var repairArr = data ? data.replace(/__/g, " , ") : '';
+                    repairArr = repairArr.slice(3, -3);
+                    return repairArr;
+                },
+            },
+            {
+                targets: [2, 3, 4, 5, 6, 7],
+                createdCell: function (td, cellData, rowData, row, col) {
+                    if ($('#isEditAllowed').val() == "true") {
+                        $(td).attr({
+                            "data-toggle": "modal",
+                            "data-target": "#modal8",
+                            "onclick": "editInspection(" + rowData[25] + ")"
+                        });
+                    }
+                }
+            },
+            {
+                searchPanes: {
+                    show: true
+                },
+                targets: [21, 12, 13, 20]
+            },
+        ],
+        language: {
+            "infoFiltered": "",
+            searchPanes: {
+                count: "{total} found",
+                countFiltered: "{shown} / {total}"
+            }
+        },
+
+        rowGroup: {
+            // dataSrc: 4,
+            dataSrc: rowGroupSrc,
+            // enable: false,
+            startRender: function (rows, group) {
+                var collapsed = !!collapsedGroups[group];
+
+                // console.log(rows);
+                // rows.nodes().each(function (r) {
+                //     r.style.display = collapsed ? 'none' : '';
+                // });
+                // if (rowGroupSrc == 19) {
+                //     if (group == "No") {
+                //         group = "Retail";
+                //     } else if (group == "Yes") {
+                //         group = "Wholesale";
+                //     }
+                // }
+                // // Add category name to the <tr>. NOTE: Hardcoded colspan
+                // return $('<tr/>')
+                //     .append('<td colspan="17">' + group + ' (' + rows.count() + ')</td>')
+                //     .attr('data-name', group)
+                //     .toggleClass('collapsed', collapsed);
+
+                // -------------  For Display All Number of Filtered Rows -----------------
+
+                var filteredData = $('#datatable-1').DataTable()
+                    .rows({ search: 'applied' })
+                    .data()
+                    .filter(function (data, index) {
+                        return data[rowGroupSrc] == group ? true : false;
+                    });
+                if (rowGroupSrc == 21) {
+                    if (group == "No") {
+                        group = "Retail";
+                    } else if (group == "Yes") {
+                        group = "Wholesale";
+                    }
+                }
+
+                return $('<tr/>')
+                    .append('<td colspan="17">' + group + ' (' + filteredData.length + ')</td>')
+                    .attr('data-name', group)
+                    .toggleClass('collapsed', collapsed);
+            }
+        },
+        createdRow: function (row, data, dataIndex) {
+            if ($('#isEditAllowed').val() == "true") {
+                $(row).children().not(':nth-child(1)').attr({
+                    "data-toggle": "modal",
+                    "data-target": "#modal8",
+                    "onclick": "editInspection(" + data[25] + ")"
+                });
+            }
+        },
+        "drawCallback": function (settings, start, end, max, total, pre) {
+            var json = this.fnSettings().json;
+            if (json) {
+                // console.log(obj);
+                var obj = json.totalNumber;
+                for (const [key, value] of Object.entries(obj)) {
+                    $(`input[name='mod'][value='${key}']`).next().next().html(value)
+                    // changing style
+                    switch (key) {
+                        case 'notTouched':
+                        case 'LotNotes':
+                        case 'windshield':
+                        case 'wheels':
+                        case 'toGo':
+                        case 'CarsToDealers':
+                            if (value == '0') {
+                                $(`input[name='mod'][value='${key}']`).parent().addClass('btn-outline-success')
+                                $(`input[name='mod'][value='${key}']`).parent().removeClass('btn-outline-danger')
+                            } else {
+                                $(`input[name='mod'][value='${key}']`).parent().addClass('btn-outline-danger')
+                                $(`input[name='mod'][value='${key}']`).parent().removeClass('btn-outline-success')
+                            }
+                            break;
+                        default:
+                            $(`input[name='mod'][value='${key}']`).parent().addClass('btn-outline-primary')
+                            break;
+                    }
+
+                }
+
+                let totalPending = 0, totalComplete = 0;
+                let modFilter = $(`#mods .btn.active input[name='mod']:checked`).val();
+                if (modFilter == 'windshield') {
+                    $('#datatable-1').DataTable()
+                        .rows()
+                        .data()
+                        .each(function (data, index) {
+                            var windshield = data[6]; // windshield
+                            var arr = windshield ? (windshield.trim()).split('__') : [];
+                            if (arr.length > 0 && arr.indexOf('Done') == -1) {
+                                totalPending += 1;
+                            }
+                            if (arr.length > 0 && arr.indexOf('Done') != -1) {
+                                totalComplete += 1;
+                            }
+                        })
+                } else if (modFilter == 'wheels') {
+                    $('#datatable-1').DataTable()
+                        .rows()
+                        .data()
+                        .each(function (data, index) {
+                            var wheels = data[7]; // wheels
+                            var arr = wheels ? (wheels.trim()).split('__') : [];
+                            if (arr.length > 0 && arr.indexOf('Done') == -1) {
+                                totalPending += 1;
+                            }
+                            if (arr.length > 0 && arr.indexOf('Done') != -1) {
+                                totalComplete += 1;
+                            }
+                        });
+                }
+
+                $('#pendingCount').html(totalPending);
+                $('#completeCount').html(totalComplete);
+
+
+
+            }
+        },
+        "initComplete": function (settings, json) {
+            setTimeout(() => {
+                loadSearchData();
+                $('#DataTables_Table_0').find('.dtsp-nameColumn.sorting_1:first').click()
+                $('#DataTables_Table_3').find('.dtsp-nameColumn.sorting_1:last').click()
+            }, 500);
+        },
+        "order": [[21, "asc"], [8, "desc"]], // wholesale , age
+        // "order": [[4, "asc"], [5, "desc"]],
+    });
+
+    loadbodyshops();
+    writeStatusHTML();
+
+    // --------------------- checkboxes query --------------------------------------
+    $.fn.dataTable.ext.search.push(
+        function (settings, searchData, index, rowData, counter) {
+            var tableNode = manageInvTable.table().node();
+
+            var activebtnvalue = $("#mods .btn.active input[name='mod']").val();
+            // console.log(activebtnvalue);
+            var invStatus = rowData[27];
+
+            if (activebtnvalue == 'notTouched') {
+                // console.log(rowData);
+                var balance = rowData[17];
+                var recon = rowData[1];
+                var notes = rowData[3];
+                var stockType = rowData[20];
+                var wholesale = rowData[21];
+
+                var windshield = rowData[6];
+                var arr = windshield ? (windshield.trim()).split('__') : [];
+                var doneEle = arr.find((element) => {
+                    return element != "Done";
+                })
+
+                var wheels = rowData[7];
+                var arrWheels = wheels ? (wheels.trim()).split('__') : [];
+                var doneEleWheel = arrWheels.find((element) => {
+                    return element != "Done";
+                })
+
+
+                var repairs = rowData[22];
+                var repairArr = repairs ? (repairs.trim()).split('__') : [];
+                var repairSent = rowData[23];
+
+                // not touched old 
+                // if (recon == "" || recon == null || notes == null || notes == "" || doneEleWheel || doneEle || repairArr.length == 0) {
+                //     return true;
+                // }
+
+                // working 1.2
+                // if ((recon == "" || recon == null) && repairArr.length == 0 && invStatus != 2) {
+                //     return true;
+                // }
+                if ((recon == "" || recon == null) && repairArr.length == 0 && stockType != 'NEW' && invStatus != 2) {
+                    return true;
+                }
+            }
+            if (activebtnvalue == 'holdForRecon') {
+
+                var balance = rowData[17];
+                var recon = rowData[1];
+                if (recon == 'hold' && balance && invStatus != 2) {
+                    return true;
+                }
+            }
+            if (activebtnvalue == 'sendToRecon') {
+
+                var balance = rowData[17];
+                var recon = rowData[1];
+                if (recon == 'send' && balance && invStatus != 2) {
+                    return true;
+                }
+            }
+            if (activebtnvalue == 'LotNotes') {
+
+                var notes = rowData[3];
+                if (notes && invStatus != 2) {
+                    return true;
+                }
+            }
+            if (activebtnvalue == 'windshield') {
+                var windshield = rowData[6];
+                var balance = rowData[17];
+
+                var arr = windshield ? (windshield.trim()).split('__') : [];
+                var filterValue = $('#statusFilterBtns input:radio:checked').val();
+                if (filterValue == 'pending') {
+                    // if (arr.length > 0 && arr.indexOf('Done') == -1 && (balance != '' && balance < 0)) {
+                    //     return true;
+                    // }
+                    if (arr.length > 0 && arr.indexOf('Done') == -1 && (balance && balance != 0) && invStatus != 2) {
+                        return true;
+                    }
+                } else {
+                    if (arr.length > 0 && arr.indexOf('Done') != -1 && (balance && balance != 0) && invStatus != 2) {
+                        return true;
+                    }
+                }
+            }
+            if (activebtnvalue == 'wheels') {
+                var wheels = rowData[7];
+                var balance = rowData[17];
+
+                var arr = wheels ? (wheels.trim()).split('__') : [];
+                var filterValue = $('#statusFilterBtns input:radio:checked').val();
+                if (filterValue == 'pending') {
+                    if (arr.length > 0 && arr.indexOf('Done') == -1 && (balance && balance != 0) && invStatus != 2) {
+                        return true;
+                    }
+                } else {
+                    if (arr.length > 0 && arr.indexOf('Done') != -1 && (balance && balance != 0) && invStatus != 2) {
+                        return true;
+                    }
+                }
+            }
+            // To go = repairs selected….repair sent bank
+            if (activebtnvalue == 'toGo') {
+                var repairs = rowData[22];
+                var repairSent = rowData[23];
+                var arr = repairs ? (repairs.trim()).split('__') : [];
+                if (arr.length > 0 && (repairSent == "" || repairSent == null) && invStatus != 2) {
+                    return true;
+                }
+            }
+            // At bodyshop- repairs, bodyshop & repair sent selected…….repair returned blank
+            if (activebtnvalue == 'atBodyshop') {
+                var repairs = rowData[22];
+                var repairSent = rowData[23];
+                var repairReturned = rowData[24];
+                var arr = repairs ? (repairs.trim()).split('__') : [];
+                if (arr.length > 0 && (repairSent != "" && repairSent != null) && (repairReturned == "" || repairReturned == null) && invStatus != 2) {
+                    return true;
+                }
+            }
+            // Back from bodyshop - repair returned selected and recon is blank
+            if (activebtnvalue == 'backFromBodyshop') {
+                var recon = rowData[1];
+                var repairSent = rowData[23];
+                var repairReturned = rowData[24];
+                if (repairReturned && repairSent && (recon == "" || recon == null) && invStatus != 2) {
+                    return true;
+                }
+            }
+            if (activebtnvalue == 'retailReady') {
+                var recon = rowData[1];
+                if (recon == 'sent' && invStatus != 2) {
+                    return true;
+                }
+            }
+            if (activebtnvalue == 'Gone') {
+                var balance = rowData[17];
+                var stockType = rowData[20];
+                if (balance == '' || balance == null || balance == 0 && stockType != 'NEW' ) {
+                    return true;
+                }
+            }
+
+            if (settings.nTable !== tableNode) {
+                return true;
+            }
+
+            return false;
+        }
+    );
 
     $('#mods input:radio').on('change', function () {
 
@@ -116,8 +563,56 @@ $(function () {
             $('.inspectionTable').removeClass('d-none');
             $('.DealerTable').addClass('d-none');
 
-            $('#datatable-1').DataTable().destroy();
-            loadDataTable();
+
+            switch (currentElement) {
+                case "notTouched":
+                    rowGroupSrc = 21;
+                    manageInvTable.rowGroup().enable().draw();
+                    manageInvTable.rowGroup().dataSrc(rowGroupSrc);
+                    setColumVisibility([0, 1, 2, 3, 4, 5, 10, 22, 23, 24, 6, 7]);
+                    manageInvTable.order([21, "asc"], [8, "desc"]).draw(); // wholesale , age
+                    break;
+                case "toGo":
+                case "atBodyshop":
+                case "backFromBodyshop":
+                case "Gone":
+                    rowGroupSrc = 4;
+                    manageInvTable.rowGroup().enable().draw();
+                    manageInvTable.dataSrc(rowGroupSrc);
+                    if (currentElement == 'toGo') {
+                        setColumVisibility([1, 2, 3, 4, 5, 9, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 6, 7]);
+                        manageInvTable.order([4, "asc"], [8, "desc"]).draw(); // bodyshop , age
+                    } else if (currentElement == 'atBodyshop' || currentElement == 'backFromBodyshop') {
+                        setColumVisibility([1, 2, 3, 4, 9, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 6, 7]);
+                        manageInvTable.order([4, "asc"], [5, "desc"]).draw(); // bodyshop , daysout
+                    } else {
+                        setColumVisibility([1, 2, 3, 4, 5, 10, 22, 23, 24, 6, 7]);
+                        manageInvTable.order([4, "asc"], [8, "desc"]).draw(); // bodyshop , age
+                    }
+                    break;
+                case "windshield":
+                case "wheels":
+                case "holdForRecon":
+                case "sendToRecon":
+                case "retailReady":
+                    manageInvTable.rowGroup().disable().draw();
+                    if (currentElement == 'windshield') {
+                        setColumVisibility([1, 2, 3, 4, 5, 10, 16, 17, 18, 19, 20, 22, 23, 24, 7]);
+                    } else if (currentElement == 'wheels') {
+                        setColumVisibility([1, 2, 3, 4, 5, 10, 16, 17, 18, 19, 20, 22, 23, 24, 6]);
+                    } else {
+                        setColumVisibility([1, 2, 3, 4, 5, 10, 22, 23, 24, 6, 7]);
+                    }
+                    manageInvTable.order([21, "asc"], [8, "desc"]).draw(); // wholesale , age
+                    break;
+                case "LotNotes":
+                    manageInvTable.rowGroup().disable().draw();
+                    setColumVisibility([1, 4, 5, 10, 16, 17, 18, 19, 20, 21, 22, 23, 24, 6, 7]);
+                    manageInvTable.order([21, "asc"], [8, "desc"]).draw(); // wholesale , age
+                    break;
+                default:
+                    break;
+            }
 
             if (currentElement == 'windshield' || currentElement == 'wheels') {
                 $('#statusFilterDiv').removeClass('d-none');
@@ -126,8 +621,9 @@ $(function () {
             }
 
             setTimeout(() => {
-                // $("#datatable-1").dataTable().fnFilter("");
-                // manageInvTable.searchPanes.rebuildPane();
+                // manageInvTable.order([8, "desc"]).draw();
+                $("#datatable-1").dataTable().fnFilter("");
+                manageInvTable.searchPanes.rebuildPane();
                 $('#inspectionTable').unblock()
                 $('#DealerTable').unblock()
             }, 500);
@@ -138,8 +634,9 @@ $(function () {
             $('.DealerTable').removeClass('d-none');
             $('#DealerTable').unblock()
         }
-    });
 
+    });
+    // manageInvTable.draw();
 
     let filter = $('#notForService').val();
     if (filter == "true") {
@@ -147,455 +644,12 @@ $(function () {
     }
     else {
         $('#notTouched').click();
-        // $('#Gone').click();
     }
-
-    $('#filterDataTable').on('click', function () {
-        loadDataTable();
-    });
-
-
 
     // $select.on('change', function () {
     //     $(this).trigger('blur');
     // });
-    // -------------------------------------------------------------------------------
 
-    function loadDataTable() {
-        if ($.fn.dataTable.isDataTable('#datatable-1')) {
-            manageInvTable.draw();  // working
-            // manageInvTable.searchPanes.rebuildPane();
-        } else {
-
-            let filterBy = $('input[name=mod]:checked').val();
-            filterBy = filterBy ? filterBy : 'notTouched';
-            let orderBy = [];
-            let hideColumns = [];
-            let rowGroupSrcStatus = false;
-            $('#wholesaleFilter').val('');
-            $('#stockTypeFilter').val('');
-            $('#makeFilter').val('');
-            $('#modalFilter').val('');
-
-            switch (filterBy) {
-                case 'notTouched':
-                    rowGroupSrcStatus = false;
-                    // rowGroupSrcStatus = "true";
-                    // rowGroupSrc = 21;
-                    hideColumns = [0, 1, 2, 3, 4, 5, 6, 7, 10, 22, 23, 24];
-                    orderBy = [[21, "asc"], [8, "desc"]];
-                    $('#wholesaleFilter').val('off');
-                    $('#stockTypeFilter').val('USED');
-                    break;
-                case 'LotNotes':
-                case 'holdForRecon':
-                case 'sendToRecon':
-                case 'retailReady':
-                case 'windshield':
-                case 'wheels':
-                    rowGroupSrcStatus = false;
-                    orderBy = [[21, "asc"], [8, "desc"]];
-                    if (filterBy == 'LotNotes') {
-                        hideColumns = [1, 4, 5, 10, 16, 17, 18, 19, 20, 21, 22, 23, 24, 6, 7];
-                    } else if (filterBy == 'windshield') {
-                        hideColumns = [1, 2, 3, 4, 5, 10, 16, 17, 18, 19, 20, 22, 23, 24, 7];
-                    } else if (filterBy == 'wheels') {
-                        hideColumns = [1, 2, 3, 4, 5, 10, 16, 17, 18, 19, 20, 22, 23, 24, 6];
-                    } else {
-                        hideColumns = [1, 2, 3, 4, 5, 10, 22, 23, 24, 6, 7];
-                    }
-                    break;
-                case 'toGo':
-                case 'Gone':
-                    rowGroupSrcStatus = true;
-                    rowGroupSrc = 4;
-                    if (filterBy == 'toGo') {
-                        hideColumns = [1, 2, 3, 4, 5, 9, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 6, 7];
-                    } else {
-                        hideColumns = [1, 2, 3, 4, 5, 10, 22, 23, 24, 6, 7];
-                    }
-                    orderBy = [[4, "asc"], [8, "desc"]];
-                    break;
-                case 'atBodyshop':
-                case 'backFromBodyshop':
-                    rowGroupSrcStatus = true;
-                    rowGroupSrc = 4;
-                    hideColumns = [1, 2, 3, 4, 9, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 6, 7];
-                    orderBy = [[4, "asc"], [5, "desc"]];
-                    break;
-                default:
-                    break;
-            }
-
-            $('.filterTags').trigger('change');
-
-
-            manageInvTable = $("#datatable-1").DataTable({
-
-                responsive: !0,
-                serverSide: true,
-                processing: true,
-                deferRender: true,
-                pageLength: 25,
-                lengthMenu: [10, 25, 50, 100, 250],
-                ajax: {
-                    url: '../php_action/fetchInspections.php',
-                    type: "POST",
-                    // type: "GET",
-                    data: function (data) {
-                        console.log(data);
-                        // Read values
-                        var filterBy = $('input[name=mod]:checked').val();
-                        filterBy = filterBy ? filterBy : 'notTouched';
-
-                        var orderBy = [];
-
-                        let wholesale = $('#wholesaleFilter').val();
-                        let stockType = $('#stockTypeFilter').val();
-                        let make = $('#makeFilter').val();
-                        let modal = $('#modalFilter').val();
-
-                        // console.log(wholesale);
-
-                        // switch (filterBy) {
-                        //     case 'notTouched':
-                        //     case 'LotNotes':
-                        //     case 'holdForRecon':
-                        //     case 'sendToRecon':
-                        //     case 'retailReady':
-                        //     case 'windshield':
-                        //     case 'wheels':
-                        //         // orderBy.push(['4', 'SORT_ASC'], ['8', 'SORT_DESC'])
-                        //         orderBy.push(['4', 'SORT_DESC'], ['8', 'SORT_ASC'])
-                        //         break;
-                        //     case 'toGo':
-                        //     case 'Gone':
-                        //         orderBy.push(['4', 'SORT_ASC'], ['8', 'SORT_DESC'])
-                        //         break;
-                        //     case 'atBodyshop':
-                        //     case 'backFromBodyshop':
-                        //         orderBy.push(['4', 'SORT_ASC'], ['5', 'SORT_DESC'])
-                        //         break;
-                        //     default:
-                        //         break;
-                        // }
-
-                        var subFilterValue = $('#statusFilterBtns input:radio:checked').val();
-                        subFilterValue = subFilterValue ? subFilterValue : 'pending';
-                        // Append to Mode Filter
-                        data.filterBy = filterBy;
-                        data.subFilterValue = subFilterValue;
-                        data.orderBy = orderBy;
-                        data.wholesaleFilter = wholesale;
-                        data.stockTypeFilter = stockType;
-                        data.makeFilter = make;
-                        data.modalFilter = modal;
-                    },
-                },
-                "paging": true,
-                "scrollX": true,
-                "orderClasses": false,
-                // autoWidth: false,
-                // "fixedHeader": true,
-                fixedHeader: {
-                    header: true,
-                    footer: true
-                },
-                dom: `<'row'<'col-12'P>>
-                <'row' <'col-sm-4 text-left text-sm-left pl-3'B>
-                    <'col-sm-4 text-left text-center pl-3'<'#statusFilterDiv.d-none'>>
-                    <'col-sm-4 text-right text-sm-right mt-2 mt-sm-0'f>>\n
-                <'row'<'col-12'tr>>\n      
-                <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
-                searchPanes: {
-                    cascadePanes: !0,
-                    columns: [21, 12, 13, 20],
-                },
-
-                buttons: [
-                    {
-                        extend: "colvis",
-                        text: "Visibility control",
-                        collectionLayout: "two-column",
-                        columns: [8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24]
-                    },
-                    {
-                        extend: 'copyHtml5',
-                        title: 'Lot widzards',
-                        exportOptions: {
-                            columns: [':visible:not(:first-child)'],
-                        }
-                    },
-                    {
-                        extend: 'excelHtml5',
-                        title: 'Lot widzards',
-                        exportOptions: {
-                            columns: [':visible:not(:first-child)']
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        title: 'Lot widzards',
-                        exportOptions: {
-                            columns: [':visible:not(:first-child)']
-                        },
-                        customize: function (win) {
-                            $(win.document.body)
-                                .css('font-size', '10pt');
-                            $(win.document.body).find('table')
-                                .addClass('compact')
-                                .css('font-size', 'inherit');
-                        }
-                    },
-                ],
-
-                columnDefs: [
-                    { width: 400, targets: [3, 6, 7] },
-                    {
-                        width: 200,
-                        targets: [9],
-                        createdCell: function (td, cellData, rowData, row, col) {
-                            $(td).addClass('text-nowrap');
-                        }
-                    },
-                    {
-                        // targets: [0, 1, 2, 3, 4, 5, 10, 6, 7, 22, 23, 24],
-                        targets: hideColumns,
-                        visible: false,
-                    },
-                    {
-                        targets: [8],
-                        createdCell: function (td, cellData, rowData, row, col) {
-                            var data = $(td).html();
-                            if (data > 4) {
-                                $(td).addClass('h5 font-weight-bolder text-danger');
-                            } else {
-                                $(td).addClass('font-weight-bold p');
-                            }
-                        }
-                    },
-                    {
-                        targets: [23],
-                        data: 22, // repairs 
-                        render: function (data, type, row) {
-                            var repairArr = data ? data.replace(/__/g, " , ") : '';
-                            repairArr = repairArr.slice(3, -3);
-                            return repairArr;
-                        },
-                    },
-                    {
-                        targets: [24],
-                        data: 3, // lot notes
-                    },
-                    {
-                        targets: [6],
-                        data: 6, // windshield
-                        render: function (data, type, row) {
-                            var repairArr = data ? data.replace(/__/g, " , ") : '';
-                            repairArr = repairArr.slice(3, -3);
-                            return repairArr;
-                        },
-                    },
-                    {
-                        targets: [7],
-                        data: 7, // wheels
-                        render: function (data, type, row) {
-                            var repairArr = data ? data.replace(/__/g, " , ") : '';
-                            repairArr = repairArr.slice(3, -3);
-                            return repairArr;
-                        },
-                    },
-                    {
-                        targets: [2, 3, 4, 5, 6, 7],
-                        createdCell: function (td, cellData, rowData, row, col) {
-                            if ($('#isEditAllowed').val() == "true") {
-                                $(td).attr({
-                                    "data-toggle": "modal",
-                                    "data-target": "#modal8",
-                                    "onclick": "editInspection(" + rowData[25] + ")"
-                                });
-                            }
-                        }
-                    },
-                    {
-                        targets: [9, 10],
-                        createdCell: function (td, cellData, rowData, row, col) {
-                            let wholesale = rowData[21];
-                            if (wholesale == 'Yes') {
-                                $(td).addClass('font-weight-bolder text-danger');
-                            } else {
-                                $(td).addClass('font-weight-bold p');
-                            }
-                        }
-                    },
-                    {
-                        searchPanes: {
-                            show: true
-                        },
-                        targets: [21, 12, 13, 20]
-                    },
-                ],
-                language: {
-                    "infoFiltered": "",
-                    searchPanes: {
-                        count: "{total} found",
-                        countFiltered: "{shown} / {total}"
-                    }
-                },
-
-                rowGroup: {
-                    // dataSrc: 4,
-                    // dataSrc: rowGroupSrc,
-                    // enable: false,
-                    dataSrc: rowGroupSrc,
-                    enable: rowGroupSrcStatus,
-                    // dataSrc: 21,
-                    // enable: true,
-                    startRender: function (rows, group) {
-                        var collapsed = !!collapsedGroups[group];
-
-                        // console.log(rows);
-                        // rows.nodes().each(function (r) {
-                        //     r.style.display = collapsed ? 'none' : '';
-                        // });
-                        // if (rowGroupSrc == 19) {
-                        //     if (group == "No") {
-                        //         group = "Retail";
-                        //     } else if (group == "Yes") {
-                        //         group = "Wholesale";
-                        //     }
-                        // }
-                        // // Add category name to the <tr>. NOTE: Hardcoded colspan
-                        // return $('<tr/>')
-                        //     .append('<td colspan="17">' + group + ' (' + rows.count() + ')</td>')
-                        //     .attr('data-name', group)
-                        //     .toggleClass('collapsed', collapsed);
-
-                        // -------------  For Display All Number of Filtered Rows -----------------
-
-                        var filteredData = $('#datatable-1').DataTable()
-                            .rows({ search: 'applied' })
-                            .data()
-                            .filter(function (data, index) {
-                                return data[rowGroupSrc] == group ? true : false;
-                            });
-                        if (rowGroupSrc == 21) {
-                            if (group == "No") {
-                                group = "Retail";
-                            } else if (group == "Yes") {
-                                group = "Wholesale";
-                            }
-                        }
-
-                        return $('<tr/>')
-                            .append('<td colspan="17">' + group + ' (' + filteredData.length + ')</td>')
-                            .attr('data-name', group)
-                            .toggleClass('collapsed', collapsed);
-                    }
-                },
-                createdRow: function (row, data, dataIndex) {
-                    if ($('#isEditAllowed').val() == "true") {
-                        $(row).children().not(':nth-child(1)').attr({
-                            "data-toggle": "modal",
-                            "data-target": "#modal8",
-                            "onclick": "editInspection(" + data[25] + ")"
-                        });
-                    }
-                },
-                "drawCallback": function (settings, start, end, max, total, pre) {
-                    var json = this.fnSettings().json;
-                    if (json) {
-                        // console.log(obj);
-                        var obj = json.totalNumber;
-                        for (const [key, value] of Object.entries(obj)) {
-                            $(`input[name='mod'][value='${key}']`).next().next().html(value)
-                            // changing style
-                            switch (key) {
-                                case 'notTouched':
-                                case 'LotNotes':
-                                case 'windshield':
-                                case 'wheels':
-                                case 'toGo':
-                                case 'CarsToDealers':
-                                    if (value == '0') {
-                                        $(`input[name='mod'][value='${key}']`).parent().addClass('btn-outline-success')
-                                        $(`input[name='mod'][value='${key}']`).parent().removeClass('btn-outline-danger')
-                                    } else {
-                                        $(`input[name='mod'][value='${key}']`).parent().addClass('btn-outline-danger')
-                                        $(`input[name='mod'][value='${key}']`).parent().removeClass('btn-outline-success')
-                                    }
-                                    break;
-                                default:
-                                    $(`input[name='mod'][value='${key}']`).parent().addClass('btn-outline-primary')
-                                    break;
-                            }
-
-                        }
-
-                        let totalPending = 0, totalComplete = 0;
-                        let modFilter = $(`#mods .btn.active input[name='mod']:checked`).val();
-                        if (modFilter == 'windshield') {
-                            $('#datatable-1').DataTable()
-                                .rows()
-                                .data()
-                                .each(function (data, index) {
-                                    var windshield = data[6]; // windshield
-                                    var arr = windshield ? (windshield.trim()).split('__') : [];
-                                    if (arr.length > 0 && arr.indexOf('Done') == -1) {
-                                        totalPending += 1;
-                                    }
-                                    if (arr.length > 0 && arr.indexOf('Done') != -1) {
-                                        totalComplete += 1;
-                                    }
-                                })
-                        } else if (modFilter == 'wheels') {
-                            $('#datatable-1').DataTable()
-                                .rows()
-                                .data()
-                                .each(function (data, index) {
-                                    var wheels = data[7]; // wheels
-                                    var arr = wheels ? (wheels.trim()).split('__') : [];
-                                    if (arr.length > 0 && arr.indexOf('Done') == -1) {
-                                        totalPending += 1;
-                                    }
-                                    if (arr.length > 0 && arr.indexOf('Done') != -1) {
-                                        totalComplete += 1;
-                                    }
-                                });
-                        }
-
-                        $('#pendingCount').html(totalPending);
-                        $('#completeCount').html(totalComplete);
-
-
-
-                    }
-                },
-                "initComplete": function (settings, json) {
-
-
-                    setTimeout(() => {
-                        loadSearchData();
-                    }, 1500);
-                },
-                // "order": [[21, "asc"], [8, "desc"]], // wholesale , age
-                "order": orderBy, // wholesale , age
-            });
-            writeStatusHTML();
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-    // -------------------------------------------------------------------------------
 
     $("#updateInspectionForm").validate({
         // ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
@@ -696,6 +750,11 @@ $(function () {
 
     });
 
+
+
+
+
+
     $('.repairAndBodyshop').on('change', function () {
         if ($('#repais option:selected').length > 0 && $('#bodyshop').val() != 0) {
             $('#repairSent').removeAttr('disabled');
@@ -788,47 +847,35 @@ $(function () {
 
     window.onscroll = function () { myFunction() };
     var header = document.getElementById("makeSticky");
+    // var sticky = header.offsetParent.offsetHeight - header.offsetTop - header.offsetHeight;
+    var sticky = header.offsetHeight;
     function myFunction() {
-
-        var desktopH = document.getElementById("sticky-header-desktop");
-        var mobileH = document.getElementById("sticky-header-mobile");
-        var header2 = document.getElementById("makeSticky");
-        var datatableHeader = $('.table.fixedHeader-floating');
-        // console.log(desktopH.offsetHeight);   
-        manageInvTable?.fixedHeader.headerOffset(desktopH.offsetHeight + mobileH.offsetHeight + header2.offsetHeight - 3);
-        manageCarDealersTable?.fixedHeader.headerOffset(desktopH.offsetHeight + mobileH.offsetHeight + header2.offsetHeight - 3);
-
-        if ($(window).width() < 580) {
-            manageInvTable?.fixedHeader.headerOffset(mobileH.offsetHeight - 3);
-            manageCarDealersTable?.fixedHeader.headerOffset(mobileH.offsetHeight - 3);
+        if (window.pageYOffset > sticky) {
+            header.classList.add("stickyDiv");
+        } else {
+            header.classList.remove("stickyDiv");
         }
-
-
-        $('#secondMenu').css('height', header2.offsetHeight)
-
-        if (datatableHeader.length > 0) {
-            let topV = desktopH.offsetHeight + mobileH.offsetHeight + header2.offsetHeight - 3;
-            datatableHeader[0].style.top = `${topV}px`;
-
-        }
-        header.classList.add("stickyDiv");
-        header.classList.add("fh-fixedHeader");
-
-        // if (window.pageYOffset > sticky) {
-        //     header.classList.add("stickyDiv");
-        //     header.classList.add("fh-fixedHeader");
-        // } else {
-        //     header.classList.remove("stickyDiv");
-        //     header.classList.remove("fh-fixedHeader");
-        // }
     }
-    header.classList.remove("stickyDiv");
+
 });
 
+function loadSearchData() {
+    searhStatusArray = [];
+    $('#datatable-1').DataTable()
+        .rows()
+        .data()
+        .each(function (rowData, index) {
+            if (rowData[9] && rowData[9] != 'undefined') {
+                searhStatusArray.push({
+                    stockDetails: rowData[9],
+                    stockAvailibility: rowData[26],
+                })
+                return true;
+            }
+            return false;
+        });
 
-async function loadSearchData() {
-    const data = await manageInvTable.ajax.json();
-    setSearchTypehead(data.searhStatusArray);
+    setSearchTypehead(searhStatusArray);
 }
 
 function loadbodyshops() {
@@ -884,7 +931,7 @@ function setSearchTypehead(searhStatusArray) {
             templates: {
                 suggestion: function (data) {
                     var stockAvailibilityArray = data.stockAvailibility;
-                    const template = `<div><p><strong>${data.stockDetails}</strong></p><div class="row pl-2 pr-2">${stockAvailibilityArray.map(e => (e) ? `<div class="col-sm-4 p-1 mr-2"> <button class="badge badge-label-primary cursor-pointer searchStockBtn" onclick="searchStockBtn(this)"  data-head="${e}" data-search="${data.stockDetails}" > ${e} </button> </div>` : ``).join('')}</div></div>`;
+                    const template = `<div><p><strong>${data.stockDetails}</strong></p><div class="row pl-2 pr-2">${stockAvailibilityArray.map(e => (e) ? `<div class="col-sm-4 p-1"> <button class="badge badge-label-primary cursor-pointer searchStockBtn" onclick="searchStockBtn(this)"  data-head="${e}" data-search="${data.stockDetails}" > ${e} </button> </div>` : ``).join('')}</div></div>`;
                     return template;
                 }
             },
@@ -947,8 +994,8 @@ function searchStockBtn(params) {
     if (tab) {
         setTimeout(() => {
             $("#datatable-1").dataTable().fnFilter(search);
-            // manageInvTable.order([21, "asc"], [8, 'desc']).draw();
-            // manageInvTable.ajax.reload(null, false);
+            manageInvTable.order([21, "asc"], [8, 'desc']).draw();
+            manageInvTable.ajax.reload(null, false);
             $('#searchcars').blur();
             $('#searchcars').val('');
         }, 1000);
@@ -989,7 +1036,6 @@ function fetchCarsToDealers() {
             "pageLength": 25,
             // autoWidth: false,
             "order": [[1, "desc"]],
-            fixedHeader: true,
 
             dom: `\n     
             <'row'<'col-12'P>>\n
@@ -1037,13 +1083,6 @@ function fetchCarsToDealers() {
             ],
             columnDefs: [
                 { width: 400, targets: [4, 5] },
-                {
-                    width: 200,
-                    targets: [2],
-                    createdCell: function (td, cellData, rowData, row, col) {
-                        $(td).addClass('text-nowrap');
-                    }
-                },
                 {
                     targets: [8],
                     visible: false,
@@ -1250,8 +1289,8 @@ function writeStatusHTML() {
         });
 
         setTimeout(() => {
-            // manageInvTable.draw();
-            // manageInvTable.searchPanes.rebuildPane();
+            manageInvTable.draw();
+            manageInvTable.searchPanes.rebuildPane();
         }, 500);
     })
 }
@@ -1294,41 +1333,17 @@ function removeImage(ele) {
 }
 
 function toggleFilterClass() {
-    $('.dtsp-panes').toggle();
+    $('.dtsp-panes1').toggle();
 }
 function toggleFilterClass2() {
-    // $('.dtsp-panes').toggle();
-    $('.customFilters1').toggleClass('d-none');
-
-    $("#wholesaleFilter").select2({
-        dropdownAutoWidth: !0,
-        placeholder: "Wholesale",
-    });
-    $("#makeFilter").select2({
-        dropdownAutoWidth: !0,
-        placeholder: "Make",
-        tags: !0
-    });
-    $("#modalFilter").select2({
-        dropdownAutoWidth: !0,
-        placeholder: "Model",
-        tags: !0
-    });
-    $("#stockTypeFilter").select2({
-        dropdownAutoWidth: !0,
-        placeholder: "Stock Type",
-    });
-
-
-
+    $('.dtsp-panes').toggle();
 }
 function clearErrorsList() {
     $('#errorList').html('');
 }
 
 $('#repairReturn').on('change', function () {
-    // $('#resend').prop('disabled', ($(this).val() != '') ? false : true);
-    $('#resend').prop('disabled', ($(this).val() != '' && $('#resend').is(':checked') == false) ? false : true);
+    $('#resend').prop('disabled', $(this).val() != '' ? false : true);
     // $('#resend').prop('checked', $(this).val() == '' ? false : null)
 })
 
@@ -1395,13 +1410,9 @@ $('#resend').on('change', function () {
         $("#repais option:selected").prop("selected", 0);
         $('#repais').val(null).trigger('change');
         arr.forEach(element => {
-            if ((element !== '') && $('#repais').find("option[value='" + element + "']").length > 0) {
+            if ((element !== '') || $('#repais').find("option[value='" + element + "']").length) {
                 $("#repais option[value='" + element + "']").prop("selected", 1);
-                // $('#repais').val(element).trigger('change');
                 $('#repais').trigger('change');
-            } else if (element !== '') {
-                var newOption = new Option(element, element, true, true);
-                $('#repais').append(newOption).trigger('change');
             }
         });
 
@@ -1497,16 +1508,9 @@ function editInspection(id) {
                 $("#repais option:selected").prop("selected", false);
                 $('#repais').val(null).trigger('change');
                 arr.forEach(element => {
-                    // if ((element !== '') || $('#repais').find("option[value='" + element + "']").length) {
-                    //     $("#repais option[value='" + element + "']").prop("selected", 1);
-                    //     $('#repais').trigger('change');
-                    // }
-                    if ((element !== '') && $('#repais').find("option[value='" + element + "']").length > 0) {
+                    if ((element !== '') || $('#repais').find("option[value='" + element + "']").length) {
                         $("#repais option[value='" + element + "']").prop("selected", 1);
                         $('#repais').trigger('change');
-                    } else if (element !== '') {
-                        var newOption = new Option(element, element, true, true);
-                        $('#repais').append(newOption).trigger('change');
                     }
                 });
 

@@ -144,7 +144,8 @@ $(function () {
             }
 
             if (searchStatus[0] === 'notPaid') {
-                if ((date_in_paid == '') || (date_sent != '' && date_out_paid == '')) {
+                // if ((date_in_paid == '') || (date_sent != '' && date_out_paid == '')) {
+                if ((date_in_paid == '') && (date_sent != '' && date_out_paid == '')) {
                     return true;
                 }
             }

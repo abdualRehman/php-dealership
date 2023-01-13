@@ -78,6 +78,12 @@ $(function () {
                 },
                 targets: [1, 2, 3, 4],
             },
+            {
+                targets: [7, 8, 9],
+                render: function (data, type, row) {
+                    return data != "" ? moment(data).format('MM-DD-YYYY') : "";
+                },
+            }
         ],
 
         language: {
@@ -119,6 +125,7 @@ $(function () {
                     .filter(function (data, index) {
                         var entered = data[8];
                         var approved = data[9];
+                        var certified = data[6];
                         if (entered == null || entered == '') {
                             todoCount += 1;
                         }
@@ -148,13 +155,14 @@ $(function () {
     });
 
     writeStatusHTML();
-    $('#all').click();
+    $('#todo').click();
 
 
 
     $.fn.dataTable.ext.search.push(
         function (settings, searchData, index) {
             var tableNode = manageDataTable.table().node();
+            var certified = searchData[6];
             var entered = searchData[8];
             var approved = searchData[9];
 
@@ -364,9 +372,9 @@ function editDetails(id = null) {
                 $('#lname').val(response.lname);
                 $('#state').val(response.state);
 
-                $('#deliveryDate').val(response.delivered);
-                $('#enteredDate').val(response.entered);
-                $('#approvedDate').val(response.approved);
+                $("#deliveryDate").datepicker("setDate", response.delivered != "" ? moment(response.delivered).format('MM-DD-YYYY') : "");
+                $("#enteredDate").datepicker("setDate", response.entered != "" ? moment(response.entered).format('MM-DD-YYYY') : "");
+                $("#approvedDate").datepicker("setDate", response.approved != "" ? moment(response.approved).format('MM-DD-YYYY') : "");
                 $('#rdrNotes').val(response.rdr_notes);
 
 
@@ -388,7 +396,16 @@ function editDetails(id = null) {
     }
 
 }
+$('#enteredDate').on('change', function () {
+    let approved = $('#approvedDate').val();
+    let iscertified = $('#iscertified').val();
+    console.log(iscertified);
+    if (approved == '' && iscertified == 'NO') {
+        $('#approvedDate').val($(this).val());
+    }
 
+    // if()
+})
 
 
 function toggleInfo(className) {

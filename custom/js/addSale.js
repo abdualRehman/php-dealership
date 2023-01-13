@@ -11,7 +11,7 @@ $(function () {
     loadFinanceManager();
 
     autosize($(".autosize"));
-    var today = new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}));
+    var today = new Date(new Date().toLocaleString('en', { timeZone: 'America/New_York' }));
     $("#saleDate").datetimepicker({
         todayHighlight: !0,
         autoclose: true,
@@ -19,7 +19,7 @@ $(function () {
         startDate: today,
         language: 'pt-BR',
         format: 'mm-dd-yyyy hh:ii',
-        defaultDate: new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'})),
+        defaultDate: new Date(new Date().toLocaleString('en', { timeZone: 'America/New_York' })),
 
         // to disable time picker
         minView: 2,
@@ -34,7 +34,7 @@ $(function () {
         language: 'pt-BR',
         format: 'mm-dd-yyyy',
     });
-    $('#saleDate').datetimepicker('update', new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'})));
+    $('#saleDate').datetimepicker('update', new Date(new Date().toLocaleString('en', { timeZone: 'America/New_York' })));
 
 
     var e1 = Swal.mixin({
@@ -152,14 +152,25 @@ $(function () {
                         })
                         form[0].reset();
                         $("#showDetails").modal('hide');
-                        loadStock();
-                        let { id } = response;
-                        setTimeout(() => {
-                            $('#stockId').val(id);
-                            $('#stockId').selectpicker('refresh');
-                            $('#stockId').selectpicker('toggle');
-                            changeStockDetails({ value: id });
-                        }, 1000);
+                        // loadStock();
+                        // let { id } = response;
+                        // setTimeout(() => {
+                        //     $('#stockId').val(id);
+                        //     $('#stockId').selectpicker('refresh');
+                        //     $('#stockId').selectpicker('toggle');
+                        //     changeStockDetails({ value: `${id}` });
+                        // }, 2000);
+
+                        var { id } = response;
+                        $.when(loadStock()).then(() => {
+                            setTimeout(() => {
+                                $('#stockId').val(id);
+                                $('#stockId').selectpicker('refresh');
+                                $('#stockId').selectpicker('toggle');
+                                console.log(id);
+                                changeStockDetails({ value: `${id}` });
+                            }, 2000);
+                        });
 
                     } else {
                         e1.fire({
@@ -303,28 +314,60 @@ $(function () {
 
 });
 
+$.fn.selectpicker.Constructor.DEFAULTS.virtualScroll = true;
 
+// function loadStock() {
+//     var selectBox = document.getElementById('stockId');
+//     $.ajax({
+//         url: '../php_action/fetchInvForSearch.php',
+//         type: "POST",
+//         dataType: 'json',
+//         beforeSend: function () {
+//             // selectBox.setAttribute("disabled", true);
+//         },
+//         success: function (response) {
+//             stockArray = response.data;
+//             // console.log(stockArray);
+//             // console.log(selectBox);
+//             selectBox.innerHTML = `<option value="0" selected disabled>Stock No:</option>`;
+//             for (var i = 0; i < stockArray.length; i++) {
+//                 // for (var i = 0; i < 3; i++) {
+//                 var item = stockArray[i];
+//                 // console.log(item);
+//                 selectBox.innerHTML += `<option value="${item[0]}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`;
+//             }
+//             // selectBox.removeAttribute("disabled");
+//             $('.selectpicker').selectpicker('refresh');
 
+//             $('#stockId').selectpicker('toggle');
+//             $('#stockId').selectpicker('refresh');
+//             $("#_").focus().val('').val("_");
+//         }
+//     });
+// }
 function loadStock() {
-    var selectBox = document.getElementById('stockId');
+    var selectBoxes = document.getElementsByClassName('stockno');
+    selectBoxes.forEach(element => {
+        element.innerHTML = ``;
+    });
+    $('.selectpicker').selectpicker('refresh');
     $.ajax({
         url: '../php_action/fetchInvForSearch.php',
         type: "POST",
         dataType: 'json',
-        beforeSend: function () {
-            // selectBox.setAttribute("disabled", true);
-        },
         success: function (response) {
+
             stockArray = response.data;
             // console.log(stockArray);
-            // console.log(selectBox);
-            selectBox.innerHTML = `<option value="0" selected disabled>Stock No:</option>`;
-            for (var i = 0; i < stockArray.length; i++) {
-                // for (var i = 0; i < 3; i++) {
-                var item = stockArray[i];
-                // console.log(item);
-                selectBox.innerHTML += `<option value="${item[0]}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`;
-            }
+            selectBoxes.forEach((element, index) => {
+                // for (var i = 0; i < stockArray.length; i++) {
+                writeHTMLOptions(element, stockArray);
+
+                const scroller = new InfiniteScroller(element, stockArray);
+                scroller.setScroller(element, stockArray);
+
+            });
+
             // selectBox.removeAttribute("disabled");
             $('.selectpicker').selectpicker('refresh');
 
@@ -334,6 +377,100 @@ function loadStock() {
         }
     });
 }
+
+function writeHTMLOptions(element, stockArray) {
+    for (var i = 0; i < 5; i++) {
+        var item = stockArray[i];
+        // element.innerHTML += `<option value="${item[0]}" data-scroll-index="${i}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`;
+        $(element).append(`<option value="${item[0]}" data-scroll-index="${i}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`);
+    }
+}
+
+class InfiniteScroller {
+    element;
+    stockArray;
+    constructor(element, stockArray) {
+        this.element = element;
+        this.stockArray = stockArray;
+    }
+    setScroller(element, array) {
+        var p = element.parentElement.id;
+
+
+        // var Selectpicker = $('.selectpicker').data('selectpicker');
+        var Selectpicker = $('#' + p).data('selectpicker');
+
+        Selectpicker?.$menuInner?.on('scroll', function () {
+
+            if (Selectpicker?.$searchbox?.val() == '') {
+
+                var scrollTop = Selectpicker?.selectpicker?.view?.scrollTop;
+                // if within 100px of the bottom of the menu, load more options
+                if ($(this)[0].scrollHeight - Selectpicker.sizeInfo.menuInnerHeight - scrollTop < 10) {
+
+                    var optionDiv = Selectpicker?.$element[0];
+                    var targetChildElement = $(optionDiv).children('optgroup')[0].lastChild;
+                    var lastArrayIndex = $(targetChildElement).data('scroll-index') + 1;
+                    console.log(lastArrayIndex);
+                    if (array.length > lastArrayIndex) {
+                        for (let j = lastArrayIndex; j < lastArrayIndex + 10; j++) {
+                            var item = array[j];
+                            if (item) {
+                                // element.innerHTML += `<option value="${item[0]}" data-scroll-index="${j}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`;
+                                $(element).append(`<option value="${item[0]}" data-scroll-index="${j}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`);
+                            }
+                            $('.selectpicker').selectpicker('refresh');
+                        }
+                    }
+                }
+            }
+        });
+
+        Selectpicker?.$searchbox.on('input', function () {
+            var search = this.value;
+
+            if (search != '' && search.length > 3) {
+                element.innerHTML = '';
+                $('.dropdown-menu.show').block();
+                const results = array.filter(element => {
+                    var stock = (element[1]).toLowerCase();
+                    var model = (element[4]).toLowerCase();
+                    var vin = (element[8]).toLowerCase();
+                    return stock.indexOf(search.toLowerCase()) >= 0 || vin.indexOf(search.toLowerCase()) >= 0 || model.indexOf(search.toLowerCase()) >= 0;
+                });
+                results.forEach((item, i) => {
+                    // element.innerHTML += `<option value="${item[0]}" data-scroll-index="${i}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`;
+                    $(element).append(`<option value="${item[0]}" data-scroll-index="${i}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`);
+                });
+                $('.dropdown-menu.show').unblock();
+                $('.selectpicker').selectpicker('refresh');
+            } else if (search == '') {
+                element.innerHTML = '';
+                $('.dropdown-menu.show').block();
+                for (var i = 0; i < 5; i++) {
+                    var item = array[i];
+                    $(element).append(`<option value="${item[0]}" data-scroll-index="${i}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`);
+                }
+                $('.dropdown-menu.show').unblock();
+                $('.selectpicker').selectpicker('refresh');
+            }
+            $('.dropdown-menu.show').unblock();
+
+        });
+    }
+}
+
+
+
+
+
+
+// ---------------------------    // --------- // ------------------- //
+
+
+
+
+
 
 $('#salesPerson').on('change', function () {
     $('#fname').focus();
@@ -412,10 +549,10 @@ function changeReconcile() {
 }
 
 function changeStockDetails(ele) {
-
+    console.log(ele);
     $('#detailsSection').removeClass('d-none');
     let obj = stockArray.find(data => data[0] === ele.value);
-
+    console.log(obj);
     var retail = obj[12];
     retail = parseFloat(retail.replace(/\$|,/g, ''))
     var blnce = obj[11];
@@ -437,14 +574,14 @@ function changeStockDetails(ele) {
     $('#selectedDetails').addClass('text-center');
 
 
-    if(obj[32] == 'true'){
+    if (obj[32] == 'true') {
         $('#codp_warn').removeClass('d-none');
-    }else{
+    } else {
         $('#codp_warn').addClass('d-none');
     }
-    if(obj[33] == 'true'){
+    if (obj[33] == 'true') {
         $('#lwbn_warn').removeClass('d-none');
-    }else{
+    } else {
         $('#lwbn_warn').addClass('d-none');
     }
 

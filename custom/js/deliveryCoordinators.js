@@ -245,7 +245,7 @@ $(function () {
                 const startOfMonth = moment().startOf('month').format('MM-DD-YYYY');
                 const endOfMonth = moment().endOf('month').format('MM-DD-YYYY');
 
-                const todayDate = moment(new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}))).format("MM-DD-YYYY");
+                const todayDate = moment(new Date(new Date().toLocaleString('en', { timeZone: 'America/New_York' }))).format("MM-DD-YYYY");
                 const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('MM-DD-YYYY')
                 const lastDayOfPrevMonth = moment(todayDate).subtract(1, 'month').endOf('month').format('MM-DD-YYYY')
 
@@ -328,7 +328,7 @@ $(function () {
                 }
                 else if (dateType == 'lastMonth') {
 
-                    const todayDate = moment(new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}))).format("MM-DD-YYYY");
+                    const todayDate = moment(new Date(new Date().toLocaleString('en', { timeZone: 'America/New_York' }))).format("MM-DD-YYYY");
                     var date = searchData[4];
                     const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('MM-DD-YYYY')
 
@@ -747,6 +747,11 @@ function disabledManagerDiv() {
     $('#esubmittedBy , #submittedBy , #eoverrideByName , #overrideByName , #customerName , #ecustomerName').addClass('disabled-div');
     $("#esubmittedBy , #submittedBy , #eoverrideByName , #overrideByName , #customerName , #ecustomerName").find("*").prop("readonly", true);
 }
+
+
+$.fn.selectpicker.Constructor.DEFAULTS.virtualScroll = true;
+
+
 function loadSoldLogs() {
     var selectBoxes = document.getElementsByClassName('stockno');
     selectBoxes.forEach(element => {
@@ -760,16 +765,107 @@ function loadSoldLogs() {
         dataType: 'json',
         success: function (response) {
             stockArray = response.data;
-            selectBoxes.forEach(element => {
-                for (var i = 0; i < stockArray.length; i++) {
-                    var item = stockArray[i];
-                    element.innerHTML += `<option value="${item[0]}" title="${item[4]}">${item[4]} - ${item[5]} </option>`;
-                }
+            // console.log(stockArray);
+            selectBoxes.forEach((element, index) => {
+
+                writeHTMLOptions(element, stockArray);
+                const scroller = new InfiniteScroller(element, stockArray);
+                scroller.setScroller(element, stockArray);
+
             });
+
+
             $('.selectpicker').selectpicker('refresh');
         }
     });
 }
+
+function writeHTMLOptions(element, stockArray) {
+    for (var i = 0; i < 5; i++) {
+        var item = stockArray[i];
+        // element.innerHTML += `<option value="${item[0]}" data-scroll-index="${i}" title="${item[4]}"> ${item[4]} - ${item[5]} </option>`;
+        $(element).append(`<option value="${item[0]}" data-scroll-index="${i}" title="${item[4]}"> ${item[4]} - ${item[5]} </option>`);
+    }
+}
+
+class InfiniteScroller {
+    element;
+    stockArray;
+    constructor(element, stockArray) {
+        this.element = element;
+        this.stockArray = stockArray;
+    }
+    setScroller(element, array) {
+        var p = element.parentElement.id;
+
+
+        // var Selectpicker = $('.selectpicker').data('selectpicker');
+        var Selectpicker = $('#' + p).data('selectpicker');
+
+        Selectpicker?.$menuInner?.on('scroll', function () {
+
+            if (Selectpicker?.$searchbox?.val() == '') {
+
+                var scrollTop = Selectpicker?.selectpicker?.view?.scrollTop;
+                // if within 100px of the bottom of the menu, load more options
+                if ($(this)[0].scrollHeight - Selectpicker.sizeInfo.menuInnerHeight - scrollTop < 10) {
+
+                    var optionDiv = Selectpicker?.$element[0];
+                    var targetChildElement = $(optionDiv).children('optgroup')[0].lastChild;
+                    var lastArrayIndex = $(targetChildElement).data('scroll-index') + 1;
+                    $('.selectpicker').selectpicker('refresh');
+                    if (array.length > lastArrayIndex) {
+                        for (let j = lastArrayIndex; j < lastArrayIndex + 10; j++) {
+                            var item = array[j];
+                            if (item) {
+                                // element.innerHTML += `<option value="${item[0]}" data-scroll-index="${j}" title="${item[4]}"> ${item[4]} - ${item[5]} </option>`;
+                                $(element).append(`<option value="${item[0]}" data-scroll-index="${j}" title="${item[4]}"> ${item[4]} - ${item[5]} </option>`);
+                            }
+                            $('#' + p).addClass('selectpicker');
+                            $('#' + p).selectpicker('render');
+                            // $('.selectpicker').selectpicker('refresh');
+                        }
+                    }
+                }
+            }
+        });
+
+        Selectpicker?.$searchbox.on('input', function () {
+            var search = this.value;
+
+            if (search != '' && search.length > 3) {
+                element.innerHTML = '';
+                $('.dropdown-menu.show').block();
+                const results = array.filter(element => {
+                    var stock = (element[4]).toLowerCase();
+                    var vin = (element[5]).toLowerCase();
+                    return stock.indexOf(search.toLowerCase()) >= 0 || vin.indexOf(search.toLowerCase()) >= 0;
+                });
+                results.forEach((item, i) => {
+                    // element.innerHTML += `<option value="${item[0]}" data-scroll-index="${i}" title="${item[4]}"> ${item[4]} - ${item[5]} </option>`;
+                    $(element).append(`<option value="${item[0]}" data-scroll-index="${i}" title="${item[4]}"> ${item[4]} - ${item[5]} </option>`);
+                });
+                $('.dropdown-menu.show').unblock();
+                $('.selectpicker').selectpicker('refresh');
+            } else if (search == '') {
+                element.innerHTML = '';
+                $('.dropdown-menu.show').block();
+                for (var i = 0; i < 5; i++) {
+                    var item = array[i];
+                    // element.innerHTML += `<option value="${item[0]}" data-scroll-index="${i}" title="${item[4]}"> ${item[4]} - ${item[5]} </option>`;
+                    $(element).append(`<option value="${item[0]}" data-scroll-index="${i}" title="${item[4]}"> ${item[4]} - ${item[5]} </option>`);
+                }
+                $('.dropdown-menu.show').unblock();
+                $('.selectpicker').selectpicker('refresh');
+            }
+            $('.dropdown-menu.show').unblock();
+
+        });
+    }
+}
+
+// ---------------------------    // --------- // ------------------- //
+
 function loadDeliveryCoordinator() {
     var id = Number(localStorage.getItem('deliveryCoordinatorID'));
     $.ajax({
@@ -1004,6 +1100,10 @@ function changeExistStatus(editStatus = false) {
 function echangeStockDetails(ele, checkAppt = true) {
 
     let obj = stockArray.find(data => data[0] === ele.value);
+
+    $('#esale_id .stockno').prepend(`<option value="${obj[0]}" data-scroll-index="-1" title="${obj[4]}"> ${obj[4]} - ${obj[5]} </option>`);
+    $('#esale_id').val(`${obj[0]}`);
+
     $('#ecustomerName').val("");
     $('#evechicle').val("");
     $('#estockno').val("");

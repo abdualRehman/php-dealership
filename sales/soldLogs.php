@@ -219,7 +219,7 @@ if ($_GET['r'] == 'man') {
                                         <div class="row d-flex justify-content-center flex-row p-0 mb-2 w-100">
                                             <div class="row w-100">
                                                 <div class="col-md-12">
-                                                    <input type="text" class="form-control" placeholder="Select Date" name="datefilter" value="" />
+                                                    <input type="text" class="form-control" placeholder="Select Date" name="datefilter" value="" autocomplete="off" />
                                                 </div>
                                             </div>
 

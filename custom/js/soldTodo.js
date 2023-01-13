@@ -53,9 +53,9 @@ $(function () {
            <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
            <'col-md-5'p>>\n`,
 
-        "pageLength": 50,
+        "pageLength": 150,
         searchPanes: {
-            columns: [1, 2, 3, 4],
+            columns: [13, 2, 3, 4],
         },
         buttons: [
             {
@@ -141,7 +141,7 @@ $(function () {
                 searchPanes: {
                     show: true
                 },
-                targets: [1, 2, 3, 4],
+                targets: [13, 2, 3, 4],
             },
             {
                 targets: [12, 13],
@@ -193,10 +193,10 @@ $(function () {
 
         language: {
             "infoFiltered": "",
-            searchPanes: {
-                count: "{total} found",
-                countFiltered: "{shown} / {total}"
-            }
+            // searchPanes: {
+            //     count: "{total} found",
+            //     countFiltered: "{shown} / {total}"
+            // }
         },
 
         rowGroup: {
@@ -242,7 +242,7 @@ $(function () {
                 });
             }
         },
-        "order": [[13, "asc"], [12, "desc"]],
+        "order": [[13, "asc"], [0, "asc"]],
 
     });
 
@@ -261,7 +261,7 @@ $(function () {
     $.fn.dataTable.ext.search.push(
         function (settings, searchData, index) {
             var tableNode = manageSoldLogsTable.table().node();
-
+            // console.log(settings.preSelect);
             var searchStatus = $('input:radio[name="searchStatus"]:checked').map(function () {
                 if (this.value !== "") {
                     return this.value;
@@ -301,7 +301,16 @@ $(function () {
                         (registration !== 'pending' && registration !== 'done') && inspection !== 'need' && (salesperson_status === 'cancelled' || salesperson_status === 'delivered')) {
                         return false;
                     } else {
-                        return true;
+
+
+                        let houseDealFilter = $('#houseDealFilter:checked').is(':checked');
+                        if (houseDealFilter == true) {
+                            return true;
+                        } else {
+                            if (searchData[13] != 'House Deal') {
+                                return true;
+                            }
+                        }
                     }
                 }
             }
@@ -325,10 +334,26 @@ $(function () {
                         ) {
                             return false;
                         } else {
-                            return true;
+                            // return true;
+                            let houseDealFilter = $('#houseDealFilter:checked').is(':checked');
+                            if (houseDealFilter == true) {
+                                return true;
+                            } else {
+                                if (searchData[13] != 'House Deal') {
+                                    return true;
+                                }
+                            }
                         }
                     } else {
-                        return true;
+                        // return true;
+                        let houseDealFilter = $('#houseDealFilter:checked').is(':checked');
+                        if (houseDealFilter == true) {
+                            return true;
+                        } else {
+                            if (searchData[13] != 'House Deal') {
+                                return true;
+                            }
+                        }
                     }
                 }
 
@@ -357,7 +382,7 @@ $(function () {
     );
 
 
-    $('input:radio').on('change', function () {
+    $('input:radio , #houseDealFilter:checkbox').on('change', function () {
 
         $('#datatable-1').block({
             message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
@@ -434,7 +459,7 @@ function writeStatusHTML() {
     var element = document.getElementById('statusFilterDiv');
     if (element) {
         element.innerHTML = `<div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 d-flex align-items-center justify-content-between">
             <div id="sort">
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-flat-primary">
@@ -444,6 +469,10 @@ function writeStatusHTML() {
                         <input type="radio" name="searchStatus" id="completed" value="completed"> Completed
                     </label>
                 </div>
+            </div>
+            <div class="custom-control custom-control-lg custom-checkbox pr-2">
+                <input type="checkbox" class="custom-control-input" id="houseDealFilter">
+                <label class="custom-control-label" for="houseDealFilter">House Deal</label>
             </div>
         </div>
     </div>`;

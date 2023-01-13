@@ -18,30 +18,30 @@ if ($_POST) {
 
     $certified = (isset($_POST['certified'])) ? "true" : "false";
     $title = (isset($_POST['title'])) ? "true" : "false";
-    
 
-    
+
+
     $titlePriority = (isset($_POST['titlePriority'])) ? mysqli_real_escape_string($connect, $_POST['titlePriority']) : "";
     $salesConsultant = (isset($_POST['salesConsultant'])) ? mysqli_real_escape_string($connect, $_POST['salesConsultant']) : "";
     $customer = (isset($_POST['customerName'])) ? mysqli_real_escape_string($connect, $_POST['customerName']) : "";
-    
+
     $dateSent = (isset($_POST['dateSent'])) ? mysqli_real_escape_string($connect, $_POST['dateSent']) : "";
     $dateSold = (isset($_POST['dateSold'])) ? mysqli_real_escape_string($connect, $_POST['dateSold']) : "";
     $soldPrice = (isset($_POST['soldPrice'])) ? mysqli_real_escape_string($connect, $_POST['soldPrice']) : "";
-    
+
     $keys = (isset($_POST['keys'])) ? "true" : "false";
-    
+
     $titleNotes = (isset($_POST['titleNotes'])) ? mysqli_real_escape_string($connect, $_POST['titleNotes']) : "";
     $wholesaleNotes = (isset($_POST['wholesaleNotes'])) ? mysqli_real_escape_string($connect, $_POST['wholesaleNotes']) : "";
     $onlineDescription = (isset($_POST['onlineDescription'])) ? mysqli_real_escape_string($connect, $_POST['onlineDescription']) : "";
     $roNotes = (isset($_POST['roNotes'])) ? mysqli_real_escape_string($connect, $_POST['roNotes']) : "";
-    
+
 
     $uci = (isset($_POST['uci'])) ? mysqli_real_escape_string($connect, $_POST['uci']) : "";
     $uciRo = (isset($_POST['uciRo'])) ? mysqli_real_escape_string($connect, $_POST['uciRo']) : "";
     $uciApproved = (isset($_POST['uciApproved'])) ? mysqli_real_escape_string($connect, $_POST['uciApproved']) : "";
     $uciClosed = (isset($_POST['uciClosed'])) ? mysqli_real_escape_string($connect, $_POST['uciClosed']) : "";
-    
+
 
     $oci = (isset($_POST['oci'])) ? "true" : "false";
 
@@ -72,7 +72,21 @@ if ($_POST) {
     // echo $oci . '<br />'; // dates
 
 
+    $profit = "";
+    $checkSql = "SELECT * FROM `inventory` WHERE id = '$vehicleId'";
+    $result = $connect->query($checkSql);
+    if ($result->num_rows > 0) {
+        $row1 = $result->fetch_assoc();
+        $balance = $row1['status'] == 1 ? $row1['balance'] : 0;
+        $balance = preg_replace('/[\$,]/', '', $balance);
+        $balance = floatval($balance);
 
+        $soldPrice = $soldPrice != "" ? $soldPrice : 0;
+        $soldPrice = preg_replace('/[\$,]/', '', $soldPrice);
+        $soldPrice = floatval($soldPrice);
+
+        $profit = $soldPrice - $balance;
+    }
 
 
 
@@ -130,7 +144,8 @@ if ($_POST) {
             $valid['messages'] = mysqli_error($connect);
         }
     }
-
+    $updatekSql = "UPDATE `used_cars` SET `profit` = '$profit' WHERE inv_id = '$vehicleId'";
+    $connect->query($updatekSql) === true;
 
 
 

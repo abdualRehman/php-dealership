@@ -2,6 +2,10 @@
     flex-direction: row !important;
 }
 
+ul.dropdown-menu.inner.show{
+    min-width: auto!important;
+}
+
 .notification-menu,
 .notification-menu .dropdown-col {
     min-width: 40rem !important;
@@ -18,7 +22,7 @@
 
 
 .dropdown-menu .portlet-scroll>.portlet-body {
-    max-height: 30rem !important;
+    max-height: fit-content !important;
 }
 
 .dropdown-menu .portlet-scroll>.portlet-body #webLinksList {

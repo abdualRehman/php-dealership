@@ -231,6 +231,9 @@ $(function () {
                             timer: 1500
                         });
 
+                        form[0].reset();
+                        resetForm();
+                        $('#addNew').modal('hide');
                         $("#createBtnPrint").attr("onclick", `printDetails(${response.id})`);
                         manageDataTable.ajax.reload(null, false);
                     } else {
@@ -242,7 +245,7 @@ $(function () {
                             timer: 2500
                         })
 
-                        // form[0].reset();
+                        form[0].reset();
                     }
 
 
@@ -336,6 +339,7 @@ $(function () {
                             timer: 1500
                         })
                         // form[0].reset();
+                        $('#editDetails').modal('hide');
                         manageDataTable.ajax.reload(null, false);
 
                     } else {
@@ -445,6 +449,16 @@ $(function () {
 
 });
 
+
+function resetForm() {
+    $('.typeahead').val('');
+    $('.typeahead').trigger('change');
+    $('.selectpicker').each(function () {
+        $(this).find('option:first').prop('selected', 'selected');
+        $(".selectpicker").selectpicker("refresh");
+    });
+    $(".tags").empty();
+}
 
 
 // $('.vehicleDetails').on('change', function () {

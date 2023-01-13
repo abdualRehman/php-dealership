@@ -557,7 +557,7 @@
             </div>
         </div>
         <div class="wrapper">
-            <div class="header">
+            <div class="header"> 
                 <div class="header-holder header-holder-desktop sticky-header" id="sticky-header-desktop">
                     <div class="header-container container-fluid">
                         <div class="header-wrap">
@@ -701,11 +701,13 @@
                             </ul>
                         </div>
                         <div class="header-wrap header-wrap-block">
-                            <div class="input-group-icon input-group-lg widget15-compact d-none searchBar" id="searchBar">
-                                <div class="input-group-prepend">
-                                    <i class="fa fa-search text-primary"></i>
-                                </div>
+                            <div class="input-group-icon input-group-lg widget15-compact d-none searchBar justify-content-end" id="searchBar" style="position: absolute;z-index: 99990!important;max-width:60%!important">
                                 <input type="text" class="form-control" name="searchcars" id="searchcars" placeholder="Type to search...">
+                                <div class="input-group-prepend" style="margin-left: -30px; z-index: 100;position:relative!important ">
+                                    <button type="button" onclick="(function(){$('#searchcars').val('');})();" class="btn bg-transparent">
+                                        <i class="fa fa-times text-primary"></i>
+                                    </button>
+                                </div>
                             </div>
                             <div class="input-group-icon input-group-lg widget15-compact statusBar" id="statusBar">
                                 <h3 class="portlet-title">
@@ -872,10 +874,12 @@
 
                             <div class="d-flex align-items-center flex-wrap justify-content-center searchBar">
                                 <div class="input-group-icon input-group-lg widget15-compact searchBar d-none" style="position: absolute;z-index: 99990!important;max-width:60%!important" id="searchBar">
-                                    <div class="input-group-prepend">
-                                        <i class="fa fa-search text-primary"></i>
-                                    </div>
                                     <input type="text" class="form-control" name="searchcars" id="searchcars2" placeholder="Type to search...">
+                                    <div class="input-group-prepend" style="margin-left: -30px; z-index: 100; position:relative!important ">
+                                        <button type="button" onclick="(function(){$('#searchcars2').val('');})();" class="btn bg-transparent">
+                                            <i class="fa fa-times text-primary"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             <h5 class="portlet-title statusBar">
@@ -950,7 +954,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="header-holder header-holder-mobile">
+                <div class="header-holder header-holder-mobile" id="sticky-header-mobile1">
                     <div class="header-container container-fluid">
                         <div class="row" style="width:-webkit-fill-available;">
                             <div class="col-9">

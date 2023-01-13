@@ -178,9 +178,17 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
     .stickyDiv {
         position: fixed;
         top: calc(5em);
-        width: calc(100% - 65px);
+        width: calc(100% - 40px);
         z-index: 999;
         border-radius: 10px;
+    }
+
+    @media (max-width: 576px) {
+        .stickyDiv {
+            position: initial !important;
+            width: calc(100%);
+            border-radius: 0px;
+        }
     }
 
     body.theme-dark .stickyDiv {
@@ -190,84 +198,73 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
     body.theme-light .stickyDiv {
         background: #ffffff;
     }
-
-    @media (max-width: 576px) {
-        .stickyDiv {
-            position: relative !important;
-            top: auto !important;
-            width: auto !important;
-            z-index: 0;
-            border-radius: 0px !important;
-        }
-    }
 </style>
 
 
-<div class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="portlet">
-                    <div class="portlet-header portlet-header-bordered">
-                        <div class="div-sticky-class" id="makeSticky">
-                            <div class="text-center m-auto justify-content-center">
-                                <div class="btn-group-toggle" id="mods" data-toggle="buttons">
-                                    <?php
-                                    if ($notForService == true) {
-                                    ?>
-                                        <div class="row p-2">
-                                            <div class="col-md-12">
-                                                <label class="btn text-responsive active">
-                                                    <input type="radio" name="mod" value="notTouched" id="notTouched" data-title="Not Touched"> Not Touched <br> <span></span>
-                                                </label>
-                                                <label class="btn text-responsive">
-                                                    <input type="radio" name="mod" value="holdForRecon" data-title="Hold For Recon"> Hold For Recon <br> <span></span>
-                                                </label>
-                                                <label class="btn text-responsive">
-                                                    <input type="radio" name="mod" value="sendToRecon" data-title="Send To Recon"> Send To Recon <br> <span></span>
-                                                </label>
-                                                <label class="btn text-responsive">
-                                                    <input type="radio" name="mod" value="LotNotes" data-title="Lot Notes"> Lot Notes <br> <span></span>
-                                                </label>
-                                                <label class="btn text-responsive">
-                                                    <input type="radio" name="mod" value="CarsToDealers" data-title="Cars to Dealers"> Cars to Dealers <br> <span></span>
-                                                </label>
-                                                <label class="btn text-responsive">
-                                                    <input type="radio" name="mod" value="windshield" data-title="Windshield"> Windshield <br> <span></span>
-                                                </label>
-                                                <label class="btn text-responsive">
-                                                    <input type="radio" name="mod" value="wheels" data-title="Wheels"> Wheels <br> <span></span>
-                                                </label>
 
+<div>
+    <div class="sticky-wrapper pt-0 sticky" id="secondMenu">
+        <!-- <div class="sticky-wrapper  pt-0" id="secondMenu"> -->
+        <div class="container-fluid fh-fixedHeader">
+            <div class="row">
+                <div class="col-12">
+                    <div class="div-sticky-class" id="makeSticky">
+                        <div class="text-center m-auto justify-content-center">
+                            <div class="btn-group-toggle" id="mods" data-toggle="buttons">
+                                <?php
+                                if ($notForService == true) {
+                                ?>
+                                    <div class="row p-2">
+                                        <div class="col-md-12">
+                                            <label class="btn text-responsive active">
+                                                <input type="radio" name="mod" value="notTouched" id="notTouched" data-title="Not Touched"> Not Touched <br> <span></span>
+                                            </label>
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="holdForRecon" data-title="Hold For Recon"> Hold For Recon <br> <span></span>
+                                            </label>
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="sendToRecon" data-title="Send To Recon"> Send To Recon <br> <span></span>
+                                            </label>
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="LotNotes" data-title="Lot Notes"> Lot Notes <br> <span></span>
+                                            </label>
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="CarsToDealers" data-title="Cars to Dealers"> Cars to Dealers <br> <span></span>
+                                            </label>
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="windshield" data-title="Windshield"> Windshield <br> <span></span>
+                                            </label>
+                                            <label class="btn text-responsive">
+                                                <input type="radio" name="mod" value="wheels" data-title="Wheels"> Wheels <br> <span></span>
+                                            </label>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row p-2">
+                                        <div class="col-md-12">
+                                            <div id="year">
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="toGo" data-title="To Go"> To Go <br> <span></span>
+                                                </label>
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="atBodyshop" data-title="At Bodyshop"> At Bodyshop <br> <span></span>
+                                                </label>
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="backFromBodyshop" data-title="Back From Bodyshop"> Back From Bodyshop <br> <span></span>
+                                                </label>
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="retailReady" data-title="Retail Ready"> Retail Ready <br> <span></span>
+                                                </label>
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="Gone" id="Gone" data-title="Gone"> Gone <br> <span></span>
+                                                </label>
                                             </div>
                                         </div>
-
-                                        <div class="row p-2">
-                                            <div class="col-md-12">
-                                                <div id="year">
-                                                    <!-- <div class="btn-group-toggle" data-toggle="buttons"> -->
-                                                    <label class="btn text-responsive">
-                                                        <input type="radio" name="mod" value="toGo" data-title="To Go"> To Go <br> <span></span>
-                                                    </label>
-                                                    <label class="btn text-responsive">
-                                                        <input type="radio" name="mod" value="atBodyshop" data-title="At Bodyshop"> At Bodyshop <br> <span></span>
-                                                    </label>
-                                                    <label class="btn text-responsive">
-                                                        <input type="radio" name="mod" value="backFromBodyshop" data-title="Back From Bodyshop"> Back From Bodyshop <br> <span></span>
-                                                    </label>
-                                                    <label class="btn text-responsive">
-                                                        <input type="radio" name="mod" value="retailReady" data-title="Retail Ready"> Retail Ready <br> <span></span>
-                                                    </label>
-                                                    <label class="btn text-responsive">
-                                                        <input type="radio" name="mod" value="Gone" data-title="Gone"> Gone <br> <span></span>
-                                                    </label>
-                                                    <!-- </div> -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php
-                                    } else {
-                                        echo '
+                                    </div>
+                                <?php
+                                } else {
+                                    echo '
                                     <div class="row p-2">
                                         <div class="col-md-12">
                                             <label class="btn text-responsive">
@@ -276,13 +273,22 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                         </div>
                                     </div>
                                     ';
-                                    }
-                                    ?>
-                                </div>
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="portlet">
                     <div class="portlet-body">
                         <div class="inspectionTable" id="inspectionTable">
                             <div class="form-row text-right">
@@ -290,6 +296,39 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                     <button class="btn btn-primary p-2" onclick="toggleFilterClass2()">
                                         <i class="fa fa-align-center ml-1 mr-2"></i> Filter
                                     </button>
+                                </div>
+                            </div>
+                            <div class="form-row m-2 customFilters1 d-none">
+                                <div class="col-md-12 p-2 d-flex justify-content-between">
+                                    <div class="dtsp-title">Filters Active</div>
+                                    <button type="button" id="filterDataTable" class="btn btn-flat-primary btn-wider">Filter Data</button>
+                                </div>
+                                <div class="col-12 row">
+                                    <div class="col-md-3 p-1">
+                                        <select class="form-control filterTags" id="wholesaleFilter" multiple="multiple">
+                                            <optgroup label="Wholesale">
+                                                <option value="off">No</option>
+                                                <option value="on">Yes</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 p-1">
+                                        <select class="form-control filterTags" id="makeFilter" multiple="multiple">
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 p-1">
+                                        <select class="form-control filterTags" id="modalFilter" multiple="multiple">
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 p-1">
+                                        <select class="form-control filterTags" id="stockTypeFilter" multiple="multiple">
+                                            <optgroup label="Stock Type">
+                                                <option value="USED">USED</option>
+                                                <option value="NEW">NEW</option>
+                                                <option value="OTHER">OTHER</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <table id="datatable-1" class="table table-bordered table-hover">
@@ -315,7 +354,7 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                         <!-- 8 -->
                                         <th>Age</th>
                                         <!-- 9 -->
-                                        <th>Stock no || Vin</th>
+                                        <th style="min-width: 200px!important;" >Stock no || Vin</th>
                                         <!-- 10 -->
                                         <th>Stock no</th>
                                         <!-- 11 -->
@@ -353,7 +392,7 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                         <div class="DealerTable d-none" id="DealerTable">
                             <div class="form-row text-right">
                                 <div class="col-md-12 p-1 pr-2">
-                                    <button class="btn btn-primary p-2" onclick="toggleFilterClass2()">
+                                    <button class="btn btn-primary p-2" onclick="toggleFilterClass()">
                                         <i class="fa fa-align-center ml-1 mr-2"></i> Filter
                                     </button>
                                 </div>
@@ -363,7 +402,7 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                     <tr>
                                         <th>Action</th>
                                         <th>Age</th>
-                                        <th>Stock no || Vin</th>
+                                        <th style="min-width: 200px;" >Stock no || Vin</th>
                                         <th>Year Make Model</th>
                                         <th>Worked Needed</th>
                                         <th>Notes</th>
@@ -447,14 +486,18 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                             <option value="Driver Fender">Driver Fender</option>
                                             <option value="Driver Fog Light">Driver Fog Light</option>
                                             <option value="Driver Front Door">Driver Front Door</option>
+                                            <option value="Driver Front Door Trim">Driver Front Door Trim</option>
                                             <option value="Driver Front Wheel Trim">Driver Front Wheel Trim</option>
                                             <option value="Driver Headlight">Driver Headlight</option>
                                             <option value="Driver Mirror">Driver Mirror</option>
                                             <option value="Driver Rear Door">Driver Rear Door</option>
+                                            <option value="Driver Rear Door Trim">Driver Rear Door Trim</option>
                                             <option value="Driver Rear Quarter">Driver Rear Quarter</option>
                                             <option value="Driver Rear Wheel Trim">Driver Rear Wheel Trim</option>
                                             <option value="Driver Rocker">Driver Rocker</option>
                                             <option value="Driver Roof Rail">Driver Roof Rail</option>
+                                            <option value="Driver Running Board">Driver Running Board</option>
+                                            <option value="Driver Side Step">Driver Side Step</option>
                                             <option value="Driver Sill">Driver Sill</option>
                                             <option value="Driver Slider Door">Driver Slider Door</option>
                                             <option value="DriverTaillight">DriverTaillight</option>
@@ -462,17 +505,21 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                             <option value="Passenger Fender">Passenger Fender</option>
                                             <option value="Passenger Fog Light">Passenger Fog Light</option>
                                             <option value="Passenger Front Door">Passenger Front Door</option>
+                                            <option value="Passenger Front Door Trim">Passenger Front Door Trim</option>
                                             <option value="Passenger Front Wheel Trim">Passenger Front Wheel Trim</option>
                                             <option value="Passenger Headlight">Passenger Headlight</option>
                                             <option value="Passenger Mirror">Passenger Mirror</option>
                                             <option value="Passenger Rear Door">Passenger Rear Door</option>
+                                            <option value="Passenger Rear Door Trim">Passenger Rear Door Trim</option>
                                             <option value="Passenger Rear Quarter">Passenger Rear Quarter</option>
                                             <option value="Passenger Rear Wheel Trim">Passenger Rear Wheel Trim</option>
                                             <option value="Passenger Rocker">Passenger Rocker</option>
                                             <option value="Passenger Roof Rail">Passenger Roof Rail</option>
+                                            <option value="Passenger Running Board">Passenger Running Board</option>
+                                            <option value="Passenger Side Step">Passenger Side Step</option>
                                             <option value="Passenger Sill">Passenger Sill</option>
                                             <option value="Passenger Slider Door">Passenger Slider Door</option>
-                                            <option value="PassengerTaillight">PassengerTaillight</option>
+                                            <option value="Passenger Taillight">Passenger Taillight</option>
                                             <option value="Hail">Hail</option>
                                             <option value="Pdr">Pdr</option>
                                             <option value="Wetsand">Wetsand</option>
