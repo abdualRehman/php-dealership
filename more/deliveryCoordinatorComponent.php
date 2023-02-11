@@ -240,23 +240,23 @@
                             <div class="form-group col-sm-10">
                                 <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="additionalServices">
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="additionalServices" value="vinCheck" id="vinCheck">
+                                        <input type="checkbox" name="additionalServices[]" value="vinCheck" id="vinCheck">
                                         Vin Check
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="additionalServices" value="maInspection" id="maInspection">
+                                        <input type="checkbox" name="additionalServices[]" value="maInspection" id="maInspection">
                                         MA Inspection
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="additionalServices" value="riInspection" id="riInspection">
+                                        <input type="checkbox" name="additionalServices[]" value="riInspection" id="riInspection">
                                         RI Inspection
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="additionalServices" value="paperworkSigned" id="paperworkSigned">
+                                        <input type="checkbox" name="additionalServices[]" value="paperworkSigned" id="paperworkSigned">
                                         Get Paperwork Signed
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="additionalServices" value="other" id="other">
+                                        <input type="checkbox" name="additionalServices[]" value="other" id="other">
                                         Other (See Notes)
                                     </label>
                                 </div>
@@ -444,23 +444,23 @@
                                 <div class="form-group col-sm-10">
                                     <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="eadditionalServices">
                                         <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                            <input type="radio" name="eadditionalServices" value="vinCheck" id="evinCheck">
+                                            <input type="checkbox" name="eadditionalServices[]" value="vinCheck" id="evinCheck">
                                             Vin Check
                                         </label>
                                         <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                            <input type="radio" name="eadditionalServices" value="maInspection" id="emaInspection">
+                                            <input type="checkbox" name="eadditionalServices[]" value="maInspection" id="emaInspection">
                                             MA Inspection
                                         </label>
                                         <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                            <input type="radio" name="eadditionalServices" value="riInspection" id="eriInspection">
+                                            <input type="checkbox" name="eadditionalServices[]" value="riInspection" id="eriInspection">
                                             RI Inspection
                                         </label>
                                         <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                            <input type="radio" name="eadditionalServices" value="paperworkSigned" id="epaperworkSigned">
+                                            <input type="checkbox" name="eadditionalServices[]" value="paperworkSigned" id="epaperworkSigned">
                                             Get Paperwork Signed
                                         </label>
                                         <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                            <input type="radio" name="eadditionalServices" value="other" id="eother">
+                                            <input type="checkbox" name="eadditionalServices[]" value="other" id="eother">
                                             Other (See Notes)
                                         </label>
                                     </div>

@@ -388,11 +388,10 @@ $(function () {
                         createdCell: function (td, cellData, rowData, row, col) {
                             let retailStatus = rowData[23];
                             let wholesale = rowData[20];
-                            $(td).addClass('text-nowrap');
                             if (retailStatus == 'retail' && wholesale == 'Yes') {
-                                $(td).addClass('font-weight-bolder text-danger');
+                                $(td).addClass('font-weight-bolder text-danger text-nowrap');
                             } else {
-                                $(td).addClass('font-weight-bold p');
+                                $(td).addClass('font-weight-bold p text-nowrap');
                             }
                         }
                     },
@@ -1171,7 +1170,7 @@ function fetchFixCDKAge() {
             ],
             columnDefs: [
                 {
-                    width: 200,
+                    width: 200, 
                     targets: [5],
                     createdCell: function (td, cellData, rowData, row, col) {
                         $(td).addClass('text-nowrap');

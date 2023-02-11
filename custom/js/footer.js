@@ -256,7 +256,7 @@ function loadSchedules() {
                         if (obj.previous_date == today) {
                             $(td).html(rowData[17]);
                         } else {
-                            $(td).html("");
+                            $(td).html(rowData[17]);
                         }
                     }
                 },
@@ -409,7 +409,7 @@ function writeWebLinks(linksArray) {
 function editWebLink(id = null) {
     var obj = linksArray.find((e) => e[0] == id);
 
-    
+
     if (obj.length > 0) {
         var visibleBy = obj[5];
         visibleBy = visibleBy.slice(1, -1);

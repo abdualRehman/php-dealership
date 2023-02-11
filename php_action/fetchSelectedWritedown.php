@@ -47,10 +47,13 @@ if ($result->num_rows > 0) {
     $todayTimestamp = strtotime(date('Y-m-d'));
     $daysRemaining = (int)date('t', $todayTimestamp) - (int)date('j', $todayTimestamp);
     $endOfAge = (int)$age + $daysRemaining;
+    
+    $writedown = 0;
+
 
     $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
-    $ruleSql = "SELECT * FROM `writedown_rules` WHERE status = 1 AND location = '$location' AND age_from <= '$endOfAge' AND age_to >= '$endOfAge' AND balance_from <= '$balance' AND balance_to >= '$balance' ORDER BY cast(age_from as int) ASC, cast(age_to as int) DESC , cast(balance_from as int) ASC, cast(balance_to as int) ASC LIMIT 1";
+    $ruleSql = "SELECT * FROM `writedown_rules` WHERE status = 1 AND location = '$location' AND age_from <= {$endOfAge} AND age_to >= {$endOfAge} AND balance_from <= {$balance} AND balance_to >= {$balance} ORDER BY cast(age_from as int) ASC, cast(age_to as int) DESC , cast(balance_from as int) ASC, cast(balance_to as int) ASC LIMIT 1";
     $result1 = $connect->query($ruleSql);
     $row1 = $result1->fetch_assoc();
 

@@ -61,6 +61,63 @@ if ($searchByCatgry != '') {
     $searchQuery .= " and (sale_status='" . $searchByCatgry . "') ";
 }
 
+
+// consultantF
+
+if (isset($_POST['consultantF']) && count($_POST['consultantF']) != 0) {
+    $array = $_POST['consultantF'];
+    $searchQuery .= " AND ( ";
+    foreach ($array as $value) {
+        if ($value != '') {
+            $searchQuery .= " users.username LIKE '%$value%' ";
+            if (next($array)==true) $searchQuery .= " OR ";
+        }
+    }
+    $searchQuery .= " ) ";
+}
+if (isset($_POST['stockF']) && count($_POST['stockF']) != 0) {
+    $array = $_POST['stockF'];
+    $searchQuery .= " AND ( ";
+    foreach ($array as $value) {
+        if ($value != '') {
+            $searchQuery .= " inventory.stockno LIKE '%$value%' ";
+            if (next($array)==true) $searchQuery .= " OR ";
+        }
+    }
+    $searchQuery .= " ) ";
+}
+
+if (isset($_POST['vehicleF']) && count($_POST['vehicleF']) != 0) {
+    $array = $_POST['vehicleF'];
+    $searchQuery .= " AND ( ";
+    foreach ($array as $value) {
+        if ($value != '') {
+            $searchQuery .= " CONCAT( inventory.stocktype ,' ', inventory.year ,' ', inventory.make ,' ', inventory.model ) LIKE '%$value%' ";
+            if (next($array)==true) $searchQuery .= " OR ";
+        }
+    }
+    $searchQuery .= " ) ";
+}
+if (isset($_POST['typeF']) && count($_POST['typeF']) != 0) {
+    $array = $_POST['typeF'];
+    $searchQuery .= " AND ( ";
+    foreach ($array as $value) {
+        if ($value != '') {
+            $searchQuery .= " inventory.stocktype = '$value' ";
+            if (next($array)==true) $searchQuery .= " OR ";
+        }
+    }
+    $searchQuery .= " ) ";
+}
+
+
+
+
+
+
+
+
+
 if ($userRole != $salesConsultantID) {
 
     $sqlQuery = "SELECT CAST( IF((sales.reconcileDate != ''), sales.reconcileDate , sales.date ) AS date ) as date , sales.fname , sales.lname , users.username, inventory.stockno , 

@@ -303,7 +303,9 @@ $(function () {
             // },
             'delivery': {
                 required: function (params) {
-                    var opt = $('input:radio[name="additionalServices"]:checked').val();
+                    // var opt = $('input:radio[name="additionalServices"]:checked').val();
+                    let checkboxes = $('input:checkbox[name="additionalServices[]"]');
+                    var opt = [...checkboxes].some(checkbox => checkbox.checked);
                     if (!opt && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                         return true;
                     } else {
@@ -323,8 +325,10 @@ $(function () {
             },
             'scheduleNotes': {
                 required: function (params) {
-                    var opt = $('input:radio[name="additionalServices"]:checked').val();
-                    if (opt == 'other' && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
+                    // var opt = $('input:radio[name="additionalServices"]:checked').val();
+                    let checkboxes = $('input:checkbox[name="additionalServices[]"]');
+                    var opt = [...checkboxes].some(checkbox => checkbox.checked && checkbox.value === 'other');
+                    if (opt && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                         return true;
                     } else {
                         return false;
@@ -408,7 +412,9 @@ $(function () {
             // },
             'edelivery': {
                 required: function (params) {
-                    var opt = $('input:radio[name="eadditionalServices"]:checked').val();
+                    // var opt = $('input:radio[name="eadditionalServices"]:checked').val();
+                    let checkboxes = $('input:checkbox[name="eadditionalServices[]"]');
+                    var opt = [...checkboxes].some(checkbox => checkbox.checked);
                     if (!opt && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                         return true;
                     } else {
@@ -428,8 +434,10 @@ $(function () {
             },
             'escheduleNotes': {
                 required: function (params) {
-                    var opt = $('input:radio[name="eadditionalServices"]:checked').val();
-                    if (opt == 'other' && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
+                    // var opt = $('input:radio[name="eadditionalServices"]:checked').val();
+                    let checkboxes = $('input:checkbox[name="eadditionalServices[]"]');
+                    var opt = [...checkboxes].some(checkbox => checkbox.checked && checkbox.value === 'other');
+                    if (opt && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                         return true;
                     } else {
                         return false;
@@ -507,7 +515,7 @@ $(function () {
     })
 
 
-    $('#additionalServices, #delivery , #eadditionalServices, #edelivery').on('click', function () {
+    $('#delivery, #edelivery').on('click', function () {
         const targetId = this.id;
         const prev = $(`#${targetId} label.active :radio`).val();
         var current = '';
@@ -519,6 +527,93 @@ $(function () {
             }
         }, 100);
     });
+
+
+
+    $('.handleDateTime').on('change', function () {
+        var date, time, selectBox;
+        if ($(this).data('type') == 'add') {
+            date = $('#scheduleDate').val();
+            time = $('#scheduleTime').val();
+            selectBox = document.getElementById('coordinatorList');
+        } else {
+            date = $('#escheduleDate').val();
+            time = $('#escheduleTime').val();
+            selectBox = document.getElementById('ecoordinatorList');
+        }
+        selectBox.innerHTML = "";
+        $('.selectpicker').selectpicker('refresh');
+        if ((date != '' && time != '') && moment(time, ["h:mmA"]).format("HH:mm") != 'Invalid date') {
+            let dayname = moment(date, 'MM-DD-YYYY').format('dddd').toLowerCase();
+            deliveryCoordinatorArray.forEach(element => {
+                let startTime = element[3][dayname][0];
+                let endTime = element[3][dayname][1];
+                let scheduledAppointments = element[4];
+                let available_today = element[5];
+                if (startTime && endTime) {
+                    time = moment(moment(time, ["h:mmA"]).format("HH:mm"), 'hh:mm');
+                    startTime = moment(moment(startTime, ["h:mmA"]).format("HH:mm"), 'hh:mm');
+                    endTime = moment(moment(endTime, ["h:mmA"]).format("HH:mm"), 'hh:mm');
+                    if (time.isBetween(startTime, endTime, null, '[]')) {
+                        let timeFormat = moment(time, ["h:mmA"]).format("HH:mm");
+                        let dateFormat = moment(date, 'MM-DD-YYYY').format('YYYY-MM-DD');
+                        let dateTime = moment(dateFormat + ' ' + timeFormat, 'YYYY-MM-DD hh:mm');
+                        let allready_appointed = false;
+                        scheduledAppointments.forEach(appointment => {
+                            let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm');
+                            let schedule_end = moment(appointment.schedule_end, 'YYYY-MM-DD hh:mm');
+                            if (dateTime.isBetween(schedule_start, schedule_end, null, '[]')) {
+                                // check today availabilit
+                                var checkTodayDate = moment(moment().format('MM-DD-YYYY')).diff(moment(date).format('MM-DD-YYYY'));
+                                if (checkTodayDate == 0 && available_today == false) {
+                                    allready_appointed = false;
+                                } else {
+                                    allready_appointed = true;
+                                }
+                            }
+                        });
+                        if (allready_appointed == false) {
+                            selectBox.innerHTML += `<option value="${element[0]}" title="${element[1]} - ${element[2]}">${element[1]} - ${element[2]} </option>`;
+                            $('.selectpicker').selectpicker('refresh');
+                        }
+                    }
+                }
+            });
+        }
+    });
+
+
+    $('input[name=delivery] , input[name=edelivery]').change(function () {
+        if ($(this).prop('name') == 'delivery') {
+            changeExistStatus();
+        } else {
+            changeExistStatus(true);
+        }
+    })
+
+    $('#overrideBy').change(function () {
+        if ($(this).prop('checked')) {
+            var cN = $('#currentUser').val();
+            var cId = $('#currentUserId').val();
+            $('#overrideByName').val(cN);
+            $('#overrideById').val(cId);
+        } else {
+            $('#overrideByName').val("");
+            $('#overrideById').val("");
+        }
+    })
+    $('#eoverrideBy').change(function () {
+        if ($(this).prop('checked')) {
+            var cN = $('#currentUser').val();
+            var cId = $('#currentUserId').val();
+            $('#eoverrideByName').val(cN);
+            $('#eoverrideById').val(cId);
+        } else {
+            $('#eoverrideByName').val("");
+            $('#eoverrideById').val("");
+        }
+    })
+
 
 
 });
@@ -666,57 +761,6 @@ function loadDeliveryCoordinator() {
     });
 }
 
-$('.handleDateTime').on('change', function () {
-    var date, time, selectBox;
-    if ($(this).data('type') == 'add') {
-        date = $('#scheduleDate').val();
-        time = $('#scheduleTime').val();
-        selectBox = document.getElementById('coordinatorList');
-    } else {
-        date = $('#escheduleDate').val();
-        time = $('#escheduleTime').val();
-        selectBox = document.getElementById('ecoordinatorList');
-    }
-    selectBox.innerHTML = "";
-    $('.selectpicker').selectpicker('refresh');
-    if ((date != '' && time != '') && moment(time, ["h:mmA"]).format("HH:mm") != 'Invalid date') {
-        let dayname = moment(date).format('dddd').toLowerCase();
-        deliveryCoordinatorArray.forEach(element => {
-            let startTime = element[3][dayname][0];
-            let endTime = element[3][dayname][1];
-            let scheduledAppointments = element[4];
-            let available_today = element[5];
-            if (startTime && endTime) {
-                time = moment(moment(time, ["h:mmA"]).format("HH:mm"), 'hh:mm');
-                startTime = moment(moment(startTime, ["h:mmA"]).format("HH:mm"), 'hh:mm');
-                endTime = moment(moment(endTime, ["h:mmA"]).format("HH:mm"), 'hh:mm');
-                if (time.isBetween(startTime, endTime, null, '[]')) {
-                    let timeFormat = moment(time, ["h:mmA"]).format("HH:mm");
-                    let dateFormat = moment(date, 'MM-DD-YYYY').format('YYYY-MM-DD');
-                    let dateTime = moment(dateFormat + ' ' + timeFormat, 'YYYY-MM-DD hh:mm');
-                    let allready_appointed = false;
-                    scheduledAppointments.forEach(appointment => {
-                        let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm');
-                        let schedule_end = moment(appointment.schedule_end, 'YYYY-MM-DD hh:mm');
-                        if (dateTime.isBetween(schedule_start, schedule_end, null, '[]')) {
-                            // check today availabilit
-                            var checkTodayDate = moment(moment().format('MM-DD-YYYY')).diff(moment(date).format('MM-DD-YYYY'));
-                            if (checkTodayDate == 0 && available_today == false) {
-                                allready_appointed = false;
-                            } else {
-                                allready_appointed = true;
-                            }
-                        }
-                    });
-                    if (allready_appointed == false) {
-                        selectBox.innerHTML += `<option value="${element[0]}" title="${element[1]} - ${element[2]}">${element[1]} - ${element[2]} </option>`;
-                        $('.selectpicker').selectpicker('refresh');
-                    }
-                }
-            }
-        });
-    }
-});
 
 
 function disabledManagerDiv() {
@@ -823,9 +867,14 @@ function editShedule(id = null) {
                 $('#edelivery .active').removeClass('active');
                 (response.delivery) ? $('#e' + response.delivery).prop('checked', true).click() : null;
 
-                $('#eadditionalServices :radio[name="eadditionalServices"]').prop('checked', false);
+                $('#eadditionalServices :checkbox[name="eadditionalServices"]').prop('checked', false);
                 $('#eadditionalServices .active').removeClass('active');
-                (response.additional_services) ? $('#e' + response.additional_services).prop('checked', true).click() : null;
+                // (response.additional_services) ? $('#e' + response.additional_services).prop('checked', true).click() : null;
+
+                let additional_servicesArray = (response.additional_services) ? response.additional_services.split(",") : [];
+                additional_servicesArray.forEach(additional_serviceValue => {
+                    $('#e' + additional_serviceValue).prop('checked', true).click();
+                });
 
                 $('#scheduleId').val(response.id);
                 $('#ecallenderId').val(response.calender_id);
@@ -957,7 +1006,7 @@ function echangeStockDetails(ele, checkAppt = true) {
 
     $('#esale_id .stockno').prepend(`<option value="${obj[0]}" data-scroll-index="-1" title="${obj[4]}"> ${obj[4]} - ${obj[5]} </option>`);
     $('#esale_id').val(`${obj[0]}`);
-    
+
     $('#ecustomerName').val("");
     $('#evechicle').val("");
     $('#estockno').val("");
@@ -986,33 +1035,3 @@ function echangeStockDetails(ele, checkAppt = true) {
     }
 
 }
-$('input[name=delivery] , input[name=edelivery]').change(function () {
-    if ($(this).prop('name') == 'delivery') {
-        changeExistStatus();
-    } else {
-        changeExistStatus(true);
-    }
-})
-
-$('#overrideBy').change(function () {
-    if ($(this).prop('checked')) {
-        var cN = $('#currentUser').val();
-        var cId = $('#currentUserId').val();
-        $('#overrideByName').val(cN);
-        $('#overrideById').val(cId);
-    } else {
-        $('#overrideByName').val("");
-        $('#overrideById').val("");
-    }
-})
-$('#eoverrideBy').change(function () {
-    if ($(this).prop('checked')) {
-        var cN = $('#currentUser').val();
-        var cId = $('#currentUserId').val();
-        $('#eoverrideByName').val(cN);
-        $('#eoverrideById').val(cId);
-    } else {
-        $('#eoverrideByName').val("");
-        $('#eoverrideById').val("");
-    }
-})

@@ -63,13 +63,6 @@ $(function () {
                 cancelLabel: 'Clear'
             }
         });
-
-
-        loadDataTable();
-
-        disabledManagerDiv();
-        loadDeliveryCoordinator();
-
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const filter = urlParams.get('filter');
@@ -77,18 +70,35 @@ $(function () {
         if (filter == 'today') {
             $('#todayBtn').click();
             $('#searchStatusAll').click();
+            $("input[name=searchStatus][value='today']").prop("checked", true);
+            $("input[name=radio-date][value='']").prop("checked", true);
         } else if (filter == 'pending') {
             $('#modAll').click();
             $('#searchPending').click();
+            $("input[name=searchStatus][value='all']").prop("checked", true);
+            $("input[name=radio-date][value='pending']").prop("checked", true);
         } else if (filter == 'month') {
             $('#currentMonth').click();
             $('#searchStatusAll').click();
+            $("input[name=searchStatus][value='currentMonth']").prop("checked", true);
+            $("input[name=radio-date][value='']").prop("checked", true);
         } else {
             $('#currentMonth').click();
             $('#searchStatusAll').click();
+            $("input[name=searchStatus][value='currentMonth']").prop("checked", true);
+            $("input[name=radio-date][value='']").prop("checked", true);
         }
 
 
+        loadDataTable();
+
+        disabledManagerDiv();
+        loadDeliveryCoordinator();
+
+
+        $('#filterDataTable').on('click', function () {
+            loadDataTable();
+        });
 
 
 
@@ -240,7 +250,8 @@ $(function () {
                     serverSide: true,
                     processing: true,
                     deferRender: true,
-                    pageLength: 25,
+                    pageLength: 50,
+                    lengthMenu: [50, 100, 250, 500],
                     ajax: {
                         url: '../php_action/fetchSoldLogs.php',
                         type: "POST",
@@ -252,11 +263,23 @@ $(function () {
                             var searchByCatgry = $('input[name=searchStatus]:checked').val();
                             searchByCatgry = searchByCatgry ? searchByCatgry : '';
 
+
+                            let consultantF = $('#salesConsultantFilter').val();
+                            let stockF = $('#stockFilter').val();
+                            let vehicleF = $('#vehicleFilter').val();
+                            let typeF = $('#typeFilter').val();
+
+
                             // Append to data
                             data.searchByDatePeriod = datePeriod;
                             data.customStart = dateStart;
                             data.customEnd = dateEnd;
                             data.searchByCatgry = searchByCatgry;
+
+                            data.consultantF = consultantF;
+                            data.stockF = stockF;
+                            data.vehicleF = vehicleF;
+                            data.typeF = typeF;
                         },
                     },
                     dom: `\n     
@@ -351,7 +374,7 @@ $(function () {
                                 if (col == 4 && rowData[21] == 'true') {
                                     $(td).html(cellData + ' <span class="badge badge-danger badge-lg badge-pill">!</span>');
                                 }
-                                if (rowData[17] > 0) {
+                                if (rowData[17] > 0 && rowData[23] != 3) {
                                     if (col == 4) {
                                         $(td).addClass('dublicate_left');
                                     }
@@ -503,7 +526,9 @@ $(function () {
                 // },
                 'edelivery': {
                     required: function (params) {
-                        var opt = $('input:radio[name="eadditionalServices"]:checked').val();
+                        // var opt = $('input:radio[name="eadditionalServices"]:checked').val();
+                        let checkboxes = $('input:checkbox[name="eadditionalServices[]"]');
+                        var opt = [...checkboxes].some(checkbox => checkbox.checked);
                         if (!opt && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                             return true;
                         } else {
@@ -523,8 +548,10 @@ $(function () {
                 },
                 'escheduleNotes': {
                     required: function (params) {
-                        var opt = $('input:radio[name="eadditionalServices"]:checked').val();
-                        if (opt == 'other' && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
+                        // var opt = $('input:radio[name="eadditionalServices"]:checked').val();
+                        let checkboxes = $('input:checkbox[name="eadditionalServices[]"]');
+                        var opt = [...checkboxes].some(checkbox => checkbox.checked && checkbox.value === 'other');
+                        if (opt && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                             return true;
                         } else {
                             return false;
@@ -673,7 +700,16 @@ $(function () {
                                 showConfirmButton: !1,
                                 timer: 2500,
                             })
-                            manageSoldLogsTable.ajax.reload(null, false);
+
+
+
+                            let tab = $('input:radio[name="radio-date"]:checked')[0].value;
+                            if (tab == 'notDone') {
+                                manageNotDoneTable.ajax.reload(null, false);
+                            } else {
+                                manageSoldLogsTable.ajax.reload(null, false);
+                            }
+
                             $('#editSaleModal').modal('hide');
                         } else {
                             e1.fire({
@@ -720,7 +756,7 @@ $(function () {
         }, 100);
     })
 
-    $('#eadditionalServices, #edelivery').on('click', function () {
+    $('#edelivery').on('click', function () {
         const targetId = this.id;
         const prev = $(`#${targetId} label.active :radio`).val();
         var current = '';
@@ -792,9 +828,13 @@ function addNewSchedule(id = null) {
                 $('#edelivery :radio[name="edelivery"]').prop('checked', false);
                 $('#edelivery .active').removeClass('active');
                 (response.delivery) ? $('#e' + response.delivery).prop('checked', true).click() : null;
-                $('#eadditionalServices :radio[name="eadditionalServices"]').prop('checked', false);
+                $('#eadditionalServices :checkbox[name="eadditionalServices"]').prop('checked', false);
                 $('#eadditionalServices .active').removeClass('active');
-                (response.additional_services) ? $('#e' + response.additional_services).prop('checked', true).click() : null;
+                // (response.additional_services) ? $('#e' + response.additional_services).prop('checked', true).click() : null;
+                let additional_servicesArray = (response.additional_services) ? response.additional_services.split(",") : [];
+                additional_servicesArray.forEach(additional_serviceValue => {
+                    $('#e' + additional_serviceValue).prop('checked', true).click();
+                });
 
                 $('#allready_created').val(response.allready_created);
 
@@ -933,7 +973,7 @@ $('.handleDateTime').on('change', function () {
     selectBox.innerHTML = "";
     $('.selectpicker').selectpicker('refresh');
     if ((date != '' && time != '') && moment(time, ["h:mmA"]).format("HH:mm") != 'Invalid date') {
-        let dayname = moment(date).format('dddd').toLowerCase();
+        let dayname = moment(date, 'MM-DD-YYYY').format('dddd').toLowerCase();
         deliveryCoordinatorArray.forEach(element => {
             let startTime = element[3][dayname][0];
             let endTime = element[3][dayname][1];
@@ -975,7 +1015,8 @@ $('.handleDateTime').on('change', function () {
 
 function fetchNotDoneSoldLogs() {
     if ($.fn.dataTable.isDataTable('#datatable-2')) {
-
+        manageNotDoneTable.draw();  // working
+        manageNotDoneTable.searchPanes.rebuildPane();
     }
     else {
         manageNotDoneTable = $("#datatable-2").DataTable({
@@ -985,7 +1026,7 @@ function fetchNotDoneSoldLogs() {
             "scrollX": true,
             "orderClasses": false,
             "deferRender": true,
-            "pageLength": 25,
+            "pageLength": 500,
             autoWidth: false,
             dom: `\n     
             <'row'<'col-12'P>>\n
@@ -1252,7 +1293,29 @@ function writeStatusHTML() {
 }
 
 function toggleFilterClass() {
-    $('.dtsp-panes').toggle();
+    // $('.dtsp-panes').toggle();
+    $('.customFilters1').toggleClass('d-none');
+
+    $("#salesConsultantFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "Sales Consultant",
+        tags: !0
+    });
+    $("#stockFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "Stock #",
+        tags: !0
+    });
+    $("#vehicleFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "Vehicle",
+        tags: !0
+    });
+    $("#typeFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "Stock Type",
+        // tags: !0
+    });
 }
 function editSale(id = null) {
 
@@ -1283,6 +1346,9 @@ function editSale(id = null) {
 
                 if (response.reconcileDate != "") {
                     $('#reconcileDate').datepicker('update', moment(response.reconcileDate).format('MM-DD-YYYY'));
+                } else {
+                    $('#reconcileDate').datepicker('update', "");
+                    $('#reconcileDate').val("");
                 }
 
                 $('input[name="status"]').prop('checked', false);

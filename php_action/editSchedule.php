@@ -36,7 +36,15 @@ if ($_POST) {
 
     $coordinator = isset($_POST['ecoordinator']) ? mysqli_real_escape_string($connect, $_POST['ecoordinator']) : "";
     $delivery = (isset($_POST['edelivery'])) ? mysqli_real_escape_string($connect, $_POST['edelivery']) : "";
-    $additionalServices = (isset($_POST['eadditionalServices'])) ? mysqli_real_escape_string($connect, $_POST['eadditionalServices']) : "";
+    // $additionalServices = (isset($_POST['eadditionalServices'])) ? mysqli_real_escape_string($connect, $_POST['eadditionalServices']) : "";
+    $additionalServices = "";
+    if (isset($_POST['eadditionalServices'])) {
+        $services = $_POST['eadditionalServices'];
+        $additionalServices = implode(",", $services);
+    }
+
+
+
     $scheduleNotes = (isset($_POST['escheduleNotes'])) ? mysqli_real_escape_string($connect, $_POST['escheduleNotes']) : "";
     $confirmed = (isset($_POST['econfirmed'])) ? mysqli_real_escape_string($connect, $_POST['econfirmed']) : "";
     $complete = (isset($_POST['ecomplete'])) ? mysqli_real_escape_string($connect, $_POST['ecomplete']) : "";
@@ -98,7 +106,7 @@ if ($_POST) {
                 $to = $coordinator;
                 $delivery = preg_split('/(?=[A-Z])/', $delivery);
                 $delivery = implode(' ', $delivery);
-                
+
                 $message = 'Appointment Updated: With "' . $customerName . '" On "' . ucwords($delivery) . '" at: "' . $scheduleStart_formated . '"';
                 $appointment_id = $scheduleId;
                 sendNotifiation($from, $to, $message, $appointment_id);
@@ -148,13 +156,11 @@ if ($_POST) {
                     Your appointment for {$customerName} with  
                     {$delivery_coordinator} was confirmed as of {$scheduleStart_formated}";
                     $sms_user = send_sms($submitted_by, $message);
-
                 } else if ($confirmed == 'showVerified') {
 
                     $message = "Sorry {$sales_consultant}. Appointment for {$customerName} with 
                     {$delivery_coordinator} was DECLINED as {$scheduleStart_formated}. Please reschedule.";
                     $sms_user = send_sms($submitted_by, $message);
-
                 }
 
                 if ($complete == 'ok') {
@@ -162,13 +168,11 @@ if ($_POST) {
                     $message = "The Appointment for {$customerName}
                     has been completed by {$delivery_coordinator}";
                     $sms_user = send_sms($submitted_by, $message);
-
                 } else if ($complete == 'showVerified') {
 
                     $message = "The Appointment for {$customerName}
                     was not completed by {$delivery_coordinator}";
                     $sms_user = send_sms($submitted_by, $message);
-
                 }
 
                 if ($sms_user == 'true') {
@@ -209,7 +213,7 @@ if ($_POST) {
                 $appointment_id = $connect->insert_id;
                 sendNotifiation($from, $to, $message, $appointment_id);
 
-                $link = $siteurl . '/index.php?redirect=more/deliveryCoordinators.php?filter='.$appointment_id;
+                $link = $siteurl . '/index.php?redirect=more/deliveryCoordinators.php?filter=' . $appointment_id;
                 $message = "An appointment on {$scheduleStart_formated} has been added by {$salesConsultantName}
                         Click to confirm: {$link}";
                 $sms_user = send_sms($coordinator, $message);

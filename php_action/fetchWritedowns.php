@@ -54,7 +54,10 @@ if ($result->num_rows > 0) {
 
         $mmr_balance = $mmr - $balance;
         // $mmr_retail = $retail - $mmr;
-        $mmr_retail =  $mmr - $balance;
+        
+        // ------------- new code --------------
+        $mmr_retail = $retail - $mmr;
+        $mmr_retail2 =  $mmr - $balance;
 
 
         // date_default_timezone_set('Asia/Karachi');
@@ -107,7 +110,10 @@ if ($result->num_rows > 0) {
                 }
 
                 // $mmr_balanceV += $mmr_balance;
-                $mmr_retailV += $mmr_retail;
+                
+                // $mmr_retailV += $mmr_retail;
+                // -------- new code ------------
+                $mmr_retailV += $mmr_retail2;
             }
             if ($row['retail_status'] == 'wholesale' && $endOfAge >= 75) {
 

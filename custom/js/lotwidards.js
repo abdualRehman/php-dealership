@@ -353,10 +353,7 @@ $(function () {
                     { width: 400, targets: [3, 6, 7] },
                     {
                         width: 200,
-                        targets: [9],
-                        createdCell: function (td, cellData, rowData, row, col) {
-                            $(td).addClass('text-nowrap');
-                        }
+                        targets: [9]
                     },
                     {
                         // targets: [0, 1, 2, 3, 4, 5, 10, 6, 7, 22, 23, 24],
@@ -422,9 +419,9 @@ $(function () {
                         createdCell: function (td, cellData, rowData, row, col) {
                             let wholesale = rowData[21];
                             if (wholesale == 'Yes') {
-                                $(td).addClass('font-weight-bolder text-danger');
+                                $(td).addClass('font-weight-bolder text-danger text-nowrap');
                             } else {
-                                $(td).addClass('font-weight-bold p');
+                                $(td).addClass('font-weight-bold p text-nowrap');
                             }
                         }
                     },
@@ -1327,8 +1324,8 @@ function clearErrorsList() {
 }
 
 $('#repairReturn').on('change', function () {
-    // $('#resend').prop('disabled', ($(this).val() != '') ? false : true);
-    $('#resend').prop('disabled', ($(this).val() != '' && $('#resend').is(':checked') == false) ? false : true);
+    $('#resend').prop('disabled', ($(this).val() != '') ? false : true);
+    // $('#resend').prop('disabled', ($(this).val() != '' && $('#resend').is(':checked') == false) ? false : true);
     // $('#resend').prop('checked', $(this).val() == '' ? false : null)
 })
 
@@ -1374,7 +1371,7 @@ $('#resend').on('change', function () {
             autosize.update($(".autosize"));
             $('.slick-2').slick('refresh');
 
-            // $('#resend').prop('disabled', false);
+            $('#resend').prop('disabled', false);
             $('#resend').prop('checked', true);
 
         }, 500);
@@ -1454,6 +1451,8 @@ $('#resend').on('change', function () {
         $('#maxLimit').html(maxFileLimit);
         setTimeout(() => {
             autosize.update($(".autosize"));
+            $('#resend').prop('disabled', false);
+            $('#resend').prop('checked', false);
         }, 500);
         $('.selectpicker').selectpicker('refresh');
 
@@ -1539,18 +1538,27 @@ function editInspection(id) {
                 $('#repairSent').prop('disabled', ((response.shops != 0 || response.shops != '' || response.shops != null) && arr.length != 0) ? false : true);
                 $('#repairReturn').prop('disabled', ((response.shops != 0 || response.shops != '' || response.shops != null) && (arr.length != 0) && (response.repair_sent != '' || response.repair_sent != null)) ? false : true);
 
-                $('#resend').prop('disabled', response.repair_returned != "" ? false : true);  ////
-
-                $('#resend').prop('checked', response.resend == "true" ? true : false);
 
                 $('#resendDetails').html("");
-                if (response.repair_sent_log != '' || response.repair_returned_log != '' || response.bodyshop_log != '' || response.repair_paid_log != '') {
+                if ((response.repair_sent_log != '' ) ||
+                    (response.repair_returned_log != '' ) ||
+                    (response.bodyshop_log != '' ) ||
+                    (response.repair_paid_log != '')) {
+
+                    $('#resend').prop('disabled', false);  
+                    $('#resend').prop('checked', true);
+
+
                     $('#resendDetailsDiv').removeClass('d-none');
                     var arr = response.repairs_log ? (response.repairs_log.trim()).split('__') : [];
                     arr.pop(); arr.shift();
                     var detailsDiv = `History  Sent ${response.repair_sent_log}     Returned ${response.repair_returned_log} \nRepairs: ${arr.map(element => element).join(' , ')} \nBodyshop: ${response.bodyshop_log} \nPaid: ${response.repair_paid_log}`;
                     $('#resendDetails').html(detailsDiv);
                 } else {
+
+                    $('#resend').prop('disabled', response.repair_returned != "" ? false : true);  ////
+                    $('#resend').prop('checked', response.resend == "true" ? true : false);
+
                     $('#resendDetailsDiv').addClass('d-none');
                 }
 

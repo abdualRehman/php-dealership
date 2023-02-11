@@ -28,7 +28,8 @@ if ($result->num_rows > 0) {
 
     while ($row = $result->fetch_assoc()) {
         $date = $row['date'];
-        $date = date("M-d-Y", strtotime($date));  // formating date
+        // $date = date("M-d-Y", strtotime($date));  // formating date
+        $date = date("m-d-Y", strtotime($date));  // formating date
         $sale_consultant = $row['sale_consultant'];
         $id = $row['sale_todo_id'];
         $customerName = $row['fname'] . ' ' . $row['lname'];

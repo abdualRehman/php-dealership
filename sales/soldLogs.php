@@ -240,6 +240,44 @@ if ($_GET['r'] == 'man') {
                                         <i data-feather="alert-circle"></i>
                                     </div>
                                 </button> -->
+
+                                <div class="form-row m-2 customFilters1 d-none">
+                                    <div class="col-md-12 p-2 d-flex justify-content-between">
+                                        <div class="dtsp-title">Filters Active</div>
+                                        <button type="button" id="filterDataTable" class="btn btn-flat-primary btn-wider">Filter Data</button>
+                                    </div>
+                                    <div class="col-12 row">
+                                        <div class="col p-1">
+                                            <select class="form-control filterTags" id="salesConsultantFilter" multiple="multiple">
+                                                <optgroup label="Sales Consultant">
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                        <div class="col p-1">
+                                            <select class="form-control filterTags" id="stockFilter" multiple="multiple">
+                                                <optgroup label="Stock #">
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                        <div class="col p-1">
+                                            <select class="form-control filterTags" id="vehicleFilter" multiple="multiple">
+                                                <optgroup label="Vehicle">
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                        <div class="col p-1">
+                                            <select class="form-control filterTags" id="typeFilter" multiple="multiple">
+                                                <optgroup label="Stock Type">
+                                                    <option value="NEW" selected>NEW</option>
+                                                    <option value="USED" selected>USED</option>
+                                                    <option value="OTHER">OTHER</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                                 <table id="datatable-1" class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
@@ -425,23 +463,23 @@ if ($_GET['r'] == 'man') {
                                     <div class="form-group col-sm-10">
                                         <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="eadditionalServices">
                                             <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                                <input type="radio" name="eadditionalServices" value="vinCheck" id="evinCheck">
+                                                <input type="checkbox" name="eadditionalServices[]" value="vinCheck" id="evinCheck">
                                                 Vin Check
                                             </label>
                                             <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                                <input type="radio" name="eadditionalServices" value="maInspection" id="emaInspection">
+                                                <input type="checkbox" name="eadditionalServices[]" value="maInspection" id="emaInspection">
                                                 MA Inspection
                                             </label>
                                             <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                                <input type="radio" name="eadditionalServices" value="riInspection" id="eriInspection">
+                                                <input type="checkbox" name="eadditionalServices[]" value="riInspection" id="eriInspection">
                                                 RI Inspection
                                             </label>
                                             <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                                <input type="radio" name="eadditionalServices" value="paperworkSigned" id="epaperworkSigned">
+                                                <input type="checkbox" name="eadditionalServices[]" value="paperworkSigned" id="epaperworkSigned">
                                                 Get Paperwork Signed
                                             </label>
                                             <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                                <input type="radio" name="eadditionalServices" value="other" id="eother">
+                                                <input type="checkbox" name="eadditionalServices[]" value="other" id="eother">
                                                 Other (See Notes)
                                             </label>
                                         </div>

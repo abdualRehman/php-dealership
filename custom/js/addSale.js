@@ -164,6 +164,7 @@ $(function () {
                         var { id } = response;
                         $.when(loadStock()).then(() => {
                             setTimeout(() => {
+                                writeNewHTMLOptions('stockId', stockArray, id);
                                 $('#stockId').val(id);
                                 $('#stockId').selectpicker('refresh');
                                 $('#stockId').selectpicker('toggle');
@@ -385,6 +386,10 @@ function writeHTMLOptions(element, stockArray) {
         $(element).append(`<option value="${item[0]}" data-scroll-index="${i}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`);
     }
 }
+function writeNewHTMLOptions(element, stockArray, searchID) {
+    let item = stockArray.find((e) => e[0] == searchID);
+    $(`#${element} .stockno`).prepend(`<option value="${item[0]}" data-scroll-index="-1" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`);
+}
 
 class InfiniteScroller {
     element;
@@ -411,7 +416,7 @@ class InfiniteScroller {
                     var optionDiv = Selectpicker?.$element[0];
                     var targetChildElement = $(optionDiv).children('optgroup')[0].lastChild;
                     var lastArrayIndex = $(targetChildElement).data('scroll-index') + 1;
-                    console.log(lastArrayIndex);
+                    // console.log(lastArrayIndex);
                     if (array.length > lastArrayIndex) {
                         for (let j = lastArrayIndex; j < lastArrayIndex + 10; j++) {
                             var item = array[j];
@@ -549,10 +554,10 @@ function changeReconcile() {
 }
 
 function changeStockDetails(ele) {
-    console.log(ele);
+    // console.log(ele);
     $('#detailsSection').removeClass('d-none');
     let obj = stockArray.find(data => data[0] === ele.value);
-    console.log(obj);
+    // console.log(obj);
     var retail = obj[12];
     retail = parseFloat(retail.replace(/\$|,/g, ''))
     var blnce = obj[11];
@@ -673,7 +678,7 @@ function changeSalesPersonTodo() {
         // console.log(obj['spTodoArray']);
         var todoArray = obj['spTodoArray'];
         let state = $('#state').val();
-        console.log(todoArray);
+        // console.log(todoArray);
         var saleDate = $('#saleDate').val();
         if (state && todoArray && todoArray.length > 0) {
 
@@ -681,7 +686,7 @@ function changeSalesPersonTodo() {
 
             if (spTodoRulesObj) {
 
-                console.log("Data found \n", spTodoRulesObj);
+                // console.log("Data found \n", spTodoRulesObj);
                 changeSalesPersonTodoStyle("vincheck", spTodoRulesObj[5]);
                 changeSalesPersonTodoStyle("insurance", spTodoRulesObj[6]);
                 changeSalesPersonTodoStyle("tradeTitle", spTodoRulesObj[7]);

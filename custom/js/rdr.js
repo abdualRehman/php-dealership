@@ -372,9 +372,9 @@ function editDetails(id = null) {
                 $('#lname').val(response.lname);
                 $('#state').val(response.state);
 
-                $("#deliveryDate").datepicker("setDate", response.delivered != "" ? moment(response.delivered).format('MM-DD-YYYY') : "");
-                $("#enteredDate").datepicker("setDate", response.entered != "" ? moment(response.entered).format('MM-DD-YYYY') : "");
-                $("#approvedDate").datepicker("setDate", response.approved != "" ? moment(response.approved).format('MM-DD-YYYY') : "");
+                $("#deliveryDate").datepicker("setDate", response.delivered != "" && response.delivered != null ? moment(response.delivered).format('MM-DD-YYYY') : "");
+                $("#enteredDate").datepicker("setDate", response.entered != "" && response.entered != null ? moment(response.entered).format('MM-DD-YYYY') : "");
+                $("#approvedDate").datepicker("setDate", response.approved != "" && response.approved != null ? moment(response.approved).format('MM-DD-YYYY') : "");
                 $('#rdrNotes').val(response.rdr_notes);
 
 

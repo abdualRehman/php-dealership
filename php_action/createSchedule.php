@@ -31,7 +31,13 @@ if ($_POST) {
     $overrideBy = isset($_POST['overrideBy']) ? $_SESSION['overrideById'] : "";
     $coordinator = isset($_POST['coordinator']) ? mysqli_real_escape_string($connect, $_POST['coordinator']) : "";
     $delivery = (isset($_POST['delivery'])) ? mysqli_real_escape_string($connect, $_POST['delivery']) : "";
-    $additionalServices = (isset($_POST['additionalServices'])) ? mysqli_real_escape_string($connect, $_POST['additionalServices']) : "";
+    // $additionalServices = (isset($_POST['additionalServices'])) ? mysqli_real_escape_string($connect, $_POST['additionalServices']) : "";
+    $additionalServices = "";
+    if (isset($_POST['additionalServices'])) {
+        $services = $_POST['additionalServices'];
+        $additionalServices = implode(",", $services);
+    }
+
     $scheduleNotes = (isset($_POST['scheduleNotes'])) ? mysqli_real_escape_string($connect, $_POST['scheduleNotes']) : "";
     $confirmed = (isset($_POST['confirmed'])) ? mysqli_real_escape_string($connect, $_POST['confirmed']) : "";
     $complete = (isset($_POST['complete'])) ? mysqli_real_escape_string($connect, $_POST['complete']) : "";
@@ -95,7 +101,7 @@ if ($_POST) {
             $appointment_id = $connect->insert_id;
             sendNotifiation($from, $to, $message, $appointment_id);
 
-            
+
             $link = $siteurl . '/index.php?redirect=more/deliveryCoordinators.php?filter='.$appointment_id;
             $message = "An appointment on {$scheduleStart_formated} has been added by {$salesConsultantName}
                     Click to confirm: {$link}";

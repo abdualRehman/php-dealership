@@ -56,9 +56,9 @@ if ($rulesResults->num_rows > 0) {
                 $certified = ($row['certified'] == 'on') ? "Yes" : "No";
 
 
-                $delivered = $row['delivered'];
-                $entered = $row['entered'];
-                $approved = $row['approved'];
+                $delivered = isset($row['delivered']) ? $row['delivered'] : "";
+                $entered = isset($row['entered']) ? $row['entered'] : "";
+                $approved = isset($row['approved']) ? $row['approved'] : "";
                 $rdr_notes = $row['rdr_notes'];
 
 
