@@ -102,7 +102,7 @@ $(function () {
        <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
        <'col-md-5'p>>\n`,
 
-        "pageLength": 25,
+        "pageLength": 50,
         searchPanes: {
             cascadePanes: !0,
             viewTotal: !0,

@@ -231,6 +231,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                     <option value="need">Need</option>
                                     <option value="notNeed">Doesn't Need</option>
                                     <option value="done">Done</option>
+                                    <option value="donebycustomer">Done by Customer</option>
                                     <option value="n/a">N/A</option>
                                 </select>
                             </div>

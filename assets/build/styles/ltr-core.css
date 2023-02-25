@@ -2330,9 +2330,11 @@ body:not(.fullscreen-active) .fullscreen-icon-compress {
         display: none
     }
 }
+
 #tablet-menu {
     display: none
 }
+
 .footer {
     width: 100%;
     border-top-width: 1px;
@@ -18110,4 +18112,7 @@ a.text-dark:hover {
 
 .invisible {
     visibility: hidden !important
+}
+.text-danger2 {
+    color: #0096ed !important
 }

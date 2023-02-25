@@ -255,7 +255,7 @@ $(function () {
                 serverSide: true,
                 processing: true,
                 deferRender: true,
-                pageLength: 25,
+                pageLength: 50,
                 lengthMenu: [10, 25, 50, 100, 250],
                 ajax: {
                     url: '../php_action/fetchUsedCars.php',
@@ -1128,7 +1128,7 @@ function fetchFixCDKAge() {
             "scrollX": true,
             "orderClasses": false,
             "deferRender": true,
-            "pageLength": 25,
+            "pageLength": 50,
             autoWidth: false,
             "order": [[1, "desc"]],
             fixedHeader: true,

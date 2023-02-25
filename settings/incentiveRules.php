@@ -96,7 +96,7 @@ if (hasAccess("incr", "Edit") === 'false') {
                                     <th>Loyalty</th>
                                     <th>Conquest</th>
                                     <th>Lease Loyalty</th>
-                                    <th>Misc 1</th>
+                                    <th>Right to Repair</th>
                                     <th>Misc 2</th>
                                     <th>Action</th>
                                     <th>ID</th>
@@ -271,7 +271,7 @@ if (hasAccess("incr", "Edit") === 'false') {
                                         <div class="custom-control-lg custom-checkbox">
                                             <input type="checkbox" class="custom-control-input" id="editMisc1" name="editMisc1">
                                             <label class="custom-control-label h5" for="editMisc1">
-                                                Misc 1
+                                                Right to Repair
                                             </label>
                                         </div>
                                     </div>
@@ -472,7 +472,7 @@ if (hasAccess("incr", "Edit") === 'false') {
                                     <div class="custom-control-lg custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="misc1" name="misc1">
                                         <label class="custom-control-label h5" for="misc1">
-                                            Misc 1
+                                            Right to Repair
                                         </label>
                                     </div>
                                 </div>

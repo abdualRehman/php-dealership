@@ -209,7 +209,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                     <th>Loyalty</th>
                                     <th>Conquest</th>
                                     <th>Lease Loyalty</th>
-                                    <th>Misc 1</th>
+                                    <th>Right to Repair</th>
                                     <th>Misc 2</th>
                                     <th>ColD</th>
                                     <th>MilD</th>
@@ -428,7 +428,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <label for="vincheck" class="col-md-2 col-form-label text-center">Misc 1</label>
+                                    <label for="vincheck" class="col-md-2 col-form-label text-center">Right to Repair</label>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <select class="selectpicker" onchange="checkValue(this)" data-live-search="true" <?php echo ($isEditAllowed == true ?: 'disabled'); ?> id="misc1" name="misc1" data-size="5">

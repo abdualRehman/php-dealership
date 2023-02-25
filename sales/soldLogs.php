@@ -1074,14 +1074,14 @@ if ($_GET['r'] == 'man') {
                                             </optgroup>
                                         </select>
                                     </div>
-                                    <label for="misc1" class="col-md-1 col-form-label text-md-center">Misc 1
+                                    <label for="misc1" class="col-md-1 col-form-label text-md-center">Right to Repair
                                         <span class="badge-label-primary" id="misc1_v"></span>
                                     </label>
                                     <div class="col-md-3">
                                         <select class="selectpicker" data-live-search="true" id="misc1" name="misc1" data-size="5" <?php echo $_editIncentives; ?>>
                                             <optgroup>
-                                                <option>No</option>
                                                 <option>Yes</option>
+                                                <option>No</option>
                                             </optgroup>
                                             <optgroup class="salesManagerList" label="YES/APPROVED BY">
 

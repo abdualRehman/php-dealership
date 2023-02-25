@@ -184,7 +184,6 @@ $(function () {
                     // rowGroupSrc = 21;
                     hideColumns = [0, 1, 2, 3, 4, 5, 6, 7, 10, 22, 23, 24];
                     orderBy = [[21, "asc"], [8, "desc"]];
-                    $('#wholesaleFilter').val('off');
                     $('#stockTypeFilter').val('USED');
                     break;
                 case 'LotNotes':
@@ -236,7 +235,7 @@ $(function () {
                 serverSide: true,
                 processing: true,
                 deferRender: true,
-                pageLength: 25,
+                pageLength: 100,
                 lengthMenu: [10, 25, 50, 100, 250],
                 ajax: {
                     url: '../php_action/fetchInspections.php',
@@ -419,7 +418,7 @@ $(function () {
                         createdCell: function (td, cellData, rowData, row, col) {
                             let wholesale = rowData[21];
                             if (wholesale == 'Yes') {
-                                $(td).addClass('font-weight-bolder text-danger text-nowrap');
+                                $(td).addClass('font-weight-bolder text-danger2 text-nowrap');
                             } else {
                                 $(td).addClass('font-weight-bold p text-nowrap');
                             }
@@ -983,7 +982,7 @@ function fetchCarsToDealers() {
             "scrollX": true,
             "orderClasses": false,
             "deferRender": true,
-            "pageLength": 25,
+            "pageLength": 100,
             // autoWidth: false,
             "order": [[1, "desc"]],
             fixedHeader: true,
@@ -1058,7 +1057,7 @@ function fetchCarsToDealers() {
                     createdCell: function (td, cellData, rowData, row, col) {
                         var data = $(td).html();
                         if (data > 4) {
-                            $(td).addClass('h5 font-weight-bolder text-danger');
+                            $(td).addClass('h5 font-weight-bolder text-danger2');
                         } else {
                             $(td).addClass('font-weight-bold p');
                         }

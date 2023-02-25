@@ -250,7 +250,7 @@ $(function () {
                     serverSide: true,
                     processing: true,
                     deferRender: true,
-                    pageLength: 50,
+                    pageLength: 250,
                     lengthMenu: [50, 100, 250, 500],
                     ajax: {
                         url: '../php_action/fetchSoldLogs.php',
@@ -1026,7 +1026,7 @@ function fetchNotDoneSoldLogs() {
             "scrollX": true,
             "orderClasses": false,
             "deferRender": true,
-            "pageLength": 500,
+            "pageLength": 250,
             autoWidth: false,
             dom: `\n     
             <'row'<'col-12'P>>\n

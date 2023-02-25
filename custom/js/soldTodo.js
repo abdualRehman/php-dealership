@@ -536,6 +536,8 @@ function changePillCSS(data, title) {
                 return '<span class="badge badge-lg badge-success badge-pill">Not Need</span>';
             } else if (data == 'done') {
                 return '<span class="badge badge-lg badge-success badge-pill">Done</span>';
+            } else if (data == 'donebycustomer') {
+                return '<span class="badge badge-lg badge-success badge-pill">Done by Customer</span>';
             } else if (data == 'n/a') {
                 return '<span class="badge badge-lg badge-success badge-pill">N/A</span>';
             }

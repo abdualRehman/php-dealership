@@ -32,7 +32,7 @@ $(function () {
             viewTotal: !0,
             columns: [1, 2, 7, 9, 10],
         },
-        "pageLength": 50,
+        "pageLength": 200,
         buttons: [
             {
                 extend: 'copyHtml5',

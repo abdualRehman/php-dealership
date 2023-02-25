@@ -263,9 +263,8 @@ function loadSchedules() {
                 {
                     targets: 5, //MANAGER
                     createdCell: function (td, cellData, rowData, row, col) {
-                        var obj = rowData[20];
-                        var today = moment().format("MM-DD-YYYY")
-                        if (obj.previous_date == today) {
+                        let bdc_notes = rowData[17];
+                        if (bdc_notes != "") {
                             $(td).html(rowData[18]);
                         } else {
                             $(td).html("");
@@ -515,7 +514,7 @@ function editSchedule(id = null) {
                 var now = moment(moment().format('MM-DD-YYYY'));
                 if (now > date) {
                     $('#availability').val("");
-                    $('#offNotes').val("");
+                    $('#offNotes').val(response.off_notes);
                 } else {
                     $('#availability').val(response.today_availability);
                     $('#offNotes').val(response.off_notes);
@@ -537,8 +536,8 @@ function editSchedule(id = null) {
                 $('#sfriEnd').val(response.fri_end);
                 $('#ssatStart').val(response.sat_start);
                 $('#ssatEnd').val(response.sat_end);
-                $('#ssunStart').val(response.sun_end);
-                $('#ssunEnd').val(response.sun_start);
+                $('#ssunStart').val(response.sun_start);
+                $('#ssunEnd').val(response.sun_end);
 
 
 

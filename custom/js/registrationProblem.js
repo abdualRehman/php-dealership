@@ -61,7 +61,7 @@ $(function () {
             viewTotal: !0,
             columns: [0, 1, 2, 3],
         },
-        "pageLength": 25,
+        "pageLength": 100,
         buttons: [
             {
                 extend: 'copyHtml5',
