@@ -354,7 +354,7 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                         <!-- 8 -->
                                         <th>Age</th>
                                         <!-- 9 -->
-                                        <th style="min-width: 200px!important;" >Stock no || Vin</th>
+                                        <th style="min-width: 200px!important;">Stock no || Vin</th>
                                         <!-- 10 -->
                                         <th>Stock no</th>
                                         <!-- 11 -->
@@ -402,7 +402,7 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                     <tr>
                                         <th>Action</th>
                                         <th>Age</th>
-                                        <th style="min-width: 200px;" >Stock no || Vin</th>
+                                        <th style="min-width: 200px;">Stock no || Vin</th>
                                         <th>Year Make Model</th>
                                         <th>Worked Needed</th>
                                         <th>Notes</th>
@@ -581,6 +581,11 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                     <div class="form-group offset-sm-4 col-sm-8">
                                         <div class="custom-control custom-control-lg custom-checkbox">
                                             <input type="checkbox" class="custom-control-input" name="resend" id="resend" />
+                                            <input type="hidden" class="custom-control-input" name="repair_sent_log" id="repair_sent_log" />
+                                            <input type="hidden" class="custom-control-input" name="repair_returned_log" id="repair_returned_log" />
+                                            <input type="hidden" class="custom-control-input" name="bodyshop_log" id="bodyshop_log" />
+                                            <input type="hidden" class="custom-control-input" name="repair_paid_log" id="repair_paid_log" />
+                                            <input type="hidden" class="custom-control-input" name="repairs_log" id="repairs_log" />
                                             <label class="custom-control-label" for="resend">Resend</label>
                                         </div>
                                     </div>

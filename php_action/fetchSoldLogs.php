@@ -19,7 +19,9 @@ $customEnd = $_POST['customEnd'];
 $searchByCatgry = $_POST['searchByCatgry'];
 
 // ## Search 
+$filterQuery = " ";
 $searchQuery = " ";
+
 if ($searchByDatePeriod != '') {
     if ($searchByDatePeriod == "currentMonth") {
         // $startDate = date('m/01/Y');
@@ -66,48 +68,48 @@ if ($searchByCatgry != '') {
 
 if (isset($_POST['consultantF']) && count($_POST['consultantF']) != 0) {
     $array = $_POST['consultantF'];
-    $searchQuery .= " AND ( ";
+    $filterQuery .= " AND ( ";
     foreach ($array as $value) {
         if ($value != '') {
-            $searchQuery .= " users.username LIKE '%$value%' ";
-            if (next($array)==true) $searchQuery .= " OR ";
+            $filterQuery .= " users.username LIKE '%$value%' ";
+            if (next($array) == true) $filterQuery .= " OR ";
         }
     }
-    $searchQuery .= " ) ";
+    $filterQuery .= " ) ";
 }
 if (isset($_POST['stockF']) && count($_POST['stockF']) != 0) {
     $array = $_POST['stockF'];
-    $searchQuery .= " AND ( ";
+    $filterQuery .= " AND ( ";
     foreach ($array as $value) {
         if ($value != '') {
-            $searchQuery .= " inventory.stockno LIKE '%$value%' ";
-            if (next($array)==true) $searchQuery .= " OR ";
+            $filterQuery .= " inventory.stockno LIKE '%$value%' ";
+            if (next($array) == true) $filterQuery .= " OR ";
         }
     }
-    $searchQuery .= " ) ";
+    $filterQuery .= " ) ";
 }
 
 if (isset($_POST['vehicleF']) && count($_POST['vehicleF']) != 0) {
     $array = $_POST['vehicleF'];
-    $searchQuery .= " AND ( ";
+    $filterQuery .= " AND ( ";
     foreach ($array as $value) {
         if ($value != '') {
-            $searchQuery .= " CONCAT( inventory.stocktype ,' ', inventory.year ,' ', inventory.make ,' ', inventory.model ) LIKE '%$value%' ";
-            if (next($array)==true) $searchQuery .= " OR ";
+            $filterQuery .= " CONCAT( inventory.stocktype ,' ', inventory.year ,' ', inventory.make ,' ', inventory.model ) LIKE '%$value%' ";
+            if (next($array) == true) $filterQuery .= " OR ";
         }
     }
-    $searchQuery .= " ) ";
+    $filterQuery .= " ) ";
 }
 if (isset($_POST['typeF']) && count($_POST['typeF']) != 0) {
     $array = $_POST['typeF'];
-    $searchQuery .= " AND ( ";
+    $filterQuery .= " AND ( ";
     foreach ($array as $value) {
         if ($value != '') {
-            $searchQuery .= " inventory.stocktype = '$value' ";
-            if (next($array)==true) $searchQuery .= " OR ";
+            $filterQuery .= " inventory.stocktype = '$value' ";
+            if (next($array) == true) $filterQuery .= " OR ";
         }
     }
-    $searchQuery .= " ) ";
+    $filterQuery .= " ) ";
 }
 
 
@@ -135,11 +137,12 @@ if ($userRole != $salesConsultantID) {
     inventory.stocktype, 
     '' as countRow , 
     sales.sale_id , 
+    inventory.vin as vin ,
     sales.thankyou_cards , sales.date as sold_date , 
     '' as codp_warn , 
     '' as lwbn_warn , 
     inventory.status as invStatus , sales.stock_id, sales.reconcileDate as reconcileDateOnly
-    FROM sales, inventory, users WHERE sales.stock_id = inventory.id AND users.id = sales.sales_consultant AND sales.status = 1 AND sales.location = '$location'";
+    FROM sales, inventory, users WHERE sales.stock_id = inventory.id AND users.id = sales.sales_consultant AND sales.status = 1 AND sales.location = '$location'  " . $filterQuery;
 } else {
     $uid = $_SESSION['userId'];
 
@@ -147,11 +150,12 @@ if ($userRole != $salesConsultantID) {
     CONCAT( inventory.stocktype ,' ', inventory.year ,' ', inventory.make ,' ', inventory.model ) as vehicle , 
     inventory.age , sales.certified ,inventory.lot , CAST(sales.gross AS INT) as gross , sales.sale_status , sales.deal_notes ,inventory.balance , 
     sales.consultant_notes , '' as sales_consultant_status, '' as button, inventory.stocktype, '' as countRow , sales.sale_id , 
+    inventory.vin as vin ,
     sales.thankyou_cards , sales.date as sold_date , 
     '' as codp_warn , 
     '' as lwbn_warn , 
     inventory.status as invStatus , sales.stock_id , sales.reconcileDate as reconcileDateOnly
-    FROM sales, inventory, users WHERE sales.stock_id = inventory.id AND users.id = sales.sales_consultant AND sales.status = 1 AND sales.sales_consultant = '$uid' AND sales.location = '$location'";
+    FROM sales, inventory, users WHERE sales.stock_id = inventory.id AND users.id = sales.sales_consultant AND sales.status = 1 AND sales.sales_consultant = '$uid' AND sales.location = '$location' " . $filterQuery;
 }
 
 
@@ -188,7 +192,7 @@ $columns = array(
     array(
         'db' => 'date', 'dt' => 0,
         'formatter' => function ($d, $row) {
-            $date =  ($d != '') ? date("M-d-Y", strtotime($d)) : '';
+            $date =  ($d != '') ? date("m-d-Y", strtotime($d)) : '';
             return $date;
         }
     ),
@@ -207,7 +211,7 @@ $columns = array(
     array(
         'db' => 'lot',   'dt' => 8,
         'formatter' => function ($d, $row) {
-            return $row[23] == 1 ? $d : '';
+            return $row[24] == 1 ? $d : '';
         }
     ),
     array(
@@ -221,7 +225,7 @@ $columns = array(
     array(
         'db' => 'balance',   'dt' => 12,
         'formatter' => function ($d, $row) {
-            return $row[23] == 1 ? $d : '';
+            return $row[24] == 1 ? $d : '';
         }
     ),
     array('db' => 'consultant_notes',   'dt' => 13),
@@ -281,7 +285,7 @@ $columns = array(
         'db' => 'countRow',   'dt' => 17,
         'formatter' => function ($d, $row) {
             global $connect;
-            $stock_id = $row[24];
+            $stock_id = $row[25];
             $countRow = 0;
             $sql2 = "SELECT stock_id, COUNT(stock_id) FROM sales WHERE sales.sale_status != 'cancelled' AND stock_id = '$stock_id' GROUP BY stock_id HAVING COUNT(stock_id) > 1";
             $result2 = $connect->query($sql2);
@@ -293,13 +297,19 @@ $columns = array(
         }
     ),
     array('db' => 'sale_id',   'dt' => 18),
-    array('db' => 'thankyou_cards',   'dt' => 19),
-    array('db' => 'sold_date',   'dt' => 20),
     array(
-        'db' => 'codp_warn',   'dt' => 21,
+        'db' => 'vin', 'dt' => 19,
+        'formatter' => function ($d, $row) {
+            return (String)$d;
+        }
+    ),
+    array('db' => 'thankyou_cards',   'dt' => 20),
+    array('db' => 'sold_date',   'dt' => 21),
+    array(
+        'db' => 'codp_warn',   'dt' => 22,
         'formatter' => function ($d, $row) {
             global $connect;
-            $stock_id = $row[24];
+            $stock_id = $row[25];
             $countRow = '';
             $sql2 = "SELECT stock_id, COUNT(stock_id) FROM sales WHERE sales.sale_status != 'cancelled' AND stock_id = '$stock_id' GROUP BY stock_id HAVING COUNT(stock_id) > 1";
             $result2 = $connect->query($sql2);
@@ -311,10 +321,10 @@ $columns = array(
         }
     ),
     array(
-        'db' => 'lwbn_warn',   'dt' => 22,
+        'db' => 'lwbn_warn',   'dt' => 23,
         'formatter' => function ($d, $row) {
             global $connect;
-            $stock_id = $row[24];
+            $stock_id = $row[25];
             $countRow = '';
             $sql2 = "SELECT stock_id, COUNT(stock_id) FROM sales WHERE sales.sale_status != 'cancelled' AND stock_id = '$stock_id' GROUP BY stock_id HAVING COUNT(stock_id) > 1";
             $result2 = $connect->query($sql2);
@@ -325,9 +335,9 @@ $columns = array(
             return $countRow;
         }
     ),
-    array('db' => 'invStatus',   'dt' => 23),
-    array('db' => 'stock_id',   'dt' => 24),
-    array('db' => 'reconcileDateOnly',   'dt' => 25)
+    array('db' => 'invStatus',   'dt' => 24),
+    array('db' => 'stock_id',   'dt' => 25),
+    array('db' => 'reconcileDateOnly',   'dt' => 26),
 );
 
 
@@ -363,10 +373,10 @@ $result = $connect->query($sqlQuery);
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_array()) {
 
-        $soldDateOnly = $row[20];
-        $reconcileDateOnly = $row[25];
+        $soldDateOnly = $row[21];
+        $reconcileDateOnly = $row[26];
         $sale_status = $row[10];
-        $thankyou = $row[19];
+        $thankyou = $row[20];
         $dateFormat = date("Y-m-d", strtotime($soldDateOnly));
 
         $reconcileDate = ($reconcileDateOnly != '') ? $reconcileDateOnly : $soldDateOnly;

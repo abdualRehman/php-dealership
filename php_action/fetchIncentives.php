@@ -2,112 +2,221 @@
 
 require_once 'db/core.php';
 
+date_default_timezone_set("America/New_York");
 
 $userRole;
 if ($_SESSION['userRole']) {
     $userRole = $_SESSION['userRole'];
 }
 $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
+$sqlQuery = '';
 
 
-if ($userRole != $salesConsultantID) {
-    $sql = "SELECT sale_incentives.incentive_id , users.username as sale_consultant , sales.date , sales.fname , sales.lname , sale_incentives.college , sale_incentives.military , sale_incentives.loyalty , sale_incentives.conquest, sale_incentives.misc1 , sale_incentives.misc2 , sale_incentives.lease_loyalty , inventory.stockno ,  inventory.stocktype , inventory.year , inventory.model , inventory.make , sales.state ,
-    sale_incentives.college_date, sale_incentives.military_date , sale_incentives.loyalty_date , sale_incentives.conquest_date , sale_incentives.misc1_date , sale_incentives.misc2_date , sale_incentives.lease_loyalty_date , sale_incentives.images , sales.sale_status
-    FROM `sale_incentives` INNER JOIN sales ON sale_incentives.sale_id = sales.sale_id INNER JOIN users ON sales.sales_consultant = users.id INNER JOIN inventory ON sales.stock_id = inventory.id WHERE sales.status = 1 AND sales.sale_status != 'cancelled' AND sale_incentives.status = 1 AND sales.location = '$location' ORDER BY sales.sales_consultant ASC";
+## Custom Field value
+$searchByDatePeriod = $_POST['searchByDatePeriod'];
+
+
+// ## Search 
+$filterQuery = " ";
+$searchQuery = " ";
+
+if ($searchByDatePeriod != '') {
+    if ($searchByDatePeriod == "pending") {
+
+        $searchQuery .= " and (( a.college != 'No' OR a.military != 'No' OR a.loyalty != 'No' OR a.conquest != 'No' OR a.lease_loyalty != 'No' OR a.misc1 != 'No' OR a.misc2 != 'No' ) AND ( ";
+        $searchQuery .= " (a.college = 'Yes' OR (a.college REGEXP '^[0-9]+$' AND a.college_date = ''))  OR";
+        $searchQuery .= " (a.military = 'Yes' OR (a.military REGEXP '^[0-9]+$' AND a.military_date = ''))  OR";
+        $searchQuery .= " (a.loyalty = 'Yes' OR (a.loyalty REGEXP '^[0-9]+$' AND a.loyalty_date = ''))  OR";
+        $searchQuery .= " (a.conquest = 'Yes' OR (a.conquest REGEXP '^[0-9]+$' AND a.conquest_date = ''))  OR";
+        $searchQuery .= " (a.lease_loyalty = 'Yes' OR (a.lease_loyalty REGEXP '^[0-9]+$' AND a.lease_loyalty_date = ''))  OR";
+        $searchQuery .= " (a.misc1 = 'Yes' OR (a.misc1 REGEXP '^[0-9]+$' AND a.misc1_date = ''))  OR";
+        $searchQuery .= " (a.misc2 = 'Yes' OR (a.misc2 REGEXP '^[0-9]+$' AND a.misc2_date = ''))";
+        $searchQuery .= " ))";
+    } else if ($searchByDatePeriod == "submitted") {
+
+        $searchQuery .= " and (( a.college != 'No' OR a.military != 'No' OR a.loyalty != 'No' OR a.conquest != 'No' OR a.lease_loyalty != 'No' OR a.misc1 != 'No' OR a.misc2 != 'No' ) AND ( ";
+        $searchQuery .= " (a.college = 'No' OR (a.college REGEXP '^[0-9]+$' AND a.college_date != ''))  AND";
+        $searchQuery .= " (a.military = 'No' OR (a.military REGEXP '^[0-9]+$' AND a.military_date != ''))  AND";
+        $searchQuery .= " (a.loyalty = 'No' OR (a.loyalty REGEXP '^[0-9]+$' AND a.loyalty_date != ''))  AND";
+        $searchQuery .= " (a.conquest = 'No' OR (a.conquest REGEXP '^[0-9]+$' AND a.conquest_date != ''))  AND";
+        $searchQuery .= " (a.lease_loyalty = 'No' OR (a.lease_loyalty REGEXP '^[0-9]+$' AND a.lease_loyalty_date != ''))  AND";
+        $searchQuery .= " (a.misc1 = 'No' OR (a.misc1 REGEXP '^[0-9]+$' AND a.misc1_date != ''))  AND";
+        $searchQuery .= " (a.misc2 = 'No' OR (a.misc2 REGEXP '^[0-9]+$' AND a.misc2_date != ''))";
+        $searchQuery .= " ))";
+    } else {
+        // $searchQuery .= " ";
+    }
+}
+
+
+
+// // soldF  YYYY-MM-DD
+if (isset($_POST['soldF']) && count($_POST['soldF']) != 0) {
+    $array = $_POST['soldF'];
+    $filterQuery .= " AND ( ";
+    foreach ($array as $value) {
+        if ($value != '') {
+            $filterQuery .= " CAST( b.date AS date ) = '$value' ";
+            if (next($array) == true) $filterQuery .= " OR ";
+        }
+    }
+    $filterQuery .= " ) ";
+}
+
+
+// customerF
+if (isset($_POST['customerF']) && count($_POST['customerF']) != 0) {
+    $array = $_POST['customerF'];
+    $filterQuery .= " AND ( ";
+    foreach ($array as $value) {
+        if ($value != '') {
+            $value = strtolower($value);
+            $filterQuery .= " CONCAT( b.fname ,' ', b.lname )  LIKE '%$value%' ";
+            if (next($array) == true) $filterQuery .= " OR ";
+        }
+    }
+    $filterQuery .= " ) ";
+}
+if (isset($_POST['stockF']) && count($_POST['stockF']) != 0) {
+    $array = $_POST['stockF'];
+    $filterQuery .= " AND ( ";
+    foreach ($array as $value) {
+        if ($value != '') {
+            $filterQuery .= " c.stockno LIKE '%$value%' ";
+            if (next($array) == true) $filterQuery .= " OR ";
+        }
+    }
+    $filterQuery .= " ) ";
+}
+
+if (isset($_POST['vehicleF']) && count($_POST['vehicleF']) != 0) {
+    $array = $_POST['vehicleF'];
+    $filterQuery .= " AND ( ";
+    foreach ($array as $value) {
+        if ($value != '') {
+            $filterQuery .= " CONCAT( c.stocktype ,' ', c.year ,' ', c.make ,' ', c.model ) LIKE '%$value%' ";
+            if (next($array) == true) $filterQuery .= " OR ";
+        }
+    }
+    $filterQuery .= " ) ";
+}
+
+
+
+if ($_SESSION['userRole'] != $salesConsultantID) {
+
+    $sqlQuery = "SELECT CAST( b.date AS date ) as date ,
+    CONCAT( b.fname ,' ', b.lname ) as customerName,
+    c.stockno , CONCAT( c.stocktype , ' ' , c.year , ' ' , c.make , ' ' , c.model) as vehicle,
+    IF(a.college REGEXP '^[0-9]+$', (SELECT CONCAT('Yes/Approved by <br />', username) FROM users WHERE id = a.college) , a.college ) as college,
+    IF(a.military REGEXP '^[0-9]+$', (SELECT CONCAT('Yes/Approved by <br />', username) FROM users WHERE id = a.military) , a.military ) as military,
+    IF(a.loyalty REGEXP '^[0-9]+$', (SELECT CONCAT('Yes/Approved by <br />', username) FROM users WHERE id = a.loyalty) , a.loyalty ) as loyalty,
+    IF(a.conquest REGEXP '^[0-9]+$', (SELECT CONCAT('Yes/Approved by <br />', username) FROM users WHERE id = a.conquest) , a.conquest ) as conquest,
+    IF(a.lease_loyalty REGEXP '^[0-9]+$', (SELECT CONCAT('Yes/Approved by <br />', username) FROM users WHERE id = a.lease_loyalty) , a.lease_loyalty ) as lease_loyalty,
+    IF(a.misc1 REGEXP '^[0-9]+$', (SELECT CONCAT('Yes/Approved by <br />', username) FROM users WHERE id = a.misc1) , a.misc1 ) as misc1,
+    IF(a.misc2 REGEXP '^[0-9]+$', (SELECT CONCAT('Yes/Approved by <br />', username) FROM users WHERE id = a.misc2) , a.misc2 ) as misc2,
+    a.college_date, a.military_date , a.loyalty_date , a.conquest_date , 
+    a.lease_loyalty_date, a.misc1_date , a.misc2_date , 
+    a.images , a.incentive_id , 
+    users.username as sale_consultant , 
+    b.state , b.sale_status
+    FROM `sale_incentives` as a INNER JOIN sales as b ON a.sale_id = b.sale_id INNER JOIN users ON b.sales_consultant = users.id INNER JOIN inventory as c ON b.stock_id = c.id WHERE b.status = 1 AND b.sale_status != 'cancelled' AND a.status = 1 AND b.location = '$location' " . $filterQuery . " " . $searchQuery . "  ORDER BY b.sales_consultant ASC";
 } else {
     $uid = $_SESSION['userId'];
-    $sql = "SELECT sale_incentives.incentive_id , users.username as sale_consultant , sales.date , sales.fname , sales.lname , sale_incentives.college , sale_incentives.military , sale_incentives.loyalty , sale_incentives.conquest, sale_incentives.misc1 , sale_incentives.misc2 , sale_incentives.lease_loyalty , inventory.stockno ,  inventory.stocktype , inventory.year , inventory.model , inventory.make , sales.state ,
-    sale_incentives.college_date, sale_incentives.military_date , sale_incentives.loyalty_date , sale_incentives.conquest_date , sale_incentives.misc1_date , sale_incentives.misc2_date , sale_incentives.lease_loyalty_date , sale_incentives.images , sales.sale_status
-    FROM `sale_incentives` INNER JOIN sales ON sale_incentives.sale_id = sales.sale_id INNER JOIN users ON sales.sales_consultant = users.id INNER JOIN inventory ON sales.stock_id = inventory.id WHERE sales.status = 1 AND sales.sale_status != 'cancelled' AND sale_incentives.status = 1 AND sales.sales_consultant = '$uid' AND sales.location = '$location' ORDER BY sales.sales_consultant ASC";
+
+    $sqlQuery = "SELECT CAST( b.date AS date ) as date ,
+    CONCAT( b.fname ,' ', b.lname ) as customerName,
+    c.stockno , CONCAT( c.stocktype , ' ' , c.year , ' ' , c.make , ' ' , c.model) as vehicle,
+    IF(a.college REGEXP '^[0-9]+$', (SELECT CONCAT('Yes/Approved by <br />', username) FROM users WHERE id = a.college) , a.college ) as college,
+    IF(a.military REGEXP '^[0-9]+$', (SELECT CONCAT('Yes/Approved by <br />', username) FROM users WHERE id = a.military) , a.military ) as military,
+    IF(a.loyalty REGEXP '^[0-9]+$', (SELECT CONCAT('Yes/Approved by <br />', username) FROM users WHERE id = a.loyalty) , a.loyalty ) as loyalty,
+    IF(a.conquest REGEXP '^[0-9]+$', (SELECT CONCAT('Yes/Approved by <br />', username) FROM users WHERE id = a.conquest) , a.conquest ) as conquest,
+    IF(a.lease_loyalty REGEXP '^[0-9]+$', (SELECT CONCAT('Yes/Approved by <br />', username) FROM users WHERE id = a.lease_loyalty) , a.lease_loyalty ) as lease_loyalty,
+    IF(a.misc1 REGEXP '^[0-9]+$', (SELECT CONCAT('Yes/Approved by <br />', username) FROM users WHERE id = a.misc1) , a.misc1 ) as misc1,
+    IF(a.misc2 REGEXP '^[0-9]+$', (SELECT CONCAT('Yes/Approved by <br />', username) FROM users WHERE id = a.misc2) , a.misc2 ) as misc2,
+    a.college_date, a.military_date , a.loyalty_date , a.conquest_date , 
+    a.lease_loyalty_date , a.misc1_date , a.misc2_date , 
+    a.images , a.incentive_id , 
+    users.username as sale_consultant , 
+    b.state , b.sale_status
+    FROM `sale_incentives` as a INNER JOIN sales as b ON a.sale_id = b.sale_id INNER JOIN users ON b.sales_consultant = users.id INNER JOIN inventory as c ON b.stock_id = c.id WHERE b.status = 1 AND b.sale_status != 'cancelled' AND a.status = 1 AND b.sales_consultant = '$uid' AND b.location = '$location' " . $filterQuery . " " . $searchQuery . "  ORDER BY b.sales_consultant ASC";
 }
-$result = $connect->query($sql);
 
-$output = array('data' => array());
 
-function fetchSalesManagerName($manId)
-{
-    global $connect;
-    $userSql = "SELECT username FROM users WHERE id = '$manId'";
-    $result = $connect->query($userSql);
-    $row = $result->fetch_array();
-    return $row[0];
-    // return $manId;
-}
+$table = <<<EOT
+(
+    {$sqlQuery}
+) temp
+EOT;
 
+// echo $table;
+// echo "<hr />";
+
+
+$primaryKey = 'incentive_id';
+
+$columns = array(
+
+    array(
+        'db' => 'date',  'dt' => 0,
+        'formatter' => function ($d, $row) {
+            $date =  ($d != '') ? date("M-d-Y", strtotime($d)) : '';
+            return $date;
+        }
+    ),
+    array('db' => 'customerName',  'dt' => 1),
+    array('db' => 'stockno',   'dt' => 2),
+    array('db' => 'vehicle',   'dt' => 3),
+    array('db' => 'college', 'dt' => 4),
+    array('db' => 'military',   'dt' => 5),
+    array('db' => 'loyalty', 'dt' => 6),
+    array('db' => 'conquest', 'dt' => 7),
+    array('db' => 'lease_loyalty',   'dt' => 8),
+    array('db' => 'misc1',   'dt' => 9),
+    array('db' => 'misc2',   'dt' => 10),
+    array('db' => 'college_date',   'dt' => 11),
+    array('db' => 'military_date',   'dt' => 12),
+    array('db' => 'loyalty_date',   'dt' => 13),
+    array('db' => 'conquest_date',   'dt' => 14),
+    array('db' => 'lease_loyalty_date',   'dt' => 15),
+    array('db' => 'misc1_date',   'dt' => 16),
+    array('db' => 'misc2_date',   'dt' => 17),
+    array('db' => 'images',   'dt' => 18),
+    array('db' => 'incentive_id',   'dt' => 19),
+    array('db' => 'sale_status',   'dt' => 20),
+    array('db' => 'state',   'dt' => 21),
+    array('db' => 'sale_consultant',   'dt' => 22),
+
+);
+
+
+$sql_details = array(
+    'user' => $username,
+    'pass' => $password,
+    'db'   => $dbname,
+    'host' => $localhost
+);
+
+require('ssp.class.php');
+
+$tP = 0;
+$tD = 0;
+$result = $connect->query($sqlQuery);
 if ($result->num_rows > 0) {
+    while ($row = $result->fetch_array()) {
+        $sale_status = $row['sale_status'];
+        if ($sale_status == 'pending') {
+            $tP += 1;
+        }
+        if ($sale_status == 'delivered') {
+            $tD += 1;
+        }
+    }
+}
 
-    while ($row = $result->fetch_assoc()) {
-        $date = $row['date'];
-        $date = date("M-d-Y", strtotime($date));  // formating date
-        $sale_consultant = $row['sale_consultant'];
-        $id = $row['incentive_id'];
-        $customerName = $row['fname'] . ' ' . $row['lname'];
+$dataObj = SSP::simple($_POST, $sql_details, $table, $primaryKey, $columns);
 
-        $stockNo = $row['stockno'];
-        $vehicle = $row['stocktype'] . ' ' . $row['year'] . ' ' . $row['make'] . ' ' . $row['model'];
-        $state = $row['state'];
+$dataObj['totalCount']['tP'] = $tP;
+$dataObj['totalCount']['tD'] = $tD;
 
-
-        $college = (is_numeric($row['college'])) ? "Yes/Approved by <br />" .fetchSalesManagerName($row['college']) : $row['college'];
-        $military = (is_numeric($row['military'])) ? "Yes/Approved by <br />" .fetchSalesManagerName($row['military']) : $row['military'];
-        $loyalty = (is_numeric($row['loyalty'])) ? "Yes/Approved by <br />" .fetchSalesManagerName($row['loyalty']) : $row['loyalty'];
-        $conquest = (is_numeric($row['conquest'])) ? "Yes/Approved by <br />" .fetchSalesManagerName($row['conquest']) : $row['conquest'];
-        $misc1 = (is_numeric($row['misc1'])) ? "Yes/Approved by <br />" .fetchSalesManagerName($row['misc1']) : $row['misc1'];
-        $misc2 = (is_numeric($row['misc2'])) ? "Yes/Approved by <br />" .fetchSalesManagerName($row['misc2']) : $row['misc2'];
-        $lease_loyalty = (is_numeric($row['lease_loyalty'])) ? "Yes/Approved by <br />" .fetchSalesManagerName($row['lease_loyalty']) : $row['lease_loyalty'];
-
-        $college_date = $row['college_date'];
-        $military_date = $row['military_date'];
-        $loyalty_date = $row['loyalty_date'];
-        $conquest_date = $row['conquest_date'];
-        $misc1_date = $row['misc1_date'];
-        $misc2_date = $row['misc2_date'];
-        $lease_loyalty_date = $row['lease_loyalty_date'];
-        $images = $row['images'];
-    
-        
-        
-
-
-        $button = '
-        <div class="show d-inline-flex" >
-            <button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#editDetails" onclick="editDetails(' . $id . ')" >
-                <i class="fa fa-edit"></i>
-            </button>
-            <!-- <button class="btn btn-label-primary btn-icon" onclick="removeTodo(' . $id . ')" >
-                <i class="fa fa-trash"></i>
-            </button>    -->
-        </div>';
-
-        $output['data'][] = array(
-            $date,
-            $customerName,
-            $stockNo,
-            $vehicle,
-            // $state,
-            $college,
-            $military,
-            $loyalty,
-            $conquest,
-            $lease_loyalty,
-            $misc1,
-            $misc2,
-            $college_date,  
-            $military_date,
-            $loyalty_date, 
-            $conquest_date,
-            $lease_loyalty_date,
-            $misc1_date, 
-            $misc2_date, 
-            $images,
-            // $button // 19 index
-            $id, // 19 index
-            $row['sale_status']
-        );
-    } // /while 
-
-} // if num_rows
-
-$connect->close();
-
-echo json_encode($output);
+echo json_encode($dataObj);

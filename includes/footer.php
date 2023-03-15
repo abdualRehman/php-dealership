@@ -16,7 +16,7 @@
 <div class="scrolltop"><button class="btn btn-info btn-icon btn-lg"><i class="fa fa-angle-up"></i></button></div>
 
 <div class="sidemenu sidemenu-right sidemenu-wider" id="sidemenu-todo">
-    <div class="sidemenu-header">
+    <div class="sidemenu-header" id="sidemenu-todo-header">
         <h3 class="sidemenu-title" id="todayDate"></h3>
         <div class="sidemenu-addon">
             <button class="btn btn-label-info ml-2 btn-icon" onclick="toggleSidebar(this)">
@@ -24,10 +24,10 @@
             </button>
         </div>
     </div>
-    <div class="sidemenu-body pb-0" data-simplebar="data-simplebar">
-        <div class="portlet p-1 pt-5 pb-5">
+    <div class="sidemenu-body pb-0" id="sidemenu-todo-body" data-simplebar="data-simplebar">
+        <div class="portlet p-1 pt-5 pb-5" id="childDiv">
             <table id="datatable-4" class="table table-bordered table-hover m-0" style="margin:0px!important;">
-                <thead>
+                <thead style="position: sticky; border:1px solid #757575" >
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
@@ -191,6 +191,10 @@
                                 <label class="col-form-label" for="availabilityUserName">User Name</label>
                                 <div class="form-group">
                                     <input type="text" class="form-control" name="availabilityUserName" id="availabilityUserName" disabled />
+                                </div>
+                                <label class="col-form-label" for="availabilityUserCell">Cell</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="availabilityUserCell" id="availabilityUserCell" disabled />
                                 </div>
                             </div>
                         </div>
@@ -572,6 +576,30 @@
             }
         });
     }
+
+    $(function() {
+
+        // let availablityTable = document.getElementById('sidemenu-todo');
+        // if(availablityTable){
+        //     console.log(availablityTable);
+        // window.onscroll = function () { availablityTableScrollFun() };
+        // }    
+    });
+
+    // function availablityTableScrollFun() {
+    //     console.log("dqwas");
+    //     // var desktopH = document.getElementById("sticky-header-desktop");
+    //     // var mobileH = document.getElementById("sticky-header-mobile");
+    //     // var datatableHeader = $('.table.fixedHeader-floating');
+    //     // manageWritedownTable?.fixedHeader.headerOffset(desktopH.offsetHeight + mobileH.offsetHeight - 3);
+    //     // if ($(availablityTable).width() < 580) {
+    //     //     manageWritedownTable?.fixedHeader.headerOffset(mobileH.offsetHeight - 3);
+    //     // }
+    //     // if (datatableHeader.length > 0) {
+    //     //     let topV = desktopH.offsetHeight + mobileH.offsetHeight - 3;
+    //     //     datatableHeader[0].style.top = `${topV}px`;
+    //     // }
+    // }
 </script>
 
 

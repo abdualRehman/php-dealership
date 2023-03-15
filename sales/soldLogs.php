@@ -159,6 +159,9 @@ if ($_GET['r'] == 'man') {
         background-color: #757575 !important;
         pointer-events: none;
     }
+    .calendar-time{
+        display: none!important;
+    }
 </style>
 
 
@@ -300,6 +303,7 @@ if ($_GET['r'] == 'man') {
                                             <th>Stock Type</th>
                                             <th>count</th>
                                             <th>ID</th>
+                                            <th>Vin</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -1000,6 +1004,7 @@ if ($_GET['r'] == 'man') {
                                 </a>
                             </h5>
 
+                            <!-- <div class="mt-3 loadIncentives border rounded <?php echo ($salesConsultantID != $_SESSION['userRole']) ? "hidden" : ""; ?>" id="loadIncentivesDiv" style="background-color: rgba(0,188,212,.1);"> -->
                             <div class="mt-3 loadIncentives border rounded hidden" id="loadIncentivesDiv" style="background-color: rgba(0,188,212,.1);">
                                 <div class="form-row p-3">
                                     <label for="college" class="col-md-1 col-form-label text-md-center">College

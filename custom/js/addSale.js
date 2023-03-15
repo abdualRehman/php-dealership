@@ -37,6 +37,37 @@ $(function () {
     $('#saleDate').datetimepicker('update', new Date(new Date().toLocaleString('en', { timeZone: 'America/New_York' })));
 
 
+    var target = document.querySelector('#stockId').nextElementSibling;
+    var stockIdTempValue = '';
+    // Create a new observer instance
+    var observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'aria-expanded') {
+                if ($(target).attr('aria-expanded') == 'false') {
+                    let id = $('#stockId').val();
+                    if (id != stockIdTempValue) {
+                        changeStockDetails({ value: `${id}` });
+                        stockIdTempValue = id;
+                    }
+                }
+            }
+        });
+    });
+
+    var config = { attributes: true, subtree: true };
+    observer.observe(target, config);
+
+
+
+
+
+
+
+
+
+
+
+
     var e1 = Swal.mixin({
         customClass: {
             confirmButton: "btn btn-label-success btn-wide mx-1",
@@ -554,67 +585,70 @@ function changeReconcile() {
 }
 
 function changeStockDetails(ele) {
-    // console.log(ele);
-    $('#detailsSection').removeClass('d-none');
-    let obj = stockArray.find(data => data[0] === ele.value);
-    // console.log(obj);
-    var retail = obj[12];
-    retail = parseFloat(retail.replace(/\$|,/g, ''))
-    var blnce = obj[11];
-    blnce = parseFloat(blnce.replace(/\$|,/g, ''))
-    var profit = retail - blnce;
-    $('#profit').val(profit.toFixed(2));
+    console.log(ele.value);
+    if (ele?.value && ele?.value != 'null') {
+        $('#detailsSection').removeClass('d-none');
+        let obj = stockArray.find(data => data[0] === ele.value);
+        // console.log(obj);
+        var retail = obj[12];
+        retail = parseFloat(retail.replace(/\$|,/g, ''))
+        var blnce = obj[11];
+        blnce = parseFloat(blnce.replace(/\$|,/g, ''))
+        var profit = retail - blnce;
+        $('#profit').val(profit.toFixed(2));
 
-    if (obj[13] == 'on') {
-        $("#yes").prop("checked", true);
-    } else {
-        $("#no").prop("checked", true);
+        if (obj[13] == 'on') {
+            $("#yes").prop("checked", true);
+        } else {
+            $("#no").prop("checked", true);
+        }
+
+
+        $('#selectedStockType').val(obj[14]); // setting up stockType for sales person Todo
+
+        var detailsDiv = `${obj[14]} ${obj[2]} ${obj[3]} ${obj[4]} \n Vin: ${obj[8]} \n Mileage: ${obj[9]} \n Age: ${obj[10]} \n Lot: ${obj[7]}  ${($('#vgb').val() == "true") ? `\n Balance: ${obj[11]}` : ``} `;
+        $('#selectedDetails').html(detailsDiv);
+        $('#selectedDetails').addClass('text-center');
+
+
+        if (obj[32] == 'true') {
+            $('#codp_warn').removeClass('d-none');
+        } else {
+            $('#codp_warn').addClass('d-none');
+        }
+        if (obj[33] == 'true') {
+            $('#lwbn_warn').removeClass('d-none');
+        } else {
+            $('#lwbn_warn').addClass('d-none');
+        }
+
+
+        if ($('#vgb').val() == "true") {
+            $('#grossDiv').removeClass('v-none'); // show gross field on both stock type new / used
+        }
+
+
+        // for checking this stock is already in sale or not if it is in sale then and status is not cancelled then make it red
+        if ((obj[16].length > 0) && obj[16].every(element => element != 'cancelled')) {
+            $('#selectedDetails').addClass('text-center text-danger is-invalid');  // invalid selectarea section
+            $('#saleDetailsDiv').addClass('is-invalid');  // invalid stock details div
+            // $('#grossDiv').addClass('v-none');  // hide gross div
+            $('#stockId').parent().addClass('text-danger is-invalid'); // invalid stock input div
+        } else {
+            $('#selectedDetails').removeClass('text-danger is-invalid');  // valid selectarea section
+            $('#saleDetailsDiv').removeClass('is-invalid');  // valid stock details div
+            $('#stockId').parent().removeClass('text-danger is-invalid'); // valid stock input div
+        }
+
+        autosize.update($("#selectedDetails"));
+        changeRules();
+
+        setTimeout(() => {
+            $('#salesPerson').selectpicker('toggle');
+            $('#salesPerson').selectpicker('refresh');
+            $("#_").focus().val('').val("_");
+        }, 500);
     }
-
-
-    $('#selectedStockType').val(obj[14]); // setting up stockType for sales person Todo
-
-    var detailsDiv = `${obj[14]} ${obj[2]} ${obj[3]} ${obj[4]} \n Vin: ${obj[8]} \n Mileage: ${obj[9]} \n Age: ${obj[10]} \n Lot: ${obj[7]}  ${($('#vgb').val() == "true") ? `\n Balance: ${obj[11]}` : ``} `;
-    $('#selectedDetails').html(detailsDiv);
-    $('#selectedDetails').addClass('text-center');
-
-
-    if (obj[32] == 'true') {
-        $('#codp_warn').removeClass('d-none');
-    } else {
-        $('#codp_warn').addClass('d-none');
-    }
-    if (obj[33] == 'true') {
-        $('#lwbn_warn').removeClass('d-none');
-    } else {
-        $('#lwbn_warn').addClass('d-none');
-    }
-
-
-    if ($('#vgb').val() == "true") {
-        $('#grossDiv').removeClass('v-none'); // show gross field on both stock type new / used
-    }
-
-
-    // for checking this stock is already in sale or not if it is in sale then and status is not cancelled then make it red
-    if ((obj[16].length > 0) && obj[16].every(element => element != 'cancelled')) {
-        $('#selectedDetails').addClass('text-center text-danger is-invalid');  // invalid selectarea section
-        $('#saleDetailsDiv').addClass('is-invalid');  // invalid stock details div
-        // $('#grossDiv').addClass('v-none');  // hide gross div
-        $('#stockId').parent().addClass('text-danger is-invalid'); // invalid stock input div
-    } else {
-        $('#selectedDetails').removeClass('text-danger is-invalid');  // valid selectarea section
-        $('#saleDetailsDiv').removeClass('is-invalid');  // valid stock details div
-        $('#stockId').parent().removeClass('text-danger is-invalid'); // valid stock input div
-    }
-
-    autosize.update($("#selectedDetails"));
-    changeRules();
-    setTimeout(() => {
-        $('#salesPerson').selectpicker('toggle');
-        $('#salesPerson').selectpicker('refresh');
-        $("#_").focus().val('').val("_");
-    }, 500);
 
 }
 
@@ -656,6 +690,15 @@ function chnageIncentiveStatus(value, date, element) {
         var cdays = cduration.asDays();
         cdays = Math.ceil(cdays);
 
+        if (element == 'misc1') {
+            if (cdays >= 0) {
+                $('#misc1').val("Yes");
+            } else {
+                $('#misc1').val("No");
+            }
+            $(".selectpicker").selectpicker("refresh");
+        }
+
         if (cdays >= 0) {
             $('#' + element).prop("disabled", false);
             $('#' + element + '_v').html('$' + value);
@@ -665,6 +708,7 @@ function chnageIncentiveStatus(value, date, element) {
     } else {
         $('#' + element).prop("disabled", true);
         $('#' + element + '_v').html('');
+        $('#misc1').val("No");
     }
 }
 

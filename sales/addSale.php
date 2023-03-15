@@ -141,7 +141,7 @@ if ($userRole != 'Admin' && $userRole != $branchAdmin && $userRole != $generalMa
                                         <div class="col-md-9">
                                             <div class="form-group">
                                                 <input type="hidden" name="selectedStockType" id="selectedStockType" />
-                                                <select class="selectpicker required" data-focus-on="true" tabIndex="1" onchange="changeStockDetails(this)" name="stockId" id="stockId" data-live-search="true" data-size="4" autofocus='autofocus'>
+                                                <select class="selectpicker required" data-focus-on="true" tabIndex="1" name="stockId" id="stockId" data-live-search="true" data-size="4" autofocus='autofocus'>
                                                     <option value="0" selected disabled>Stock No:</option>
                                                     <optgroup class="stockno"></optgroup>
 

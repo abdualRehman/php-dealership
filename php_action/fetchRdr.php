@@ -42,6 +42,9 @@ if ($rulesResults->num_rows > 0) {
 
                 $id = $row['sale_id'];
 
+                $sale_date = $row['date'];
+                $reconcileDate = $row['reconcileDate'];
+
                 $status = $row['sale_status'];
                 $fname = $row['fname'];
                 $lname = $row['lname'];
@@ -69,6 +72,8 @@ if ($rulesResults->num_rows > 0) {
                 $output['data'][] = array(
                     $id,
                     $status,
+                    $sale_date,
+                    $reconcileDate,
                     $fname,
                     $lname,
                     $stockNo,

@@ -71,220 +71,6 @@ $(function () {
         typeof obj[key] === 'undefined' ? obj[key] = 1 : obj[key]++;
     }
 
-    manageAppointmentsTable = $("#datatable-1").DataTable({
-        responsive: !0,
-        'ajax': `${siteURL}/php_action/fetchSchedules.php`,
-        dom: `<'row'<'col-12'P>>
-        <'row' 
-        <'col-sm-4 text-left text-sm-left pl-3'<'#statusFilterDiv'>>
-            <'col-sm-4 text-center pl-3'B>
-            <'col-sm-4 text-right text-sm-right mt-2 mt-sm-0'f>>\n
-        <'row'<'col-12'tr>>\n      
-        <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
-        searchPanes: {
-            cascadePanes: !0,
-            viewTotal: !0,
-            columns: [6, 10, 7, 15],
-        },
-        "pageLength": 25,
-        buttons: [
-            {
-                extend: 'copyHtml5',
-                title: 'Appointments',
-                exportOptions: {
-                    columns: [':visible:not(:last-child)']
-                }
-            },
-            {
-                extend: 'excelHtml5',
-                title: 'Appointments',
-                exportOptions: {
-                    columns: [':visible:not(:last-child)']
-                }
-            },
-            {
-                extend: 'print',
-                title: 'Appointments',
-                exportOptions: {
-                    columns: [':visible:not(:last-child)']
-                }
-            },
-        ],
-        columnDefs: [
-            { width: 400, targets: [13] },
-            { visible: false, targets: [0, 12, 15] },
-            {
-                targets: [0],
-                data: 0,
-            },
-            {
-                targets: [1],
-                data: 6,
-                render: function (data, type, row) {
-                    // var d1 = data.split(/(?=[A-Z])/).join(' ').toLowerCase();
-                    if (data == 'ok') {
-                        data = "Yes";
-                    } else if (data == 'showVerified') {
-                        data = "No";
-                    }
-                    return data;
-                }
-            },
-            {
-                targets: [2],
-                data: 7,
-                render: function (data, type, row) {
-                    // var d1 = data.split(/(?=[A-Z])/).join(' ').toLowerCase();
-                    if (data == 'ok') {
-                        data = "Yes";
-                    } else if (data == 'showVerified') {
-                        data = "No";
-                    }
-                    return data;
-                }
-            },
-            {
-                targets: [3],
-                data: 8,
-            },
-            {
-                targets: [4],
-                data: 9,
-                render: function (data, type, row) {
-                    data = moment(data, 'YYYY-MM-DD').format('MM-DD-YYYY')
-                    return data;
-                },
-            },
-            {
-                targets: [5],
-                data: 10,
-                render: function (data, type, row) {
-                    data = moment(data, "HH:mm").format("h:mm A")
-                    return data;
-                },
-            },
-            {
-                targets: [6],
-                data: 11,
-            },
-            {
-                targets: [7],
-                data: 12,
-            },
-            {
-                targets: [8],
-                data: 13,
-            },
-            {
-                targets: [9],
-                data: 22,
-            },
-            {
-                targets: [10],
-                data: 14,
-            },
-            {
-                targets: [11],
-                data: 23,
-            },
-            {
-                targets: [12],
-                data: 19,
-            },
-            {
-                targets: [13],
-                data: 15,
-            },
-            {
-                targets: [14],
-                data: 16,
-            },
-            {
-                targets: [15],
-                data: 18,
-                render: function (data, type, row) {
-                    if (data == '') {
-                        data = "";
-                    } else {
-                        data = "Additional Services";
-                    }
-                    return data;
-                }
-            },
-            {
-                searchPanes: {
-                    show: true
-                },
-                targets: [6, 10, 7, 15],
-            },
-        ],
-
-        language: {
-            searchPanes: {
-                count: "{total} found",
-                countFiltered: "{shown} / {total}"
-            }
-        },
-        createdRow: function (row, data, dataIndex) {
-            if (data[17] && $('#isEditAllowed').val() == "true") {
-                $(row).children().not(':last-child').attr({
-                    "data-toggle": "modal",
-                    "data-target": "#editScheduleModel",
-                    "onclick": "editShedule(" + data[0] + ")"
-                });
-            }
-        },
-        "drawCallback": function (settings, start, end, max, total, pre) {
-            var json = this.fnSettings().json;
-            if (json) {
-
-                var obj = json.data;
-                var lmconfirmed = 0, lmcomplete = 0, tmconfirmed = 0, tmcomplete = 0;
-
-                const startOfMonth = moment().startOf('month').format('MM-DD-YYYY');
-                const endOfMonth = moment().endOf('month').format('MM-DD-YYYY');
-
-                const todayDate = moment(new Date(new Date().toLocaleString('en', { timeZone: 'America/New_York' }))).format("MM-DD-YYYY");
-                const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('MM-DD-YYYY')
-                const lastDayOfPrevMonth = moment(todayDate).subtract(1, 'month').endOf('month').format('MM-DD-YYYY')
-
-
-                var bool1 = moment(date).isBetween
-                    (startDayOfPrevMonth, lastDayOfPrevMonth, null, '[]');
-                if (bool1) {
-                    return true;
-                }
-
-                for (const [key, value] of Object.entries(obj)) {
-                    // console.log(value[0]);
-                    var date = value[4];
-                    let confirm = value[6];
-                    let complete = value[7];
-                    let additional_services = value[18];
-                    var bool1 = moment(date).isBetween
-                        (startDayOfPrevMonth, lastDayOfPrevMonth, null, '[]');
-                    if (bool1) {
-                        // if (confirm == 'ok' && complete == 'ok' && additional_services != '') {
-                        if (confirm == 'ok' && complete == 'ok' && additional_services != '') {
-                            lmconfirmed += 1;
-                        }
-                    }
-                    var bool1 = moment(date).isBetween(startOfMonth, endOfMonth, null, '[]');
-                    if (bool1) {
-                        // if (confirm == 'ok' && complete == 'ok' && additional_services != '') {
-                        if (confirm == 'ok' && complete == 'ok') {
-                            tmconfirmed += 1;
-                        }
-                    }
-                }
-                $(`#lmconfirmed`).html(lmconfirmed);
-                $(`#tmconfirmed`).html(tmconfirmed);
-            }
-        },
-        "order": [[0, "desc"]]
-    })
-
-    writeStatusHTML();
 
     let filterById = null;
     const queryString = window.location.search;
@@ -299,82 +85,18 @@ $(function () {
         $('#thisMonth').click();
     }
 
+    loadDataTable();
+
+    $('#filterDataTable').on('click', function () {
+        loadDataTable();
+    });
+
+
 
 
     loadSoldLogs();
     loadDeliveryCoordinator();
     disabledManagerDiv();
-
-
-    $.fn.dataTable.ext.search.push(
-        function (settings, searchData, index, rowData, counter) {
-            var tableNode = manageAppointmentsTable.table().node();
-
-            if (filterById == null) {
-
-                var dateType = $('input:radio[name="searchStatus"]:checked').map(function () {
-                    if (this.value !== "") {
-                        return this.value;
-                    }
-                }).get();
-
-                if (dateType.length === 0) {
-                    return true;
-                }
-
-                if (dateType == 'all') {
-                    return true;
-                }
-                else if (dateType == 'lastMonth') {
-
-                    const todayDate = moment(new Date(new Date().toLocaleString('en', { timeZone: 'America/New_York' }))).format("MM-DD-YYYY");
-                    var date = searchData[4];
-                    const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('MM-DD-YYYY')
-
-                    const lastDayOfPrevMonth = moment(todayDate).subtract(1, 'month').endOf('month').format('MM-DD-YYYY')
-
-
-                    var bool1 = moment(date).isBetween
-                        (startDayOfPrevMonth, lastDayOfPrevMonth, null, '[]');
-                    if (bool1) {
-                        return true;
-                    }
-
-                } else if (dateType == 'thisMonth') {
-                    const startOfMonth = moment().startOf('month').format('MM-DD-YYYY');
-                    const endOfMonth = moment().endOf('month').format('MM-DD-YYYY');
-
-                    var date = searchData[4];
-                    var bool1 = moment(date).isBetween
-                        (startOfMonth, endOfMonth, null, '[]');
-                    if (bool1) {
-                        return true;
-                    }
-                } else if (dateType == 'approvals') {
-                    var appointed = rowData[19];
-                    var manager_override_id = rowData[20];
-                    var delivery = rowData[23];
-                    if (appointed == 'true' && !manager_override_id && delivery != '') {
-                        return true;
-                    }
-                }
-
-
-            } else {
-                let rowId = searchData[0];
-                if (rowId == filter) {
-                    return true;
-                }
-            }
-
-
-            if (settings.nTable !== tableNode) {
-                return true;
-            }
-
-            return false;
-        }
-    );
 
 
     $('input[name="searchStatus"]:radio').on('change', function () {
@@ -386,6 +108,261 @@ $(function () {
         manageAppointmentsTable.draw();  // working
         manageAppointmentsTable.searchPanes.rebuildPane();
     });
+
+
+    function loadDataTable() {
+
+        if ($.fn.dataTable.isDataTable('#datatable-1')) {
+            manageAppointmentsTable.draw();  // working
+            manageAppointmentsTable.searchPanes.rebuildPane();
+        }
+        else {
+
+            manageAppointmentsTable = $("#datatable-1").DataTable({
+                responsive: !0,
+                serverSide: true,
+                processing: true,
+                deferRender: true,
+                "pageLength": 25,
+                ajax: {
+                    url: `${siteURL}/php_action/fetchSchedules.php`,
+                    type: "POST",
+                    data: function (data) {
+
+                        // // Read values
+                        var datePeriod = $('input[name=searchStatus]:checked').val();
+                        datePeriod = datePeriod ? datePeriod : 'thisMonth';
+
+                        let coordinatorF = $('#coordinatorFilter').val();
+                        let consultantF = $('#salesConsultantFilter').val();
+                        let stockF = $('#stockFilter').val();
+                        let additionalServiceF = $('#additionalServiceFilter').val();
+
+
+                        // // Append to data
+                        data.filterById = filterById;
+                        data.searchByDatePeriod = datePeriod;
+                        data.coordinatorF = coordinatorF;
+                        data.consultantF = consultantF;
+                        data.stockF = stockF;
+                        data.additionalServiceF = additionalServiceF;
+
+                        console.log(data);
+                    },
+                },
+                dom: `<'row'<'col-12'P>>
+                <'row' 
+                <'col-sm-4 text-left text-sm-left pl-3'<'#statusFilterDiv'>>
+                    <'col-sm-4 text-center pl-3'B>
+                    <'col-sm-4 text-right text-sm-right mt-2 mt-sm-0'f>>\n
+                <'row'<'col-12'tr>>\n      
+                <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
+
+                autoWidth: false,
+                searchPanes: {
+                    cascadePanes: !0,
+                    viewTotal: !0,
+                    columns: [6, 10, 7, 15],
+                },
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        title: 'Appointments',
+                        exportOptions: {
+                            columns: [':visible:not(:last-child)']
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        title: 'Appointments',
+                        exportOptions: {
+                            columns: [':visible:not(:last-child)']
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        title: 'Appointments',
+                        exportOptions: {
+                            columns: [':visible:not(:last-child)']
+                        }
+                    },
+                ],
+                columnDefs: [
+                    { width: 400, targets: [13] },
+                    { visible: false, targets: [0, 12, 15] },
+                    {
+                        targets: [0],
+                        data: 0,
+                    },
+                    {
+                        targets: [1],
+                        data: 6,
+                        render: function (data, type, row) {
+                            // var d1 = data.split(/(?=[A-Z])/).join(' ').toLowerCase();
+                            if (data == 'ok') {
+                                data = "Yes";
+                            } else if (data == 'showVerified') {
+                                data = "No";
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: [2],
+                        data: 7,
+                        render: function (data, type, row) {
+                            // var d1 = data.split(/(?=[A-Z])/).join(' ').toLowerCase();
+                            if (data == 'ok') {
+                                data = "Yes";
+                            } else if (data == 'showVerified') {
+                                data = "No";
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        targets: [3],
+                        data: 8,
+                    },
+                    {
+                        targets: [4],
+                        data: 9,
+                        render: function (data, type, row) {
+                            data = moment(data, 'YYYY-MM-DD').format('MM-DD-YYYY')
+                            return data;
+                        },
+                    },
+                    {
+                        targets: [5],
+                        data: 10,
+                        render: function (data, type, row) {
+                            data = moment(data, "HH:mm").format("h:mm A")
+                            return data;
+                        },
+                    },
+                    {
+                        targets: [6],
+                        data: 11,
+                    },
+                    {
+                        targets: [7],
+                        data: 12,
+                    },
+                    {
+                        targets: [8],
+                        data: 13,
+                    },
+                    {
+                        targets: [9],
+                        data: 22,
+                    },
+                    {
+                        targets: [10],
+                        data: 14,
+                    },
+                    {
+                        targets: [11],
+                        data: 23,
+                    },
+                    {
+                        targets: [12],
+                        data: 19,
+                    },
+                    {
+                        targets: [13],
+                        data: 15,
+                    },
+                    {
+                        targets: [14],
+                        data: 16,
+                    },
+                    {
+                        targets: [15],
+                        data: 18,
+                        render: function (data, type, row) {
+                            if (data == '') {
+                                data = "";
+                            } else {
+                                data = "Additional Services";
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        searchPanes: {
+                            show: true
+                        },
+                        targets: [6, 10, 7, 15],
+                    },
+                ],
+                language: {
+                    searchPanes: {
+                        count: "{total} found",
+                        countFiltered: "{shown} / {total}"
+                    }
+                },
+                createdRow: function (row, data, dataIndex) {
+                    if (data[17] && $('#isEditAllowed').val() == "true") {
+                        $(row).children().not(':last-child').attr({
+                            "data-toggle": "modal",
+                            "data-target": "#editScheduleModel",
+                            "onclick": "editShedule(" + data[0] + ")"
+                        });
+                    }
+                },
+                "drawCallback": function (settings, start, end, max, total, pre) {
+                    var json = this.fnSettings().json;
+                    if (json) {
+
+                        // var obj = json.data;
+                        // var lmconfirmed = 0, lmcomplete = 0, tmconfirmed = 0, tmcomplete = 0;
+                        // const startOfMonth = moment().startOf('month').format('MM-DD-YYYY');
+                        // const endOfMonth = moment().endOf('month').format('MM-DD-YYYY');
+                        // const todayDate = moment(new Date(new Date().toLocaleString('en', { timeZone: 'America/New_York' }))).format("MM-DD-YYYY");
+                        // const startDayOfPrevMonth = moment(todayDate).subtract(1, 'month').startOf('month').format('MM-DD-YYYY')
+                        // const lastDayOfPrevMonth = moment(todayDate).subtract(1, 'month').endOf('month').format('MM-DD-YYYY')
+
+
+                        // var bool1 = moment(date).isBetween
+                        //     (startDayOfPrevMonth, lastDayOfPrevMonth, null, '[]');
+                        // if (bool1) {
+                        //     return true;
+                        // }
+
+                        // --------------------------------- previous code  ----------------
+                        // for (const [key, value] of Object.entries(obj)) {
+                        //     var date = value[4];
+                        //     let confirm = value[6];
+                        //     let complete = value[7];
+                        //     let additional_services = value[18];
+                        //     var bool1 = moment(date).isBetween
+                        //         (startDayOfPrevMonth, lastDayOfPrevMonth, null, '[]');
+                        //     if (bool1) {
+                        //         // if (confirm == 'ok' && complete == 'ok' && additional_services != '') {
+                        //         if (confirm == 'ok' && complete == 'ok' && additional_services != '') {
+                        //             lmconfirmed += 1;
+                        //         }
+                        //     }
+                        //     var bool2 = moment(date).isBetween(startOfMonth, endOfMonth, null, '[]');
+                        //     if (bool2) {
+                        //         // if (confirm == 'ok' && complete == 'ok' && additional_services != '') {
+                        //         if (confirm == 'ok' && complete == 'ok') {
+                        //             tmconfirmed += 1;
+                        //         }
+                        //     }
+                        // }
+
+                        var countObj = manageAppointmentsTable.ajax.json();
+                        $(`#lmconfirmed`).html(countObj.totalCount.lmconfirmed);
+                        $(`#tmconfirmed`).html(countObj.totalCount.tmconfirmed);
+                    }
+                },
+                "order": [[0, "desc"]]
+            });
+            writeStatusHTML();
+        }
+    }
+
 
 
     $('.clear-selection-btn-group').on('click', function () {
@@ -677,7 +654,7 @@ $(function () {
         if ((date != '' && time != '') && moment(time, ["h:mmA"]).format("HH:mm") != 'Invalid date') {
             let dayname = moment(date, 'MM-DD-YYYY').format('dddd').toLowerCase();
             deliveryCoordinatorArray.forEach(element => {
-
+                console.log(element);
                 let startTime = element[3][dayname][0];
                 let endTime = element[3][dayname][1];
                 let scheduledAppointments = element[4];
@@ -692,7 +669,11 @@ $(function () {
                         let dateTime = moment(dateFormat + ' ' + timeFormat, 'YYYY-MM-DD hh:mm');
                         let allready_appointed = false;
                         scheduledAppointments.forEach(appointment => {
-                            let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm');
+                            
+                            // let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm');
+                            // coordinator should available at least 1h before the schedule start
+                            let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm').subtract(1, 'hour');
+
                             let schedule_end = moment(appointment.schedule_end, 'YYYY-MM-DD hh:mm');
                             if (dateTime.isBetween(schedule_start, schedule_end, null, '[]')) {
                                 // check today availabilit
@@ -771,8 +752,8 @@ function writeStatusHTML() {
                     <label class="btn btn-flat-primary">
                         <input type="radio" name="searchStatus" id="searchStatusAll" value="all" > ALL <span class="badge badge-lg p-1" id="allCount" ></span>
                     </label>
-                    <label class="btn btn-flat-primary">
-                        <input type="radio" name="searchStatus" value="thisMonth" id="thisMonth" > This Month <span class="badge badge-lg p-1" id="thisMonthCount" ></span>
+                    <label class="btn btn-flat-primary active">
+                        <input type="radio" name="searchStatus" value="thisMonth" id="thisMonth" checked > This Month <span class="badge badge-lg p-1" id="thisMonthCount" ></span>
                     </label>
                     <label class="btn btn-flat-primary">
                         <input type="radio" name="searchStatus" value="lastMonth"> Last Month <span class="badge badge-lg p-1" id="lastMonthCount" ></span>
@@ -827,7 +808,30 @@ function removeSchedule(scheduleId = null) {
 
 
 function toggleFilterClass() {
-    $('.dtsp-panes').toggle();
+    // $('.dtsp-panes').toggle();
+    $('.customFilters1').toggleClass('d-none');
+
+    $("#coordinatorFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "Coordinator",
+        tags: !0
+    });
+    $("#salesConsultantFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "Sales Consultant",
+        tags: !0
+    });
+    $("#stockFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "Stock #",
+        tags: !0
+    });
+    $("#additionalServiceFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "Additional Services",
+        // tags: !0
+    });
+
 }
 
 function disabledManagerDiv() {
@@ -912,7 +916,7 @@ class InfiniteScroller {
     }
     setScroller(element, array) {
         var p = element.parentElement.id;
-
+        let timeoutId;
 
         // var Selectpicker = $('.selectpicker').data('selectpicker');
         var Selectpicker = $('#' + p).data('selectpicker');
@@ -951,17 +955,22 @@ class InfiniteScroller {
             if (search != '' && search.length > 3) {
                 element.innerHTML = '';
                 $('.dropdown-menu.show').block();
-                const results = array.filter(element => {
-                    var stock = (element[4]).toLowerCase();
-                    var vin = (element[5]).toLowerCase();
-                    return stock.indexOf(search.toLowerCase()) >= 0 || vin.indexOf(search.toLowerCase()) >= 0;
+
+                debounce(() => {
+                    const results = array.filter(element => {
+                        if (element[4] && element[5]) {
+                            var stock = (element[4]).toLowerCase();
+                            var vin = (element[5]).toLowerCase();
+                            return stock.indexOf(search.toLowerCase()) >= 0 || vin.indexOf(search.toLowerCase()) >= 0;
+                        }
+                    });
+                    results.forEach((item, i) => {
+                        // element.innerHTML += `<option value="${item[0]}" data-scroll-index="${i}" title="${item[4]}"> ${item[4]} - ${item[5]} </option>`;
+                        $(element).append(`<option value="${item[0]}" data-scroll-index="${i}" title="${item[4]}"> ${item[4]} - ${item[5]} </option>`);
+                    });
+                    $('.dropdown-menu.show').unblock();
+                    $('.selectpicker').selectpicker('refresh');
                 });
-                results.forEach((item, i) => {
-                    // element.innerHTML += `<option value="${item[0]}" data-scroll-index="${i}" title="${item[4]}"> ${item[4]} - ${item[5]} </option>`;
-                    $(element).append(`<option value="${item[0]}" data-scroll-index="${i}" title="${item[4]}"> ${item[4]} - ${item[5]} </option>`);
-                });
-                $('.dropdown-menu.show').unblock();
-                $('.selectpicker').selectpicker('refresh');
             } else if (search == '') {
                 element.innerHTML = '';
                 $('.dropdown-menu.show').block();
@@ -976,6 +985,10 @@ class InfiniteScroller {
             $('.dropdown-menu.show').unblock();
 
         });
+        const debounce = (callback, delay) => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(callback, delay);
+        }
     }
 }
 
@@ -1023,7 +1036,7 @@ function editShedule(id = null) {
                 $('#eadditionalServices :checkbox[name="eadditionalServices"]').prop('checked', false);
                 $('#eadditionalServices .active').removeClass('active');
                 // (response.additional_services) ? $('#e' + response.additional_services).prop('checked', true).click() : null;
-                
+
                 let additional_servicesArray = (response.additional_services) ? response.additional_services.split(",") : [];
                 additional_servicesArray.forEach(additional_serviceValue => {
                     $('#e' + additional_serviceValue).prop('checked', true).click();

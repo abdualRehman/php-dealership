@@ -115,6 +115,8 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                 <tr>
                                     <th>ID</th>
                                     <th>Status</th>
+                                    <th>Sale Date</th>
+                                    <th>Reconcile Date</th>
                                     <th>First Name</th>
                                     <th>Last name</th>
                                     <th>Stock no</th>
@@ -150,14 +152,24 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                         <div class="form-row">
                             <div class="col-md-4 mb-3">
                                 <div class="row">
-                                    <label for="inputEmail4" class="col-sm-2 col-form-label text-md-center">Date:</label>
-                                    <div class="col-sm-10">
+                                    <label for="inputEmail4" class="col-sm-3 col-form-label text-md-center">Date:</label>
+                                    <div class="col-sm-9">
                                         <div class="form-group input-group">
                                             <div class="input-group-append">
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
                                             <input type="text" class="form-control" name="saleDate" placeholder="Select date" id="saleDate" disabled>
+                                        </div>
+                                    </div>
+                                    <label for="inputEmail4" class="col-sm-3 col-form-label text-md-center">Reconcile</label>
+                                    <div class="col-sm-9">
+                                        <div class="form-group input-group">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control" name="reconcile" id="reconcile" disabled>
                                         </div>
                                     </div>
                                 </div>

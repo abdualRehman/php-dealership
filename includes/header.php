@@ -106,7 +106,7 @@
     <title>Dashboard</title>
 </head>
 
-<body class="theme-light preload-active aside-active aside-mobile-minimized aside-desktop-maximized" id="fullscreen">
+<body class="theme-light preload-active aside-active aside-mobile-minimized aside-desktop-minimized" id="fullscreen">
     <?php
     // check permission for todays availibilty
     if (hasAccess("todayavail", "Edit") === 'false') {

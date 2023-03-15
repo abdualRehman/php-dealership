@@ -88,184 +88,178 @@ $(function () {
         }
     }
 
-    manageSoldLogsTable = $("#datatable-1").DataTable({
+    // var manageSoldLogsTable1 = $("#datatable-2").DataTable({
 
-        responsive: !0,
+    //     responsive: !0,
 
-        'ajax': '../php_action/fetchIncentives.php',
+    //     'ajax': '../php_action/fetchIncentives_prev.php',
 
-        dom: `\n     
-        <'row'<'col-12'P>>\n
-        <'row'<'col-sm-12 text-sm-left col-md-3 mb-2'<'#statusFilterDiv'>> <'col-sm-12 col-md-6 text-center'B> <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
-       <'row'<'col-12'tr>>\n      
-       <'row align-items-baseline'
-       <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
-       <'col-md-5'p>>\n`,
+    //     dom: `\n     
+    //     <'row'<'col-12'P>>\n
+    //     <'row'<'col-sm-12 text-sm-left col-md-3 mb-2'<'#statusFilterDiv'>> <'col-sm-12 col-md-6 text-center'B> <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
+    //    <'row'<'col-12'tr>>\n      
+    //    <'row align-items-baseline'
+    //    <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
+    //    <'col-md-5'p>>\n`,
 
-        "pageLength": 50,
-        searchPanes: {
-            cascadePanes: !0,
-            viewTotal: !0,
-            columns: [0, 1, 2, 3],
-            stateSave: true,
-        },
-        buttons: [
-            {
-                extend: 'copyHtml5',
-                title: 'Sale Incentives',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-                }
-            },
-            {
-                extend: 'excelHtml5',
-                title: 'Sale Incentives',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-                }
-            },
-            {
-                extend: 'print',
-                title: 'Sale Incentives',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-                }
-            },
-        ],
+    //     "pageLength": 50,
+    //     searchPanes: {
+    //         cascadePanes: !0,
+    //         viewTotal: !0,
+    //         columns: [0, 1, 2, 3],
+    //         stateSave: true,
+    //     },
+    //     buttons: [
+    //         {
+    //             extend: 'copyHtml5',
+    //             title: 'Sale Incentives',
+    //             exportOptions: {
+    //                 columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    //             }
+    //         },
+    //         {
+    //             extend: 'excelHtml5',
+    //             title: 'Sale Incentives',
+    //             exportOptions: {
+    //                 columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    //             }
+    //         },
+    //         {
+    //             extend: 'print',
+    //             title: 'Sale Incentives',
+    //             exportOptions: {
+    //                 columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    //             }
+    //         },
+    //     ],
 
-        "createdRow": function (row, data, dataIndex) {
-            changePillCSS(row, data, 11, 4);  // collegeDate Index  11 +  college index 4
-            changePillCSS(row, data, 12, 5);
-            changePillCSS(row, data, 13, 6);
-            changePillCSS(row, data, 14, 7);
-            changePillCSS(row, data, 15, 8);
-            changePillCSS(row, data, 16, 9);
-            changePillCSS(row, data, 17, 10);
-            $(row).attr({
-                "data-toggle": "modal",
-                "data-target": "#editDetails",
-                "onclick": "editDetails(" + data[19] + ")"
-            });
-        },
+    //     "createdRow": function (row, data, dataIndex) {
+    //         changePillCSS(row, data, 11, 4);  // collegeDate Index  11 +  college index 4
+    //         changePillCSS(row, data, 12, 5);
+    //         changePillCSS(row, data, 13, 6);
+    //         changePillCSS(row, data, 14, 7);
+    //         changePillCSS(row, data, 15, 8);
+    //         changePillCSS(row, data, 16, 9);
+    //         changePillCSS(row, data, 17, 10);
+    //         $(row).attr({
+    //             "data-toggle": "modal",
+    //             "data-target": "#editDetails",
+    //             "onclick": "editDetails(" + data[19] + ")"
+    //         });
+    //     },
 
-        columnDefs: [
-            {
-                searchPanes: {
-                    show: true
-                },
-                targets: [0, 1, 2, 3],
+    //     columnDefs: [
+    //         {
+    //             searchPanes: {
+    //                 show: true
+    //             },
+    //             targets: [0, 1, 2, 3],
 
-            },
-            { 'visible': false, 'targets': [11, 12, 13, 14, 15, 16, 17, 18, 19, 20] }, //hide columns 
-        ],
+    //         },
+    //         { 'visible': false, 'targets': [11, 12, 13, 14, 15, 16, 17, 18, 19, 20] }, //hide columns 
+    //     ],
 
-        rowGroup: {
-            dataSrc: 20,
-            startRender: function (rows, group) {
-                var collapsed = !!collapsedGroups[group];
+    //     rowGroup: {
+    //         dataSrc: 20,
+    //         startRender: function (rows, group) {
+    //             var collapsed = !!collapsedGroups[group];
 
-                var filteredData = $('#datatable-1').DataTable()
-                    .rows({ search: 'applied' })
-                    .data()
-                    .filter(function (data, index) {
-                        return data[20] == group ? true : false;
-                    });
-                // setting total numbers
-                $('#' + group + 'Count').html(filteredData.length);
+    //             var filteredData = $('#datatable-1').DataTable()
+    //                 .rows({ search: 'applied' })
+    //                 .data()
+    //                 .filter(function (data, index) {
+    //                     return data[20] == group ? true : false;
+    //                 });
+    //             // setting total numbers
+    //             $('#' + group + 'Count').html(filteredData.length);
 
-                return $('<tr/>')
-                    .append('<td style="text-align:left!important" colspan="16">' + group + ' (' + filteredData.length + ')</td>')
-                    .attr('data-name', group)
-                    .toggleClass('collapsed', collapsed);
-            }
-        },
-        language: {
-            "infoFiltered": "",
-            searchPanes: {
-                count: "{total} found",
-                countFiltered: "{shown} / {total}"
-            }
-        },
-        "order": [[20, "asc"]]
+    //             return $('<tr/>')
+    //                 .append('<td style="text-align:left!important" colspan="16">' + group + ' (' + filteredData.length + ')</td>')
+    //                 .attr('data-name', group)
+    //                 .toggleClass('collapsed', collapsed);
+    //         }
+    //     },
+    //     language: {
+    //         "infoFiltered": "",
+    //         searchPanes: {
+    //             count: "{total} found",
+    //             countFiltered: "{shown} / {total}"
+    //         }
+    //     },
+    //     "order": [[20, "asc"]]
+    // });
+
+    loadDataTable();
+
+    $('#filterDataTable').on('click', function () {
+        loadDataTable();
     });
 
-
-    writeStatusHTML();
-    $('#pending').click();
+    // writeStatusHTML();
+    // $('#pending').click();
     loadSaleManager();
 
 
-    $.fn.dataTable.ext.search.push(
-        function (settings, data, index) {
-            var tableNode = manageSoldLogsTable.table().node();
+    // $.fn.dataTable.ext.search.push(
+    //     function (settings, data, index) {
+    //         var tableNode = manageSoldLogsTable.table().node();
 
-            var searchStatus = $('input:radio[name="searchStatus"]:checked').map(function () {
-                if (this.value !== "") {
-                    return this.value;
-                }
-            }).get();
+    //         var searchStatus = $('input:radio[name="searchStatus"]:checked').map(function () {
+    //             if (this.value !== "") {
+    //                 return this.value;
+    //             }
+    //         }).get();
 
-            if (searchStatus.length === 0) {
-                return true;
-            }
+    //         if (searchStatus.length === 0) {
+    //             return true;
+    //         }
 
-            if (settings.nTable !== tableNode) {
-                return true;
-            }
+    //         if (settings.nTable !== tableNode) {
+    //             return true;
+    //         }
 
-            if (searchStatus[0] === 'pending') {
-                if (data[4] != 'No' || data[5] != 'No' || data[6] != 'No' || data[7] != 'No' || data[8] != 'No' || data[9] != 'No' || data[10] != 'No') {
-                    if (
-                        comparision(data[4], data[11]) !== true ||
-                        comparision(data[5], data[12]) !== true ||
-                        comparision(data[6], data[13]) !== true ||
-                        comparision(data[7], data[14]) !== true ||
-                        comparision(data[8], data[15]) !== true ||
-                        comparision(data[9], data[16]) !== true ||
-                        comparision(data[10], data[17]) !== true
-                    ) {
-                        return true;
-                    }
-                    // if (
-                    //     comparision(data[4], data[11]) !== true ||
-                    //     comparision(data[5], data[12]) !== true ||
-                    //     comparision(data[6], data[13]) !== true ||
-                    //     comparision(data[7], data[14]) !== true ||
-                    //     comparision(data[8], data[15]) !== true ||
-                    //     comparision(data[9], data[16]) !== true ||
-                    //     comparision(data[10], data[17]) !== true
-                    // ) {
-                    //     return true;
-                    // }
-                }
-                return false;
-            }
-            if (searchStatus[0] === 'submitted') {
+    //         if (searchStatus[0] === 'pending') {
+    //             if (data[4] != 'No' || data[5] != 'No' || data[6] != 'No' || data[7] != 'No' || data[8] != 'No' || data[9] != 'No' || data[10] != 'No') {
+    //                 if (
+    //                     comparision(data[4], data[11]) !== true ||
+    //                     comparision(data[5], data[12]) !== true ||
+    //                     comparision(data[6], data[13]) !== true ||
+    //                     comparision(data[7], data[14]) !== true ||
+    //                     comparision(data[8], data[15]) !== true ||
+    //                     comparision(data[9], data[16]) !== true ||
+    //                     comparision(data[10], data[17]) !== true
+    //                 ) {
+    //                     return true;
+    //                 }
+    //             }
+    //             return false;
+    //         }
+    //         if (searchStatus[0] === 'submitted') {
 
-                if (data[4] != 'No' || data[5] != 'No' || data[6] != 'No' || data[7] != 'No' || data[8] != 'No' || data[9] != 'No' || data[10] != 'No') {
-                    if (
-                        comparision(data[4], data[11]) === true &&
-                        comparision(data[5], data[12]) === true &&
-                        comparision(data[6], data[13]) === true &&
-                        comparision(data[7], data[14]) === true &&
-                        comparision(data[8], data[15]) === true &&
-                        comparision(data[9], data[16]) === true &&
-                        comparision(data[10], data[17]) === true
-                    ) {
+    //             if (data[4] != 'No' || data[5] != 'No' || data[6] != 'No' || data[7] != 'No' || data[8] != 'No' || data[9] != 'No' || data[10] != 'No') {
+    //                 if (
+    //                     comparision(data[4], data[11]) === true &&
+    //                     comparision(data[5], data[12]) === true &&
+    //                     comparision(data[6], data[13]) === true &&
+    //                     comparision(data[7], data[14]) === true &&
+    //                     comparision(data[8], data[15]) === true &&
+    //                     comparision(data[9], data[16]) === true &&
+    //                     comparision(data[10], data[17]) === true
+    //                 ) {
 
-                        return true;
-                    }
-                }
-                return false
+    //                     return true;
+    //                 }
+    //             }
+    //             return false
 
-            }
+    //         }
 
-            return false;
-        }
-    );
+    //         return false;
+    //     }
+    // );
 
 
-    $('input:radio').on('change', function () {
+    $('input:radio[name="searchStatus"]').on('change', function () {
         $('#datatable-1').block({
             message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
             timeout: 1e3
@@ -274,6 +268,196 @@ $(function () {
         manageSoldLogsTable.searchPanes.rebuildPane();
 
     });
+
+
+
+
+
+    function loadDataTable() {
+
+        if ($.fn.dataTable.isDataTable('#datatable-1')) {
+            manageSoldLogsTable.draw();  // working
+            manageSoldLogsTable.searchPanes.rebuildPane();
+        }
+        else {
+
+            manageSoldLogsTable = $("#datatable-1").DataTable({
+                responsive: !0,
+                serverSide: true,
+                processing: true,
+                deferRender: true,
+                "pageLength": 50,
+                ajax: {
+                    url: '../php_action/fetchIncentives.php',
+                    type: "POST",
+                    data: function (data) {
+
+                        // // Read values
+                        var datePeriod = $('input[name=searchStatus]:checked').val();
+                        datePeriod = datePeriod ? datePeriod : 'pending';
+
+                        // let coordinatorF = $('#soldFilter').val();
+                        var soldF = [];
+                        if ($('#soldFilter').val() != '') {
+                            soldF = $('#soldFilter').datepicker('getDates');
+                            // soldF = soldF.map((d) => moment(d).format('MM-DD-YYYY'))
+                            soldF = soldF.map((d) => moment(d).format('YYYY-MM-DD'))
+                        }
+                        let customerF = $('#customerFilter').val();
+                        let stockF = $('#stockFilter').val();
+                        let vehicleF = $('#vehicleFilter').val();
+
+
+
+                        // // // Append to data
+                        data.searchByDatePeriod = datePeriod;
+                        data.soldF = soldF;
+                        data.customerF = customerF;
+                        data.stockF = stockF;
+                        data.vehicleF = vehicleF;
+                        // console.log(data);
+                    },
+                },
+                dom: `\n     
+                <'row'<'col-12'P>>\n
+                <'row'<'col-sm-12 text-sm-left col-md-3 mb-2'<'#statusFilterDiv'>> <'col-sm-12 col-md-6 text-center'B> <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
+               <'row'<'col-12'tr>>\n      
+               <'row align-items-baseline'
+               <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
+               <'col-md-5'p>>\n`,
+
+                autoWidth: false,
+                searchPanes: {
+                    cascadePanes: !0,
+                    viewTotal: !0,
+                    columns: [0, 1, 2, 3],
+                    stateSave: true,
+                },
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        title: 'Sale Incentives',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        title: 'Sale Incentives',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        title: 'Sale Incentives',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+                        }
+                    },
+                ],
+
+                columnDefs: [
+                    {
+                        searchPanes: {
+                            show: true
+                        },
+                        targets: [0, 1, 2, 3],
+
+                    },
+                    { 'visible': false, 'targets': [11, 12, 13, 14, 15, 16, 17, 18, 19, 20] }, //hide columns 
+                ],
+                "createdRow": function (row, data, dataIndex) {
+                    changePillCSS(row, data, 11, 4);  // collegeDate Index  11 +  college index 4
+                    changePillCSS(row, data, 12, 5);
+                    changePillCSS(row, data, 13, 6);
+                    changePillCSS(row, data, 14, 7);
+                    changePillCSS(row, data, 15, 8);
+                    changePillCSS(row, data, 16, 9);
+                    changePillCSS(row, data, 17, 10);
+                    $(row).attr({
+                        "data-toggle": "modal",
+                        "data-target": "#editDetails",
+                        "onclick": "editDetails(" + data[19] + ")"
+                    });
+                },
+                rowGroup: {
+                    dataSrc: 20,
+                    startRender: function (rows, group) {
+                        var collapsed = !!collapsedGroups[group];
+
+                        // var filteredData = $('#datatable-1').DataTable()
+                        //     .rows({ search: 'applied' })
+                        //     .data()
+                        //     .filter(function (data, index) {
+                        //         return data[20] == group ? true : false;
+                        //     });
+
+                        var countObj = manageSoldLogsTable.ajax.json();
+                        var filteredData = 0;
+                        switch (group) {
+                            case 'pending':
+                                filteredData = countObj.totalCount.tP;
+                                console.log(filteredData);
+                                break;
+                            case 'delivered':
+                                filteredData = countObj.totalCount.tD;
+                                break;
+                            default:
+                                break;
+                        }
+                        // setting total numbers
+
+                        return $('<tr/>')
+                            .append('<td style="text-align:left!important" colspan="16">' + group + ' (' + filteredData + ')</td>')
+                            .attr('data-name', group)
+                            .toggleClass('collapsed', collapsed);
+                    }
+                },
+                language: {
+                    "infoFiltered": "",
+                    searchPanes: {
+                        count: "{total} found",
+                        countFiltered: "{shown} / {total}"
+                    }
+                },
+                // "drawCallback": function (settings, start, end, max, total, pre) {
+                //     var json = this.fnSettings().json;
+                //     if (json) {
+                //         var obj = json.totalNumber;
+
+
+                //         // $(`input[name='mod'][value='fixAge`).parent().addClass('btn-outline-info');
+
+                //         var activebtnvalue = $("#mods .btn.active input[name='mod']").val();
+                //         if (activebtnvalue == 'missingDate' || activebtnvalue == 'keysPulled' || activebtnvalue == 'atAuction') {
+                //             setfun();
+                //             setInputChange();
+                //         } else if (activebtnvalue == 'soldAtAuction') {
+                //             setInputChange();
+                //         }
+
+                //     }
+                //     autosize.update($(".autosize"));
+                // },
+                "order": [[20, "asc"]]
+            });
+            writeStatusHTML();
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     // ---------------------- Edit Sale---------------------------
 
     // validateState
@@ -354,8 +538,8 @@ function writeStatusHTML() {
         <div class="col-md-12">
             <div id="sort">
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-flat-primary">
-                        <input type="radio" name="searchStatus" id="pending" value="pending"> Pending Incentives
+                    <label class="btn btn-flat-primary active">
+                        <input type="radio" name="searchStatus" id="pending" value="pending" checked > Pending Incentives
                     </label>
                     <label class="btn btn-flat-primary">
                         <input type="radio" name="searchStatus" id="submitted" value="submitted"> Submitted Incentives
@@ -442,7 +626,31 @@ function changePillCSS(row, data, compareIndex, valueIndex) {
 
 
 function toggleFilterClass() {
-    $('.dtsp-panes').toggle();
+    // $('.dtsp-panes').toggle();
+    $('.customFilters1').toggleClass('d-none');
+    $("#soldFilter").datepicker({
+        language: 'en',
+        format: 'mm-dd-yyyy',
+        orientation: "bottom auto",
+        multidate: true,
+        selectCounter: true,
+        multidateSeparator: " - ",
+    });
+    $("#customerFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "Customer",
+        tags: !0
+    });
+    $("#stockFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "Stock #",
+        tags: !0
+    });
+    $("#vehicleFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "Vehicle",
+        tags: !0
+    });
 }
 
 function editDetails(id = null) {
@@ -470,7 +678,7 @@ function editDetails(id = null) {
                 }, 100);
 
 
-                console.log(response);
+                // console.log(response);
                 maxFileLimit = 10;
                 // var images = JSON.parse(response.images);
                 $("#images").val(null);
@@ -502,6 +710,16 @@ function editDetails(id = null) {
                 $('#vehicle').val(`${response.stocktype} ${response.year} ${response.make} ${response.model}`);
                 $('#state').val(response.state);
                 $('#vin').val(response.vin);
+
+
+
+                $('#dealNote').val(response.deal_notes);
+                $('input[name="sale_status"]').prop('checked', false);
+                $('input[name="sale_status"]').parent().removeClass('active disabled')
+
+                $('#' + response.sale_status + '_status').click();
+                $('#' + response.sale_status + '_status').parent().addClass('active');
+
                 $('#saleDate').datetimepicker('update', response.date);
 
 

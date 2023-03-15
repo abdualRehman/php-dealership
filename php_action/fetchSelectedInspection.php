@@ -32,8 +32,10 @@ if ($result->num_rows > 0) {
         $result1 = $connect->query($sql1);
         $row1 = $result1->fetch_assoc();
         $output['bodyshop_log'] = $row1['shop'];
+        $output['bodyshop_log_id'] = $row1['id'];
     } else {
         $output['bodyshop_log'] = $row['bodyshop_log'];
+        $output['bodyshop_log_id'] = $row['bodyshop_log'];
     }
     if (isset($bodyshop) && $bodyshop != '') {
         $sql1 = "SELECT * FROM `bodyshops` WHERE id = '$bodyshop'";

@@ -17,6 +17,11 @@ if (hasAccess("incentives", "Edit") === 'false') {
     <link rel="stylesheet" href="../custom/css/customDatatable.css">
 </head>
 <style>
+    .makeDisable {
+        pointer-events: none;
+        opacity: 0.8;
+    }
+
     .customerDetailBody,
     .loadIncentives,
     .loadSalesPersonTodo {
@@ -195,7 +200,35 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                     </div>
 
                     <div class="portlet-body">
-
+                        <div class="form-row m-2 customFilters1 d-none">
+                            <div class="col-md-12 p-2 d-flex justify-content-between">
+                                <div class="dtsp-title">Filters Active</div>
+                                <button type="button" id="filterDataTable" class="btn btn-flat-primary btn-wider">Filter Data</button>
+                            </div>
+                            <div class="col-12 row">
+                                <div class="col p-1">
+                                    <input type="text" class="form-control" placeholder="Sold Date" id="soldFilter" />
+                                </div>
+                                <div class="col p-1">
+                                    <select class="form-control filterTags" id="customerFilter" multiple="multiple">
+                                        <optgroup label="Customer">
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="col p-1">
+                                    <select class="form-control filterTags" id="stockFilter" multiple="multiple">
+                                        <optgroup label="Stock #">
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="col p-1">
+                                    <select class="form-control filterTags" id="vehicleFilter" multiple="multiple">
+                                        <optgroup label="Vechicle">
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <table id="datatable-1" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
@@ -246,6 +279,37 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                     <div class="showResult">
                         <div class="form-row flex-column-reverse flex-md-row">
                             <div class="col-md-8">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label for="sale_status" class="col-form-label text-md-right">Status</label>
+                                        <div class="<?php echo ($salesConsultantID != $_SESSION['userRole'] && hasAccess("sale", "Edit") !== 'false') ?: "makeDisable"; ?>">
+                                            <div class="form-group">
+                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    <label class="btn btn-flat-primary d-flex align-items-center responsive-content">
+                                                        <input type="radio" name="sale_status" value="pending" id="pending_status">
+                                                        <i class="fa fa-clock pr-1"></i> Pending
+                                                    </label>
+                                                    <label class="btn btn-flat-success d-flex align-items-center responsive-content">
+                                                        <input type="radio" name="sale_status" value="delivered" id="delivered_status">
+                                                        <i class="fa fa-check pr-1"></i> Delivered
+                                                    </label>
+
+                                                    <label class="btn btn-flat-danger d-flex align-items-center responsive-content">
+                                                        <input type="radio" name="sale_status" value="cancelled" id="cancelled_status">
+                                                        <i class="fa fa-times pr-1"></i> Cancelled
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6 <?php echo ($salesConsultantID != $_SESSION['userRole'] && hasAccess("sale", "Edit") !== 'false') ?: "makeDisable"; ?>">
+                                        <label class="col-form-label" for="dealNote">Deal Notes</label>
+                                        <div class="form-group">
+                                            <textarea class="form-control autosize" name="dealNote" id="dealNote" placeholder="Deal Notes..."></textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
                                 <div class="row">
                                     <div class="form-group col-md-4">
                                         <label for="saleDate" class="col-form-label">Date</label>

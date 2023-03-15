@@ -335,9 +335,8 @@ if ($_SESSION['userRole'] == $officeID || (hasAccess("usedCars", "TitleView") !=
                                     <div class="col p-1">
                                         <select class="form-control filterTags" id="uciFilter" multiple="multiple">
                                             <optgroup label="UCI">
-                                                <option value="need">Need</option>
-                                                <option value="opened">Opened</option>
-                                                <option value="closed">Closed</option>
+                                                <option value="true">True</option>
+                                                <option value="false">False</option>
                                             </optgroup>
                                         </select>
                                     </div>
@@ -708,7 +707,7 @@ if ($_SESSION['userRole'] != $onlineManagerID && $_SESSION['userRole'] != $offic
                                             <div class="col-md-3 p-2">
                                                 <label for="uciRo" class="col-form-label">UCI RO #</label>
                                                 <div class="form-group">
-                                                    <input type="text" class="form-control" name="uciRo" id="uciRo" autocomplete="off" autofill="off" />
+                                                    <input type="text" class="form-control handleUCI" name="uciRo" id="uciRo" autocomplete="off" autofill="off" />
                                                 </div>
                                             </div>
                                             <div class="col-md-2 p-2">
@@ -719,7 +718,7 @@ if ($_SESSION['userRole'] != $onlineManagerID && $_SESSION['userRole'] != $offic
                                                             <span class="input-group-text"><i class="fa fa-dollar-sign"></i>
                                                             </span>
                                                         </div>
-                                                        <input type="text" class="form-control" name="uciClosed" id="uciClosed">
+                                                        <input type="text" class="form-control handleUCI" name="uciClosed" id="uciClosed">
                                                     </div>
                                                 </div>
                                             </div>

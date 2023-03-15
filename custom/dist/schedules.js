@@ -2,6 +2,7 @@
 
 /*eslint-disable*/
 
+var DefaultScheduleList = [];
 var ScheduleList = [];
 var start = moment("28/07/2022").format("DD/MM/YYYY")
 var end = moment(new Date()).format("DD/MM/YYYY")

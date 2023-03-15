@@ -7,6 +7,11 @@ function reformatDate($date, $from_format = 'm-d-Y', $to_format = 'Y-m-d')
     $date_aux = date_create_from_format($from_format, $date);
     return date_format($date_aux, $to_format);
 }
+function asDollars($value)
+{
+    if ($value < 0) return "-" . asDollars(-$value);
+    return '$' . number_format($value, 2);
+}
 
 
 
@@ -115,9 +120,20 @@ if (isset($_POST['modalFilter']) && count($_POST['modalFilter']) != 0) {
 // inventory.stockno , inventory.year, inventory.make , inventory.model, inventory.color , 
 // inventory.mileage, inventory.lot , inventory.balance, inventory.retail, inventory.certified, 
 // inventory.stocktype , inventory.wholesale , inventory.id as invId , inventory.status as invStatus , inspections.* FROM inventory LEFT JOIN inspections ON inventory.id = inspections.inv_id WHERE inventory.lot != 'LBO' AND inventory.location = '$location'";
+
+// working on previus file March 1, 2023
+// $sqlQuery = "SELECT '' as button , inspections.shops as bodyshopName , IF((inspections.repair_returned != '' AND inspections.repair_sent IS NOT NULL AND inspections.repair_sent != '' ), inspections.repair_returned , inspections.repair_sent ) as daysout ,  '' as arr, CAST(inventory.age AS INT) as age , CONCAT( inventory.stockno ,' || ', inventory.vin) as stockDetails ,
+// inventory.stockno , inventory.year, inventory.make , inventory.model, inventory.color , 
+// inventory.mileage, inventory.lot , inventory.balance, inventory.retail, inventory.certified, 
+// inventory.stocktype , inventory.wholesale , inventory.id as invId , inventory.status as invStatus , inspections.* FROM inventory LEFT JOIN inspections ON inventory.id = inspections.inv_id WHERE inventory.lot != 'LBO' AND inventory.location = '$location'";
+
 $sqlQuery = "SELECT '' as button , inspections.shops as bodyshopName , IF((inspections.repair_returned != '' AND inspections.repair_sent IS NOT NULL AND inspections.repair_sent != '' ), inspections.repair_returned , inspections.repair_sent ) as daysout ,  '' as arr, CAST(inventory.age AS INT) as age , CONCAT( inventory.stockno ,' || ', inventory.vin) as stockDetails ,
 inventory.stockno , inventory.year, inventory.make , inventory.model, inventory.color , 
-inventory.mileage, inventory.lot , inventory.balance, inventory.retail, inventory.certified, 
+CAST(inventory.mileage AS INT) AS mileage, inventory.lot , 
+CASE WHEN inventory.balance = '' THEN ''
+       ELSE ROUND( CAST(REPLACE(REPLACE(inventory.balance, ',', ''), '$', '') AS FLOAT) , 2)
+  END AS balance, 
+inventory.retail, inventory.certified, 
 inventory.stocktype , inventory.wholesale , inventory.id as invId , inventory.status as invStatus , inspections.* FROM inventory LEFT JOIN inspections ON inventory.id = inspections.inv_id WHERE inventory.lot != 'LBO' AND inventory.location = '$location'";
 
 // echo $sqlQuery . '<br />';
@@ -249,7 +265,7 @@ $columns = array(
         return $d;
     }),
     array('db' => 'balance',   'dt' => 17, 'formatter' => function ($d, $row) {
-        return $d;
+        return $d != "" ? asDollars($d) : "";
     }),
     array('db' => 'retail',   'dt' => 18, 'formatter' => function ($d, $row) {
         return $d;

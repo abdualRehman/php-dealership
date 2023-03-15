@@ -159,6 +159,7 @@ $(function () {
 
 function loadSchedules() {
 
+
     if ($.fn.dataTable.isDataTable('#datatable-4')) {
         return true;
     }
@@ -179,6 +180,9 @@ function loadSchedules() {
                 },
                 {
                     targets: 1,
+                    render: function (data, type, row) {
+                        return row[15];
+                    },
                     createdCell: function (td, cellData, rowData, row, col) {
                         $(td).html(rowData[15]);
                         $(td).addClass('link-css');
@@ -186,6 +190,9 @@ function loadSchedules() {
                 },
                 {
                     targets: 2,
+                    render: function (data, type, row) {
+                        return row[16];
+                    },
                     createdCell: function (td, cellData, rowData, row, col) {
                         var obj = rowData[20];
                         var today = moment().format("MM-DD-YYYY")
@@ -250,6 +257,9 @@ function loadSchedules() {
                 },
                 {
                     targets: 4, //NOTES
+                    render: function (data, type, row) {
+                        return row[17];
+                    },
                     createdCell: function (td, cellData, rowData, row, col) {
                         var obj = rowData[20];
                         var today = moment().format("MM-DD-YYYY")
@@ -262,6 +272,9 @@ function loadSchedules() {
                 },
                 {
                     targets: 5, //MANAGER
+                    render: function (data, type, row) {
+                        return row[18];
+                    },
                     createdCell: function (td, cellData, rowData, row, col) {
                         let bdc_notes = rowData[17];
                         if (bdc_notes != "") {
@@ -361,6 +374,14 @@ function loadSchedules() {
 
             "order": [[3, "desc"]]
         })
+    }
+
+    $("#sidemenu-todo-body div").scroll(function () {
+        availablityTableScrollFun();
+    });
+    function availablityTableScrollFun() {
+        var datatableHeader = $('#datatable-4 thead');
+        datatableHeader[0].style.top = `0px`;
     }
 
 }
@@ -523,6 +544,7 @@ function editSchedule(id = null) {
                 $('#shceduleId').val(response.id);
 
                 $('#availabilityUserName').val(response.username);
+                $('#availabilityUserCell').val(response.mobile);
 
                 $('#smonStart').val(response.mon_start);
                 $('#smonEnd').val(response.mon_end);

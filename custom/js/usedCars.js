@@ -923,6 +923,18 @@ $(function () {
         manageInvTable.draw(false);
     });
 
+    $('.handleUCI').on('input', function () {
+        let uciRo = $('#uciRo').val();
+        let uciClosed = $('#uciClosed').val();
+        if (uciRo != "" && uciClosed == '') {
+            $('#uci').val('opened');
+            $('.selectpicker').selectpicker('refresh');
+        } else if (uciRo != "" && uciClosed != '') {
+            $('#uci').val('closed');
+            $('.selectpicker').selectpicker('refresh');
+        }
+
+    })
 });
 
 async function loadSearchData() {
@@ -1170,7 +1182,7 @@ function fetchFixCDKAge() {
             ],
             columnDefs: [
                 {
-                    width: 200, 
+                    width: 200,
                     targets: [5],
                     createdCell: function (td, cellData, rowData, row, col) {
                         $(td).addClass('text-nowrap');
@@ -1321,6 +1333,8 @@ function toggleFilterClass2() {
 function toggleInfo(id) {
     $('#' + id).toggleClass('d-none');
 }
+
+
 
 function editUsedCar(id) {
     if (id) {

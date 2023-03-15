@@ -122,13 +122,18 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                 <div class="portlet">
                     <div class="portlet-header portlet-header-bordered">
                         <h3 class="portlet-title">Appointment Calendar</h3>
-                        <?php
-                        if (hasAccess("appointment", "Add") !== 'false') {
-                            echo '<button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
-                            <i class="fa fa-plus ml-1 mr-2"></i> Add Appointment
-                        </button>';
-                        }
-                        ?>
+                        <div class="d-flex align-items-center">
+                            <label class="d-flex align-items-center">Search:
+                                <input type="search" id="search-in-calendar" class="form-control form-control-sm m-2" placeholder="">
+                            </label>
+                            <?php
+                            if (hasAccess("appointment", "Add") !== 'false') {
+                                echo '<button class="btn btn-primary mr-2 p-2" data-toggle="modal" data-target="#addNew">
+                                    <i class="fa fa-plus ml-1 mr-2"></i> Add Appointment
+                                </button>';
+                            }
+                            ?>
+                        </div>
                     </div>
                     <div class="portlet-body">
                         <div>
@@ -558,7 +563,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
 
                             <label for="econfirmed" class="col-sm-2 text-sm-right col-form-label">Confirmed</label>
                             <div class="col-md-4">
-                                <div class="btn-group btn-group-toggle clear-selection-btn-group w-100" data-targetElement="ecomplete"  data-toggle="buttons" id="econfirmed">
+                                <div class="btn-group btn-group-toggle clear-selection-btn-group w-100" data-targetElement="ecomplete" data-toggle="buttons" id="econfirmed">
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                         <input type="radio" name="econfirmed" value="ok" id="conok">
                                         Yes

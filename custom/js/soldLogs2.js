@@ -204,10 +204,10 @@ $(function () {
                     var obj = json.data;
                     var todayCount = 0, yesterdayCount = 0, AllCount = obj.length, currentMonthCount = 0, pendingCount = 0, deliveredCount = 0, cancelledCount = 0, notDoneCount = 0;
 
-                    var date = new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}));
+                    var date = new Date(new Date().toLocaleString('en', { timeZone: 'America/New_York' }));
                     var today = moment(date).format("MMM-DD-YYYY");
 
-                    var date2 = moment(new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'})), "MMM-DD-YYYY").subtract(1, 'days');
+                    var date2 = moment(new Date(new Date().toLocaleString('en', { timeZone: 'America/New_York' })), "MMM-DD-YYYY").subtract(1, 'days');
                     var yesterday = moment(date2).format("MMM-DD-YYYY")
 
                     const startOfMonth = moment().startOf('month').format('MMM-DD-YYYY');
@@ -332,14 +332,14 @@ $(function () {
                 if (dateType == 'all') {
                     return true;
                 } else if (dateType == 'today') {
-                    var date2 = new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'}));
+                    var date2 = new Date(new Date().toLocaleString('en', { timeZone: 'America/New_York' }));
                     var today = moment(date2).format("MMM-DD-YYYY");
                     if (today === searchData[0]) {
                         return true;
                     }
 
                 } else if (dateType == 'yesterday') {
-                    var date2 = moment(new Date(new Date().toLocaleString('en', {timeZone: 'America/New_York'})), "MMM-DD-YYYY").subtract(1, 'days');
+                    var date2 = moment(new Date(new Date().toLocaleString('en', { timeZone: 'America/New_York' })), "MMM-DD-YYYY").subtract(1, 'days');
                     var yesterday = moment(date2).format("MMM-DD-YYYY")
                     if (yesterday === searchData[0]) {
                         return true;
@@ -1607,6 +1607,15 @@ function chnageIncentiveStatus(value, date, element) {
         var cdays = cduration.asDays();
         cdays = Math.ceil(cdays);
 
+        if (element == 'misc1') {
+            if (cdays >= 0) {
+                $('#misc1').val("Yes");
+            } else {
+                $('#misc1').val("No");
+            }
+            $(".selectpicker").selectpicker("refresh");
+        }
+
         if (cdays >= 0) {
             $('#' + element).prop("disabled", false);
             $('#' + element + '_v').html('$' + value);
@@ -1616,6 +1625,7 @@ function chnageIncentiveStatus(value, date, element) {
     } else {
         $('#' + element).prop("disabled", true);
         $('#' + element + '_v').html('');
+        $('#misc1').val("No");
     }
 }
 

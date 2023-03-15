@@ -242,7 +242,7 @@ $(function () {
         function loadDataTable(dateStart = '', dateEnd = '') {
             if ($.fn.dataTable.isDataTable('#datatable-1')) {
                 manageSoldLogsTable.draw();  // working
-                manageSoldLogsTable.searchPanes.rebuildPane();
+                // manageSoldLogsTable.searchPanes.rebuildPane();
             }
             else {
                 manageSoldLogsTable = $("#datatable-1").DataTable({
@@ -282,9 +282,16 @@ $(function () {
                             data.typeF = typeF;
                         },
                     },
+                    // dom: `\n     
+                    //     <'row'<'col-12'P>>\n      
+                    //         <'row'<'col-sm-12 text- sm-left col-md-3 mb-2'B> <'col-sm-12 col-md-4 text-center '<'#statusFilterDiv'>  > <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
+                    //     <'row'<'col-12'tr>>\n      
+                    //     <'row align-items-baseline'
+                    //         <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
+                    //         <'col-md-5'p>>\n`,
                     dom: `\n     
                         <'row'<'col-12'P>>\n      
-                            <'row'<'col-sm-12 text- sm-left col-md-3 mb-2'B> <'col-sm-12 col-md-6 text-center '<'#statusFilterDiv'>  > <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
+                            <'row'<'col-sm-12 text- sm-left col-md-4 mb-2'B> <'col-sm-12 col-md-4 text-center '<'#statusFilterDiv'>  > <'col-sm-12 col-md-4 d-flex align-items-center justify-content-between text-center text-sm-right mt-2 mt-sm-0'<'#reconcileDiv'>f> >\n  
                         <'row'<'col-12'tr>>\n      
                         <'row align-items-baseline'
                             <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
@@ -322,7 +329,7 @@ $(function () {
                     columnDefs: [
                         { width: 200, targets: 11 },
                         {
-                            targets: [16, 17, 18],
+                            targets: [16, 17, 18, 19],
                             visible: false,
                         },
                         {
@@ -332,7 +339,7 @@ $(function () {
                         {
                             targets: [9],
                             createdCell: function (td, cellData, rowData, row, col) {
-                                if (rowData[22] == 'true') {
+                                if (rowData[23] == 'true') {
                                     $(td).html(cellData + ' <span class="badge badge-danger badge-lg badge-pill">$</span>');
                                 }
                             }
@@ -371,10 +378,10 @@ $(function () {
                         {
                             targets: [4, 5],
                             createdCell: function (td, cellData, rowData, row, col) {
-                                if (col == 4 && rowData[21] == 'true') {
+                                if (col == 4 && rowData[22] == 'true') {
                                     $(td).html(cellData + ' <span class="badge badge-danger badge-lg badge-pill">!</span>');
                                 }
-                                if (rowData[17] > 0 && rowData[23] != 3) {
+                                if (rowData[17] > 0 && rowData[24] != 3) {
                                     if (col == 4) {
                                         $(td).addClass('dublicate_left');
                                     }
@@ -399,7 +406,13 @@ $(function () {
                                     $(td).html('<span class="badge badge-lg badge-success badge-pill">Delivered</span>');
                                 }
                             }
-                        }
+                        },
+                        {
+                            targets: [19], // vin
+                            render: function (data, type, row) {
+                                return row[19];
+                            }
+                        },
                     ],
 
                     language: {
@@ -989,7 +1002,10 @@ $('.handleDateTime').on('change', function () {
                     let dateTime = moment(dateFormat + ' ' + timeFormat, 'YYYY-MM-DD hh:mm');
                     let allready_appointed = false;
                     scheduledAppointments.forEach(appointment => {
-                        let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm');
+                        // let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm');
+                        // coordinator should available at least 1h before the schedule start
+                        let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm').subtract(1, 'hour');
+
                         let schedule_end = moment(appointment.schedule_end, 'YYYY-MM-DD hh:mm');
                         if (dateTime.isBetween(schedule_start, schedule_end, null, '[]')) {
                             // check today availabilit
@@ -1152,7 +1168,7 @@ function fetchNotDoneSoldLogs() {
                 // Start with closed groups
                 $('#datatable-2 tbody tr.dtrg-start').each(function () {
                     var name = $(this).data('name');
-                    collapsedGroupsThankyouCard[name] = !collapsedGroupsThankyouCard[name];
+                    collapsedGroupsThankyouCard[name] = !!collapsedGroupsThankyouCard[name];
                 });
                 manageNotDoneTable.draw(false);
             },
@@ -1284,13 +1300,80 @@ function writeStatusHTML() {
                 timeout: 1e3
             });
             manageSoldLogsTable.draw();  // working
-            manageSoldLogsTable.searchPanes.rebuildPane();
-            // $('#datatable-1').DataTable().destroy();
-            // loadDataTable();
+            // manageSoldLogsTable.searchPanes.rebuildPane();
+
+
+            var currentElement = $(this).val();
+            if (currentElement == 'pending') {
+                var searchByCatgry = $('input[name=radio-date]:checked').val();
+                if (searchByCatgry == 'all') {
+                    var reconcileDiv = document.getElementById('reconcileDiv');
+                    if (reconcileDiv) {
+                        reconcileDiv.innerHTML = `<div class="input-group">
+                                <input class="form-control" type="text" id="daterangepicker-3" value="" autocomplete="off" >
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>`;
+
+
+                        $('#daterangepicker-3').daterangepicker({
+                            singleDatePicker: !0, showDropdowns: !0, timePicker: !0,
+                            autoUpdateInput: false,
+                            locale: {
+                                cancelLabel: 'Reset'
+                            }
+                        });
+
+                        $('input[id="daterangepicker-3"]').on('apply.daterangepicker', function (ev, picker) {
+                            $(this).val(picker.startDate.format('MM-DD-YYYY'));
+                            // console.log(picker.startDate.format('MM-DD-YYYY'));
+                            updateAllPendingSales(picker.startDate.format('MM-DD-YYYY'));
+                            // console.log(picker.startDate.format('MM/DD/YYYY'), picker.endDate.format('MM/DD/YYYY'));
+                        });
+                        $('input[id="daterangepicker-3"]').on('cancel.daterangepicker', function (ev, picker) {
+                            $(this).val("");
+                            updateAllPendingSales("");
+                        });
+
+
+
+                    }
+                }
+            }
+
+
         });
 
     }
 }
+
+
+
+function updateAllPendingSales(reconcileDate) {
+
+    $.ajax({
+        url: '../php_action/editSaleReconcileDates.php',
+        type: 'post',
+        data: { reconcileDate: reconcileDate },
+        dataType: 'json',
+        success: function (response) {
+            if (response.success == true) {
+                Swal.fire("Updated!", "All Records has been updated", "success")
+                manageSoldLogsTable.ajax.reload(null, false);
+            } // /response messages
+        }
+    }); // /ajax function to remove the brand
+
+
+
+}
+
+
+
+
 
 function toggleFilterClass() {
     // $('.dtsp-panes').toggle();
@@ -1673,40 +1756,43 @@ function changeStockDetails(ele, fromEdit = false, gross = null) {
 
     autosize.update($("#selectedDetails"));
 
-    if (fromEdit == false) {
-        changeRules();
-    }
+    // if (fromEdit == false) {
+    // }
+    changeRules(true);
 
 }
 
-function changeRules() {
+function changeRules(changeIncentiveValue = false) {
     var eleV = $('#stockId').val();
     if (eleV) {
         let obj = stockArray.find(data => data[0] === eleV);
         // console.log(obj);
+        if (obj) {
 
-        chnageIncentiveStatus(obj[17], obj[18], 'college');
-        chnageIncentiveStatus(obj[19], obj[20], 'military');
-        chnageIncentiveStatus(obj[21], obj[22], 'loyalty');
-        chnageIncentiveStatus(obj[23], obj[24], 'conquest');
-        chnageIncentiveStatus(obj[25], obj[26], 'misc1');
-        chnageIncentiveStatus(obj[27], obj[28], 'misc2');
-        chnageIncentiveStatus(obj[29], obj[30], 'leaseLoyalty');
+            chnageIncentiveStatus(obj[17], obj[18], 'college');
+            chnageIncentiveStatus(obj[19], obj[20], 'military');
+            chnageIncentiveStatus(obj[21], obj[22], 'loyalty');
+            chnageIncentiveStatus(obj[23], obj[24], 'conquest');
+            chnageIncentiveStatus(obj[25], obj[26], 'misc1', changeIncentiveValue);
+            chnageIncentiveStatus(obj[27], obj[28], 'misc2');
+            chnageIncentiveStatus(obj[29], obj[30], 'leaseLoyalty');
 
-        if (obj[17] != 'N/A' || obj[19] != 'N/A' || obj[21] != 'N/A' || obj[23] != 'N/A' || obj[25] != 'N/A' || obj[27] != 'N/A' || obj[29] != 'N/A') {
-            $('#loadIncentivesDiv').removeClass('hidden');
-        } else {
-            $('#loadIncentivesDiv').addClass('hidden');
+            if (obj[17] != 'N/A' || obj[19] != 'N/A' || obj[21] != 'N/A' || obj[23] != 'N/A' || obj[25] != 'N/A' || obj[27] != 'N/A' || obj[29] != 'N/A') {
+                $('#loadIncentivesDiv').removeClass('hidden');
+            } else {
+                $('#loadIncentivesDiv').addClass('hidden');
+            }
+
+            $('.selectpicker').selectpicker('refresh');
+
+            changeSalesPersonTodo();
+
         }
-
-        $('.selectpicker').selectpicker('refresh');
-
-        changeSalesPersonTodo();
     }
 
 }
 
-function chnageIncentiveStatus(value, date, element) {
+function chnageIncentiveStatus(value, date, element, changeIncentiveValue = false) {
     if (value != 'N/A') {
         var saleDate = $('#saleDate').val();
         saleDate = moment(saleDate).format('MM-DD-YYYY');
@@ -1715,6 +1801,15 @@ function chnageIncentiveStatus(value, date, element) {
         var cduration = moment.duration(edate.diff(saleDate));
         var cdays = cduration.asDays();
         cdays = Math.ceil(cdays);
+
+        if (changeIncentiveValue == true && element == 'misc1') {
+            if (cdays >= 0) {
+                $('#misc1').val("Yes");
+            } else {
+                $('#misc1').val("No");
+            }
+            $(".selectpicker").selectpicker("refresh");
+        }
 
         if (cdays >= 0) {
             $('#' + element).prop("disabled", false);
@@ -1727,6 +1822,7 @@ function chnageIncentiveStatus(value, date, element) {
         $('#' + element).prop("disabled", true);
         $('#' + element).val("No");
         $('#' + element + '_v').html('');
+        // $('#misc1').val("No");
     }
 }
 

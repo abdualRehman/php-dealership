@@ -55,6 +55,49 @@ $(function () {
                 targets: [9],
                 visible: false,
             },
+            {
+                targets: [5],
+                createdCell: function (td, cellData, rowData, row, col) {
+                    console.log(rowData[1]);
+                    if (cellData == 'Yes') {
+                        $(td).html('<h2 class="badge badge-xl h1 badge-success">Yes</h2>');
+                    } else if (cellData == 'No') {
+                        let celld = (rowData[1]).replace(/<[^>]*>?/gm, '');
+                        if (celld != "") {
+                            $(td).html('<h2 class="badge badge-xl h1 badge-danger">No</h2>');
+                        } else {
+                            $(td).html(cellData);
+                        }
+                    }
+                }
+            },
+            {
+                targets: [6],
+                createdCell: function (td, cellData, rowData, row, col) {
+                    if (cellData == 'Yes') {
+                        $(td).html('<h2 class="badge badge-xl h1 badge-success">Yes</h2>');
+                    } else if (cellData == 'No') {
+                        let celld = (rowData[2]).replace(/<[^>]*>?/gm, '');
+                        if (celld != "") {
+                            $(td).html('<h2 class="badge badge-xl h1 badge-danger">No</h2>');
+                        } else {
+                            $(td).html(cellData);
+                        }
+                    }
+                }
+            },
+            {
+                targets: [7],
+                createdCell: function (td, cellData, rowData, row, col) {
+                    if (cellData == 'Pending') {
+                        $(td).html('<h2 class="badge badge-xl h1 badge-warning">Pending</h2>');
+                    } else if (cellData == 'Paperwork Done') {
+                        $(td).html('<h2 class="badge badge-xl h1 badge-primary">Paperwork Done</h2>');
+                    } else if (cellData == 'Completed') {
+                        $(td).html('<h2 class="badge badge-xl h1 badge-success">Completed</h2>');
+                    }
+                }
+            },
         ],
 
         language: {
@@ -77,6 +120,7 @@ $(function () {
                 });
             }
         },
+        "order": [[7, "desc"]],
     });
 
     // --------------------- checkboxes query --------------------------------------

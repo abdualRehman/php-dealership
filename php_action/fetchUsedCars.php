@@ -77,7 +77,7 @@ if (isset($_POST['uciF']) && count($_POST['uciF']) != 0) {
     $searchQuery .= " AND ( ";
     foreach ($array as $value) {
         if ($value != '') {
-            $searchQuery .= " used_cars.uci = '$value' ";
+            $searchQuery .= " used_cars.oci_ok = '$value' ";
             if (next($array) == true) $searchQuery .= " OR ";
         }
     }
@@ -132,9 +132,18 @@ if (isset($_POST['soldF']) && count($_POST['soldF']) != 0) {
 // inventory.mileage, inventory.lot , inventory.balance, inventory.retail, inventory.certified as certified_inv, 
 // inventory.stocktype , inventory.wholesale , inventory.status as invStatus , used_cars.* FROM inventory LEFT JOIN used_cars ON inventory.id = used_cars.inv_id WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.location = '$location'";
 
+// working on previus file March 1, 2023
+// $sqlQuery = "SELECT inventory.id as invId , IF((used_cars.date_in != ''), STR_TO_DATE(used_cars.date_in, '%m-%d-%Y') , 'zzz') as cdkAge , '' as button , '' as arr, CONCAT( inventory.stockno ,' || ', inventory.vin) as stockDetails , 
+// CAST(inventory.age AS INT) as age , inventory.stockno , inventory.vin , inventory.model, inventory.year, inventory.make , inventory.color , 
+// inventory.mileage, inventory.lot , inventory.balance, inventory.retail, inventory.certified as certified_inv, 
+// inventory.stocktype , inventory.wholesale , inventory.status as invStatus, IF((used_cars.date_sold != ''), STR_TO_DATE(used_cars.date_sold, '%m-%d-%Y') , 'zzz') as date_sold_modified , used_cars.* FROM inventory LEFT JOIN used_cars ON inventory.id = used_cars.inv_id WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.location = '$location'";
+
 $sqlQuery = "SELECT inventory.id as invId , IF((used_cars.date_in != ''), STR_TO_DATE(used_cars.date_in, '%m-%d-%Y') , 'zzz') as cdkAge , '' as button , '' as arr, CONCAT( inventory.stockno ,' || ', inventory.vin) as stockDetails , 
 CAST(inventory.age AS INT) as age , inventory.stockno , inventory.vin , inventory.model, inventory.year, inventory.make , inventory.color , 
-inventory.mileage, inventory.lot , inventory.balance, inventory.retail, inventory.certified as certified_inv, 
+CAST(inventory.mileage AS INT) AS mileage, inventory.lot ,
+CASE WHEN inventory.balance = '' THEN ''
+       ELSE ROUND( CAST(REPLACE(REPLACE(inventory.balance, ',', ''), '$', '') AS FLOAT) , 2)
+  END AS balance, inventory.retail, inventory.certified as certified_inv, 
 inventory.stocktype , inventory.wholesale , inventory.status as invStatus, IF((used_cars.date_sold != ''), STR_TO_DATE(used_cars.date_sold, '%m-%d-%Y') , 'zzz') as date_sold_modified , used_cars.* FROM inventory LEFT JOIN used_cars ON inventory.id = used_cars.inv_id WHERE inventory.stocktype = 'USED' AND inventory.lot != 'LBO' AND inventory.location = '$location'";
 
 // echo $sqlQuery . '<br />';
@@ -232,7 +241,7 @@ $columns = array(
         return $d;
     }),
     array('db' => 'balance',   'dt' => 16, 'formatter' => function ($d, $row) {
-        return $d;
+        return $d != "" ? asDollars($d) : "";
     }),
     array('db' => 'retail',   'dt' => 17, 'formatter' => function ($d, $row) {
         return $d;

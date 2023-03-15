@@ -330,6 +330,9 @@ $(function () {
                         title: 'Lot widzards',
                         exportOptions: {
                             columns: [':visible:not(:first-child)']
+                        },
+                        customize: function (xlsx) {
+                            $(xlsx.xl["styles.xml"]).find('numFmt[numFmtId="164"]').attr('formatCode', '[$$-en-AU]#,##0.00;[Red]-[$$-en-AU]#,##0.00');
                         }
                     },
                     {
@@ -824,7 +827,7 @@ $(function () {
 
 async function loadSearchData() {
     const data = await manageInvTable.ajax.json();
-    setSearchTypehead(data.searhStatusArray);
+    setSearchTypehead(data?.searhStatusArray);
 }
 
 function loadbodyshops() {
@@ -1014,6 +1017,9 @@ function fetchCarsToDealers() {
                     title: 'Cars To Dealers',
                     exportOptions: {
                         columns: [':visible:not(:first-child)']
+                    },
+                    customize: function (xlsx) {
+                        $(xlsx.xl["styles.xml"]).find('numFmt[numFmtId="164"]').attr('formatCode', '[$$-en-AU]#,##0.00;[Red]-[$$-en-AU]#,##0.00');
                     }
                 },
                 {
@@ -1323,7 +1329,21 @@ function clearErrorsList() {
 }
 
 $('#repairReturn').on('change', function () {
+
+    console.log(editInspectionObj);
+    // if ($(this).val() != '' &&
+    //     editInspectionObj?.bodyshop_log == "" &&
+    //     editInspectionObj?.repair_paid_log == "" &&
+    //     editInspectionObj?.repair_returned_log == "" &&
+    //     editInspectionObj?.repair_sent_log == "" &&
+    //     editInspectionObj?.repairs_log == ""
+    // ) {
+    //     $('#resend').prop('disabled', false);
+    // } else {
+    //     $('#resend').prop('disabled', true);
+    // }
     $('#resend').prop('disabled', ($(this).val() != '') ? false : true);
+
     // $('#resend').prop('disabled', ($(this).val() != '' && $('#resend').is(':checked') == false) ? false : true);
     // $('#resend').prop('checked', $(this).val() == '' ? false : null)
 })
@@ -1339,6 +1359,13 @@ $('#resend').on('change', function () {
         arr.pop(); arr.shift();
         var detailsDiv = `History  Sent ${obj.repair_sent}     Returned ${obj.repair_returned} \nRepairs: ${arr.map(element => element).join(' , ')} \nBodyshop: ${obj.bodyshop_name} \nPaid: ${obj.repair_paid}`;
         $('#resendDetails').html(detailsDiv);
+
+
+        $('#repair_sent_log').val(obj.repair_sent);
+        $('#repair_returned_log').val(obj.repair_returned);
+        $('#bodyshop_log').val(obj.shops);
+        $('#repair_paid_log').val(obj.repair_paid);
+        $('#repairs_log').val(obj.repairs);
 
 
         // setting values to null
@@ -1400,6 +1427,14 @@ $('#resend').on('change', function () {
                 $('#repais').append(newOption).trigger('change');
             }
         });
+
+
+        $('#repair_sent_log').val("");
+        $('#repair_returned_log').val("");
+        $('#bodyshop_log').val("");
+        $('#repair_paid_log').val("");
+        $('#repairs_log').val("");
+
 
         $('#bodyshop').val(obj.shops ? obj.shops : 0);
         $('#bodyshopNotes').val(obj.shops_notes ? obj.shops_notes : "");
@@ -1539,12 +1574,20 @@ function editInspection(id) {
 
 
                 $('#resendDetails').html("");
-                if ((response.repair_sent_log != '' ) ||
-                    (response.repair_returned_log != '' ) ||
-                    (response.bodyshop_log != '' ) ||
-                    (response.repair_paid_log != '')) {
+                // if ((response.repair_sent_log != '') ||
+                //     (response.repair_returned_log != '') ||
+                //     (response.bodyshop_log != '') ||
+                //     (response.repairs_log != '') ||
+                //     (response.repair_paid_log != '') || response.resend == "true") {
+                $('#repair_sent_log').val(response.repair_sent_log);
+                $('#repair_returned_log').val(response.repair_returned_log);
+                $('#bodyshop_log').val(response.bodyshop_log_id);
+                $('#repair_paid_log').val(response.repair_paid_log);
+                $('#repairs_log').val(response.repairs_log);
 
-                    $('#resend').prop('disabled', false);  
+                if (response.resend == "true") {
+
+                    $('#resend').prop('disabled', false);
                     $('#resend').prop('checked', true);
 
 
@@ -1554,7 +1597,7 @@ function editInspection(id) {
                     var detailsDiv = `History  Sent ${response.repair_sent_log}     Returned ${response.repair_returned_log} \nRepairs: ${arr.map(element => element).join(' , ')} \nBodyshop: ${response.bodyshop_log} \nPaid: ${response.repair_paid_log}`;
                     $('#resendDetails').html(detailsDiv);
                 } else {
-
+                    $('#isResend').val(false);
                     $('#resend').prop('disabled', response.repair_returned != "" ? false : true);  ////
                     $('#resend').prop('checked', response.resend == "true" ? true : false);
 

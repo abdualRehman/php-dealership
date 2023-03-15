@@ -75,9 +75,10 @@ if (hasAccess("todo", "Edit") === 'false') {
     #datatable-1 tbody tr td {
         padding: 7px;
     }
+
     #datatable-1 thead tr th,
     #datatable-1 tbody tr td {
-        text-align: center!important;
+        text-align: center !important;
     }
 
     @media (min-width: 1025px) {
@@ -110,6 +111,40 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                         </button>
                     </div>
                     <div class="portlet-body">
+                        <div class="form-row m-2 customFilters1 d-none">
+                            <div class="col-md-12 p-2 d-flex justify-content-between">
+                                <div class="dtsp-title">Filters Active</div>
+                                <button type="button" id="filterDataTable" class="btn btn-flat-primary btn-wider">Filter Data</button>
+                            </div>
+                            <div class="col-12 row">
+                                <div class="col p-1">
+                                    <select class="form-control filterTags" id="consultantFilter" multiple="multiple">
+                                        <optgroup label="Sales Consultant">
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="col p-1">
+                                    <select class="form-control filterTags" id="stockFilter" multiple="multiple">
+                                        <optgroup label="Stock #">
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="col p-1">
+                                    <select class="form-control filterTags" id="vehicleFilter" multiple="multiple">
+                                        <optgroup label="Vechicle">
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="col p-1">
+                                    <select class="form-control filterTags" id="stateFilter" multiple="multiple">
+                                        <optgroup label="State">
+                                        </optgroup>
+                                    </select>
+                                </div>
+
+
+                            </div>
+                        </div>
                         <table id="datatable-1" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
@@ -160,9 +195,13 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                     <input type="text" class="form-control" readonly name="saleDate" placeholder="Select date" id="saleDate">
                                 </div>
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="customerName" class="col-form-label">Customer Name</label>
                                 <input type="text" class="form-control" id="customerName" readonly name="customerName" placeholder="Customer Name">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="state" class="col-form-label">State</label>
+                                <input type="text" class="form-control" id="state" readonly name="state" placeholder="State">
                             </div>
                         </div>
                         <div class="form-row">
@@ -175,8 +214,8 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                 <input type="text" class="form-control" id="vehicle" readonly name="vehicle" placeholder="Vehicle">
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="state" class="col-form-label">State</label>
-                                <input type="text" class="form-control" id="state" readonly name="state" placeholder="State">
+                                <label for="vinTodo" class="col-form-label">Vin</label>
+                                <input type="text" class="form-control" id="vinTodo" readonly name="vin" placeholder="Vin">
                             </div>
                         </div>
                         <h5 class="my-4">Sales Consultant Todo</h5>
@@ -257,6 +296,10 @@ if ($salesConsultantID != $_SESSION['userRole']) {
 
                         </div>
 
+                        <div class="form-group <?php echo ($salesConsultantID == $_SESSION['userRole'] || 'Admin' == $_SESSION['userRole'] || $branchAdmin == $_SESSION['userRole']) ?: "makeDisable"; ?>">
+                            <label class="col-form-label" for="consultantNote">Consultant Notes</label>
+                            <textarea class="form-control autosize" name="consultantNote" id="consultantNote" placeholder="Consultant Notes..."></textarea>
+                        </div>
 
                     </div>
                 </div>

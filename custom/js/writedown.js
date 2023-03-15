@@ -33,6 +33,7 @@ $(function () {
             columns: [1, 2, 7, 9, 10],
         },
         "pageLength": 200,
+        fixedHeader: true,
         buttons: [
             {
                 extend: 'copyHtml5',
@@ -46,6 +47,9 @@ $(function () {
                 title: 'Writedown',
                 exportOptions: {
                     columns: [':visible']
+                },
+                customize: function (xlsx) {
+                    $(xlsx.xl["styles.xml"]).find('numFmt[numFmtId="164"]').attr('formatCode', '[$$-en-AU]#,##0.00;[Red]-[$$-en-AU]#,##0.00');
                 }
             },
             {
@@ -155,6 +159,24 @@ $(function () {
         },
         "order": [[16, "asc"], [7, "desc"]]
     });
+
+
+    window.onscroll = function () { myFunction() };
+    function myFunction() {
+        var desktopH = document.getElementById("sticky-header-desktop");
+        var mobileH = document.getElementById("sticky-header-mobile");
+        var datatableHeader = $('.table.fixedHeader-floating');
+        manageWritedownTable?.fixedHeader.headerOffset(desktopH.offsetHeight + mobileH.offsetHeight - 3);
+        if ($(window).width() < 580) {
+            manageWritedownTable?.fixedHeader.headerOffset(mobileH.offsetHeight - 3);
+        }
+        if (datatableHeader.length > 0) {
+            let topV = desktopH.offsetHeight + mobileH.offsetHeight - 3;
+            datatableHeader[0].style.top = `${topV}px`;
+        }
+    }
+
+
 
     // Collapse Groups
     $('#datatable-1 tbody').on('click', 'tr.dtrg-start', function () {
@@ -315,7 +337,10 @@ function updateFieldsUsedCars(obj) {
             dataType: 'json',
             success: function (response) {
                 if (response.success == true) {
-                    Swal.fire("Added!", "Successfully Changed", "success")
+                    Swal.fire("Added!", "Successfully Changed", "success");
+                    setTimeout(() => {
+                        Swal.close();
+                    }, 900);
                     manageWritedownTable.ajax.reload(null, false);
                 } // /response messages
             }

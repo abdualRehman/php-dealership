@@ -42,7 +42,7 @@ $(function () {
 
         "pageLength": 50,
         searchPanes: {
-            columns: [1, 2, 3, 4],
+            columns: [1, 4, 5, 6],
         },
         buttons: [
             {
@@ -76,10 +76,17 @@ $(function () {
                 searchPanes: {
                     show: true
                 },
-                targets: [1, 2, 3, 4],
+                targets: [1, 4, 5, 6],
             },
             {
-                targets: [7, 8, 9],
+                targets: [2, 3],
+                with: 300,
+                render: function (data, type, row) {
+                    return data != "" ? moment(data, "YYYY-MM-DD HH:mm").format('MMM-DD-YYYY') : "";
+                },
+            },
+            {
+                targets: [9, 10, 11],
                 render: function (data, type, row) {
                     return data != "" ? moment(data).format('MM-DD-YYYY') : "";
                 },
@@ -108,7 +115,7 @@ $(function () {
                 $('#' + group + 'Count').html(filteredData.length);
 
                 return $('<tr/>')
-                    .append('<td colspan="16">' + group + ' (' + filteredData.length + ')</td>')
+                    .append('<td colspan="18">' + group + ' (' + filteredData.length + ')</td>')
                     .attr('data-name', group)
                     .toggleClass('collapsed', collapsed);
             }
@@ -123,9 +130,9 @@ $(function () {
                     .rows()
                     .data()
                     .filter(function (data, index) {
-                        var entered = data[8];
-                        var approved = data[9];
-                        var certified = data[6];
+                        var entered = data[10];
+                        var approved = data[11];
+                        var certified = data[8];
                         if (entered == null || entered == '') {
                             todoCount += 1;
                         }
@@ -162,9 +169,9 @@ $(function () {
     $.fn.dataTable.ext.search.push(
         function (settings, searchData, index) {
             var tableNode = manageDataTable.table().node();
-            var certified = searchData[6];
-            var entered = searchData[8];
-            var approved = searchData[9];
+            var certified = searchData[8];
+            var entered = searchData[10];
+            var approved = searchData[11];
 
             var searchStatus = $('input:radio[name="searchStatus"]:checked').map(function () {
                 if (this.value !== "") {
@@ -347,6 +354,8 @@ function editDetails(id = null) {
                 }
 
                 $('#submittedBy').val(response.submittedByName);
+                $('#saleDate').val(response.date != "" ? moment(response.date, "YYYY-MM-DD HH:mm").format('MMM-DD-YYYY') : "");
+                $('#reconcile').val(response.reconcileDate != "" ? moment(response.reconcileDate, "YYYY-MM-DD HH:mm").format('MMM-DD-YYYY') : "");
 
                 var detailsDiv = `${response.stocktype} ${response.year} ${response.make} ${response.model} \n Vin: ${response.vin} \n Mileage: ${response.mileage} \n Age: ${response.age} \n Lot: ${response.lot} ${($('#isConsultant').val() == "true") ? `` : `\n Balance: ${response.balance} \n ${response.stocktype == "USED" ? `Gross:` + Number(response.gross) : ''}`} `;
 

@@ -21,233 +21,11 @@ $(function () {
     });
 
 
-    manageSoldLogsTable = $("#datatable-1").DataTable({
+    loadDataTable();
 
-
-
-        responsive: !0,
-        // responsive: {
-        //     details: {
-        //         type: 'column',
-        //         target: 1
-        //     }
-        // },
-
-        'ajax': '../php_action/fetchSoldTodo.php',
-
-        // working.... with both
-        // dom: "Pfrtip",
-        // dom: `\n     
-        //      <'row'<'col-12'P>>\n      
-        //      <'row'<'col-sm-12 col-md-6'l>>\n  
-        //     \n     
-        //     <'row'<'col-sm-6 text-center text-sm-left p-3'B>
-        //         <'col-sm-6 text-center text-sm-right mt-2 mt-sm-0'f>>\n
-        //     <'row'<'col-12'tr>>\n      
-        //     <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
-        dom: `\n     
-            <'row'<'col-12'P>>\n      
-            <'row'<'col-sm-12 text-sm-left col-md-3 mb-2 '<'#statusFilterDiv'>> <'col-sm-12 col-md-6 text-center'B> <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
-           <'row'<'col-12'tr>>\n      
-           <'row align-items-baseline'
-           <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
-           <'col-md-5'p>>\n`,
-
-        "pageLength": 150,
-        searchPanes: {
-            columns: [13, 2, 3, 4],
-        },
-        buttons: [
-            {
-                text: '&nbsp Expand/Collapse All',
-                action: function () {
-                    $('#datatable-1 tbody tr.dtrg-group.dtrg-start').each(function () {
-                        var name = $(this).data('name');
-                        collapsedGroups[name] = !collapsedGroups[name];
-                        manageSoldLogsTable.draw(false);
-                    });
-                }
-            },
-            {
-                extend: 'copyHtml5',
-                title: 'Sold Todo',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-                }
-            },
-            {
-                extend: 'excelHtml5',
-                title: 'Sold Todo',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-                }
-            },
-            {
-                extend: 'print',
-                title: 'Sold Todo',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-                }
-            },
-        ],
-        // buttons: [
-        //     {
-        //         text: 'Opened',
-        //         action: function (e, dt, node, config) {
-        //             loadOpened();
-        //         },
-
-        //     },
-        //     {
-        //         text: 'Completed',
-        //         action: function (e, dt, node, config) {
-        //             manageSoldLogsTable.button(0).active(false);
-        //             manageSoldLogsTable.button(1).active(true);
-
-        //             $.fn.dataTable.ext.search.pop();
-        //             manageSoldLogsTable.search('').draw();
-        //             var tableNode = this.table(0).node();
-        //             // console.log(tableNode);
-        //             $.fn.dataTable.ext.search.push(
-        //                 function (settings, data, dataIndex) {
-        //                     if (settings.nTable !== tableNode) {
-        //                         return true;
-        //                     }
-        //                     var vin_check = data[5];
-        //                     var insurance = data[6];
-        //                     var trade_title = data[7];
-        //                     var registration = data[8];
-        //                     var inspection = data[9];
-        //                     var salesperson_status = data[10];
-        //                     var paid = data[11];
-        //                     if (
-        //                         salesperson_status === 'cancelled' || salesperson_status === 'delivered'
-        //                     ) {
-        //                         return true;
-        //                     }
-        //                     return false
-        //                 }
-        //             )
-        //             manageSoldLogsTable.draw();  // working
-
-
-        //         },
-
-        //     }
-        // ],
-
-        columnDefs: [
-            {
-                searchPanes: {
-                    show: true
-                },
-                targets: [13, 2, 3, 4],
-            },
-            {
-                targets: [12, 13],
-                visible: false,
-            },
-            {
-                targets: 5,
-                createdCell: function (td, cellData, rowData, row, col) {
-                    $(td).html(changePillCSS(cellData, 'vinCheck'));
-                }
-            },
-            {
-                targets: 6,
-                createdCell: function (td, cellData, rowData, row, col) {
-                    $(td).html(changePillCSS(cellData, 'insurance'));
-                }
-            },
-            {
-                targets: 7,
-                createdCell: function (td, cellData, rowData, row, col) {
-                    $(td).html(changePillCSS(cellData, 'tradeTitle'));
-                }
-            },
-            {
-                targets: 8,
-                createdCell: function (td, cellData, rowData, row, col) {
-                    $(td).html(changePillCSS(cellData, 'registration'));
-                }
-            },
-            {
-                targets: 9,
-                createdCell: function (td, cellData, rowData, row, col) {
-                    $(td).html(changePillCSS(cellData, 'inspection'));
-                }
-            },
-            {
-                targets: 10,
-                createdCell: function (td, cellData, rowData, row, col) {
-                    $(td).html(changePillCSS(cellData, 'salePStatus'));
-                }
-            },
-            {
-                targets: 11,
-                createdCell: function (td, cellData, rowData, row, col) {
-                    $(td).html(changePillCSS(cellData, 'paid'));
-                }
-            },
-        ],
-
-        language: {
-            "infoFiltered": "",
-            // searchPanes: {
-            //     count: "{total} found",
-            //     countFiltered: "{shown} / {total}"
-            // }
-        },
-
-        rowGroup: {
-            enable: $('#isConsultant').val() == 'false' ? true : false,
-            dataSrc: 13,
-            startRender: function (rows, group) {
-                var collapsed = !!collapsedGroups[group];
-
-                rows.nodes().each(function (r) {
-                    r.style.display = 'none';
-                    if (collapsed) {
-                        r.style.display = '';
-                    }
-                });
-
-                var filteredData = $('#datatable-1').DataTable()
-                    .rows({ search: 'applied' })
-                    .data()
-                    .filter(function (data, index) {
-                        return data[13] == group ? true : false;
-                    });
-
-                return $('<tr/>')
-                    .append('<td style="text-align:left!important" colspan="14">' + group + ' (' + filteredData.length + ')</td>')
-                    .attr('data-name', group)
-                    .toggleClass('collapsed', collapsed);
-            },
-        },
-        initComplete: function () {
-            // Start with closed groups
-            $('#datatable-1 tbody tr.dtrg-start').each(function () {
-                var name = $(this).data('name');
-                collapsedGroups[name] = !!collapsedGroups[name];
-            });
-            manageSoldLogsTable.draw(false);
-        },
-        createdRow: function (row, data, dataIndex) {
-            if ($('#isEditAllowed').val() == "true") {
-                $(row).attr({
-                    "data-toggle": "modal",
-                    "data-target": "#editDetails",
-                    "onclick": "editDetails(" + data[12] + ")"
-                });
-            }
-        },
-        "order": [[13, "asc"], [0, "asc"]],
-
+    $('#filterDataTable').on('click', function () {
+        loadDataTable();
     });
-
-    writeStatusHTML();
-    $('#opened').click();
 
     // Collapse Groups
     $('#datatable-1 tbody').on('click', 'tr.dtrg-start', function () {
@@ -258,128 +36,93 @@ $(function () {
 
 
 
-    $.fn.dataTable.ext.search.push(
-        function (settings, searchData, index) {
-            var tableNode = manageSoldLogsTable.table().node();
-            // console.log(settings.preSelect);
-            var searchStatus = $('input:radio[name="searchStatus"]:checked').map(function () {
-                if (this.value !== "") {
-                    return this.value;
-                }
-            }).get();
-
-            if (searchStatus.length === 0) {
-                return true;
-            }
-
-            if (settings.nTable !== tableNode) {
-                return true;
-            }
-
-            if (searchStatus[0] === 'opened') {
-                var salesperson_status = searchData[10];
-                if (salesperson_status === 'cancelled') {
-                    return false;
-                } else {
-                    // Delivered AND all others to do should stay in Opened status if anything else is in the RED…except paid
-                    var vin_check = searchData[5];
-                    var insurance = searchData[6];
-                    var trade_title = searchData[7];
-                    var registration = searchData[8];
-                    var inspection = searchData[9];
-                    // if (
-                    //     (vin_check !== 'checkTitle' && vin_check !== 'need') &&
-                    //     insurance !== 'need' && trade_title !== 'need' &&
-                    //     registration !== 'pending' && inspection !== 'need') {
-                    //     return false;
-                    // } else {
-                    //     return true;
-                    // }
-                    if (
-                        (vin_check !== 'checkTitle' && vin_check !== 'need') &&
-                        insurance !== 'need' && trade_title !== 'need' &&
-                        (registration !== 'pending' && registration !== 'done') && inspection !== 'need' && (salesperson_status === 'cancelled' || salesperson_status === 'delivered')) {
-                        return false;
-                    } else {
-
-
-                        let houseDealFilter = $('#houseDealFilter:checked').is(':checked');
-                        if (houseDealFilter == true) {
-                            return true;
-                        } else {
-                            if (searchData[13] != 'House Deal') {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-            if (searchStatus[0] === 'completed') {
-                var salesperson_status = searchData[10];
-
-                if (salesperson_status === 'cancelled' || salesperson_status === 'delivered') {
-
-                    // return true;
-                    // Delivered to do should stay in Opened status if anything else is in the RED…except paid
-                    if (salesperson_status === 'delivered') {
-                        var vin_check = searchData[5];
-                        var insurance = searchData[6];
-                        var trade_title = searchData[7];
-                        var registration = searchData[8];
-                        var inspection = searchData[9];
-                        if (
-                            (vin_check === 'checkTitle' || vin_check === 'need') ||
-                            insurance === 'need' || trade_title === 'need' ||
-                            (registration === 'pending' || registration === 'done') || inspection === 'need'
-                        ) {
-                            return false;
-                        } else {
-                            // return true;
-                            let houseDealFilter = $('#houseDealFilter:checked').is(':checked');
-                            if (houseDealFilter == true) {
-                                return true;
-                            } else {
-                                if (searchData[13] != 'House Deal') {
-                                    return true;
-                                }
-                            }
-                        }
-                    } else {
-                        // return true;
-                        let houseDealFilter = $('#houseDealFilter:checked').is(':checked');
-                        if (houseDealFilter == true) {
-                            return true;
-                        } else {
-                            if (searchData[13] != 'House Deal') {
-                                return true;
-                            }
-                        }
-                    }
-                }
-
-                // var vin_check = searchData[5];
-                // var insurance = searchData[6];
-                // var trade_title = searchData[7];
-                // var registration = searchData[8];
-                // var inspection = searchData[9];
-                // if (
-                //     (vin_check === 'checkTitle' || vin_check === 'need') &&
-                //     insurance === 'need' && trade_title === 'need' &&
-                //     registration === 'pending' && inspection === 'need' &&
-                //     salesperson_status === 'dealwritten'
-                // ) {
-                //     return false;
-                // } else {
-                //     return true;
-                // }
-
-
-            }
-
-
-            return false;
-        }
-    );
+    // $.fn.dataTable.ext.search.push(
+    //     function (settings, searchData, index) {
+    //         var tableNode = manageSoldLogsTable.table().node();
+    //         // console.log(settings.preSelect);
+    //         var searchStatus = $('input:radio[name="searchStatus"]:checked').map(function () {
+    //             if (this.value !== "") {
+    //                 return this.value;
+    //             }
+    //         }).get();
+    //         if (searchStatus.length === 0) {
+    //             return true;
+    //         }
+    //         if (settings.nTable !== tableNode) {
+    //             return true;
+    //         }
+    //         if (searchStatus[0] === 'opened') {
+    //             var salesperson_status = searchData[10];
+    //             if (salesperson_status === 'cancelled') {
+    //                 return false;
+    //             } else {
+    //                 // Delivered AND all others to do should stay in Opened status if anything else is in the RED…except paid
+    //                 var vin_check = searchData[5];
+    //                 var insurance = searchData[6];
+    //                 var trade_title = searchData[7];
+    //                 var registration = searchData[8];
+    //                 var inspection = searchData[9];
+    //                 if (
+    //                     (vin_check !== 'checkTitle' && vin_check !== 'need') &&
+    //                     insurance !== 'need' && trade_title !== 'need' &&
+    //                     (registration !== 'pending' && registration !== 'done') && inspection !== 'need' && (salesperson_status === 'cancelled' || salesperson_status === 'delivered')) {
+    //                     return false;
+    //                 } else {
+    //                     let houseDealFilter = $('#houseDealFilter:checked').is(':checked');
+    //                     if (houseDealFilter == true) {
+    //                         return true;
+    //                     } else {
+    //                         if (searchData[13] != 'House Deal') {
+    //                             return true;
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         if (searchStatus[0] === 'completed') {
+    //             var salesperson_status = searchData[10];
+    //             if (salesperson_status === 'cancelled' || salesperson_status === 'delivered') {
+    //                 // return true;
+    //                 // Delivered to do should stay in Opened status if anything else is in the RED…except paid
+    //                 if (salesperson_status === 'delivered') {
+    //                     var vin_check = searchData[5];
+    //                     var insurance = searchData[6];
+    //                     var trade_title = searchData[7];
+    //                     var registration = searchData[8];
+    //                     var inspection = searchData[9];
+    //                     if (
+    //                         (vin_check === 'checkTitle' || vin_check === 'need') ||
+    //                         insurance === 'need' || trade_title === 'need' ||
+    //                         (registration === 'pending' || registration === 'done') || inspection === 'need'
+    //                     ) {
+    //                         return false;
+    //                     } else {
+    //                         // return true;
+    //                         let houseDealFilter = $('#houseDealFilter:checked').is(':checked');
+    //                         if (houseDealFilter == true) {
+    //                             return true;
+    //                         } else {
+    //                             if (searchData[13] != 'House Deal') {
+    //                                 return true;
+    //                             }
+    //                         }
+    //                     }
+    //                 } else {
+    //                     // return true;
+    //                     let houseDealFilter = $('#houseDealFilter:checked').is(':checked');
+    //                     if (houseDealFilter == true) {
+    //                         return true;
+    //                     } else {
+    //                         if (searchData[13] != 'House Deal') {
+    //                             return true;
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         return false;
+    //     }
+    // );
 
 
     $('input:radio , #houseDealFilter:checkbox').on('change', function () {
@@ -390,9 +133,206 @@ $(function () {
         });
 
         manageSoldLogsTable.draw();  // working
-        manageSoldLogsTable.searchPanes.rebuildPane();
+        // manageSoldLogsTable.searchPanes.rebuildPane();
 
     });
+
+
+
+    function loadDataTable() {
+
+        if ($.fn.dataTable.isDataTable('#datatable-1')) {
+            manageSoldLogsTable.draw();  // working
+            manageSoldLogsTable.searchPanes.rebuildPane();
+        }
+        else {
+
+            manageSoldLogsTable = $("#datatable-1").DataTable({
+                responsive: !0,
+                serverSide: true,
+                processing: true,
+                deferRender: true,
+                "pageLength": 150,
+                ajax: {
+                    url: '../php_action/fetchSoldTodo.php',
+                    type: "POST",
+                    data: function (data) {
+
+                        // // // Read values
+                        var datePeriod = $('input[name=searchStatus]:checked').val();
+                        datePeriod = datePeriod ? datePeriod : 'opened';
+
+                        var houseDealFilter = $('input[id=houseDealFilter]:checked').val();
+                        houseDealFilter = houseDealFilter ? houseDealFilter : 'false';
+
+                        let consultantF = $('#consultantFilter').val();
+                        let stockF = $('#stockFilter').val();
+                        let vehicleF = $('#vehicleFilter').val();
+                        let stateF = $('#stateFilter').val();
+
+                        // // // // Append to data
+                        data.searchByDatePeriod = datePeriod;
+                        data.houseDealFilter = houseDealFilter;
+                        data.consultantF = consultantF;
+                        data.stockF = stockF;
+                        data.vehicleF = vehicleF;
+                        data.stateF = stateF;
+                        // console.log(data);
+                    },
+                },
+                dom: `\n     
+                        <'row'<'col-12'P>>\n      
+                        <'row'<'col-sm-12 text-sm-left col-md-3 mb-2 '<'#statusFilterDiv'>> <'col-sm-12 col-md-6 text-center'B> <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
+                    <'row'<'col-12'tr>>\n      
+                    <'row align-items-baseline'
+                    <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
+                    <'col-md-5'p>>\n`,
+
+                autoWidth: false,
+                searchPanes: {
+                    columns: [13, 2, 3, 4],
+                },
+                buttons: [
+                    {
+                        text: '&nbsp Expand/Collapse All',
+                        action: function () {
+                            $('#datatable-1 tbody tr.dtrg-group.dtrg-start').each(function () {
+                                var name = $(this).data('name');
+                                collapsedGroups[name] = !collapsedGroups[name];
+                                manageSoldLogsTable.draw(false);
+                            });
+                        }
+                    },
+                    {
+                        extend: 'copyHtml5',
+                        title: 'Sold Todo',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        title: 'Sold Todo',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        title: 'Sold Todo',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                        }
+                    },
+                ],
+
+                columnDefs: [
+                    {
+                        searchPanes: {
+                            show: true
+                        },
+                        targets: [13, 2, 3, 4],
+                    },
+                    {
+                        targets: [12, 13],
+                        visible: false,
+                    },
+                    {
+                        targets: 5,
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            $(td).html(changePillCSS(cellData, 'vinCheck'));
+                        }
+                    },
+                    {
+                        targets: 6,
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            $(td).html(changePillCSS(cellData, 'insurance'));
+                        }
+                    },
+                    {
+                        targets: 7,
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            $(td).html(changePillCSS(cellData, 'tradeTitle'));
+                        }
+                    },
+                    {
+                        targets: 8,
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            $(td).html(changePillCSS(cellData, 'registration'));
+                        }
+                    },
+                    {
+                        targets: 9,
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            $(td).html(changePillCSS(cellData, 'inspection'));
+                        }
+                    },
+                    {
+                        targets: 10,
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            $(td).html(changePillCSS(cellData, 'salePStatus'));
+                        }
+                    },
+                    {
+                        targets: 11,
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            $(td).html(changePillCSS(cellData, 'paid'));
+                        }
+                    },
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    if ($('#isEditAllowed').val() == "true") {
+                        $(row).attr({
+                            "data-toggle": "modal",
+                            "data-target": "#editDetails",
+                            "onclick": "editDetails(" + data[12] + ")"
+                        });
+                    }
+                },
+                rowGroup: {
+                    enable: $('#isConsultant').val() == 'false' ? true : false,
+                    dataSrc: 13,
+                    startRender: function (rows, group) {
+                        var collapsed = !!collapsedGroups[group];
+
+                        rows.nodes().each(function (r) {
+                            r.style.display = 'none';
+                            if (collapsed) {
+                                r.style.display = '';
+                            }
+                        });
+
+                        // var filteredData = $('#datatable-1').DataTable()
+                        //     .rows({ search: 'applied' })
+                        //     .data()
+                        //     .filter(function (data, index) {
+                        //         return data[13] == group ? true : false;
+                        //     });
+
+                        var countObj = manageSoldLogsTable.ajax.json();
+                        let filteredDataValue = countObj.totalCount.sc;
+                        // console.log(filteredDataValue[group]);
+
+                        return $('<tr/>')
+                            .append('<td style="text-align:left!important" colspan="14">' + group + ' (' + filteredDataValue[group] + ')</td>')
+                            .attr('data-name', group)
+                            .toggleClass('collapsed', collapsed);
+                    },
+                },
+                language: {
+                    "infoFiltered": "",
+                    // searchPanes: {
+                    //     count: "{total} found",
+                    //     countFiltered: "{shown} / {total}"
+                    // }
+                },
+                "order": [[13, "asc"], [0, "asc"]],
+            });
+            writeStatusHTML();
+        }
+    }
+
+
 
 
     // ---------------------- Edit Sale---------------------------
@@ -462,11 +402,11 @@ function writeStatusHTML() {
         <div class="col-md-12 d-flex align-items-center justify-content-between">
             <div id="sort">
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-flat-primary">
-                        <input type="radio" name="searchStatus" id="opened" value="opened"> Opened
+                    <label class="btn btn-flat-primary active">
+                        <input type="radio" name="searchStatus" id="opened" value="opened" checked /> Opened
                     </label>
                     <label class="btn btn-flat-primary">
-                        <input type="radio" name="searchStatus" id="completed" value="completed"> Completed
+                        <input type="radio" name="searchStatus" id="completed" value="completed" /> Completed
                     </label>
                 </div>
             </div>
@@ -569,7 +509,30 @@ function changePillCSS(data, title) {
 }
 
 function toggleFilterClass() {
-    $('.dtsp-panes').toggle();
+    // $('.dtsp-panes').toggle();
+    $('.customFilters1').toggleClass('d-none');
+
+    $("#consultantFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "Sales Consultant",
+        tags: !0
+    });
+    $("#stockFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "Stock #",
+        tags: !0
+    });
+    $("#vehicleFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "Vehicle",
+        tags: !0
+    });
+    $("#stateFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "State",
+        tags: !0
+    });
+
 }
 function editDetails(id = null) {
 
@@ -605,6 +568,8 @@ function editDetails(id = null) {
                 $('#state').val(response.state);
                 $('#saleDate').datetimepicker('update', response.date);
 
+                $('#consultantNote').val(response.consultant_notes);
+                $('#vinTodo').val(response.vin);
 
 
                 $('#vincheck').val(response.vin_check);

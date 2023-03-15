@@ -19,13 +19,13 @@ if ($_POST) {
     // echo $incentiveId;
 
     // sales person Todo
-    $college = mysqli_real_escape_string($connect, $_POST['college']);
-    $military = mysqli_real_escape_string($connect, $_POST['military']);
-    $loyalty = mysqli_real_escape_string($connect, $_POST['loyalty']);
-    $conquest = mysqli_real_escape_string($connect, $_POST['conquest']);
-    $misc1 = mysqli_real_escape_string($connect, $_POST['misc1']);
-    $misc2 = mysqli_real_escape_string($connect, $_POST['misc2']);
-    $leaseLoyalty = mysqli_real_escape_string($connect, $_POST['leaseLoyalty']);
+    $college = isset($_POST['college']) ? mysqli_real_escape_string($connect, $_POST['college']) : "";
+    $military = isset($_POST['military']) ? mysqli_real_escape_string($connect, $_POST['military']) : "";
+    $loyalty = isset($_POST['loyalty']) ? mysqli_real_escape_string($connect, $_POST['loyalty']) : "";
+    $conquest = isset($_POST['conquest']) ? mysqli_real_escape_string($connect, $_POST['conquest']) : "";
+    $misc1 = isset($_POST['misc1']) ? mysqli_real_escape_string($connect, $_POST['misc1']) : "";
+    $misc2 = isset($_POST['misc2']) ? mysqli_real_escape_string($connect, $_POST['misc2']) : "";
+    $leaseLoyalty = isset($_POST['leaseLoyalty']) ? mysqli_real_escape_string($connect, $_POST['leaseLoyalty']) : "";
 
     $collegeDate = mysqli_real_escape_string($connect, $_POST['collegeDate']);
     $collegeDate = ($collegeDate) ? reformatDate($collegeDate) : "";
@@ -47,6 +47,9 @@ if ($_POST) {
 
     $leaseLoyaltyDate = mysqli_real_escape_string($connect, $_POST['leaseLoyaltyDate']);
     $leaseLoyaltyDate = ($leaseLoyaltyDate) ? reformatDate($leaseLoyaltyDate) : "";
+
+    $sale_status = mysqli_real_escape_string($connect, $_POST['sale_status']);  // sale status
+    $dealNote = mysqli_real_escape_string($connect, $_POST['dealNote']);
 
 
     // echo $collegeDate . '<br />';
@@ -123,6 +126,13 @@ if ($_POST) {
         `images`='$imageArray' 
         WHERE incentive_id = '$incentiveId'";
 
+
+        if (isset($sale_status) &&  isset($dealNote)) {
+            $saleTodoSql2 = "UPDATE sales INNER JOIN sale_incentives ON sales.sale_id = sale_incentives.sale_id 
+            SET sales.sale_status = '$sale_status', sales.deal_notes = '$dealNote' 
+            WHERE sale_incentives.incentive_id = '$incentiveId'";
+            $connect->query($saleTodoSql2) === true;
+        }
 
         if ($connect->query($saleTodoSql) === true) {
             $valid['success'] = true;

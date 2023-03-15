@@ -1,4 +1,3 @@
-
 <style>
     .custom-checkbox {
         display: inline-grid;
@@ -90,6 +89,43 @@
                     </div>
                     <div class="portlet-body">
                         <div class="remove-messages"></div>
+                        <div class="form-row m-2 customFilters1 d-none">
+                            <div class="col-md-12 p-2 d-flex justify-content-between">
+                                <div class="dtsp-title">Filters Active</div>
+                                <button type="button" id="filterDataTable" class="btn btn-flat-primary btn-wider">Filter Data</button>
+                            </div>
+                            <div class="col-12 row">
+                                <div class="col p-1">
+                                    <select class="form-control filterTags" id="coordinatorFilter" multiple="multiple">
+                                        <optgroup label="Coordinator">
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="col p-1">
+                                    <select class="form-control filterTags" id="salesConsultantFilter" multiple="multiple">
+                                        <optgroup label="Sales Consultant">
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="col p-1">
+                                    <select class="form-control filterTags" id="stockFilter" multiple="multiple">
+                                        <optgroup label="Stock #">
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="col p-1">
+                                    <select class="form-control filterTags" id="additionalServiceFilter" multiple="multiple">
+                                        <optgroup label="Additional Services">
+                                            <option value="vinCheck">Vin Check</option>
+                                            <option value="maInspection">MA Inspection</option>
+                                            <option value="riInspection">RI Inspection</option>
+                                            <option value="paperworkSigned">Get Paperwork Signed</option>
+                                            <option value="other">Other (See Notes)</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <table id="datatable-1" class="table table-bordered table-striped table-hover">
                             <thead>
                                 <tr>
@@ -520,4 +556,3 @@
         </div>
     </div>
 </div>
-

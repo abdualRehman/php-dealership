@@ -14,13 +14,23 @@ if ($userRole != $salesConsultantID) {
     $sql = "SELECT swaps.id , locations.dealer_no , locations.dealership , locations.address , 
     swaps.vehicle_in , swaps.color_in , swaps.stock_in , 
     swaps.vehicle_out , swaps.color_out , inventory.stockno as stock_out , swaps.sales_consultant , swaps.notes , users.username , swaps.swap_status , transferred_in , transferred_out
-    FROM `swaps` LEFT JOIN locations ON locations.id = swaps.from_dealer LEFT JOIN users ON users.id = swaps.sales_consultant LEFT JOIN inventory ON inventory.id = swaps.stock_out  WHERE swaps.status = 1 AND swaps.location = '$location'";
+    FROM `swaps` LEFT JOIN locations ON locations.id = swaps.from_dealer LEFT JOIN users ON users.id = swaps.sales_consultant LEFT JOIN inventory ON inventory.id = swaps.stock_out  WHERE swaps.status = 1 AND swaps.location = '$location' ORDER BY CASE swap_status
+    WHEN 'Pending' THEN 1
+    WHEN 'Paperwork Done' THEN 2
+    WHEN 'Completed' THEN 3
+    ELSE 4
+  END";
 } else {
     $uid = $_SESSION['userId'];
     $sql = "SELECT swaps.id , locations.dealer_no , locations.dealership , locations.address , 
     swaps.vehicle_in , swaps.color_in , swaps.stock_in , 
     swaps.vehicle_out , swaps.color_out , inventory.stockno as stock_out , swaps.sales_consultant , swaps.notes , users.username , swaps.swap_status , transferred_in , transferred_out
-    FROM `swaps` LEFT JOIN locations ON locations.id = swaps.from_dealer LEFT JOIN users ON users.id = swaps.sales_consultant LEFT JOIN inventory ON inventory.id = swaps.stock_out  WHERE swaps.status = 1 AND swaps.sales_consultant = '$uid' AND swaps.location = '$location'";
+    FROM `swaps` LEFT JOIN locations ON locations.id = swaps.from_dealer LEFT JOIN users ON users.id = swaps.sales_consultant LEFT JOIN inventory ON inventory.id = swaps.stock_out  WHERE swaps.status = 1 AND swaps.sales_consultant = '$uid' AND swaps.location = '$location' ORDER BY CASE swap_status
+    WHEN 'Pending' THEN 1
+    WHEN 'Paperwork Done' THEN 2
+    WHEN 'Completed' THEN 3
+    ELSE 4
+  END";
 }
 
 $result = $connect->query($sql);

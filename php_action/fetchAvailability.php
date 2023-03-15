@@ -12,7 +12,7 @@ $deliveryCoordinatorID = $_SESSION['deliveryCoordinatorID'];
 
 $sql = "SELECT schedule.* , users.username , users.role , role.role_name 
 FROM users LEFT JOIN schedule ON users.id = schedule.user_id LEFT JOIN role ON users.role = role.role_id 
-WHERE users.status = 1 AND users.location = '$location' AND ( users.role = '$salesConsultantID' OR users.role = '$deliveryCoordinatorID') ORDER BY users.username ASC";
+WHERE users.status = 1 AND users.username != 'House Deal' AND users.location = '$location' AND ( users.role = '$salesConsultantID' OR users.role = '$deliveryCoordinatorID') ORDER BY users.username ASC";
 
 // echo $sql . '<br />';
 // echo $salesConsultantID . '<br />';

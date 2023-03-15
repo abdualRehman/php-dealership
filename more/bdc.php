@@ -197,7 +197,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                             <div class="row d-flex justify-content-center flex-row p-0 mb-2 w-100">
                                 <div class="row w-100">
                                     <div class="col-md-12">
-                                        <input type="text" class="form-control" placeholder="Select Date" name="datefilter" value="" />
+                                        <input type="text" class="form-control" placeholder="Select Date" autocomplete="off" name="datefilter" value="" />
                                     </div>
                                 </div>
 
@@ -217,83 +217,323 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                     </div>
                     <div class="portlet-body">
                         <div class="remove-messages"></div>
-                        <table id="datatable-1" class="table table-bordered table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Date</th>
-                                    <th>CCS</th>
-                                    <th>Last Name</th>
-                                    <th>First Name</th>
-                                    <th>Entity</th>
-                                    <th>Vehicle</th>
-                                    <th>Sales Consultant</th>
-                                    <th>Sold / Show</th>
-                                    <th>New / Used</th>
-                                    <th>Source</th>
-                                    <th>Notes</th>
-                                    <th>Verified</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
+                        <div class="portlet-body">
 
+                            <div class="form-row m-2 customFilters1 d-none">
+                                <div class="col-md-12 p-2 d-flex justify-content-between">
+                                    <div class="dtsp-title">Filters Active</div>
+                                    <button type="button" id="filterDataTable" class="btn btn-flat-primary btn-wider">Filter Data</button>
+                                </div>
+                                <div class="col-12 row">
+                                    <div class="col p-1">
+                                        <select class="form-control filterTags" id="ccsFilter" multiple="multiple">
+                                            <optgroup label="CCS">
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                    <div class="col p-1">
+                                        <select class="form-control filterTags" id="consultantFilter" multiple="multiple">
+                                            <optgroup label="Sales Consultant">
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                    <div class="col p-1">
+                                        <select class="form-control filterTags" id="soldFilter" multiple="multiple">
+                                            <optgroup label="Sold/Show">
+                                                <option value="sold">Sold</option>
+                                                <option value="show">Show</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                    <div class="col p-1">
+                                        <select class="form-control filterTags" id="newFilter" multiple="multiple">
+                                            <optgroup label="New/Used">
+                                                <option value="new">New</option>
+                                                <option value="used">Used</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                    <div class="col p-1">
+                                        <select class="form-control filterTags" id="sourceFilter" multiple="multiple">
+                                            <optgroup label="Source">
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table id="datatable-1" class="table table-bordered table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Date</th>
+                                        <th>CCS</th>
+                                        <th>Last Name</th>
+                                        <th>First Name</th>
+                                        <th>Entity</th>
+                                        <th>Vehicle</th>
+                                        <th>Sales Consultant</th>
+                                        <th>Sold / Show</th>
+                                        <th>New / Used</th>
+                                        <th>Source</th>
+                                        <th>Notes</th>
+                                        <th>Verified</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 
-<div class="modal fade" id="modal8">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header modal-header-bordered">
-                <h5 class="modal-title">Edit Lead</h5><button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
-            </div>
-            <form class="form-horizontal" id="editLeadForm" action="../php_action/editBdcLead.php" method="post">
-                <input type="hidden" name="leadId" id="leadId">
-                <input type="hidden" name="eapprovedBy" id="eapprovedBy" value="<?php echo $managerID; ?>">
-                <div class="modal-body">
+    <div class="modal fade" id="modal8">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header modal-header-bordered">
+                    <h5 class="modal-title">Edit Lead</h5><button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                </div>
+                <form class="form-horizontal" id="editLeadForm" action="../php_action/editBdcLead.php" method="post">
+                    <input type="hidden" name="leadId" id="leadId">
+                    <input type="hidden" name="eapprovedBy" id="eapprovedBy" value="<?php echo $managerID; ?>">
+                    <div class="modal-body">
 
-                    <div id="edit-messages"></div>
-                    <div class="text-center">
-                        <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div>
+                        <div id="edit-messages"></div>
+                        <div class="text-center">
+                            <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div>
+                        </div>
+                        <div class="showResult d-none">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="row align-items-baseline">
+                                        <label for="eleadDate" class="col-sm-1 offset-sm-1 col-form-label">Date</label>
+                                        <div class="form-group col-sm-4">
+                                            <div class="form-group input-group">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="fa fa-calendar"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control leadDate" name="eleadDate" id="eleadDate" />
+                                            </div>
+                                        </div>
+                                        <label for="eentityId" class="col-sm-2 text-md-center col-form-label">Entity ID</label>
+                                        <div class="form-group col-sm-4">
+                                            <input type="text" class="form-control" name="eentityId" id="eentityId" autocomplete="off" autofill="off" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <!-- <input type="text" class="form-control text-center" name="esubmittedBy" id="esubmittedBy" value="<?php // echo $_SESSION['userName']; 
+                                                                                                                                                ?>" readonly placeholder="Client Care Specialist" autocomplete="off" autofill="off" /> -->
+                                        <?php
+                                        if ($_SESSION['userRole'] == 'Admin' || $_SESSION['userRole'] == $branchAdmin || $_SESSION['userRole'] == $bdcManagerID) {
+                                            echo '<input type="hidden" class="form-control text-center" name="esubmittedBy" id="esubmittedBy" value="' . $_SESSION['userName'] . '" readonly autocomplete="off" autofill="off" />';
+                                            echo '<select class="form-control selectpicker w-auto" id="esubmittedById" name="esubmittedById" data-live-search="true" data-size="4">
+                                                <option value="" selected disabled>Select CCS</option>
+                                                <optgroup class="clientCareSpecialist"></optgroup>
+                                            </select>';
+                                        } else {
+                                            echo '<input type="hidden" class="form-control text-center" name="esubmittedById" id="esubmittedById" value="' . $_SESSION['userId'] . '" readonly autocomplete="off" autofill="off" />';
+                                            echo '<input type="text" class="form-control text-center" name="esubmittedBy" id="esubmittedBy" value="' . $_SESSION['userName'] . '" readonly placeholder="Client Care Specialist" autocomplete="off" autofill="off" />';
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="row align-items-baseline">
+                                        <label for="efname" class="col-sm-3 offset-sm-1 col-form-label">First Name</label>
+                                        <div class="form-group col-sm-8">
+                                            <input type="text" class="form-control" name="efname" id="efname" autocomplete="off" autofill="off" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row align-items-baseline">
+                                        <label for="elname" class="col-sm-4 text-md-center col-form-label">Last Name</label>
+                                        <div class="form-group col-sm-8">
+                                            <input type="text" class="form-control" name="elname" id="elname" autocomplete="off" autofill="off" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row align-items-baseline">
+                                        <label for="esalesConsultant" class="col-sm-5 col-form-label">Sales Consultant</label>
+                                        <div class="form-group col-sm-7">
+                                            <select class="form-control selectpicker w-auto" id="esalesConsultant" name="esalesConsultant" data-live-search="true" data-size="4">
+                                                <option value="" selected disabled>Select</option>
+                                                <optgroup class="salesConsultant"></optgroup>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="row align-items-baseline">
+                                        <label for="evehicle" class="col-sm-3 offset-sm-1 col-form-label">Vehicle</label>
+                                        <div class="form-group col-sm-8">
+                                            <input type="text" class="form-control typeahead typeahead1" id="evehicle" name="evehicle" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="eleadType">
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="eleadType" value="new" id="enew">
+                                            New
+                                        </label>
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="eleadType" value="used" id="eused">
+                                            Used
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row align-items-baseline">
+                                        <label for="eleadStatus" class="col-sm-4 col-form-label">Sold / Show</label>
+                                        <div class="form-group col-sm-8 text-center">
+                                            <div class="btn-group btn-group-toggle w-100 statusRadioButtons" data-toggle="buttons" id="eleadStatus">
+                                                <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                                    <input type="radio" name="eleadStatus" value="sold" id="esold" />
+                                                    Sold
+                                                </label>
+                                                <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                                    <input type="radio" name="eleadStatus" value="show" id="eshow" />
+                                                    Show
+                                                </label>
+                                            </div>
+                                            <!-- <span class="badge-text-primary pl-2 clear-selection" data-id="eleadStatus">Clear Selection</span> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-items-baseline">
+                                <label for="esource" class="col-sm-1 text-sm-right col-form-label">Source</label>
+                                <div class="form-group col-sm-11">
+                                    <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="esource">
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="esource" value="autoAlert" id="eautoAlert">
+                                            Auto Alert
+                                        </label>
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="esource" value="carCode" id="ecarCode">
+                                            Car Code
+                                        </label>
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="esource" value="concierge" id="econcierge">
+                                            Concierge
+                                        </label>
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="esource" value="freshUp" id="efreshUp">
+                                            Fresh Up
+                                        </label>
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="esource" value="internet" id="einternet">
+                                            Internet
+                                        </label>
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="esource" value="phoneUp" id="ephoneUp">
+                                            Phone Up
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <label for="eleadNotes" class="col-sm-1 text-sm-right col-form-label">Notes</label>
+                                <div class="form-group col-sm-11">
+                                    <textarea class="form-control autosize" name="eleadNotes" id="eleadNotes" placeholder="Notes..."></textarea>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row bdc_manager align-items-baseline" id="ebdc_manager">
+
+                                <div class="col-md-12 mb-3 mt-3">
+                                    <p class="h5 text-center">
+                                        Business Development Center Manager Verified
+                                    </p>
+                                </div>
+                                <label for="evarifiedStatus" class="col-sm-1 text-sm-right col-form-label">Status</label>
+                                <div class="form-group col-sm-11">
+                                    <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="evarifiedStatus">
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="evarifiedStatus" value="ok" id="eok">
+                                            OK
+                                        </label>
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="evarifiedStatus" value="showVerified" id="eshowVerified">
+                                            Show Verified
+                                        </label>
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="evarifiedStatus" value="doesNotCount" id="edoesNotCount">
+                                            Does Not Count
+                                        </label>
+                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
+                                            <input type="radio" name="evarifiedStatus" value="lastMonth" id="elastMonth">
+                                            Last Month
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
                     </div>
-                    <div class="showResult d-none">
+                    <div class="modal-footer modal-footer-bordered">
+                        <button type="submit" class="btn btn-primary mr-2">Update Changes</button>
+                        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addNew">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header modal-header-bordered">
+                    <h5 class="modal-title">Add Lead</h5>
+                    <button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                </div>
+                <form id="addNewLead" autocomplete="off" method="post" action="../php_action/createBdcLead.php">
+                    <input type="hidden" name="approvedBy" id="approvedBy" value="<?php echo $managerID; ?>">
+                    <div class="modal-body">
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="row align-items-baseline">
-                                    <label for="eleadDate" class="col-sm-1 offset-sm-1 col-form-label">Date</label>
+                                    <label for="leadDate" class="col-sm-1 offset-sm-1 col-form-label">Date</label>
                                     <div class="form-group col-sm-4">
                                         <div class="form-group input-group">
                                             <div class="input-group-append">
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control leadDate" name="eleadDate" id="eleadDate" />
+                                            <input type="text" class="form-control leadDate" name="leadDate" id="leadDate" />
                                         </div>
                                     </div>
-                                    <label for="eentityId" class="col-sm-2 text-md-center col-form-label">Entity ID</label>
+                                    <label for="entityId" class="col-sm-2 text-md-center col-form-label">Entity ID</label>
                                     <div class="form-group col-sm-4">
-                                        <input type="text" class="form-control" name="eentityId" id="eentityId" autocomplete="off" autofill="off" />
+                                        <input type="text" class="form-control" name="entityId" id="entityId" autocomplete="off" autofill="off" />
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <!-- <input type="text" class="form-control text-center" name="esubmittedBy" id="esubmittedBy" value="<?php // echo $_SESSION['userName']; ?>" readonly placeholder="Client Care Specialist" autocomplete="off" autofill="off" /> -->
                                     <?php
                                     if ($_SESSION['userRole'] == 'Admin' || $_SESSION['userRole'] == $branchAdmin || $_SESSION['userRole'] == $bdcManagerID) {
-                                        echo '<input type="hidden" class="form-control text-center" name="esubmittedBy" id="esubmittedBy" value="' . $_SESSION['userName'] . '" readonly autocomplete="off" autofill="off" />';
-                                        echo '<select class="form-control selectpicker w-auto" id="esubmittedById" name="esubmittedById" data-live-search="true" data-size="4">
+                                        echo '<select class="form-control selectpicker w-auto" id="submittedById" name="submittedById" data-live-search="true" data-size="4">
                                                 <option value="" selected disabled>Select CCS</option>
                                                 <optgroup class="clientCareSpecialist"></optgroup>
                                             </select>';
                                     } else {
-                                        echo '<input type="hidden" class="form-control text-center" name="esubmittedById" id="esubmittedById" value="' . $_SESSION['userId'] . '" readonly autocomplete="off" autofill="off" />';
-                                        echo '<input type="text" class="form-control text-center" name="esubmittedBy" id="esubmittedBy" value="' . $_SESSION['userName'] . '" readonly placeholder="Client Care Specialist" autocomplete="off" autofill="off" />';
+                                        echo '<input type="hidden" class="form-control text-center" name="submittedById" id="submittedById" value="' . $_SESSION['userId'] . '" readonly autocomplete="off" autofill="off" />';
+                                        echo '<input type="text" class="form-control text-center" name="submittedBy" id="submittedBy" value="' . $_SESSION['userName'] . '" readonly placeholder="Client Care Specialist" autocomplete="off" autofill="off" />';
                                     }
                                     ?>
                                 </div>
@@ -302,25 +542,25 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="row align-items-baseline">
-                                    <label for="efname" class="col-sm-3 offset-sm-1 col-form-label">First Name</label>
+                                    <label for="fname" class="col-sm-3 offset-sm-1 col-form-label">First Name</label>
                                     <div class="form-group col-sm-8">
-                                        <input type="text" class="form-control" name="efname" id="efname" autocomplete="off" autofill="off" />
+                                        <input type="text" class="form-control" name="fname" id="fname" autocomplete="off" autofill="off" />
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="row align-items-baseline">
-                                    <label for="elname" class="col-sm-4 text-md-center col-form-label">Last Name</label>
+                                    <label for="lname" class="col-sm-4 text-md-center col-form-label">Last Name</label>
                                     <div class="form-group col-sm-8">
-                                        <input type="text" class="form-control" name="elname" id="elname" autocomplete="off" autofill="off" />
+                                        <input type="text" class="form-control" name="lname" id="lname" autocomplete="off" autofill="off" />
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="row align-items-baseline">
-                                    <label for="esalesConsultant" class="col-sm-5 col-form-label">Sales Consultant</label>
+                                    <label for="salesConsultant" class="col-sm-5 col-form-label">Sales Consultant</label>
                                     <div class="form-group col-sm-7">
-                                        <select class="form-control selectpicker w-auto" id="esalesConsultant" name="esalesConsultant" data-live-search="true" data-size="4">
+                                        <select class="form-control selectpicker w-auto" id="salesConsultant" name="salesConsultant" data-live-search="true" data-size="4">
                                             <option value="" selected disabled>Select</option>
                                             <optgroup class="salesConsultant"></optgroup>
                                         </select>
@@ -331,314 +571,120 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="row align-items-baseline">
-                                    <label for="evehicle" class="col-sm-3 offset-sm-1 col-form-label">Vehicle</label>
+                                    <label for="vehicle" class="col-sm-3 offset-sm-1 col-form-label">Vehicle</label>
                                     <div class="form-group col-sm-8">
-                                        <input type="text" class="form-control typeahead typeahead1" id="evehicle" name="evehicle" />
+                                        <input type="text" class="form-control typeahead typeahead1" id="vehicle" name="vehicle" />
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-4 form-group">
-                                <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="eleadType">
+                                <div class="btn-group btn-group-toggle w-100 statusRadioButtons" data-toggle="buttons" id="leadType">
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="eleadType" value="new" id="enew">
+                                        <input type="radio" name="leadType" value="new" id="new">
                                         New
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="eleadType" value="used" id="eused">
+                                        <input type="radio" name="leadType" value="used" id="used">
                                         Used
                                     </label>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="row align-items-baseline">
-                                    <label for="eleadStatus" class="col-sm-4 col-form-label">Sold / Show</label>
+                                    <label for="leadStatus" class="col-sm-4 col-form-label">Sold / Show</label>
                                     <div class="form-group col-sm-8 text-center">
-                                        <div class="btn-group btn-group-toggle w-100 statusRadioButtons" data-toggle="buttons" id="eleadStatus">
+                                        <div class="btn-group btn-group-toggle w-100 statusRadioButtons" data-toggle="buttons" id="leadStatus">
                                             <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                                <input type="radio" name="eleadStatus" value="sold" id="esold" />
+                                                <input type="radio" name="leadStatus" value="sold" id="leadStatusSold" />
                                                 Sold
                                             </label>
                                             <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                                <input type="radio" name="eleadStatus" value="show" id="eshow" />
+                                                <input type="radio" name="leadStatus" value="show" id="leadStatusShow" />
                                                 Show
                                             </label>
                                         </div>
-                                        <!-- <span class="badge-text-primary pl-2 clear-selection" data-id="eleadStatus">Clear Selection</span> -->
+                                        <!-- <span class="badge-text-primary pl-2 clear-selection" data-id="leadStatus">Clear Selection</span> -->
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row align-items-baseline">
-                            <label for="esource" class="col-sm-1 text-sm-right col-form-label">Source</label>
+                            <label for="source" class="col-sm-1 text-sm-right col-form-label">Source</label>
                             <div class="form-group col-sm-11">
-                                <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="esource">
+                                <div class="btn-group btn-group-toggle w-100 statusRadioButtons" data-toggle="buttons" id="source">
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="esource" value="autoAlert" id="eautoAlert">
+                                        <input type="radio" name="source" value="autoAlert" id="autoAlert">
                                         Auto Alert
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="esource" value="carCode" id="ecarCode">
+                                        <input type="radio" name="source" value="carCode" id="carCode">
                                         Car Code
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="esource" value="concierge" id="econcierge">
+                                        <input type="radio" name="source" value="concierge" id="concierge">
                                         Concierge
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="esource" value="freshUp" id="efreshUp">
+                                        <input type="radio" name="source" value="freshUp" id="freshUp">
                                         Fresh Up
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="esource" value="internet" id="einternet">
+                                        <input type="radio" name="source" value="internet" id="internet">
                                         Internet
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="esource" value="phoneUp" id="ephoneUp">
+                                        <input type="radio" name="source" value="phoneUp" id="phoneUp">
                                         Phone Up
                                     </label>
                                 </div>
                             </div>
 
-                            <label for="eleadNotes" class="col-sm-1 text-sm-right col-form-label">Notes</label>
+                            <label for="leadNotes" class="col-sm-1 text-sm-right col-form-label">Notes</label>
                             <div class="form-group col-sm-11">
-                                <textarea class="form-control autosize" name="eleadNotes" id="eleadNotes" placeholder="Notes..."></textarea>
+                                <textarea class="form-control autosize" name="leadNotes" id="leadNotes" placeholder="Notes..."></textarea>
                             </div>
                         </div>
                         <hr>
-                        <div class="row bdc_manager align-items-baseline" id="ebdc_manager">
+                        <div class="row bdc_manager align-items-baseline" id="bdc_manager">
 
                             <div class="col-md-12 mb-3 mt-3">
                                 <p class="h5 text-center">
                                     Business Development Center Manager Verified
                                 </p>
                             </div>
-                            <label for="evarifiedStatus" class="col-sm-1 text-sm-right col-form-label">Status</label>
+                            <label for="varifiedStatus" class="col-sm-1 text-sm-right col-form-label">Status</label>
                             <div class="form-group col-sm-11">
-                                <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="evarifiedStatus">
+                                <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="varifiedStatus">
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="evarifiedStatus" value="ok" id="eok">
+                                        <input type="radio" name="varifiedStatus" value="ok" id="ok">
                                         OK
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="evarifiedStatus" value="showVerified" id="eshowVerified">
+                                        <input type="radio" name="varifiedStatus" value="showVerified" id="showVerified">
                                         Show Verified
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="evarifiedStatus" value="doesNotCount" id="edoesNotCount">
+                                        <input type="radio" name="varifiedStatus" value="doesNotCount" id="doesNotCount">
                                         Does Not Count
                                     </label>
                                     <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                        <input type="radio" name="evarifiedStatus" value="lastMonth" id="elastMonth">
+                                        <input type="radio" name="varifiedStatus" value="lastMonth" id="lastMonth">
                                         Last Month
                                     </label>
                                 </div>
                             </div>
                         </div>
 
-
                     </div>
-                </div>
-                <div class="modal-footer modal-footer-bordered">
-                    <button type="submit" class="btn btn-primary mr-2">Update Changes</button>
-                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
-                </div>
-            </form>
-
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="addNew">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header modal-header-bordered">
-                <h5 class="modal-title">Add Lead</h5>
-                <button type="button" class="btn btn-label-danger btn-icon" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                    <div class="modal-footer modal-footer-bordered">
+                        <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
             </div>
-            <form id="addNewLead" autocomplete="off" method="post" action="../php_action/createBdcLead.php">
-                <input type="hidden" name="approvedBy" id="approvedBy" value="<?php echo $managerID; ?>">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="row align-items-baseline">
-                                <label for="leadDate" class="col-sm-1 offset-sm-1 col-form-label">Date</label>
-                                <div class="form-group col-sm-4">
-                                    <div class="form-group input-group">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text"><i class="fa fa-calendar"></i>
-                                            </span>
-                                        </div>
-                                        <input type="text" class="form-control leadDate" name="leadDate" id="leadDate" />
-                                    </div>
-                                </div>
-                                <label for="entityId" class="col-sm-2 text-md-center col-form-label">Entity ID</label>
-                                <div class="form-group col-sm-4">
-                                    <input type="text" class="form-control" name="entityId" id="entityId" autocomplete="off" autofill="off" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <?php
-                                if ($_SESSION['userRole'] == 'Admin' || $_SESSION['userRole'] == $branchAdmin || $_SESSION['userRole'] == $bdcManagerID) {
-                                    echo '<select class="form-control selectpicker w-auto" id="submittedById" name="submittedById" data-live-search="true" data-size="4">
-                                                <option value="" selected disabled>Select CCS</option>
-                                                <optgroup class="clientCareSpecialist"></optgroup>
-                                            </select>';
-                                } else {
-                                    echo '<input type="hidden" class="form-control text-center" name="submittedById" id="submittedById" value="' . $_SESSION['userId'] . '" readonly autocomplete="off" autofill="off" />';
-                                    echo '<input type="text" class="form-control text-center" name="submittedBy" id="submittedBy" value="' . $_SESSION['userName'] . '" readonly placeholder="Client Care Specialist" autocomplete="off" autofill="off" />';
-                                }
-                                ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="row align-items-baseline">
-                                <label for="fname" class="col-sm-3 offset-sm-1 col-form-label">First Name</label>
-                                <div class="form-group col-sm-8">
-                                    <input type="text" class="form-control" name="fname" id="fname" autocomplete="off" autofill="off" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="row align-items-baseline">
-                                <label for="lname" class="col-sm-4 text-md-center col-form-label">Last Name</label>
-                                <div class="form-group col-sm-8">
-                                    <input type="text" class="form-control" name="lname" id="lname" autocomplete="off" autofill="off" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="row align-items-baseline">
-                                <label for="salesConsultant" class="col-sm-5 col-form-label">Sales Consultant</label>
-                                <div class="form-group col-sm-7">
-                                    <select class="form-control selectpicker w-auto" id="salesConsultant" name="salesConsultant" data-live-search="true" data-size="4">
-                                        <option value="" selected disabled>Select</option>
-                                        <optgroup class="salesConsultant"></optgroup>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="row align-items-baseline">
-                                <label for="vehicle" class="col-sm-3 offset-sm-1 col-form-label">Vehicle</label>
-                                <div class="form-group col-sm-8">
-                                    <input type="text" class="form-control typeahead typeahead1" id="vehicle" name="vehicle" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <div class="btn-group btn-group-toggle w-100 statusRadioButtons" data-toggle="buttons" id="leadType">
-                                <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                    <input type="radio" name="leadType" value="new" id="new">
-                                    New
-                                </label>
-                                <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                    <input type="radio" name="leadType" value="used" id="used">
-                                    Used
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="row align-items-baseline">
-                                <label for="leadStatus" class="col-sm-4 col-form-label">Sold / Show</label>
-                                <div class="form-group col-sm-8 text-center">
-                                    <div class="btn-group btn-group-toggle w-100 statusRadioButtons" data-toggle="buttons" id="leadStatus">
-                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                            <input type="radio" name="leadStatus" value="sold" id="leadStatusSold" />
-                                            Sold
-                                        </label>
-                                        <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                            <input type="radio" name="leadStatus" value="show" id="leadStatusShow" />
-                                            Show
-                                        </label>
-                                    </div>
-                                    <!-- <span class="badge-text-primary pl-2 clear-selection" data-id="leadStatus">Clear Selection</span> -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row align-items-baseline">
-                        <label for="source" class="col-sm-1 text-sm-right col-form-label">Source</label>
-                        <div class="form-group col-sm-11">
-                            <div class="btn-group btn-group-toggle w-100 statusRadioButtons" data-toggle="buttons" id="source">
-                                <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                    <input type="radio" name="source" value="autoAlert" id="autoAlert">
-                                    Auto Alert
-                                </label>
-                                <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                    <input type="radio" name="source" value="carCode" id="carCode">
-                                    Car Code
-                                </label>
-                                <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                    <input type="radio" name="source" value="concierge" id="concierge">
-                                    Concierge
-                                </label>
-                                <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                    <input type="radio" name="source" value="freshUp" id="freshUp">
-                                    Fresh Up
-                                </label>
-                                <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                    <input type="radio" name="source" value="internet" id="internet">
-                                    Internet
-                                </label>
-                                <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                    <input type="radio" name="source" value="phoneUp" id="phoneUp">
-                                    Phone Up
-                                </label>
-                            </div>
-                        </div>
-
-                        <label for="leadNotes" class="col-sm-1 text-sm-right col-form-label">Notes</label>
-                        <div class="form-group col-sm-11">
-                            <textarea class="form-control autosize" name="leadNotes" id="leadNotes" placeholder="Notes..."></textarea>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row bdc_manager align-items-baseline" id="bdc_manager">
-
-                        <div class="col-md-12 mb-3 mt-3">
-                            <p class="h5 text-center">
-                                Business Development Center Manager Verified
-                            </p>
-                        </div>
-                        <label for="varifiedStatus" class="col-sm-1 text-sm-right col-form-label">Status</label>
-                        <div class="form-group col-sm-11">
-                            <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="varifiedStatus">
-                                <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                    <input type="radio" name="varifiedStatus" value="ok" id="ok">
-                                    OK
-                                </label>
-                                <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                    <input type="radio" name="varifiedStatus" value="showVerified" id="showVerified">
-                                    Show Verified
-                                </label>
-                                <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                    <input type="radio" name="varifiedStatus" value="doesNotCount" id="doesNotCount">
-                                    Does Not Count
-                                </label>
-                                <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
-                                    <input type="radio" name="varifiedStatus" value="lastMonth" id="lastMonth">
-                                    Last Month
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-footer modal-footer-bordered">
-                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
-                </div>
-            </form>
         </div>
     </div>
-</div>
 
 
-<?php require_once('../includes/footer.php') ?>
-<script type="text/javascript" src="../custom/js/bdc.js"></script>
+    <?php require_once('../includes/footer.php') ?>
+    <script type="text/javascript" src="../custom/js/bdc.js"></script>

@@ -129,12 +129,14 @@ cal.on({
         }
     },
     'beforeCreateSchedule': function (event) {
+        // console.log(event);
         var triggerEventName = event.triggerEventName;
         if (triggerEventName === 'click') {
             return false;
         } else if (triggerEventName === 'dblclick') {
             return false;
         } else if (triggerEventName == 'mouseup') {
+            creareAppointment(event?.start)
             return false;
         }
 
@@ -150,6 +152,16 @@ cal.on({
         cal.deleteSchedule(e.schedule.id, e.schedule.calendarId);
     }
 });
+
+
+function creareAppointment(dateTime) {
+    $('#addNew').modal('show');
+    let date = moment(dateTime._date).format('MM-DD-YYYY');
+    $('#scheduleDate').val(date);
+    $('#scheduleDate').datepicker('update', date);
+    $('#scheduleTime').val(moment(dateTime._date).format("hh:mm A"));
+    $('.selectpicker').selectpicker('refresh');
+}
 
 
 
@@ -251,6 +263,42 @@ $(function () {
     loadSoldLogs();
     loadDeliveryCoordinator();
     disabledManagerDiv();
+
+    let timeoutIdd;
+
+    $('#search-in-calendar').on('input', function (e) {
+
+        let search = e.target.value;
+        if (search != "") {
+            debounce(() => {
+                let newArray = DefaultScheduleList.filter((element) => {
+                    var stock = (element?.data?.stock).toLowerCase();
+                    var vin = (element?.data?.vin).toLowerCase();
+                    var consultant = (element?.data?.consultant).toLowerCase();
+                    var coordinator = (element?.data?.coordinator).toLowerCase();
+                    var customer = (element?.data?.customer).toLowerCase();
+                    return stock.indexOf(search.toLowerCase()) >= 0 ||
+                        vin.indexOf(search.toLowerCase()) >= 0 ||
+                        consultant.indexOf(search.toLowerCase()) >= 0 ||
+                        coordinator.indexOf(search.toLowerCase()) >= 0 ||
+                        customer.indexOf(search.toLowerCase()) >= 0;
+                });
+                ScheduleList = [...newArray];
+                setSchedules()
+                refreshScheduleVisibility();
+            }, 500);
+
+        } else {
+            ScheduleList = [...DefaultScheduleList];
+            setSchedules()
+            refreshScheduleVisibility();
+        }
+    })
+
+    const debounce = (callback, delay) => {
+        clearTimeout(timeoutIdd);
+        timeoutIdd = setTimeout(callback, delay);
+    }
 
 
     $(".scheduleDate").datepicker({
@@ -560,7 +608,11 @@ $(function () {
                         let dateTime = moment(dateFormat + ' ' + timeFormat, 'YYYY-MM-DD hh:mm');
                         let allready_appointed = false;
                         scheduledAppointments.forEach(appointment => {
-                            let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm');
+                            
+                            // let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm');
+                            // coordinator should available at least 1h before the schedule start
+                            let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm').subtract(1, 'hour');
+
                             let schedule_end = moment(appointment.schedule_end, 'YYYY-MM-DD hh:mm');
                             if (dateTime.isBetween(schedule_start, schedule_end, null, '[]')) {
                                 // check today availabilit
@@ -667,6 +719,7 @@ class InfiniteScroller {
     }
     setScroller(element, array) {
         var p = element.parentElement.id;
+        let timeoutId;
 
         // var Selectpicker = $('.selectpicker').data('selectpicker');
         var Selectpicker = $('#' + p).data('selectpicker');
@@ -705,19 +758,25 @@ class InfiniteScroller {
             if (search != '' && search.length > 3) {
                 element.innerHTML = '';
                 $('.dropdown-menu.show').block();
-                const results = array.filter(element => {
-                    var stock = (element[4]).toLowerCase();
-                    var vin = (element[5]).toLowerCase();
-                    return stock.indexOf(search.toLowerCase()) >= 0 || vin.indexOf(search.toLowerCase()) >= 0;
-                });
-                results.forEach((item, i) => {
-                    // element.innerHTML += `<option value="${item[0]}" data-scroll-index="${i}" title="${item[4]}"> ${item[4]} - ${item[5]} </option>`;
-                    $(element).append(`<option value="${item[0]}" data-scroll-index="${i}" title="${item[4]}"> ${item[4]} - ${item[5]} </option>`);
-                });
-                $('.dropdown-menu.show').unblock();
-                $('.selectpicker').selectpicker('refresh');
-                // $('#' + p).addClass('selectpicker');
-                // $('#' + p).selectpicker('render');
+
+                debounce(() => {
+                    const results = array.filter(element => {
+                        if (element[4] && element[5]) {
+                            var stock = (element[4]).toLowerCase();
+                            var vin = (element[5]).toLowerCase();
+                            return stock.indexOf(search.toLowerCase()) >= 0 || vin.indexOf(search.toLowerCase()) >= 0;
+                        }
+                    });
+                    results.forEach((item, i) => {
+                        // element.innerHTML += `<option value="${item[0]}" data-scroll-index="${i}" title="${item[4]}"> ${item[4]} - ${item[5]} </option>`;
+                        $(element).append(`<option value="${item[0]}" data-scroll-index="${i}" title="${item[4]}"> ${item[4]} - ${item[5]} </option>`);
+                    });
+                    $('.dropdown-menu.show').unblock();
+                    $('.selectpicker').selectpicker('refresh');
+                    // $('#' + p).addClass('selectpicker');
+                    // $('#' + p).selectpicker('render');
+                }, 500);
+
             } else if (search == '') {
                 element.innerHTML = '';
                 $('.dropdown-menu.show').block();
@@ -731,6 +790,11 @@ class InfiniteScroller {
             }
             $('.dropdown-menu.show').unblock();
         });
+
+        const debounce = (callback, delay) => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(callback, delay);
+        }
     }
 }
 
@@ -797,11 +861,12 @@ function disabledManagerDiv() {
 }
 function fetchSchedules() {
     $.ajax({
-        url: '../php_action/fetchSchedules.php',
+        url: '../php_action/fetchSchedules_calendar.php',
         type: "GET",
         dataType: 'json',
         success: function (response) {
             var dataArray = response.data;
+            DefaultScheduleList = [];
             ScheduleList = [];
             dataArray.forEach(element => {
                 let userRole = element[2] != 'Admin' ? element[2] : 1;
@@ -834,9 +899,17 @@ function fetchSchedules() {
                             appointmentId: element[17] ? element[0] : null,
                         }
                     },
-                    customStyle: `background-color: ${coordinator_color}; color: ${calendar.color};`
+                    customStyle: `background-color: ${coordinator_color}; color: ${calendar.color};`,
+                    data: { // for search
+                        customer: element[8],
+                        consultant: element[14],
+                        coordinator: element[11],
+                        stock: element[12],
+                        vin: element[22],
+                    }
                 };
                 ScheduleList.push(schedule);
+                DefaultScheduleList.push(schedule);
             });
 
             setSchedules()
@@ -855,6 +928,7 @@ function editShedule(id = null) {
             data: { id: id },
             dataType: 'json',
             success: function (response) {
+                console.log(response);
                 $('.spinner-grow').addClass('d-none');
                 // modal result
                 $('.showResult').removeClass('d-none');
@@ -922,11 +996,26 @@ function editShedule(id = null) {
                 }
 
 
-                if (response.allowDeliveryCoordinator == true) {
+
+                if (response.editPersonalOnly == true) {
                     $('.delivery_coordinator').addClass('disabled-div');
                     $(".delivery_coordinator").find("*").prop("readonly", true);
+                    $('.appointment_div').addClass('disabled-div');
+                    $(".appointment_div").find("*").prop("readonly", true);
+                    $('.manager_override_div').addClass('disabled-div');
+                    $(".manager_override_div").find("*").prop("readonly", true);
+                    $('#esubmittedBy , #submittedBy , #eoverrideByName , #overrideByName , #customerName , #ecustomerName').addClass('disabled-div');
+                    $("#esubmittedBy , #submittedBy , #eoverrideByName , #overrideByName , #customerName , #ecustomerName").find("*").prop("readonly", true);
+                    $('#editScheduleForm button[type=submit]').addClass('d-none')
                 } else {
-                    disabledManagerDiv();
+                    $('#editScheduleForm button[type=submit]').removeClass('d-none')
+
+                    if (response.allowDeliveryCoordinator == true) {
+                        $('.delivery_coordinator').addClass('disabled-div');
+                        $(".delivery_coordinator").find("*").prop("readonly", true);
+                    } else {
+                        disabledManagerDiv();
+                    }
                 }
 
                 $('#ecoordinator').val(response.coordinator);

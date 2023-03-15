@@ -30,6 +30,12 @@ if ($_POST) {
     $repairReturn = (isset($_POST['repairReturn'])) ? mysqli_real_escape_string($connect, $_POST['repairReturn']) : "";
     $resend = (isset($_POST['resend'])) ? "true" : "false";
 
+    $repairSent_log = (isset($_POST['repair_sent_log'])) ? mysqli_real_escape_string($connect, $_POST['repair_sent_log']) : "";
+    $repairRetrun_log = (isset($_POST['repair_returned_log'])) ? mysqli_real_escape_string($connect, $_POST['repair_returned_log']) : "";
+    $repairs_log = (isset($_POST['repairs_log'])) ? mysqli_real_escape_string($connect, $_POST['repairs_log']) : "";
+    $repairPaid_log = (isset($_POST['repair_paid_log'])) ? mysqli_real_escape_string($connect, $_POST['repair_paid_log']) : "";
+    $bodyshop_log = (isset($_POST['bodyshop_log'])) ? mysqli_real_escape_string($connect, $_POST['bodyshop_log']) : "";
+
     $windshield = (isset($_POST['windshield'])) ? implode("__", $_POST['windshield']) : "";
     $windshield = ($windshield ===  "") ? "" :   "__" . $windshield . "__";
     $windshield = (isset($_POST['windshield_done'])) ? $windshield . "Done__" : $windshield;
@@ -80,11 +86,6 @@ if ($_POST) {
 
 
 
-    $repairSent_log = "";
-    $repairRetrun_log = "";
-    $repairs_log = "";
-    $repairPaid_log = "";
-    $bodyshop_log = "";
 
 
     $checkSql = "SELECT * FROM `inspections` WHERE inv_id = '$vehicleId' AND status = 1";
@@ -92,7 +93,22 @@ if ($_POST) {
     if ($result->num_rows > 0) {
 
         while ($row = $result->fetch_assoc()) {
-            if ($resend == 'true' && $row['resend'] == 'false') {
+            // if ($resend == 'true' && $row['resend'] == 'false') {
+            //     $repairSent_log = $row['repair_sent'];
+            //     $repairRetrun_log = $row['repair_returned'];
+            //     $repairs_log = $row['repairs'];
+            //     $repairPaid_log = $row['repair_paid'];
+            //     $bodyshop_log = $row['shops'];
+            // }
+            if (
+                $resend == 'true' &&
+                $repairSent_log == "" &&
+                $repairRetrun_log == "" &&
+                $repairs_log == "" &&
+                $repairPaid_log == "" &&
+                $bodyshop_log == "" &&
+                $row['resend'] == 'false'
+            ) {
                 $repairSent_log = $row['repair_sent'];
                 $repairRetrun_log = $row['repair_returned'];
                 $repairs_log = $row['repairs'];
@@ -155,18 +171,12 @@ if ($_POST) {
 
 
 
-    // echo $vehicleId . '<br />';
-    // echo $lotNotes . '<br />';
-    // echo $recon . '<br />';
-    // echo $repais . '<br />';
-    // echo $bodyshop . '<br />';
-    // echo $estimate . '<br />';
-    // echo $repairPaid . '<br />';
-    // echo $repairSent . '<br />';  // dates
-    // echo $repairReturn . '<br />'; // dates
-    // echo $windshield . '<br />';  // dates
-    // echo $wheels . '<br />'; // dates
-    // echo $resend . '<br />'; // dates
+    // echo $resend . '<br />';
+    // echo $repairSent_log . '<br />';
+    // echo $repairRetrun_log . '<br />';
+    // echo $repairs_log . '<br />';
+    // echo $repairPaid_log . '<br />';
+    // echo $bodyshop_log . '<br />';
 
 
 
