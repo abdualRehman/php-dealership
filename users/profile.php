@@ -158,7 +158,7 @@ if ($mainResult->num_rows == 1) {
                                         </form>
                                     </div>
                                 </div>
-                                <div class="card text-center m-3">
+                                <!-- <div class="card text-center m-3">
                                     <form id="otpDetails" autocomplete="off" method="post" action="../php_action/updateProfile.php">
                                         <div class="card-body">
                                             <h3 class="card-title1">OTP Settings</h3>
@@ -195,7 +195,7 @@ if ($mainResult->num_rows == 1) {
                                             </div>
                                         </div>
                                     </form>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="col-md-4 pb-3">
                                 <div class="card text-center m-3" style="height:97%;">

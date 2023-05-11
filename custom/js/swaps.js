@@ -58,7 +58,6 @@ $(function () {
             {
                 targets: [5],
                 createdCell: function (td, cellData, rowData, row, col) {
-                    console.log(rowData[1]);
                     if (cellData == 'Yes') {
                         $(td).html('<h2 class="badge badge-xl h1 badge-success">Yes</h2>');
                     } else if (cellData == 'No') {
@@ -631,7 +630,7 @@ function loadStock() {
     $.ajax({
         url: '../php_action/fetchInvForSearch.php',
         type: "POST",
-        data: { type: 'NEW' },
+        data: { type: 'NEW', removeStatus: false },
         dataType: 'json',
         success: function (response) {
             stockArray = response.data;
