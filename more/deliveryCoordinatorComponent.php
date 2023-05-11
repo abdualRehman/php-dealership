@@ -66,6 +66,33 @@
     .clear-selection {
         cursor: pointer;
     }
+
+    .loading {
+        position: relative;
+        cursor: not-allowed !important;
+        pointer-events: none !important;
+        opacity: 0.5;
+    }
+
+    .loading:before {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 20%;
+        left: 30%;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #fff;
+        border-top-color: #999;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
 </style>
 
 <div class="content">
@@ -343,7 +370,7 @@
 
                 </div>
                 <div class="modal-footer modal-footer-bordered">
-                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <button type="submit" id="SubmitBtn" class="btn btn-primary mr-2">Submit</button>
                     <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
                 </div>
             </form>
@@ -459,6 +486,7 @@
                             <div class="row d-flex flex-row align-items-center">
                                 <label for="edelivery" class="col-sm-2 text-sm-center col-form-label">Delivery</label>
                                 <div class="form-group col-sm-10">
+                                    <input type="hidden" name="prev_delivery" id="prev_delivery" value="">
                                     <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="edelivery">
                                         <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                             <input type="radio" name="edelivery" value="spotDelivery" id="espotDelivery">
@@ -549,7 +577,7 @@
                     </div>
                 </div>
                 <div class="modal-footer modal-footer-bordered">
-                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <button type="submit" id="eSubmitBtn" data-loading-text="Loading..." class="btn btn-primary mr-2">Submit</button>
                     <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
                 </div>
             </form>

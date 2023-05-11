@@ -1,8 +1,7 @@
 <?php
-require_once 'php_action/db/db_connect.php';
+// require_once 'php_action/db/db_connect.php';
 
 session_start();
-
 
 if (isset($_SESSION['userId'])) {
     if (isset($_GET['redirect'])) {
@@ -13,74 +12,6 @@ if (isset($_SESSION['userId'])) {
 }
 
 $errors = array();
-
-if ($_POST) {
-
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    if (empty($email) || empty($password)) {
-        if ($email == "") {
-            $errors[] = "Email is required";
-        }
-
-        if ($password == "") {
-            $errors[] = "Password is required";
-        }
-    } else {
-
-        $sql = "SELECT * FROM users WHERE email = '$email' AND status = 1";
-        $result = $connect->query($sql);
-
-        if ($result->num_rows == 1) {
-            $fRow = $result->fetch_assoc();
-            
-            $password = md5($password);
-            // echo $password;
-            // exists
-            $mainSql = "SELECT users.* , role.role_name , user_location.name as locName FROM users LEFT JOIN role ON users.role = role.role_id LEFT JOIN user_location ON users.location = user_location.id WHERE users.email = '$email' AND users.password = '$password' AND users.status = 1 ".($fRow['role'] == 'Admin' ? "" : " AND user_location.status = 1")."";
-            $mainResult = $connect->query($mainSql);
-
-            if ($mainResult->num_rows == 1) {
-                $value = $mainResult->fetch_assoc();
-                $user_id = $value['id'];
-                $role_id = $value['role'];
-
-                // set session
-                $_SESSION['userId'] = $user_id;
-                $_SESSION['userName'] = $value['username'];
-                $_SESSION['userEmail'] = $value['email'];
-                $_SESSION['userProfile'] = $value['profile'];
-                $_SESSION['userRoleName'] = $value['role_name'];
-                $_SESSION['userRole'] = $role_id;
-                $_SESSION['userLoc'] = $value['location'] != '' ? $value['location'] : 1;
-                $_SESSION['userLocName'] = $value['locName'];
-
-                $checkSql = "SELECT modules , functions , permission FROM `role_mod` WHERE role_id = '$role_id'";
-                $result = $connect->query($checkSql);
-                // $output = array('data' => array());
-                $output = array();
-                if ($result && $result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        // $output['data'][] = array($row);
-                        array_push($output, $row);
-                    }
-                }
-                $_SESSION['permissionsArray'] = $output;
-
-                if (isset($_GET['redirect'])) {
-                    header('location:' . $_GET['redirect']);
-                } else {
-                    header('location: dashboard.php');
-                }
-            } else {
-                $errors[] = "Incorrect email/password combination";
-            } // /else
-        } else {
-            $errors[] = "Email doesnot exists";
-        } // /else
-    } // /else not empty email // password
-} // /if $_POST
 
 if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
     $url = "https://";
@@ -137,23 +68,27 @@ $_SESSION['siteurl'] = $url;
                                             <div class="avatar-display"><i class="fa fa-user-alt"></i></div>
                                         </div>
                                     </div>
-                                    <?php if ($errors) {
-                                        foreach ($errors as $key => $value) {
-                                            echo '<div class="alert alert-danger show d-flex w-100 justify-content-between">
-                                                    <div class="widget18">
-                                                    <div class="widget18-icon"><i data-feather="alert-circle"></i></div>
-                                                    <span class="widget18-text">' . $value . '</span>
-                                                    </div>
-                                                    <button type="button" class="btn btn-text-light btn-icon alert-dismiss" data-dismiss="alert"><i class="fa fa-times"></i></button>
-                                            </div>';
-                                        }
-                                    } ?>
-                                    <form id="login-form" action="" method="post">
+                                    <?php
+                                    // if ($errors) {
+                                    //     foreach ($errors as $key => $value) {
+                                    //         echo '<div class="alert alert-danger show d-flex w-100 justify-content-between">
+                                    //                 <div class="widget18">
+                                    //                 <div class="widget18-icon"><i data-feather="alert-circle"></i></div>
+                                    //                 <span class="widget18-text">' . $value . '</span>
+                                    //                 </div>
+                                    //                 <button type="button" class="btn btn-text-light btn-icon alert-dismiss" data-dismiss="alert"><i class="fa fa-times"></i></button>
+                                    //         </div>';
+                                    //     }
+                                    // } 
+                                    ?>
+
+                                    <div id="login-error-message"></div>
+                                    <form id="login-form" action="php_action/login.php" method="post">
                                         <div class="form-group">
-                                            <div class="float-label float-label-lg"><input class="form-control form-control-lg" type="email" id="email" name="email" placeholder="Please insert your email"> <label for="email">Email</label></div>
+                                            <div class="float-label float-label-lg"><input class="form-control form-control-lg" type="email" id="email" name="email" placeholder="Please insert your email" autocomplete="username"> <label for="email">Email</label></div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="float-label float-label-lg"><input class="form-control form-control-lg" type="password" id="password" name="password" placeholder="Please insert your password"> <label for="password">Password</label></div>
+                                            <div class="float-label float-label-lg"><input class="form-control form-control-lg" type="password" id="password" name="password" placeholder="Please insert your password" autocomplete="current-password"> <label for="password">Password</label></div>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between mb-3">
                                             <div class="form-group mb-0">
@@ -225,6 +160,115 @@ $_SESSION['siteurl'] = $url;
                 }
             })
         })
+    </script>
+
+    <script>
+        $("#login-form").validate({
+            rules: {
+                email: {
+                    required: !0,
+                },
+                password: {
+                    required: !0,
+                }
+            },
+            submitHandler: function(form, e) {
+                e.preventDefault();
+                var form = $('#login-form');
+                $.ajax({
+                    url: 'php_action/login.php',
+                    type: 'POST',
+                    data: form.serialize(),
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response);
+                        if (!response.send_otp) {
+                            if (response.success == false) {
+                                $('#login-error-message').html(`<div class="alert alert-danger show d-flex w-100 justify-content-between">
+                                    <div class="widget18">
+                                    <div class="widget18-icon"><i data-feather="alert-circle"></i></div>
+                                    <span class="widget18-text">${response.messages}</span>
+                                    </div>
+                                    <button type="button" class="btn btn-text-light btn-icon alert-dismiss" data-dismiss="alert"><i class="fa fa-times"></i></button>
+                                </div>`);
+                            } else {
+                                window.location.replace("dashboard.php");
+                            }
+                        } else {
+                            Swal.fire({
+                                title: 'Please Enter your OTP',
+                                input: 'text',
+                                inputAttributes: {
+                                    autocapitalize: 'off'
+                                },
+                                showCancelButton: true,
+                                showCloseButton: false,
+                                confirmButtonText: 'Submit',
+                                cancelButtonText: 'Cancel and Resend',
+                                showLoaderOnConfirm: true,
+                                preConfirm: (text) => {
+                                    if (text != "") {
+                                        // console.log(text);
+                                        return $.ajax({
+                                            url: 'php_action/confirm_otp.php',
+                                            type: "POST",
+                                            dataType: 'json',
+                                            data: {
+                                                text: text
+                                            },
+                                            success: function(response) {
+                                                console.log("response", response);
+                                                if (response.success == false) {
+                                                    Swal.showValidationMessage(`Wrong OTP`);
+                                                } else {
+                                                    return JSON.stringify(response);
+
+                                                }
+                                            },
+                                            error: function(error) {
+                                                console.log(error);
+                                                Swal.showValidationMessage(
+                                                    `Request failed: ${error.statusText}`
+                                                )
+                                            }
+                                        });
+                                    } else {
+                                        Swal.showValidationMessage(`Field is required`);
+                                        !Swal.isLoading();
+                                    }
+                                },
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                            }).then((result) => {
+                                console.log(result);
+                                if (result.value?.success == true) {
+                                    window.location.replace("dashboard.php");
+                                } else if (result.value?.success == false) {
+                                    Swal.showValidationMessage(`Wrong OTP`);
+                                } else {
+                                    if (result.isConfirmed) {
+                                        Swal.fire({
+                                            title: `${result.value.success == 'true' ? 'Success' : 'Failed'}`,
+                                            title: `${result.value.messages}`,
+                                        })
+                                    }
+
+                                }
+                            })
+
+                        }
+                    },
+                    error: function(error) {
+                        console.log("error", error);
+                    }
+                });
+                return false;
+
+
+
+
+            }
+        });
     </script>
 
 

@@ -254,6 +254,7 @@ if ($salesConsultantID != $_SESSION['userRole']) {
                                     <th>Images</th>
                                     <th>Action</th>
                                     <th>Sale Status</th>
+                                    <th>Vin</th>
                                 </tr>
                             </thead>
                         </table>

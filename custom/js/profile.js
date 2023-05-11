@@ -176,4 +176,60 @@ $(function () {
             return false;
         }
     });
+
+    $.validator.addMethod("usPhoneFormat", function (value, element) {
+        return this.optional(element) || /^\d{3}-\d{3}-\d{4}$/.test(value);
+    }, "Please enter a valid US phone number in the format XXX-XXX-XXXX.");
+
+    $("#otpDetails").validate({
+        rules: {
+            mobile: {
+                usPhoneFormat: true,
+            },
+        },
+        messages: {
+            email: {
+                usPhoneFormat: "Please enter a valid US phone number in the format XXX-XXX-XXXX."
+            },
+        },
+        submitHandler: function (form, e) {
+            e.preventDefault();
+
+            var form = $('#otpDetails');
+            var fd = new FormData(document.getElementById("otpDetails"));
+            fd.append("formType", "changeOTP");
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                // data: form.serialize(),
+                data: fd,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function (response) {
+                    // console.log(response);
+                    if (response.success == true) {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500,
+                        })
+
+
+                    } else {
+                        e1.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: response.messages,
+                            showConfirmButton: !1,
+                            timer: 2500
+                        })
+                    }
+                }
+            });
+            return false;
+        }
+    });
 });

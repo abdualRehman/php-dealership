@@ -979,7 +979,7 @@ function toggleFilterClass() {
     $("#sourceFilter").select2({
         dropdownAutoWidth: !0,
         placeholder: "Source",
-        tags: !0
+        // tags: !0
     });
 }
 

@@ -411,7 +411,7 @@ function loadStock() {
 }
 
 function writeHTMLOptions(element, stockArray) {
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < (stockArray.length < 5 ? stockArray.length : 5); i++) {
         var item = stockArray[i];
         // element.innerHTML += `<option value="${item[0]}" data-scroll-index="${i}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`;
         $(element).append(`<option value="${item[0]}" data-scroll-index="${i}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`);
@@ -623,7 +623,7 @@ function changeStockDetails(ele) {
         }
 
 
-        if ($('#vgb').val() == "true") {
+        if ($('#vgb').val() == "true" && obj[31] == 1) {
             $('#grossDiv').removeClass('v-none'); // show gross field on both stock type new / used
         }
 
@@ -693,7 +693,9 @@ function chnageIncentiveStatus(value, date, element) {
         if (element == 'misc1') {
             if (cdays >= 0) {
                 $('#misc1').val("Yes");
+                $("#misc1 option:contains('No')").prop("disabled", true);
             } else {
+                $("#misc1 option:contains('No')").prop("disabled", false);
                 $('#misc1').val("No");
             }
             $(".selectpicker").selectpicker("refresh");
@@ -703,12 +705,15 @@ function chnageIncentiveStatus(value, date, element) {
             $('#' + element).prop("disabled", false);
             $('#' + element + '_v').html('$' + value);
         } else {
+            $('#' + element).val("No");
             $('#' + element).prop("disabled", true);
+            // $('#misc1').val("No");
         }
     } else {
+        $('#' + element).val("No");
         $('#' + element).prop("disabled", true);
         $('#' + element + '_v').html('');
-        $('#misc1').val("No");
+        // $('#misc1').val("No");
     }
 }
 

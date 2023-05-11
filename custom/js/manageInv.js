@@ -186,8 +186,11 @@ $(function () {
                 var json = this.fnSettings().json;
                 if (json) {
                     var lastImportTime = json.lastImportTime;
-                    lastImportTime = moment(lastImportTime).format('MM-DD-YYYY hh:mm:ss A')
-                    $('#lastImportTimeDiv').html(`<h4 class="portlet-title">${lastImportTime}</h4>`);
+                    // lastImportTime = moment(lastImportTime).format('MM-DD-YYYY hh:mm:ss A')
+                    let dateObj = new Date(lastImportTime);
+                    let easternTime = new Date(dateObj.toLocaleString("en-US", { timeZone: "America/New_York" }));
+                    let formattedTime = easternTime.toLocaleString('en-US', { hour12: true, month: '2-digit', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/\//g, '-');
+                    $('#lastImportTimeDiv').html(`<h4 class="portlet-title">${formattedTime}</h4>`);
 
                 }
             },

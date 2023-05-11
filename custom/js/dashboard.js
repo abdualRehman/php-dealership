@@ -160,7 +160,7 @@ $(function () {
                     graphArray = graphArray.filter((e) => e.id == uid);
                 }
                 graphData = graphArray;
-                tableData = response.graph;
+                tableData = response.datatable;
 
                 if ($('input[name="changeView"]').is(':checked')) {
                     drawTable()

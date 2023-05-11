@@ -85,6 +85,8 @@ if ($mainResult->num_rows == 1) {
     $userName = $value['username'];
     $userEmail = $value['email'];
     $userProfile = $value['profile'];
+    $mobile = $value['mobile'];
+    $otp_status = $value['otp_status'];
 }
 
 ?>
@@ -155,6 +157,44 @@ if ($mainResult->num_rows == 1) {
                                             </div>
                                         </form>
                                     </div>
+                                </div>
+                                <div class="card text-center m-3">
+                                    <form id="otpDetails" autocomplete="off" method="post" action="../php_action/updateProfile.php">
+                                        <div class="card-body">
+                                            <h3 class="card-title1">OTP Settings</h3>
+                                            <div class="row justify-content-center">
+                                                <div class="form-group form-group col-sm-10" id="add-messages">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <label for="username" class="col-sm-3 offset-sm-1 col-form-label text-right">Mobile</label>
+                                                <div class="form-group col-sm-6">
+                                                    <input type="text" class="form-control" value="<?php echo $mobile; ?>" placeholder="XXX-XXX-XXXX" name="mobile" id="mobile" autocomplete="false" autofill="off" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <label for="email" class="col-sm-3 offset-sm-1 col-form-label text-right">Status</label>
+                                                <div class="form-group col-sm-6 text-left">
+                                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                        <label class="btn btn-flat-primary <?php echo $otp_status == 0 ? 'active' : '' ?> ">
+                                                            <input type="radio" name="otp_status" value="false" id="otp_status_false" <?php echo $otp_status == 0 ? 'checked="checked"' : '' ?>>
+                                                            OFF
+                                                        </label>
+                                                        <label class="btn btn-flat-primary <?php echo $otp_status == 1 ? 'active' : '' ?>">
+                                                            <input type="radio" name="otp_status" value="true" id="otp_status_true" <?php echo $otp_status == 1 ? 'checked="checked"' : '' ?>>
+                                                            ON
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-sm-6 m-auto d-flex justify-content-around mb-0">
+                                                    <button type="submit" class="btn btn-primary">Save</button>
+                                                    <button type="reset" class="btn btn-secondary">Reset</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                             <div class="col-md-4 pb-3">

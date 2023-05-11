@@ -204,7 +204,7 @@ if ($_GET['r'] == 'man') {
                                                             <input type="radio" name="mod" data-texts="Civic,CIVIC HATCH,CIVIC SEDAN,Civic SI,CIVIC 5DR"> CIVIC
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="mod" data-texts="CR-V,CR-V Hybrid,CRV,CLARITY PLUG-IN HYBRID"> CR-V
+                                                            <input type="radio" name="mod" data-texts="CR-V,CR-V Hybrid,CRV Hybrid,CRV,CLARITY PLUG-IN HYBRID"> CR-V
                                                         </label>
                                                         <label class="btn btn-outline-primary">
                                                             <input type="radio" name="mod" data-texts="HR-V,HRV"> HRV
@@ -219,7 +219,7 @@ if ($_GET['r'] == 'man') {
                                                             <input type="radio" name="mod" data-texts="Passport,Passport  Package,Passport Package"> PASSPORT
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="mod" data-texts="Pilot,PILOT"> PILOT
+                                                            <input type="radio" name="mod" data-texts="Pilot,PILOT,Pilot Package,Pilot Packages"> PILOT
                                                         </label>
                                                         <label class="btn btn-outline-primary">
                                                             <input type="radio" name="mod" data-texts="Ridgeline,Ridgeline Packages,RIDGELINE"> RIDGELINE

@@ -111,6 +111,33 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
             background-color: #757575 !important;
             pointer-events: none;
         }
+
+        .loading {
+            position: relative;
+            cursor: not-allowed !important;
+            pointer-events: none !important;
+            opacity: 0.5;
+        }
+
+        .loading:before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 20%;
+            left: 30%;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #fff;
+            border-top-color: #999;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 
@@ -389,7 +416,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
 
                 </div>
                 <div class="modal-footer modal-footer-bordered">
-                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <button type="submit" id="SubmitBtn" class="btn btn-primary mr-2">Submit</button>
                     <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
                 </div>
             </form>
@@ -503,6 +530,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                             <div class="row d-flex flex-row align-items-center">
                                 <label for="edelivery" class="col-sm-2 text-sm-center col-form-label">Delivery</label>
                                 <div class="form-group col-sm-10">
+                                    <input type="hidden" name="prev_delivery" id="prev_delivery" value="">
                                     <div class="btn-group btn-group-toggle w-100" data-toggle="buttons" id="edelivery">
                                         <label class="btn btn-flat-primary d-flex align-items-center m-2 rounded">
                                             <input type="radio" name="edelivery" value="spotDelivery" id="espotDelivery">
@@ -591,7 +619,7 @@ echo '<input type="hidden" name="currentUserId" id="currentUserId" value="' . $_
                     </div>
                 </div>
                 <div class="modal-footer modal-footer-bordered">
-                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <button type="submit" id="eSubmitBtn" class="btn btn-primary mr-2">Submit</button>
                     <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
                 </div>
             </form>

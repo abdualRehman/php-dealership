@@ -94,7 +94,7 @@ if ($result->num_rows > 0) {
                 $result1 = $connect->query($sql1);
                 $row1 = $result1->fetch_assoc();
                 $coordinator = $row1['username'];
-                $coordinator_color = '#'.$row1['color'];
+                $coordinator_color = '#' . $row1['color'];
             } else {
                 $coordinator = "Blank";
                 $coordinator_color = "";

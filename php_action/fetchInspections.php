@@ -42,15 +42,15 @@ if ($filterBy != '') {
         $searchQuery .= " AND ( (inspections.lot_notes != '' AND inspections.lot_notes IS NOT NULL) AND inventory.status != 2  ) ";
     } else if ($filterBy == 'windshield') {
         if ($subFilterValue == 'pending') {
-            $searchQuery .= " AND ( inspections.windshield LIKE '%Done%' AND ( inventory.balance != '' AND inventory.balance != 0 ) AND inventory.status != 2 ) ";
+            $searchQuery .= " AND ( inspections.windshield != '' AND inspections.windshield NOT LIKE '%Done%' AND ( inventory.balance != '' OR inventory.balance != 0 ) AND inventory.status != 2 ) ";
         } else {
-            $searchQuery .= " AND ( inspections.windshield NOT LIKE '%Done%' AND ( inventory.balance != '' AND inventory.balance != 0 ) AND inventory.status != 2 ) ";
+            $searchQuery .= " AND ( inspections.windshield != '' AND inspections.windshield LIKE '%Done%' AND ( inventory.balance != '' OR inventory.balance != 0 ) AND inventory.status != 2 ) ";
         }
     } else if ($filterBy == 'wheels') {
         if ($subFilterValue == 'pending') {
-            $searchQuery .= " AND ( inspections.wheels LIKE '%Done%' AND ( inventory.balance != '' AND inventory.balance != 0 ) AND inventory.status != 2 ) ";
+            $searchQuery .= " AND ( inspections.wheels != '' AND inspections.wheels NOT LIKE '%Done%' AND ( inventory.balance != '' OR inventory.balance != 0 ) AND inventory.status != 2 ) ";
         } else {
-            $searchQuery .= " AND ( inspections.wheels NOT LIKE '%Done%' AND ( inventory.balance != '' AND inventory.balance != 0 ) AND inventory.status != 2 ) ";
+            $searchQuery .= " AND ( inspections.wheels != '' AND inspections.wheels LIKE '%Done%' AND ( inventory.balance != '' OR inventory.balance != 0 ) AND inventory.status != 2 ) ";
         }
     } else if ($filterBy == 'toGo') {
         $searchQuery .= " AND ( inspections.repairs != '' AND  ( inspections.repair_sent = '' OR inspections.repair_sent IS NULL ) AND inventory.status != 2 ) ";
@@ -73,7 +73,7 @@ if (isset($_POST['wholesaleFilter']) && count($_POST['wholesaleFilter']) != 0) {
     foreach ($array as $value) {
         if ($value != '') {
             $searchQuery .= " inventory.wholesale = '$value' ";
-            if (next($array)==true) $searchQuery .= " OR ";
+            if (next($array) == true) $searchQuery .= " OR ";
         }
     }
     $searchQuery .= " ) ";
@@ -84,7 +84,7 @@ if (isset($_POST['stockTypeFilter']) && count($_POST['stockTypeFilter']) != 0) {
     foreach ($array as $value) {
         if ($value != '') {
             $searchQuery .= " inventory.stocktype = '$value' ";
-            if (next($array)==true) $searchQuery .= " OR ";
+            if (next($array) == true) $searchQuery .= " OR ";
         }
     }
     $searchQuery .= " ) ";
@@ -96,7 +96,7 @@ if (isset($_POST['makeFilter']) && count($_POST['makeFilter']) != 0) {
     foreach ($array as $value) {
         if ($value != '') {
             $searchQuery .= " inventory.make = '$value' ";
-            if (next($array)==true) $searchQuery .= " OR ";
+            if (next($array) == true) $searchQuery .= " OR ";
         }
     }
     $searchQuery .= " ) ";
@@ -107,7 +107,7 @@ if (isset($_POST['modalFilter']) && count($_POST['modalFilter']) != 0) {
     foreach ($array as $value) {
         if ($value != '') {
             $searchQuery .= " inventory.model = '$value' ";
-            if (next($array)==true) $searchQuery .= " OR ";
+            if (next($array) == true) $searchQuery .= " OR ";
         }
     }
     $searchQuery .= " ) ";
@@ -115,25 +115,24 @@ if (isset($_POST['modalFilter']) && count($_POST['modalFilter']) != 0) {
 
 
 
-
-// $sqlQuery = "SELECT '' as button , inspections.shops as bodyshopName , '' as daysout ,  '' as arr, CAST(inventory.age AS INT) as age , CONCAT( inventory.stockno ,' || ', inventory.vin) as stockDetails ,
-// inventory.stockno , inventory.year, inventory.make , inventory.model, inventory.color , 
-// inventory.mileage, inventory.lot , inventory.balance, inventory.retail, inventory.certified, 
-// inventory.stocktype , inventory.wholesale , inventory.id as invId , inventory.status as invStatus , inspections.* FROM inventory LEFT JOIN inspections ON inventory.id = inspections.inv_id WHERE inventory.lot != 'LBO' AND inventory.location = '$location'";
-
 // working on previus file March 1, 2023
 // $sqlQuery = "SELECT '' as button , inspections.shops as bodyshopName , IF((inspections.repair_returned != '' AND inspections.repair_sent IS NOT NULL AND inspections.repair_sent != '' ), inspections.repair_returned , inspections.repair_sent ) as daysout ,  '' as arr, CAST(inventory.age AS INT) as age , CONCAT( inventory.stockno ,' || ', inventory.vin) as stockDetails ,
 // inventory.stockno , inventory.year, inventory.make , inventory.model, inventory.color , 
 // inventory.mileage, inventory.lot , inventory.balance, inventory.retail, inventory.certified, 
 // inventory.stocktype , inventory.wholesale , inventory.id as invId , inventory.status as invStatus , inspections.* FROM inventory LEFT JOIN inspections ON inventory.id = inspections.inv_id WHERE inventory.lot != 'LBO' AND inventory.location = '$location'";
 
+// $sqlQuery = "SELECT '' as button , inspections.shops as bodyshopName , IF((inspections.repair_returned != '' AND inspections.repair_sent IS NOT NULL AND inspections.repair_sent != '' ), inspections.repair_returned , inspections.repair_sent ) as daysout ,  '' as arr, CAST(inventory.age AS INT) as age , CONCAT( inventory.stockno ,' || ', inventory.vin) as stockDetails ,
+// inventory.stockno , inventory.year, inventory.make , inventory.model, inventory.color , 
+// CAST(inventory.mileage AS INT) AS mileage, inventory.lot , 
+// CASE WHEN inventory.balance = '' THEN ''
+//        ELSE ROUND( CAST(REPLACE(REPLACE(inventory.balance, ',', ''), '$', '') AS FLOAT) , 2)
+//   END AS balance, 
+// inventory.retail, inventory.certified, 
+// inventory.stocktype , inventory.wholesale , inventory.id as invId , inventory.status as invStatus , inspections.* FROM inventory LEFT JOIN inspections ON inventory.id = inspections.inv_id WHERE inventory.lot != 'LBO' AND inventory.location = '$location'";
+
 $sqlQuery = "SELECT '' as button , inspections.shops as bodyshopName , IF((inspections.repair_returned != '' AND inspections.repair_sent IS NOT NULL AND inspections.repair_sent != '' ), inspections.repair_returned , inspections.repair_sent ) as daysout ,  '' as arr, CAST(inventory.age AS INT) as age , CONCAT( inventory.stockno ,' || ', inventory.vin) as stockDetails ,
 inventory.stockno , inventory.year, inventory.make , inventory.model, inventory.color , 
-CAST(inventory.mileage AS INT) AS mileage, inventory.lot , 
-CASE WHEN inventory.balance = '' THEN ''
-       ELSE ROUND( CAST(REPLACE(REPLACE(inventory.balance, ',', ''), '$', '') AS FLOAT) , 2)
-  END AS balance, 
-inventory.retail, inventory.certified, 
+CAST(inventory.mileage AS INT) AS mileage, inventory.lot, inventory.balance, inventory.retail, inventory.certified, 
 inventory.stocktype , inventory.wholesale , inventory.id as invId , inventory.status as invStatus , inspections.* FROM inventory LEFT JOIN inspections ON inventory.id = inspections.inv_id WHERE inventory.lot != 'LBO' AND inventory.location = '$location'";
 
 // echo $sqlQuery . '<br />';
@@ -322,7 +321,11 @@ $sendToRecon = 0;
 $LotNotes = 0;
 $CarsToDealers = 0;
 $windshield = 0;
+$windshieldP = 0;
+$windshieldC = 0;
 $wheels = 0;
+$wheelsP = 0;
+$wheelsC = 0;
 $toGo = 0;
 $atBodyshop = 0;
 $backFromBodyshop = 0;
@@ -397,14 +400,28 @@ if ($result->num_rows > 0) {
             $LotNotes += 1;
             $_lotNotes = 'Lot Notes';
         }
+        // also count total pending
         if (count($windshield1) > 0 && !$doneEle && ($balance && $balance != '0') && $invStatus != 2) {
             $windshield += 1;
+            $windshieldP += 1;
             $_windshield = 'Windshield';
         }
+        // also count total compelte
+        if (count($windshield1) > 0 && $doneEle && ($balance && $balance != '0') && $invStatus != 2) {
+            $windshieldC += 1;
+        }
+        
+
         if (count($wheels1) > 0 &&  !$doneEleWheel && ($balance && $balance != '0') && $invStatus != 2) {
+            $wheelsP += 1;
             $wheels += 1;
             $_wheels = "Wheels";
         }
+        if (count($wheels1) > 0 &&  $doneEleWheel && ($balance && $balance != '0') && $invStatus != 2) {
+            $wheelsC += 1;
+        }
+
+
         if (count($arr) > 0 && ($repairSent == "" || $repairSent == null) && $invStatus != 2) {
             $toGo += 1;
             $_toGo = "To Go";
@@ -421,7 +438,7 @@ if ($result->num_rows > 0) {
             $retailReady += 1;
             $_retailReady = "Retail Ready";
         }
-        if (($balance == '' || $balance == null || $balance == 0) && $row['stocktype'] != 'NEW' && $invStatus == 2 ) {
+        if (($balance == '' || $balance == null || $balance == 0) && $row['stocktype'] != 'NEW' && $invStatus == 2) {
             $Gone += 1;
             $_gone = "Gone";
         }
@@ -457,7 +474,11 @@ $dataObj['totalNumber'] = array(
     "LotNotes" => $LotNotes,
     "CarsToDealers" => $CarsToDealers,
     "windshield" => $windshield,
+    "windshieldP" => $windshieldP,
+    "windshieldC" => $windshieldC,
     "wheels" => $wheels,
+    "wheelsP" => $wheelsP,
+    "wheelsC" => $wheelsC,
     "toGo" => $toGo,
     "atBodyshop" => $atBodyshop,
     "backFromBodyshop" => $backFromBodyshop,

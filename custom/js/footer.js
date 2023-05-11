@@ -533,7 +533,8 @@ function editSchedule(id = null) {
 
                 var date = moment(response.today_date, 'MM-DD-YYYY');
                 var now = moment(moment().format('MM-DD-YYYY'));
-                if (now > date) {
+                // if (now > date) {
+                if (!date.isSame(now)) {
                     $('#availability').val("");
                     $('#offNotes').val(response.off_notes);
                 } else {

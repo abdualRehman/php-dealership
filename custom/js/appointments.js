@@ -114,7 +114,11 @@ var cal = new tui.Calendar('#calendar', {
             tooltip: 'New York',
             displayLabel: 'GMT-05:00 / USA'
         },
-    ]
+    ],
+    week: {
+        hourStart: 8,
+        hourEnd: 21
+    },
 });
 
 cal.on({
@@ -161,6 +165,8 @@ function creareAppointment(dateTime) {
     $('#scheduleDate').datepicker('update', date);
     $('#scheduleTime').val(moment(dateTime._date).format("hh:mm A"));
     $('.selectpicker').selectpicker('refresh');
+    $("#scheduleTime").trigger("change");
+
 }
 
 
@@ -249,6 +255,12 @@ function setEventListener1() {
 
 }
 
+// setEventListener1();
+// fetchSchedules()
+// loadSoldLogs();
+// loadDeliveryCoordinator();
+// disabledManagerDiv();
+
 $(function () {
 
     $('.nav-link').removeClass('active');
@@ -259,7 +271,6 @@ $(function () {
 
 
     fetchSchedules()
-
     loadSoldLogs();
     loadDeliveryCoordinator();
     disabledManagerDiv();
@@ -318,6 +329,8 @@ $(function () {
         scrollbar: true,
         show24Hours: false,
         interval: 60,
+        minTime: '08:00am',
+        maxTime: '08:00pm',
     });
 
 
@@ -387,7 +400,7 @@ $(function () {
         submitHandler: function (form, e) {
             // return true;
             e.preventDefault();
-
+            $("#SubmitBtn").addClass("loading");
             var time = $('#scheduleTime').val();
             const number = moment(time, ["h:mmA"]).format("HH:mm");
             $('#scheduleTime').val(number);
@@ -400,6 +413,7 @@ $(function () {
                 dataType: 'json',
                 success: function (response) {
                     console.log(response);
+                    $("#SubmitBtn").removeClass("loading");
                     if (response.success == true) {
                         e1.fire({
                             position: "center",
@@ -410,7 +424,7 @@ $(function () {
                         });
                         $('#addNewSchedule')[0].reset();
                         loadSoldLogs();
-
+                        loadDeliveryCoordinator();
                     } else {
                         e1.fire({
                             // position: "center",
@@ -495,6 +509,7 @@ $(function () {
         },
         submitHandler: function (form, e) {
             // return true;
+            $("#eSubmitBtn").addClass("loading");
             e.preventDefault();
 
 
@@ -511,7 +526,8 @@ $(function () {
                 data: form.serialize(),
                 dataType: 'json',
                 success: function (response) {
-                    console.log(response);
+                    // console.log(response);
+                    $("#eSubmitBtn").removeClass("loading");
                     if (response.success == true) {
                         e1.fire({
                             position: "center",
@@ -522,6 +538,8 @@ $(function () {
                         });
                         fetchSchedules();
                         $('#editScheduleModel').modal('hide');
+                        loadSoldLogs();
+                        loadDeliveryCoordinator();
                     } else {
                         e1.fire({
                             // position: "center",
@@ -577,6 +595,62 @@ $(function () {
     });
 
 
+    // previous schedule timings was working but having doubt that is not working properly
+    // $('.handleDateTime').on('change', function () {
+    //     var date, time, selectBox;
+    //     if ($(this).data('type') == 'add') {
+    //         date = $('#scheduleDate').val();
+    //         time = $('#scheduleTime').val();
+    //         selectBox = document.getElementById('coordinatorList');
+    //     } else {
+    //         date = $('#escheduleDate').val();
+    //         time = $('#escheduleTime').val();
+    //         selectBox = document.getElementById('ecoordinatorList');
+    //     }
+    //     selectBox.innerHTML = "";
+    //     $('.selectpicker').selectpicker('refresh');
+    //     if ((date != '' && time != '') && moment(time, ["h:mmA"]).format("HH:mm") != 'Invalid date') {
+    //         let dayname = moment(date, 'MM-DD-YYYY').format('dddd').toLowerCase();
+    //         deliveryCoordinatorArray.forEach(element => {
+    //             let startTime = element[3][dayname][0];
+    //             let endTime = element[3][dayname][1];
+    //             let scheduledAppointments = element[4];
+    //             let available_today = element[5];
+    //             if (startTime && endTime) {
+    //                 time = moment(moment(time, ["h:mmA"]).format("HH:mm"), 'hh:mm');
+    //                 startTime = moment(moment(startTime, ["h:mmA"]).format("HH:mm"), 'hh:mm');
+    //                 endTime = moment(moment(endTime, ["h:mmA"]).format("HH:mm"), 'hh:mm');
+    //                 if (time.isBetween(startTime, endTime, null, '[]')) {
+    //                     let timeFormat = moment(time, ["h:mmA"]).format("HH:mm");
+    //                     let dateFormat = moment(date, 'MM-DD-YYYY').format('YYYY-MM-DD');
+    //                     let dateTime = moment(dateFormat + ' ' + timeFormat, 'YYYY-MM-DD hh:mm');
+    //                     let allready_appointed = false;
+    //                     scheduledAppointments.forEach(appointment => {
+
+    //                         // let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm');
+    //                         // coordinator should available at least 1h before the schedule start
+    //                         let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm').subtract(1, 'hour');
+
+    //                         let schedule_end = moment(appointment.schedule_end, 'YYYY-MM-DD hh:mm');
+    //                         if (dateTime.isBetween(schedule_start, schedule_end, null, '[]')) {
+    //                             // check today availabilit
+    //                             var checkTodayDate = moment(moment().format('MM-DD-YYYY')).diff(moment(date).format('MM-DD-YYYY'));
+    //                             if (checkTodayDate == 0 && available_today == false) {
+    //                                 allready_appointed = false;
+    //                             } else {
+    //                                 allready_appointed = true;
+    //                             }
+    //                         }
+    //                     });
+    //                     if (allready_appointed == false) {
+    //                         selectBox.innerHTML += `<option value="${element[0]}" title="${element[1]} - ${element[2]}">${element[1]} - ${element[2]} </option>`;
+    //                         $('.selectpicker').selectpicker('refresh');
+    //                     }
+    //                 }
+    //             }
+    //         });
+    //     }
+    // });
 
     $('.handleDateTime').on('change', function () {
         var date, time, selectBox;
@@ -602,32 +676,32 @@ $(function () {
                     time = moment(moment(time, ["h:mmA"]).format("HH:mm"), 'hh:mm');
                     startTime = moment(moment(startTime, ["h:mmA"]).format("HH:mm"), 'hh:mm');
                     endTime = moment(moment(endTime, ["h:mmA"]).format("HH:mm"), 'hh:mm');
+
+
                     if (time.isBetween(startTime, endTime, null, '[]')) {
                         let timeFormat = moment(time, ["h:mmA"]).format("HH:mm");
                         let dateFormat = moment(date, 'MM-DD-YYYY').format('YYYY-MM-DD');
                         let dateTime = moment(dateFormat + ' ' + timeFormat, 'YYYY-MM-DD hh:mm');
-                        let allready_appointed = false;
-                        scheduledAppointments.forEach(appointment => {
-                            
-                            // let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm');
-                            // coordinator should available at least 1h before the schedule start
-                            let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm').subtract(1, 'hour');
 
+                        let isUserAvailable = true;
+                        // check today availabilit
+                        // var checkTodayDate = moment(moment().format('MM-DD-YYYY')).diff(moment(date).format('MM-DD-YYYY'));
+                        // if ((checkTodayDate == 0 && available_today == true) || checkTodayDate != 0) {
+                        for (let appointment of scheduledAppointments) {
+                            let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm');
                             let schedule_end = moment(appointment.schedule_end, 'YYYY-MM-DD hh:mm');
+
                             if (dateTime.isBetween(schedule_start, schedule_end, null, '[]')) {
-                                // check today availabilit
-                                var checkTodayDate = moment(moment().format('MM-DD-YYYY')).diff(moment(date).format('MM-DD-YYYY'));
-                                if (checkTodayDate == 0 && available_today == false) {
-                                    allready_appointed = false;
-                                } else {
-                                    allready_appointed = true;
-                                }
+                                isUserAvailable = false;
+                                break;
                             }
-                        });
-                        if (allready_appointed == false) {
+                        };
+                        // console.log("element", element);
+                        if (isUserAvailable == true) {
                             selectBox.innerHTML += `<option value="${element[0]}" title="${element[1]} - ${element[2]}">${element[1]} - ${element[2]} </option>`;
                             $('.selectpicker').selectpicker('refresh');
                         }
+                        // }
                     }
                 }
             });
@@ -702,7 +776,7 @@ function loadSoldLogs() {
 }
 
 function writeHTMLOptions(element, stockArray) {
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < (stockArray.length < 5 ? stockArray.length : 5); i++) {
         var item = stockArray[i];
         // element.innerHTML += `<option value="${item[0]}" data-scroll-index="${i}" title="${item[4]}"> ${item[4]} - ${item[5]} </option>`;
         $(element).append(`<option value="${item[0]}" data-scroll-index="${i}" title="${item[4]}"> ${item[4]} - ${item[5]} </option>`);
@@ -928,7 +1002,7 @@ function editShedule(id = null) {
             data: { id: id },
             dataType: 'json',
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 $('.spinner-grow').addClass('d-none');
                 // modal result
                 $('.showResult').removeClass('d-none');
@@ -940,6 +1014,7 @@ function editShedule(id = null) {
                 $('#edelivery :radio[name="edelivery"]').prop('checked', false);
                 $('#edelivery .active').removeClass('active');
                 (response.delivery) ? $('#e' + response.delivery).prop('checked', true).click() : null;
+                $('#prev_delivery').val((response.delivery) ? response.delivery : "");
 
                 $('#eadditionalServices :checkbox[name="eadditionalServices"]').prop('checked', false);
                 $('#eadditionalServices .active').removeClass('active');
@@ -1039,7 +1114,6 @@ function editShedule(id = null) {
 
 function changeStockDetails(ele) {
     let obj = stockArray.find(data => data[0] === ele.value);
-    console.log(obj);
     $('#customerName').val("");
     $('#vechicle').val("");
     $('#stockno').val("");
@@ -1050,18 +1124,19 @@ function changeStockDetails(ele) {
         var sales_manager_id = Number(localStorage.getItem('salesManagerID'));;
         var general_manager_id = Number(localStorage.getItem('generalManagerID'));
         var branchAdmin_id = Number(localStorage.getItem('branchAdmin'));
-        if (apptStatus != null && currentUser != sales_manager_id && currentUser != general_manager_id && currentUser != 'Admin' && currentUser != branchAdmin_id) {
-            toastr.error('Error! - Appointment Allready Exist');
+        // if (apptStatus != null && currentUser != sales_manager_id && currentUser != general_manager_id && currentUser != 'Admin' && currentUser != branchAdmin_id) {
+        //     toastr.error('Error! - Appointment Allready Exist');
 
-            $('#sale_id').val('');
-            $('.selectpicker').selectpicker('refresh');
-            return false;
-        }
+        //     $('#sale_id').val('');
+        //     $('.selectpicker').selectpicker('refresh');
+        //     return false;
+        // }
         changeExistStatus();
 
         $('#customerName').val(obj[2] + ' ' + obj[3]);
         $('#vechicle').val(obj[6] + ' ' + obj[7] + ' ' + obj[9]);
-        $('#has_appointment').val(obj[10])
+        // $('#has_appointment').val(obj[10])
+        $('#has_appointment').val(obj[11])
         $('#stockno').val(obj[1])
     }
 
@@ -1069,6 +1144,7 @@ function changeStockDetails(ele) {
 
 
 function changeExistStatus(editStatus = false) {
+    let apptexistStatusValue;
     let eleValue = $(`#${editStatus ? 'e' : ''}sale_id`).val();
     let obj = stockArray.find(data => data[0] === eleValue);
     let deliveryStatus = $(`input[name="${editStatus ? 'e' : ''}delivery"]:checked`).val();
@@ -1083,7 +1159,7 @@ function changeExistStatus(editStatus = false) {
         apptexistStatusValue = false;
     }
     if (apptexistStatusValue == true) {
-        toastr.error(`Error! - Stock No: ${obj[4]} has already been scheduled for a delivery`);
+        toastr.warning(`Error! - Stock No: ${obj[4]} has already been scheduled for a delivery`);
     }
     $(`#${editStatus ? 'e' : ''}overrideBy`).prop('checked', false);
     $(`#${editStatus ? 'e' : ''}overrideByName`).val("");
@@ -1107,12 +1183,12 @@ function echangeStockDetails(ele, checkAppt = true) {
             var sales_manager_id = Number(localStorage.getItem('salesManagerID'));;
             var general_manager_id = Number(localStorage.getItem('generalManagerID'));
             var branchAdmin_id = Number(localStorage.getItem('branchAdmin'));
-            if (apptStatus != null && currentUser != sales_manager_id && currentUser != general_manager_id && currentUser != 'Admin' && currentUser != branchAdmin_id) {
-                toastr.error('Error! - Appointment Allready Exist');
-                $('#esale_id').val('');
-                $('.selectpicker').selectpicker('refresh');
-                return false;
-            }
+            // if (apptStatus != null && currentUser != sales_manager_id && currentUser != general_manager_id && currentUser != 'Admin' && currentUser != branchAdmin_id) {
+            //     toastr.error('Error! - Appointment Allready Exist');
+            //     $('#esale_id').val('');
+            //     $('.selectpicker').selectpicker('refresh');
+            //     return false;
+            // }
             changeExistStatus();
         }
 

@@ -188,6 +188,7 @@ $(function () {
             let rowGroupSrcStatus = false;
             $('#retailFilter').val('');
             $('#uciFilter').val('');
+            $('#uciokFilter').val('');
             $('#titleFilter').val('');
             // $('#soldFilter').val('');
             // $('#purchaseFilter').val('');
@@ -272,6 +273,7 @@ $(function () {
 
                         let retailF = $('#retailFilter').val();
                         let uciF = $('#uciFilter').val();
+                        let uciokF = $('#uciokFilter').val();
                         let titleF = $('#titleFilter').val();
                         let purchaseF = $('#purchaseFilter').val();
 
@@ -298,6 +300,7 @@ $(function () {
 
                         data.retailF = retailF;
                         data.uciF = uciF;
+                        data.uciokF = uciokF;
                         data.titleF = titleF;
                         data.soldF = soldF;
                         data.purchaseF = purchaseF;
@@ -1296,6 +1299,11 @@ function toggleFilterClass2() {
     $("#uciFilter").select2({
         dropdownAutoWidth: !0,
         placeholder: "UCI",
+        // tags: !0
+    });
+    $("#uciokFilter").select2({
+        dropdownAutoWidth: !0,
+        placeholder: "UCI OK",
         // tags: !0
     });
 

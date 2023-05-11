@@ -102,19 +102,41 @@ if (isset($_POST['stateF']) && count($_POST['stateF']) != 0) {
 
 if ($_SESSION['userRole'] != $salesConsultantID) {
 
-    $sqlQuery = "SELECT STR_TO_DATE( DATE(b.date) ,'%Y-%m-%d') as date , CONCAT( b.fname ,' ', b.lname ) as customerName , 
+    // $sqlQuery = "SELECT STR_TO_DATE( DATE(b.date) ,'%Y-%m-%d') as date , CONCAT( b.fname ,' ', b.lname ) as customerName , 
+    // d.stockno , CONCAT( d.stocktype , ' ' , d.year , ' ' , d.make , ' ' , d.model) as vehicle,
+    // b.state, a.vin_check , a.insurance , a.trade_title , a.registration , a.inspection , a.salesperson_status , a.paid ,
+    // a.sale_todo_id , c.username as sale_consultant 
+    // FROM `sale_todo` as a INNER JOIN sales as b ON a.sale_id = b.sale_id INNER JOIN users as c ON b.sales_consultant = c.id INNER JOIN inventory as d ON b.stock_id = d.id WHERE b.status = 1 AND b.sale_status = 'delivered' AND a.status = 1 AND b.location = '$location' AND b.sale_status != 'cancelled' "  . $searchQuery . " " . $filterQuery . "  ORDER BY b.sales_consultant ASC";
+
+    $sqlQuery = "SELECT CAST( IF((b.reconcileDate != ''), b.reconcileDate , b.date ) as date ) as date , CONCAT( b.fname ,' ', b.lname ) as customerName , 
     d.stockno , CONCAT( d.stocktype , ' ' , d.year , ' ' , d.make , ' ' , d.model) as vehicle,
     b.state, a.vin_check , a.insurance , a.trade_title , a.registration , a.inspection , a.salesperson_status , a.paid ,
     a.sale_todo_id , c.username as sale_consultant 
-    FROM `sale_todo` as a INNER JOIN sales as b ON a.sale_id = b.sale_id INNER JOIN users as c ON b.sales_consultant = c.id INNER JOIN inventory as d ON b.stock_id = d.id WHERE b.status = 1 AND a.status = 1 AND b.location = '$location' AND b.sale_status != 'cancelled' "  . $searchQuery . " " . $filterQuery . "  ORDER BY b.sales_consultant ASC";
+    FROM `sale_todo` as a INNER JOIN sales as b ON a.sale_id = b.sale_id INNER JOIN users as c ON b.sales_consultant = c.id INNER JOIN inventory as d ON b.stock_id = d.id WHERE b.status = 1 AND b.sale_status = 'delivered' AND a.status = 1 AND b.location = '$location' AND b.sale_status != 'cancelled' "  . $searchQuery . " " . $filterQuery . "  ORDER BY b.sales_consultant ASC";
 } else {
     $uid = $_SESSION['userId'];
 
-    $sqlQuery = "SELECT STR_TO_DATE( DATE(b.date) ,'%Y-%m-%d') as date , CONCAT( b.fname ,' ', b.lname ) as customerName , 
+    // $sqlQuery = "SELECT STR_TO_DATE( DATE(b.date) ,'%Y-%m-%d') as date , CONCAT( b.fname ,' ', b.lname ) as customerName , 
+    // d.stockno , CONCAT( d.stocktype , ' ' , d.year , ' ' , d.make , ' ' , d.model) as vehicle,
+    // b.state, a.vin_check , a.insurance , a.trade_title , a.registration , a.inspection , a.salesperson_status , a.paid ,
+    // a.sale_todo_id , c.username as sale_consultant
+    // FROM `sale_todo` as a INNER JOIN sales as b ON a.sale_id = b.sale_id INNER JOIN users as c ON b.sales_consultant = c.id INNER JOIN inventory as d ON b.stock_id = d.id WHERE b.status = 1 AND b.sale_status = 'delivered' AND a.status = 1 AND b.sales_consultant = '$uid' AND b.location = '$location'  AND b.sale_status != 'cancelled' "  . $searchQuery . " " . $filterQuery . "  ORDER BY b.sales_consultant ASC";
+
+    $sqlQuery = "SELECT CAST( IF((b.reconcileDate != ''), b.reconcileDate , b.date ) as date ) as date , CONCAT( b.fname ,' ', b.lname ) as customerName , 
     d.stockno , CONCAT( d.stocktype , ' ' , d.year , ' ' , d.make , ' ' , d.model) as vehicle,
     b.state, a.vin_check , a.insurance , a.trade_title , a.registration , a.inspection , a.salesperson_status , a.paid ,
     a.sale_todo_id , c.username as sale_consultant
-    FROM `sale_todo` as a INNER JOIN sales as b ON a.sale_id = b.sale_id INNER JOIN users as c ON b.sales_consultant = c.id INNER JOIN inventory as d ON b.stock_id = d.id WHERE b.status = 1 AND a.status = 1 AND b.sales_consultant = '$uid' AND b.location = '$location'  AND b.sale_status != 'cancelled' "  . $searchQuery . " " . $filterQuery . "  ORDER BY b.sales_consultant ASC";
+    FROM `sale_todo` as a 
+    INNER JOIN sales as b ON a.sale_id = b.sale_id 
+    INNER JOIN users as c ON b.sales_consultant = c.id 
+    INNER JOIN inventory as d ON b.stock_id = d.id 
+    WHERE b.status = 1 
+    AND (b.sale_status = 'delivered' OR b.sale_status = 'pending' ) 
+    AND a.status = 1 
+    AND b.sales_consultant = '$uid'  
+    AND b.location = '$location' 
+    AND b.sale_status != 'cancelled' 
+    "  . $searchQuery . " " . $filterQuery . "  ORDER BY b.sales_consultant ASC";
 }
 
 

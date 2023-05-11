@@ -103,7 +103,7 @@ if ($_POST) {
     $military = (isset($_POST['military'])) ? mysqli_real_escape_string($connect, $_POST['military']) : "No";
     $loyalty = (isset($_POST['loyalty'])) ?  mysqli_real_escape_string($connect, $_POST['loyalty']) : "No";
     $conquest = (isset($_POST['conquest'])) ?  mysqli_real_escape_string($connect, $_POST['conquest']) : "No";
-    $misc1 = (isset($_POST['misc1'])) ?  mysqli_real_escape_string($connect, $_POST['misc1']) : "Yes";
+    $misc1 = (isset($_POST['misc1'])) ?  mysqli_real_escape_string($connect, $_POST['misc1']) : "No";
     $misc2 = (isset($_POST['misc2'])) ?  mysqli_real_escape_string($connect, $_POST['misc2']) : "No";
     $leaseLoyalty = (isset($_POST['leaseLoyalty'])) ?  mysqli_real_escape_string($connect, $_POST['leaseLoyalty']) : "No";
 

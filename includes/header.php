@@ -21,17 +21,20 @@
 
         body.aside-desktop-minimized .aside.aside-hover .aside-body,
         body.aside-desktop-minimized .aside.aside-hover .aside-addon {
-            display: none !important;
+            /* display: none !important; */
+            display: none;
         }
 
         body.aside-desktop-minimized .aside.aside-hover:hover .aside-body,
         body.aside-desktop-minimized .aside.aside-hover:hover .aside-addon {
-            display: block !important;
+            /* display: block !important; */
+            display: block;
         }
 
         body.aside-desktop-minimized .aside.aside-hover:not(:hover) .aside-body,
         body.aside-desktop-minimized .aside.aside-hover:not(:hover) .aside-addon {
-            display: none !important;
+            /* display: none !important; */
+            display: none;
         }
 
         .menu-section .menu-section-icon {
@@ -557,7 +560,7 @@
             </div>
         </div>
         <div class="wrapper">
-            <div class="header"> 
+            <div class="header">
                 <div class="header-holder header-holder-desktop sticky-header" id="sticky-header-desktop">
                     <div class="header-container container-fluid">
                         <div class="header-wrap">
@@ -869,7 +872,11 @@
                 </div>
                 <div class="header-holder header-holder-mobile sticky-header" id="sticky-header-mobile">
                     <div class="header-container container-fluid">
-                        <div class="header-wrap"><button class="btn btn-flat-primary btn-icon" data-toggle="aside"><i class="fa fa-bars"></i></button></div>
+                        <div class="header-wrap">
+                            <button class="btn btn-flat-primary btn-icon" data-toggle="aside">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                        </div>
                         <div class="header-wrap header-wrap-block justify-content-start p-2 text-center d-contents text-overflow-ellipsis">
 
                             <div class="d-flex align-items-center flex-wrap justify-content-center searchBar">

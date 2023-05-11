@@ -225,6 +225,7 @@ $columns = array(
         'formatter' => function ($d, $row) {
             $delivery = preg_replace('/(?<=\\w)(?=[A-Z])/', " ", $d);
             $delivery = ucfirst($delivery);
+            return $delivery;
         }
     ),
     array('db' => 'coordinator_color',   'dt' => 24),

@@ -93,6 +93,25 @@ if ($_POST) {
                 }
             }
         }
+    } elseif ($formType == 'changeOTP') {
+        $mobile = (isset($_POST['mobile'])) ? mysqli_real_escape_string($connect, $_POST['mobile']) : "";
+        $otp_status = (isset($_POST['otp_status'])) ? mysqli_real_escape_string($connect, $_POST['otp_status']) : "";
+        $otp_status = $otp_status == 'true' ? 1 : 0;
+
+        if ($otp_status == 0 || ($otp_status == 1 && $mobile != '')) {
+            $sql = "UPDATE `users` SET `mobile`='$mobile',`otp_status`='$otp_status' WHERE id = '$userId'";
+            if ($connect->query($sql) === true) {
+                $valid['success'] = true;
+                $valid['messages'] = "Successfully Updated";
+            } else {
+                $valid['success'] = false;
+                $valid['messages'] = $connect->error;
+                $valid['messages'] = mysqli_error($connect);
+            }
+        } else {
+            $valid['success'] = false;
+            $valid['messages'] = "Error: Number is Required";
+        }
     }
 
 

@@ -119,7 +119,7 @@ if ($_SESSION['userRole'] != $salesConsultantID) {
     a.lease_loyalty_date, a.misc1_date , a.misc2_date , 
     a.images , a.incentive_id , 
     users.username as sale_consultant , 
-    b.state , b.sale_status
+    c.vin, b.state , b.sale_status
     FROM `sale_incentives` as a INNER JOIN sales as b ON a.sale_id = b.sale_id INNER JOIN users ON b.sales_consultant = users.id INNER JOIN inventory as c ON b.stock_id = c.id WHERE b.status = 1 AND b.sale_status != 'cancelled' AND a.status = 1 AND b.location = '$location' " . $filterQuery . " " . $searchQuery . "  ORDER BY b.sales_consultant ASC";
 } else {
     $uid = $_SESSION['userId'];
@@ -138,7 +138,7 @@ if ($_SESSION['userRole'] != $salesConsultantID) {
     a.lease_loyalty_date , a.misc1_date , a.misc2_date , 
     a.images , a.incentive_id , 
     users.username as sale_consultant , 
-    b.state , b.sale_status
+    c.vin, b.state , b.sale_status
     FROM `sale_incentives` as a INNER JOIN sales as b ON a.sale_id = b.sale_id INNER JOIN users ON b.sales_consultant = users.id INNER JOIN inventory as c ON b.stock_id = c.id WHERE b.status = 1 AND b.sale_status != 'cancelled' AND a.status = 1 AND b.sales_consultant = '$uid' AND b.location = '$location' " . $filterQuery . " " . $searchQuery . "  ORDER BY b.sales_consultant ASC";
 }
 
@@ -184,8 +184,9 @@ $columns = array(
     array('db' => 'images',   'dt' => 18),
     array('db' => 'incentive_id',   'dt' => 19),
     array('db' => 'sale_status',   'dt' => 20),
-    array('db' => 'state',   'dt' => 21),
-    array('db' => 'sale_consultant',   'dt' => 22),
+    array('db' => 'vin', 'dt' => 21),
+    array('db' => 'state',   'dt' => 22),
+    array('db' => 'sale_consultant',   'dt' => 23),
 
 );
 

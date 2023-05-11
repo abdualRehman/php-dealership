@@ -191,7 +191,7 @@ if ($_SESSION['userRole'] == $officeID || (hasAccess("usedCars", "TitleView") !=
 
     @media (max-width: 576px) {
         .stickyDiv {
-            position: initial!important;
+            position: initial !important;
             width: calc(100%);
             border-radius: 0px;
         }
@@ -335,6 +335,15 @@ if ($_SESSION['userRole'] == $officeID || (hasAccess("usedCars", "TitleView") !=
                                     <div class="col p-1">
                                         <select class="form-control filterTags" id="uciFilter" multiple="multiple">
                                             <optgroup label="UCI">
+                                                <option value="need">Need</option>
+                                                <option value="opened">Opened</option>
+                                                <option value="closed">Closed</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                    <div class="col p-1">
+                                        <select class="form-control filterTags" id="uciokFilter" multiple="multiple">
+                                            <optgroup label="UCI OK">
                                                 <option value="true">True</option>
                                                 <option value="false">False</option>
                                             </optgroup>
@@ -375,7 +384,7 @@ if ($_SESSION['userRole'] == $officeID || (hasAccess("usedCars", "TitleView") !=
                                     <tr>
                                         <th>ID</th>
                                         <th>Age</th>
-                                        <th style="min-width: 200px!important;" >Stock no || Vin</th>
+                                        <th style="min-width: 200px!important;">Stock no || Vin</th>
                                         <th>Inventory Date</th>
                                         <th>Keys</th>
                                         <th>Year</th>
@@ -445,7 +454,7 @@ if ($_SESSION['userRole'] == $officeID || (hasAccess("usedCars", "TitleView") !=
                                         <th>AGE</th>
                                         <th>CDK AGE</th>
                                         <th>Action</th>
-                                        <th style="min-width: 200px;" >Stock no || Vin</th>
+                                        <th style="min-width: 200px;">Stock no || Vin</th>
                                         <th>Year</th>
                                         <th>Make</th>
                                         <th>Model</th>

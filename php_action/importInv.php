@@ -7,6 +7,24 @@ require_once '../assets/plugin/SpreadsheetReader.php';
 
 $valid['success'] = array('success' => false, 'messages' => array(), 'erorStock' => array());
 
+function convertToNumeric($value)
+{
+    $value = str_replace(",", "", $value); // remove commas
+    $value = preg_replace("/[^0-9\.\-]/", "", $value); // remove all characters except digits, decimal point, and minus sign
+    if ($value == "") {
+        return 0; // if empty, return 0
+    }
+    $negative = false;
+    if (substr($value, 0, 1) == "-") {
+        $negative = true; // check if value is negative
+    }
+    $value = preg_replace("/[^0-9\.]/", "", $value); // remove all non-numeric characters except decimal point
+    $value = floatval($value); // convert to float
+    if ($negative) {
+        $value = -$value; // add negative sign back
+    }
+    return round($value, 2); // round to 2 decimal places
+}
 
 
 if ($_POST) {
@@ -117,6 +135,7 @@ if ($_POST) {
                     $balance = "";
                     if (isset($Row[10])) {
                         $balance = mysqli_real_escape_string($connect, $Row[10]);
+                        $balance = convertToNumeric($balance);
                         // $balance = preg_replace('/[^A-Za-z0-9\-]/', '', $balance); // Removes special chars.
                         // $balance = str_replace(' ', '', $balance);
                     }

@@ -122,16 +122,16 @@ if (hasAccess("swap", "Edit") === 'false') {
                         <table id="datatable-1" class="table table-bordered table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th style="width:10%;">From Dealer</th>
-                                    <th style="width:10%;">Vehicle In Details</th>
-                                    <th style="width:10%;">Vehicle Out Details</th>
-                                    <th style="width:10%;">Sales Consultant</th>
-                                    <th style="width:20%;">Notes</th>
-                                    <th style="width:10%;">Transferred In</th>
-                                    <th style="width:10%;">Transferred Out</th>
-                                    <th style="width:10%;">Status</th>
-                                    <th style="width:10%;">Action</th>
-                                    <th style="width:10%;">ID</th>
+                                    <th style="width:10%;text-align:center">From Dealer</th>
+                                    <th style="width:10%;text-align:center">Vehicle In Details</th>
+                                    <th style="width:10%;text-align:center">Vehicle Out Details</th>
+                                    <th style="width:10%;text-align:center">Sales Consultant</th>
+                                    <th style="width:20%;text-align:center">Notes</th>
+                                    <th style="width:10%;text-align:center">Transferred In</th>
+                                    <th style="width:10%;text-align:center">Transferred Out</th>
+                                    <th style="width:10%;text-align:center">Status</th>
+                                    <th style="width:10%;text-align:center">Action</th>
+                                    <th style="width:10%;text-align:center">ID</th>
                                 </tr>
                             </thead>
                         </table>

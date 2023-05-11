@@ -256,6 +256,12 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
                                     <div class="col p-1">
                                         <select class="form-control filterTags" id="sourceFilter" multiple="multiple">
                                             <optgroup label="Source">
+                                                <option value="autoAlert">Auto Alert</option>
+                                                <option value="carCode">Car Code</option>
+                                                <option value="concierge">Concierge</option>
+                                                <option value="freshUp">Fresh Up</option>
+                                                <option value="internet">Internet</option>
+                                                <option value="phoneUp">Phone Up</option>
                                             </optgroup>
                                         </select>
                                     </div>

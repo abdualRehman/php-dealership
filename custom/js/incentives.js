@@ -365,7 +365,7 @@ $(function () {
                         targets: [0, 1, 2, 3],
 
                     },
-                    { 'visible': false, 'targets': [11, 12, 13, 14, 15, 16, 17, 18, 19, 20] }, //hide columns 
+                    { 'visible': false, 'targets': [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21] }, //hide columns 
                 ],
                 "createdRow": function (row, data, dataIndex) {
                     changePillCSS(row, data, 11, 4);  // collegeDate Index  11 +  college index 4

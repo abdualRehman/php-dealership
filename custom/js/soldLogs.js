@@ -45,6 +45,8 @@ $(function () {
         scrollbar: true,
         show24Hours: false,
         interval: 60,
+        minTime: '08:00am',
+        maxTime: '08:00pm',
     });
 
     autosize($(".autosize"));
@@ -413,6 +415,11 @@ $(function () {
                                 return row[19];
                             }
                         },
+                        {
+
+                            targets: [0, 6, 7, 8, 9, 12, 13, 14],
+                            "className": "dt-center text-center",
+                        },
                     ],
 
                     language: {
@@ -432,7 +439,6 @@ $(function () {
                             switch (group) {
                                 case 'pending':
                                     filteredData = countObj.totalCount.penC;
-                                    console.log(filteredData);
                                     break;
                                 case 'delivered':
                                     filteredData = countObj.totalCount.delC;
@@ -509,25 +515,25 @@ $(function () {
 
 
 
-        $("#editScheduleForm").validate({
+        $("#addNewScheduleForm").validate({
             ignore: ":hidden:not(.selectpicker)", // or whatever your dropdown classname is
             rules: {
-                ecustomerName: {
+                customerName: {
                     required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
                 },
-                escheduleTime: {
+                scheduleTime: {
                     required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
                 },
-                escheduleDate: {
+                scheduleDate: {
                     required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
                 },
-                esale_id: {
+                sale_id: {
                     required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
                 },
-                ecoordinator: {
+                coordinator: {
                     required: $('#loggedInUserRole').val() == deliveryCoordinatorID ? false : true,
                 },
-                // eoverrideBy: {
+                // overrideBy: {
                 //     required: function (params) {
                 //         if ($('#loggedInUserRole').val() != deliveryCoordinatorID) {
                 //             return true;
@@ -537,10 +543,10 @@ $(function () {
                 //         }
                 //     },
                 // },
-                'edelivery': {
+                'delivery': {
                     required: function (params) {
-                        // var opt = $('input:radio[name="eadditionalServices"]:checked').val();
-                        let checkboxes = $('input:checkbox[name="eadditionalServices[]"]');
+                        // var opt = $('input:radio[name="additionalServices"]:checked').val();
+                        let checkboxes = $('input:checkbox[name="additionalServices[]"]');
                         var opt = [...checkboxes].some(checkbox => checkbox.checked);
                         if (!opt && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                             return true;
@@ -549,9 +555,9 @@ $(function () {
                         }
                     },
                 },
-                'eadditionalServices': {
+                'additionalServices': {
                     required: function (params) {
-                        var opt = $('input:radio[name="edelivery"]:checked').val();
+                        var opt = $('input:radio[name="delivery"]:checked').val();
                         if (!opt && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                             return true;
                         } else {
@@ -559,10 +565,10 @@ $(function () {
                         }
                     },
                 },
-                'escheduleNotes': {
+                'scheduleNotes': {
                     required: function (params) {
-                        // var opt = $('input:radio[name="eadditionalServices"]:checked').val();
-                        let checkboxes = $('input:checkbox[name="eadditionalServices[]"]');
+                        // var opt = $('input:radio[name="additionalServices"]:checked').val();
+                        let checkboxes = $('input:checkbox[name="additionalServices[]"]');
                         var opt = [...checkboxes].some(checkbox => checkbox.checked && checkbox.value === 'other');
                         if (opt && $('#loggedInUserRole').val() != deliveryCoordinatorID) {
                             return true;
@@ -574,19 +580,20 @@ $(function () {
             },
             submitHandler: function (form, e) {
                 e.preventDefault();
-
-                var time = $('#escheduleTime').val();
+                $("#SubmitBtn").addClass("loading");
+                var time = $('#scheduleTime').val();
                 const number = moment(time, ["h:mmA"]).format("HH:mm");
-                $('#escheduleTime').val(number);
+                $('#scheduleTime').val(number);
 
-                var form = $('#editScheduleForm');
+                var form = $('#addNewScheduleForm');
                 $.ajax({
                     type: "POST",
                     url: form.attr('action'),
                     data: form.serialize(),
                     dataType: 'json',
                     success: function (response) {
-                        console.log(response);
+                        $("#SubmitBtn").removeClass("loading");
+                        // console.log(response);
                         if (response.success == true) {
                             e1.fire({
                                 position: "center",
@@ -595,8 +602,9 @@ $(function () {
                                 showConfirmButton: !1,
                                 timer: 1500
                             });
-                            $('#editScheduleModel').modal('hide');
+                            $('#addNewScheduleModel').modal('hide');
                             manageSoldLogsTable.ajax.reload(null, false);
+                            loadDeliveryCoordinator();
                         } else {
                             e1.fire({
                                 // position: "center",
@@ -703,7 +711,7 @@ $(function () {
                     data: form.serialize(),
                     dataType: 'json',
                     success: function (response) {
-                        console.log(response);
+                        // console.log(response);
 
                         if (response.success == true) {
                             e1.fire({
@@ -769,7 +777,7 @@ $(function () {
         }, 100);
     })
 
-    $('#edelivery').on('click', function () {
+    $('#delivery').on('click', function () {
         const targetId = this.id;
         const prev = $(`#${targetId} label.active :radio`).val();
         var current = '';
@@ -800,87 +808,29 @@ function addNewSchedule(id = null) {
             data: { id: id },
             dataType: 'json',
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 $('.spinner-grow').addClass('d-none');
                 // modal result
                 $('.showResult').removeClass('d-none');
                 // modal footer
                 $('.modal-footer').removeClass('d-none');
 
-                $('#editScheduleForm')[0].reset();
+                $('#addNewScheduleForm')[0].reset();
 
                 // setting up delivery status first
                 $('#allready_created').val(null);
                 apptexistStatusValue = false;
 
-
-                $('#scheduleId').val(response.id);
-                $('#ecallenderId').val(response.calender_id);
-                $('#esale_id').val(response.sale_id);
-                // echangeStockDetails({ value: response.sale_id }, false);
-
-                $('#ecustomerName').val(response.fname + ' ' + response.lname);
-                $('#evechicle').val(response.stocktype + ' ' + response.year + ' ' + response.make);
-                $('#estockno').val(response.stock_id)
-                $('#estocknoDisplay').val(response.stockno)
-                $('#ehas_appointment').val(response.already_have);
-                $('#esubmittedBy').val(response.submitted_by + ' - ' + (response.submitted_by_time ? response.submitted_by_time : ''));
-                $('#esubmittedByRole').val(response.submitted_by_role);
-                $('#esubmittedById').val(response.submitted_by_id);
-                $('#eoverrideBy').prop('checked', (response.manager_override != "" && response.manager_override != null) ? true : false);
-                $('#eoverrideByName').val(response.manager_overrideName);
-                $('#eoverrideById').val(response.eoverrideById);
-
-
-                const number = response.appointment_time ? moment(response.appointment_time, ["HH:mm"]).format("h:mma") : "";
-                $('#escheduleTime').val(number);
-                var date = response.appointment_date ? moment(response.appointment_date, 'YYYY-MM-DD').format('MM-DD-YYYY') : "";
-                $('#escheduleDate').val(date);
-                $('#escheduleDate').datepicker('update', date);
-
-                $('#edelivery :radio[name="edelivery"]').prop('checked', false);
-                $('#edelivery .active').removeClass('active');
-                (response.delivery) ? $('#e' + response.delivery).prop('checked', true).click() : null;
-                $('#eadditionalServices :checkbox[name="eadditionalServices"]').prop('checked', false);
-                $('#eadditionalServices .active').removeClass('active');
-                // (response.additional_services) ? $('#e' + response.additional_services).prop('checked', true).click() : null;
-                let additional_servicesArray = (response.additional_services) ? response.additional_services.split(",") : [];
-                additional_servicesArray.forEach(additional_serviceValue => {
-                    $('#e' + additional_serviceValue).prop('checked', true).click();
-                });
-
+                $('#sale_id').val(response.sale_id);
+                $('#customerName').val(response.fname + ' ' + response.lname);
+                $('#vechicle').val(response.stocktype + ' ' + response.year + ' ' + response.make);
+                $('#stockno').val(response.stock_id)
+                $('#stocknoDisplay').val(response.stockno)
+                $('#has_appointment').val(response.already_have);
                 $('#allready_created').val(response.allready_created);
 
-                $('#escheduleNotes').val(response.notes);
-                $('#econfirmed :radio[name="econfirmed"]').prop('checked', false);
-                $('#econfirmed .active').removeClass('active');
-                (response.confirmed) ? $('#con' + response.confirmed).prop('checked', true).click() : null;
-                $('#ecomplete :radio[name="ecomplete"]').prop('checked', false);
-                $('#ecomplete .active').removeClass('active');
-                (response.complete) ? $('#com' + response.complete).prop('checked', true).click() : null;
-
-                if (response.confirmed != "ok") {
-                    $('#ecomplete').addClass('disabled-div');
-                } else {
-                    $('#ecomplete').removeClass('disabled-div');
-                }
-
-
-                if (response.allowDeliveryCoordinator == true) {
-                    $('.delivery_coordinator').addClass('disabled-div');
-                    $(".delivery_coordinator").find("*").prop("readonly", true);
-                } else {
-                    disabledManagerDiv();
-                }
-
-                $('#ecoordinator').val(response.coordinator);
-                var checkSelectValue = $('#ecoordinator').val();
-                if (!checkSelectValue) {
-                    var selectBox = document.getElementById('ecoordinatorList');
-                    selectBox.innerHTML += `<option value="${response.coordinator}" title="${response.coordinator_name} - ${response.coordinator_email}">${response.coordinator_name} - ${response.coordinator_email} </option>`;
-                    $('#ecoordinator').val(response.coordinator);
-                }
-                $('.selectpicker').selectpicker('refresh');
+                changeExistStatus();
+                disabledManagerDiv();
 
             }, // /success
             error: function (err) {
@@ -889,28 +839,28 @@ function addNewSchedule(id = null) {
         }); // ajax function
     }
 }
-$('#eoverrideBy').change(function () {
+$('#overrideBy').change(function () {
     if ($(this).prop('checked')) {
         var cN = $('#currentUser').val();
         var cId = $('#currentUserId').val();
-        $('#eoverrideByName').val(cN);
-        $('#eoverrideById').val(cId);
+        $('#overrideByName').val(cN);
+        $('#overrideById').val(cId);
     } else {
-        $('#eoverrideByName').val("");
-        $('#eoverrideById').val("");
+        $('#overrideByName').val("");
+        $('#overrideById').val("");
     }
 });
 
-$('input[name=edelivery]').change(function () {
+$('input[name=delivery]').change(function () {
     changeExistStatus();
 })
 
 
 function changeExistStatus() {
     let alrhValue = $(`#allready_created`).val();
-    let estocknoDisplay = $(`#estocknoDisplay`).val();
+    let estocknoDisplay = $(`#stocknoDisplay`).val();
     if (alrhValue) {
-        let deliveryStatus = $(`input[name="edelivery"]:checked`).val();
+        let deliveryStatus = $(`input[name="delivery"]:checked`).val();
         if (alrhValue && deliveryStatus) {
             if (alrhValue != null && deliveryStatus != '') {
                 apptexistStatusValue = true;
@@ -922,7 +872,7 @@ function changeExistStatus() {
         }
     }
     if (apptexistStatusValue == true) {
-        toastr.error(`Error! - Stock No: ${estocknoDisplay} has already been scheduled for a delivery`);
+        toastr.warning(`Error! - Stock No: ${estocknoDisplay} has already been scheduled for a delivery`);
     }
 }
 
@@ -955,8 +905,8 @@ function disabledManagerDiv() {
         $(".manager_override_div").find("*").prop("readonly", false);
     }
 
-    $('#esubmittedBy , #eoverrideByName , #estocknoDisplay , #ecustomerName').addClass('disabled-div');
-    $("#esubmittedBy , #eoverrideByName , #estocknoDisplay , #ecustomerName").find("*").prop("readonly", true);
+    $('#submittedBy , #overrideByName , #stocknoDisplay , #customerName').addClass('disabled-div');
+    $("#submittedBy , #overrideByName , #stocknoDisplay , #customerName").find("*").prop("readonly", true);
 }
 
 function loadDeliveryCoordinator() {
@@ -1000,32 +950,35 @@ $('.handleDateTime').on('change', function () {
                     let timeFormat = moment(time, ["h:mmA"]).format("HH:mm");
                     let dateFormat = moment(date, 'MM-DD-YYYY').format('YYYY-MM-DD');
                     let dateTime = moment(dateFormat + ' ' + timeFormat, 'YYYY-MM-DD hh:mm');
-                    let allready_appointed = false;
-                    scheduledAppointments.forEach(appointment => {
-                        // let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm');
-                        // coordinator should available at least 1h before the schedule start
-                        let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm').subtract(1, 'hour');
-
+                    let isUserAvailable = true;
+                    // check today availabilit
+                    // var checkTodayDate = moment(moment().format('MM-DD-YYYY')).diff(moment(date).format('MM-DD-YYYY'));
+                    // if ((checkTodayDate == 0 && available_today == true) || checkTodayDate != 0) {
+                    // if (element[0] == 68) {
+                    //     console.log("element", element);
+                    // }
+                    // console.log(element , dateTime);
+                    for (let appointment of scheduledAppointments) {
+                        let schedule_start = moment(appointment.schedule_start, 'YYYY-MM-DD hh:mm');
                         let schedule_end = moment(appointment.schedule_end, 'YYYY-MM-DD hh:mm');
                         if (dateTime.isBetween(schedule_start, schedule_end, null, '[]')) {
-                            // check today availabilit
-                            var checkTodayDate = moment(moment().format('MM-DD-YYYY')).diff(moment(date).format('MM-DD-YYYY'));
-                            if (checkTodayDate == 0 && available_today == false) {
-                                allready_appointed = false;
-                            } else {
-                                allready_appointed = true;
-                            }
+                            isUserAvailable = false;
+                            break;
                         }
-                    });
-                    if (allready_appointed == false) {
+                    };
+                    // console.log("element", element);
+                    if (isUserAvailable == true) {
                         selectBox.innerHTML += `<option value="${element[0]}" title="${element[1]} - ${element[2]}">${element[1]} - ${element[2]} </option>`;
                         $('.selectpicker').selectpicker('refresh');
                     }
+                    // }
                 }
             }
         });
     }
 });
+
+
 // ------------------------------------------------------------------------------------------------------------
 
 
@@ -1168,7 +1121,9 @@ function fetchNotDoneSoldLogs() {
                 // Start with closed groups
                 $('#datatable-2 tbody tr.dtrg-start').each(function () {
                     var name = $(this).data('name');
-                    collapsedGroupsThankyouCard[name] = !!collapsedGroupsThankyouCard[name];
+                    // collapsedGroupsThankyouCard[name] = !!collapsedGroupsThankyouCard[name];
+                    let isConsultant = $('#isConsultant').val();
+                    collapsedGroupsThankyouCard[name] = isConsultant == 'true' ? !collapsedGroupsThankyouCard[name] : !!collapsedGroupsThankyouCard[name];
                 });
                 manageNotDoneTable.draw(false);
             },
@@ -1257,7 +1212,7 @@ function fetchSelectedInvForSearch(id = null, gross = null) {
         data: { id: id },
         dataType: 'json',
         success: function (response) {
-            console.log(response);
+            // console.log(response);
             stockArray.push(response.data);
             var item = response.data;
             var selectBox = document.getElementById('stockId');
@@ -1413,8 +1368,8 @@ function editSale(id = null) {
             data: { id: id },
             dataType: 'json',
             success: function (response) {
-                console.log(id);
-                console.log(response);
+                // console.log(id);
+                // console.log(response);
 
                 // modal loading
                 $('.spinner-grow').addClass('d-none');
@@ -1473,7 +1428,7 @@ function editSale(id = null) {
                     $('#' + response.deal_type).click();
                 }
 
-                $('#submittedBy').val(response.submittedBy);
+                $('#submittedByName').val(response.submittedBy);
                 $('#consultantNote').val(response.consultant_notes);
                 $('#thankyouCard').prop('checked', response.thankyou_cards == 'on' ? true : false);
                 $('#dealNote').val(response.deal_notes);
@@ -1554,7 +1509,13 @@ function editSale(id = null) {
                     // if Inventory item was deleted then search from deleted inv data
                     fetchSelectedInvForSearch(response.stock_id, response.gross);
                 } else {
-                    changeRules();
+                    // changeRules();
+                    // changeRules(false);
+
+                    // change incentives rules without values 
+                    setTimeout(() => {
+                        changeRules_css();
+                    }, 500);
                 }
 
 
@@ -1696,7 +1657,7 @@ function changeStockDetails(ele, fromEdit = false, gross = null) {
     $('#detailsSection').removeClass('d-none');
     let obj = stockArray.find(data => data[0] === ele.value);
 
-    console.log(obj);
+    // console.log(obj);
 
     if (fromEdit == false) {
         var retail = obj[12];
@@ -1756,13 +1717,15 @@ function changeStockDetails(ele, fromEdit = false, gross = null) {
 
     autosize.update($("#selectedDetails"));
 
-    // if (fromEdit == false) {
-    // }
-    changeRules(true);
+    if (fromEdit == false) {
+        changeRules(true);
+    } else {
+        changeRules_css();
+    }
 
 }
 
-function changeRules(changeIncentiveValue = false) {
+function changeRules(changeMisc1V) {
     var eleV = $('#stockId').val();
     if (eleV) {
         let obj = stockArray.find(data => data[0] === eleV);
@@ -1773,7 +1736,7 @@ function changeRules(changeIncentiveValue = false) {
             chnageIncentiveStatus(obj[19], obj[20], 'military');
             chnageIncentiveStatus(obj[21], obj[22], 'loyalty');
             chnageIncentiveStatus(obj[23], obj[24], 'conquest');
-            chnageIncentiveStatus(obj[25], obj[26], 'misc1', changeIncentiveValue);
+            chnageIncentiveStatus(obj[25], obj[26], 'misc1', changeMisc1V);
             chnageIncentiveStatus(obj[27], obj[28], 'misc2');
             chnageIncentiveStatus(obj[29], obj[30], 'leaseLoyalty');
 
@@ -1792,21 +1755,45 @@ function changeRules(changeIncentiveValue = false) {
 
 }
 
-function chnageIncentiveStatus(value, date, element, changeIncentiveValue = false) {
+// -------------------------------- change Css only without values -----------------------------------------
+function changeRules_css() {
+    var eleV = $('#stockId').val();
+    if (eleV) {
+        let obj = stockArray.find(data => data[0] === eleV);
+        if (obj) {
+            chnageIncentiveStatus_css(obj[17], obj[18], 'college');
+            chnageIncentiveStatus_css(obj[19], obj[20], 'military');
+            chnageIncentiveStatus_css(obj[21], obj[22], 'loyalty');
+            chnageIncentiveStatus_css(obj[23], obj[24], 'conquest');
+            chnageIncentiveStatus_css(obj[25], obj[26], 'misc1');
+            chnageIncentiveStatus_css(obj[27], obj[28], 'misc2');
+            chnageIncentiveStatus_css(obj[29], obj[30], 'leaseLoyalty');
+            if (obj[17] != 'N/A' || obj[19] != 'N/A' || obj[21] != 'N/A' || obj[23] != 'N/A' || obj[25] != 'N/A' || obj[27] != 'N/A' || obj[29] != 'N/A') {
+                $('#loadIncentivesDiv').removeClass('hidden');
+            } else {
+                $('#loadIncentivesDiv').addClass('hidden');
+            }
+            $('.selectpicker').selectpicker('refresh');
+            changeSalesPersonTodo_css();
+        }
+    }
+}
+function chnageIncentiveStatus_css(value, date, element) {
     if (value != 'N/A') {
         var saleDate = $('#saleDate').val();
         saleDate = moment(saleDate).format('MM-DD-YYYY');
-
         var edate = moment(date);
         var cduration = moment.duration(edate.diff(saleDate));
         var cdays = cduration.asDays();
         cdays = Math.ceil(cdays);
 
-        if (changeIncentiveValue == true && element == 'misc1') {
+        if (element == 'misc1') {
             if (cdays >= 0) {
-                $('#misc1').val("Yes");
+                $("#misc1 option:contains('No')").prop("disabled", true);
+                // $('#misc1').val("Yes");
             } else {
-                $('#misc1').val("No");
+                $("#misc1 option:contains('No')").prop("disabled", false);
+                // $('#misc1').val("No");
             }
             $(".selectpicker").selectpicker("refresh");
         }
@@ -1816,15 +1803,97 @@ function chnageIncentiveStatus(value, date, element, changeIncentiveValue = fals
             $('#' + element + '_v').html('$' + value);
         } else {
             $('#' + element).prop("disabled", true);
-            $('#' + element).val("No");
         }
     } else {
         $('#' + element).prop("disabled", true);
-        $('#' + element).val("No");
         $('#' + element + '_v').html('');
-        // $('#misc1').val("No");
     }
 }
+function changeSalesPersonTodo_css() {
+    var eleV = $('#stockId').val();
+    if (eleV) {
+        let obj = stockArray.find(data => data[0] === eleV);
+        var todoArray = obj['spTodoArray'];
+        let state = $('#state').val();
+        var saleDate = $('#saleDate').val();
+        if (state && todoArray && todoArray.length > 0) {
+            var spTodoRulesObj = todoArray.find(data => data[4] === state);
+            if (spTodoRulesObj) {
+                changeSalesPersonTodoStyle_css("vincheck", spTodoRulesObj[5]);
+                changeSalesPersonTodoStyle_css("insurance", spTodoRulesObj[6]);
+                changeSalesPersonTodoStyle_css("tradeTitle", spTodoRulesObj[7]);
+                changeSalesPersonTodoStyle_css("registration", spTodoRulesObj[8]);
+                changeSalesPersonTodoStyle_css("inspection", spTodoRulesObj[9]);
+                changeSalesPersonTodoStyle_css("salePStatus", spTodoRulesObj[10]);
+                changeSalesPersonTodoStyle_css("paid", spTodoRulesObj[11]);
+            } else {
+                changeSalesPersonTodoStyle_css("vincheck", "N/A");
+                changeSalesPersonTodoStyle_css("insurance", "N/A");
+                changeSalesPersonTodoStyle_css("tradeTitle", "N/A");
+                changeSalesPersonTodoStyle_css("registration", "N/A");
+                changeSalesPersonTodoStyle_css("inspection", "N/A");
+                changeSalesPersonTodoStyle_css("salePStatus", "N/A");
+                changeSalesPersonTodoStyle_css("paid", "N/A");
+            }
+        } else {
+            changeSalesPersonTodoStyle_css("vincheck", "N/A");
+            changeSalesPersonTodoStyle_css("insurance", "N/A");
+            changeSalesPersonTodoStyle_css("tradeTitle", "N/A");
+            changeSalesPersonTodoStyle_css("registration", "N/A");
+            changeSalesPersonTodoStyle_css("inspection", "N/A");
+            changeSalesPersonTodoStyle_css("salePStatus", "N/A");
+            changeSalesPersonTodoStyle_css("paid", "N/A");
+        }
+        $(".selectpicker").selectpicker("refresh");
+    }
+}
+function changeSalesPersonTodoStyle_css(elementID, value) {
+    if (value !== "N/A") {
+        $('#' + elementID).prop("disabled", false);
+    } else {
+        $(`#${elementID} option:eq(0)`).prop("selected", true);
+        $('#' + elementID).prop("disabled", true);
+    }
+}
+// -------------------------------- change Css only without values -----------------------------------------
+
+function chnageIncentiveStatus(value, date, element, changeMisc1V = false) {
+    if (value != 'N/A') {
+        var saleDate = $('#saleDate').val();
+        saleDate = moment(saleDate).format('MM-DD-YYYY');
+
+        var edate = moment(date);
+        var cduration = moment.duration(edate.diff(saleDate));
+        var cdays = cduration.asDays();
+        cdays = Math.ceil(cdays);
+
+        if (cdays >= 0) {
+            $('#' + element).prop("disabled", false);
+            $('#' + element + '_v').html('$' + value);
+            if (changeMisc1V == true) {
+                // if (value != "" && value != "Yes") {
+                //     $('#misc1').val(value);
+                // } else {
+                //     $('#misc1').val("Yes");
+                // }
+                $('#misc1').val("Yes");
+                $("#misc1 option:contains('No')").prop("disabled", true);
+            }
+        } else {
+            $("#misc1 option:contains('No')").prop("disabled", false);
+            $('#' + element).val("No");
+            $('#misc1').val("No");
+            $('#' + element).prop("disabled", true);
+        }
+    } else {
+        $("#misc1 option:contains('No')").prop("disabled", false);
+        $('#' + element).val("No");
+        $('#' + element).prop("disabled", true);
+        $('#' + element + '_v').html('');
+    }
+}
+
+
 
 function changeSalesPersonTodo() {
     var eleV = $('#stockId').val();

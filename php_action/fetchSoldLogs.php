@@ -264,7 +264,7 @@ $columns = array(
                 $_SESSION['userRole'] == $salesManagerID || $_SESSION['userRole'] == $generalManagerID
             ) {
                 if ($row['sale_status'] != 'cancelled' && hasAccess("appointment", "Add") !== 'false') {
-                    $button .= '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#editScheduleModel" onclick="addNewSchedule(' . $id . ')" >
+                    $button .= '<button class="btn btn-label-primary btn-icon mr-1" data-toggle="modal" data-target="#addNewScheduleModel" onclick="addNewSchedule(' . $id . ')" >
                                 <i class="far fa-calendar-alt"></i>
                             </button>';
                 }
@@ -287,7 +287,7 @@ $columns = array(
             global $connect;
             $stock_id = $row[25];
             $countRow = 0;
-            $sql2 = "SELECT stock_id, COUNT(stock_id) FROM sales WHERE sales.sale_status != 'cancelled' AND stock_id = '$stock_id' GROUP BY stock_id HAVING COUNT(stock_id) > 1";
+            $sql2 = "SELECT stock_id, COUNT(stock_id) FROM sales WHERE sales.sale_status != 'cancelled' AND sales.status = 1 AND stock_id = '$stock_id' GROUP BY stock_id HAVING COUNT(stock_id) > 1";
             $result2 = $connect->query($sql2);
             if ($result2->num_rows > 0) {
                 $row2 = $result2->fetch_array();

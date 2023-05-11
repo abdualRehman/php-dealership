@@ -531,40 +531,15 @@ $(function () {
 
                         }
 
-                        let totalPending = 0, totalComplete = 0;
+
                         let modFilter = $(`#mods .btn.active input[name='mod']:checked`).val();
                         if (modFilter == 'windshield') {
-                            $('#datatable-1').DataTable()
-                                .rows()
-                                .data()
-                                .each(function (data, index) {
-                                    var windshield = data[6]; // windshield
-                                    var arr = windshield ? (windshield.trim()).split('__') : [];
-                                    if (arr.length > 0 && arr.indexOf('Done') == -1) {
-                                        totalPending += 1;
-                                    }
-                                    if (arr.length > 0 && arr.indexOf('Done') != -1) {
-                                        totalComplete += 1;
-                                    }
-                                })
+                            $('#pendingCount').html(obj.windshieldP);
+                            $('#completeCount').html(obj.windshieldC);
                         } else if (modFilter == 'wheels') {
-                            $('#datatable-1').DataTable()
-                                .rows()
-                                .data()
-                                .each(function (data, index) {
-                                    var wheels = data[7]; // wheels
-                                    var arr = wheels ? (wheels.trim()).split('__') : [];
-                                    if (arr.length > 0 && arr.indexOf('Done') == -1) {
-                                        totalPending += 1;
-                                    }
-                                    if (arr.length > 0 && arr.indexOf('Done') != -1) {
-                                        totalComplete += 1;
-                                    }
-                                });
+                            $('#pendingCount').html(obj.wheelsP);
+                            $('#completeCount').html(obj.wheelsC);
                         }
-
-                        $('#pendingCount').html(totalPending);
-                        $('#completeCount').html(totalComplete);
 
 
 
@@ -1181,7 +1156,7 @@ function carDealersFilterDivHTML() {
         }
         setTimeout(() => {
             manageCarDealersTable.draw();
-            manageCarDealersTable.searchPanes.rebuildPane();
+            // manageCarDealersTable.searchPanes.rebuildPane();
         }, 500);
     })
 }
@@ -1251,10 +1226,7 @@ function writeStatusHTML() {
             timeout: 1e3
         });
 
-        setTimeout(() => {
-            // manageInvTable.draw();
-            // manageInvTable.searchPanes.rebuildPane();
-        }, 500);
+        manageInvTable.draw();
     })
 }
 

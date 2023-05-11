@@ -21,8 +21,10 @@ if ($result->num_rows > 0) {
             $result1 = $connect->query($sql1);
             if ($result1->num_rows > 0) {
                 while ($row1 = $result1->fetch_assoc()) {
+                    $scheduleStart = date('Y-m-d H:i:s', strtotime($row1['schedule_start']  . ' -59 minute'));
                     $appointments[] = array(
-                        "schedule_start" => $row1['schedule_start'],
+                        // "schedule_start" => $row1['schedule_start'],
+                        "schedule_start" => $scheduleStart,
                         "schedule_end" => $row1['schedule_end'],
                     );
                 }
@@ -33,9 +35,15 @@ if ($result->num_rows > 0) {
 
         // $today_date = $row[17];
         // $todayDate = date('m-d-Y');
+        // if (strtotime($today_date) == strtotime($todayDate)) {
+        //     echo "The date is today's date";
+        // } else {
+        //     echo "The date is not today's date";
+        // }
+
         $today_availability = $row[18];
         $available_today = true;
-        if($today_availability == 'Lunch' ){
+        if ($today_availability == 'Lunch') {
             $available_today = false;
         }
 

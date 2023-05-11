@@ -26,7 +26,7 @@ if ($userRole != $salesConsultantID) {
             -- SELECT  COUNT(b.sale_todo_id)  FROM `sale_todo` as b INNER JOIN sales ON b.sale_id = sales.sale_id 
             -- WHERE sales.status = 1 AND sales.location = '$location' AND b.status = 1 AND b.salesperson_status != 'cancelled' AND ((b.vin_check = 'checkTitle' OR b.vin_check = 'need') OR b.insurance = 'need' OR b.trade_title = 'need' OR (b.registration = 'pending' OR b.registration = 'done') OR b.inspection = 'need' OR b.salesperson_status != 'delivered' )) as todo , 
             SELECT  COUNT(b.sale_todo_id)  FROM `sale_todo` as b INNER JOIN sales ON b.sale_id = sales.sale_id LEFT JOIN users ON users.id = sales.sales_consultant
-            WHERE sales.status = 1 AND sales.location = '$location' AND b.status = 1 AND b.salesperson_status != 'cancelled' AND users.username != 'House Deal' AND ((b.vin_check = 'checkTitle' OR b.vin_check = 'need') OR b.insurance = 'need' OR b.trade_title = 'need' OR (b.registration = 'pending' OR b.registration = 'done') OR b.inspection = 'need' OR b.salesperson_status != 'delivered' )) as todo , 
+            WHERE sales.status = 1 AND sales.stock_id != '' AND sales.sale_status = 'delivered' AND sales.location = '$location' AND b.status = 1 AND b.salesperson_status != 'cancelled' AND users.username != 'House Deal' AND ((b.vin_check = 'checkTitle' OR b.vin_check = 'need') OR b.insurance = 'need' OR b.trade_title = 'need' OR (b.registration = 'pending' OR b.registration = 'done') OR b.inspection = 'need' OR b.salesperson_status != 'delivered' )) as todo , 
         ( SELECT COUNT(used_cars.id) FROM `used_cars` LEFT JOIN inventory ON (used_cars.inv_id = inventory.id AND inventory.status = 1 AND inventory.location = '$location' AND inventory.stocktype = 'USED' AND inventory.lot != 'LBO') WHERE (title = 'false' OR title IS NULL) AND date_in IS NOT NULL AND inventory.id IS NOT NULL ) as titleIssue ,
         ( SELECT COUNT(*) FROM `warrenty_cancellation` WHERE status = 1 AND location = '$location') as warrenty_cancellation";
 } else {
@@ -40,7 +40,31 @@ if ($userRole != $salesConsultantID) {
 
     $sql2 = "SELECT 
         ( SELECT COUNT(registration_problems.id) FROM registration_problems WHERE registration_problems.status = 1 AND registration_problems.location = '$location' AND registration_problems.p_status = 1 AND registration_problems.sales_consultant = '$uid') as problem ,
-        ( SELECT  COUNT(b.sale_todo_id)  FROM `sale_todo` as b INNER JOIN sales ON b.sale_id = sales.sale_id WHERE sales.sales_consultant = '$uid' AND sales.location = '$location' AND sales.status = 1 AND b.status = 1 AND b.salesperson_status != 'cancelled' AND ((b.vin_check = 'checkTitle' OR b.vin_check = 'need') OR b.insurance = 'need' OR b.trade_title = 'need' OR (b.registration = 'pending' OR b.registration = 'done') OR b.inspection = 'need'  OR b.salesperson_status != 'delivered' )) as todo , 
+        -- ( SELECT  COUNT(b.sale_todo_id)  FROM `sale_todo` as b INNER JOIN sales ON b.sale_id = sales.sale_id WHERE sales.sales_consultant = '$uid' AND sales.location = '$location' AND sales.status = 1 AND ( sales.sale_status = 'delivered' OR sales.sale_status = 'pending') AND b.status = 1 AND b.salesperson_status != 'cancelled' AND ((b.vin_check = 'checkTitle' OR b.vin_check = 'need') OR b.insurance = 'need' OR b.trade_title = 'need' OR (b.registration = 'pending' OR b.registration = 'done') OR b.inspection = 'need'  OR b.salesperson_status != 'delivered' )) as todo , 
+        ( 
+            SELECT  COUNT(b.sale_todo_id) 
+            FROM `sale_todo` as b 
+            INNER JOIN sales ON b.sale_id = sales.sale_id 
+            
+            WHERE sales.status = 1 
+            AND sales.stock_id != ''
+            AND ( sales.sale_status = 'delivered' OR sales.sale_status = 'pending') 
+            AND b.status = 1 
+            AND sales.sales_consultant = '$uid' 
+            AND sales.location = '$location' 
+            AND sales.sale_status != 'cancelled' 
+                AND ( b.salesperson_status != 'cancelled' AND NOT (
+                    (b.vin_check != 'checkTitle' AND b.vin_check != 'need') 
+                    AND b.insurance != 'need' 
+                    AND b.trade_title != 'need' 
+                    AND (b.registration != 'pending' AND b.registration != 'done') 
+                    AND b.inspection != 'need' 
+                    AND (b.salesperson_status = 'cancelled' OR b.salesperson_status = 'delivered')
+                ))
+        ) as todo , 
+        
+        
+        
         ( SELECT COUNT(used_cars.id) FROM `used_cars` LEFT JOIN inventory ON (used_cars.inv_id = inventory.id AND inventory.status = 1 AND inventory.location = '$location' AND inventory.stocktype = 'USED' AND inventory.lot != 'LBO') WHERE (title = 'false' OR title IS NULL) AND date_in IS NOT NULL AND inventory.id IS NOT NULL ) as titleIssue ,
         ( SELECT COUNT(*) FROM `warrenty_cancellation` WHERE status = 1 AND location = '$location') as warrenty_cancellation";
 }
@@ -52,6 +76,7 @@ if ($userRole != $salesConsultantID) {
 $result = $connect->query($sql);
 $output = array('data' => array(), 'graph' => array());
 $outputArray = array();
+$outputArray_delivered = array();
 
 
 $monthNewCount = 0;
@@ -190,6 +215,48 @@ if ($result->num_rows > 0) {
             }
         }
 
+        //  status delivered list will only show in graphs
+        if ($row['sale_status'] == 'delivered') {
+            if (!key_exists($consultant_id, $outputArray_delivered)) {
+                $outputArray_delivered[$consultant_id] = array(
+                    'id' => $consultant_id,
+                    'name' => ($sales_consultant) ? $sales_consultant : "Unknown",
+                    'status' => ($user_status) ? $user_status : "Unknown",
+                    'data' => array(),
+                );
+            }
+
+            $key = array_search($reconcileDate, array_column($outputArray_delivered[$consultant_id]['data'], 'time'));
+            if ($key) {
+                if ($row['stocktype'] == 'NEW') {
+                    $outputArray_delivered[$consultant_id]['data'][$key]['new'] += 1;
+                    if ($row['sale_status'] == 'pending') {
+                        $outputArray_delivered[$consultant_id]['data'][$key]['newP'] += 1;
+                    } else if ($row['sale_status'] == 'delivered') {
+                        $outputArray_delivered[$consultant_id]['data'][$key]['newD'] += 1;
+                    }
+                }
+                if ($row['stocktype'] == 'USED') {
+                    $outputArray_delivered[$consultant_id]['data'][$key]['used'] += 1;
+                    if ($row['sale_status'] == 'pending') {
+                        $outputArray_delivered[$consultant_id]['data'][$key]['usedP'] += 1;
+                    } else if ($row['sale_status'] == 'delivered') {
+                        $outputArray_delivered[$consultant_id]['data'][$key]['usedD'] += 1;
+                    }
+                }
+            } else {
+                $outputArray_delivered[$consultant_id]['data'][] = array(
+                    'new' => ($row['stocktype'] == 'NEW') ? 1 : 0,
+                    'newP' => ($row['stocktype'] == 'NEW' && $row['sale_status'] == 'pending') ? 1 : 0,
+                    'newD' => ($row['stocktype'] == 'NEW' && $row['sale_status'] == 'delivered') ? 1 : 0,
+                    'used' => ($row['stocktype'] == 'USED') ? 1 : 0,
+                    'usedP' => ($row['stocktype'] == 'USED' && $row['sale_status'] == 'pending') ? 1 : 0,
+                    'usedD' => ($row['stocktype'] == 'USED' && $row['sale_status'] == 'delivered') ? 1 : 0,
+                    'time' => $reconcileDate,
+                );
+            }
+        }
+
 
 
         // $gross = floatval(preg_replace("/[^0-9.]/", '', $row['gross']));
@@ -273,8 +340,10 @@ if ($result2->num_rows > 0) {
 
 
 $outputArray = array_values($outputArray);
+$outputArray_delivered = array_values($outputArray_delivered);
 
-$output['graph'] = $outputArray;
+$output['datatable'] = $outputArray;
+$output['graph'] = $outputArray_delivered;
 
 $avgn = ($todayNCount != 0) ? $todayN / $todayNCount : 0;
 $avgu = ($todayUCount != 0) ? $todayU / $todayUCount : 0;
