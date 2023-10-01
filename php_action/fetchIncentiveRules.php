@@ -3,7 +3,7 @@
 require_once 'db/core.php';
 $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 // $sql = "SELECT `id`, `from_date`, `to_date`, `model`, `year`, `modelno`, `college`, `military`, `loyalty`, `conquest`, `misc1`, `misc2`, `misc3` , `type` , `ex_modelno` FROM `incentive_rules` WHERE status = 1";
-$sql = "SELECT `id`, `model`, `year`, `modelno`, `ex_modelno`, `type`, `college`, `college_e`, `military`, `military_e`, `loyalty`, `loyalty_e`, `conquest`, `conquest_e`, `misc1`, `misc1_e`, `misc2`, `misc2_e`, `lease_loyalty`, `lease_loyalty_e` FROM `incentive_rules` WHERE status = 1 AND location = '$location'";
+$sql = "SELECT `id`, `model`, `year`, `modelno`, `ex_modelno` , `state`, `type`, `college`, `college_e`, `military`, `military_e`, `loyalty`, `loyalty_e`, `conquest`, `conquest_e`, `misc1`, `misc1_e`, `misc2`, `misc2_e`, `lease_loyalty`, `lease_loyalty_e` FROM `incentive_rules` WHERE status = 1 AND location = '$location'";
 $result = $connect->query($sql);
 
 $output = array('data' => array());
@@ -19,6 +19,9 @@ if ($result->num_rows > 0) {
 
         $ex_modelno = $row['ex_modelno'];
         $ex_modelno = str_replace('_', ' ', $ex_modelno);
+
+        $state = $row['state'];
+        $state = str_replace('_', ' ', $state);
 
         // date_default_timezone_set('Australia/Melbourne');
 
@@ -100,6 +103,7 @@ if ($result->num_rows > 0) {
             $row['modelno'],
             $row['type'],  // type
             $ex_modelno,
+            $state,
             $college,
             $military,
             $loyalty,

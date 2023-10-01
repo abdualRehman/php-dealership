@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6">
-                <p class="text-left mb-0">Copyright <i class="far fa-copyright"></i> <span id="copyright-year"></span> AR Webs. All rights reserved</p>
+                <p class="text-left mb-0">Copyright <i class="far fa-copyright"></i> <span id="copyright-year"></span> 1 DEALER SYSTEM</p>
             </div>
             <div class="col-md-6 d-none d-md-block">
                 <p class="text-right mb-0"><a href="https://www.fiverr.com/share/yVzNwz" target="_blank"><i class="fa fa-link text-info"></i> &nbsp; Contact Developer</a></p>

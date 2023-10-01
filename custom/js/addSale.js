@@ -171,7 +171,7 @@ $(function () {
                 data: form.serialize(),
                 dataType: 'json',
                 success: function (response) {
-                    console.log(response);
+                    // console.log(response);
 
                     if (response.success == true) {
                         e1.fire({
@@ -199,7 +199,7 @@ $(function () {
                                 $('#stockId').val(id);
                                 $('#stockId').selectpicker('refresh');
                                 $('#stockId').selectpicker('toggle');
-                                console.log(id);
+                                // console.log(id);
                                 changeStockDetails({ value: `${id}` });
                             }, 2000);
                         });
@@ -304,7 +304,7 @@ $(function () {
                 data: form.serialize(),
                 dataType: 'json',
                 success: function (response) {
-                    console.log(response);
+                    // console.log(response);
 
                     if (response.success == true) {
                         e1.fire({
@@ -318,7 +318,7 @@ $(function () {
                         // form[0].reset();
                         setTimeout(() => {
                             var siteURL = localStorage.getItem('siteURL');
-                            console.log(siteURL);
+                            // console.log(siteURL);
                             if (siteURL != null) {
                                 window.location.href = siteURL + '/sales/soldLogs.php?r=man&filter=today';
                             }
@@ -585,7 +585,7 @@ function changeReconcile() {
 }
 
 function changeStockDetails(ele) {
-    console.log(ele.value);
+    // console.log(ele.value);
     if (ele?.value && ele?.value != 'null') {
         $('#detailsSection').removeClass('d-none');
         let obj = stockArray.find(data => data[0] === ele.value);
@@ -611,19 +611,19 @@ function changeStockDetails(ele) {
         $('#selectedDetails').addClass('text-center');
 
 
-        if (obj[32] == 'true') {
+        if (obj[19] == 'true') {
             $('#codp_warn').removeClass('d-none');
         } else {
             $('#codp_warn').addClass('d-none');
         }
-        if (obj[33] == 'true') {
+        if (obj[20] == 'true') {
             $('#lwbn_warn').removeClass('d-none');
         } else {
             $('#lwbn_warn').addClass('d-none');
         }
 
 
-        if ($('#vgb').val() == "true" && obj[31] == 1) {
+        if ($('#vgb').val() == "true" && obj[18] == 1) {
             $('#grossDiv').removeClass('v-none'); // show gross field on both stock type new / used
         }
 
@@ -657,22 +657,38 @@ function changeRules() {
     if (eleV) {
         let obj = stockArray.find(data => data[0] === eleV);
 
-        // console.log(obj);
+        var incentivesArray = obj.incentivesArray;
 
-        chnageIncentiveStatus(obj[17], obj[18], 'college');
-        chnageIncentiveStatus(obj[19], obj[20], 'military');
-        chnageIncentiveStatus(obj[21], obj[22], 'loyalty');
-        chnageIncentiveStatus(obj[23], obj[24], 'conquest');
-        chnageIncentiveStatus(obj[25], obj[26], 'misc1');
-        chnageIncentiveStatus(obj[27], obj[28], 'misc2');
-        chnageIncentiveStatus(obj[29], obj[30], 'leaseLoyalty');
+        let state = $('#state').val();
+        if (state && incentivesArray && incentivesArray.length > 0) {
 
-        if (obj[17] != 'N/A' || obj[19] != 'N/A' || obj[21] != 'N/A' || obj[23] != 'N/A' || obj[25] != 'N/A' || obj[27] != 'N/A' || obj[29] != 'N/A') {
-            $('#loadIncentivesDiv').removeClass('hidden');
-        } else {
-            $('#loadIncentivesDiv').addClass('hidden');
+            // get most related obj from rules array 
+            var r_obj = incentivesArray.find(rule => (rule[0].includes(`_${state}_`)));
+
+            if (r_obj) {
+                chnageIncentiveStatus(r_obj[1], r_obj[2], 'college');
+                chnageIncentiveStatus(r_obj[3], r_obj[4], 'military');
+                chnageIncentiveStatus(r_obj[5], r_obj[6], 'loyalty');
+                chnageIncentiveStatus(r_obj[7], r_obj[8], 'conquest');
+                chnageIncentiveStatus(r_obj[9], r_obj[10], 'misc1');
+                chnageIncentiveStatus(r_obj[11], r_obj[12], 'misc2');
+                chnageIncentiveStatus(r_obj[13], r_obj[14], 'leaseLoyalty');
+                if (r_obj[1] != 'N/A' || r_obj[3] != 'N/A' || r_obj[5] != 'N/A' || r_obj[7] != 'N/A' || r_obj[9] != 'N/A' || r_obj[11] != 'N/A' || r_obj[13] != 'N/A') {
+                    $('#loadIncentivesDiv').removeClass('hidden');
+                } else {
+                    $('#loadIncentivesDiv').addClass('hidden');
+                }
+            } else {
+                chnageIncentiveStatus("N/A", "N/A", 'college');
+                chnageIncentiveStatus("N/A", "N/A", 'military');
+                chnageIncentiveStatus("N/A", "N/A", 'loyalty');
+                chnageIncentiveStatus("N/A", "N/A", 'conquest');
+                chnageIncentiveStatus("N/A", "N/A", 'misc1');
+                chnageIncentiveStatus("N/A", "N/A", 'misc2');
+                chnageIncentiveStatus("N/A", "N/A", 'leaseLoyalty');
+                $('#loadIncentivesDiv').addClass('hidden');
+            }
         }
-
         $('.selectpicker').selectpicker('refresh');
         changeSalesPersonTodo();
 
@@ -721,14 +737,8 @@ function changeSalesPersonTodo() {
     var eleV = $('#stockId').val();
     if (eleV) {
         let obj = stockArray.find(data => data[0] === eleV);
-        // console.log(obj);
-
-        // sales Person's Todo Rules
-        // console.log(obj['spTodoArray']);
         var todoArray = obj['spTodoArray'];
         let state = $('#state').val();
-        // console.log(todoArray);
-        var saleDate = $('#saleDate').val();
         if (state && todoArray && todoArray.length > 0) {
 
             var spTodoRulesObj = todoArray.find(data => data[4] === state);

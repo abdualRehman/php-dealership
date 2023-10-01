@@ -272,7 +272,7 @@ if ($userRole != 'Admin' && $userRole != $branchAdmin && $userRole != $generalMa
                                         <input type="text" name="fname" id="fname" class="form-control w-auto " placeholder="First name">
                                         <input type="text" name="mname" id="mname" class="form-control w-auto " placeholder="Middle name">
                                         <input type="text" name="lname" id="lname" class="form-control w-auto " placeholder="Last name">
-                                        <select class="form-control selectpicker w-auto" onchange="changeSalesPersonTodo()" name="state" id="state" data-live-search="true" data-size="4">
+                                        <select class="form-control selectpicker w-auto" onchange="changeRules()" name="state" id="state" data-live-search="true" data-size="4">
                                             <option value="0" selected disabled>State</option>
                                             <option value="MA">MA</option>
                                             <option value="RI">RI</option>

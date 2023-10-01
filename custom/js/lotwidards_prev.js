@@ -146,21 +146,21 @@ $(function () {
         buttons: [
             {
                 extend: 'copyHtml5',
-                title: 'Lot widzards',
+                title: 'Lot Wizard',
                 exportOptions: {
                     columns: [':visible:not(:first-child)'],
                 }
             },
             {
                 extend: 'excelHtml5',
-                title: 'Lot widzards',
+                title: 'Lot Wizard',
                 exportOptions: {
                     columns: [':visible:not(:first-child)']
                 }
             },
             {
                 extend: 'print',
-                title: 'Lot widzards',
+                title: 'Lot Wizard',
                 exportOptions: {
                     columns: [':visible:not(:first-child)']
                 },

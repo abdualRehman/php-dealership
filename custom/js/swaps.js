@@ -630,7 +630,7 @@ function loadStock() {
     $.ajax({
         url: '../php_action/fetchInvForSearch.php',
         type: "POST",
-        data: { type: 'NEW', removeStatus: false },
+        data: { type: 'NEW' },
         dataType: 'json',
         success: function (response) {
             stockArray = response.data;

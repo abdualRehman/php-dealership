@@ -42,15 +42,12 @@ if (hasAccess("invsplst", "Edit") === 'false') {
                                 <div class="widget10 widget10-vertical-md">
                                     <div class="widget10-item">
                                         <div class="widget10-content">
-                                            <h2 class="widget10-title" id="done-percentage"><span></span></h2>
+                                            <h2 class="widget10-title" id="done-percentage"><span></span> %</h2>
                                             <span class="widget10-subtitle">
                                                 Percent Done
                                             </span>
                                         </div>
                                         <div class="widget10-addon">
-                                            <div class="avatar avatar-label-info avatar-circle widget8-avatar m-0">
-                                                <div class="avatar-display"><i class="fa fa-percent"></i></div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

@@ -32,7 +32,8 @@ $(function () {
             viewTotal: !0,
             columns: [1, 2, 7, 9, 10],
         },
-        "pageLength": 200,
+        pageLength: 100,
+                    lengthMenu: [[50, 100, 250, -1], [50, 100, 250, "All"]],
         fixedHeader: true,
         buttons: [
             {

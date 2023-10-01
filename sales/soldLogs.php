@@ -237,7 +237,6 @@ if ($_GET['r'] == 'man') {
                                                     <label class="btn btn-flat-primary">
                                                         <input type="radio" name="radio-date" value="all" id="modAll">
                                                         Show All
-                                                        <span class="badge badge-lg p-1" id="AllCount"></span>
                                                     </label>
                                                 </div>
                                             </div>
@@ -788,7 +787,8 @@ if ($_GET['r'] == 'man') {
                                         <input type="text" name="fname" id="fname" class="form-control w-auto " placeholder="First name">
                                         <input type="text" name="mname" id="mname" class="form-control w-auto " placeholder="Middle name">
                                         <input type="text" name="lname" id="lname" class="form-control w-auto " placeholder="Last name">
-                                        <select class="form-control selectpicker w-auto" onchange="changeSalesPersonTodo()" name="state" id="state" data-live-search="true" data-size="4">
+                                        <!-- <select class="form-control selectpicker w-auto" onchange="changeSalesPersonTodo()" name="state" id="state" data-live-search="true" data-size="4"> -->
+                                        <select class="form-control selectpicker w-auto" onchange="changeRules(true)" name="state" id="state" data-live-search="true" data-size="4">
                                             <option value="0" selected disabled>State</option>
                                             <option value="MA">MA</option>
                                             <option value="RI">RI</option>

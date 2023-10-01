@@ -253,7 +253,7 @@ $(function () {
                     processing: true,
                     deferRender: true,
                     pageLength: 250,
-                    lengthMenu: [50, 100, 250, 500],
+                    lengthMenu: [[50, 100, 250, 500, -1], [50, 100, 250, 500, "All"]],
                     ajax: {
                         url: '../php_action/fetchSoldLogs.php',
                         type: "POST",
@@ -310,21 +310,21 @@ $(function () {
                             extend: 'copyHtml5',
                             title: 'Sold Logs',
                             exportOptions: {
-                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                                columns: [0, 1, 2, 3, 4, 19, 5, 6, 7, 8, 9, 10, 11]
                             }
                         },
                         {
                             extend: 'excelHtml5',
                             title: 'Sold Logs',
                             exportOptions: {
-                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                                columns: [0, 1, 2, 3, 4, 19, 5, 6, 7, 8, 9, 10, 11]
                             }
                         },
                         {
                             extend: 'print',
                             title: 'Sold Logs',
                             exportOptions: {
-                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                                columns: [0, 1, 2, 3, 4, 19, 5, 6, 7, 8, 9, 10, 11]
                             }
                         },
                     ],
@@ -1681,23 +1681,23 @@ function changeStockDetails(ele, fromEdit = false, gross = null) {
 
     $('#selectedStockType').val(obj[14]); // setting up stockType for sales person Todo
 
-    var detailsDiv = `${obj[14]} ${obj[2]} ${obj[3]} ${obj[4]} \n Vin: ${obj[8]} \n Mileage: ${obj[31] == 1 ? obj[9] : ""} \n Age: ${obj[31] == 1 ? obj[10] : ""} \n Lot: ${obj[31] == 1 ? obj[7] : ""}  ${($('#vgb').val() == "true") ? `\n Balance: ${obj[31] == 1 ? obj[11] : ""} ${obj[31] == 2 ? "\n  Stock is Deleted" : ""}` : ``}`;
+    var detailsDiv = `${obj[14]} ${obj[2]} ${obj[3]} ${obj[4]} \n Vin: ${obj[8]} \n Mileage: ${obj[18] == 1 ? obj[9] : ""} \n Age: ${obj[18] == 1 ? obj[10] : ""} \n Lot: ${obj[18] == 1 ? obj[7] : ""}  ${($('#vgb').val() == "true") ? `\n Balance: ${obj[18] == 1 ? obj[11] : ""} ${obj[18] == 2 ? "\n  Stock is Deleted" : ""}` : ``}`;
     $('#selectedDetails').html(detailsDiv);
     $('#selectedDetails').addClass('text-center');
 
-    if (obj[32] == 'true') {
+    if (obj[19] == 'true') {
         $('#codp_warn').removeClass('d-none');
     } else {
         $('#codp_warn').addClass('d-none');
     }
-    if (obj[33] == 'true') {
+    if (obj[20] == 'true') {
         $('#lwbn_warn').removeClass('d-none');
     } else {
         $('#lwbn_warn').addClass('d-none');
     }
 
 
-    if ($('#vgb').val() == "true" && obj[31] == 1) {
+    if ($('#vgb').val() == "true" && obj[18] == 1) {
         $('#grossDiv').removeClass('v-none'); // show gross field on both stock type new / used
     }
 
@@ -1729,28 +1729,40 @@ function changeRules(changeMisc1V) {
     var eleV = $('#stockId').val();
     if (eleV) {
         let obj = stockArray.find(data => data[0] === eleV);
-        // console.log(obj);
-        if (obj) {
 
-            chnageIncentiveStatus(obj[17], obj[18], 'college');
-            chnageIncentiveStatus(obj[19], obj[20], 'military');
-            chnageIncentiveStatus(obj[21], obj[22], 'loyalty');
-            chnageIncentiveStatus(obj[23], obj[24], 'conquest');
-            chnageIncentiveStatus(obj[25], obj[26], 'misc1', changeMisc1V);
-            chnageIncentiveStatus(obj[27], obj[28], 'misc2');
-            chnageIncentiveStatus(obj[29], obj[30], 'leaseLoyalty');
+        var incentivesArray = obj.incentivesArray;
+        let state = $('#state').val();
 
-            if (obj[17] != 'N/A' || obj[19] != 'N/A' || obj[21] != 'N/A' || obj[23] != 'N/A' || obj[25] != 'N/A' || obj[27] != 'N/A' || obj[29] != 'N/A') {
-                $('#loadIncentivesDiv').removeClass('hidden');
+        if (state && incentivesArray && incentivesArray.length > 0) {
+            // get most related obj from rules array 
+            var r_obj = incentivesArray.find(rule => (rule[0].includes(`_${state}_`)));
+
+            if (r_obj) {
+                chnageIncentiveStatus(r_obj[1], r_obj[2], 'college');
+                chnageIncentiveStatus(r_obj[3], r_obj[4], 'military');
+                chnageIncentiveStatus(r_obj[5], r_obj[6], 'loyalty');
+                chnageIncentiveStatus(r_obj[7], r_obj[8], 'conquest');
+                chnageIncentiveStatus(r_obj[9], r_obj[10], 'misc1', changeMisc1V);
+                chnageIncentiveStatus(r_obj[11], r_obj[12], 'misc2');
+                chnageIncentiveStatus(r_obj[13], r_obj[14], 'leaseLoyalty');
+                if (r_obj[1] != 'N/A' || r_obj[3] != 'N/A' || r_obj[5] != 'N/A' || r_obj[7] != 'N/A' || r_obj[9] != 'N/A' || r_obj[11] != 'N/A' || r_obj[13] != 'N/A') {
+                    $('#loadIncentivesDiv').removeClass('hidden');
+                } else {
+                    $('#loadIncentivesDiv').addClass('hidden');
+                }
             } else {
+                chnageIncentiveStatus("N/A", "N/A", 'college');
+                chnageIncentiveStatus("N/A", "N/A", 'military');
+                chnageIncentiveStatus("N/A", "N/A", 'loyalty');
+                chnageIncentiveStatus("N/A", "N/A", 'conquest');
+                chnageIncentiveStatus("N/A", "N/A", 'misc1', changeMisc1V);
+                chnageIncentiveStatus("N/A", "N/A", 'misc2');
+                chnageIncentiveStatus("N/A", "N/A", 'leaseLoyalty');
                 $('#loadIncentivesDiv').addClass('hidden');
             }
-
-            $('.selectpicker').selectpicker('refresh');
-
-            changeSalesPersonTodo();
-
         }
+        $('.selectpicker').selectpicker('refresh');
+        changeSalesPersonTodo();
     }
 
 }
@@ -1760,22 +1772,40 @@ function changeRules_css() {
     var eleV = $('#stockId').val();
     if (eleV) {
         let obj = stockArray.find(data => data[0] === eleV);
-        if (obj) {
-            chnageIncentiveStatus_css(obj[17], obj[18], 'college');
-            chnageIncentiveStatus_css(obj[19], obj[20], 'military');
-            chnageIncentiveStatus_css(obj[21], obj[22], 'loyalty');
-            chnageIncentiveStatus_css(obj[23], obj[24], 'conquest');
-            chnageIncentiveStatus_css(obj[25], obj[26], 'misc1');
-            chnageIncentiveStatus_css(obj[27], obj[28], 'misc2');
-            chnageIncentiveStatus_css(obj[29], obj[30], 'leaseLoyalty');
-            if (obj[17] != 'N/A' || obj[19] != 'N/A' || obj[21] != 'N/A' || obj[23] != 'N/A' || obj[25] != 'N/A' || obj[27] != 'N/A' || obj[29] != 'N/A') {
-                $('#loadIncentivesDiv').removeClass('hidden');
+
+        var incentivesArray = obj.incentivesArray;
+        let state = $('#state').val();
+
+        if (state && incentivesArray && incentivesArray.length > 0) {
+            // get most related obj from rules array 
+            var r_obj = incentivesArray.find(rule => (rule[0].includes(`_${state}_`)));
+
+            if (r_obj) {
+                chnageIncentiveStatus_css(r_obj[1], r_obj[2], 'college');
+                chnageIncentiveStatus_css(r_obj[3], r_obj[4], 'military');
+                chnageIncentiveStatus_css(r_obj[5], r_obj[6], 'loyalty');
+                chnageIncentiveStatus_css(r_obj[7], r_obj[8], 'conquest');
+                chnageIncentiveStatus_css(r_obj[9], r_obj[10], 'misc1');
+                chnageIncentiveStatus_css(r_obj[11], r_obj[12], 'misc2');
+                chnageIncentiveStatus_css(r_obj[13], r_obj[14], 'leaseLoyalty');
+                if (r_obj[1] != 'N/A' || r_obj[3] != 'N/A' || r_obj[5] != 'N/A' || r_obj[7] != 'N/A' || r_obj[9] != 'N/A' || r_obj[11] != 'N/A' || r_obj[13] != 'N/A') {
+                    $('#loadIncentivesDiv').removeClass('hidden');
+                } else {
+                    $('#loadIncentivesDiv').addClass('hidden');
+                }
             } else {
+                chnageIncentiveStatus_css("N/A", "N/A", 'college');
+                chnageIncentiveStatus_css("N/A", "N/A", 'military');
+                chnageIncentiveStatus_css("N/A", "N/A", 'loyalty');
+                chnageIncentiveStatus_css("N/A", "N/A", 'conquest');
+                chnageIncentiveStatus_css("N/A", "N/A", 'misc1');
+                chnageIncentiveStatus_css("N/A", "N/A", 'misc2');
+                chnageIncentiveStatus_css("N/A", "N/A", 'leaseLoyalty');
                 $('#loadIncentivesDiv').addClass('hidden');
             }
-            $('.selectpicker').selectpicker('refresh');
-            changeSalesPersonTodo_css();
         }
+        $('.selectpicker').selectpicker('refresh');
+        changeSalesPersonTodo_css();
     }
 }
 function chnageIncentiveStatus_css(value, date, element) {

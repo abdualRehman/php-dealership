@@ -178,9 +178,6 @@ if ($_GET['r'] == 'man') {
                                                             <input type="radio" name="year" value=""> ALL
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="year" value="2022"> 2022
-                                                        </label>
-                                                        <label class="btn btn-outline-primary">
                                                             <input type="radio" name="year" value="2023"> 2023
                                                         </label>
                                                         <label class="btn btn-outline-primary">
@@ -201,16 +198,16 @@ if ($_GET['r'] == 'man') {
                                                             <input type="radio" name="mod" data-texts="Accord,Accord Hybrid,ACCORD 4DR"> ACCORD
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="mod" data-texts="Civic,CIVIC HATCH,CIVIC SEDAN,Civic SI,CIVIC 5DR"> CIVIC
+                                                            <input type="radio" name="mod" data-texts="Civic,CIVIC SEDAN,Civic SI"> CIVIC SEDAN
                                                         </label>
+                                                        <label class="btn btn-outline-primary">
+                                                             <input type="radio" name="mod" data-texts="CIVIC HATCH,CIVIC 5DR,Civic Type R"> CIVIC HATCH
+                                                         </label>     
                                                         <label class="btn btn-outline-primary">
                                                             <input type="radio" name="mod" data-texts="CR-V,CR-V Hybrid,CRV Hybrid,CRV,CLARITY PLUG-IN HYBRID"> CR-V
                                                         </label>
                                                         <label class="btn btn-outline-primary">
                                                             <input type="radio" name="mod" data-texts="HR-V,HRV"> HRV
-                                                        </label>
-                                                        <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="mod" data-texts="INSIGHT"> INSIGHT
                                                         </label>
                                                         <label class="btn btn-outline-primary">
                                                             <input type="radio" name="mod" data-texts="ODYSSEY"> ODYSSEY

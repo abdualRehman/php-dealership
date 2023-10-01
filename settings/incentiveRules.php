@@ -91,6 +91,7 @@ if (hasAccess("incr", "Edit") === 'false') {
                                     <th>Model no.</th>
                                     <th>Model Type</th>
                                     <th>Ex Model No</th>
+                                    <th>State</th>
                                     <th>College</th>
                                     <th>Military</th>
                                     <th>Loyalty</th>
@@ -130,11 +131,12 @@ if (hasAccess("incr", "Edit") === 'false') {
                         <table class="table" id="productTable1">
                             <thead>
                                 <tr>
-                                    <th style="width:20%;text-align:center">Model</th>
-                                    <th style="width:20%;text-align:center">Year</th>
+                                    <th style="width:15%;text-align:center">Model</th>
+                                    <th style="width:15%;text-align:center">Year</th>
                                     <th style="width:20%;text-align:center">Model No.</th>
-                                    <th style="width:20%;text-align:center">Model Type</th>
+                                    <th style="width:15%;text-align:center">Model Type</th>
                                     <th style="width:20%;text-align:center">Exclude Model No</th>
+                                    <th style="width:15%;text-align:center">State</th>
 
                                 </tr>
                             </thead>
@@ -148,7 +150,7 @@ if (hasAccess("incr", "Edit") === 'false') {
                                             <option value="ACCORD HYBRID">ACCORD HYBRID</option>
                                             <option value="CIVIC">CIVIC</option>
                                             <option value="CR-V">CR-V</option>
-                                            <option value="CR-V HYBRID">CR-V HYBRID</option>
+                                            <option value="CR-V HYBRID">CRV HYBRID</option>
                                             <option value="HR-V">HR-V</option>
                                             <option value="INSIGHT">INSIGHT</option>
                                             <option value="ODYSSEY">ODYSSEY</option>
@@ -174,6 +176,63 @@ if (hasAccess("incr", "Edit") === 'false') {
                                         <select class="form-control tags select21" id="editExModelno" name="editExModelno[]" multiple="multiple" title="Exclude Model No.">
                                             <optgroup label="Press Enter to add">
                                         </select>
+                                    </td>
+                                    <td class="form-group">
+                                        <select class="form-control selectpicker" id="editState" name="editState[]" multiple="multiple" title="Select State" data-width="200px" data-actions-box="true" data-size="12" >
+                                            <option value="MA">MA</option>
+                                            <option value="RI">RI</option>
+                                            <option value="CT">CT</option>
+                                            <option value="NH">NH</option>
+                                            <option value="AL">AL</option>
+                                            <option value="AK">AK</option>
+                                            <option value="AZ">AZ</option>
+                                            <option value="AR">AR</option>
+                                            <option value="CA">CA</option>
+                                            <option value="CO">CO</option>
+                                            <option value="DC">DC</option>
+                                            <option value="DE">DE</option>
+                                            <option value="FL">FL</option>
+                                            <option value="GA">GA</option>
+                                            <option value="HI">HI</option>
+                                            <option value="ID">ID</option>
+                                            <option value="IL">IL</option>
+                                            <option value="IN">IN</option>
+                                            <option value="IA">IA</option>
+                                            <option value="KS">KS</option>
+                                            <option value="KY">KY</option>
+                                            <option value="LA">LA</option>
+                                            <option value="ME">ME</option>
+                                            <option value="MD">MD</option>
+                                            <option value="MI">MI</option>
+                                            <option value="MN">MN</option>
+                                            <option value="MS">MS</option>
+                                            <option value="MO">MO</option>
+                                            <option value="MT">MT</option>
+                                            <option value="NE">NE</option>
+                                            <option value="NV">NV</option>
+                                            <option value="NJ">NJ</option>
+                                            <option value="NM">NM</option>
+                                            <option value="NY">NY</option>
+                                            <option value="NC">NC</option>
+                                            <option value="ND">ND</option>
+                                            <option value="OH">OH</option>
+                                            <option value="OK">OK</option>
+                                            <option value="OR">OR</option>
+                                            <option value="PA">PA</option>
+                                            <option value="SC">SC</option>
+                                            <option value="SD">SD</option>
+                                            <option value="TN">TN</option>
+                                            <option value="TX">TX</option>
+                                            <option value="UT">UT</option>
+                                            <option value="VT">VT</option>
+                                            <option value="VA">VA</option>
+                                            <option value="WA">WA</option>
+                                            <option value="WV">WV</option>
+                                            <option value="WI">WI</option>
+                                            <option value="WY">WY</option>
+                                        </select>
+                                        <!-- <select class="form-control select31" id="editState" name="editState[]" multiple="multiple" title="Select State">
+                                        </select> -->
                                     </td>
                                 </tr>
                             </tbody>
@@ -327,11 +386,12 @@ if (hasAccess("incr", "Edit") === 'false') {
                     <table class="table" id="productTable">
                         <thead>
                             <tr>
-                                <th style="width:20%;text-align:center">Model</th>
+                                <th style="width:15%;text-align:center">Model</th>
                                 <th style="width:15%;text-align:center">Year</th>
-                                <th style="width:20%;text-align:center">Model No.</th>
+                                <th style="width:15%;text-align:center">Model No.</th>
                                 <th style="width:15%;text-align:center">Model Type</th>
-                                <th style="width:20%;text-align:center">Exclude Model No</th>
+                                <th style="width:15%;text-align:center">Exclude Model No</th>
+                                <th style="width:15%;text-align:center">State</th>
                                 <th style="width:10%;text-align:center"></th>
                             </tr>
                         </thead>
@@ -372,6 +432,63 @@ if (hasAccess("incr", "Edit") === 'false') {
                                         <optgroup label="Press Enter to add">
                                     </select>
                                 </td>
+                                <td class="form-group">
+                                    <select class="form-control selectpicker" id="state1" name="state1[]" multiple="multiple" title="Select State" data-width="200px" data-actions-box="true" data-size="12" >
+                                        <option value="MA">MA</option>
+                                        <option value="RI">RI</option>
+                                        <option value="CT">CT</option>
+                                        <option value="NH">NH</option>
+                                        <option value="AL">AL</option>
+                                        <option value="AK">AK</option>
+                                        <option value="AZ">AZ</option>
+                                        <option value="AR">AR</option>
+                                        <option value="CA">CA</option>
+                                        <option value="CO">CO</option>
+                                        <option value="DC">DC</option>
+                                        <option value="DE">DE</option>
+                                        <option value="FL">FL</option>
+                                        <option value="GA">GA</option>
+                                        <option value="HI">HI</option>
+                                        <option value="ID">ID</option>
+                                        <option value="IL">IL</option>
+                                        <option value="IN">IN</option>
+                                        <option value="IA">IA</option>
+                                        <option value="KS">KS</option>
+                                        <option value="KY">KY</option>
+                                        <option value="LA">LA</option>
+                                        <option value="ME">ME</option>
+                                        <option value="MD">MD</option>
+                                        <option value="MI">MI</option>
+                                        <option value="MN">MN</option>
+                                        <option value="MS">MS</option>
+                                        <option value="MO">MO</option>
+                                        <option value="MT">MT</option>
+                                        <option value="NE">NE</option>
+                                        <option value="NV">NV</option>
+                                        <option value="NJ">NJ</option>
+                                        <option value="NM">NM</option>
+                                        <option value="NY">NY</option>
+                                        <option value="NC">NC</option>
+                                        <option value="ND">ND</option>
+                                        <option value="OH">OH</option>
+                                        <option value="OK">OK</option>
+                                        <option value="OR">OR</option>
+                                        <option value="PA">PA</option>
+                                        <option value="SC">SC</option>
+                                        <option value="SD">SD</option>
+                                        <option value="TN">TN</option>
+                                        <option value="TX">TX</option>
+                                        <option value="UT">UT</option>
+                                        <option value="VT">VT</option>
+                                        <option value="VA">VA</option>
+                                        <option value="WA">WA</option>
+                                        <option value="WV">WV</option>
+                                        <option value="WI">WI</option>
+                                        <option value="WY">WY</option>
+                                    </select>
+                                    <!-- <select class="form-control select31" id="state1" name="state1[]" multiple="multiple" title="Select State">
+                                    </select> -->
+                                </td>
                                 <td class="form-group text-center">
                                     <button type="button" id="addRowBtn" class="btn btn-info" data-loading-text="Loading..." onclick="addRow()">Add New</button>
                                 </td>
@@ -381,7 +498,7 @@ if (hasAccess("incr", "Edit") === 'false') {
 
                     <br><br>
 
-                    <div class="form-row" id="permissionsDiv" >
+                    <div class="form-row" id="permissionsDiv">
                         <div class="col-md-6">
                             <div class="form-group row">
                                 <div class="col-sm-3 text-md-left mb-2 align-self-center">

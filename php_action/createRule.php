@@ -2,6 +2,8 @@
 
 require_once './db/core.php';
 
+$connect->begin_transaction();
+
 $valid = array('success' => false, 'messages' => array(), 'errorMessages' => array(), 'id' => '');
 function reformatDate($date, $from_format = 'm-d-Y', $to_format = 'Y-m-d')
 {
@@ -11,7 +13,7 @@ function reformatDate($date, $from_format = 'm-d-Y', $to_format = 'Y-m-d')
 
 if ($_POST) {
 
-  
+
     $college = "N/A";
     $collegeE = "";
     if (isset($_POST['college'])) {
@@ -74,6 +76,7 @@ if ($_POST) {
 
 
     for ($x = 0; $x < count($_POST['model']); $x++) {
+
         $i = $x + 1;
 
         $model = mysqli_real_escape_string($connect, $_POST['model'][$x]);
@@ -83,23 +86,38 @@ if ($_POST) {
 
         $exModelno = (isset($_POST['exModelno' . $i])) ? implode("_", $_POST['exModelno' . $i]) : "";
         $exModelno = ($exModelno ===  "") ? "" :   "_" . $exModelno . "_";
+
+        $state = (isset($_POST['state' . $i])) ? implode("_", $_POST['state' . $i]) : "";
+        $state = ($state ===  "") ? "" :   "_" . $state . "_";
+
+
+
         $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
+        $isExist = false;
+
         // echo $exModelno ."<br />";
+        if (isset($_POST['state' . $i])) {
+            foreach ($_POST['state' . $i] as $stateValue) {
+                $checkSql = "SELECT * FROM `incentive_rules` 
+                WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND state LIKE '%_" . $stateValue . "_%' AND type='$modelType' AND status = 1 AND location = '$location'";
+                $result = $connect->query($checkSql);
+                if ($result->num_rows > 0) {
+                    $isExist = true;
+                    $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . ' - ' . $modelType  . ' - ' . $stateValue  . ", Already Exist";
+                    $connect->rollback();
+                }
+            }
+        }
 
-        $checkSql = "SELECT * FROM `incentive_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND type='$modelType' AND status = 1 AND location = '$location'";
-        $result = $connect->query($checkSql);
-        if ($result->num_rows > 0) {
-
-            $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . ' - ' . $modelType  . ", Already Exist";
-        } else {
-
-            $sql = "INSERT INTO `incentive_rules`( `model`, `year`, `modelno`, `ex_modelno`, `type`, `college`, `college_e`, `military`, `military_e`, `loyalty`, `loyalty_e`, `conquest`, `conquest_e`, `misc1`, `misc1_e`, `misc2`, `misc2_e`, `lease_loyalty`, `lease_loyalty_e`, `status` , `location`) 
+        if (empty($valid['errorMessages'])) {
+            $sql = "INSERT INTO `incentive_rules`( `model`, `year`, `modelno`, `ex_modelno` , `state`, `type`, `college`, `college_e`, `military`, `military_e`, `loyalty`, `loyalty_e`, `conquest`, `conquest_e`, `misc1`, `misc1_e`, `misc2`, `misc2_e`, `lease_loyalty`, `lease_loyalty_e`, `status` , `location`) 
             VALUES (
                 '$model',
                 '$year',
                 '$modelno',
                 '$exModelno',
+                '$state',
                 '$modelType',
                 '$college',
                 '$collegeE',
@@ -117,17 +135,25 @@ if ($_POST) {
                 '$leaseLoyaltyE' , 1  , '$location' )";
 
             if ($connect->query($sql) === true) {
-                $valid['success'] = true;
-                $valid['messages'][] = "Successfully Added";
+                $valid['success'] = false;
+                $valid['messages'][] = "";
             } else {
                 $valid['success'] = false;
                 $valid['messages'][] = $connect->error;
-                // $valid['messages'] = mysqli_error($connect);
             }
         }
     }
 
+    if (empty($valid['errorMessages'])) {
+        $valid['success'] = true;
+        $valid['messages'] = ["Successfully Added"];
+    } else {
+        $valid['success'] = false;
+        $valid['messages'] = ["Please remove error first!"];
+    }
 
+
+    $connect->commit();
     $connect->close();
 
     echo json_encode($valid);

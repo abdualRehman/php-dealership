@@ -87,7 +87,7 @@ ul.dropdown-menu.inner.show{
     }
 
     .responsive-content {
-        font-size: 10px;
+        font-size: 19px;
         margin-top: 2px;
         margin-bottom: 2px;
     }
@@ -129,14 +129,14 @@ ul.dropdown-menu.inner.show{
     }
 
     .responsive-content {
-        font-size: 10px;
+        font-size: 19px;
         margin-top: 2px;
         margin-bottom: 2px;
     }
 
     .responsive-content-title,
     .responsive-content-title * {
-        font-size: 1rem !important;
+        font-size: 3rem !important;
         margin-top: 2px;
         margin-bottom: 2px;
     }

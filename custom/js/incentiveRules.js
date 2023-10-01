@@ -59,11 +59,11 @@ $(function () {
                 targets: [0, 1, 2, 3, 4],
             },
             {
-                targets: [13],
+                targets: [14],
                 visible: false,
             },
             {
-                targets: [5, 6, 7, 8, 9, 10, 11],
+                targets: [6, 7, 8, 9, 10, 11, 12],
                 createdCell: function (td, cellData, rowData, row, col) {
                     if (cellData == 'Expire') {
                         $(td).html('<span class="badge badge-danger badge-pill">Expire</span>');
@@ -86,7 +86,7 @@ $(function () {
                 $(row).children().not(':last-child').attr({
                     "data-toggle": "modal",
                     "data-target": "#modal8",
-                    "onclick": "editRule(" + data[13] + ")"
+                    "onclick": "editRule(" + data[14] + ")"
                 });
             }
         },
@@ -211,10 +211,14 @@ $(function () {
                 dataType: 'json',
                 success: function (response) {
                     console.log(response);
-
+                    if ((response.errorMessages) && response.errorMessages.length > 0) {
+                        response.errorMessages.forEach(message => {
+                            toastr.error(message, 'Error while Updating');
+                        });
+                    }
                     if (response.success == true) {
                         e1.fire({
-                            position: "top-end",
+                            position: "center",
                             icon: "success",
                             title: response.messages,
                             showConfirmButton: !1,
@@ -225,7 +229,7 @@ $(function () {
 
                     } else {
                         e1.fire({
-                            position: "top-end",
+                            position: "center",
                             icon: "error",
                             title: response.messages,
                             showConfirmButton: !1,
@@ -292,6 +296,26 @@ function loadTypeHead(id) {
         tags: !0,
         allowClear: true
     })
+
+    $('#' + id).selectpicker('refresh');
+    // $(".select3" + id).select2({
+    //     dropdownAutoWidth: !0,
+    //     placeholder: "Select State",
+    //     allowClear: false
+    // });
+    // $(".select3" + id).on('select2:select', function (e) {
+    //     var data = e.params.data;
+    //     if (data?.id == "ALL") {
+    //         $(".select3" + id).val('ALL');
+    //         $(".select3" + id).trigger('change');
+    //     } else {
+    //         let values = $(".select3" + id).val();
+    //         if (values.includes('ALL')) {
+    //             $(".select3" + id).val('ALL');
+    //             $(".select3" + id).trigger('change');
+    //         }
+    //     }
+    // });
 }
 
 
@@ -341,6 +365,8 @@ function editRule(ruleId = null) {
                 var arr = (response.ex_modelno.trim()).split('_');
                 arr.shift(); //remove first space
                 arr.pop(); //remove last space
+
+
                 $("#editExModelno").html('');
                 arr.forEach(element => {
                     if ((element == '') || $('#editExModelno').find("option[value='" + element + "']").length) {
@@ -351,6 +377,12 @@ function editRule(ruleId = null) {
                         $('#editExModelno').append(newOption).trigger('change');
                     }
                 });
+
+                var stateArr = (response.state.trim()).split('_');
+                stateArr.shift(); //remove first space
+                stateArr.pop(); //remove last space
+                // $('#editState').val(stateArr).trigger('change');
+                $('#editState').selectpicker('val', stateArr);
 
 
                 if (response.college != 'N/A') {
@@ -391,7 +423,9 @@ function editRule(ruleId = null) {
                 }
 
 
+                
                 $('.selectpicker').selectpicker('refresh');
+                $('#editState').selectpicker('refresh');
 
             }, // /success
             error: function (err) {
@@ -497,8 +531,8 @@ function addRow() {
         <option value="RIDGELINE">RIDGELINE</option>
     </select>
 </td>`;
-
-
+    // previous - select state
+    {/* <select class="form-control tags select3${count}" id="state${count}" name="state${count}[]" multiple="multiple" title="Select State"> */ }
     tr += `
     <td class="form-group">
         <input type="text" class="form-control typeahead typeahead${count}" id="year${count}" name="year[]" placeholder="Year">
@@ -516,6 +550,61 @@ function addRow() {
     <td class="form-group">
         <select class="form-control tags select2${count}" id="exModelno${count}" name="exModelno${count}[]" multiple="multiple" title="Exclude Model No.">
             <optgroup label="Press Enter to add">
+        </select>
+    </td>
+    <td class="form-group">
+        <select class="form-control selectpicker" id="state${count}" name="state${count}[]" multiple="multiple" title="Select State" data-width="200px" data-actions-box="true" data-size="12" >
+            <option value="MA">MA</option>
+            <option value="RI">RI</option>
+            <option value="CT">CT</option>
+            <option value="NH">NH</option>
+            <option value="AL">AL</option>
+            <option value="AK">AK</option>
+            <option value="AZ">AZ</option>
+            <option value="AR">AR</option>
+            <option value="CA">CA</option>
+            <option value="CO">CO</option>
+            <option value="DC">DC</option>
+            <option value="DE">DE</option>
+            <option value="FL">FL</option>
+            <option value="GA">GA</option>
+            <option value="HI">HI</option>
+            <option value="ID">ID</option>
+            <option value="IL">IL</option>
+            <option value="IN">IN</option>
+            <option value="IA">IA</option>
+            <option value="KS">KS</option>
+            <option value="KY">KY</option>
+            <option value="LA">LA</option>
+            <option value="ME">ME</option>
+            <option value="MD">MD</option>
+            <option value="MI">MI</option>
+            <option value="MN">MN</option>
+            <option value="MS">MS</option>
+            <option value="MO">MO</option>
+            <option value="MT">MT</option>
+            <option value="NE">NE</option>
+            <option value="NV">NV</option>
+            <option value="NJ">NJ</option>
+            <option value="NM">NM</option>
+            <option value="NY">NY</option>
+            <option value="NC">NC</option>
+            <option value="ND">ND</option>
+            <option value="OH">OH</option>
+            <option value="OK">OK</option>
+            <option value="OR">OR</option>
+            <option value="PA">PA</option>
+            <option value="SC">SC</option>
+            <option value="SD">SD</option>
+            <option value="TN">TN</option>
+            <option value="TX">TX</option>
+            <option value="UT">UT</option>
+            <option value="VT">VT</option>
+            <option value="VA">VA</option>
+            <option value="WA">WA</option>
+            <option value="WV">WV</option>
+            <option value="WI">WI</option>
+            <option value="WY">WY</option>
         </select>
     </td>
     <td class="form-group text-center">

@@ -2,7 +2,9 @@
 
 require_once './db/core.php';
 
-$valid['success'] = array('success' => false, 'messages' => array(), 'id' => '');
+$connect->begin_transaction();
+
+$valid['success'] = array('success' => false, 'messages' => array(), 'errorMessages' => array(), 'id' => '');
 function reformatDate($date, $from_format = 'm-d-Y', $to_format = 'Y-m-d')
 {
     $date_aux = date_create_from_format($from_format, $date);
@@ -17,10 +19,13 @@ if ($_POST) {
     $year = mysqli_real_escape_string($connect, $_POST['editYear']);
     $modelno = mysqli_real_escape_string($connect, $_POST['editModelno']);
     $editModelType = mysqli_real_escape_string($connect, $_POST['editModelType']);
-    
-    $editExModelno = (isset($_POST['editExModelno'])) ? implode("_",$_POST['editExModelno']): "";
+
+    $editExModelno = (isset($_POST['editExModelno'])) ? implode("_", $_POST['editExModelno']) : "";
     // echo implode(" ",(array)$_POST['editExModelno']);
-    $editExModelno = ($editExModelno ===  "") ? "" :   "_".$editExModelno."_" ;
+    $editExModelno = ($editExModelno ===  "") ? "" :   "_" . $editExModelno . "_";
+
+    $state = (isset($_POST['editState'])) ? implode("_", $_POST['editState']) : "";
+    $state = ($state ===  "") ? "" :   "_" . $state . "_";
 
     // echo $editExModelno;
 
@@ -76,25 +81,35 @@ if ($_POST) {
         $misc2E = mysqli_real_escape_string($connect, $_POST['emisc2E']);
         $misc2E = reformatDate($misc2E);
     }
-    
+
 
     $location = ($_SESSION['userLoc'] !== '') ? $_SESSION['userLoc'] : '1';
 
-    $checkSql = "SELECT * FROM `incentive_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND type = '$editModelType' AND status = 1 AND location = '$location' AND id != '$ruleId'";
-    $result = $connect->query($checkSql);
+    $isExist = false;
 
-    if ($result->num_rows > 0) {
+    if (isset($_POST['editState'])) {
+        foreach ($_POST['editState'] as $stateValue) {
 
-        $valid['success'] = false;
-        $valid['messages'] = "Rule Already Exist";
+            $checkSql = "SELECT * FROM `incentive_rules` 
+            WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND state LIKE '%_" . $stateValue . "_%' AND type = '$editModelType' AND status = 1 AND location = '$location' AND id != '$ruleId'";
 
-    } else {
+            $result = $connect->query($checkSql);
+            if ($result->num_rows > 0) {
+                $isExist = true;
+                $valid['errorMessages'][] = $model . ' - ' . $year . ' - ' . $modelno . ' - ' . $editModelType  . ' - ' . $stateValue  . ", Already Exist";
+                $connect->rollback();
+            }
+        }
+    }
+
+    if (empty($valid['errorMessages'])) {
 
         $sql = "UPDATE `incentive_rules` SET 
         `model`='$model',
         `year`='$year',
         `modelno`='$modelno',
         `ex_modelno`='$editExModelno',
+        `state`='$state',
         `type`='$editModelType',
         `college`='$college',
         `college_e`='$collegeE',
@@ -111,6 +126,7 @@ if ($_POST) {
         `lease_loyalty`='$leaseLoyalty',
         `lease_loyalty_e`='$leaseLoyaltyE' WHERE id = '$ruleId' ";
 
+
         if ($connect->query($sql) === true) {
             $valid['success'] = true;
             $valid['messages'] = "Successfully Updated";
@@ -119,11 +135,51 @@ if ($_POST) {
             $valid['messages'] = $connect->error;
             $valid['messages'] = mysqli_error($connect);
         }
+    } else {
+        $valid['success'] = false;
+        $valid['messages'] = ["Please remove error first!"];
     }
 
 
+    // $checkSql = "SELECT * FROM `incentive_rules` WHERE model = '$model' AND year = '$year' AND modelno = '$modelno' AND type = '$editModelType' AND state LIKE '%_AKK_%' AND status = 1 AND location = '$location' AND id != '$ruleId'";
+    // $result = $connect->query($checkSql);
+    // if ($result->num_rows > 0) {
+    //     $valid['success'] = false;
+    //     $valid['messages'] = "Rule Already Exist";
+    // } else {
+    //     $sql = "UPDATE `incentive_rules` SET 
+    //     `model`='$model',
+    //     `year`='$year',
+    //     `modelno`='$modelno',
+    //     `ex_modelno`='$editExModelno',
+    //     `type`='$editModelType',
+    //     `college`='$college',
+    //     `college_e`='$collegeE',
+    //     `military`='$military',
+    //     `military_e`='$militaryE',
+    //     `loyalty`='$loyalty',
+    //     `loyalty_e`='$loyaltyE',
+    //     `conquest`='$conquest',
+    //     `conquest_e`='$conquestE',
+    //     `misc1`='$misc1',
+    //     `misc1_e`='$misc1E',
+    //     `misc2`='$misc2',
+    //     `misc2_e`='$misc2E',
+    //     `lease_loyalty`='$leaseLoyalty',
+    //     `lease_loyalty_e`='$leaseLoyaltyE' WHERE id = '$ruleId' ";
+    //     if ($connect->query($sql) === true) {
+    //         $valid['success'] = true;
+    //         $valid['messages'] = "Successfully Updated";
+    //     } else {
+    //         $valid['success'] = false;
+    //         $valid['messages'] = $connect->error;
+    //         $valid['messages'] = mysqli_error($connect);
+    //     }
+    // }
 
 
+
+    $connect->commit();
     $connect->close();
 
     echo json_encode($valid);
