@@ -38,7 +38,7 @@ if ($result->num_rows > 0) {
         $sql1 = "SELECT * FROM `users` WHERE id = '$submittedBy'";
         $result1 = $connect->query($sql1);
         $row1 = $result1->fetch_assoc();
-        $output['submittedBy'] = $row1['username'];
+        $output['submittedBy'] = is_array($row1) ? $row1['username'] : "";
     } else {
         $output['submittedBy'] = "";
     }
@@ -46,7 +46,7 @@ if ($result->num_rows > 0) {
         $sql2 = "SELECT * FROM `users` WHERE id = '$financeManager'";
         $result2 = $connect->query($sql2);
         $row2 = $result2->fetch_assoc();
-        $output['financeManager'] = $row2['username'];
+        $output['financeManager'] = is_array($row2) ?  $row2['username'] : "";
     } else {
         $output['financeManager'] = "";
     }
@@ -66,8 +66,6 @@ if ($result->num_rows > 0) {
 
     $output['codp_warn'] = $codp_warn;
     $output['lwbn_warn'] = $lwbn_warn;
-
-
 } // if num_rows
 
 $connect->close();

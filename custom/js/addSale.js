@@ -688,6 +688,15 @@ function changeRules() {
                 chnageIncentiveStatus("N/A", "N/A", 'leaseLoyalty');
                 $('#loadIncentivesDiv').addClass('hidden');
             }
+        } else {
+            chnageIncentiveStatus("N/A", "N/A", 'college');
+            chnageIncentiveStatus("N/A", "N/A", 'military');
+            chnageIncentiveStatus("N/A", "N/A", 'loyalty');
+            chnageIncentiveStatus("N/A", "N/A", 'conquest');
+            chnageIncentiveStatus("N/A", "N/A", 'misc1');
+            chnageIncentiveStatus("N/A", "N/A", 'misc2');
+            chnageIncentiveStatus("N/A", "N/A", 'leaseLoyalty');
+            $('#loadIncentivesDiv').addClass('hidden');
         }
         $('.selectpicker').selectpicker('refresh');
         changeSalesPersonTodo();
@@ -698,27 +707,29 @@ function changeRules() {
 
 function chnageIncentiveStatus(value, date, element) {
     if (value != 'N/A') {
-        var saleDate = $('#saleDate').val();
-        saleDate = moment(saleDate).format('MM-DD-YYYY');
-
-        var edate = moment(date);
+        var saleDateB = $('#saleDate').val();
+        saleDateB = moment(saleDateB,'MM-DD-YYYY HH:mm').format('MM-DD-YYYY');
+        var saleDate = moment(saleDateB,'MM-DD-YYYY');
+        var edate = moment(date, 'YYYY-MM-DD').format('MM-DD-YYYY');
+        edate = moment(edate , 'MM-DD-YYYY');
         var cduration = moment.duration(edate.diff(saleDate));
         var cdays = cduration.asDays();
         cdays = Math.ceil(cdays);
-
         if (element == 'misc1') {
             if (cdays >= 0) {
                 $('#misc1').val("Yes");
                 $("#misc1 option:contains('No')").prop("disabled", true);
             } else {
                 $("#misc1 option:contains('No')").prop("disabled", false);
+                $("#misc1 option:contains('No')").removeAttr('disabled');
                 $('#misc1').val("No");
             }
             $(".selectpicker").selectpicker("refresh");
+            $('#' + element).selectpicker("refresh");
         }
-
         if (cdays >= 0) {
             $('#' + element).prop("disabled", false);
+            $('#' + element).removeAttr('disabled');
             $('#' + element + '_v').html('$' + value);
         } else {
             $('#' + element).val("No");
@@ -731,7 +742,11 @@ function chnageIncentiveStatus(value, date, element) {
         $('#' + element + '_v').html('');
         // $('#misc1').val("No");
     }
+    
+    $(".selectpicker").selectpicker("refresh");
+    $('#' + element).selectpicker("refresh");
 }
+
 
 function changeSalesPersonTodo() {
     var eleV = $('#stockId').val();
@@ -825,6 +840,7 @@ function changeSalesPersonTodoStyle(elementID, value) {
     if (value !== "N/A") {
         $('#' + elementID).val(value);
         $('#' + elementID).prop("disabled", false);
+        $('#' + elementID).removeAttr('disabled');;
     } else {
         $(`#${elementID} option:eq(0)`).prop("selected", true);
         $('#' + elementID).prop("disabled", true);
