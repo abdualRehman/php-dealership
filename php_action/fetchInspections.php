@@ -53,12 +53,12 @@ if ($filterBy != '') {
             $searchQuery .= " AND ( inspections.wheels != '' AND inspections.wheels LIKE '%Done%' AND ( inventory.balance != '' OR inventory.balance != 0 ) AND inventory.status != 2 ) ";
         }
     } else if ($filterBy == 'toGo') {
-        $searchQuery .= " AND ( inspections.repairs != '' AND  ( inspections.repair_sent = '' OR inspections.repair_sent IS NULL ) AND inventory.status != 2 ) ";
+        $searchQuery .= " AND ( inspections.repairs != '' AND  ( inspections.repair_sent = '' OR inspections.repair_sent IS NULL ) AND inventory.status != 3 ) ";
     } else if ($filterBy == 'atBodyshop') {
 
-        $searchQuery .= " AND ( inspections.repairs != '' AND  ( inspections.repair_sent != '' ) AND ( inspections.repair_returned = '' OR inspections.repair_returned IS NULL ) AND inventory.status != 2 ) ";
+        $searchQuery .= " AND ( inspections.repairs != '' AND  ( inspections.repair_sent != '' ) AND ( inspections.repair_returned = '' OR inspections.repair_returned IS NULL ) AND inventory.status != 3 ) ";
     } else if ($filterBy == 'backFromBodyshop') {
-        $searchQuery .= " AND ( inspections.repair_returned != '' AND inspections.repair_sent != '' AND ( inspections.recon = '' OR inspections.recon IS NULL ) AND inventory.status != 2 ) ";
+        $searchQuery .= " AND ( inspections.repair_returned != '' AND inspections.repair_sent != '' AND ( inspections.recon = '' OR inspections.recon IS NULL ) AND inventory.status != 3 ) ";
     } else if ($filterBy == 'retailReady') {
         $searchQuery .= " AND ( inspections.recon = 'sent' AND inventory.status != 2 ) ";
     } else if ($filterBy == 'Gone') {
@@ -422,15 +422,15 @@ if ($result->num_rows > 0) {
         }
 
 
-        if (count($arr) > 0 && ($repairSent == "" || $repairSent == null) && $invStatus != 2) {
+        if (count($arr) > 0 && ($repairSent == "" || $repairSent == null) && $invStatus != 3) {
             $toGo += 1;
             $_toGo = "To Go";
         }
-        if (count($arr) > 0 && ($repairSent != "" && $repairSent != null) && ($repairReturned == "" || $repairReturned == null) && $invStatus != 2) {
+        if (count($arr) > 0 && ($repairSent != "" && $repairSent != null) && ($repairReturned == "" || $repairReturned == null) && $invStatus != 3) {
             $atBodyshop += 1;
             $_atBodyshop = "At Bodyshop";
         }
-        if ($repairReturned && $repairSent && ($recon == "" || $recon == null) && $invStatus != 2) {
+        if ($repairReturned && $repairSent && ($recon == "" || $recon == null) && $invStatus != 3) {
             $backFromBodyshop += 1;
             $_backBodyshop = "Back Bodyshop";
         }

@@ -597,7 +597,7 @@ if ($userRole != 'Admin' && $userRole != $branchAdmin && $userRole != $generalMa
                                             </optgroup>
                                         </select>
                                     </div>
-                                    <label for="misc2" class="col-md-1 col-form-label text-md-center">Misc 2
+                                    <label for="misc2" class="col-md-1 col-form-label text-md-center">Closing Cash
                                         <span class="badge-label-primary" id="misc2_v"></span>
                                     </label>
                                     <div class="col-md-3">

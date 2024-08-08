@@ -422,7 +422,7 @@ function writeStatusHTML() {
                 <input type="radio" name="searchStatus" id="searchStatusNotFixed" value="1" >Not Fixed <span class="badge badge-lg p-1" id="notFixedCount" ></span>
             </label>
             <label class="btn btn-flat-primary">
-                <input type="radio" name="searchStatus" id="searchStatusFixed" value="0">Fixed <span class="badge badge-lg p-1" id="fixedCount" ></span>
+                <input type="radio" name="searchStatus" id="searchStatusFixed" value="0">Fixed <span class="badge badge-lg p-1"  ></span>
             </label> 
             
         </div>`;

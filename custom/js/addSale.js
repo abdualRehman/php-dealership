@@ -513,6 +513,19 @@ $('#salesPerson').on('change', function () {
 })
 
 
+// custom color of incentives on Change
+$('#loadIncentivesDiv .selectpicker').on('change', function () {
+    var selectedOption = $(this).find('option:selected').text().trim();
+    var buttonElement = $(this).closest('.bootstrap-select').find('button');
+    if (selectedOption === 'Yes') {
+        buttonElement.removeClass('bs-btn-default').addClass('btn-danger');
+    } else {
+        buttonElement.removeClass('btn-danger').addClass('bs-btn-default');
+    }
+    $(this).selectpicker('refresh');
+});
+
+
 function loadSaleConsultant() {
     // var sales_consultant_id = 66;
     var sales_consultant_id = Number(localStorage.getItem('salesConsultantID'));
@@ -708,10 +721,10 @@ function changeRules() {
 function chnageIncentiveStatus(value, date, element) {
     if (value != 'N/A') {
         var saleDateB = $('#saleDate').val();
-        saleDateB = moment(saleDateB,'MM-DD-YYYY HH:mm').format('MM-DD-YYYY');
-        var saleDate = moment(saleDateB,'MM-DD-YYYY');
+        saleDateB = moment(saleDateB, 'MM-DD-YYYY HH:mm').format('MM-DD-YYYY');
+        var saleDate = moment(saleDateB, 'MM-DD-YYYY');
         var edate = moment(date, 'YYYY-MM-DD').format('MM-DD-YYYY');
-        edate = moment(edate , 'MM-DD-YYYY');
+        edate = moment(edate, 'MM-DD-YYYY');
         var cduration = moment.duration(edate.diff(saleDate));
         var cdays = cduration.asDays();
         cdays = Math.ceil(cdays);
@@ -742,7 +755,7 @@ function chnageIncentiveStatus(value, date, element) {
         $('#' + element + '_v').html('');
         // $('#misc1').val("No");
     }
-    
+
     $(".selectpicker").selectpicker("refresh");
     $('#' + element).selectpicker("refresh");
 }

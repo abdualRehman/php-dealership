@@ -119,7 +119,7 @@ $(function () {
                 serverSide: true,
                 processing: true,
                 deferRender: true,
-                "pageLength": 250,
+                "pageLength": 251,
                 ajax: {
                     url: `${siteURL}/php_action/fetchSchedules.php`,
                     type: "POST",

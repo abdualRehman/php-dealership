@@ -1864,7 +1864,8 @@
 
 .bootstrap-select .dropdown-toggle .filter-option-inner-inner {
     overflow: hidden;
-    text-overflow: ellipsis
+    text-overflow: ellipsis;
+    text-align: center !important;
 }
 
 .bootstrap-select .dropdown-toggle .filter-option-inner-inner>i {
@@ -2262,7 +2263,8 @@
 
 .dataTable>thead>tr>td:not(.sorting_disabled),
 .dataTable>thead>tr>th:not(.sorting_disabled) {
-    padding-right: 2rem
+    padding-right: 2rem;
+    text-align: center !important;
 }
 
 .dataTable>thead .sorting,
@@ -2487,12 +2489,13 @@
 
 .dataTable.table-bordered td,
 .dataTable.table-bordered th {
-    border-left-width: 0
+    padding: .6rem;
+    border-left-width: 0;
 }
 
 .dataTable.table-bordered td:last-child,
 .dataTable.table-bordered th:last-child {
-    border-right-width: 1px !important
+    border-right-width: 1px !important;
 }
 
 .dataTable.table-bordered tbody td,

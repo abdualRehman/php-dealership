@@ -476,6 +476,7 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                             <option value="Attach Rear Bumper">Attach Rear Bumper</option>
                                             <option value="Both Bumpers">Both Bumpers</option>
                                             <option value="Rear Bumper Lower">Rear Bumper Lower</option>
+                                            <option value="Rear Bumper Trim">Rear Bumper Trim</option>
                                             <option value="Grill">Grill</option>
                                             <option value="Hood">Hood</option>
                                             <option value="Roof">Roof</option>

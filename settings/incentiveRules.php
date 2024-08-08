@@ -149,13 +149,15 @@ if (hasAccess("incr", "Edit") === 'false') {
                                             <option value="ACCORD">ACCORD</option>
                                             <option value="ACCORD HYBRID">ACCORD HYBRID</option>
                                             <option value="CIVIC">CIVIC</option>
+                                            <option value="CIVIC HYBRID">CIVIC HYBRID</option>
                                             <option value="CR-V">CR-V</option>
-                                            <option value="CR-V HYBRID">CRV HYBRID</option>
+                                            <option value="CR-V HYBRID">CR-V HYBRID</option>
                                             <option value="HR-V">HR-V</option>
                                             <option value="INSIGHT">INSIGHT</option>
                                             <option value="ODYSSEY">ODYSSEY</option>
                                             <option value="PASSPORT">PASSPORT</option>
                                             <option value="PILOT">PILOT</option>
+                                            <option value="PROLOGUE">PROLOGUE</option>
                                             <option value="RIDGELINE">RIDGELINE</option>
                                         </select>
                                     </td>
@@ -404,13 +406,15 @@ if (hasAccess("incr", "Edit") === 'false') {
                                         <option value="ACCORD">ACCORD</option>
                                         <option value="ACCORD HYBRID">ACCORD HYBRID</option>
                                         <option value="CIVIC">CIVIC</option>
+                                        <option value="CIVIC HYBRID">CIVIC HYBRID</option>
                                         <option value="CR-V">CR-V</option>
-                                        <option value="CR-V HYBRID">CR-V HYBRID</option>
+                                        <option value="CR-V HYBRID">CRV HYBRID</option>
                                         <option value="HR-V">HR-V</option>
                                         <option value="INSIGHT">INSIGHT</option>
                                         <option value="ODYSSEY">ODYSSEY</option>
                                         <option value="PASSPORT">PASSPORT</option>
                                         <option value="PILOT">PILOT</option>
+                                        <option value="PROLOGUE">PROLOGUE</option>
                                         <option value="RIDGELINE">RIDGELINE</option>
                                     </select>
                                 </td>

@@ -235,8 +235,8 @@ $(function () {
                 serverSide: true,
                 processing: true,
                 deferRender: true,
-                pageLength: 100,
-                lengthMenu: [10, 25, 50, 100, 250],
+                pageLength: 250,
+                lengthMenu: [250, 500, 1000, 2000],
                 ajax: {
                     url: '../php_action/fetchInspections.php',
                     type: "POST",

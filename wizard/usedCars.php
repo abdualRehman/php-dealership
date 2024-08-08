@@ -52,11 +52,13 @@ if ($_SESSION['userRole'] == $officeID || (hasAccess("usedCars", "TitleView") !=
         margin: 5px;
         /* font-size: medium; */
     }
+    
 
     label.btn-outline-success:hover,
     label.btn-outline-danger:hover,
     label.btn-outline-infor:hover {
         color: white;
+        
     }
 
     .btn-group-toggle label input {

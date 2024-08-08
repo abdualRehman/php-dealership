@@ -256,7 +256,7 @@ $(function () {
                 serverSide: true,
                 processing: true,
                 deferRender: true,
-                pageLength: 50,
+                pageLength: 100,
                 lengthMenu: [10, 25, 50, 100, 250],
                 ajax: {
                     url: '../php_action/fetchUsedCars.php',

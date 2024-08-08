@@ -178,10 +178,10 @@ if ($_GET['r'] == 'man') {
                                                             <input type="radio" name="year" value=""> ALL
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="year" value="2023"> 2023
+                                                            <input type="radio" name="year" value="2024"> 2024
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="year" value="2024"> 2024
+                                                            <input type="radio" name="year" value="2025"> 2025
                                                         </label>
                                                     </div>
                                                 </div>
@@ -198,7 +198,7 @@ if ($_GET['r'] == 'man') {
                                                             <input type="radio" name="mod" data-texts="Accord,Accord Hybrid,ACCORD 4DR"> ACCORD
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="mod" data-texts="Civic,CIVIC SEDAN,Civic SI"> CIVIC SEDAN
+                                                            <input type="radio" name="mod" data-texts="Civic,CIVIC SEDAN,Civic Hybrid,Civic SI"> CIVIC SEDAN
                                                         </label>
                                                         <label class="btn btn-outline-primary">
                                                              <input type="radio" name="mod" data-texts="CIVIC HATCH,CIVIC 5DR,Civic Type R"> CIVIC HATCH
@@ -210,7 +210,7 @@ if ($_GET['r'] == 'man') {
                                                             <input type="radio" name="mod" data-texts="HR-V,HRV"> HRV
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="mod" data-texts="ODYSSEY"> ODYSSEY
+                                                            <input type="radio" name="mod" data-texts="ODYSSEY,Odyssey,Odyssey Package"> ODYSSEY
                                                         </label>
                                                         <label class="btn btn-outline-primary">
                                                             <input type="radio" name="mod" data-texts="Passport,Passport  Package,Passport Package"> PASSPORT
@@ -219,7 +219,10 @@ if ($_GET['r'] == 'man') {
                                                             <input type="radio" name="mod" data-texts="Pilot,PILOT,Pilot Package,Pilot Packages"> PILOT
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="mod" data-texts="Ridgeline,Ridgeline Packages,RIDGELINE"> RIDGELINE
+                                                            <input type="radio" name="mod" data-texts="Prologue,Prologue Packages,Prologue Package"> PROLOGUE
+                                                        </label>
+                                                        <label class="btn btn-outline-primary">
+                                                            <input type="radio" name="mod" data-texts="Ridgeline,Ridgeline Packages,RIDGELINE,Ridgeline Package"> RIDGELINE
                                                         </label>
                                                     </div>
                                                 </div>

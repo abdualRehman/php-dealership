@@ -50,7 +50,7 @@ $(function () {
             viewTotal: !0,
             columns: [0, 1, 2, 3, 4],
         },
-        "pageLength": 25,
+        "pageLength": 100,
         columnDefs: [
             {
                 searchPanes: {
@@ -528,6 +528,7 @@ function addRow() {
         <option value="ODYSSEY">ODYSSEY</option>
         <option value="PASSPORT">PASSPORT</option>
         <option value="PILOT">PILOT</option>
+        <option value="PROLOGUE">PROLOGUE</option>
         <option value="RIDGELINE">RIDGELINE</option>
     </select>
 </td>`;

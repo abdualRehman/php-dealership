@@ -96,6 +96,11 @@
         .bootstrap-select.show-tick .dropdown-menu .selected .check-mark {
             position: inherit !important;
         }
+        .btn-danger {
+            color: #fff !important;
+            background: #f44336 !important;
+            border-color: #f44336 !important;
+        }
     </style>
 
 
@@ -572,14 +577,14 @@
                                 if ($_SESSION['userRole'] != $serviceID) {
                                 ?>
                                     <li class="nav-item">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/dashboard.php" id="dashboard" class="nav-link active">Dashboard</a>
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/dashboard.php" id="dashboard" class="nav-link active">DASHBOARD</a>
                                     </li>
                                 <?php
                                 }
                                 if (hasAccess("lotWizards", "View") !== 'false') {
                                 ?>
                                     <li class="nav-item">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/wizard/lotwizards.php" id="lotWizars" class="nav-link">Lot Wizards</a>
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/wizard/lotwizards.php" id="lotWizars" class="nav-link">LOT WIZARD</a>
                                     </li>
                                 <?php
                                 }
@@ -587,7 +592,7 @@
                                 if (hasAccess("usedCars", "View") !== 'false') {
                                 ?>
                                     <li class="nav-item">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/wizard/usedCars.php" id="usedCars" class="nav-link">Used Cars</a>
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/wizard/usedCars.php" id="usedCars" class="nav-link">USED CARS</a>
                                     </li>
                                 <?php
                                 }
@@ -601,7 +606,7 @@
                                 if (hasAccess("writedown", "View") !== 'false') {
                                 ?>
                                     <li class="nav-item">
-                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/more/writedown.php" id="writedownPage" class="nav-link">Writedown</a>
+                                        <a href="<?php echo $GLOBALS['siteurl']; ?>/more/writedown.php" id="writedownPage" class="nav-link">WRITE DOWN</a>
                                     </li>
                                 <?php
                                 }
@@ -732,7 +737,7 @@
                                 ?>
                                     <li class="nav-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/matrix/manMatrix.php?r=man" id="matrixPage" class="nav-link">
-                                            Matrix
+                                            MATRIX
                                         </a>
                                     </li>
                                 <?php
@@ -741,7 +746,7 @@
                                 ?>
                                     <li class="nav-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/addSale.php" id="addSalePage" class="nav-link">
-                                            Add Sale
+                                            ADD SALE
                                         </a>
                                     </li>
                                 <?php
@@ -750,7 +755,7 @@
                                 ?>
                                     <li class="nav-item">
                                         <a href="<?php echo $GLOBALS['siteurl']; ?>/sales/soldLogs.php?r=man" id="soldLogsPage" class="nav-link">
-                                            Sold Logs
+                                            SOLD LOG
                                         </a>
                                     </li>
                                 <?php

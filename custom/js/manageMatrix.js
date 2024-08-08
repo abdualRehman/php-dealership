@@ -38,7 +38,7 @@ $(function () {
                 viewTotal: !0,
                 columns: [0, 1, 3]
             },
-            "pageLength": 25,
+            "pageLength": 50,
 
             columnDefs: [
                 {

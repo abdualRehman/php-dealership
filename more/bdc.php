@@ -48,6 +48,7 @@ if ($_SESSION['userRole'] == $bdcManagerID) {
 
     #datatable-1 tbody tr td {
         padding: 10px;
+        text-align: center;
     }
 
     @media (min-width: 576px) {

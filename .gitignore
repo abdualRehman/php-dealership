@@ -1,1 +1,9 @@
 .env
+testing
+composer.lock
+assets/uploads/*
+assets/uploadMatrixRateFiles/*
+assets/profiles/*
+assets/inspections/*
+assets/IncentivesProof/*
+assets/uploadsMatrix/*

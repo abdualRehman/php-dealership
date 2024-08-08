@@ -131,7 +131,7 @@ if ($userRole != $salesConsultantID) {
     sales.sale_status , 
     sales.deal_notes ,
     inventory.balance , 
-    sales.consultant_notes , 
+    sales.finance_manager , 
     '' as sales_consultant_status, 
     '' as button, 
     inventory.stocktype, 
@@ -149,7 +149,7 @@ if ($userRole != $salesConsultantID) {
     $sqlQuery = "SELECT CAST( IF((sales.reconcileDate != ''), sales.reconcileDate , sales.date ) as date ) as date , sales.fname , sales.lname , users.username, inventory.stockno , 
     CONCAT( inventory.stocktype ,' ', inventory.year ,' ', inventory.make ,' ', inventory.model ) as vehicle , 
     inventory.age , sales.certified ,inventory.lot , CAST(sales.gross AS INT) as gross , sales.sale_status , sales.deal_notes ,inventory.balance , 
-    sales.consultant_notes , '' as sales_consultant_status, '' as button, inventory.stocktype, '' as countRow , sales.sale_id , 
+    sales.finance_manager , '' as sales_consultant_status, '' as button, inventory.stocktype, '' as countRow , sales.sale_id , 
     inventory.vin as vin ,
     sales.thankyou_cards , sales.date as sold_date , 
     '' as codp_warn , 
@@ -228,7 +228,18 @@ $columns = array(
             return $row[24] == 1 ? $d : '';
         }
     ),
-    array('db' => 'consultant_notes',   'dt' => 13),
+    array('db' => 'finance_manager',   'dt' => 13, 'formatter' => function ($d, $row) {
+        global $connect;
+        if (isset($d)) {
+            $sql1 = "SELECT * FROM `users` WHERE id = '$d'";
+            $result1 = $connect->query($sql1);
+            $row1 = $result1->fetch_assoc();
+            $d = $row1['username'];
+        } else {
+            $d = "";
+        }
+        return $d;
+    }),
     array(
         'db' => 'sales_consultant_status',   'dt' => 14,
         'formatter' => function ($d, $row) {

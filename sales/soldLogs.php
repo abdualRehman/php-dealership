@@ -119,6 +119,7 @@ if ($_GET['r'] == 'man') {
 
     #datatable-1 tbody tr td {
         padding: .55rem;
+        text-align: center;
     }
 
     @media (min-width: 1025px) {
@@ -321,10 +322,10 @@ if ($_GET['r'] == 'man') {
                                             <th style="text-align: center; padding: 10px;">Certified</th>
                                             <th style="text-align: center; padding: 10px;">Lot</th>
                                             <th style="text-align: center; padding: 10px;">Gross</th>
-                                            <th>Status</th>
+                                            <th>Status</th> 
                                             <th>Notes</th>
                                             <th style="text-align: center; padding: 10px;">Balance</th>
-                                            <th style="text-align: center; padding: 10px;">Consultant Notes</th>
+                                            <th style="text-align: center; padding: 10px;">Finance Manager</th>
                                             <th style="text-align: center; padding: 10px;">Salesperson Status</th>
                                             <th>Action</th>
                                             <th>Stock Type</th>
@@ -1122,7 +1123,7 @@ if ($_GET['r'] == 'man') {
                                             </optgroup>
                                         </select>
                                     </div>
-                                    <label for="misc2" class="col-md-1 col-form-label text-md-center">Misc 2
+                                    <label for="misc2" class="col-md-1 col-form-label text-md-center">Closing Cash
                                         <span class="badge-label-primary" id="misc2_v"></span>
                                     </label>
                                     <div class="col-md-3">
