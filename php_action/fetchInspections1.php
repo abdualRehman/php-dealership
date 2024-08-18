@@ -95,7 +95,8 @@ $primaryKey = 'invId';
 
 $columns = array(
     array(
-        'db' => 'button', 'dt' => 0,
+        'db' => 'button',
+        'dt' => 0,
         'formatter' => function ($d, $row) {
             $id = $row['invId'];
             $button = '
@@ -108,13 +109,15 @@ $columns = array(
         }
     ),
     array(
-        'db' => 'recon',  'dt' => 1,
+        'db' => 'recon',
+        'dt' => 1,
         'formatter' => function ($d, $row) {
             return $d;
         }
     ),
     array(
-        'db' => 'submitted_by',   'dt' => 2,
+        'db' => 'submitted_by',
+        'dt' => 2,
         'formatter' => function ($d, $row) {
             global $connect;
             $submittedBy = $d;
@@ -122,20 +125,22 @@ $columns = array(
                 $sql1 = "SELECT * FROM `users` WHERE id = '$submittedBy'";
                 $result1 = $connect->query($sql1);
                 $row1 = $result1->fetch_assoc();
-                return $row1['username'];
+                return $row1 ? $row1['username'] : "";
             } else {
                 return "";
             }
         }
     ),
     array(
-        'db' => 'lot_notes',   'dt' => 3,
+        'db' => 'lot_notes',
+        'dt' => 3,
         'formatter' => function ($d, $row) {
             return $d;
         }
     ),
     array(
-        'db' => 'bodyshopName',   'dt' => 4,
+        'db' => 'bodyshopName',
+        'dt' => 4,
         'formatter' => function ($d, $row) {
             global $connect;
             $bodyShop = $row['shops'] ? $row['shops'] : "";
@@ -144,7 +149,7 @@ $columns = array(
                 $sql2 = "SELECT * FROM `bodyshops` WHERE id = '$bodyShop'";
                 $result2 = $connect->query($sql2);
                 $row2 = $result2->fetch_assoc();
-                $bodyshopName = $row2['shop'];
+                $bodyshopName = $row2 ?  $row2['shop'] : "";
             } else {
                 $bodyshopName = "Blank";
             }
@@ -152,7 +157,8 @@ $columns = array(
         }
     ),
     array(
-        'db' => 'daysout', 'dt' => 5,
+        'db' => 'daysout',
+        'dt' => 5,
         'formatter' => function ($d, $row) {
             $daysout = "NULL";
             $TodayDate = date('Y-m-d');
@@ -183,37 +189,43 @@ $columns = array(
         }
     ),
     array(
-        'db' => 'windshield',   'dt' => 6,
+        'db' => 'windshield',
+        'dt' => 6,
         'formatter' => function ($d, $row) {
             return $d;
         }
     ),
     array(
-        'db' => 'wheels',   'dt' => 7,
+        'db' => 'wheels',
+        'dt' => 7,
         'formatter' => function ($d, $row) {
             return $d;
         }
     ),
     array(
-        'db' => 'age',   'dt' => 8,
+        'db' => 'age',
+        'dt' => 8,
         'formatter' => function ($d, $row) {
             return $d;
         }
     ),
     array(
-        'db' => 'stockDetails',   'dt' => 9,
+        'db' => 'stockDetails',
+        'dt' => 9,
         'formatter' => function ($d, $row) {
             return $d;
         }
     ),
     array(
-        'db' => 'stockno',   'dt' => 10,
+        'db' => 'stockno',
+        'dt' => 10,
         'formatter' => function ($d, $row) {
             return $d;
         }
     ),
     array(
-        'db' => 'year',   'dt' => 11,
+        'db' => 'year',
+        'dt' => 11,
         'formatter' => function ($d, $row) {
             return $d;
         }
@@ -263,7 +275,8 @@ $columns = array(
         return $row['invId'];
     }),
     array(
-        'db' => 'arr',   'dt' => 26,
+        'db' => 'arr',
+        'dt' => 26,
         'formatter' => function ($d, $row) {
             return "";
         }
@@ -393,7 +406,6 @@ if ($result->num_rows > 0) {
             'stockDetails' => $row['stockDetails'],
             'stockAvailibility' => array($_notTouched, $_holdRecon, $_sendRecon, $_lotNotes, $_windshield, $_wheels, $_toGo, $_atBodyshop, $_backBodyshop, $_retailReady, $_gone),
         );
-
     }
 }
 

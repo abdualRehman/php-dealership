@@ -237,7 +237,6 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                             <label class="btn text-responsive">
                                                 <input type="radio" name="mod" value="wheels" data-title="Wheels"> Wheels <br> <span></span>
                                             </label>
-
                                         </div>
                                     </div>
 
@@ -246,6 +245,9 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                             <div id="year">
                                                 <label class="btn text-responsive">
                                                     <input type="radio" name="mod" value="toGo" data-title="To Go"> To Go <br> <span></span>
+                                                </label>
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="wholesale" data-title="Wholesale"> Wholesale <br> <span></span>
                                                 </label>
                                                 <label class="btn text-responsive">
                                                     <input type="radio" name="mod" value="atBodyshop" data-title="At Bodyshop"> At Bodyshop <br> <span></span>
@@ -258,6 +260,9 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                                 </label>
                                                 <label class="btn text-responsive">
                                                     <input type="radio" name="mod" value="Gone" id="Gone" data-title="Gone"> Gone <br> <span></span>
+                                                </label>
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="wizardBills" data-title="Wizard Bills"> Wizard Bills <br> <span></span>
                                                 </label>
                                             </div>
                                         </div>
@@ -412,6 +417,36 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                     </tr>
                                 </thead>
                             </table>
+                        </div>
+                        <div class="wizardBillTable d-none" id="wizardBillTable">
+                            <div id="wizardBillsFilterDiv1">
+                                <div class="form-row text-right">
+                                    <div class="col-md-12 p-1 pr-2 my-2">
+                                        <button class="btn btn-primary p-2" onclick="toggleFilterClass()">
+                                            <i class="fa fa-align-center ml-1 mr-2"></i> Filter
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="portlet-body">
+                                    <table id="datatable-3" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Age</th>
+                                                <th>Stock # - Vin</th>
+                                                <th>Vehicle</th>
+                                                <th>Repairs</th>
+                                                <th>Repair Sent</th>
+                                                <th>Repair Returned</th>
+                                                <th>Repair Paid($)</th>
+                                                <!-- <th>Repair Paid(date)</th> -->
+                                                <th>Bodyshop</th>
+                                                <!-- <th>Action</th> -->
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

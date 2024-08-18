@@ -46,7 +46,7 @@ if ($result->num_rows > 0) {
             $sql1 = "SELECT * FROM `users` WHERE id = '$submittedBy'";
             $result1 = $connect->query($sql1);
             $row1 = $result1->fetch_assoc();
-            $row['submitted_by'] = $row1['username'];
+            $row['submitted_by'] = $row1 ? $row1['username'] : "";
         } else {
             $row['submitted_by'] = "";
         }
@@ -75,7 +75,7 @@ if ($result->num_rows > 0) {
             $sql2 = "SELECT * FROM `bodyshops` WHERE id = '$bodyShop'";
             $result2 = $connect->query($sql2);
             $row2 = $result2->fetch_assoc();
-            $bodyShopName = $row2['shop'];
+            $bodyShopName = $row2 ? $row2['shop'] : "";
         } else {
             $bodyShopName = "blank";
         }
@@ -222,8 +222,8 @@ if ($result->num_rows > 0) {
 
 
 
-        
-        
+
+
         // $output['data'][] = array(
         //     $button,
         //     $row['recon'],
@@ -253,7 +253,7 @@ if ($result->num_rows > 0) {
         //     $id,
         //     array($_notTouched, $_holdRecon, $_sendRecon, $_lotNotes, $_windshield, $_wheels, $_toGo, $_atBodyshop, $_backBodyshop, $_retailReady, $_gone),
         // );
-        
+
         $output['data'][] = array(
             // $button,
             "button",

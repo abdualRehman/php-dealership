@@ -158,11 +158,11 @@ if ($_POST) {
 
                     $result1 = $connect->query($sql1);
                     $row1 = $result1->fetch_assoc();
-                    $sales_consultant = $row1['sales_consultant'];
-                    $customerName = $row1['fname'] . ' ' . $row1['lname'];
-                    $delivery_coordinator = $row1['delivery_coordinator'];
-                    $coordinator_id = $row1['coordinator'];
-                    $submitted_by = $row1['submitted_by'];
+                    $sales_consultant = $row1 ? $row1['sales_consultant'] : "";
+                    $customerName = $row1 ? ($row1['fname'] . ' ' . $row1['lname']) : "";
+                    $delivery_coordinator = $row1 ? $row1['delivery_coordinator'] : "";
+                    $coordinator_id = $row1 ? $row1['coordinator'] : "";
+                    $submitted_by = $row1 ? $row1['submitted_by'] : "";
 
 
                     $sms_user = "false";
@@ -170,9 +170,8 @@ if ($_POST) {
                     if ($_SESSION['userRole'] != $deliveryCoordinatorID) {
 
                         $link = $siteurl . '/index.php?redirect=more/deliveryCoordinators.php?filter=' . $scheduleId;
-                        $message = "An appointment on {$scheduleStart_formated} has been updated by {$sales_consultant}
-                        Click to confirm: {$link}";
-                        $sms_user = send_sms($coordinator_id, $message);
+                        $message = "An appointment on {$scheduleStart_formated} has been updated by {$sales_consultant}";
+                        $sms_user = send_sms($coordinator_id, $message, $link);
                         if ($sms_user == 'true') {
                             $valid['sms_status'] = "SMS Send";
                         } else {
@@ -243,9 +242,8 @@ if ($_POST) {
                     sendNotifiation($from, $to, $message, $appointment_id);
 
                     $link = $siteurl . '/index.php?redirect=more/deliveryCoordinators.php?filter=' . $appointment_id;
-                    $message = "An appointment on {$scheduleStart_formated} has been added by {$salesConsultantName}
-                            Click to confirm: {$link}";
-                    $sms_user = send_sms($coordinator, $message);
+                    $message = "An appointment on {$scheduleStart_formated} has been added by {$salesConsultantName}";
+                    $sms_user = send_sms($coordinator, $message, $link);
                     if ($sms_user == 'true') {
                         $valid['sms_status'] = "SMS Send";
                     } else {

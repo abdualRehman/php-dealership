@@ -20,11 +20,10 @@ if ($result->num_rows > 0) {
         $sql1 = "SELECT * FROM `users` WHERE id = '$submittedBy'";
         $result1 = $connect->query($sql1);
         $row1 = $result1->fetch_assoc();
-        $output['submitted_by'] = $row1['username'];
+        $output['submitted_by'] = $row1 ? $row1['username'] : "";
     } else {
         $output['submitted_by'] = "";
     }
-
 } // if num_rows
 
 $connect->close();

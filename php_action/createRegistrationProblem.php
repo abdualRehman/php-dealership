@@ -39,16 +39,15 @@ if ($_POST) {
         $problem_id = $connect->insert_id;
 
         $link = $siteurl . '/index.php?redirect=sales/registrationProblem.php?filter=' . $problem_id;
-        $message = "New Registration Problem  for {$customerName} – {$problem},  
-            Click here: {$link}";
-        $sms_user = send_sms($salesConsultant, $message);
+        $message = "New Registration Problem  for {$customerName} – {$problem}";
+        $sms_user = send_sms($salesConsultant, $message, $link);
         if ($sms_user == 'true') {
             $valid['sms_status'] = "SMS Send";
         } else {
             $valid['sms_status'] = "SMS Failed";
         }
         if ($financeManager != '') {
-            $sms_user = send_sms($financeManager, $message);
+            $sms_user = send_sms($financeManager, $message, $link);
             if ($sms_user == 'true') {
                 $valid['sms_status'] = "SMS Send";
             } else {

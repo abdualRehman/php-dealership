@@ -46,16 +46,15 @@ if ($_POST) {
     if ($connect->query($sql) === true) {
 
         $link = $siteurl . '/index.php?redirect=sales/registrationProblem.php?filter=' . $id;
-        $message = "Updated Registration Problem  for {$customerName} – {$problem},  
-        Click here: {$link}";
-        $sms_user = send_sms($salesConsultant, $message);
+        $message = "Updated Registration Problem  for {$customerName} – {$problem}";
+        $sms_user = send_sms($salesConsultant, $message, $link);
         if ($sms_user == 'true') {
             $valid['sms_status'] = "SMS Send";
         } else {
             $valid['sms_status'] = $sms_user;
         }
         if ($financeManager != '') {
-            $sms_user = send_sms($financeManager, $message);
+            $sms_user = send_sms($financeManager, $message, $link);
             if ($sms_user == 'true') {
                 $valid['sms_status'] = "SMS Send";
             } else {

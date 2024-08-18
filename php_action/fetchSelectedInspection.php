@@ -22,7 +22,7 @@ if ($result->num_rows > 0) {
         $sql1 = "SELECT * FROM `users` WHERE id = '$submittedBy'";
         $result1 = $connect->query($sql1);
         $row1 = $result1->fetch_assoc();
-        $output['submitted_by'] = $row1['username'];
+        $output['submitted_by'] = $row1 ? $row1['username'] : "";
     } else {
         $output['submitted_by'] = "";
     }
@@ -31,8 +31,8 @@ if ($result->num_rows > 0) {
         $sql1 = "SELECT * FROM `bodyshops` WHERE id = '$bodyshop_log'";
         $result1 = $connect->query($sql1);
         $row1 = $result1->fetch_assoc();
-        $output['bodyshop_log'] = $row1['shop'];
-        $output['bodyshop_log_id'] = $row1['id'];
+        $output['bodyshop_log'] = $row1 ? $row1['shop'] : "";
+        $output['bodyshop_log_id'] = $row1 ? $row1['id'] : "";
     } else {
         $output['bodyshop_log'] = $row['bodyshop_log'];
         $output['bodyshop_log_id'] = $row['bodyshop_log'];
@@ -41,11 +41,10 @@ if ($result->num_rows > 0) {
         $sql1 = "SELECT * FROM `bodyshops` WHERE id = '$bodyshop'";
         $result1 = $connect->query($sql1);
         $row1 = $result1->fetch_assoc();
-        $output['bodyshop_name'] = $row1['shop'];
+        $output['bodyshop_name'] = $row1 ? $row1['shop'] : "";
     } else {
         $output['bodyshop_name'] = "";
     }
-
 } // if num_rows
 
 $connect->close();

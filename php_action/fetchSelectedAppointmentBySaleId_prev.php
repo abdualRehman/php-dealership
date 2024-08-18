@@ -27,8 +27,8 @@ if ($result->num_rows > 0) {
         $sql1 = "SELECT * FROM `users` WHERE id = '$submittedBy'";
         $result1 = $connect->query($sql1);
         $row1 = $result1->fetch_assoc();
-        $output['submitted_by'] = $row1['username'];
-        $output['submitted_by_role'] = $row1['role'];
+        $output['submitted_by'] = $row1 ? $row1['username'] : "";
+        $output['submitted_by_role'] = $row1 ? $row1['role'] : "";
     } else {
         $output['submitted_by'] = "";
         $output['submitted_by_role'] = "";
@@ -37,7 +37,7 @@ if ($result->num_rows > 0) {
         $sql1 = "SELECT * FROM `users` WHERE id = '$manager_override'";
         $result1 = $connect->query($sql1);
         $row1 = $result1->fetch_assoc();
-        $output['manager_overrideName'] = $row1['username'];
+        $output['manager_overrideName'] = $row1 ? $row1['username'] : "";
     } else {
         $output['manager_overrideName'] = "";
     }
@@ -55,7 +55,7 @@ if ($result->num_rows > 0) {
         } else {
             $output['already_have'] = "false";
         }
-    }else{
+    } else {
         $output['already_have'] = $row['already_have'];
     }
 

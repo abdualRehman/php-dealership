@@ -153,6 +153,15 @@ $(function () {
             } else {
                 $('#statusFilterDiv').addClass('d-none');
             }
+            if (currentElement == 'keysPulled') {
+                $('.visibilityDiv').removeClass('justify-content-center');
+                $('.visibilityDiv').addClass('justify-content-end');
+                $('#addDateSendActionDiv').removeClass('d-none');
+            } else {
+                $('.visibilityDiv').removeClass('justify-content-end');
+                $('.visibilityDiv').addClass('justify-content-center');
+                $('#addDateSendActionDiv').addClass('d-none');
+            }
 
             setTimeout(() => {
                 // $("#datatable-1").dataTable().fnFilter("");
@@ -316,9 +325,9 @@ $(function () {
                 "fixedHeader": true,
                 dom: `<'row'<'col-12'P>>
                 <'row' 
-                <'col-sm-4 text-left text-sm-left pl-3'<'#statusFilterDiv'>>
-                    <'col-sm-4 text-sm-center pl-3'B>
-                    <'col-sm-4 text-right text-sm-right mt-2 mt-sm-0'f>>\n
+                <'col-sm-2 text-left text-sm-left pl-3'<'#statusFilterDiv'>>
+                    <'col-sm-7 d-flex gap-5 justify-content-end text-center pl-3 visibilityDiv'B    <'ml-5'<'#addDateSendActionDiv'>>   >
+                    <'col-sm-3 text-right text-sm-right mt-2 mt-sm-0'f>>\n
                 <'row'<'col-12'tr>>\n      
                 <'row align-items-baseline'<'col-md-5'i><'col-md-2 mt-2 mt-md-0'l><'col-md-5'p>>\n`,
 
@@ -586,6 +595,9 @@ $(function () {
                         targets: [21, 26, 27, 12, 28]
                     },
                 ],
+                "searching": true, // Ensure this is enabled                
+                "debug": true, // Enable debug mode
+
 
                 language: {
                     "infoFiltered": "",
@@ -1460,6 +1472,40 @@ function writeStatusHTML() {
         </div>
     </div>`;
     }
+    var element = document.getElementById('addDateSendActionDiv');
+    if (element) {
+        element.innerHTML = `<div class="row">
+        <div class="col-md-12">
+            <input type="text" class="form-control" name="date_send_all_table" data-attribute="date_sent" autocomplete="off"  />
+        </div>
+    </div>`;
+    }
+
+
+    $('input[name="date_send_all_table"]').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        timePicker: !0,
+        autoUpdateInput: false,
+        cleanable: true,
+        "opens": "left",
+        "showDropdowns": true,
+        locale: {
+            format: 'MM-DD-YYYY',
+            applyLabel: 'Submit',
+            cancelLabel: 'Reset',
+        },
+    });
+    $('input[name="date_send_all_table"]').on('cancel.daterangepicker', function (ev, picker) {
+        $(this).val('');
+        $(this).data('daterangepicker').setStartDate(moment());
+        $(this).data('daterangepicker').setEndDate(moment());
+    });
+    $('input[name="date_send_all_table"]').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('MM-DD-YYYY'));
+        let value = picker.startDate.format('MM-DD-YYYY');
+        updateFieldsDateSent({ attribute: "date_sent", value: value });
+    });
 }
 function addALL() {
     // var arrayObj = [];
@@ -1536,7 +1582,7 @@ function setColumVisibility(columnArray) {
 }
 
 function updateFieldsUsedCars(obj, notify = true) {
-    console.log(obj);
+    // console.log(obj);
     if (obj) {
         // e1.fire({
         //     title: "Are you sure?",
@@ -1572,6 +1618,40 @@ function updateFieldsUsedCars(obj, notify = true) {
         //         manageInvTable.ajax.reload(null, false);
         //     }
         // });
+    }
+}
+function updateFieldsDateSent(obj) {
+    console.log(obj);
+    if (obj) {
+        var arrayObj = {
+            id: [],
+            attribute: [],
+            value: []
+        };
+        $('#datatable-1').DataTable()
+            .rows({ search: 'applied' })
+            .data().each((e) => {
+                var id = e[0];
+                arrayObj.id.push(id);
+                arrayObj.attribute.push(obj.attribute);
+                arrayObj.value.push(obj.value);
+            });
+
+        if (arrayObj.id.length > 0) {
+            e1.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: !0,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Update All!"
+            }).then(function (t) {
+                if (t.isConfirmed == true) {
+                    updateFieldsUsedCars(arrayObj)
+                }
+            });
+        }
     }
 }
 

@@ -38,7 +38,7 @@ if ($result->num_rows > 0) {
             $sql2 = "SELECT * FROM `bodyshops` WHERE id = '$bodyShop'";
             $result2 = $connect->query($sql2);
             $row2 = $result2->fetch_assoc();
-            $bodyShopName = $row2['shop'];
+            $bodyShopName = $row2 ?  $row2['shop'] : "";
         } else {
             $bodyShopName = "blank";
         }

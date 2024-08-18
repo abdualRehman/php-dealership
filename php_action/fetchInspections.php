@@ -53,7 +53,9 @@ if ($filterBy != '') {
             $searchQuery .= " AND ( inspections.wheels != '' AND inspections.wheels LIKE '%Done%' AND ( inventory.balance != '' OR inventory.balance != 0 ) AND inventory.status != 2 ) ";
         }
     } else if ($filterBy == 'toGo') {
-        $searchQuery .= " AND ( inspections.repairs != '' AND  ( inspections.repair_sent = '' OR inspections.repair_sent IS NULL ) AND inventory.status != 3 ) ";
+        $searchQuery .= " AND ( inspections.repairs != '' AND  ( inspections.repair_sent = '' OR inspections.repair_sent IS NULL ) AND inventory.status != 3 AND inventory.wholesale != 'on') ";
+    } else if ($filterBy == 'wholesale') {
+        $searchQuery .= " AND ( ( inventory.balance != '' AND inventory.balance != 0 AND  inventory.balance != '0.00' AND inventory.balance IS NOT NULL ) AND inventory.status != 3 AND inventory.wholesale = 'on' ) ";
     } else if ($filterBy == 'atBodyshop') {
 
         $searchQuery .= " AND ( inspections.repairs != '' AND  ( inspections.repair_sent != '' ) AND ( inspections.repair_returned = '' OR inspections.repair_returned IS NULL ) AND inventory.status != 3 ) ";
@@ -149,9 +151,10 @@ $primaryKey = 'invId';
 
 $columns = array(
     array(
-        'db' => 'button', 'dt' => 0,
+        'db' => 'button',
+        'dt' => 0,
         'formatter' => function ($d, $row) {
-            $id = $row['invId'];
+            $id = isset($row['invId']) ? $row['invId'] : "";
             $button = '
             <div class="show d-flex" >' .
                 (hasAccess("lotWizards", "Edit") !== 'false' ? '<button class="btn btn-label-primary btn-icon mr-1" onclick="removeInspections(' . $id . ')" >
@@ -165,7 +168,8 @@ $columns = array(
         return $d;
     }),
     array(
-        'db' => 'submitted_by',   'dt' => 2,
+        'db' => 'submitted_by',
+        'dt' => 2,
         'formatter' => function ($d, $row) {
             global $connect;
             $submittedBy = $d;
@@ -173,7 +177,7 @@ $columns = array(
                 $sql1 = "SELECT * FROM `users` WHERE id = '$submittedBy'";
                 $result1 = $connect->query($sql1);
                 $row1 = $result1->fetch_assoc();
-                return $row1['username'];
+                return $row1 ? $row1['username'] : "";
             } else {
                 return "";
             }
@@ -183,16 +187,17 @@ $columns = array(
         return $d;
     }),
     array(
-        'db' => 'bodyshopName',   'dt' => 4,
+        'db' => 'bodyshopName',
+        'dt' => 4,
         'formatter' => function ($d, $row) {
             global $connect;
-            $bodyShop = $row['shops'] ? $row['shops'] : "";
+            $bodyShop = isset($row['shops']) ? $row['shops'] : "";
             $bodyshopName = "Blank";
             if ($bodyShop != "") {
                 $sql2 = "SELECT * FROM `bodyshops` WHERE id = '$bodyShop'";
                 $result2 = $connect->query($sql2);
                 $row2 = $result2->fetch_assoc();
-                $bodyshopName = $row2['shop'];
+                $bodyshopName = $row2 ?  $row2['shop'] : "";
             } else {
                 $bodyshopName = "Blank";
             }
@@ -200,7 +205,8 @@ $columns = array(
         }
     ),
     array(
-        'db' => 'daysout', 'dt' => 5,
+        'db' => 'daysout',
+        'dt' => 5,
         'formatter' => function ($d, $row) {
             $daysout = "NULL";
             $TodayDate = date('Y-m-d');
@@ -291,16 +297,23 @@ $columns = array(
         return $row['repair_returned'];
     }),
     array('db' => 'id',   'dt' => 25, 'formatter' => function ($d, $row) {
-        return $row['invId'];
+        return isset($row['invId']) ? $row['invId'] : "";
     }),
     array(
-        'db' => 'arr',   'dt' => 26,
+        'db' => 'arr',
+        'dt' => 26,
         'formatter' => function ($d, $row) {
             return "";
         }
     ),
     array('db' => 'invStatus',   'dt' => 27, 'formatter' => function ($d, $row) {
         return $row['invStatus'];
+    }),
+    array('db' => 'invId',   'dt' => 28, 'formatter' => function ($d, $row) {
+        return isset($row['invId']) ? $row['invId'] : "";
+    }),
+    array('db' => 'shops',   'dt' => 29, 'formatter' => function ($d, $row) {
+        return isset($row['shops']) ? $row['shops'] : "";
     }),
 );
 
@@ -327,6 +340,7 @@ $wheels = 0;
 $wheelsP = 0;
 $wheelsC = 0;
 $toGo = 0;
+$wholesale = 0;
 $atBodyshop = 0;
 $backFromBodyshop = 0;
 $retailReady = 0;
@@ -372,6 +386,7 @@ if ($result->num_rows > 0) {
         $_windshield = false;
         $_wheels = false;
         $_toGo = false;
+        $_wholesale = false;
         $_atBodyshop = false;
         $_backBodyshop = false;
         $_retailReady = false;
@@ -410,7 +425,7 @@ if ($result->num_rows > 0) {
         if (count($windshield1) > 0 && $doneEle && ($balance && $balance != '0') && $invStatus != 2) {
             $windshieldC += 1;
         }
-        
+
 
         if (count($wheels1) > 0 &&  !$doneEleWheel && ($balance && $balance != '0') && $invStatus != 2) {
             $wheelsP += 1;
@@ -422,9 +437,13 @@ if ($result->num_rows > 0) {
         }
 
 
-        if (count($arr) > 0 && ($repairSent == "" || $repairSent == null) && $invStatus != 3) {
+        if (count($arr) > 0 && ($repairSent == "" || $repairSent == null) && $invStatus != 3 && $row['wholesale'] != 'on') {
             $toGo += 1;
             $_toGo = "To Go";
+        }
+        if (($balance != '' && $balance != null && $balance != 0 && $balance != '0.00') && $invStatus != 3 && $row['wholesale'] == 'on') {
+            $wholesale += 1;
+            $_wholesale = "Wholesale";
         }
         if (count($arr) > 0 && ($repairSent != "" && $repairSent != null) && ($repairReturned == "" || $repairReturned == null) && $invStatus != 3) {
             $atBodyshop += 1;
@@ -445,14 +464,15 @@ if ($result->num_rows > 0) {
 
         $searhStatusArray[]  = array(
             'stockDetails' => $row['stockDetails'],
-            'stockAvailibility' => array($_notTouched, $_holdRecon, $_sendRecon, $_lotNotes, $_windshield, $_wheels, $_toGo, $_atBodyshop, $_backBodyshop, $_retailReady, $_gone),
+            'stockAvailibility' => array($_notTouched, $_holdRecon, $_sendRecon, $_lotNotes, $_windshield, $_wheels, $_toGo, $_wholesale, $_atBodyshop, $_backBodyshop, $_retailReady, $_gone),
         );
     }
 }
 
 
-
-$dataObj = SSP::complex($_POST, $sql_details, $table, $primaryKey, $columns);
+// Fetch and output the data
+// $dataObj = SSP::complex($_POST, $sql_details, $table, $primaryKey, $columns);
+$dataObj = SSP::simple($_POST, $sql_details, $table, $primaryKey, $columns);
 
 
 $carsToDealsSql = "SELECT COUNT(inventory.stockno) as totalPending FROM inventory LEFT JOIN car_to_dealers ON inventory.id = car_to_dealers.inv_id 
@@ -462,6 +482,12 @@ $result3 = $connect->query($carsToDealsSql);
 $row3 = $result3->fetch_assoc();
 $CarsToDealers = $row3['totalPending'];
 
+
+$sql4 = "SELECT COUNT(inspections.id) as totalWizardBills
+FROM `inspections` LEFT JOIN inventory ON (inspections.inv_id = inventory.id AND inventory.location = '$location') WHERE inspections.status = 1 AND inventory.location = '$location' AND inspections.repair_returned != '' AND (inspections.repair_paid = '' OR inspections.repair_paid IS NULL )";
+$result4 = $connect->query($sql4);
+$row4 = $result4->fetch_assoc();
+$totalWizardBills = $row4['totalWizardBills'];
 
 $dataObj['searhStatusArray'] = $searhStatusArray;
 
@@ -480,10 +506,12 @@ $dataObj['totalNumber'] = array(
     "wheelsP" => $wheelsP,
     "wheelsC" => $wheelsC,
     "toGo" => $toGo,
+    "wholesale" => $wholesale,
     "atBodyshop" => $atBodyshop,
     "backFromBodyshop" => $backFromBodyshop,
     "retailReady" => $retailReady,
     "Gone" => $Gone,
+    "wizardBills" => $totalWizardBills
 );
 
 

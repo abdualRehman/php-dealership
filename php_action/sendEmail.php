@@ -1,10 +1,10 @@
 <?php
 // error_reporting(E_ERROR | E_PARSE);
 // require __DIR__."/../vendor/autoload.php";
-include(__DIR__."/../smtp/PHPMailerAutoload.php");
+include(__DIR__ . "/../smtp/PHPMailerAutoload.php");
 require_once realpath(__DIR__ . '/../vendor/autoload.php');
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../');
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load(); // safeLoad for avoid exceptions
 
 if (!isset($_SESSION)) session_start();
@@ -156,4 +156,3 @@ function sendEmail($email, $name, $type, $generatePassword = '')
 
 // sendEmail('contactrehmanali@gmail.com' , 'Rehman' , 'register' , '1233jdwia');
 // echo "send";
-

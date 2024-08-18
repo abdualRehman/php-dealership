@@ -190,7 +190,8 @@ $primaryKey = 'sale_id';
 
 $columns = array(
     array(
-        'db' => 'date', 'dt' => 0,
+        'db' => 'date',
+        'dt' => 0,
         'formatter' => function ($d, $row) {
             $date =  ($d != '') ? date("m-d-Y", strtotime($d)) : '';
             return $date;
@@ -203,19 +204,22 @@ $columns = array(
     array('db' => 'vehicle',   'dt' => 5),
     array('db' => 'age',   'dt' => 6),
     array(
-        'db' => 'certified',   'dt' => 7,
+        'db' => 'certified',
+        'dt' => 7,
         'formatter' => function ($d, $row) {
             return $d == 'on' ? 'Yes' : 'No';
         }
     ),
     array(
-        'db' => 'lot',   'dt' => 8,
+        'db' => 'lot',
+        'dt' => 8,
         'formatter' => function ($d, $row) {
             return $row[24] == 1 ? $d : '';
         }
     ),
     array(
-        'db' => 'gross',   'dt' => 9,
+        'db' => 'gross',
+        'dt' => 9,
         'formatter' => function ($d, $row) {
             return  (int)round(($d), 2);
         }
@@ -223,7 +227,8 @@ $columns = array(
     array('db' => 'sale_status',   'dt' => 10),
     array('db' => 'deal_notes',   'dt' => 11),
     array(
-        'db' => 'balance',   'dt' => 12,
+        'db' => 'balance',
+        'dt' => 12,
         'formatter' => function ($d, $row) {
             return $row[24] == 1 ? $d : '';
         }
@@ -234,14 +239,15 @@ $columns = array(
             $sql1 = "SELECT * FROM `users` WHERE id = '$d'";
             $result1 = $connect->query($sql1);
             $row1 = $result1->fetch_assoc();
-            $d = $row1['username'];
+            $d = $row1 ? $row1['username'] : '';
         } else {
             $d = "";
         }
         return $d;
     }),
     array(
-        'db' => 'sales_consultant_status',   'dt' => 14,
+        'db' => 'sales_consultant_status',
+        'dt' => 14,
         'formatter' => function ($d, $row) {
             global $connect;
             $id = $row[18];
@@ -256,7 +262,8 @@ $columns = array(
         }
     ),
     array(
-        'db' => 'button',   'dt' => 15,
+        'db' => 'button',
+        'dt' => 15,
         'formatter' => function ($d, $row) {
             global $connect, $location, $salesConsultantID, $branchAdmin, $salesManagerID, $generalManagerID;
             $id = $row[18];
@@ -293,7 +300,8 @@ $columns = array(
     ),
     array('db' => 'stocktype',   'dt' => 16),
     array(
-        'db' => 'countRow',   'dt' => 17,
+        'db' => 'countRow',
+        'dt' => 17,
         'formatter' => function ($d, $row) {
             global $connect;
             $stock_id = $row[25];
@@ -309,15 +317,17 @@ $columns = array(
     ),
     array('db' => 'sale_id',   'dt' => 18),
     array(
-        'db' => 'vin', 'dt' => 19,
+        'db' => 'vin',
+        'dt' => 19,
         'formatter' => function ($d, $row) {
-            return (String)$d;
+            return (string)$d;
         }
     ),
     array('db' => 'thankyou_cards',   'dt' => 20),
     array('db' => 'sold_date',   'dt' => 21),
     array(
-        'db' => 'codp_warn',   'dt' => 22,
+        'db' => 'codp_warn',
+        'dt' => 22,
         'formatter' => function ($d, $row) {
             global $connect;
             $stock_id = $row[25];
@@ -332,7 +342,8 @@ $columns = array(
         }
     ),
     array(
-        'db' => 'lwbn_warn',   'dt' => 23,
+        'db' => 'lwbn_warn',
+        'dt' => 23,
         'formatter' => function ($d, $row) {
             global $connect;
             $stock_id = $row[25];

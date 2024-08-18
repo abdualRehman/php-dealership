@@ -243,7 +243,7 @@ $columns = array(
             $sql1 = "SELECT * FROM `users` WHERE id = '$d'";
             $result1 = $connect->query($sql1);
             $row1 = $result1->fetch_assoc();
-            $d = $row1['username'];
+            $d = $row1 ? $row1['username'] : "";
         } else {
             $d = "";
         }
@@ -340,7 +340,7 @@ $columns = array(
             $sql1 = "SELECT * FROM `users` WHERE id = '$d'";
             $result1 = $connect->query($sql1);
             $row1 = $result1->fetch_assoc();
-            $d = $row1['username'];
+            $d = $row1 ? $row1['username'] : "";
         } else {
             $d = "";
         }

@@ -57,7 +57,7 @@ if ($_POST) {
     // line 58 was working
     $scheduleStart = date('Y-m-d H:i:s', strtotime($scheduleStart_v));
     // $scheduleStart = date('Y-m-d H:i:s', strtotime($scheduleStart_v  . ' -59 minute'));
-    
+
     // $scheduleEnd = strtotime((string)$scheduleStart . ':00 +30 minute');
     $scheduleEnd = strtotime($scheduleStart_v . ' +59 minute');
     $scheduleEnd =  date('Y-m-d H:i:s', $scheduleEnd);
@@ -125,9 +125,8 @@ if ($_POST) {
 
 
                 $link = $siteurl . '/index.php?redirect=more/deliveryCoordinators.php?filter=' . $appointment_id;
-                $message = "An appointment on {$scheduleStart_formated} has been added by {$salesConsultantName}
-                        Click to confirm: {$link}";
-                $sms_user = send_sms($coordinator, $message);
+                $message = "An appointment on {$scheduleStart_formated} has been added by {$salesConsultantName}";
+                $sms_user = send_sms($coordinator, $message, $link);
                 if ($sms_user == 'true') {
                     $valid['sms_status'] = "SMS Send";
                 } else {

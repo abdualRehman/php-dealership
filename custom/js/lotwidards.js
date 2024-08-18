@@ -3,6 +3,7 @@
 var manageInvTable, TableData, maxFileLimit = 10, rowGroupSrc = 21; // 21; // wholesale 
 var searhStatusArray = [], editInspectionObj = {};
 var manageCarDealersTable;
+var manageWizardBillsTable;
 var collapsedGroups = {};
 var e1 = Swal.mixin({
     customClass: {
@@ -101,6 +102,10 @@ $(function () {
             message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
             // timeout: 1e3
         })
+        $('#wizardBillTable').block({
+            message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+            // timeout: 1e3
+        })
         $('#inspectionTable').block({
             message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
             // timeout: 1e3
@@ -111,10 +116,11 @@ $(function () {
         $('#portlet-title').html(title);
 
         var currentElement = $(this).val();
-        if (currentElement != "CarsToDealers") {
+        if (currentElement != "CarsToDealers" && currentElement != "wizardBills") {
 
             $('.inspectionTable').removeClass('d-none');
             $('.DealerTable').addClass('d-none');
+            $('.wizardBillTable').addClass('d-none');
 
             $('#datatable-1').DataTable().destroy();
             loadDataTable();
@@ -130,13 +136,23 @@ $(function () {
                 // manageInvTable.searchPanes.rebuildPane();
                 $('#inspectionTable').unblock()
                 $('#DealerTable').unblock()
+                $('#wizardBillTable').unblock()
             }, 500);
 
         } else if (currentElement == 'CarsToDealers') {
             fetchCarsToDealers();
             $('.inspectionTable').addClass('d-none');
+            $('.wizardBillTable').addClass('d-none');
+            $('#wizardBillTable').block()
             $('.DealerTable').removeClass('d-none');
             $('#DealerTable').unblock()
+        } else if (currentElement == 'wizardBills') {
+            fetchWizardsBills(); //  need action
+            $('.inspectionTable').addClass('d-none');
+            $('.DealerTable').addClass('d-none');
+            $('#DealerTable').block()
+            $('.wizardBillTable').removeClass('d-none');
+            $('#wizardBillTable').unblock()
         }
     });
 
@@ -205,10 +221,11 @@ $(function () {
                     }
                     break;
                 case 'toGo':
+                case 'wholesale':
                 case 'Gone':
                     rowGroupSrcStatus = true;
                     rowGroupSrc = 4;
-                    if (filterBy == 'toGo') {
+                    if (filterBy == 'toGo' || filterBy == 'wholesale') {
                         hideColumns = [1, 2, 3, 4, 5, 9, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 6, 7];
                     } else {
                         hideColumns = [1, 2, 3, 4, 5, 10, 22, 23, 24, 6, 7];
@@ -242,7 +259,7 @@ $(function () {
                     type: "POST",
                     // type: "GET",
                     data: function (data) {
-                        console.log(data);
+                        // console.log(data);
                         // Read values
                         var filterBy = $('input[name=mod]:checked').val();
                         filterBy = filterBy ? filterBy : 'notTouched';
@@ -515,7 +532,17 @@ $(function () {
                                 case 'windshield':
                                 case 'wheels':
                                 case 'toGo':
+                                case 'wholesale':
                                 case 'CarsToDealers':
+                                    if (value == '0') {
+                                        $(`input[name='mod'][value='${key}']`).parent().addClass('btn-outline-success')
+                                        $(`input[name='mod'][value='${key}']`).parent().removeClass('btn-outline-danger')
+                                    } else {
+                                        $(`input[name='mod'][value='${key}']`).parent().addClass('btn-outline-danger')
+                                        $(`input[name='mod'][value='${key}']`).parent().removeClass('btn-outline-success')
+                                    }
+                                    break;
+                                case 'wizardBills':
                                     if (value == '0') {
                                         $(`input[name='mod'][value='${key}']`).parent().addClass('btn-outline-success')
                                         $(`input[name='mod'][value='${key}']`).parent().removeClass('btn-outline-danger')
@@ -633,7 +660,7 @@ $(function () {
                 processData: false,
                 dataType: 'json',
                 success: function (response) {
-                    console.log(response);
+                    // console.log(response);
                     if (response.success == true) {
                         e1.fire({
                             position: "center",
@@ -716,7 +743,7 @@ $(function () {
                 processData: false,
                 dataType: 'json',
                 success: function (response) {
-                    console.log(response);
+                    // console.log(response);
 
 
                     if (response.success == true) {
@@ -771,10 +798,12 @@ $(function () {
         // console.log(desktopH.offsetHeight);   
         manageInvTable?.fixedHeader.headerOffset(desktopH.offsetHeight + mobileH.offsetHeight + header2.offsetHeight - 3);
         manageCarDealersTable?.fixedHeader.headerOffset(desktopH.offsetHeight + mobileH.offsetHeight + header2.offsetHeight - 3);
+        manageWizardBillsTable?.fixedHeader.headerOffset(desktopH.offsetHeight + mobileH.offsetHeight + header2.offsetHeight - 3);
 
         if ($(window).width() < 580) {
             manageInvTable?.fixedHeader.headerOffset(mobileH.offsetHeight - 3);
             manageCarDealersTable?.fixedHeader.headerOffset(mobileH.offsetHeight - 3);
+            manageWizardBillsTable?.fixedHeader.headerOffset(mobileH.offsetHeight - 3);
         }
 
 
@@ -877,8 +906,8 @@ function setSearchTypehead(searhStatusArray) {
 function searchStockBtn(params) {
     let head = $(params).data('head');
     let search = $(params).data('search');
-    console.log(head);
-    console.log(search);
+    // console.log(head);
+    // console.log(search);
     switch (head) {
         case 'Not Touched':
             head = 'notTouched';
@@ -901,6 +930,9 @@ function searchStockBtn(params) {
         case 'To Go':
             head = 'toGo';
             break;
+        case 'Wholesale':
+            head = 'wholesale';
+            break;
         case 'At Bodyshop':
             head = 'atBodyshop';
             break;
@@ -912,7 +944,9 @@ function searchStockBtn(params) {
             break;
         case 'Gone':
             head = 'Gone';
-            break;
+        // case 'Wizard Bills':
+        //     head = 'wizardBills';
+        //     break;
         default:
             head = '';
             break;
@@ -1140,6 +1174,10 @@ function carDealersFilterDivHTML() {
             message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
             timeout: 1e3
         });
+        $('#datatable-3').block({
+            message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+            timeout: 1e3
+        });
 
         let currentElement = $(this).val();
         const column1 = manageCarDealersTable.column(0);
@@ -1225,11 +1263,14 @@ function writeStatusHTML() {
             message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
             timeout: 1e3
         });
+        $('#datatable-3').block({
+            message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+            timeout: 1e3
+        });
 
         manageInvTable.draw();
     })
 }
-
 
 
 
@@ -1302,7 +1343,7 @@ function clearErrorsList() {
 
 $('#repairReturn').on('change', function () {
 
-    console.log(editInspectionObj);
+    // console.log(editInspectionObj);
     // if ($(this).val() != '' &&
     //     editInspectionObj?.bodyshop_log == "" &&
     //     editInspectionObj?.repair_paid_log == "" &&
@@ -1322,11 +1363,9 @@ $('#repairReturn').on('change', function () {
 
 
 $('#resend').on('change', function () {
-    console.log(this.checked);
     var obj = editInspectionObj;
     if (this.checked == true) {
         $('#resendDetailsDiv').removeClass('d-none');
-        // console.log(obj);
         var arr = obj.repairs ? (obj.repairs.trim()).split('__') : [];
         arr.pop(); arr.shift();
         var detailsDiv = `History  Sent ${obj.repair_sent}     Returned ${obj.repair_returned} \nRepairs: ${arr.map(element => element).join(' , ')} \nBodyshop: ${obj.bodyshop_name} \nPaid: ${obj.repair_paid}`;
@@ -1437,7 +1476,7 @@ $('#resend').on('change', function () {
         document.getElementById('slickSlider').innerHTML = "";
         if (obj.pictures) {
             var images = (obj.pictures.trim()).split('__');
-            console.log(images);
+            // console.log(images);
             images.forEach((element, index) => {
                 if (element !== "") {
                     document.getElementById('slickSlider').innerHTML += `<div class="carousel-item">
@@ -1466,7 +1505,7 @@ $('#resend').on('change', function () {
 })
 
 function editInspection(id) {
-    console.log(id);
+    // console.log(id);
     if (id) {
         $('.spinner-grow').removeClass('d-none');
         $('.showResult').addClass('d-none');
@@ -1484,7 +1523,7 @@ function editInspection(id) {
                 $('.showResult').removeClass('d-none');
                 $('.modal-footer').removeClass('d-none');
 
-                console.log(response);
+                // console.log(response);
                 // stockno  stock and vin
                 // selectedDetails   stock details
                 $('#vehicleId').val(id);
@@ -1621,7 +1660,7 @@ function editInspection(id) {
                 document.getElementById('slickSlider').innerHTML = "";
                 if (response.pictures) {
                     var images = (response.pictures.trim()).split('__');
-                    console.log(images);
+                    // console.log(images);
                     images.forEach((element, index) => {
                         if (element !== "") {
                             document.getElementById('slickSlider').innerHTML += `<div class="carousel-item">
@@ -1682,7 +1721,7 @@ function editCashToDealers(id) {
                 // modal footer
                 $('.modal-footer').removeClass('d-none');
 
-                console.log(response);
+                // console.log(response);
                 // stockno  stock and vin
                 // selectedDetails   stock details
                 $('#evehicleId').val(id);
@@ -1780,5 +1819,367 @@ function removeCarsToDealers(id = null) {
                 }); // /ajax function to remove the brand
             }
         });
+    }
+}
+
+
+// -------------------------------------------------------------------------------------- wizard Bills --------------------------------------------------
+
+function fetchWizardsBills() {
+    if ($.fn.dataTable.isDataTable('#datatable-3')) {
+        // manageWizardBillsTable = $('#datatable-3').DataTable();
+        manageWizardBillsTable.draw();
+    }
+    else {
+        manageWizardBillsTable = $("#datatable-3").DataTable({
+            responsive: !0,
+            'ajax': '../php_action/fetchLotWizardsBills.php',
+            dom: `\n     
+            <'row'<'col-12'P>>\n      
+            <'row'<'col-sm-12 text-sm-left col-md-3 mb-2 '<'#wizardBillsFilterDiv'>> <'col-sm-12 col-md-6 text-center 'B> <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n
+           <'row'<'col-12'tr>>\n      
+           <'row align-items-baseline'
+           <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
+           <'col-md-5'p>>\n`,
+
+            "pageLength": 50,
+            searchPanes: {
+                columns: [1, 2, 3],
+            },
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    title: 'Lot Wizards Bills',
+                    exportOptions: {
+                        columns: [':visible']
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    title: 'Lot Wizards Bills',
+                    exportOptions: {
+                        columns: [':visible']
+                    }
+                },
+                {
+                    extend: 'print',
+                    title: 'Lot Wizards Bills',
+                    exportOptions: {
+                        columns: [':visible']
+                    }
+                },
+            ],
+            columnDefs: [
+                {
+                    searchPanes: {
+                        show: true
+                    },
+                    targets: [1, 2, 3],
+                },
+                {
+                    targets: [0, 8],
+                    visible: false,
+                },
+                {
+                    targets: [4],
+                    data: 4, // repairs 
+                    render: function (data, type, row) {
+                        var repairArr = data ? data.replace(/__/g, " , ") : '';
+                        repairArr = repairArr.slice(3, -3);
+                        return repairArr;
+                    },
+                },
+                {
+                    targets: 7,
+                    data: 7,
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        if ($('#isEditAllowed').val() == "true") {
+                            $(td).html(`<div class="show d-flex" >
+                            <input type="text" class="form-control" name="input_field" value="${rowData[7]}" data-attribute="repair_paid" data-id="${rowData[0]}" autocomplete="off"  />
+                        </div>`);
+                        } else {
+                            $(td).html(rowData[7]);
+                        }
+                    }
+                },
+                {
+                    targets: 8,
+                    data: 9,  // bodyshop
+                    // createdCell: function (td, cellData, rowData, row, col) {
+                    //     if ($('#isEditAllowed').val() == "true") {
+                    //         $(td).html(`<div class="show d-flex" >
+                    //             <input type="text" class="form-control" name="date_in_table" value="${rowData[8]}" data-attribute="repair_paid_date" data-id="${rowData[0]}" autocomplete="off"  />
+                    //         </div>`);
+                    //     } else {
+                    //         $(td).html(rowData[8]);
+                    //     }
+                    // }
+                },
+
+            ],
+
+            language: {
+                "infoFiltered": "",
+                searchPanes: {
+                    count: "{total} found",
+                    countFiltered: "{shown} / {total}"
+                }
+            },
+
+            rowGroup: {
+                enable: true,
+                dataSrc: 9,
+                startRender: function (rows, group) {
+                    var collapsed = !!collapsedGroups[group];
+
+                    var filteredData = $('#datatable-3').DataTable()
+                        .rows({ search: 'applied' })
+                        .data()
+                        .filter(function (data, index) {
+                            return data[9] == group ? true : false;
+                        });
+
+                    return $('<tr/>')
+                        .append('<td colspan="14">' + group + ' (' + filteredData.length + ')</td>')
+                        .attr('data-name', group)
+                        .toggleClass('collapsed', collapsed);
+                },
+            },
+
+            "drawCallback": function (settings, start, end, max, total, pre) {
+                var json = this.fnSettings().json;
+
+                if (json) {
+                    var totalWizardBillsValue = json?.data?.filter((dataObj) => dataObj[7] == "" || dataObj[7] == null).length;
+                    if (totalWizardBillsValue == '0') {
+                        $(`input[name='mod'][value='wizardBills']`).parent().addClass('btn-outline-success')
+                        $(`input[name='mod'][value='wizardBills']`).parent().removeClass('btn-outline-danger')
+                    } else {
+                        $(`input[name='mod'][value='wizardBills']`).parent().addClass('btn-outline-danger')
+                        $(`input[name='mod'][value='wizardBills']`).parent().removeClass('btn-outline-success')
+                    }
+                    $(`input[name='mod'][value='wizardBills']`).next().next().html(totalWizardBillsValue)
+
+                    setfun();
+                    setInputChange();
+                }
+            },
+
+            // createdRow: function (row, data, dataIndex) {
+            //     $(row).children().not(':last-child').attr({
+            //         "data-toggle": "modal",
+            //         "data-target": "#editDetails",
+            //         "onclick": "editDetails(" + data[0] + ")"
+            //     });
+            // },
+            "order": [[8, "asc"], [1, "desc"]],
+        })
+        wizardBillsFilterDivHTML();
+    }
+    var tableNode = $('#datatable-3')[0];
+
+    $.fn.dataTable.ext.search.push(
+        function (settings, searchData, index) {
+            // var tableNode = manageCarDealersTable.table().node();
+            var repairPaid = searchData[7];
+            var searchStatus = $('#wizardBillsFilterDiv input:radio[name="searchStatus"]:checked').map(function () {
+                if (this.value !== "") {
+                    return this.value;
+                }
+            }).get();
+
+            if (searchStatus.length === 0) {
+                return true;
+            }
+
+            if (settings.nTable !== tableNode) {
+                return true;
+            }
+
+            if (searchStatus[0] === 'notPaid') {
+                if (repairPaid == '' || repairPaid == null) {
+                    return true;
+                }
+            }
+            if (searchStatus[0] === 'paid') {
+                if (repairPaid != '' && repairPaid != null) {
+                    return true;
+                }
+
+            }
+            return false;
+        }
+    );
+}
+
+function wizardBillsFilterDivHTML() {
+    var element = document.getElementById('wizardBillsFilterDiv');
+    if (element) {
+        element.innerHTML = `<div class="row">
+        <div class="col-md-12" id="wizardBillsFilterBtns" >
+            <div id="sort">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-flat-primary">
+                        <input type="radio" name="searchStatus" id="notPaid" value="notPaid"> Not Paid
+                    </label>
+                    <label class="btn btn-flat-primary">
+                        <input type="radio" name="searchStatus" id="paid" value="paid"> Paid
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>`;
+    }
+
+
+    $('#wizardBillsFilterBtns input:radio').on('change', function () {
+        $('#datatable-1').block({
+            message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+            timeout: 1e3
+        });
+        $('#datatable-2').block({
+            message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+            timeout: 1e3
+        });
+        $('#datatable-3').block({
+            message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+            timeout: 1e3
+        });
+
+        // let currentElement = $(this).val();
+        // const column1 = manageCarDealersTable.column(0);
+        // switch (currentElement) {
+        //     case "Pending":
+        //     case "Complete":
+        //         column1.visible(true);
+        //         break;
+        //     case "Inventory":
+        //         column1.visible(false);
+        //         break;
+        //     default:
+        //         break;
+        // }
+        setTimeout(() => {
+            manageWizardBillsTable.draw();
+            // manageWizardBillsTable.searchPanes.rebuildPane();
+        }, 500);
+    })
+
+    $('#notPaid').click();
+}
+
+
+
+function setfun() {
+    $('input[name="date_in_table"]').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        timePicker: !0,
+        autoUpdateInput: false,
+        cleanable: true,
+        "opens": "left",
+        "showDropdowns": true,
+        locale: {
+            format: 'MM-DD-YYYY',
+            applyLabel: 'Submit',
+            cancelLabel: 'Reset',
+        },
+    });
+    $('input[name="date_in_table"]').on('cancel.daterangepicker', function (ev, picker) {
+        $(this).val('');
+        $(this).data('daterangepicker').setStartDate(moment());
+        $(this).data('daterangepicker').setEndDate(moment());
+        let id = $(this).data('id');
+        let attribute = $(this).data('attribute');
+        let value = "";
+
+        let repair_ele = $('input[data-id="' + id + '"][data-attribute="repair_paid"]');
+        var repair_ele_v = repair_ele.val();
+        var repair_ele_attr = "repair_paid";
+
+        updateFieldsUsedCars({ id: [id, id], attribute: [attribute, repair_ele_attr], value: [value, repair_ele_v] });
+    });
+    $('input[name="date_in_table"]').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('MM-DD-YYYY'));
+        let id = $(this).data('id');
+        let attribute = $(this).data('attribute');
+        let value = picker.startDate.format('MM-DD-YYYY');
+
+        let repair_ele = $('input[data-id="' + id + '"][data-attribute="repair_paid"]');
+        var repair_ele_v = repair_ele.val();
+        var repair_ele_attr = "repair_paid";
+        if (repair_ele_v == '') {
+            repair_ele.addClass('is-invalid');
+            return false;
+        } else {
+            repair_ele.removeClass('is-invalid');
+            updateFieldsUsedCars({ id: [id, id], attribute: [attribute, repair_ele_attr], value: [value, repair_ele_v] });
+        }
+
+    });
+}
+
+
+function setInputChange() {
+    var inputs = document.querySelectorAll("input[name=input_field]");
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                let id = $(this).data('id');
+                let attribute = $(this).data('attribute');
+                let value = $(this).val();
+
+                // let repair_date_ele = $('input[data-id="' + id + '"][data-attribute="repair_paid_date"]');
+                // var repair_date_ele_v = repair_date_ele.val();
+                // var repair_date_ele_attr = "repair_paid_date";
+                // if (repair_date_ele_v != '' && value == '') {
+                //     $(this).addClass('is-invalid');
+                //     return false;
+                // } else {
+                //     $(this).removeClass('is-invalid');
+                // }
+                updateFieldsUsedCars({ id: [id], attribute: [attribute], value: [value] });
+            }
+        });
+    }
+}
+
+
+function updateFieldsUsedCars(data) {
+    if (data) {
+        // e1.fire({
+        //     title: "Are you sure?",
+        //     // text: "You won't be able to revert this!",
+        //     icon: "warning",
+        //     showCancelButton: !0,
+        //     confirmButtonColor: "#3085d6",
+        //     cancelButtonColor: "#d33",
+        //     confirmButtonText: "Yes, Change this!"
+        // }).then(function (t) {
+        //     if (t.isConfirmed == true) {
+        $.ajax({
+            url: '../php_action/updateFieldsLotwizards.php',
+            type: 'post',
+            data: data,
+            dataType: 'json',
+            success: function (response) {
+                if (response.success == true) {
+                    e1.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "Successfully Changed",
+                        showConfirmButton: !1,
+                        timer: 1500,
+                    })
+                    manageWizardBillsTable.ajax.reload(null, false);
+                } // /response messages
+            }
+
+        }); // /ajax function to remove the brand
+        //     } else {
+        //         manageWizardBillsTable.ajax.reload(null, false);
+        //     }
+        // });
     }
 }

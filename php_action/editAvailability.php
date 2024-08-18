@@ -46,18 +46,18 @@ if ($_POST) {
 
         $result1 = $connect->query($sql1);
         $row1 = $result1->fetch_assoc();
-        $consultant_name = $row1['consultant_name'];
-        $consultant_id = $row1['user_id'];
-        $consultant_role = $row1['consultant_role'];
+        $consultant_name =  $row1 ? $row1['consultant_name'] : "";
+        $consultant_id = $row1 ? $row1['user_id'] : "";
+        $consultant_role = $row1 ? $row1['consultant_role'] : "";
         $sms_user = "false";
         $username = $_SESSION['userName'];
 
         if ($consultant_role == $salesConsultantID) {
 
             if ($availability != 'OFF' && $availability != '' && $availability != 'Vacation') {
-                if($availability == 'See Notes'){
+                if ($availability == 'See Notes') {
                     $message = "You Have been marked Off BDC by {$username}…Reason - {$offNotes}";
-                }else{
+                } else {
                     $message = "You have been marked {$availability} by {$username}";
                 }
                 $sms_user = send_sms($consultant_id, $message);
@@ -66,7 +66,6 @@ if ($_POST) {
                 } else {
                     $valid['sms_status'] = "SMS Failed";
                 }
-
             }
         }
 

@@ -102,10 +102,9 @@ if ($_POST) {
             sendNotifiation($from, $to, $message, $appointment_id);
 
 
-            $link = $siteurl . '/index.php?redirect=more/deliveryCoordinators.php?filter='.$appointment_id;
-            $message = "An appointment on {$scheduleStart_formated} has been added by {$salesConsultantName}
-                    Click to confirm: {$link}";
-            $sms_user = send_sms($coordinator, $message);
+            $link = $siteurl . '/index.php?redirect=more/deliveryCoordinators.php?filter=' . $appointment_id;
+            $message = "An appointment on {$scheduleStart_formated} has been added by {$salesConsultantName}.";
+            $sms_user = send_sms($coordinator, $message, $link);
             if ($sms_user == 'true') {
                 $valid['sms_status'] = "SMS Send";
             } else {

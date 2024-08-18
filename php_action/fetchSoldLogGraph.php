@@ -325,10 +325,10 @@ if ($result->num_rows > 0) {
 $result2 = $connect->query($sql2);
 if ($result2->num_rows > 0) {
     $row2 = $result2->fetch_assoc();
-    $regCount = $row2['problem'];
-    $todoCount = $row2['todo'];
-    $tittleCount = $row2['titleIssue'];
-    $warrenty_cancellation = $row2['warrenty_cancellation'];
+    $regCount = $row2 ?  $row2['problem'] : "";
+    $todoCount = $row2 ?  $row2['todo'] : "";
+    $tittleCount = $row2 ?  $row2['titleIssue'] : "";
+    $warrenty_cancellation = $row2 ?  $row2['warrenty_cancellation'] : "";
 }
 
 

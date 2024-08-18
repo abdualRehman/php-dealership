@@ -1,0 +1,8 @@
+{
+  "intelephense.diagnostics.undefinedMethods": true,
+  "intelephense.diagnostics.undefinedProperties": true,
+  "intelephense.diagnostics.undefinedVariables": true,
+  "intelephense.diagnostics.undefinedFunctions": true,
+  "intelephense.diagnostics.undefinedTypes": true,
+  "intelephense.diagnostics.enable": false
+}

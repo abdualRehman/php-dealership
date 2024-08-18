@@ -74,7 +74,7 @@ if ($result->num_rows > 0) {
                 $sql1 = "SELECT * FROM `users` WHERE id = '$submitted_by'";
                 $result1 = $connect->query($sql1);
                 $row1 = $result1->fetch_assoc();
-                $submitted_by = $row1['username'];
+                $submitted_by = $row1 ?  $row1['username'] : "";
             } else {
                 $submitted_by = "Blank";
             }
@@ -84,7 +84,7 @@ if ($result->num_rows > 0) {
                 $sql1 = "SELECT * FROM `users` WHERE id = '$salesConsultant'";
                 $result1 = $connect->query($sql1);
                 $row1 = $result1->fetch_assoc();
-                $salesConsultant = $row1['username'];
+                $salesConsultant = $row1 ?  $row1['username'] : "";
             } else {
                 $salesConsultant = "Blank";
             }
@@ -93,8 +93,8 @@ if ($result->num_rows > 0) {
                 $sql1 = "SELECT * FROM `users` WHERE id = '$coordinator'";
                 $result1 = $connect->query($sql1);
                 $row1 = $result1->fetch_assoc();
-                $coordinator = $row1['username'];
-                $coordinator_color = '#' . $row1['color'];
+                $coordinator = $row1 ?  $row1['username'] : "";
+                $coordinator_color = $row1 ? ('#' . $row1['color']) : "";
             } else {
                 $coordinator = "Blank";
                 $coordinator_color = "";

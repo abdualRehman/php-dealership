@@ -626,12 +626,26 @@ $(function () {
 
 
     }
+    // custom color of incentives on Change
+    $('#loadIncentivesDiv .selectpicker').on('change', function () {
+        var selectedOption = $(this).find('option:selected').text().trim();
+        var buttonElement = $(this).closest('.bootstrap-select').find('button');
+        if (selectedOption === 'Yes') {
+            buttonElement.removeClass('bs-btn-default').addClass('btn-danger');
+        } else {
+            buttonElement.removeClass('btn-danger').addClass('bs-btn-default');
+        }
+        $(this).selectpicker('refresh');
+    });
+
     $(function () {
 
         loadStock();
         loadSaleConsultant();
         loadSaleManager();
         loadFinanceManager();
+
+
 
 
         // ---------------------- Edit Sale---------------------------
@@ -1487,6 +1501,16 @@ function editSale(id = null) {
                 $('#leaseLoyalty').val(response.lease_loyalty);
 
 
+                // custom color of incentives on Change
+                chnageIncentiveStatus_style('college', response.college)
+                chnageIncentiveStatus_style('military', response.military)
+                chnageIncentiveStatus_style('loyalty', response.loyalty)
+                chnageIncentiveStatus_style('conquest', response.conquest)
+                chnageIncentiveStatus_style('misc1', response.misc1)
+                chnageIncentiveStatus_style('misc2', response.misc2)
+                chnageIncentiveStatus_style('leaseLoyalty', response.lease_loyalty)
+
+
                 $('#vincheck').val(response.vin_check);
                 $('#insurance').val(response.insurance);
                 $('#tradeTitle').val(response.trade_title);
@@ -1532,6 +1556,8 @@ function editSale(id = null) {
 
 
 
+
+
             }, // /success
             error: function (err) {
                 console.log(err);
@@ -1548,7 +1574,18 @@ function editSale(id = null) {
 
 }
 
-
+// custom color of incentives on Change
+function chnageIncentiveStatus_style(targetElement, targetValue) {
+    if (targetElement) {
+        var buttonElement = $(`#${targetElement}`).closest('.bootstrap-select').find('button');
+        if (targetValue === 'Yes') {
+            buttonElement.removeClass('bs-btn-default').addClass('btn-danger');
+        } else {
+            buttonElement.removeClass('btn-danger').addClass('bs-btn-default');
+        }
+        $(`#${targetElement}`).selectpicker('refresh');
+    }
+}
 
 
 function changeReconcile() {
@@ -1832,7 +1869,7 @@ function chnageIncentiveStatus_css(value, date, element) {
         saleDateB = moment(saleDateB, 'MM-DD-YYYY HH:mm').format('MM-DD-YYYY');
         var saleDate = moment(saleDateB, 'MM-DD-YYYY');
         var edate = moment(date, 'YYYY-MM-DD').format('MM-DD-YYYY');
-        edate = moment(edate , 'MM-DD-YYYY');
+        edate = moment(edate, 'MM-DD-YYYY');
         var cduration = moment.duration(edate.diff(saleDate));
         var cdays = cduration.asDays();
         cdays = Math.ceil(cdays);

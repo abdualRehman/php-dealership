@@ -732,10 +732,12 @@ function chnageIncentiveStatus(value, date, element) {
             if (cdays >= 0) {
                 $('#misc1').val("Yes");
                 $("#misc1 option:contains('No')").prop("disabled", true);
+                chnageIncentiveStatus_style(element, 'Yes')
             } else {
                 $("#misc1 option:contains('No')").prop("disabled", false);
                 $("#misc1 option:contains('No')").removeAttr('disabled');
                 $('#misc1').val("No");
+                chnageIncentiveStatus_style(element, 'No')
             }
             $(".selectpicker").selectpicker("refresh");
             $('#' + element).selectpicker("refresh");
@@ -747,17 +749,30 @@ function chnageIncentiveStatus(value, date, element) {
         } else {
             $('#' + element).val("No");
             $('#' + element).prop("disabled", true);
-            // $('#misc1').val("No");
+            chnageIncentiveStatus_style(element, 'No')
         }
     } else {
         $('#' + element).val("No");
         $('#' + element).prop("disabled", true);
         $('#' + element + '_v').html('');
+        chnageIncentiveStatus_style(element, 'No')
         // $('#misc1').val("No");
     }
 
     $(".selectpicker").selectpicker("refresh");
     $('#' + element).selectpicker("refresh");
+}
+// custom color of incentives on Change
+function chnageIncentiveStatus_style(targetElement, targetValue) {
+    if (targetElement) {
+        var buttonElement = $(`#${targetElement}`).closest('.bootstrap-select').find('button');
+        if (targetValue === 'Yes') {
+            buttonElement.removeClass('bs-btn-default').addClass('btn-danger');
+        } else {
+            buttonElement.removeClass('btn-danger').addClass('bs-btn-default');
+        }
+        $(`#${targetElement}`).selectpicker('refresh');
+    }
 }
 
 
