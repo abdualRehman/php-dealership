@@ -479,7 +479,8 @@ if ($result->num_rows > 0) {
 
 
 
-$dataObj = SSP::complex($_POST, $sql_details, $table, $primaryKey, $columns);
+// $dataObj = SSP::complex($_POST, $sql_details, $table, $primaryKey, $columns);
+$dataObj = SSP::simple($_POST, $sql_details, $table, $primaryKey, $columns);
 
 
 

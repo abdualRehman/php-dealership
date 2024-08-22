@@ -1505,6 +1505,9 @@ function writeStatusHTML() {
         $(this).val(picker.startDate.format('MM-DD-YYYY'));
         let value = picker.startDate.format('MM-DD-YYYY');
         updateFieldsDateSent({ attribute: "date_sent", value: value });
+        $(this).val('');
+        $(this).data('daterangepicker').setStartDate(moment());
+        $(this).data('daterangepicker').setEndDate(moment());
     });
 }
 function addALL() {

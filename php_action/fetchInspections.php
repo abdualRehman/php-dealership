@@ -62,7 +62,7 @@ if ($filterBy != '') {
     } else if ($filterBy == 'backFromBodyshop') {
         $searchQuery .= " AND ( inspections.repair_returned != '' AND inspections.repair_sent != '' AND ( inspections.recon = '' OR inspections.recon IS NULL ) AND inventory.status != 3 ) ";
     } else if ($filterBy == 'retailReady') {
-        $searchQuery .= " AND ( inspections.recon = 'sent' AND inventory.status != 2 ) ";
+        $searchQuery .= " AND ( inspections.recon = 'sent' AND inventory.status != 2 AND inventory.wholesale != 'on') ";
     } else if ($filterBy == 'Gone') {
         $searchQuery .= " AND ( (inventory.balance = '' OR inventory.balance = 0 OR inventory.balance IS NULL ) AND inventory.stocktype != 'NEW' AND inventory.status = 2  ) ";
     }
@@ -453,7 +453,7 @@ if ($result->num_rows > 0) {
             $backFromBodyshop += 1;
             $_backBodyshop = "Back Bodyshop";
         }
-        if ($recon == 'sent' && $invStatus != 2) {
+        if ($recon == 'sent' && $invStatus != 2 && $row['wholesale'] != 'on') {
             $retailReady += 1;
             $_retailReady = "Retail Ready";
         }
