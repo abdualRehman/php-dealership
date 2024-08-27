@@ -192,7 +192,11 @@ $_SESSION['siteurl'] = $url;
                                     <button type="button" class="btn btn-text-light btn-icon alert-dismiss" data-dismiss="alert"><i class="fa fa-times"></i></button>
                                 </div>`);
                             } else {
-                                window.location.replace("dashboard.php");
+                                if (response?.isConsultant) {
+                                    window.location.replace("sales/soldLogs.php?r=man");
+                                } else {
+                                    window.location.replace("dashboard.php");
+                                }
                             }
                         } else {
                             Swal.fire({

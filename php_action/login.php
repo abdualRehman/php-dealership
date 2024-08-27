@@ -40,6 +40,11 @@ function handleUserData($value)
             array_push($output, $row);
         }
     }
+
+    $valid['isConsultant'] = false;
+    if ($role_id === '66') {
+        $valid['isConsultant'] = true;
+    }
     $_SESSION['permissionsArray'] = $output;
 
     $valid['success'] = true;
