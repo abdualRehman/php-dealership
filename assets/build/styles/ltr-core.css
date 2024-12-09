@@ -41,7 +41,7 @@ body.theme-light {
 
 body.theme-dark {
     color: #f5f5f5;
-    background: #535353
+    background: #131416
 }
 
 [tabindex="-1"]:focus {
@@ -185,7 +185,7 @@ code {
 }
 
 .theme-dark code {
-    background-color: #616161
+    background-color: #cccccc
 }
 
 pre {

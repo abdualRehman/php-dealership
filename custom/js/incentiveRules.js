@@ -520,7 +520,10 @@ function addRow() {
         <option value="0" selected disabled>Select Model</option>
         <option value="ACCORD">ACCORD</option>
         <option value="ACCORD HYBRID">ACCORD HYBRID</option>
-        <option value="CIVIC">CIVIC</option>
+        <option value="CIVIC SEDAN">CIVIC</option>
+        <option value="CIVIC SEDAN HYBRID">CIVIC HYBRID</option>
+        <option value="CIVIC HATCH">CIVIC</option>
+        <option value="CIVIC HATCH HYBRID">CIVIC HYBRID</option>
         <option value="CR-V">CR-V</option>
         <option value="CR-V HYBRID">CR-V HYBRID</option>
         <option value="HR-V">HR-V</option>

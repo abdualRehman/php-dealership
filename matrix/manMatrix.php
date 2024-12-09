@@ -198,10 +198,10 @@ if ($_GET['r'] == 'man') {
                                                             <input type="radio" name="mod" data-texts="Accord,Accord Hybrid,ACCORD 4DR"> ACCORD
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="mod" data-texts="Civic,CIVIC SEDAN,Civic Hybrid,Civic SI"> CIVIC SEDAN
+                                                            <input type="radio" name="mod" data-texts="Civic,CIVIC SEDAN,Civic Hybrid,Civic Sedan Hybrid,Civic SI"> CIVIC SEDAN
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                             <input type="radio" name="mod" data-texts="CIVIC HATCH,CIVIC 5DR,Civic Type R"> CIVIC HATCH
+                                                             <input type="radio" name="mod" data-texts="CIVIC HATCH,Civic Hatch,Civic Hatch Hybrid,CIVIC 5DR,Civic Type R"> CIVIC HATCH
                                                          </label>     
                                                         <label class="btn btn-outline-primary">
                                                             <input type="radio" name="mod" data-texts="CR-V,CR-V Hybrid,CRV Hybrid,CRV,CLARITY PLUG-IN HYBRID"> CR-V
@@ -341,7 +341,7 @@ if ($_GET['r'] == 'man') {
                                 <div class="inner">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <h5 class="h5 text-primary">FINANCE RATES 660+</h5>
+                                            <h5 class="h5 text-primary">FINANCE RATES</h5>
                                             <div class="well">
                                                 <p>24-36 Months <strong id="f_24_36"></strong> </p>
                                             </div>
@@ -383,7 +383,7 @@ if ($_GET['r'] == 'man') {
                                 <div class="inner">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <h5 class="h5 text-primary">LEASE RATES 660+</h5>
+                                            <h5 class="h5 text-primary">LEASE RATES</h5>
                                             <div class="well">
                                                 <p>24-36 Months <strong id="l_24_36"></strong> </p>
                                             </div>

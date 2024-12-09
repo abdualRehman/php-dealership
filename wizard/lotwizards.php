@@ -247,9 +247,6 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                                     <input type="radio" name="mod" value="toGo" data-title="To Go"> To Go <br> <span></span>
                                                 </label>
                                                 <label class="btn text-responsive">
-                                                    <input type="radio" name="mod" value="wholesale" data-title="Wholesale"> Wholesale <br> <span></span>
-                                                </label>
-                                                <label class="btn text-responsive">
                                                     <input type="radio" name="mod" value="atBodyshop" data-title="At Bodyshop"> At Bodyshop <br> <span></span>
                                                 </label>
                                                 <label class="btn text-responsive">
@@ -258,6 +255,9 @@ if (hasAccess("lotWizards", "Edit") === 'false') {
                                                 <label class="btn text-responsive">
                                                     <input type="radio" name="mod" value="retailReady" data-title="Retail Ready"> Retail Ready <br> <span></span>
                                                 </label>
+                                                <label class="btn text-responsive">
+                                                    <input type="radio" name="mod" value="wholesale" data-title="Wholesale"> Wholesale <br> <span></span>
+                                                </label>                                                
                                                 <label class="btn text-responsive">
                                                     <input type="radio" name="mod" value="Gone" id="Gone" data-title="Gone"> Gone <br> <span></span>
                                                 </label>
