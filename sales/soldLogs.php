@@ -2,6 +2,8 @@
 include_once '../php_action/db/core.php';
 include_once '../includes/header.php';
 
+loadDefaultRoles();
+
 if ($_GET['r'] == 'man') {
     $userRole = $_SESSION['userRole'];
     if (hasAccess("sale", "View") === 'false') {
@@ -322,7 +324,7 @@ if ($_GET['r'] == 'man') {
                                             <th style="text-align: center; padding: 10px;">Certified</th>
                                             <th style="text-align: center; padding: 10px;">Lot</th>
                                             <th style="text-align: center; padding: 10px;">Gross</th>
-                                            <th>Status</th> 
+                                            <th>Status</th>
                                             <th>Notes</th>
                                             <th style="text-align: center; padding: 10px;">Balance</th>
                                             <th style="text-align: center; padding: 10px;">Finance Manager</th>

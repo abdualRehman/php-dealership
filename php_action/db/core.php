@@ -44,6 +44,11 @@ function loadDefaultRoles()
 {
 	global $connect;
 
+	$roleLoaded = isset($_SESSION['roleLoaded']) ? $_SESSION['roleLoaded'] : '';
+	if ($roleLoaded) {
+		return true;
+	}
+
 	$location = $_SESSION['userLoc'];
 
 	$checkSql = "SELECT * FROM `default_roles` WHERE location_id = '$location' AND status = 1";
@@ -108,6 +113,8 @@ function loadDefaultRoles()
 					break;
 			}
 		}
+
+		$_SESSION['roleLoaded'] = true;
 	}
 }
 
@@ -142,13 +149,12 @@ function hasAccess($module, $function)
 	// }
 }
 
-function sendNotifiation($from , $to , $message , $appointment_id)
+function sendNotifiation($from, $to, $message, $appointment_id)
 {
 	global $connect;
 	$insentiveSql = "INSERT INTO `notifications`(`from_user`, `to_user`, `message`, `link`, `is_read`, `is_delivered`, `status`) 
 	VALUES ('$from' , '$to' , '$message' , $appointment_id , 0, 0, 1 )";
 	$connect->query($insentiveSql);
-
 }
 
 // echo hasAccess("swap", "Add");

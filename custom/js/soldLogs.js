@@ -84,6 +84,11 @@ $(function () {
             $('#searchStatusAll').click();
             $("input[name=searchStatus][value='currentMonth']").prop("checked", true);
             $("input[name=radio-date][value='']").prop("checked", true);
+        } else if (filter == 'cards') {
+            $('#notDoneBtn').click();
+            $('.soldLogs').addClass('d-none');
+            $('.notDone').removeClass('d-none');
+            fetchNotDoneSoldLogs();
         } else {
             $('#currentMonth').click();
             $('#searchStatusAll').click();

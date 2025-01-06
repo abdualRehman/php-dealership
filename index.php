@@ -40,7 +40,6 @@ $_SESSION['siteurl'] = $url;
         if (domain == 'http://localhost') {
             domain += '/carshop';
         }
-        console.log(domain);
         var siteURL = domain;
         // var siteURL = 'http://localhost/carshop';
         // var siteURL = 'http://onedealersystem.com';
@@ -181,7 +180,6 @@ $_SESSION['siteurl'] = $url;
                     data: form.serialize(),
                     dataType: 'json',
                     success: function(response) {
-                        console.log(response);
                         if (!response.send_otp) {
                             if (response.success == false) {
                                 $('#login-error-message').html(`<div class="alert alert-danger show d-flex w-100 justify-content-between">

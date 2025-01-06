@@ -1119,11 +1119,12 @@ function changeStockDetails(ele) {
     $('#stockno').val("");
     $('#has_appointment').val("null");
     if (obj) {
-        let currentUser = $('#loggedInUserRole').val();
-        var apptStatus = obj[10];
-        var sales_manager_id = Number(localStorage.getItem('salesManagerID'));;
-        var general_manager_id = Number(localStorage.getItem('generalManagerID'));
-        var branchAdmin_id = Number(localStorage.getItem('branchAdmin'));
+
+        // let currentUser = $('#loggedInUserRole').val();
+        // var apptStatus = obj[10];
+        // var sales_manager_id = Number(localStorage.getItem('salesManagerID'));;
+        // var general_manager_id = Number(localStorage.getItem('generalManagerID'));
+        // var branchAdmin_id = Number(localStorage.getItem('branchAdmin'));
         // if (apptStatus != null && currentUser != sales_manager_id && currentUser != general_manager_id && currentUser != 'Admin' && currentUser != branchAdmin_id) {
         //     toastr.error('Error! - Appointment Allready Exist');
 
@@ -1131,6 +1132,7 @@ function changeStockDetails(ele) {
         //     $('.selectpicker').selectpicker('refresh');
         //     return false;
         // }
+        $('#sale_id').val(`${obj[0]}`);
         changeExistStatus();
 
         $('#customerName').val(obj[2] + ' ' + obj[3]);

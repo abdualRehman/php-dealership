@@ -1,5 +1,5 @@
 "use strict";
-var manageDataTable, stockArray;
+var manageDataTable, stockArray, defaultOptionsData;
 var e1 = Swal.mixin({
     customClass: {
         confirmButton: "btn btn-label-success btn-wide mx-1",
@@ -31,10 +31,18 @@ $(function () {
 
     $('.nav-link').removeClass('active');
     $('#more').addClass('active');
-    
+
     manageDataTable = $("#datatable-1").DataTable({
         responsive: !0,
-        'ajax': '../php_action/fetchTransportations.php',
+        ajax: {
+            url: '../php_action/fetchTransportations.php',
+            type: "POST",
+            data: function (data) {
+                var statusPriority = $('#statusPriority').val();
+                statusPriority = statusPriority ? statusPriority : "";
+                data.statusPriority = statusPriority;
+            }
+        },
         dom: `\n     
             <'row'<'col-12'P>>\n      
             <'row'<'col-sm-12 text-sm-left col-md-3 mb-2 '<'#statusFilterDiv'>> <'col-sm-12 col-md-6 text-center 'B> <'col-sm-12 col-md-3 text-center text-sm-right mt-2 mt-sm-0'f> >\n  
@@ -43,31 +51,33 @@ $(function () {
            <'col-md-5'i><'col-md-2 mt-2 mt-md-0'l>
            <'col-md-5'p>>\n`,
         "pageLength": 25,
+        // 'rowsGroup': [0],
+        'rowsGroup': [0, 1, 2, 3],
         searchPanes: {
             cascadePanes: !0,
             viewTotal: !0,
-            columns: [1, 2, 3],
+            columns: [1, 2, 3, 4],
         },
         buttons: [
             {
                 extend: 'copyHtml5',
                 title: 'Transportation Damager',
                 exportOptions: {
-                    columns: [1, 2, 3, 4]
+                    columns: [1, 2, 3, 4, 5]
                 }
             },
             {
                 extend: 'excelHtml5',
                 title: 'Transportation Damager',
                 exportOptions: {
-                    columns: [1, 2, 3, 4]
+                    columns: [1, 2, 3, 4, 5]
                 }
             },
             {
                 extend: 'print',
                 title: 'Transportation Damager',
                 exportOptions: {
-                    columns: [1, 2, 3, 4]
+                    columns: [1, 2, 3, 4, 5]
                 }
             },
         ],
@@ -77,10 +87,37 @@ $(function () {
                 visible: false,
             },
             {
+                targets: [1, 2, 3],
+                createdCell: function (td) {
+                    $(td).addClass('align-content-center');
+                }
+            },
+            {
+                targets: [4],
+                width: "60%",
+            },
+            {
+                targets: [5],
+                render: function (data) {
+                    return formatCamelCase(data)
+                },
+                createdCell: function (td, cellData) {
+                    if (cellData == 'pendingInspection') {
+                        $(td).html('<h3 data-order="1" class="badge badge-lg badge-warning badge-pill">' + formatCamelCase(cellData) + '</h3>');
+                    } else if (['partsNeeded', 'partsRequested', 'partsArrivedPendingService', 'bodyshopNeeded'].includes(cellData)) {
+                        $(td).html('<h3 data-order="2" class="badge badge-lg badge-danger badge-pill">' + formatCamelCase(cellData) + '</h3>');
+                    } else if (['atBodyshop', 'bodyshopCompleted', 'completedAwaitingPayment'].includes(cellData)) {
+                        $(td).html('<h3 data-order="3" class="badge badge-lg badge-primary badge-pill">' + formatCamelCase(cellData) + '</h3>');
+                    } else if (['repairNotRequired', 'done'].includes(cellData)) {
+                        $(td).html('<h3 data-order="4" class="badge badge-lg badge-success badge-pill">' + formatCamelCase(cellData) + '</h3>');
+                    }
+                }
+            },
+            {
                 searchPanes: {
                     show: true
                 },
-                targets: [1, 2, 3],
+                targets: [1, 2, 3, 4],
             },
         ],
 
@@ -100,7 +137,8 @@ $(function () {
             }
 
         },
-        "order": [[0, "asc"]]
+        // "order": [[0, "asc"]]
+        "order": []
     })
 
 
@@ -109,7 +147,7 @@ $(function () {
 
 
     loadStock();
-    loadDefaultOptions();
+    loadDefaultOptionsFromAPI();
 
 
     $.fn.dataTable.ext.search.push(
@@ -131,14 +169,14 @@ $(function () {
             }
 
             if (searchStatus[0] === 'pending') {
-                var status = searchData[4];
-                if (status == 'Pending') {
+                var status = searchData[5];
+                if (!['Repair Not Required', 'Not Required', 'Done'].includes(status)) {
                     return true;
                 }
             }
             if (searchStatus[0] === 'done') {
-                var status = searchData[4];
-                if (status != 'Pending') {
+                var status = searchData[5];
+                if (['Repair Not Required', 'Not Required', 'Done'].includes(status)) {
                     return true;
                 }
             }
@@ -149,15 +187,12 @@ $(function () {
 
 
     $('input:radio').on('change', function () {
-
         $('#datatable-1').block({
             message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
             timeout: 1e3
         });
-
         manageDataTable.draw();  // working
         manageDataTable.searchPanes.rebuildPane();
-
     });
 
 
@@ -200,7 +235,7 @@ $(function () {
                             timer: 2500
                         })
 
-                        
+
                     }
 
 
@@ -262,6 +297,24 @@ $(function () {
 
 });
 
+function filterDatatable() {
+    $('#datatable-1').block({
+        message: '\n        <div class="spinner-grow text-success"></div>\n        <h1 class="blockui blockui-title">Processing...</h1>\n      ',
+        timeout: 1e3
+    });
+    manageDataTable.ajax.reload();
+}
+function formatCamelCase(input) {
+    if (!input) return ""; // Handle empty input
+
+    // Insert a space before each uppercase letter and capitalize the first letter
+    const formatted = input
+        .replace(/([A-Z])/g, " $1") // Add space before uppercase letters
+        .replace(/^\w/, (c) => c.toUpperCase()); // Capitalize the first letter
+
+    return formatted.trim(); // Trim any extra spaces
+}
+
 
 
 function writeStatusHTML() {
@@ -284,11 +337,11 @@ function writeStatusHTML() {
     }
 }
 
-function loadStock() {
-    $.ajax({
+async function loadStock() {
+    await $.ajax({
         url: '../php_action/fetchInvForSearch.php',
         type: "POST",
-        data:{type : 'NEW'},
+        data: { type: 'NEW' },
         dataType: 'json',
         success: function (response) {
             stockArray = response.data;
@@ -298,7 +351,7 @@ function loadStock() {
                 for (var i = 0; i < stockArray.length; i++) {
                     // for (var i = 0; i < 3; i++) {
                     var item = stockArray[i];
-                    
+
                     selectBox.innerHTML += `<option value="${item[0]}" title="${item[1]} - ${item[8]}">${item[1]} - ${item[8]} </option>`;
                 }
             });
@@ -307,32 +360,34 @@ function loadStock() {
         }
     });
 }
-function loadDefaultOptions() {
-
-    var defaultOptions = document.getElementsByClassName('defaultOptions');
-    $.ajax({
+async function loadDefaultOptionsFromAPI(editModeValue = '') {
+    await $.ajax({
         url: '../php_action/fetchDefaultOptions.php',
         type: "POST",
         dataType: 'json',
         success: function (response) {
-            let data = response.data;
+            defaultOptionsData = response.data;
+            loadDefaultOptionsData(1, editModeValue);
+        }
+    });
+}
+function loadDefaultOptionsData(rowCount, editModeValue = '') {
 
-            defaultOptions.forEach(element => {
+    if (defaultOptionsData) {
+        var defaultOptions = document.getElementsByClassName(editModeValue + 'defaultOptions' + rowCount);
 
-                for (var i = 0; i < data.length; i++) {
+        defaultOptions.forEach(element => {
+            if (element.textContent.trim() === '') {
+                for (var i = 0; i < defaultOptionsData.length; i++) {
 
-                    var item = data[i];
+                    var item = defaultOptionsData[i];
 
-                    if (item[0] != "") {
-                        if ($(element).hasClass("locNum")) {
-                            element.innerHTML += `<option>${item[0]} </option>`;
-                        }
-                    }
                     if (item[1] != "") {
                         if ($(element).hasClass("damageType")) {
                             element.innerHTML += `<option>${item[1]} </option>`;
                         }
                     }
+
                     if (item[2] != "") {
                         if ($(element).hasClass("damageSeverity")) {
                             element.innerHTML += `<option>${item[2]} </option>`;
@@ -343,16 +398,19 @@ function loadDefaultOptions() {
                             element.innerHTML += `<option>${item[3]} </option>`;
                         }
                     }
-
+                    if (item[0] != "") {
+                        if ($(element).hasClass("locNum")) {
+                            element.innerHTML += `<option>${item[0]} </option>`;
+                        }
+                    }
                 }
 
-            });
-            // selectBox.removeAttribute("disabled");
-            $('.selectpicker').selectpicker('refresh');
-        }
-    });
-}
+            }
 
+        });
+        $('.selectpicker').selectpicker('refresh');
+    }
+}
 
 
 function changeStockDetails(ele) {
@@ -367,34 +425,65 @@ function echangeStockDetails(ele) {
 }
 
 
-function editFun(id = null) {
+async function editFun(id = null) {
     if (id) {
+        $('.spinner-grow').removeClass('d-none');
+        // modal result
+        $('.eshowResult').addClass('d-none');
+        $('.modal-footer').addClass('d-none');
 
         $.ajax({
             url: '../php_action/fetchSelectedtransportation.php',
             type: 'post',
             data: { id: id },
             dataType: 'json',
-            success: function (response) {
+            success: async (response) => {
+
+                console.log("response", response);
+
+
                 $('.spinner-grow').addClass('d-none');
                 // modal result
-                $('.showResult').removeClass('d-none');
-                // modal footer
+                $('.eshowResult').removeClass('d-none');
+                // // modal footer
                 $('.modal-footer').removeClass('d-none');
 
-                $('#editForm')[0].reset();
+                if (defaultOptionsData) {
+                    loadDefaultOptionsData(1, 'e')
+                } else {
+                    await loadDefaultOptionsFromAPI('e')
+                }
 
+                var tableLength = $(`#eproductTable tbody tr`).length;
+                if (tableLength > 1) {
+                    $(`#eproductTable tbody tr:gt(0)`).remove();
+                }
 
-                $('#transId').val(response.id);
+                if (response?.length > 0) {
+                    const responseObj = response[0];
 
-                $('#estockId').val(response.stock_id);
-                echangeStockDetails({ value: response.stock_id });
+                    $('#editForm')[0].reset();
+                    $('#transId').val(responseObj.tid);
+                    $('#estockId').val(responseObj.stock_id);
+                    $('#enotes').val(responseObj.notes);
+                    echangeStockDetails({ value: responseObj.stock_id });
+                    $('#estatus').val(responseObj.transport_status);
 
-                $('#estatus').val(response.transport_status);
-                $('#elocNum').val(response.loc_num);
-                $('#edamageType').val(response.damage_type);
-                $('#edamageSeverity').val(response.damage_severity);
-                $('#edamageGrid').val(response.damage_grid);
+                    for (let i = 0; i < response.length; i++) {
+                        const element = response[i];
+                        $('#erowId' + (i + 1)).val(element.tdid);
+                        $('#elocNum' + (i + 1)).val(element.loc_num);
+                        $('#edamageType' + (i + 1)).val(element.damage_type);
+                        $('#edamageSeverity' + (i + 1)).val(element.damage_severity);
+                        $('#edamageGrid' + (i + 1)).val(element.damage_grid);
+
+                        var tableLength = $(`#eproductTable tbody tr`).length;
+
+                        if (response.length > (i + 1) && tableLength < response.length) {
+                            addRow('e', response[i + 1]?.tdid)
+                        }
+                    }
+                }
 
                 $('.selectpicker').selectpicker('refresh');
 
@@ -406,7 +495,7 @@ function editFun(id = null) {
     }
 }
 
-function removeDetails(id = null) {
+function removeDetails(tdid = null, id = null) {
     if (id) {
         e1.fire({
             title: "Are you sure?",
@@ -422,7 +511,7 @@ function removeDetails(id = null) {
                 $.ajax({
                     url: '../php_action/removeTransportation.php',
                     type: 'post',
-                    data: { id: id },
+                    data: { id: id, tdid: tdid },
                     dataType: 'json',
                     success: function (response) {
                         if (response.success == true) {
@@ -441,4 +530,92 @@ function removeDetails(id = null) {
 
 function toggleFilterClass() {
     $('.dtsp-panes').toggle();
+}
+
+
+function addRow(editModeValue = '', editRowId = null) {
+
+    $(`#${editModeValue}addRowBtn`).button("loading");
+
+    var tableLength = $(`#${editModeValue}productTable tbody tr`).length;
+
+    var tableRow;
+    var arrayNumber;
+    var count;
+
+    if (tableLength > 0) {
+        tableRow = $(`#${editModeValue}productTable tbody tr:last`).attr('id');
+        arrayNumber = $(`#${editModeValue}productTable tbody tr:last`).attr('class');
+        count = tableRow.substring(editModeValue ? 4 : 3);
+        count = Number(count) + 1;
+        arrayNumber = Number(arrayNumber) + 1;
+    }
+
+
+    var tr = '<tr id="' + editModeValue + 'row' + count + '" class="' + arrayNumber + '">';
+
+    tr += '<td class="form-group" >';
+    if (editRowId) {
+        tr += `<input type="hidden" name="erowId[]" id="erowId${count}" >`;
+    }
+    tr += `
+    
+        <select class="selectpicker required" name="${editModeValue}locNum[]" id="${editModeValue}locNum${count}" data-live-search="true" data-size="4" autocomplete="off">
+            <option value="0" selected disabled>Select</option>
+            <optgroup class="locNum ${editModeValue}defaultOptions${count}">
+            </optgroup>
+        </select>
+    </td>
+    <td class="form-group">
+        <select class="selectpicker required" name="${editModeValue}damageType[]" id="${editModeValue}damageType${count}" data-live-search="true" data-size="4" autocomplete="off">
+            <option value="0" selected disabled>Select</option>
+            <optgroup class="damageType ${editModeValue}defaultOptions${count}">
+            </optgroup>
+        </select>
+    </td>
+    <td class="form-group">
+        <select class="selectpicker required" name="${editModeValue}damageSeverity[]" id="${editModeValue}damageSeverity${count}" data-live-search="true" data-size="4" autocomplete="off">
+            <option value="0" selected disabled>Select</option>
+            <optgroup class="damageSeverity ${editModeValue}defaultOptions${count}">
+            </optgroup>
+        </select>
+    </td>
+    <td class="form-group">
+        <select class="selectpicker required" name="${editModeValue}damageGrid[]" id="${editModeValue}damageGrid${count}" data-live-search="true" data-size="4" autocomplete="off">
+            <option value="0" selected disabled>Select</option>
+            <optgroup class="damageGrid ${editModeValue}defaultOptions${count}">
+            </optgroup>
+        </select>
+    </td>
+
+    <td class="form-group text-center">
+        <button type="button" class="btn btn-danger removeProductRowBtn" data-loading-text="Loading..." onclick="removeProductRow(${count}, ${editModeValue ? true : false},${editRowId})"><i class="fa fa-trash"></i></button>
+    </td>
+    </tr>
+    `;
+
+    if (tableLength > 0) {
+        $(`#${editModeValue}productTable tbody tr:last`).after(tr);
+        $('.selectpicker').selectpicker('refresh');
+        $(`#${editModeValue}addRowBtn`).button("reset");
+        if (defaultOptionsData) {
+            loadDefaultOptionsData(count, editModeValue)
+        } else {
+            loadDefaultOptionsFromAPI(editModeValue)
+        }
+    }
+}
+
+function removeProductRow(row = null, editModeValue = false, editRowId = null) {
+    if (row) {
+
+        if (editRowId) {
+            const deletedRowValues = $('#deletedRows').val();
+            $('#deletedRows').val(deletedRowValues + (deletedRowValues ? "," : "") + editRowId)
+        }
+
+        $(`#${editModeValue ? 'e' : ''}row` + row).remove();
+    } else {
+        alert('error! Refresh the page again');
+    }
 }

@@ -196,6 +196,7 @@ $(function () {
                 $('#todayCT').html(dataArray[17] ? Number(dataArray[17]) : "0");
 
                 $('#warrantyC').html(dataArray[18] ? Number(dataArray[18]) : "0");
+                $('#cardsC').html(dataArray[19] ? Number(dataArray[19]) : "0");
                 $('#thisMonth').click();
 
             }

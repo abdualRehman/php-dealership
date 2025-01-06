@@ -377,9 +377,8 @@ if (hasAccess("swap", "Edit") === 'false') {
                                         <!-- <input type="text" class="form-control" id="stockOut" name="stockOut" placeholder="Stock# Out"> -->
                                         <select class="selectpicker" name="estockOut" onchange="changeStockDetails(this , 'evehicleOut' , 'ecolorOut' , 'evinOut' )" id="estockOut" data-live-search="true" data-size="4">
                                             <!-- <option value="0" selected disabled>Stock# Out</option> -->
-                                            <optgroup class="stockOut">
-                                                <option value="0" selected disabled>Stock# Out</option>
-                                            </optgroup>
+                                            <option value="" selected>Stock# Out</option>
+                                            <optgroup class="stockOut" id="stockOutEdit"></optgroup>
                                         </select>
                                     </div>
                                 </div>
@@ -798,11 +797,10 @@ if (hasAccess("swap", "Edit") === 'false') {
                                 </div>
                                 <div class="col-md-9 form-group">
                                     <!-- <input type="text" class="form-control" id="stockOut" name="stockOut" placeholder="Stock# Out"> -->
-                                    <select class="selectpicker" name="stockOut" onchange="changeStockDetails(this , 'vehicleOut' , 'colorOut' , 'vinOut' )" id="stockOut" data-live-search="true" data-size="4">
+                                    <select class="selectpicker" data-focus-on="true" tabIndex="1" name="stockOut" onchange="changeStockDetails(this , 'vehicleOut' , 'colorOut' , 'vinOut' )" id="stockOut" data-live-search="true" data-size="4" autofocus='autofocus'>
                                         <!-- <option value="0" selected disabled>Stock# Out</option> -->
-                                        <optgroup class="stockOut">
-                                            <option value="0" selected disabled>Stock# Out</option>
-                                        </optgroup>
+                                        <option value="" selected>Stock# Out</option>
+                                        <optgroup class="stockOut" id="stockOutAdd"></optgroup>
                                     </select>
                                 </div>
                             </div>

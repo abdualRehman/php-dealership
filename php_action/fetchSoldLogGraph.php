@@ -28,6 +28,7 @@ if ($userRole != $salesConsultantID) {
             SELECT  COUNT(b.sale_todo_id)  FROM `sale_todo` as b INNER JOIN sales ON b.sale_id = sales.sale_id LEFT JOIN users ON users.id = sales.sales_consultant
             WHERE sales.status = 1 AND sales.stock_id != '' AND sales.sale_status = 'delivered' AND sales.location = '$location' AND b.status = 1 AND b.salesperson_status != 'cancelled' AND users.username != 'House Deal' AND ((b.vin_check = 'checkTitle' OR b.vin_check = 'need') OR b.insurance = 'need' OR b.trade_title = 'need' OR (b.registration = 'pending' OR b.registration = 'done') OR b.inspection = 'need' OR b.salesperson_status != 'delivered' )) as todo , 
         ( SELECT COUNT(used_cars.id) FROM `used_cars` LEFT JOIN inventory ON (used_cars.inv_id = inventory.id AND inventory.status = 1 AND inventory.location = '$location' AND inventory.stocktype = 'USED' AND inventory.lot != 'LBO') WHERE (title = 'false' OR title IS NULL) AND date_in IS NOT NULL AND inventory.id IS NOT NULL ) as titleIssue ,
+        ( SELECT COUNT(*) FROM `sales` WHERE sales.status = 1 AND sales.location = '$location' AND sales.sale_status = 'delivered' AND sales.thankyou_cards != 'on') as cardsCount ,
         ( SELECT COUNT(*) FROM `warrenty_cancellation` WHERE status = 1 AND location = '$location') as warrenty_cancellation";
 } else {
     $uid = $_SESSION['userId'];
@@ -66,6 +67,7 @@ if ($userRole != $salesConsultantID) {
         
         
         ( SELECT COUNT(used_cars.id) FROM `used_cars` LEFT JOIN inventory ON (used_cars.inv_id = inventory.id AND inventory.status = 1 AND inventory.location = '$location' AND inventory.stocktype = 'USED' AND inventory.lot != 'LBO') WHERE (title = 'false' OR title IS NULL) AND date_in IS NOT NULL AND inventory.id IS NOT NULL ) as titleIssue ,
+        ( SELECT COUNT(*) FROM `sales` WHERE sales.status = 1 AND sales.sales_consultant = '$uid' AND sales.location = '$location' AND sales.sale_status = 'delivered' AND sales.thankyou_cards != 'on') as cardsCount ,
         ( SELECT COUNT(*) FROM `warrenty_cancellation` WHERE status = 1 AND location = '$location') as warrenty_cancellation";
 }
 
@@ -102,6 +104,8 @@ $regCount = 0;
 $todoCount = 0;
 $tittleCount = 0;
 $warrenty_cancellation = 0;
+
+$cardsCount = 0;
 
 $user_id = $_SESSION['userId'];
 
@@ -327,6 +331,7 @@ if ($result2->num_rows > 0) {
     $row2 = $result2->fetch_assoc();
     $regCount = $row2 ?  $row2['problem'] : "";
     $todoCount = $row2 ?  $row2['todo'] : "";
+    $cardsCount = $row2 ?  $row2['cardsCount'] : "";
     $tittleCount = $row2 ?  $row2['titleIssue'] : "";
     $warrenty_cancellation = $row2 ?  $row2['warrenty_cancellation'] : "";
 }
@@ -373,8 +378,8 @@ $output['data'] = array(
     $todayNCount,
     $todayUCount,
     $todayTCount,
-    $warrenty_cancellation
-
+    $warrenty_cancellation,
+    $cardsCount
 );
 
 

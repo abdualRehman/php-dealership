@@ -343,17 +343,24 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                         <div class="portlet text-center">
                             <div class="portlet-header portlet-header-bordered">
                                 <div class="row w-100">
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <h4 class="portlet-title font-small text-center">
                                             <?php
                                             echo (hasAccess("regp", "View") !== 'false') ? '<a href="' . $GLOBALS['siteurl'] . '/sales/registrationProblem.php" class="link-primary">Registration Problems</a>' : 'Registration Problems';
                                             ?>
                                         </h4>
                                     </div>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <h4 class="portlet-title font-small text-center">
                                             <?php
-                                            echo (hasAccess("todo", "View") !== 'false') ? '<a href="' . $GLOBALS['siteurl'] . '/sales/soldTodo.php" class="link-primary">Sales Consultants To Do’s</a>' : 'Sales Consultants To Do’s';
+                                            echo (hasAccess("todo", "View") !== 'false') ? '<a href="' . $GLOBALS['siteurl'] . '/sales/soldTodo.php" class="link-primary">To Do’s</a>' : 'To Do’s';
+                                            ?>
+                                        </h4>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <h4 class="portlet-title font-small text-center">
+                                            <?php
+                                            echo (hasAccess("todo", "View") !== 'false') ? '<a href="' . $GLOBALS['siteurl'] . '/sales/soldLogs.php?r=man&filter=cards" class="link-primary">Cards</a>' : 'Cards';
                                             ?>
                                         </h4>
                                     </div>
@@ -370,6 +377,12 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                                     <div class="widget10-item">
                                         <div class="widget10-content">
                                             <h2 class="widget10-title responsive-content-title" id="todoC"></h2>
+                                            <span class="widget10-subtitle">&nbsp;</span>
+                                        </div>
+                                    </div>
+                                    <div class="widget10-item">
+                                        <div class="widget10-content">
+                                            <h2 class="widget10-title responsive-content-title" id="cardsC"></h2>
                                             <span class="widget10-subtitle">&nbsp;</span>
                                         </div>
                                     </div>
@@ -398,7 +411,7 @@ if ($_SESSION['userRole'] === $_SESSION['deliveryCoordinatorID']) {
                                         <label class="custom-control-label" for="changeView">&nbsp;</label>
                                     </div>
                                 </div>
-                                <div class="d-flex" >
+                                <div class="d-flex">
                                     <div class="custom-control custom-control-lg custom-checkbox mr-3">
                                         <input type="checkbox" class="custom-control-input" id="activeUserGraph" checked />
                                         <label class="custom-control-label" for="activeUserGraph">

@@ -28,6 +28,16 @@ if ($_POST) {
 
     $stockno = mysqli_real_escape_string($connect, $_POST['stockno']);
     $sale_id = isset($_POST['sale_id']) ? mysqli_real_escape_string($connect, $_POST['sale_id']) : "";
+
+    // Validate sale_id
+    if (empty($sale_id)) {
+        $valid['success'] = false;
+        $valid['messages'] = "Sale ID is required.";
+        echo json_encode($valid);
+        exit();
+    }
+
+
     $overrideBy = isset($_POST['overrideBy']) ? $_SESSION['overrideById'] : "";
     $coordinator = isset($_POST['coordinator']) ? mysqli_real_escape_string($connect, $_POST['coordinator']) : "";
     $delivery = (isset($_POST['delivery'])) ? mysqli_real_escape_string($connect, $_POST['delivery']) : "";

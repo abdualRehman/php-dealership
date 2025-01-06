@@ -453,6 +453,7 @@ $(function () {
                 ],
                 language: {
                     "infoFiltered": "",
+                    processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw zindex-tooltip"></i><span class="sr-only">Loading..n.</span> ',
                     searchPanes: {
                         count: "{total} found",
                         countFiltered: "{shown} / {total}"
@@ -585,6 +586,7 @@ $(function () {
             writeStatusHTML();
         }
     }
+
 
 
 

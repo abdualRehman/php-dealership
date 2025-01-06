@@ -51,10 +51,10 @@ $(function () {
                 },
                 targets: [0, 1, 2, 3],
             },
-            {
-                targets: [9],
-                visible: false,
-            },
+            // {
+            //     targets: [9],
+            //     visible: false,
+            // },
             {
                 targets: [5],
                 createdCell: function (td, cellData, rowData, row, col) {
@@ -598,7 +598,7 @@ function calculateHTB(currentElement, target, percentage) {
     var msrp = $('#' + currentElement).val();
     var prcntge = $('#' + percentage).val();
     var calcHbt = (msrp * prcntge) / 100;
-    calcHbt = Number(calcHbt).toFixed(2);
+    calcHbt = Number(calcHbt).toFixed(3);
     $('#' + target).val(calcHbt);
     $('#' + target).click();
 }
@@ -623,31 +623,6 @@ function calculateCost(inv, hb, HBT, hdag, adds, target) {
 
     $('#' + target).val(newCost);
 
-}
-
-function loadStock() {
-
-    $.ajax({
-        url: '../php_action/fetchInvForSearch.php',
-        type: "POST",
-        data: { type: 'NEW' },
-        dataType: 'json',
-        success: function (response) {
-            stockArray = response.data;
-            // console.log(stockArray);
-            // console.log(selectBox);
-
-            var selectBoxes = document.getElementsByClassName('stockOut');
-            selectBoxes.forEach(element => {
-                for (var i = 0; i < stockArray.length; i++) {
-                    var item = stockArray[i];
-                    element.innerHTML += `<option value="${item[0]}" title="${item[1]}" >${item[1]} || ${item[4]} ||  ${item[8]} </option>`;
-                }
-            });
-            // selectBox.removeAttribute("disabled");
-            $('.selectpicker').selectpicker('refresh');
-        }
-    });
 }
 
 function loadSaleConsultant() {
@@ -724,8 +699,8 @@ function editDetails(id = null) {
             type: 'post',
             data: { id: id },
             dataType: 'json',
-            success: function (response) {
-                console.log(response);
+            success: async function (response) {
+                // console.log(response);
                 $('.spinner-grow').addClass('d-none');
                 // modal result
                 $('.showResult').removeClass('d-none');
@@ -774,7 +749,33 @@ function editDetails(id = null) {
 
                 $('#enetcostIn').val(response.net_cost_in);
 
+
+                // $('#estockOut').val(response.stock_out);
+
+                console.log("response.stock_out", response.stock_out);
+
+                if (response.stock_out !== "") {
+                    const foundStock = stockArray.find((obj) => obj[0] === response.stock_out);
+                    console.log("foundStock", foundStock, stockArray);
+                    if (foundStock) {
+                        var element = document.getElementById('stockOutEdit');
+                        var options = element.querySelectorAll('option');
+                        // Check if any option has the specific value
+                        var hasSpecificValueExist = Array.from(options).some(option => option.value === response.stock_out);
+                        if (!hasSpecificValueExist) {
+                            writeHTMLOptions(element, [foundStock])
+                        }
+                    } else {
+                        await fetchSelectedInvForSearch(response.stock_out)
+                    }
+
+                }
+
+
                 $('#estockOut').val(response.stock_out);
+
+
+
                 $('#evehicleOut').val(response.vehicle_out);
                 $('#ecolorOut').val(response.color_out);
 
@@ -901,3 +902,163 @@ function toggleFilterClass() {
     $('.dtsp-panes').toggle();
 }
 
+
+
+// Previous code
+
+// function loadStock() {
+//     $.ajax({
+//         url: '../php_action/fetchInvForSearch.php',
+//         type: "POST",
+//         data: { type: 'NEW' },
+//         dataType: 'json',
+//         success: function (response) {
+//             stockArray = response.data;
+//             // console.log(stockArray);
+//             // console.log(selectBox);
+
+//             var selectBoxes = document.getElementsByClassName('stockOut');
+//             selectBoxes.forEach(element => {
+//                 for (var i = 0; i < stockArray.length; i++) {
+//                     var item = stockArray[i];
+//                     element.innerHTML += `<option value="${item[0]}" title="${item[1]}" >${item[1]} || ${item[4]} ||  ${item[8]} </option>`;
+//                 }
+//             });
+//             // selectBox.removeAttribute("disabled");
+//             $('.selectpicker').selectpicker('refresh');
+//         }
+//     });
+// }
+
+function loadStock() {
+    var selectBoxes = document.getElementsByClassName('stockOut');
+    selectBoxes.forEach(element => {
+        element.innerHTML = ``;
+    });
+    $('.selectpicker').selectpicker('refresh');
+    $.ajax({
+        url: '../php_action/fetchInvForSearch.php',
+        type: "POST",
+        data: { type: 'NEW' },
+        dataType: 'json',
+        success: function (response) {
+
+            stockArray = response.data;
+            // console.log(stockArray);
+            selectBoxes.forEach((element, index) => {
+                // for (var i = 0; i < stockArray.length; i++) {
+                writeHTMLOptions(element, stockArray);
+
+                const scroller = new InfiniteScroller(element, stockArray);
+                scroller.setScroller(element, stockArray);
+
+            });
+
+            // selectBox.removeAttribute("disabled");
+            $('.selectpicker').selectpicker('refresh');
+
+            $('#stockId').selectpicker('toggle');
+            $('#stockId').selectpicker('refresh');
+            $("#_").focus().val('').val("_");
+        }
+    });
+}
+
+function writeHTMLOptions(element, stockArray) {
+    for (var i = 0; i < (stockArray.length < 10 ? stockArray.length : 10); i++) {
+        var item = stockArray[i];
+        $(element).append(`<option value="${item[0]}" title="${item[1]}" >${item[1]} || ${item[4]} ||  ${item[8]} </option>`);
+    }
+}
+
+
+function fetchSelectedInvForSearch(id = null) {
+    $.ajax({
+        url: '../php_action/fetchSelectedInvForSearch.php',
+        type: 'post',
+        data: { id: id },
+        dataType: 'json',
+        success: function (response) {
+            // console.log(response);
+            stockArray.push(response.data);
+            var item = response.data;
+            var selectBox = document.getElementById('stockOutEdit');
+            selectBox.innerHTML += `<option value="${item[0]}" selected title="${item[1]}" >${item[1]} || ${item[4]} ||  ${item[8]}  || Stock Deleted</option>`;
+            $('#estockOut').val(item[0]);
+            $('.selectpicker').selectpicker('refresh');
+        }
+
+    }); // /ajax function to remove the brand
+}
+
+class InfiniteScroller {
+    element;
+    stockArray;
+    constructor(element, stockArray) {
+        this.element = element;
+        this.stockArray = stockArray;
+    }
+    setScroller(element, array) {
+        var p = element.parentElement.id;
+
+        var Selectpicker = $('#' + p).data('selectpicker');
+
+        Selectpicker?.$menuInner?.on('scroll', function () {
+            if (Selectpicker?.$searchbox?.val() == '') {
+
+                var scrollTop = Selectpicker?.selectpicker?.view?.scrollTop;
+                // if within 100px of the bottom of the menu, load more options
+                if ($(this)[0].scrollHeight - Selectpicker.sizeInfo.menuInnerHeight - scrollTop < 10) {
+
+                    var optionDiv = Selectpicker?.$element[0];
+                    var targetChildElement = $(optionDiv).children('optgroup')[0].lastChild;
+                    var lastArrayIndex = $(targetChildElement).data('scroll-index') + 1;
+                    // console.log(lastArrayIndex);
+                    if (array.length > lastArrayIndex) {
+                        for (let j = lastArrayIndex; j < lastArrayIndex + 10; j++) {
+                            var item = array[j];
+                            if (item) {
+                                // element.innerHTML += `<option value="${item[0]}" data-scroll-index="${j}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`;
+                                $(element).append(`<option value="${item[0]}" data-scroll-index="${j}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`);
+
+                            }
+                            $('.selectpicker').selectpicker('refresh');
+                        }
+                    }
+                }
+            }
+        });
+
+        Selectpicker?.$searchbox.on('input', function () {
+            var search = this.value;
+
+            if (search != '' && search.length > 3) {
+                element.innerHTML = '';
+                $('.dropdown-menu.show').block();
+                const results = array.filter(element => {
+                    var stock = (element[1]).toLowerCase();
+                    var model = (element[4]).toLowerCase();
+                    var vin = (element[8]).toLowerCase();
+                    return stock.indexOf(search.toLowerCase()) >= 0 || vin.indexOf(search.toLowerCase()) >= 0 || model.indexOf(search.toLowerCase()) >= 0;
+                });
+                results.forEach((item, i) => {
+                    // element.innerHTML += `<option value="${item[0]}" data-scroll-index="${i}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`;
+                    $(element).append(`<option value="${item[0]}" data-scroll-index="${i}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`);
+                });
+                $('.dropdown-menu.show').unblock();
+                $('.selectpicker').selectpicker('refresh');
+            } else if (search == '') {
+                element.innerHTML = '';
+                $('.dropdown-menu.show').block();
+                for (var i = 0; i < 5; i++) {
+                    var item = array[i];
+                    $(element).append(`<option value="${item[0]}" data-scroll-index="${i}" title="${item[1]}">${item[1]} || ${item[4]} ||  ${item[8]} </option>`);
+                }
+                $('.dropdown-menu.show').unblock();
+                $('.selectpicker').selectpicker('refresh');
+            }
+            $('.dropdown-menu.show').unblock();
+
+        });
+    }
+}

@@ -37,6 +37,28 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
         padding: 10px;
     }
 
+
+    .theme-dark .table-hover tbody tr.odd:hover td:nth-child(-n+3) {
+        background: #616161;
+    }
+
+    .theme-dark .table-hover tbody tr.even:hover td:nth-child(-n+3) {
+        background: #424242;
+    }
+
+    .theme-light .table-hover tbody tr.odd:hover td:nth-child(-n+3) {
+        background-color: #f5f5f5;
+    }
+
+    .theme-light .table-hover tbody tr.even:hover td:nth-child(-n+3) {
+        background-color: #ffffff;
+    }
+
+    .align-content-center {
+        align-content: center !important;
+    }
+
+
     @media (min-width: 576px) {
         .modal-dialog {
             max-width: 600px;
@@ -52,7 +74,7 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
 
         .modal-lg,
         .modal-xl {
-            max-width: 1000PX;
+            max-width: 1200PX;
         }
 
         .modal-dialog table.detialsTable {
@@ -89,8 +111,24 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
                                     <th>ID</th>
                                     <th>Stock no – Vin</th>
                                     <th>Model</th>
+                                    <th>Notes</th>
                                     <th>Damage</th>
-                                    <th>Status</th>
+                                    <!-- <th>Status</th> -->
+                                    <th>
+                                        <select class="form-control" name="statusPriority" onchange="filterDatatable()" id="statusPriority">
+                                            <option value="" selected>Status</option>
+                                            <option value="pendingInspection">Pending Inspection</option>
+                                            <option value="partsNeeded">Parts Needed</option>
+                                            <option value="partsRequested">Parts Requested</option>
+                                            <option value="partsArrivedPendingService">Parts Arrived Pending Service</option>
+                                            <option value="bodyshopNeeded">Bodyshop Needed</option>
+                                            <option value="atBodyshop">At Bodyshop</option>
+                                            <option value="bodyshopCompleted">Bodyshop Completed</option>
+                                            <option value="completedAwaitingPayment">Completed Awaiting Payment</option>
+                                            <option value="repairNotRequired">Repair Not Require</option>
+                                            <option value="done">Done</option>
+                                        </select>
+                                    </th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -115,7 +153,7 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
                     <div class="text-center">
                         <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div>
                     </div>
-                    <div class="showResult d-none">
+                    <div class="eshowResult d-none">
                         <input type="hidden" name="transId" id="transId" />
                         <h3 class="h4">Stock Details:</h3>
                         <div class="form-row">
@@ -139,14 +177,82 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
                                 <label class="col-form-label" for="estatus">Status</label>
                                 <div class="form-group">
                                     <select class="selectpicker required" name="estatus" id="estatus" autocomplete="off" autocomplete="off">
-                                        <option value="pending" selected>Pending</option>
-                                        <option value="notRequired">Repair not require</option>
+                                        <option value="pendingInspection" selected>Pending Inspection</option>
+                                        <option value="partsNeeded">Parts Needed</option>
+                                        <option value="partsRequested">Parts Requested</option>
+                                        <option value="partsArrivedPendingService">Parts Arrived Pending Service</option>
+                                        <option value="bodyshopNeeded">Bodyshop Needed</option>
+                                        <option value="atBodyshop">At Bodyshop</option>
+                                        <option value="bodyshopCompleted">Bodyshop Completed</option>
+                                        <option value="completedAwaitingPayment">Completed Awaiting Payment</option>
+                                        <!-- <option value="notRequired">Repair not require</option> -->
+                                        <option value="repairNotRequired">Repair Not Require</option>
                                         <option value="done">Done</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-row">
+
+                        <div class="row">
+                            <label class="col-md-2 col-form-label d-flex justify-content-md-end justify-content-sm-center" for="enotes">Notes</label>
+                            <div class="col-md-10 form-group">
+                                <textarea class="form-control autosize rounded" name="enotes" id="enotes" placeholder="Notes..."></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" name="deletedRows" id="deletedRows">
+                        <br><br>
+
+
+                        <table class="table" id="eproductTable" style="table-layout: fixed;">
+                            <thead>
+                                <tr>
+                                    <th style="width:20%;text-align:center">Location Number</th>
+                                    <th style="width:20%;text-align:center">Damage Type</th>
+                                    <th style="width:20%;text-align:center">Damager Severity</th>
+                                    <th style="width:20%;text-align:center">Damager Grid Location</th>
+                                    <th style="width:10%;text-align:center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="erow1" class="0">
+                                    <td class="form-group">
+                                        <input type="hidden" name="erowId[]" id="erowId1">
+                                        <select class="selectpicker required" name="elocNum[]" id="elocNum1" data-live-search="true" data-size="4" autocomplete="off">
+                                            <option value="0" selected disabled>Select</option>
+                                            <optgroup class="locNum edefaultOptions1">
+                                            </optgroup>
+                                        </select>
+
+                                    </td>
+                                    <td class="form-group">
+                                        <select class="selectpicker required" name="edamageType[]" id="edamageType1" data-live-search="true" data-size="4" autocomplete="off">
+                                            <option value="0" selected disabled>Select</option>
+                                            <optgroup class="damageType edefaultOptions1">
+                                            </optgroup>
+                                        </select>
+                                    </td>
+                                    <td class="form-group">
+                                        <select class="selectpicker required" name="edamageSeverity[]" id="edamageSeverity1" data-live-search="true" data-size="4" autocomplete="off">
+                                            <option value="0" selected disabled>Select</option>
+                                            <optgroup class="damageSeverity edefaultOptions1">
+                                            </optgroup>
+                                        </select>
+                                    </td>
+                                    <td class="form-group">
+                                        <select class="selectpicker required" name="edamageGrid[]" id="edamageGrid1" data-live-search="true" data-size="4" autocomplete="off">
+                                            <option value="0" selected disabled>Select</option>
+                                            <optgroup class="damageGrid edefaultOptions1">
+                                            </optgroup>
+                                        </select>
+                                    </td>
+                                    <td class="form-group text-center">
+                                        <button type="button" id="eaddRowBtn" class="btn btn-info" data-loading-text="Loading..." onclick="addRow('e')">Add New</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br><br>
+                        <!-- <div class="form-row">
                             <div class="col-md-6">
                                 <label class="col-form-label" for="elocNum">Location Number</label>
                                 <div class="form-group">
@@ -187,7 +293,10 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
                                     </select>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
+
+
+
                     </div>
                 </div>
                 <div class="modal-footer modal-footer-bordered">
@@ -201,7 +310,7 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
 </div>
 
 <div class="modal fade" id="addNew">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header modal-header-bordered">
                 <h5 class="modal-title">New Rule</h5>
@@ -233,14 +342,83 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
                             <label class="col-form-label" for="status">Status</label>
                             <div class="form-group">
                                 <select class="selectpicker required" name="status" id="status" autocomplete="off">
-                                    <option value="pending" selected>Pending</option>
-                                    <option value="notRequired">Repair not require</option>
+                                    <option value="pendingInspection" selected>Pending Inspection</option>
+                                    <option value="partsNeeded">Parts Needed</option>
+                                    <option value="partsRequested">Parts Requested</option>
+                                    <option value="partsArrivedPendingService">Parts Arrived Pending Service</option>
+                                    <option value="bodyshopNeeded">Bodyshop Needed</option>
+                                    <option value="atBodyshop">At Bodyshop</option>
+                                    <option value="bodyshopCompleted">Bodyshop Completed</option>
+                                    <option value="completedAwaitingPayment">Completed Awaiting Payment</option>
+                                    <!-- <option value="notRequired">Repair not require</option> -->
+                                    <option value="repairNotRequired">Repair Not Require</option>
                                     <option value="done">Done</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <br><br>
+
+                    <div class="row">
+                        <label class="col-md-2 col-form-label d-flex justify-content-md-end justify-content-sm-center" for="notes">Notes</label>
+                        <div class="col-md-10 form-group">
+                            <textarea class="form-control autosize rounded" name="notes" id="notes" placeholder="Notes..."></textarea>
+                        </div>
+                    </div>
+                    <br><br>
+
+                    <table class="table" id="productTable" style="table-layout: fixed;">
+                        <thead>
+                            <tr>
+                                <th style="width:20%;text-align:center">Location Number</th>
+                                <th style="width:20%;text-align:center">Damage Type</th>
+                                <th style="width:20%;text-align:center">Damager Severity</th>
+                                <th style="width:20%;text-align:center">Damager Grid Location</th>
+                                <th style="width:10%;text-align:center"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="row1" class="0">
+                                <td class="form-group">
+                                    <select class="selectpicker required" name="locNum[]" id="locNum1" data-live-search="true" data-size="4" autocomplete="off">
+                                        <option value="0" selected disabled>Select</option>
+                                        <optgroup class="locNum defaultOptions1">
+                                        </optgroup>
+                                    </select>
+
+                                </td>
+                                <td class="form-group">
+                                    <select class="selectpicker required" name="damageType[]" id="damageType1" data-live-search="true" data-size="4" autocomplete="off">
+                                        <option value="0" selected disabled>Select</option>
+                                        <optgroup class="damageType defaultOptions1">
+                                        </optgroup>
+                                    </select>
+                                </td>
+                                <td class="form-group">
+                                    <select class="selectpicker required" name="damageSeverity[]" id="damageSeverity1" data-live-search="true" data-size="4" autocomplete="off">
+                                        <option value="0" selected disabled>Select</option>
+                                        <optgroup class="damageSeverity defaultOptions1">
+                                        </optgroup>
+                                    </select>
+                                </td>
+                                <td class="form-group">
+                                    <select class="selectpicker required" name="damageGrid[]" id="damageGrid1" data-live-search="true" data-size="4" autocomplete="off">
+                                        <option value="0" selected disabled>Select</option>
+                                        <optgroup class="damageGrid defaultOptions1">
+                                        </optgroup>
+                                    </select>
+                                </td>
+                                <td class="form-group text-center">
+                                    <button type="button" id="addRowBtn" class="btn btn-info" data-loading-text="Loading..." onclick="addRow()">Add New</button>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br><br>
+
+
+                    <!-- <div class="form-row">
                         <div class="col-md-6">
                             <label class="col-form-label" for="locNum">Location Number</label>
                             <div class="form-group">
@@ -281,7 +459,9 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
                                 </select>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
+
+
                 </div>
                 <div class="modal-footer modal-footer-bordered">
                     <button type="submit" class="btn btn-primary mr-2">Submit</button>
@@ -294,4 +474,5 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
 
 
 <?php require_once('../includes/footer.php') ?>
+<script type="text/javascript" src="../assets/app/dataTables.rowsGroup.js"></script>
 <script type="text/javascript" src="../custom/js/transportation.js"></script>

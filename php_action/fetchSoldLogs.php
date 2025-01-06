@@ -148,14 +148,26 @@ if ($userRole != $salesConsultantID) {
 
     $sqlQuery = "SELECT CAST( IF((sales.reconcileDate != ''), sales.reconcileDate , sales.date ) as date ) as date , sales.fname , sales.lname , users.username, inventory.stockno , 
     CONCAT( inventory.stocktype ,' ', inventory.year ,' ', inventory.make ,' ', inventory.model ) as vehicle , 
-    inventory.age , sales.certified ,inventory.lot , CAST(sales.gross AS INT) as gross , sales.sale_status , sales.deal_notes ,inventory.balance , 
-    sales.finance_manager , '' as sales_consultant_status, '' as button, inventory.stocktype, '' as countRow , sales.sale_id , 
+    inventory.age , 
+    sales.certified ,
+    inventory.lot , 
+    CAST(sales.gross AS INT) as gross, 
+    sales.sale_status , 
+    sales.deal_notes ,
+    inventory.balance , 
+    sales.finance_manager , 
+    '' as sales_consultant_status, 
+    '' as button, 
+    inventory.stocktype, 
+    '' as countRow , 
+    sales.sale_id , 
     inventory.vin as vin ,
     sales.thankyou_cards , sales.date as sold_date , 
     '' as codp_warn , 
     '' as lwbn_warn , 
-    inventory.status as invStatus , sales.stock_id , sales.reconcileDate as reconcileDateOnly
-    FROM sales, inventory, users WHERE sales.stock_id = inventory.id AND users.id = sales.sales_consultant AND sales.status = 1 AND sales.sales_consultant = '$uid' AND sales.location = '$location' " . $filterQuery;
+    inventory.status as invStatus , sales.stock_id, sales.reconcileDate as reconcileDateOnly
+    FROM sales, inventory, users WHERE sales.stock_id = inventory.id AND users.id = sales.sales_consultant AND sales.status = 1 
+    AND sales.sales_consultant = '$uid' AND sales.location = '$location'  " . $filterQuery;
 }
 
 

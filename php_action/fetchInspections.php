@@ -31,7 +31,7 @@ $searchQuery = "";
 if ($filterBy != '') {
     if ($filterBy == "notTouched") {
         // working
-        $searchQuery .= " AND ( (inspections.recon = '' OR inspections.recon IS NULL) AND (inspections.repairs = '' OR  inspections.repairs IS NULL) AND inventory.stocktype != 'NEW' AND inventory.status != 2 ) ";
+        $searchQuery .= " AND ( (inspections.recon = '' OR inspections.recon IS NULL) AND (inspections.repairs = '' OR  inspections.repairs IS NULL) AND inventory.status != 2 ) ";
     } else if ($filterBy == "holdForRecon") {
 
         $searchQuery .= " AND ( inspections.recon = 'hold' AND inventory.balance != '' AND inventory.status != 2  ) ";
@@ -398,7 +398,7 @@ if ($result->num_rows > 0) {
             $notTouched += 1;
         }
 
-        if (($recon == "" || $recon == null) && count($repairArr) == 0 && $row['stocktype'] != 'NEW' && $invStatus != 2) {
+        if (($recon == "" || $recon == null) && count($repairArr) == 0 && $invStatus != 2) {
             $_notTouched = 'Not Touched';
         }
 
