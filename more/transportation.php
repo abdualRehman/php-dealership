@@ -202,55 +202,56 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
                         <input type="hidden" name="deletedRows" id="deletedRows">
                         <br><br>
 
+                        <div class="overflow-auto">
+                            <table class="table" id="eproductTable" style="table-layout: fixed;fixed;min-width:800px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width:20%;text-align:center">Location Number</th>
+                                        <th style="width:20%;text-align:center">Damage Type</th>
+                                        <th style="width:20%;text-align:center">Damager Severity</th>
+                                        <th style="width:20%;text-align:center">Damager Grid Location</th>
+                                        <th style="width:10%;text-align:center"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr id="erow1" class="0">
+                                        <td class="form-group">
+                                            <input type="hidden" name="erowId[]" id="erowId1">
+                                            <select class="selectpicker required" name="elocNum[]" id="elocNum1" data-live-search="true" data-size="4" autocomplete="off">
+                                                <option value="0" selected disabled>Select</option>
+                                                <optgroup class="locNum edefaultOptions1">
+                                                </optgroup>
+                                            </select>
 
-                        <table class="table" id="eproductTable" style="table-layout: fixed;">
-                            <thead>
-                                <tr>
-                                    <th style="width:20%;text-align:center">Location Number</th>
-                                    <th style="width:20%;text-align:center">Damage Type</th>
-                                    <th style="width:20%;text-align:center">Damager Severity</th>
-                                    <th style="width:20%;text-align:center">Damager Grid Location</th>
-                                    <th style="width:10%;text-align:center"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr id="erow1" class="0">
-                                    <td class="form-group">
-                                        <input type="hidden" name="erowId[]" id="erowId1">
-                                        <select class="selectpicker required" name="elocNum[]" id="elocNum1" data-live-search="true" data-size="4" autocomplete="off">
-                                            <option value="0" selected disabled>Select</option>
-                                            <optgroup class="locNum edefaultOptions1">
-                                            </optgroup>
-                                        </select>
-
-                                    </td>
-                                    <td class="form-group">
-                                        <select class="selectpicker required" name="edamageType[]" id="edamageType1" data-live-search="true" data-size="4" autocomplete="off">
-                                            <option value="0" selected disabled>Select</option>
-                                            <optgroup class="damageType edefaultOptions1">
-                                            </optgroup>
-                                        </select>
-                                    </td>
-                                    <td class="form-group">
-                                        <select class="selectpicker required" name="edamageSeverity[]" id="edamageSeverity1" data-live-search="true" data-size="4" autocomplete="off">
-                                            <option value="0" selected disabled>Select</option>
-                                            <optgroup class="damageSeverity edefaultOptions1">
-                                            </optgroup>
-                                        </select>
-                                    </td>
-                                    <td class="form-group">
-                                        <select class="selectpicker required" name="edamageGrid[]" id="edamageGrid1" data-live-search="true" data-size="4" autocomplete="off">
-                                            <option value="0" selected disabled>Select</option>
-                                            <optgroup class="damageGrid edefaultOptions1">
-                                            </optgroup>
-                                        </select>
-                                    </td>
-                                    <td class="form-group text-center">
-                                        <button type="button" id="eaddRowBtn" class="btn btn-info" data-loading-text="Loading..." onclick="addRow('e')">Add New</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                        </td>
+                                        <td class="form-group">
+                                            <select class="selectpicker required" name="edamageType[]" id="edamageType1" data-live-search="true" data-size="4" autocomplete="off">
+                                                <option value="0" selected disabled>Select</option>
+                                                <optgroup class="damageType edefaultOptions1">
+                                                </optgroup>
+                                            </select>
+                                        </td>
+                                        <td class="form-group">
+                                            <select class="selectpicker required" name="edamageSeverity[]" id="edamageSeverity1" data-live-search="true" data-size="4" autocomplete="off">
+                                                <option value="0" selected disabled>Select</option>
+                                                <optgroup class="damageSeverity edefaultOptions1">
+                                                </optgroup>
+                                            </select>
+                                        </td>
+                                        <td class="form-group">
+                                            <select class="selectpicker required" name="edamageGrid[]" id="edamageGrid1" data-live-search="true" data-size="4" autocomplete="off">
+                                                <option value="0" selected disabled>Select</option>
+                                                <optgroup class="damageGrid edefaultOptions1">
+                                                </optgroup>
+                                            </select>
+                                        </td>
+                                        <td class="form-group text-center">
+                                            <button type="button" id="eaddRowBtn" class="btn btn-info" data-loading-text="Loading..." onclick="addRow('e')">Add New</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         <br><br>
                         <!-- <div class="form-row">
                             <div class="col-md-6">
@@ -366,55 +367,56 @@ if (hasAccess("tansptDmg", "Edit") !== 'false') {
                         </div>
                     </div>
                     <br><br>
+                    <div class="overflow-auto">
+                        <table class="table" id="productTable" style="table-layout: fixed;min-width:800px">
+                            <thead>
+                                <tr>
+                                    <th style="width:20%;text-align:center">Location Number</th>
+                                    <th style="width:20%;text-align:center">Damage Type</th>
+                                    <th style="width:20%;text-align:center">Damager Severity</th>
+                                    <th style="width:20%;text-align:center">Damager Grid Location</th>
+                                    <th style="width:10%;text-align:center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="row1" class="0">
+                                    <td class="form-group">
+                                        <select class="selectpicker required" name="locNum[]" id="locNum1" data-live-search="true" data-size="4" autocomplete="off">
+                                            <option value="0" selected disabled>Select</option>
+                                            <optgroup class="locNum defaultOptions1">
+                                            </optgroup>
+                                        </select>
 
-                    <table class="table" id="productTable" style="table-layout: fixed;">
-                        <thead>
-                            <tr>
-                                <th style="width:20%;text-align:center">Location Number</th>
-                                <th style="width:20%;text-align:center">Damage Type</th>
-                                <th style="width:20%;text-align:center">Damager Severity</th>
-                                <th style="width:20%;text-align:center">Damager Grid Location</th>
-                                <th style="width:10%;text-align:center"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr id="row1" class="0">
-                                <td class="form-group">
-                                    <select class="selectpicker required" name="locNum[]" id="locNum1" data-live-search="true" data-size="4" autocomplete="off">
-                                        <option value="0" selected disabled>Select</option>
-                                        <optgroup class="locNum defaultOptions1">
-                                        </optgroup>
-                                    </select>
+                                    </td>
+                                    <td class="form-group">
+                                        <select class="selectpicker required" name="damageType[]" id="damageType1" data-live-search="true" data-size="4" autocomplete="off">
+                                            <option value="0" selected disabled>Select</option>
+                                            <optgroup class="damageType defaultOptions1">
+                                            </optgroup>
+                                        </select>
+                                    </td>
+                                    <td class="form-group">
+                                        <select class="selectpicker required" name="damageSeverity[]" id="damageSeverity1" data-live-search="true" data-size="4" autocomplete="off">
+                                            <option value="0" selected disabled>Select</option>
+                                            <optgroup class="damageSeverity defaultOptions1">
+                                            </optgroup>
+                                        </select>
+                                    </td>
+                                    <td class="form-group">
+                                        <select class="selectpicker required" name="damageGrid[]" id="damageGrid1" data-live-search="true" data-size="4" autocomplete="off">
+                                            <option value="0" selected disabled>Select</option>
+                                            <optgroup class="damageGrid defaultOptions1">
+                                            </optgroup>
+                                        </select>
+                                    </td>
+                                    <td class="form-group text-center">
+                                        <button type="button" id="addRowBtn" class="btn btn-info" data-loading-text="Loading..." onclick="addRow()">Add New</button>
+                                    </td>
 
-                                </td>
-                                <td class="form-group">
-                                    <select class="selectpicker required" name="damageType[]" id="damageType1" data-live-search="true" data-size="4" autocomplete="off">
-                                        <option value="0" selected disabled>Select</option>
-                                        <optgroup class="damageType defaultOptions1">
-                                        </optgroup>
-                                    </select>
-                                </td>
-                                <td class="form-group">
-                                    <select class="selectpicker required" name="damageSeverity[]" id="damageSeverity1" data-live-search="true" data-size="4" autocomplete="off">
-                                        <option value="0" selected disabled>Select</option>
-                                        <optgroup class="damageSeverity defaultOptions1">
-                                        </optgroup>
-                                    </select>
-                                </td>
-                                <td class="form-group">
-                                    <select class="selectpicker required" name="damageGrid[]" id="damageGrid1" data-live-search="true" data-size="4" autocomplete="off">
-                                        <option value="0" selected disabled>Select</option>
-                                        <optgroup class="damageGrid defaultOptions1">
-                                        </optgroup>
-                                    </select>
-                                </td>
-                                <td class="form-group text-center">
-                                    <button type="button" id="addRowBtn" class="btn btn-info" data-loading-text="Loading..." onclick="addRow()">Add New</button>
-                                </td>
-
-                            </tr>
-                        </tbody>
-                    </table>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <br><br>
 
 

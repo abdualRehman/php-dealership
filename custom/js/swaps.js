@@ -598,7 +598,9 @@ function calculateHTB(currentElement, target, percentage) {
     var msrp = $('#' + currentElement).val();
     var prcntge = $('#' + percentage).val();
     var calcHbt = (msrp * prcntge) / 100;
-    calcHbt = Number(calcHbt).toFixed(3);
+    // calcHbt = (calcHbt).toFixed(2);
+    calcHbt = Math.round((calcHbt + Number.EPSILON) * 100) / 100;   //  to set a limit of decimal 
+
     $('#' + target).val(calcHbt);
     $('#' + target).click();
 }
@@ -619,6 +621,7 @@ function calculateCost(inv, hb, HBT, hdag, adds, target) {
 
     // newCost = newCost.toFixed(2);  // to fix limit
     newCost = Math.round((newCost + Number.EPSILON) * 100) / 100;   //  to set a limit of decimal 
+    // newCost = (Math.round((newCost + Number.EPSILON) * 1000) / 1000).toFixed(3);   //  to set a limit of decimal 
 
 
     $('#' + target).val(newCost);
